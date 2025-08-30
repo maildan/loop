@@ -32,7 +32,8 @@ model Project {
   id           String   @id @default(cuid())
   title        String
   description  String?
-  content      String?  // 프로젝트 내용
+  content      String?  // 메인 에디터 내용
+  chapters     String?  // JSON: 각 장별 내용 {"chapter-1": "내용1", "chapter-2": "내용2"}
   genre        String   @default("기타")
   status       String   @default("active") // 'active' | 'completed' | 'paused'
   progress     Int      @default(0)       // 진행률 (0-100)

@@ -49,6 +49,7 @@
     "**/*.ts",
     "**/*.tsx",
     "../shared/**/*.ts",
+    "../types/**/*.ts",
     "../types/**/*.d.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",

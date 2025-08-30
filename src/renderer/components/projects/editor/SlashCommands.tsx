@@ -7,12 +7,12 @@ import Suggestion from '@tiptap/suggestion';
 import tippy from 'tippy.js';
 import type { Range, Editor } from '@tiptap/core';
 import type { Instance } from 'tippy.js';
-import { 
-  Hash, 
-  List, 
-  CheckSquare, 
-  Quote, 
-  Code, 
+import {
+  Hash,
+  List,
+  CheckSquare,
+  Quote,
+  Code,
   Minus,
   Type,
   Heading1,
@@ -264,11 +264,10 @@ const CommandMenu = forwardRef<CommandMenuRef, CommandMenuProps>(({ items, comma
         items.map((item, index) => (
           <button
             key={index}
-            className={`flex items-center gap-3 w-full px-3 py-2 text-left text-sm rounded-md transition-colors ${
-              index === selectedIndex
+            className={`flex items-center gap-3 w-full px-3 py-2 text-left text-sm rounded-md transition-colors ${index === selectedIndex
                 ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100'
                 : 'text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
-            }`}
+              }`}
             onClick={() => selectItem(index)}
           >
             <div className="w-4 h-4 flex items-center justify-center text-gray-500 dark:text-gray-400">
@@ -297,7 +296,7 @@ export const SlashCommand = Extension.create({
     return {
       suggestion: {
         char: '/',
-        command: ({ editor, range, props }: any) => {
+        command: ({ editor, range, props }: { editor: Editor; range: Range; props: { command: (params: { editor: Editor; range: Range }) => void } }) => {
           props.command({ editor, range });
         },
       },

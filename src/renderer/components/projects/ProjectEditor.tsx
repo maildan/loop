@@ -7,7 +7,8 @@ import { ShortcutHelp } from './editor/ShortcutHelp';
 import { WriterSidebar } from './components/WriterSidebar';
 import { WriterStatsPanel } from './editor/WriterStatsPanel'; // 🔥 AI 창작 파트너 패널 추가
 import { ProjectHeader } from './components/ProjectHeader'; // 🔥 새로운 모듈화된 헤더
-import { CurrentEditorHeader } from '../CurrentEditorHeader'; // 🔥 현재 에디터 표시 헤더
+import { EditorTabBar } from './components/EditorTabBar'; // 🔥 NEW: 탭 바
+import { NewChapterModal } from './components/NewChapterModal'; // 🔥 NEW: 새 장 모달
 import { ConfirmDeleteDialog } from './components/ConfirmDeleteDialog';
 import { ShareDialog } from './components/ShareDialog';
 import { WriteView } from './views/WriteView';
@@ -17,6 +18,8 @@ import { NotesView } from './views/NotesView';
 import { SynopsisView } from './views/SynopsisView';
 import { IdeaView } from './views/IdeaView';
 import { Logger } from '../../../shared/logger';
+import { EditorTab } from '../../../shared/editor';
+import { ProjectStructure } from '../../../shared/types';
 
 // 🔥 실제 hooks import (기가차드 수정)
 import { useProjectData } from './hooks/useProjectData';
@@ -61,13 +64,29 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
   // 🔥 커스텀 hooks 사용
   const { isLoading, error, ...projectData } = useProjectData(projectId);
   const uiState = useUIState();
-  const [currentView, setCurrentView] = useState<string>('write'); // 🔥 실제 뷰 상태 관리
+  const [currentView, setCurrentView] = useState<string>('write'); // 🔥 프로젝트 진입 시 바로 글쓰기 에디터 표시
   const [currentSubView, setCurrentSubView] = useState<string>(''); // 🔥 서브 뷰 상태 (시놉시스, 아이디어 등)
   const [editingItemId, setEditingItemId] = useState<string>(''); // 🔥 편집 중인 아이템 ID
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [showRightSidebar, setShowRightSidebar] = useState<boolean>(false); // 🔥 AI 사이드바 상태 추가
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [showShareDialog, setShowShareDialog] = useState<boolean>(false);
+  const [showNewChapterModal, setShowNewChapterModal] = useState<boolean>(false); // 🔥 NEW: 새 장 모달 상태
+
+  // 🔥 NEW: 탭 시스템 상태 (글쓰기 에디터만)
+  const [tabs, setTabs] = useState<EditorTab[]>([
+    {
+      id: 'main',
+      title: '메인',
+      type: 'main',
+      isActive: true,
+      order: 0,
+      content: '' // 메인 탭의 독립적인 컨텐츠
+    }
+  ]);
+  const [activeTabId, setActiveTabId] = useState<string>('main');
+  const [nextTabOrder, setNextTabOrder] = useState<number>(1);
+
   const editorRef = useRef<any>(null);
   const [isEditorReady, setIsEditorReady] = useState<boolean>(false); // 🔥 에디터 준비 상태 추가
 
@@ -122,8 +141,21 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
     }
   }, [fullProjectData?.description, projectId]);
 
+  // 🔥 메인 탭 content를 프로젝트 데이터와 동기화
+  useEffect(() => {
+    if (projectData.content !== undefined) {
+      setTabs(prevTabs =>
+        prevTabs.map(tab =>
+          tab.type === 'main'
+            ? { ...tab, content: projectData.content }
+            : tab
+        )
+      );
+    }
+  }, [projectData.content]);
+
   // 🔥 에디터 상태 업데이트
-  const { setCurrentEditor } = useStructureStore();
+  const { setCurrentEditor, addStructureItem } = useStructureStore();
 
   // 🔥 현재 뷰에 따라 에디터 상태 업데이트 (안전한 버전)
   useEffect(() => {
@@ -195,6 +227,182 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
       setIsSyncingWithGoogle(false);
     }
   }, [isGoogleDocsProject, googleDocMeta?.googleDocId, projectData]);
+
+  // 🔥 탭 관리 함수들
+  const createNewTab = useCallback((type: EditorTab['type'], title: string, chapterId?: string) => {
+    const newTab: EditorTab = {
+      id: chapterId || `${type}-${Date.now()}`,
+      title,
+      type,
+      chapterId,
+      isActive: false,
+      order: nextTabOrder,
+      content: '' // 새 탭은 빈 content로 시작
+    };
+
+    setTabs(prevTabs => {
+      const updatedTabs = prevTabs.map(tab => ({ ...tab, isActive: false }));
+      return [...updatedTabs, { ...newTab, isActive: true }];
+    });
+
+    setActiveTabId(newTab.id);
+    setNextTabOrder(prev => prev + 1);
+
+    Logger.info('PROJECT_EDITOR', 'New tab created', {
+      tabId: newTab.id,
+      type: newTab.type,
+      title: newTab.title
+    });
+
+    return newTab;
+  }, [nextTabOrder]);
+
+  const switchToTab = useCallback((tabId: string) => {
+    setTabs(prevTabs =>
+      prevTabs.map(tab => ({
+        ...tab,
+        isActive: tab.id === tabId
+      }))
+    );
+    setActiveTabId(tabId);
+
+    // 탭에 따라 currentView 업데이트
+    const targetTab = tabs.find(tab => tab.id === tabId);
+    if (targetTab) {
+      if (targetTab.type === 'chapter') {
+        setCurrentView('write');
+        setEditingItemId(targetTab.chapterId || '');
+      } else {
+        setCurrentView(targetTab.type);
+      }
+
+      Logger.info('PROJECT_EDITOR', 'Switched to tab', {
+        tabId,
+        type: targetTab.type,
+        title: targetTab.title
+      });
+    }
+  }, [tabs]);
+
+  const closeTab = useCallback((tabId: string) => {
+    if (tabId === 'main') return; // 메인 탭은 닫을 수 없음
+
+    setTabs(prevTabs => {
+      const filteredTabs = prevTabs.filter(tab => tab.id !== tabId);
+
+      // 닫힌 탭이 활성 탭이었다면 다른 탭으로 전환
+      if (activeTabId === tabId && filteredTabs.length > 0) {
+        const newActiveTab = filteredTabs[filteredTabs.length - 1];
+        if (newActiveTab) {
+          newActiveTab.isActive = true;
+          setActiveTabId(newActiveTab.id);
+
+          // currentView 업데이트
+          if (newActiveTab.type === 'chapter') {
+            setCurrentView('write');
+            setEditingItemId(newActiveTab.chapterId || '');
+          } else {
+            setCurrentView(newActiveTab.type);
+          }
+        }
+      }
+
+      return filteredTabs.map(tab => ({
+        ...tab,
+        isActive: tab.id === (activeTabId === tabId ? filteredTabs[filteredTabs.length - 1]?.id : activeTabId)
+      }));
+    });
+
+    Logger.info('PROJECT_EDITOR', 'Tab closed', { tabId });
+  }, [activeTabId]);
+
+  // 🔥 탭 재정렬 핸들러
+  const handleTabReorder = useCallback((fromIndex: number, toIndex: number) => {
+    setTabs(prevTabs => {
+      const newTabs = [...prevTabs];
+      const [movedTab] = newTabs.splice(fromIndex, 1);
+
+      if (movedTab) {
+        newTabs.splice(toIndex, 0, movedTab);
+
+        // order 값 재정렬
+        return newTabs.map((tab, index) => ({
+          ...tab,
+          order: index
+        }));
+      }
+
+      return newTabs;
+    });
+
+    Logger.info('PROJECT_EDITOR', 'Tabs reordered', { fromIndex, toIndex });
+  }, []);
+
+  // 🔥 현재 활성 탭의 content 가져오기
+  const getCurrentTabContent = useCallback(() => {
+    const activeTab = tabs.find(tab => tab.id === activeTabId);
+
+    if (!activeTab) return '';
+
+    // 메인 탭은 프로젝트 기본 content 사용
+    if (activeTab.type === 'main') {
+      return projectData.content || '';
+    }
+
+    // Chapter 탭은 chapters JSON에서 해당 chapter content 가져오기
+    if (activeTab.type === 'chapter' && activeTab.chapterId) {
+      try {
+        const chapters = JSON.parse(projectData.chapters || '{}');
+        return chapters[activeTab.chapterId] || '';
+      } catch {
+        return '';
+      }
+    }
+
+    return '';
+  }, [tabs, activeTabId, projectData.content, projectData.chapters]);
+
+  // 🔥 현재 활성 탭의 content 업데이트
+  const updateCurrentTabContent = useCallback((newContent: string) => {
+    const activeTab = tabs.find(tab => tab.id === activeTabId);
+    if (!activeTab) return;
+
+    // 탭 상태 업데이트 (dirty 표시)
+    setTabs(prevTabs =>
+      prevTabs.map(tab =>
+        tab.id === activeTabId
+          ? { ...tab, content: newContent, isDirty: true }
+          : tab
+      )
+    );
+
+    // 메인 탭의 경우 프로젝트 데이터 업데이트
+    if (activeTab.type === 'main') {
+      projectData.setContent(newContent);
+    }
+
+    // Chapter 탭의 경우 chapters JSON 업데이트  
+    if (activeTab.type === 'chapter' && activeTab.chapterId) {
+      try {
+        const chapters = JSON.parse(projectData.chapters || '{}');
+        chapters[activeTab.chapterId] = newContent;
+        projectData.setChapters(JSON.stringify(chapters));
+
+        Logger.debug('PROJECT_EDITOR', 'Chapter content updated', {
+          chapterId: activeTab.chapterId,
+          contentLength: newContent.length
+        });
+      } catch (error) {
+        Logger.error('PROJECT_EDITOR', 'Failed to update chapter content', error);
+      }
+    }
+
+    Logger.debug('PROJECT_EDITOR', 'Tab content updated', {
+      tabId: activeTabId,
+      type: activeTab.type,
+      contentLength: newContent.length
+    });
+  }, [activeTabId, tabs, projectData]);
 
   // 🔥 Google Docs로 내용 업로드 (향후 구현 예정)
   const updateGoogleDocs = useCallback(async (content: string) => {
@@ -276,19 +484,45 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
   }, []);
 
   // 🔥 WriterSidebar 핸들러들
-  const handleAddStructure = useCallback(() => {
-    setCurrentView('structure');
-    // StructureView에서 자체적으로 추가 버튼을 처리
+  const handleAddStructure = useCallback(async () => {
+    setShowNewChapterModal(true);
+    Logger.info('PROJECT_EDITOR', 'New chapter modal opened');
   }, []);
 
-  const handleAddCharacter = useCallback(() => {
+  // 🔥 NEW: 새 장 생성 확정 핸들러
+  const handleCreateNewChapter = useCallback(async (title: string) => {
+    try {
+      const newChapterId = `chapter-${Date.now()}`;
+
+      // chapters JSON에 새 장 추가
+      const chapters = JSON.parse(projectData.chapters || '{}');
+      chapters[newChapterId] = ''; // 빈 content로 시작
+      projectData.setChapters(JSON.stringify(chapters));
+
+      // 새 탭 생성
+      createNewTab('chapter', title, newChapterId);
+
+      // 쓰기 뷰로 설정
+      setCurrentView('write');
+      setEditingItemId(newChapterId);
+
+      Logger.info('PROJECT_EDITOR', 'New chapter created', {
+        chapterId: newChapterId,
+        title
+      });
+    } catch (error) {
+      Logger.error('PROJECT_EDITOR', 'Chapter creation error', error);
+    }
+  }, [createNewTab, projectData]); const handleAddCharacter = useCallback(() => {
+    // 인물 뷰로 직접 이동 (탭 시스템 사용하지 않음)
     setCurrentView('characters');
-    // CharactersView에서 자체적으로 추가 버튼을 처리
+    Logger.info('PROJECT_EDITOR', 'Add character triggered - switched to characters view');
   }, []);
 
   const handleAddNote = useCallback(() => {
+    // 노트 뷰로 직접 이동 (탭 시스템 사용하지 않음) 
     setCurrentView('notes');
-    // NotesView에서 자체적으로 추가 버튼을 처리
+    Logger.info('PROJECT_EDITOR', 'Add note triggered - switched to notes view');
   }, []);
 
   // 🔥 공유 기능 핸들러
@@ -346,11 +580,21 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
       Logger.error('PROJECT_EDITOR', 'Export failed', error);
     }
   }, [projectData.content, projectData.title]);
-  // 🔥 뷰 변경 핸들러 (실제 구현)
+  // 🔥 뷰 변경 핸들러 (글쓰기만 탭 시스템 사용)
   const handleViewChange = useCallback((view: string) => {
     Logger.info('PROJECT_EDITOR', 'View changed:', view);
-    setCurrentView(view);
-  }, []);
+
+    if (view === 'write') {
+      // 글쓰기 뷰는 탭 시스템 사용 - 메인 탭으로 전환
+      const mainTab = tabs.find(tab => tab.type === 'main');
+      if (mainTab) {
+        switchToTab(mainTab.id);
+      }
+    } else {
+      // 다른 뷰들(구조, 인물, 노트 등)은 직접 전환
+      setCurrentView(view);
+    }
+  }, [tabs, switchToTab]);
   const handleToolbarAction = useCallback((action: string) => Logger.info('PROJECT_EDITOR', 'Toolbar action:', action), []);
 
   // 🔥 작가 친화적 키보드 단축키 핸들러
@@ -488,6 +732,18 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
           onOpenGoogleDocs={openGoogleDocsExternal}
         />
 
+        {/* 🔥 Chrome 스타일 탭 바 (글쓰기 관련 뷰에서 표시) */}
+        {['write', 'structure'].includes(currentView) && (
+          <EditorTabBar
+            tabs={tabs}
+            activeTabId={activeTabId}
+            onTabClick={switchToTab}
+            onTabClose={closeTab}
+            onNewTab={() => createNewTab('chapter', `새 장 ${nextTabOrder}`)}
+            onTabReorder={handleTabReorder}
+          />
+        )}
+
         {/* 🔥 메인 영역 */}
         <div className={WRITER_EDITOR_STYLES.main}>
           {/* 🔥 모듈화된 WriterSidebar 사용 */}
@@ -507,13 +763,10 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
 
           {/* 🔥 뷰 전환 영역 - WriterSidebar와 연동 */}
           <div className={WRITER_EDITOR_STYLES.editorContainer}>
-            {/* 🔥 현재 에디터 표시 헤더 */}
-            <CurrentEditorHeader />
-
             {currentView === 'write' && (
               <WriteView
-                content={projectData.content}
-                onChange={projectData.setContent}
+                content={getCurrentTabContent()}
+                onChange={updateCurrentTabContent}
                 isFocusMode={uiState.isFocusMode}
               />
             )}
@@ -523,6 +776,7 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
                 onNavigateToChapterEdit={handleNavigateToChapterEdit}
                 onNavigateToSynopsisEdit={handleNavigateToSynopsisEdit}
                 onNavigateToIdeaEdit={handleNavigateToIdeaEdit}
+                onAddNewChapter={() => setShowNewChapterModal(true)}
               />
             )}
             {currentView === 'characters' && (
@@ -582,6 +836,14 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
         projectTitle={projectData.title}
         projectId={projectId}
         onClose={() => setShowShareDialog(false)}
+      />
+
+      {/* 🔥 NEW: 새 장 생성 모달 */}
+      <NewChapterModal
+        isOpen={showNewChapterModal}
+        onClose={() => setShowNewChapterModal(false)}
+        onConfirm={handleCreateNewChapter}
+        defaultTitle={`${nextTabOrder}장`}
       />
     </EditorProvider>
   );

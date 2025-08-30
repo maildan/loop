@@ -11,7 +11,8 @@
     "dist/shared/**/*",
     "assets/**/*",
     "package.json",
-    "node_modules/@prisma/client/runtime/**",
+    "node_modules/.prisma/client/**/*",
+    "node_modules/@prisma/client/runtime/**/*",
     "node_modules/active-win/**",
     "node_modules/node-mac-permissions/**",
     "node_modules/uiohook-napi/build/Release/uiohook_napi.node"

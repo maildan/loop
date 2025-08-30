@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import {
   Edit3,
   FileText,
@@ -67,7 +67,7 @@ const MENU_ITEMS = [
   { id: 'notes', label: '메모', icon: BookOpen },
 ];
 
-export function WriterSidebar({
+export const WriterSidebar = memo(function WriterSidebar({
   currentView,
   onViewChange,
   structure,
@@ -299,4 +299,4 @@ export function WriterSidebar({
       </div>
     </div>
   );
-}
+});

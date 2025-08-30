@@ -25,6 +25,7 @@ interface StructureViewProps {
   onNavigateToChapterEdit?: (chapterId: string) => void;
   onNavigateToSynopsisEdit?: (synopsisId: string) => void;
   onNavigateToIdeaEdit?: (ideaId: string) => void;
+  onAddNewChapter?: () => void; // 🔥 NEW: 새 장 추가 핸들러
 }
 
 // 🔥 기가차드 작가 친화적 구조 스타일
@@ -104,7 +105,8 @@ const StructureView = memo(function StructureView({
   projectId,
   onNavigateToChapterEdit,
   onNavigateToSynopsisEdit,
-  onNavigateToIdeaEdit
+  onNavigateToIdeaEdit,
+  onAddNewChapter
 }: StructureViewProps): React.ReactElement {
   // 🔥 Zustand 스토어 사용 - 참조 안정성을 위한 최적화
   const structures = useStructureStore((state) => {
@@ -122,6 +124,14 @@ const StructureView = memo(function StructureView({
   const [editTitle, setEditTitle] = useState<string>('');
 
   const handleAddItem = useCallback((type: 'chapter' | 'synopsis' | 'idea'): void => {
+    // 🔥 NEW: chapter 타입일 때는 모달을 통해 처리
+    if (type === 'chapter' && onAddNewChapter) {
+      onAddNewChapter();
+      setShowAddMenu(false);
+      return;
+    }
+
+    // 기존 synopsis, idea 처리 로직
     const defaultTitles = {
       chapter: `새로운 챕터`,
       synopsis: `새로운 시놉시스`,
@@ -153,14 +163,12 @@ const StructureView = memo(function StructureView({
     setShowAddMenu(false);
 
     // 🔥 해당 타입의 에디터로 이동
-    if (type === 'chapter') {
-      onNavigateToChapterEdit?.(newItem.id);
-    } else if (type === 'idea') {
+    if (type === 'idea') {
       onNavigateToIdeaEdit?.(newItem.id);
     } else if (type === 'synopsis') {
       onNavigateToSynopsisEdit?.(newItem.id);
     }
-  }, [projectId, addStructureItem, setCurrentEditor, onNavigateToChapterEdit, onNavigateToIdeaEdit, onNavigateToSynopsisEdit]);
+  }, [projectId, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToSynopsisEdit]);
 
   const handleItemClick = useCallback((item: ProjectStructure): void => {
     // 🔥 에디터 상태 업데이트

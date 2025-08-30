@@ -3,7 +3,6 @@
 // 🔥 아이디어 편집 뷰 - 창의적 발상과 영감 관리 시스템
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { useLongPress } from '../../../hooks/useLongPress';
 import { Logger } from '../../../../shared/logger';
 import {
     Plus,
@@ -651,20 +650,16 @@ export function IdeaView({ ideaId, onBack }: IdeaViewProps): React.ReactElement 
                             {filteredIdeas.map((idea) => {
                                 const CategoryIcon = CATEGORY_STYLES[idea.category].icon;
 
-                                // 🔥 롱프레스 핸들러
-                                const longPressHandlers = useLongPress({
-                                    onLongPress: () => {
-                                        // 롱프레스 시 편집 모드
-                                        setEditingIdea(idea);
-                                        Logger.info('IDEA_VIEW', '롱프레스로 편집 모드 활성화', { title: idea.title });
-                                    },
-                                    onShortPress: () => {
-                                        // 짧은 클릭 시 편집 모드
-                                        setEditingIdea(idea);
-                                        Logger.info('IDEA_VIEW', '짧은 클릭으로 편집 모드', { title: idea.title });
-                                    },
-                                    delay: 600
-                                });
+                                // 🔥 편집 핸들러들 (Hook 제거)
+                                const handleIdeaClick = () => {
+                                    setEditingIdea(idea);
+                                    Logger.info('IDEA_VIEW', '클릭으로 편집 모드 활성화', { title: idea.title });
+                                };
+
+                                const handleIdeaDoubleClick = () => {
+                                    setEditingIdea(idea);
+                                    Logger.info('IDEA_VIEW', '더블클릭으로 편집 모드', { title: idea.title });
+                                };
 
                                 return (
                                     <div
@@ -674,7 +669,8 @@ export function IdeaView({ ideaId, onBack }: IdeaViewProps): React.ReactElement 
                                             } select-none cursor-pointer`}
                                         style={{ userSelect: 'none' }}
                                         draggable={false}
-                                        {...longPressHandlers}
+                                        onClick={handleIdeaClick}
+                                        onDoubleClick={handleIdeaDoubleClick}
                                     // 드래그 기능 일시적으로 비활성화
                                     // onDragStart={(e) => handleDragStart(e, idea.id)}
                                     // onDragOver={(e) => handleDragOver(e, idea.id)}

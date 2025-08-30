@@ -19,6 +19,8 @@ interface UseProjectDataReturn {
   setTitle: (title: string) => void;
   content: string;
   setContent: (content: string) => void;
+  chapters: string; // JSON 문자열
+  setChapters: (chapters: string) => void;
   lastSaved: Date | null;
   saveStatus: SaveStatus;
 
@@ -165,6 +167,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
   // 🔥 기본 프로젝트 상태
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [chapters, setChapters] = useState<string>('{}'); // JSON 문자열
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [saveStatus, setSaveStatus] = useState<SaveStatus>('saved');
 
@@ -233,7 +236,8 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       // result는 위에서 설정된 값
       if (result && result.success && result.data) {
         setTitle(result.data.title);
-        setContent(result.data.content);
+        setContent(result.data.content || '');
+        setChapters(result.data.chapters || '{}'); // chapters 필드 로드
         setLastSaved(new Date(result.data.lastModified));
         setSaveStatus('saved'); // 🔥 저장 상태 업데이트
 
@@ -331,11 +335,13 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       }
 
       // 🔥 즉시 서버 저장
-      const result = await window.electronAPI.projects.update(projectId, {
+      const payload: any = {
         title: currentTitle,
         content: currentContent,
+        chapters: chapters, // chapters 필드 포함
         lastModified: new Date()
-      });
+      };
+      const result = await window.electronAPI.projects.update(projectId, payload);
 
       if (result.success) {
         setLastSaved(new Date());
@@ -513,6 +519,8 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
     setTitle: setTitleOptimized,
     content,
     setContent: setContentOptimized,
+    chapters,
+    setChapters,
     lastSaved,
     saveStatus,
 

@@ -26,17 +26,12 @@ export class ProjectErrorBoundary extends Component<ErrorBoundaryProps, ErrorBou
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ error, errorInfo });
-    
+
     Logger.error('PROJECT_ERROR_BOUNDARY', 'Client-side exception caught', {
       error: error.message,
       stack: error.stack,
       componentStack: errorInfo.componentStack
     });
-
-    // 콘솔에도 상세 정보 출력
-    console.error('🚨 ProjectErrorBoundary caught an error:', error);
-    console.error('Error Info:', errorInfo);
-    console.error('Component Stack:', errorInfo.componentStack);
   }
 
   render() {
@@ -53,7 +48,7 @@ export class ProjectErrorBoundary extends Component<ErrorBoundaryProps, ErrorBou
             <p className="text-gray-600 dark:text-gray-400 mb-6">
               클라이언트에서 예외가 발생했습니다. 페이지를 새로고침하거나 다시 시도해보세요.
             </p>
-            
+
             {process.env.NODE_ENV === 'development' && this.state.error && (
               <details className="text-left text-xs bg-gray-100 dark:bg-gray-800 p-4 rounded mb-4">
                 <summary className="cursor-pointer font-medium">기술적 세부사항</summary>
@@ -64,7 +59,7 @@ export class ProjectErrorBoundary extends Component<ErrorBoundaryProps, ErrorBou
                 </pre>
               </details>
             )}
-            
+
             <div className="space-x-4">
               <button
                 onClick={() => window.location.reload()}

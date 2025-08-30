@@ -73,10 +73,10 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
     const handleCopy = (e: KeyboardEvent) => {
       const isCtrlC = (e.ctrlKey || e.metaKey) && e.key === 'c';
       const isCtrlA = (e.ctrlKey || e.metaKey) && e.key === 'a';
-      
+
       if (isCtrlC || isCtrlA) {
         // 기본 복사 동작 허용 (TipTap이 자동으로 처리)
-        console.log('복사 허용:', isCtrlC ? 'Ctrl+C' : 'Ctrl+A');
+        Logger.debug('MARKDOWN_EDITOR', 'Copy operation allowed', { type: isCtrlC ? 'Ctrl+C' : 'Ctrl+A' });
       }
     };
 
@@ -103,10 +103,10 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           }
         }
       }),
-      
+
       // 🔥 언더라인 확장
       Underline,
-      
+
       // 🔥 이미지 확장 (드래그앤드롭, 클립보드 붙여넣기 지원)
       Image.configure({
         HTMLAttributes: {
@@ -115,7 +115,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
         inline: false,
         allowBase64: true,
       }),
-      
+
       // 🔥 Placeholder 확장 (작가 친화적)
       Placeholder.configure({
         placeholder: ({ node }) => {
@@ -139,13 +139,13 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
         showOnlyWhenEditable: true,
         showOnlyCurrent: false,
       }),
-      
+
       // 🔥 Focus 확장 (포커스 모드)
       Focus.configure({
         className: 'has-focus',
         mode: 'all',
       }),
-      
+
       // 🔥 Typography 확장 (작가 친화적 타이포그래피)
       Typography.configure({
         openDoubleQuote: '"',
@@ -155,32 +155,32 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
         ellipsis: '...',
         emDash: '--',
       }),
-      
+
       // 🔥 노션 스타일 확장들
       TaskList,
       TaskItem,
       Callout,
       Toggle,
       Highlight,
-      
+
       // 🔥 슬래시 명령어 확장
       SlashCommand.configure({
         suggestion: slashSuggestion,
       }),
-      
+
       // 🔥 문자 수 카운트
       CharacterCount,
     ],
-    
+
     content,
-    
+
     // 🔥 에디터 설정
     editorProps: {
       attributes: {
         class: `${EDITOR_STYLES.editor} ${isFocusMode ? EDITOR_STYLES.focused : ''}`,
         'data-placeholder': '이야기를 시작해보세요...',
       },
-      
+
       // 🔥 TipTap 공식 마크다운 처리 방식 (완전히 동기적 실행)
       handleKeyDown: (view, event) => {
         if (event.key === ' ') {
@@ -188,16 +188,16 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           const { selection } = state;
           const { $from } = selection;
           const textBefore = $from.parent.textContent.slice(0, $from.parentOffset);
-          
+
           // TipTap의 에디터 인스턴스에 직접 접근
           const editorInstance = (view as any).editor;
           if (!editorInstance) return false;
-          
+
           // # 처리 (제목 1)
           if (textBefore === '#') {
             event.preventDefault();
             event.stopPropagation();
-            
+
             // 텍스트 삭제 후 헤딩 적용을 체인으로 연결
             editorInstance
               .chain()
@@ -205,87 +205,87 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
               .deleteRange({ from: $from.pos - 1, to: $from.pos })
               .setHeading({ level: 1 })
               .run();
-              
+
             Logger.debug('TIPTAP_EDITOR', '✅ Markdown: H1 applied');
             return true;
           }
-          
+
           // ## 처리 (제목 2)
           if (textBefore === '##') {
             event.preventDefault();
             event.stopPropagation();
-            
+
             editorInstance
               .chain()
               .focus()
               .deleteRange({ from: $from.pos - 2, to: $from.pos })
               .setHeading({ level: 2 })
               .run();
-              
+
             Logger.debug('TIPTAP_EDITOR', '✅ Markdown: H2 applied');
             return true;
           }
-          
+
           // ### 처리 (제목 3)
           if (textBefore === '###') {
             event.preventDefault();
             event.stopPropagation();
-            
+
             editorInstance
               .chain()
               .focus()
               .deleteRange({ from: $from.pos - 3, to: $from.pos })
               .setHeading({ level: 3 })
               .run();
-              
+
             Logger.debug('TIPTAP_EDITOR', '✅ Markdown: H3 applied');
             return true;
           }
-          
+
           // - 처리 (불릿 리스트)
           if (textBefore === '-') {
             event.preventDefault();
             event.stopPropagation();
-            
+
             editorInstance
               .chain()
               .focus()
               .deleteRange({ from: $from.pos - 1, to: $from.pos })
               .toggleBulletList()
               .run();
-              
+
             Logger.debug('TIPTAP_EDITOR', '✅ Markdown: Bullet list applied');
             return true;
           }
-          
+
           // 1. 처리 (번호 리스트)
           if (/^\d+\.$/.test(textBefore)) {
             event.preventDefault();
             event.stopPropagation();
-            
+
             editorInstance
               .chain()
               .focus()
               .deleteRange({ from: $from.pos - textBefore.length, to: $from.pos })
               .toggleOrderedList()
               .run();
-              
+
             Logger.debug('TIPTAP_EDITOR', '✅ Markdown: Ordered list applied');
             return true;
           }
         }
-        
+
         return false;
       },
-      
+
       // 🔥 클립보드 처리 (이미지 붙여넣기 지원)
       handlePaste: (view, event) => {
         const editorInstance = (view as any).editor;
         if (!editorInstance) return false;
-        
+
         const clipboardData = event.clipboardData;
         if (!clipboardData) return false;
-        
+
         // 이미지 파일 처리
         const items = Array.from(clipboardData.items);
         for (const item of items) {
@@ -306,26 +306,26 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
             }
           }
         }
-        
+
         // 텍스트 처리 (기본 동작 허용)
         return false;
       },
-      
+
       // 🔥 드래그 앤 드롭 처리
       handleDrop: (view, event) => {
         const editorInstance = (view as any).editor;
         if (!editorInstance) return false;
-        
+
         // 드래그 오버 클래스 제거
         const editorElement = view.dom as HTMLElement;
         editorElement.classList.remove('drag-over');
-        
+
         const files = Array.from(event.dataTransfer?.files || []);
         const imageFiles = files.filter(file => file.type.startsWith('image/'));
-        
+
         if (imageFiles.length > 0) {
           event.preventDefault();
-          
+
           imageFiles.forEach(file => {
             const reader = new FileReader();
             reader.onload = (e) => {
@@ -337,34 +337,34 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
             };
             reader.readAsDataURL(file);
           });
-          
+
           return true;
         }
-        
+
         return false;
       },
     },
-    
+
     // 🔥 콘텐츠 변경 핸들러
     onUpdate: ({ editor }) => {
       const newContent = editor.getHTML();
       onChange(newContent);
-      Logger.debug('TIPTAP_EDITOR', 'Content updated', { 
-        wordCount: editor.storage.characterCount?.words() || 0 
+      Logger.debug('TIPTAP_EDITOR', 'Content updated', {
+        wordCount: editor.storage.characterCount?.words() || 0
       });
     },
-    
+
     // 🔥 에디터 준비 완료
     onCreate: ({ editor }) => {
       setIsReady(true);
       Logger.info('TIPTAP_EDITOR', 'Editor created successfully');
     },
-    
+
     // 🔥 에디터 포커스
     onFocus: ({ editor }) => {
       Logger.debug('TIPTAP_EDITOR', 'Editor focused');
     },
-    
+
     // 🔥 에디터 블러
     onBlur: ({ editor }) => {
       Logger.debug('TIPTAP_EDITOR', 'Editor blurred');
@@ -392,12 +392,12 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
 
     // 🔥 단축키 바인딩
     const unbindShortcuts = bindShortcutsToEditor(editor);
-    
+
     // 🔥 클립보드 단축키 추가
     const handleKeyDown = (event: KeyboardEvent) => {
       const { key, ctrlKey, metaKey } = event;
       const modKey = ctrlKey || metaKey; // Windows: Ctrl, Mac: Cmd
-      
+
       // Ctrl/Cmd + C: 복사
       if (modKey && key === 'c' && !event.shiftKey) {
         const selectedText = editor.state.doc.textBetween(
@@ -412,7 +412,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           });
         }
       }
-      
+
       // Ctrl/Cmd + V: 붙여넣기
       if (modKey && key === 'v' && !event.shiftKey) {
         navigator.clipboard.readText().then((text) => {
@@ -425,18 +425,18 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
         });
       }
     };
-    
+
     document.addEventListener('keydown', handleKeyDown);
-    
+
     // 🔥 저장 이벤트 리스너 (Ctrl+S)
     const handleSave = () => {
       const saveEvent = new CustomEvent('project:save');
       window.dispatchEvent(saveEvent);
       Logger.info('TIPTAP_EDITOR', 'Save event triggered from editor');
     };
-    
+
     window.addEventListener('editor:save', handleSave);
-    
+
     Logger.info('TIPTAP_EDITOR', 'Shortcuts and save event bound', {
       shortcutCount: ALL_SHORTCUTS.length
     });
@@ -450,12 +450,24 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
     };
   }, [editor]);
 
-  // 🔥 컴포넌트 언마운트 시 정리
+  // 🔥 컴포넌트 언마운트 시 정리 - DOM 에러 방지
   useEffect(() => {
     return () => {
-      if (editor) {
-        editor.destroy();
-        Logger.debug('TIPTAP_EDITOR', 'Editor destroyed');
+      if (editor && !editor.isDestroyed) {
+        try {
+          // 에디터 이벤트 리스너 정리
+          editor.off('transaction');
+          editor.off('update');
+          editor.off('create');
+          editor.off('focus');
+          editor.off('blur');
+
+          // 에디터 소멸
+          editor.destroy();
+          Logger.debug('TIPTAP_EDITOR', 'Editor destroyed safely');
+        } catch (error) {
+          Logger.error('TIPTAP_EDITOR', 'Error during editor cleanup', error);
+        }
       }
     };
   }, [editor]);
@@ -476,15 +488,15 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
       if (editor && event.detail && event.detail.callback) {
         const textContent = editor.getText();
         event.detail.callback(textContent);
-        Logger.info('TIPTAP_EDITOR', 'Content copied via header button', { 
-          length: textContent.length 
+        Logger.info('TIPTAP_EDITOR', 'Content copied via header button', {
+          length: textContent.length
         });
       }
     };
 
     window.addEventListener('keydown', handleEscKey);
     window.addEventListener('project:copyContent', handleCopyContent as EventListener);
-    
+
     return () => {
       window.removeEventListener('keydown', handleEscKey);
       window.removeEventListener('project:copyContent', handleCopyContent as EventListener);
@@ -496,7 +508,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
     if (!editor) return;
 
     const editorElement = editor.view.dom as HTMLElement;
-    
+
     const handleDragEnter = (e: DragEvent) => {
       e.preventDefault();
       e.stopPropagation();
@@ -564,11 +576,11 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           </div>
         </div>
       )}
-      
+
       {/* 🔥 Enhanced Bubble Menu (선택 시 나타나는 고급 툴바) */}
       {editor && (
-        <BubbleMenu 
-          editor={editor} 
+        <BubbleMenu
+          editor={editor}
           className={EDITOR_STYLES.bubble}
           shouldShow={({ editor, view, state, oldState, from, to }) => {
             // 텍스트가 선택되었을 때만 표시
@@ -578,89 +590,82 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           {/* 기본 포맷팅 버튼들 */}
           <button
             onClick={() => editor.chain().focus().toggleBold().run()}
-            className={`${EDITOR_STYLES.bubbleButton} ${
-              editor.isActive('bold') ? 'bg-blue-200 dark:bg-blue-800' : ''
-            }`}
+            className={`${EDITOR_STYLES.bubbleButton} ${editor.isActive('bold') ? 'bg-blue-200 dark:bg-blue-800' : ''
+              }`}
             title="볼드 (Ctrl+B)"
           >
             <Bold size={14} />
           </button>
-          
+
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={`${EDITOR_STYLES.bubbleButton} ${
-              editor.isActive('italic') ? 'bg-blue-200 dark:bg-blue-800' : ''
-            }`}
+            className={`${EDITOR_STYLES.bubbleButton} ${editor.isActive('italic') ? 'bg-blue-200 dark:bg-blue-800' : ''
+              }`}
             title="이탤릭 (Ctrl+I)"
           >
             <Italic size={14} />
           </button>
-          
+
           <button
             onClick={() => editor.chain().focus().toggleUnderline().run()}
-            className={`${EDITOR_STYLES.bubbleButton} ${
-              editor.isActive('underline') ? 'bg-blue-200 dark:bg-blue-800' : ''
-            }`}
+            className={`${EDITOR_STYLES.bubbleButton} ${editor.isActive('underline') ? 'bg-blue-200 dark:bg-blue-800' : ''
+              }`}
             title="언더라인 (Ctrl+U)"
           >
             <UnderlineIcon size={14} />
           </button>
-          
+
           <button
             onClick={() => editor.chain().focus().toggleStrike().run()}
-            className={`${EDITOR_STYLES.bubbleButton} ${
-              editor.isActive('strike') ? 'bg-blue-200 dark:bg-blue-800' : ''
-            }`}
+            className={`${EDITOR_STYLES.bubbleButton} ${editor.isActive('strike') ? 'bg-blue-200 dark:bg-blue-800' : ''
+              }`}
             title="취소선 (Ctrl+Shift+S)"
           >
             <Strikethrough size={14} />
           </button>
-          
+
           {/* 구분선 */}
           <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
-          
+
           {/* 고급 포맷팅 */}
           <button
             onClick={() => editor.chain().focus().toggleCode().run()}
-            className={`${EDITOR_STYLES.bubbleButton} ${
-              editor.isActive('code') ? 'bg-blue-200 dark:bg-blue-800' : ''
-            }`}
+            className={`${EDITOR_STYLES.bubbleButton} ${editor.isActive('code') ? 'bg-blue-200 dark:bg-blue-800' : ''
+              }`}
             title="인라인 코드 (Ctrl+`)"
           >
             <Code size={14} />
           </button>
-          
+
           {/* 구분선 */}
           <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
-          
+
           {/* 링크 버튼 */}
           <button
             onClick={() => {
               // TODO: 링크 다이얼로그 모달로 교체 필요
-              console.log('링크 기능은 추후 다이얼로그로 구현 예정');
+              Logger.info('MARKDOWN_EDITOR', 'Link feature - dialog implementation needed');
             }}
-            className={`${EDITOR_STYLES.bubbleButton} ${
-              editor.isActive('link') ? 'bg-blue-200 dark:bg-blue-800' : ''
-            }`}
+            className={`${EDITOR_STYLES.bubbleButton} ${editor.isActive('link') ? 'bg-blue-200 dark:bg-blue-800' : ''
+              }`}
             title="링크 추가"
           >
             <Link size={14} />
           </button>
-          
+
           {/* 인용구 버튼 */}
           <button
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={`${EDITOR_STYLES.bubbleButton} ${
-              editor.isActive('blockquote') ? 'bg-blue-200 dark:bg-blue-800' : ''
-            }`}
+            className={`${EDITOR_STYLES.bubbleButton} ${editor.isActive('blockquote') ? 'bg-blue-200 dark:bg-blue-800' : ''
+              }`}
             title="인용구"
           >
             <Quote size={14} />
           </button>
-          
+
           {/* 구분선 */}
           <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
-          
+
           {/* 이미지 추가 버튼 */}
           <button
             onClick={() => {
@@ -688,7 +693,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           >
             <ImageIcon size={14} />
           </button>
-          
+
           {/* 복사 버튼 */}
           <button
             onClick={() => {
@@ -709,7 +714,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           >
             <Copy size={14} />
           </button>
-          
+
           {/* 클립보드에서 붙여넣기 버튼 */}
           <button
             onClick={async () => {
@@ -728,10 +733,10 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           >
             <Clipboard size={14} />
           </button>
-          
+
           {/* 구분선 */}
           <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
-          
+
           {/* 추가 옵션 */}
           <button
             onClick={() => {
@@ -745,7 +750,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
           </button>
         </BubbleMenu>
       )}
-      
+
       {/* 🔥 메인 에디터 */}
       <EditorContent editor={editor} />
     </div>

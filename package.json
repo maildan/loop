@@ -59,7 +59,8 @@
     "debug:renderer": "cross-env NODE_ENV=development next dev",
     "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "analyze": "cross-env ANALYZE=true next build",
-    "bundle-analyzer": "npx @next/bundle-analyzer"
+    "bundle-analyzer": "npx @next/bundle-analyzer",
+    "clear": "clear;clear"
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.3",
