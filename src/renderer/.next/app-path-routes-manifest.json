@@ -1,0 +1,10 @@
+{
+  "/oauth/callback/page": "/oauth/callback",
+  "/analytics/page": "/analytics",
+  "/ai/page": "/ai",
+  "/settings/page": "/settings",
+  "/projects/page": "/projects",
+  "/_not-found/page": "/_not-found",
+  "/page": "/",
+  "/projects/[id]/page": "/projects/[id]"
+}

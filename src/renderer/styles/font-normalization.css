@@ -1,0 +1,172 @@
+/* 🔥 폰트 정규화 - 완전한 해결책 */
+
+/* 기본 폰트 설정 - 한글과 영문 모두 일관성 있게 */
+:root {
+    /* 폰트 크기 조정 - 한글 최적화 */
+    --font-size-adjust-hangul: 0.58;
+    /* 한글 폰트 크기 조정 */
+    --font-size-adjust-latin: 0.5;
+    /* 영문 폰트 크기 조정 */
+
+    /* 기본 폰트 스택 - 한글 우선 */
+    --font-family-base:
+        "Apple SD Gothic Neo",
+        /* macOS 한글 */
+        "Malgun Gothic",
+        /* Windows 한글 */
+        "Noto Sans KR",
+        /* Google Fonts 한글 */
+        "Roboto",
+        /* 영문 */
+        -apple-system,
+        /* iOS/macOS 시스템 폰트 */
+        BlinkMacSystemFont,
+        /* macOS 시스템 폰트 */
+        "Segoe UI",
+        /* Windows 11 시스템 폰트 */
+        system-ui,
+        /* 범용 시스템 폰트 */
+        sans-serif;
+
+    /* 모노스페이스 폰트 스택 */
+    --font-family-mono:
+        "SF Mono",
+        /* macOS */
+        "Monaco",
+        /* macOS Legacy */
+        "Cascadia Code",
+        /* Windows 11 */
+        "Roboto Mono",
+        /* Cross-platform */
+        "Consolas",
+        /* Windows */
+        "Courier New",
+        /* Fallback */
+        monospace;
+}
+
+/* 전역 폰트 설정 */
+* {
+    /* 폰트 렌더링 최적화 */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    /* 텍스트 렌더링 최적화 */
+    text-rendering: optimizeLegibility;
+
+    /* 폰트 크기 조정 적용 */
+    font-size-adjust: var(--font-size-adjust-hangul);
+}
+
+/* 영문만 포함된 요소에 대한 최적화 */
+[lang="en"],
+.lang-en {
+    font-size-adjust: var(--font-size-adjust-latin);
+}
+
+/* 기본 body 폰트 설정 */
+body {
+    font-family: var(--font-family-base);
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    /* 한글 최적화 자간 */
+}
+
+/* 제목 폰트 최적화 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-family-base);
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    /* 제목에서 더 조밀한 자간 */
+
+    /* 제목 전용 폰트 크기 조정 */
+    font-size-adjust: 0.55;
+}
+
+/* 코드 폰트 최적화 */
+code,
+pre,
+kbd,
+samp {
+    font-family: var(--font-family-mono);
+    font-size-adjust: 0.5;
+
+    /* 코드 블록 최적화 */
+    font-variant-ligatures: common-ligatures;
+    font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* 입력 요소 폰트 정규화 */
+input,
+textarea,
+select,
+button {
+    font-family: inherit;
+    font-size-adjust: inherit;
+}
+
+/* 반응형 폰트 크기 */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* 모바일에서 폰트 크기 조정 최적화 */
+    * {
+        font-size-adjust: 0.6;
+        /* 모바일에서 약간 더 큰 조정값 */
+    }
+}
+
+@media (min-width: 1200px) {
+    body {
+        font-size: 18px;
+        line-height: 1.7;
+    }
+}
+
+/* 특수 케이스 - 폰트 크기 조정 비활성화 */
+.font-size-adjust-none {
+    font-size-adjust: none;
+}
+
+/* Tailwind과의 통합을 위한 유틸리티 클래스 */
+.font-adjust-hangul {
+    font-size-adjust: var(--font-size-adjust-hangul);
+}
+
+.font-adjust-latin {
+    font-size-adjust: var(--font-size-adjust-latin);
+}
+
+/* 아이콘 폰트의 경우 크기 조정 비활성화 */
+.icon,
+[class*="icon-"],
+[class^="icon-"] {
+    font-size-adjust: none;
+}
+
+/* 다크모드에서의 폰트 렌더링 최적화 */
+@media (prefers-color-scheme: dark) {
+    * {
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
+}
+
+/* 고해상도 디스플레이 최적화 */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+    * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}

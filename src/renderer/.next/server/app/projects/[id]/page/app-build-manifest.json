@@ -1,0 +1,26 @@
+{
+  "pages": {
+    "/projects/[id]/page": [
+      "static/chunks/src_fe91748e._.js",
+      "static/chunks/node_modules_6ce8fb7f._.js",
+      "static/chunks/[root-of-the-server]__68b7a46e._.css",
+      "static/chunks/src_renderer_app_layout_tsx_c0237562._.js",
+      "static/chunks/node_modules_next_dist_b758c999._.js",
+      "static/chunks/src_renderer_app_not-found_tsx_aaebb7cd._.js",
+      "static/chunks/src_renderer_5b85f5f7._.js",
+      "static/chunks/node_modules_prosemirror-view_dist_index_212d9a9b.js",
+      "static/chunks/node_modules_@tiptap_core_dist_index_bbf02861.js",
+      "static/chunks/node_modules_@popperjs_core_lib_e7041586._.js",
+      "static/chunks/node_modules_37fa290c._.js",
+      "static/chunks/src_renderer_components_projects_editor_MarkdownEditor_6fc3b215.css",
+      "static/chunks/src_renderer_app_projects_[id]_page_tsx_aaebb7cd._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_fd44f5a4._.js",
+      "static/chunks/node_modules_next_dist_compiled_2ce9398a._.js",
+      "static/chunks/node_modules_next_dist_client_8f19e6fb._.js",
+      "static/chunks/node_modules_next_dist_2ecbf5fa._.js",
+      "static/chunks/node_modules_@swc_helpers_cjs_00636ac3._.js",
+      "static/chunks/src_renderer_e69f0d32._.js",
+      "static/chunks/src_renderer_93808211._.js"
+    ]
+  }
+}

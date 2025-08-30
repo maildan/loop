@@ -1,0 +1,7 @@
+ignoredBuiltDependencies:
+  - '@prisma/engines'
+
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - electron
+  - prisma

@@ -1,0 +1,297 @@
+// 🔥 기가차드 Loop Typing Analytics - Prisma Schema
+// Loop 프로젝트의 타입 안전성을 보장하는 데이터베이스 스키마
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./loop.db"
+}
+
+// 🎯 사용자 모델 - 기본 사용자 정보
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  email     String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  sessions  TypingSession[]
+  settings  UserSettings?
+  projects  Project[]        // 🔥 프로젝트 관계 추가
+  
+  @@map("users")
+}
+
+// 📝 프로젝트 모델 - 사용자 문서/글 프로젝트
+model Project {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  content      String?  // 프로젝트 내용
+  genre        String   @default("기타")
+  status       String   @default("active") // 'active' | 'completed' | 'paused'
+  progress     Int      @default(0)       // 진행률 (0-100)
+  wordCount    Int      @default(0)       // 단어 수
+  author       String   @default("사용자")
+  platform     String   @default("loop")  // 'loop' | 'google-docs' | 'import'
+  userId       String?  // Optional: 다중 사용자 지원 대비
+  createdAt    DateTime @default(now())
+  lastModified DateTime @updatedAt
+
+  // Relations
+  user        User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  characters  ProjectCharacter[]   // 🔥 등장인물 관계
+  structure   ProjectStructure[]   // 🔥 구조 관계
+  notes       ProjectNote[]        // 🔥 메모 관계
+  
+  @@map("projects")
+  @@index([userId])
+  @@index([status])
+  @@index([lastModified])
+}
+
+// 👥 프로젝트 등장인물 모델 - 작가용 캐릭터 관리
+model ProjectCharacter {
+  id          String   @id @default(cuid())
+  projectId   String
+  name        String
+  role        String   // '주인공' | '조력자' | '적대자' | '엑스트라'
+  description String?  // 캐릭터 설명
+  notes       String?  // 작가 메모
+  appearance  String?  // 외모 설명
+  personality String?  // 성격
+  background  String?  // 배경 이야기
+  goals       String?  // 목표/동기
+  conflicts   String?  // 갈등 요소
+  avatar      String?  // 아바타 이미지 경로
+  color       String   @default("#3b82f6") // 캐릭터 테마 색상
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@map("project_characters")
+  @@index([projectId])
+  @@index([sortOrder])
+}
+
+// 📚 프로젝트 구조 모델 - 챕터/장면 관리
+model ProjectStructure {
+  id          String   @id @default(cuid())
+  projectId   String
+  type        String   // 'chapter' | 'scene' | 'act' | 'section'
+  title       String
+  description String?
+  content     String?  // 구조 내용/요약
+  status      String   @default("planned") // 'planned' | 'in_progress' | 'completed'
+  wordCount   Int      @default(0)
+  sortOrder   Int      @default(0)
+  parentId    String?  // 계층 구조를 위한 부모 ID
+  depth       Int      @default(0) // 계층 깊이
+  color       String   @default("#6b7280") // 구조 색상
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  project  Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  parent   ProjectStructure?  @relation("StructureHierarchy", fields: [parentId], references: [id])
+  children ProjectStructure[] @relation("StructureHierarchy")
+  
+  @@map("project_structure")
+  @@index([projectId])
+  @@index([sortOrder])
+  @@index([parentId])
+}
+
+// 📋 프로젝트 메모 모델 - 작가 아이디어/메모
+model ProjectNote {
+  id          String   @id @default(cuid())
+  projectId   String
+  title       String
+  content     String
+  type        String   @default("general") // 'general' | 'idea' | 'research' | 'plot' | 'dialogue'
+  tags        Json?    // 태그 배열
+  color       String   @default("#fbbf24") // 메모 색상
+  isPinned    Boolean  @default(false)
+  isArchived  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@map("project_notes")
+  @@index([projectId])
+  @@index([type])
+  @@index([isPinned])
+  @@index([createdAt])
+}
+
+// 📊 타이핑 세션 모델 - 핵심 데이터
+model TypingSession {
+  id          String   @id @default(cuid())
+  userId      String
+  content     String
+  startTime   DateTime
+  endTime     DateTime?
+  keyCount    Int      @default(0)
+  wpm         Float    @default(0)
+  accuracy    Float    @default(0)
+  windowTitle String?
+  appName     String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyEvents KeyEvent[]
+  analytics SessionAnalytics?
+  
+  @@map("typing_sessions")
+  @@index([userId])
+  @@index([startTime])
+  @@index([wpm])
+}
+
+// ⌨️ 키 이벤트 모델 - 세부 키보드 데이터
+model KeyEvent {
+  id        String   @id @default(cuid())
+  sessionId String
+  key       String
+  keyCode   String
+  timestamp DateTime
+  eventType String   // 'keydown' | 'keyup'
+  createdAt DateTime @default(now())
+
+  // Relations
+  session TypingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@map("key_events")
+  @@index([sessionId])
+  @@index([timestamp])
+}
+
+// 📈 세션 분석 모델 - AI 분석 결과
+model SessionAnalytics {
+  id                String   @id @default(cuid())
+  sessionId         String   @unique
+  averageWpm        Float
+  peakWpm           Float
+  errorCount        Int
+  correctionCount   Int
+  rhythmScore       Float    // 타이핑 리듬 점수
+  consistencyScore  Float    // 일관성 점수
+  improvementTips   Json?    // AI 개선 제안
+  analysisData      Json?    // 상세 분석 데이터
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  session TypingSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  @@map("session_analytics")
+}
+
+// ⚙️ 사용자 설정 모델
+model UserSettings {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  theme                 String   @default("light") // 'light' | 'dark' | 'auto'
+  language              String   @default("ko")
+  keyboardLayout        String   @default("qwerty")
+  showRealTimeWpm       Boolean  @default(true)
+  enableSounds          Boolean  @default(false)
+  autoSaveInterval      Int      @default(30) // seconds
+  privacyMode           Boolean  @default(false)
+  monitoringEnabled     Boolean  @default(true)
+  targetWpm             Int      @default(60)
+  sessionGoalMinutes    Int      @default(30)
+  excludedApps          Json?    // 모니터링 제외 앱 목록
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_settings")
+}
+
+// 🏆 타이핑 성취 모델
+model Achievement {
+  id          String   @id @default(cuid())
+  userId      String
+  type        String   // 'wpm_milestone' | 'session_count' | 'accuracy' etc.
+  title       String
+  description String
+  threshold   Float    // 달성 기준값
+  earnedAt    DateTime @default(now())
+  isActive    Boolean  @default(true)
+  
+  @@map("achievements")
+  @@index([userId])
+  @@index([type])
+}
+
+// 📱 앱 사용 통계 모델
+model AppUsage {
+  id            String   @id @default(cuid())
+  userId        String
+  appName       String
+  windowTitle   String?
+  totalTime     Int      // seconds
+  sessionCount  Int      @default(1)
+  avgWpm        Float    @default(0)
+  lastUsed      DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@map("app_usage")
+  @@index([userId])
+  @@index([appName])
+  @@index([lastUsed])
+  @@unique([userId, appName])
+}
+
+// 🎯 일일 목표 모델
+model DailyGoal {
+  id              String   @id @default(cuid())
+  userId          String
+  date            DateTime
+  targetWpm       Int
+  targetMinutes   Int
+  actualWpm       Float    @default(0)
+  actualMinutes   Float    @default(0)
+  isCompleted     Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("daily_goals")
+  @@index([userId])
+  @@index([date])
+  @@unique([userId, date])
+}
+
+// 🔍 검색 히스토리 모델
+model SearchHistory {
+  id        String   @id @default(cuid())
+  userId    String
+  query     String
+  category  String   // 'sessions' | 'analytics' | 'apps'
+  results   Json?    // 검색 결과 메타데이터
+  createdAt DateTime @default(now())
+  
+  @@map("search_history")
+  @@index([userId])
+  @@index([createdAt])
+}

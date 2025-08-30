@@ -1,0 +1,91 @@
+{
+    "project": "Loop",
+    "scanId": "T001-deepscan",
+    "generatedAt": "2025-08-18T00:00:00.000Z",
+    "summary": {
+        "patterns": {
+            "TODO|FIXME (src/main scoped)": 36,
+            "console.log (renderer/components scoped)": 15,
+            "any (src/main scoped)": 51,
+            "process.exit|debugger (src/main scoped)": 6
+        },
+        "notes": "검색은 소스(src/**)를 우선 대상으로 했으며, 빌드 산출물(.next 등)은 필터링했습니다. 일부 'any'와 'console.log'는 테스트·빌드 산출물 또는 의도적 주석(예: TODO)과 섞여 있을 수 있습니다."
+    },
+    "topFiles": [
+        {
+            "path": "src/main/keyboard/KeyboardEngine.ts",
+            "issues": [
+                "TODO entries",
+                "unknown/any fields (wpmCalculator, accuracyCalculator)",
+                "needs session error handling"
+            ],
+            "priority": "high"
+        },
+        {
+            "path": "src/main/keyboard/detectors/test-unified-detector.ts",
+            "issues": [
+                "process.exit calls in test runner"
+            ],
+            "priority": "high"
+        },
+        {
+            "path": "src/main/utils/UnifiedPermissionManager.ts",
+            "issues": [
+                "dynamic native imports, several try/catch logging paths"
+            ],
+            "priority": "medium"
+        },
+        {
+            "path": "src/main/utils/IPCOptimizer.ts",
+            "issues": [
+                "complex compression/decompression logic",
+                "error swallowing patterns"
+            ],
+            "priority": "medium"
+        },
+        {
+            "path": "src/renderer/components/projects/editor/WriterStatsPanel.tsx",
+            "issues": [
+                "many console.log usages that leak partial content",
+                "fallback network calls"
+            ],
+            "priority": "high"
+        },
+        {
+            "path": "src/renderer/components/projects/ProjectEditor.tsx",
+            "issues": [
+                "console.log in render",
+                "useRef<any> and editor typed as any"
+            ],
+            "priority": "medium"
+        },
+        {
+            "path": "src/renderer/components/projects/editor/MarkdownEditor.tsx",
+            "issues": [
+                "console.log in keyboard handlers",
+                "editor refs typed as any"
+            ],
+            "priority": "medium"
+        },
+        {
+            "path": "src/main/handlers/electronStoreSettingsIpcHandlers.ts",
+            "issues": [
+                "ipc handlers using any for payloads/returns"
+            ],
+            "priority": "medium"
+        }
+    ],
+    "recommendations": [
+        "즉시 조치: main 프로세스 경로에 있는 'process.exit' 호출의 의도 확인(테스트 전용인지). 테스트가 아니면 제거 혹은 안전한 종료 로직으로 교체.",
+        "콘솔 로그 정리: 렌더러 쪽 'console.log'는 개인정보/콘텐츠 유출 위험이 있으므로 Logger로 통합하거나 개발 전용 조건부 로깅으로 대체.",
+        "타입 강화: 'any' 사용부는 우선순위 높은 모듈(KeyboardEngine, IPC/IPCOptimizer, IPC handlers)부터 명시적 타입으로 개선.",
+        "자동화: CI에서 tsc --noEmit 및 eslint를 필수 단계로 추가해 회귀 방지.",
+        "다음 단계로 스캔 리포트 기반 자동 todo.json 항목 생성 가능(원하시면 제가 생성하겠습니다)."
+    ],
+    "nextActionsSuggested": [
+        "A. critical: remove/guard process.exit in main path (investigate test vs runtime)",
+        "B. replace console.log in renderer with Logger or gated dev-flag logs",
+        "C. add targeted type fixes for top 5 files, include unit tests for KeyboardEngine/session behaviors",
+        "D. run 'pnpm exec tsc --noEmit' and 'pnpm exec eslint src --ext .ts,.tsx' and attach outputs to this report"
+    ]
+}

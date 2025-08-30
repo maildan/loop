@@ -1,0 +1,78 @@
+# 🔥 기가차드 ESLint 무시 파일들
+
+# Build outputs
+dist/
+out/
+.next/
+build/
+**/node_modules/
+*.tsbuildinfo
+
+# 🔥 Next.js 빌드 산출물 - 추가 패턴
+**/_next/**
+**/static/**
+**/*.min.js
+**/vendors-*.js
+**/webpack-*.js
+**/_buildManifest.js
+**/_ssgManifest.js
+**/chunks/**
+
+# Dependencies
+node_modules/
+.pnpm/
+
+# Coverage
+coverage/
+
+# Environment
+.env*
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Prisma
+prisma/migrations/
+
+# 🔥 테스트 파일 제거 - 이제 린트 대상으로 포함
+# **/*.test.ts
+# **/*.test.tsx
+# **/*.spec.ts
+# **/*.spec.tsx
+# test/
+
+# Generated files
+src/renderer/.next/
+src/types/generated/
+
+# Config files that might have legacy code
+webpack.config.js
+rollup.config.js
+vite.config.js
+jest.config.js
+postcss.config.js
+tailwind.config.js
+
+# Electron builder
+electron-builder.json
+
+# Additional generated/build artifacts to ignore (reduce Codacy noise)
+coverage/lcov-report/
+coverage/*.js
+coverage/*.html
+coverage/**
+src/renderer/out/**
+src/renderer/.next/**
+public/**/lcov-report/**
+public/**/prettify.js
+public/**/sorter.js

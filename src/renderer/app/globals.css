@@ -1,0 +1,1428 @@
+/* 🔥 Tailwind CSS 기본 레이어 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🔥 폰트 로딩은 JavaScript로 처리됩니다 - globals.css에서 @font-face 제거 */
+
+/* 🔥 깜빡임 방지: 테마 전환이 즉시 적용되도록 설정 */
+html {
+  /* 🔥 중요: color-scheme 설정으로 브라우저 기본 동작 제어 */
+  color-scheme: light dark;
+}
+
+/* 🔥 CSS 변수 정의 - Light/Dark 테마 */
+:root {
+  /* 🔥 기가차드 작가 친화적 색상 시스템 - 라이트 모드 */
+
+  /* 기본 배경 - 따뜻한 크림색 (종이 느낌) */
+  --bg-primary: #fefcf7;
+  --bg-secondary: #f8f6f0;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f3f4f6;
+
+  /* 텍스트 - 더 선명한 대비로 개선 */
+  --text-primary: #0a0a0a;
+  /* 더 진한 검정 */
+  --text-secondary: #2d2d2d;
+  /* 더 진한 회색 */
+  --text-muted: #525252;
+  /* 더 진한 muted */
+  --text-inverse: #ffffff;
+
+  /* 강조색 - 차분한 블루 */
+  --accent-primary: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-light: #dbeafe;
+  --accent-dark: #1e40af;
+
+  /* 경계선 - 부드러운 회색 */
+  --border-light: #e5e7eb;
+  --border-medium: #d1d5db;
+  --border-dark: #9ca3af;
+
+  /* 상태 색상 - 자연스러운 톤 */
+  --success: #059669;
+  --success-light: #d1fae5;
+  --warning: #d97706;
+  --warning-light: #fed7aa;
+  --error: #dc2626;
+  --error-light: #fee2e2;
+
+  /* 그림자 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* Tailwind 호환 색상 변수 - HSL 형식 */
+  --background: 0 0% 99%;
+  /* #fefcf7 */
+  --foreground: 0 0% 10%;
+  /* #1a1a1a */
+  --card: 0 0% 100%;
+  /* #ffffff */
+  --card-foreground: 0 0% 10%;
+  /* #1a1a1a */
+  --popover: 0 0% 100%;
+  /* #ffffff */
+  --popover-foreground: 0 0% 10%;
+  /* #1a1a1a */
+  --primary: 221 83% 53%;
+  /* #2563eb */
+  --primary-foreground: 0 0% 100%;
+  /* #ffffff */
+  --secondary: 210 40% 98%;
+  /* #f8f6f0 */
+  --secondary-foreground: 0 0% 29%;
+  /* #4a4a4a */
+  --muted: 210 40% 98%;
+  /* #f8f6f0 */
+  --muted-foreground: 0 0% 45%;
+  /* #737373 */
+  --accent: 221 83% 53%;
+  /* #2563eb */
+  --accent-foreground: 0 0% 100%;
+  /* #ffffff */
+  --destructive: 0 84% 60%;
+  /* #dc2626 */
+  --destructive-foreground: 0 0% 100%;
+  /* #ffffff */
+  --border: 220 13% 91%;
+  /* #e5e7eb */
+  --input: 220 13% 91%;
+  /* #e5e7eb */
+  --ring: 221 83% 53%;
+  /* #2563eb */
+  --chart-1: 221 83% 53%;
+  /* #2563eb */
+  --chart-2: 160 60% 45%;
+  /* #059669 */
+  --chart-3: 30 95% 56%;
+  /* #d97706 */
+  --chart-4: 280 100% 70%;
+  /* #a855f7 */
+
+  /* #a855f7 */
+
+  /* 🔥 폰트 설정 변수 */
+  --app-font-size: 14px;
+  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* 🔥 차트 색상 5 추가 */
+  --chart-5: 340 75% 55%;
+  /* #d946ef */
+
+  /* 🔥 추가 그림자 */
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* 🔥 폰트 패밀리 변수 */
+
+  /* 🔥 Discord 스타일 슬라이더 */
+  .slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .slider::-webkit-slider-track {
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 4px;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #3b82f6;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .slider::-webkit-slider-thumb:hover {
+    background: #2563eb;
+    transform: scale(1.1);
+  }
+
+  .slider::-moz-range-track {
+    background: #e2e8f0;
+    height: 8px;
+    border-radius: 4px;
+    border: none;
+  }
+
+  .slider::-moz-range-thumb {
+    background: #3b82f6;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .slider::-moz-range-thumb:hover {
+    background: #2563eb;
+    transform: scale(1.1);
+  }
+
+  /* Dark mode slider styles */
+  .dark .slider::-webkit-slider-track {
+    background: #475569;
+  }
+
+  .dark .slider::-webkit-slider-thumb {
+    border-color: #1e293b;
+  }
+
+  .dark .slider::-moz-range-track {
+    background: #475569;
+  }
+
+  .dark .slider::-moz-range-thumb {
+    border-color: #1e293b;
+  }
+
+  /* 차트 및 추가 색상 */
+  --chart-5: 340 75% 55%;
+  /* #ef4444 */
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+  /* 작가 친화적 폰트 스택 */
+  --font-primary: "SF Pro Text",
+  -apple-system,
+  BlinkMacSystemFont,
+  "Segoe UI",
+  Roboto,
+  "Helvetica Neue",
+  Arial,
+  sans-serif;
+  --font-writing: "SF Pro Text",
+  Georgia,
+  "Times New Roman",
+  serif;
+  --font-mono: "SF Mono",
+  "Monaco",
+  "Consolas",
+  monospace;
+
+  /* 타이포그래피 스케일 */
+  --text-xs: 0.75rem;
+  /* 12px */
+  --text-sm: 0.875rem;
+  /* 14px */
+  --text-base: 1rem;
+  /* 16px */
+  --text-lg: 1.125rem;
+  /* 18px */
+  --text-xl: 1.25rem;
+  /* 20px */
+  --text-2xl: 1.5rem;
+  /* 24px */
+
+  /* 줄 간격 - 가독성 최적화 */
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* 8px 기반 스페이싱 */
+  --space-1: 0.25rem;
+  /* 4px */
+  --space-2: 0.5rem;
+  /* 8px */
+  --space-3: 0.75rem;
+  /* 12px */
+  --space-4: 1rem;
+  /* 16px */
+  --space-6: 1.5rem;
+  /* 24px */
+  --space-8: 2rem;
+  /* 32px */
+  --space-12: 3rem;
+  /* 48px */
+  --space-16: 4rem;
+  /* 64px */
+
+  /* Legacy colors for backward compatibility */
+  --color-primary-50: #eff6ff;
+  --color-primary-100: #dbeafe;
+  --color-primary-200: #bfdbfe;
+  --color-primary-300: #93c5fd;
+  --color-primary-400: #60a5fa;
+  --color-primary-500: #3b82f6;
+  --color-primary-600: #2563eb;
+  --color-primary-700: #1d4ed8;
+  --color-primary-800: #1e40af;
+  --color-primary-900: #1e3a8a;
+
+  /* Secondary 색상 */
+  --color-secondary-50: #f8fafc;
+  --color-secondary-100: #f1f5f9;
+  --color-secondary-200: #e2e8f0;
+  --color-secondary-300: #cbd5e1;
+  --color-secondary-400: #94a3b8;
+  --color-secondary-500: #64748b;
+  --color-secondary-600: #475569;
+  --color-secondary-700: #334155;
+  --color-secondary-800: #1e293b;
+  --color-secondary-900: #0f172a;
+
+  /* Success 색상 */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+
+  /* Warning 색상 */
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
+  --color-warning-900: #78350f;
+
+  /* Error 색상 */
+  --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
+  --color-error-900: #7f1d1d;
+
+  /* Neutral 색상 */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* Typography */
+  --font-family-sans: 'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  'Roboto',
+  sans-serif;
+  --font-family-mono: 'JetBrains Mono',
+  'SF Mono',
+  'Fira Code',
+  'Consolas',
+  monospace;
+
+  /* Spacing & Layout */
+  --spacing-xs: 0.25rem;
+  /* 4px */
+  --spacing-sm: 0.5rem;
+  /* 8px */
+  --spacing-md: 0.75rem;
+  /* 12px */
+  --spacing-lg: 1rem;
+  /* 16px */
+  --spacing-xl: 1.5rem;
+  /* 24px */
+  --spacing-2xl: 2rem;
+  /* 32px */
+  --spacing-3xl: 2.5rem;
+  /* 40px */
+  --spacing-4xl: 3rem;
+  /* 48px */
+
+  /* Border Radius */
+  --radius-none: 0;
+  --radius-xs: 0.125rem;
+  /* 2px */
+  --radius-sm: 0.25rem;
+  /* 4px */
+  --radius-md: 0.375rem;
+  /* 6px */
+  --radius-lg: 0.5rem;
+  /* 8px */
+  --radius-xl: 0.75rem;
+  /* 12px */
+  --radius-2xl: 1rem;
+  /* 16px */
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1),
+  0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+  0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+  0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1),
+  0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Z-Index 계층 */
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
+  --z-toast: 1080;
+
+  /* Animation Duration */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --header-height: 64px;
+  --max-width-container: 1200px;
+}
+
+/* 🔥 Dark 테마 - 작가 친화적 다크 모드 */
+[data-theme="dark"],
+html.dark,
+body[data-theme="dark"] {
+  /* 기본 배경 - 진한 회색 (순수 검정 피하기) */
+  --bg-primary: #0f1419;
+  --bg-secondary: #1a1f29;
+  --bg-elevated: #242936;
+  --bg-card: #242936;
+  --bg-hover: #2d3748;
+
+  /* 텍스트 - 더 밝은 화이트로 개선 */
+  --text-primary: #f8fafc;
+  /* 더 밝은 화이트 */
+  --text-secondary: #cbd5e1;
+  /* 더 밝은 회색 */
+  --text-muted: #94a3b8;
+  /* 더 밝은 muted */
+  --text-inverse: #0a0a0a;
+
+  /* 강조색 - 부드러운 블루 */
+  --accent-primary: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-light: #1e3a8a;
+  --accent-dark: #1e40af;
+
+  /* 경계선 */
+  --border-light: #374151;
+  --border-medium: #4b5563;
+  --border-dark: #6b7280;
+
+  /* 🔥 폰트 설정 변수 (다크 모드) */
+  --app-font-size: 14px;
+  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+  /* 상태 색상 */
+  --success: #10b981;
+  --success-light: #064e3b;
+  --warning: #f59e0b;
+  --warning-light: #78350f;
+  --error: #ef4444;
+  --error-light: #7f1d1d;
+
+  /* Tailwind 호환 색상 변수 - HSL 형식 (다크모드) */
+  --background: 220 26% 8%;
+  /* #0f1419 */
+  --foreground: 220 13% 91%;
+  /* #e5e7eb */
+  --card: 220 14% 16%;
+  /* #242936 */
+  --card-foreground: 220 13% 91%;
+  /* #e5e7eb */
+  --popover: 220 14% 16%;
+  /* #242936 */
+  --popover-foreground: 220 13% 91%;
+  /* #e5e7eb */
+  --primary: 217 91% 60%;
+  /* #3b82f6 */
+  --primary-foreground: 0 0% 100%;
+  /* #ffffff */
+  --secondary: 220 14% 16%;
+  /* #242936 */
+  --secondary-foreground: 220 9% 64%;
+  /* #9ca3af */
+  --muted: 220 14% 16%;
+  /* #242936 */
+  --muted-foreground: 220 14% 51%;
+  /* #6b7280 */
+  --accent: 217 91% 60%;
+  /* #3b82f6 */
+  --accent-foreground: 0 0% 100%;
+  /* #ffffff */
+  --destructive: 0 84% 60%;
+  /* #ef4444 */
+  --destructive-foreground: 0 0% 100%;
+  /* #ffffff */
+  --border: 215 14% 34%;
+  /* #4b5563 */
+  --input: 215 14% 34%;
+  /* #4b5563 */
+  --ring: 217 91% 60%;
+  /* #3b82f6 */
+  --chart-1: 217 91% 60%;
+  /* #3b82f6 */
+  --chart-2: 159 62% 48%;
+  /* #10b981 */
+  --chart-3: 43 96% 56%;
+  /* #f59e0b */
+  --chart-4: 280 100% 70%;
+  /* #a855f7 */
+  --chart-5: 0 84% 60%;
+  /* #ef4444 */
+
+  /* Primary (어둠 속에서도 잘 보이는 밝은 파란색) */
+  --color-primary-50: #1e3a8a;
+  --color-primary-100: #1e40af;
+  --color-primary-200: #1d4ed8;
+  --color-primary-300: #2563eb;
+  --color-primary-400: #3b82f6;
+  --color-primary-500: #60a5fa;
+  --color-primary-600: #93c5fd;
+  --color-primary-700: #bfdbfe;
+  --color-primary-800: #dbeafe;
+  --color-primary-900: #eff6ff;
+
+  /* Secondary (다크 모드용 회색) */
+  --color-secondary-50: #0f172a;
+  --color-secondary-100: #1e293b;
+  --color-secondary-200: #334155;
+  --color-secondary-300: #475569;
+  --color-secondary-400: #64748b;
+  --color-secondary-500: #94a3b8;
+  --color-secondary-600: #cbd5e1;
+  --color-secondary-700: #e2e8f0;
+  --color-secondary-800: #f1f5f9;
+  --color-secondary-900: #f8fafc;
+
+  /* Neutral (다크 모드 중성 색상) */
+  --color-neutral-50: #171717;
+  --color-neutral-100: #262626;
+  --color-neutral-200: #404040;
+  --color-neutral-300: #525252;
+  --color-neutral-400: #737373;
+  --color-neutral-500: #a3a3a3;
+  --color-neutral-600: #d4d4d4;
+  --color-neutral-700: #e5e5e5;
+  --color-neutral-800: #f5f5f5;
+  --color-neutral-900: #fafafa;
+}
+
+/* 🔥 기본 요소 스타일 리셋 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  height: 100%;
+  font-family: var(--app-font-family);
+  font-size: var(--app-font-size);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  /* 🔥 깜빡임 방지: 테마 전환 애니메이션 제거 */
+  transition: none;
+}
+
+/* 🔥 전역 폰트 상속 - 모든 요소가 body의 폰트를 상속하도록 */
+* {
+  font-family: inherit;
+}
+
+/* 🔥 input, textarea, select 요소들도 폰트 상속 */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* 🔥 텍스트 가시성 개선 - 명시적 색상 지정 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+p,
+span,
+div,
+label {
+  color: var(--text-primary);
+}
+
+/* 🔥 버튼 텍스트 개선 */
+button {
+  color: inherit;
+}
+
+/* 🔥 input 요소 텍스트 개선 */
+input,
+textarea,
+select {
+  color: var(--text-primary);
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* ===== Defensive overflow guards ===== */
+/* Ensure root layout won't produce horizontal scrollbars */
+.app-root {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Make sure any flex children can shrink properly */
+.app-root * {
+  min-width: 0;
+}
+
+/* Images and media should not overflow */
+img,
+video,
+iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Break long words and preserve content within containers */
+.break-words,
+.prose,
+.text-content {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Tooltips/popovers must be position-aware and not affect layout */
+.tooltip,
+.popover {
+  position: absolute !important;
+  max-width: 80vw;
+  white-space: normal !important;
+}
+
+
+/* 🔥 다크 모드 body 스타일 (즉시 적용) */
+html.dark body,
+[data-theme="dark"] body,
+body[data-theme="dark"] {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: var(--app-font-size);
+  font-family: var(--app-font-family);
+}
+
+/* 🔥 라이트 모드 body 스타일 */
+body {
+  font-size: var(--app-font-size);
+  font-family: var(--app-font-family);
+}
+
+/* 🔥 루트 컨테이너 */
+#__next {
+  height: 100%;
+  isolation: isolate;
+}
+
+/* 🔥 스크롤바 커스터마이징 (macOS/WebKit) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-neutral-100);
+  border-radius: var(--radius-md);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast) ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-400);
+}
+
+/* 🔥 Focus Ring 커스터마이징 */
+*:focus {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+}
+
+/* 🔥 Selection 스타일 */
+::selection {
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-900);
+}
+
+::-moz-selection {
+  background-color: var(--color-primary-200);
+  color: var(--color-primary-900);
+}
+
+/* 🔥 Button 기본 스타일 리셋 */
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  color: inherit;
+}
+
+/* 🔥 Input 기본 스타일 리셋 */
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-neutral-400);
+  opacity: 1;
+}
+
+/* 🔥 Link 기본 스타일 */
+a {
+  color: var(--color-primary-600);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+a:hover {
+  color: var(--color-primary-700);
+  text-decoration: underline;
+}
+
+/* 🔥 이미지 기본 스타일 */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 🔥 List 기본 스타일 리셋 */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 🔥 Typography 스타일 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.25;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* 🔥 컴포넌트별 유틸리티 클래스 */
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: var(--max-width-container);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+/* Flexbox 유틸리티 */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flex-end {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Grid 유틸리티 */
+.grid-auto-fit {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.grid-auto-fill {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+/* Text 유틸리티 */
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Animation 유틸리티 */
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--duration-normal) ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown var(--duration-normal) ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-fast) ease-out;
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* 🔥 기가차드 작가 친화적 색상 시스템 - 다크 모드 */
+:root[data-theme="dark"],
+.dark {
+  /* 기본 배경 - 진한 회색 (순수 검정 피하기) */
+  --bg-primary: #0f1419;
+  --bg-secondary: #1a1f29;
+  --bg-elevated: #242936;
+  --bg-card: #242936;
+  --bg-hover: #374151;
+
+  /* 텍스트 - 따뜻한 화이트 */
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --text-inverse: #1a1a1a;
+
+  /* 강조색 - 부드러운 블루 */
+  --accent-primary: #3b82f6;
+  --accent-hover: #2563eb;
+  --accent-light: #1e3a8a;
+  --accent-dark: #60a5fa;
+
+  /* 경계선 */
+  --border-light: #374151;
+  --border-medium: #4b5563;
+  --border-dark: #6b7280;
+
+  /* 상태 색상 */
+  --success: #10b981;
+  --success-light: #064e3b;
+  --warning: #f59e0b;
+  --warning-light: #78350f;
+  --error: #ef4444;
+  --error-light: #7f1d1d;
+
+  /* 그림자 - 다크모드용 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* 🔥 기가차드 작가 친화적 컴포넌트 스타일 */
+
+/* 카드 컴포넌트 - 그라데이션 제거, 단순화 */
+.writer-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.writer-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 12px 0 rgba(37, 99, 235, 0.1);
+  transform: translateY(-2px);
+}
+
+/* 아이콘 통일 - 단색으로 */
+.writer-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-light);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+}
+
+.writer-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-primary);
+}
+
+/* 텍스트 가독성 최우선 */
+.writer-text-primary {
+  color: var(--text-primary);
+  font-family: var(--font-primary);
+}
+
+.writer-text-secondary {
+  color: var(--text-secondary);
+  font-family: var(--font-primary);
+}
+
+.writer-text-muted {
+  color: var(--text-muted);
+  font-family: var(--font-primary);
+}
+
+/* 버튼 스타일 - 차분하게 */
+.writer-button-primary {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-primary);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.writer-button-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.writer-button-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-primary);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.writer-button-secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+}
+
+/* 입력 필드 - 작가 친화적 */
+.writer-input {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-primary);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.writer-input:focus {
+  outline: 2px solid var(--accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary);
+}
+
+/* 집중 모드 */
+.focus-mode {
+  background: var(--bg-primary);
+}
+
+.focus-mode .sidebar {
+  display: none;
+}
+
+.focus-mode .header {
+  opacity: 0.3;
+}
+
+.focus-mode .main-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* 독서 모드 */
+.reading-mode {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+}
+
+/* 접근성 개선 - 포커스 가시성 */
+.focusable:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* GPU 가속 활용 */
+.card-transition {
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .writer-card {
+    padding: var(--space-4);
+  }
+
+  .writer-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .writer-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* 🔥 기가차드 규칙: 페이지 전환 최적화 (깜빡임 방지) */
+.app-root {
+  /* 초기 렌더링 최적화 */
+  opacity: 1;
+  visibility: visible;
+
+  /* 부드러운 전환 효과 */
+  transition: opacity 0.15s ease-out;
+
+  /* GPU 가속 활성화 */
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* 페이지 전환 중 깜빡임 방지 */
+.page-transition {
+  position: relative;
+}
+
+.page-transition::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+/* 컨텐츠 영역 레이아웃 안정성 */
+main {
+  /* 최소 높이 보장으로 레이아웃 점프 방지 */
+  min-height: 100vh;
+
+  /* contain 속성으로 렌더링 최적화 */
+  contain: layout style paint;
+}
+
+/* 사이드바 전환 최적화 */
+aside {
+  /* 트랜지션 중 레이어 분리 */
+  transform: translateZ(0);
+  will-change: width;
+
+  /* 부드러운 너비 전환 */
+  transition: width 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+/* 헤더 안정성 */
+header {
+  /* 백드롭 블러 최적화 */
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* 텍스트 렌더링 최적화 */
+body {
+  /* 폰트 렌더링 성능 개선 */
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 스크롤 성능 개선 */
+  scroll-behavior: smooth;
+}
+
+/* 다크 모드 전환 최적화 */
+* {
+  /* 색상 전환 시 깜빡임 방지 */
+  transition-property: color, background-color, border-color, outline-color, fill, stroke;
+  transition-duration: 0.15s;
+  transition-timing-function: ease-out;
+}
+
+/* 애니메이션 비활성화 시 성능 최적화 */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 🔥 추가 깜빡임 방지 최적화 */
+html,
+body {
+  /* 현대적 스크롤바 스타일링 (overlay 대체) */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-medium) transparent;
+}
+
+/* Static export + SPA 라우팅 깜빡임 방지 */
+.app-root {
+  /* 초기 로딩 시 깜빡임 방지 */
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+
+  /* 컨텐츠 로딩 전 배경 안정화 */
+  opacity: 1;
+  visibility: visible;
+
+  /* GPU 가속으로 렌더링 성능 향상 */
+  transform: translateZ(0);
+  will-change: auto;
+}
+
+/* 페이지 전환 시 스무스한 애니메이션 */
+main {
+  /* 페이지 컨텐츠 전환 최적화 */
+  transition: opacity 0.15s ease-in-out;
+
+  /* 레이아웃 시프트 방지 */
+  min-height: calc(100vh - 4rem);
+  /* 헤더 높이 제외 */
+
+  /* 스크롤 성능 최적화 */
+  scroll-behavior: smooth;
+  contain: layout style paint;
+}
+
+/* 사이드바 전환 최적화 */
+aside {
+  /* 크기 변경 시 부드러운 전환 */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 백그라운드 안정화 */
+  background-color: white;
+}
+
+/* 다크 모드에서 사이드바 */
+.dark aside {
+  background-color: var(--bg-elevated);
+}
+
+/* 링크 및 버튼 호버 최적화 */
+a,
+button {
+  /* 호버 상태 전환 최적화 */
+  transition: all 0.15s ease-out;
+
+  /* will-change로 GPU 가속 */
+  will-change: transform, opacity;
+}
+
+/* 포커스 상태 최적화 */
+*:focus {
+  /* 포커스 링 깜빡임 방지 */
+  transition: outline-color 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+/* 🔥 폰트 정규화 - 완전한 해결책 */
+
+/* 기본 폰트 설정 - 한글과 영문 모두 일관성 있게 */
+:root {
+  /* 폰트 크기 조정 - 한글 최적화 */
+  --font-size-adjust-hangul: 0.58;
+  /* 한글 폰트 크기 조정 */
+  --font-size-adjust-latin: 0.5;
+  /* 영문 폰트 크기 조정 */
+
+  /* 기본 폰트 스택 - 한글 우선 */
+  --font-family-base:
+    "Apple SD Gothic Neo",
+    /* macOS 한글 */
+    "Malgun Gothic",
+    /* Windows 한글 */
+    "Noto Sans KR",
+    /* Google Fonts 한글 */
+    "Roboto",
+    /* 영문 */
+    -apple-system,
+    /* iOS/macOS 시스템 폰트 */
+    BlinkMacSystemFont,
+    /* macOS 시스템 폰트 */
+    "Segoe UI",
+    /* Windows 11 시스템 폰트 */
+    system-ui,
+    /* 범용 시스템 폰트 */
+    sans-serif;
+
+  /* 모노스페이스 폰트 스택 */
+  --font-family-mono:
+    "SF Mono",
+    /* macOS */
+    "Monaco",
+    /* macOS Legacy */
+    "Cascadia Code",
+    /* Windows 11 */
+    "Roboto Mono",
+    /* Cross-platform */
+    "Consolas",
+    /* Windows */
+    "Courier New",
+    /* Fallback */
+    monospace;
+}
+
+/* 전역 폰트 설정 */
+* {
+  /* 폰트 렌더링 최적화 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 텍스트 렌더링 최적화 */
+  text-rendering: optimizeLegibility;
+
+  /* 폰트 크기 조정 적용 */
+  font-size-adjust: var(--font-size-adjust-hangul);
+}
+
+/* 영문만 포함된 요소에 대한 최적화 */
+[lang="en"],
+.lang-en {
+  font-size-adjust: var(--font-size-adjust-latin);
+}
+
+/* 제목 폰트 최적화 */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  /* 제목에서 더 조밀한 자간 */
+
+  /* 제목 전용 폰트 크기 조정 */
+  font-size-adjust: 0.55;
+}
+
+/* 코드 폰트 최적화 */
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-family-mono);
+  font-size-adjust: 0.5;
+
+  /* 코드 블록 최적화 */
+  font-variant-ligatures: common-ligatures;
+  font-feature-settings: "liga" 1, "calt" 1;
+}
+
+/* 입력 요소 폰트 정규화 */
+input,
+textarea,
+select,
+button {
+  font-family: inherit;
+  font-size-adjust: inherit;
+}
+
+/* 반응형 폰트 크기 */
+@media (max-width: 768px) {
+
+  /* 모바일에서 폰트 크기 조정 최적화 */
+  * {
+    font-size-adjust: 0.6;
+    /* 모바일에서 약간 더 큰 조정값 */
+  }
+}
+
+/* 특수 케이스 - 폰트 크기 조정 비활성화 */
+.font-size-adjust-none {
+  font-size-adjust: none;
+}
+
+/* 아이콘 폰트의 경우 크기 조정 비활성화 */
+.icon,
+[class*="icon-"],
+[class^="icon-"] {
+  font-size-adjust: none;
+}
+
+/* 다크모드에서의 폰트 렌더링 최적화 */
+@media (prefers-color-scheme: dark) {
+  * {
+    -webkit-font-smoothing: subpixel-antialiased;
+  }
+}
+
+/* 고해상도 디스플레이 최적화 */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

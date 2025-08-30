@@ -1,0 +1,14 @@
+# .copilotignore
+node_modules/
+build/
+*.min.js
+**.log
+**.next
+**out
+**coverage
+**dataset
+**coverage
+**.next
+**reports
+**release
+**dist

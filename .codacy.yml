@@ -1,0 +1,23 @@
+# Codacy configuration: exclude build/generated folders to reduce noise
+analysis:
+	exclude:
+		- "node_modules/**"
+		- ".next/**"
+		- "out/**"
+		- "coverage/**"
+		- "src/renderer/out/**"
+		- "src/renderer/.next/**"
+		- "public/**/lcov-report/**"
+		- "dist/**"
+		- "build/**"
+		- "release/**"
+		- "**/*.min.js"
+		- "**/*.tgz"
+		- "**/*.d.ts.map"
+		- "**/*.js.map"
+		- "**/.cache/**"
+		- "src/renderer/.next/**"
+		- "coverage/lcov-report/**"
+		- "**/out/_next/**"
+
+

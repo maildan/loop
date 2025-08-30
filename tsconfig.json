@@ -1,0 +1,67 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "skipLibCheck": true, // 🔥 라이브러리 타입 체크 스킵 (빌드 속도 향상)
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true, // 🔥 증분 컴파일 (기존)
+    "composite": true, // 🔥 프로젝트 참조 최적화 (기존)
+    "tsBuildInfoFile": ".tsbuildinfo", // 🔥 빌드 정보 캐싱 (기존)
+    
+    // 🔥 기가차드 극한 최적화 추가
+    "assumeChangesOnlyAffectDirectDependencies": true, // 변경 최적화
+    "useDefineForClassFields": true, // 클래스 필드 최적화
+    
+    "noUncheckedIndexedAccess": true, // 인덱스 접근 안전성
+    
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/renderer/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@main/*": ["./src/main/*"],
+      "@renderer/*": ["./src/renderer/*"],
+      "@preload/*": ["./src/preload/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "src/renderer/**/*.ts",
+    "src/renderer/**/*.tsx",
+    "src/types/**/*.d.ts",
+    "src/shared/**/*.ts",
+    "src/preload/**/*.ts",
+    "src/main/**/*.ts",
+    "../shared/**/*.ts"
+
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "out",
+    ".next",
+    "**/*.test.*",
+    "**/*.spec.*",
+    "coverage",
+    "prisma/migrations",
+    "scripts",
+    "debug-scripts",
+    "test",
+    "**/*.config.js",
+    "**/*.config.mjs"
+  ]
+}

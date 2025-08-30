@@ -1,0 +1,126 @@
+{
+    "project": "Loop",
+    "generatedAt": "2025-08-18T00:00:00.000Z",
+    "tasks": [
+        {
+            "id": "T001",
+            "title": "코드베이스 안전 검사: any/console.log/TODO 탐지",
+            "description": "전역적으로 `any` 사용, `console.log` 사용, `TODO`/`FIXME` 주석을 찾고 우선 순위 목록 생성",
+            "priority": "high",
+            "status": "open",
+            "owner": null
+        },
+        {
+            "id": "T002",
+            "title": "타입체크 및 린트 실행",
+            "description": "`tsc --noEmit` 및 `eslint`를 실행해 타입 오류와 린트 이슈를 수집",
+            "priority": "high",
+            "status": "open",
+            "owner": null
+        },
+        {
+            "id": "T003",
+            "title": "핵심 모듈 단위테스트 추가 (스켈레톤)",
+            "description": "`HangulComposer`, `SessionManager`, `StatsManager`에 대한 단위테스트 스켈레톤을 추가하고 CI에서 실행되도록 설정",
+            "priority": "medium",
+            "status": "open",
+            "owner": null
+        },
+        {
+            "id": "T004",
+            "title": "타입 정리: unknown/any 제거",
+            "description": "`unknown`/`any`로 남아있는 필드(예: KeyboardEngine의 계산기들)에 대해 명시적 타입을 부여",
+            "priority": "medium",
+            "status": "open",
+            "owner": null
+        },
+        {
+            "id": "T005",
+            "title": "권한/폴백 경로 테스트 시나리오 작성",
+            "description": "macOS/Windows/Linux에서 권한 실패·폴백 동작을 시뮬레이션하는 통합 테스트 케이스 작성",
+            "priority": "medium",
+            "status": "open",
+            "owner": null
+        },
+        {
+            "id": "T006",
+            "title": "문서화: ARCHITECTURE.md 생성 또는 안전 업데이트",
+            "description": "데이터 흐름, 주요 모듈, 확장 포인트, 수정 금지 파일 목록을 담은 아키텍처 문서 작성. 이미 `ARCHITECTURE.md`가 존재할 경우에는 덮어쓰기 대신 백업 생성(예: ARCHITECTURE.md.bak.<timestamp>) 후 안전하게 병합하거나, 변경사항을 별도 파일(ARCHITECTURE.changes.md)에 기록하는 워크플로우를 권장. 자동화 스크립트에는 파일 존재 체크 및 예외 처리(try/catch 스타일)를 포함할 것.",
+            "priority": "low",
+            "status": "open",
+            "owner": "docs-team"
+        },
+        {
+            "id": "T007",
+            "title": "로그 정리: renderer의 console.log 제거/교체",
+            "description": "렌더러 컴포넌트에 산재한 `console.log`를 `Logger` 또는 개발용 게이트된 로깅으로 교체. 민감 데이터(사용자 콘텐츠/부분 텍스트)는 절대 로그하지 않도록 검토",
+            "priority": "high",
+            "status": "open",
+            "owner": "frontend-team"
+        },
+        {
+            "id": "T008",
+            "title": "main: process.exit 사용점 검토 및 안전 처리",
+            "description": "`process.exit`가 런타임 경로에 남아있는지 확인(테스트 전용인지 판단). 런타임이면 안전한 종료(Graceful shutdown) 로직으로 대체",
+            "priority": "high",
+            "status": "open",
+            "owner": "backend-team"
+        },
+        {
+            "id": "T009",
+            "title": "타입 강제: 상위 모듈 any 제거 우선 적용",
+            "description": "`KeyboardEngine`, `IPCOptimizer`, `ElectronStoreSettings` 등 T001 상위파일부터 `any` 타입을 제거하고 명시적 타입을 추가. 작은 PR 단위로 나눠 적용",
+            "priority": "high",
+            "status": "open",
+            "owner": "types-team"
+        },
+        {
+            "id": "T010",
+            "title": "로그 민감도 평가 및 마스킹 정책",
+            "description": "로그에 기록되는 사용자 콘텐츠/AI 응답/프로젝트 텍스트 등을 분류하여 마스킹 또는 금지 규칙을 적용. Logger 레벨별 데이터 포함 규칙 문서화",
+            "priority": "medium",
+            "status": "open",
+            "owner": "security-team"
+        },
+        {
+            "id": "T011",
+            "title": "테스트/유틸: test-unified-detector 실행 경로 분리",
+            "description": "`test-unified-detector`처럼 테스트용 스크립트는 실행 경로에서 분리하고, process.exit 호출을 테스트 harness에서만 사용하도록 수정",
+            "priority": "medium",
+            "status": "open",
+            "owner": "qa-team"
+        },
+        {
+            "id": "T012",
+            "title": "CI 파이프라인에 tsc/eslint 단계 추가",
+            "description": "CI에서 `pnpm exec tsc --noEmit` 및 `pnpm exec eslint src --ext .ts,.tsx`를 필수로 실행하여 회귀를 방지",
+            "priority": "high",
+            "status": "open",
+            "owner": "ci-team"
+        },
+        {
+            "id": "T013",
+            "title": "macOS Dock 아이콘 실패 수정",
+            "description": "앱이 사용하는 macOS Dock 아이콘 경로를 assets 폴더의 `icon.icns`로 안정적으로 설정하도록 코드 수정 및 아이콘 파일 유효성 검증. 실패 시 대체 아이콘 로드나 로그 출력 개선 포함",
+            "priority": "high",
+            "status": "open",
+            "owner": "desktop-team"
+        },
+        {
+            "id": "T014",
+            "title": "OAuth 토큰 스코프 재검증 및 자동 재인증 흐름",
+            "description": "OAuthService에서 400 응답(잘못된 스코프) 처리 개선: 환경변수(`GOOGLE_REFRESH_TOKEN`, `GOOGLE_ACCESS_TOKEN`, `GOOGLE_AUTHORIZATION`) 로드 확인, 토큰 유효성 검사 실패 시 사용자에게 재인증 흐름을 트리거하도록 안전한 재시도 로직 구현",
+            "priority": "high",
+            "status": "open",
+            "owner": "auth-team"
+        },
+        {
+            "id": "T015",
+            "title": "환경변수 로드 및 .env 보안 검토",
+            "description": "`.env` 파일에 민감 정보가 평문으로 저장되어 있음. 개발환경에 한정하되, 배포 전에는 환경변수 관리(Secret manager) 사용 권장 및 .env 파일 가공/마스킹 스크립트 추가",
+            "priority": "medium",
+            "status": "open",
+            "owner": "security-team"
+        }
+    ]
+}

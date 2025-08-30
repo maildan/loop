@@ -1,0 +1,101 @@
+{
+  "productName": "Loop",
+  "appId": "com.loop.typing-analytics",
+  "directories": {
+    "output": "release"
+  },
+  "files": [
+    "dist/main/**/*",
+    "dist/preload/**/*",
+    "dist/renderer/**/*",
+    "dist/shared/**/*",
+    "assets/**/*",
+    "package.json",
+    "node_modules/@prisma/client/runtime/**",
+    "node_modules/active-win/**",
+    "node_modules/node-mac-permissions/**",
+    "node_modules/uiohook-napi/build/Release/uiohook_napi.node"
+  ],
+  "asarUnpack": [
+    "**/*.node",
+    "**/*.dll",
+    "**/*.dylib",
+    "**/*.so",
+    "fonts/**",
+    "resources/fonts/**"
+  ],
+  "extraResources": [
+    {
+      "from": "prisma/schema.prisma",
+      "to": "schema.prisma"
+    },
+    {
+      "from": "node_modules/@prisma/client/runtime/query-engine-darwin-arm64",
+      "to": "prisma/query-engine"
+    },
+    {
+      "from": "public/fonts",
+      "to": "fonts"
+    }
+  ],
+  "extraFiles": [],
+  "mac": {
+    "category": "public.app-category.productivity",
+    "icon": "assets/icon.icns",
+    "entitlements": "assets/entitlements.mac.plist",
+    "entitlementsInherit": "assets/entitlements.mac.plist",
+    "gatekeeperAssess": false,
+    "hardenedRuntime": true,
+    "asar": true,
+    "target": [
+      {
+        "target": "dmg",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    ]
+  },
+  "win": {
+    "icon": "assets/icon.ico",
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    ]
+  },
+  "linux": {
+    "icon": "assets/icon.png",
+    "category": "Utility",
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      {
+        "target": "deb",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      }
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "Loop"
+  },
+  "publish": null,
+  "asar": true
+}

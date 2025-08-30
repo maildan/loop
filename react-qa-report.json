@@ -1,0 +1,466 @@
+{
+  "timestamp": "2025-08-10T15:05:24.635Z",
+  "totalIssues": 266,
+  "issuesByType": {
+    "inline-handler": 63,
+    "unnecessary-update": 139,
+    "missing-memo": 51,
+    "inline-conditional": 12,
+    "inline-style": 1
+  },
+  "issuesBySeverity": {
+    "medium": 266
+  },
+  "issues": [
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 266,
+      "type": "inline-handler",
+      "message": "인라인 클릭 핸들러",
+      "severity": "medium",
+      "suggestion": "useCallback/useMemo로 메모이제이션하거나 컴포넌트 외부로 분리",
+      "code": "onClick={() => handleFeatureClick(feature)}"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 364,
+      "type": "inline-handler",
+      "message": "인라인 변경 핸들러",
+      "severity": "medium",
+      "suggestion": "useCallback/useMemo로 메모이제이션하거나 컴포넌트 외부로 분리",
+      "code": "onChange={(e) => setInputMessage(e.target.value)}"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 388,
+      "type": "inline-handler",
+      "message": "인라인 클릭 핸들러",
+      "severity": "medium",
+      "suggestion": "useCallback/useMemo로 메모이제이션하거나 컴포넌트 외부로 분리",
+      "code": "onClick={() => handleSuggestionClick(suggestion)}"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 191,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setIsTyping(true);"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 232,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setIsTyping(false);"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 237,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setInputMessage(suggestion);"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 130,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "timestamp: new Date(Date.now() - 60000)"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 187,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "timestamp: new Date()"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 210,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "timestamp: new Date()"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 227,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "timestamp: new Date()"
+    },
+    {
+      "file": "src/renderer/app/ai/page.tsx",
+      "line": 329,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "{new Date(message.timestamp).toLocaleTimeString('ko-KR', {"
+    },
+    {
+      "file": "src/renderer/app/analytics/page.tsx",
+      "line": 387,
+      "type": "inline-handler",
+      "message": "인라인 클릭 핸들러",
+      "severity": "medium",
+      "suggestion": "useCallback/useMemo로 메모이제이션하거나 컴포넌트 외부로 분리",
+      "code": "onClick={() => setCurrentTab(tab.id)}"
+    },
+    {
+      "file": "src/renderer/app/analytics/page.tsx",
+      "line": 113,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setLoading(true);"
+    },
+    {
+      "file": "src/renderer/app/analytics/page.tsx",
+      "line": 114,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setError(null);"
+    },
+    {
+      "file": "src/renderer/app/analytics/page.tsx",
+      "line": 181,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setLoading(false);"
+    },
+    {
+      "file": "src/renderer/app/layout.tsx",
+      "line": 53,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSidebarCollapsed(true);"
+    },
+    {
+      "file": "src/renderer/app/layout.tsx",
+      "line": 60,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setIsClientMounted(true);"
+    },
+    {
+      "file": "src/renderer/app/layout.tsx",
+      "line": 70,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSidebarCollapsed(newState);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 38,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setShowCreator(true);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 57,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setLoading(true);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 58,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setError(null);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 70,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setProjects(projectsData);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 76,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setError(errorMessage);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 79,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setProjects(DEFAULT_PROJECTS);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 81,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setLoading(false);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 109,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setShowCreator(true);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 209,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setError(null);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 211,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setLoading(true);"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 258,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "onClose={() => setShowCreator(false)}"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 95,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "createdAt: project.createdAt ? new Date(project.createdAt) : new Date(),"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 96,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "updatedAt: project.updatedAt ? new Date(project.updatedAt) :"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 97,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "project.lastModified ? new Date(project.lastModified) : new Date(),"
+    },
+    {
+      "file": "src/renderer/app/projects/page.tsx",
+      "line": 151,
+      "type": "missing-memo",
+      "message": "비용이 큰 연산: 날짜 객체 생성",
+      "severity": "medium",
+      "suggestion": "useMemo나 useCallback으로 메모이제이션하세요",
+      "code": "updatedAt: new Date(),"
+    },
+    {
+      "file": "src/renderer/app/settings/components/sections/AppSettingsSection.tsx",
+      "line": 43,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setDisplayTheme(currentTheme);"
+    },
+    {
+      "file": "src/renderer/app/settings/components/sections/AppSettingsSection.tsx",
+      "line": 53,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setDisplayTheme(newTheme);"
+    },
+    {
+      "file": "src/renderer/app/settings/components/sections/AppSettingsSection.tsx",
+      "line": 56,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setTheme(newTheme);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 69,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setLoading(true);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 70,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setError(null);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 81,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSettings(defaultSettings);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 86,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSettings(defaultSettings);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 89,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setLoading(false);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 105,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSaving(true);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 149,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSaving(false);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 162,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSaving(true);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 163,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setError(null);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 180,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSaving(false);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 193,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSaving(true);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 194,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setError(null);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 202,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSettings(defaultSettings);"
+    },
+    {
+      "file": "src/renderer/app/settings/hooks/useSettings.ts",
+      "line": 212,
+      "type": "unnecessary-update",
+      "message": "동일한 값으로 상태 업데이트 가능성",
+      "severity": "medium",
+      "suggestion": "상태 업데이트 전에 값 비교 추가",
+      "code": "setSaving(false);"
+    }
+  ]
+}

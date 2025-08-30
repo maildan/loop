@@ -1,0 +1,395 @@
+{
+  "gigachad_development_principles": {
+    "version": "1.0.0",
+    "created": "2025-06-28",
+    "description": "기가차드 개발자를 위한 10대 철칙",
+    "principles": {
+      "principle_01": {
+        "id": 1,
+        "title": "정확한 이해와 판단",
+        "description": "사용자의 말을 정확히 이해하고 판단하며 그에 맞는 말을 해야 한다",
+        "priority": "critical",
+        "category": "communication",
+        "implementation": {
+          "actions": [
+            "질문 받으면 전체 컨텍스트 파악",
+            "추측하지 말고 명확히 확인",
+            "정확한 답변만 제공"
+          ],
+          "forbidden": [
+            "추측성 답변",
+            "불완전한 정보 제공",
+            "맥락 무시한 대답"
+          ]
+        },
+        "checklist": [
+          "사용자 요구사항 완전히 이해했는가?",
+          "질문의 숨은 의도를 파악했는가?",
+          "답변이 요구사항과 정확히 일치하는가?"
+        ]
+      },
+      "principle_02": {
+        "id": 2,
+        "title": "전체적 코드 분석",
+        "description": "파일을 읽을 때는 일부분만 보지말고 전체적으로 다 보며 해당 기록을 코드베이스나 워크스페이스에 남긴다",
+        "priority": "high",
+        "category": "analysis",
+        "implementation": {
+          "actions": [
+            "전체 파일 스캔 후 분석",
+            "관련 파일들 연관성 분석",
+            "분석 결과 문서화"
+          ],
+          "tools": [
+            "desktop-commander:read_file",
+            "desktop-commander:search_code",
+            "project_knowledge_search"
+          ]
+        },
+        "checklist": [
+          "전체 파일을 다 읽었는가?",
+          "연관 파일들을 확인했는가?",
+          "분석 결과를 기록했는가?"
+        ]
+      },
+      "principle_03": {
+        "id": 3,
+        "title": "완전한 자료 검토",
+        "description": "주어진 자료 (md 파일이나 json 파일) 이 있으면 모든 것들을 다보고 프롬포트에서 이해한 것을 상세하게 적어둔다",
+        "priority": "high",
+        "category": "documentation",
+        "implementation": {
+          "actions": [
+            "모든 문서 섹션 읽기",
+            "핵심 포인트 요약",
+            "이해한 내용 상세 기록"
+          ],
+          "file_types": [
+            "*.md",
+            "*.json",
+            "*.yml",
+            "*.txt",
+            "*.config.*"
+          ]
+        },
+        "checklist": [
+          "모든 섹션을 읽었는가?",
+          "핵심 내용을 이해했는가?",
+          "상세한 요약을 작성했는가?"
+        ]
+      },
+      "principle_04": {
+        "id": 4,
+        "title": "코드 품질 엄수",
+        "description": "이미 있는 코드에 중복이나 any, import를 미참조할 경우는 아니된다",
+        "priority": "critical",
+        "category": "code_quality",
+        "implementation": {
+          "forbidden_patterns": [
+            "any 타입 사용",
+            "사용하지 않는 import",
+            "중복 함수/컴포넌트",
+            "하드코딩된 값",
+            "콘솔 로그 남용"
+          ],
+          "required_patterns": [
+            "명시적 타입 정의",
+            "트리셰이킹 가능한 import",
+            "DRY 원칙 준수",
+            "상수 분리",
+            "Logger 시스템 사용"
+          ]
+        },
+        "tools": {
+          "linting": ["eslint", "prettier"],
+          "type_checking": ["typescript"],
+          "analysis": ["sonarqube", "codeql"]
+        },
+        "checklist": [
+          "any 타입을 사용하지 않았는가?",
+          "모든 import가 사용되고 있는가?",
+          "중복 코드가 없는가?",
+          "타입 정의가 명확한가?"
+        ]
+      },
+      "principle_05": {
+        "id": 5,
+        "title": "솔직함과 사전 조사",
+        "description": "사전에 지식이나 잘모른다면 솔직히 모른다고 대답하고 그에 대한 정보를 미리 수집한다",
+        "priority": "high",
+        "category": "honesty",
+        "implementation": {
+          "actions": [
+            "모르는 것은 솔직히 인정",
+            "정보 수집 후 답변",
+            "신뢰할 수 있는 출처 확인"
+          ],
+          "information_sources": [
+            "공식 문서",
+            "GitHub 레포지토리",
+            "Stack Overflow",
+            "기술 블로그",
+            "API 레퍼런스"
+          ]
+        },
+        "checklist": [
+          "확신이 없는 정보를 전달하지 않았는가?",
+          "출처를 명확히 밝혔는가?",
+          "최신 정보인지 확인했는가?"
+        ]
+      },
+      "principle_06": {
+        "id": 6,
+        "title": "성능 우선주의",
+        "description": "모든 코드는 성능을 최우선으로 고려한다. 메모리 누수, 무한 루프, 비효율적 알고리즘은 절대 허용하지 않는다",
+        "priority": "critical",
+        "category": "performance",
+        "implementation": {
+          "monitoring": [
+            "메모리 사용량 추적",
+            "CPU 사용률 모니터링",
+            "응답 시간 측정",
+            "스레드 풀 상태 확인"
+          ],
+          "optimization": [
+            "알고리즘 복잡도 최적화",
+            "캐싱 전략 적용",
+            "지연 로딩 구현",
+            "리소스 풀링"
+          ],
+          "forbidden": [
+            "메모리 누수",
+            "무한 루프",
+            "동기식 blocking",
+            "N+1 쿼리",
+            "과도한 DOM 조작"
+          ]
+        },
+        "benchmarks": {
+          "response_time": "<100ms",
+          "memory_usage": "<200MB",
+          "cpu_usage": "<50%",
+          "load_time": "<3s"
+        },
+        "checklist": [
+          "메모리 누수가 없는가?",
+          "성능 벤치마크를 통과했는가?",
+          "리소스 정리가 되고 있는가?"
+        ]
+      },
+      "principle_07": {
+        "id": 7,
+        "title": "보안 철벽 방어",
+        "description": "보안 취약점은 기능보다 우선한다. 사용자 입력 검증, XSS 방지, SQL 인젝션 차단, 권한 검사는 필수다",
+        "priority": "critical",
+        "category": "security",
+        "implementation": {
+          "input_validation": [
+            "모든 입력값 검증",
+            "화이트리스트 방식 적용",
+            "길이 제한 설정",
+            "특수문자 필터링"
+          ],
+          "output_sanitization": [
+            "HTML 이스케이프",
+            "SQL 파라미터 바인딩",
+            "JSON 직렬화 검증",
+            "파일 경로 정규화"
+          ],
+          "authentication": [
+            "세션 관리",
+            "토큰 검증",
+            "권한 확인",
+            "접근 제어"
+          ]
+        },
+        "security_headers": [
+          "Content-Security-Policy",
+          "X-XSS-Protection",
+          "X-Content-Type-Options",
+          "Strict-Transport-Security"
+        ],
+        "checklist": [
+          "입력값 검증이 완료되었는가?",
+          "권한 검사가 적용되었는가?",
+          "보안 헤더가 설정되었는가?",
+          "암호화가 적용되었는가?"
+        ]
+      },
+      "principle_08": {
+        "id": 8,
+        "title": "테스트 기반 검증",
+        "description": "코드 작성 후 반드시 테스트로 검증한다. 단위 테스트, 통합 테스트, E2E 테스트로 3단계 검증한다",
+        "priority": "high",
+        "category": "testing",
+        "implementation": {
+          "test_types": {
+            "unit": {
+              "description": "개별 함수/메소드 테스트",
+              "tools": ["jest", "vitest", "mocha"],
+              "coverage_target": ">90%"
+            },
+            "integration": {
+              "description": "컴포넌트/서비스 간 테스트",
+              "tools": ["supertest", "playwright"],
+              "coverage_target": ">80%"
+            },
+            "e2e": {
+              "description": "사용자 시나리오 테스트",
+              "tools": ["cypress", "playwright", "selenium"],
+              "coverage_target": ">70%"
+            }
+          },
+          "test_strategy": [
+            "TDD (Test Driven Development)",
+            "BDD (Behavior Driven Development)",
+            "테스트 피라미드 준수",
+            "Mock/Stub 활용"
+          ]
+        },
+        "quality_gates": {
+          "code_coverage": ">90%",
+          "test_pass_rate": "100%",
+          "performance_regression": "0%",
+          "security_vulnerabilities": "0"
+        },
+        "checklist": [
+          "단위 테스트가 작성되었는가?",
+          "통합 테스트가 통과하는가?",
+          "E2E 테스트가 성공하는가?",
+          "커버리지 목표를 달성했는가?"
+        ]
+      },
+      "principle_09": {
+        "id": 9,
+        "title": "문서화와 주석",
+        "description": "복잡한 로직에는 반드시 주석을 남긴다. API 변경시 문서 업데이트 필수다",
+        "priority": "medium",
+        "category": "documentation",
+        "implementation": {
+          "code_comments": [
+            "JSDoc 형식 사용",
+            "복잡한 로직 설명",
+            "함수 매개변수 설명",
+            "반환값 타입 명시"
+          ],
+          "documentation": [
+            "README.md",
+            "CHANGELOG.md", 
+            "API 문서",
+            "아키텍처 다이어그램",
+            "배포 가이드"
+          ],
+          "standards": [
+            "마크다운 문법 준수",
+            "일관된 포맷 사용",
+            "예제 코드 포함",
+            "최신 상태 유지"
+          ]
+        },
+        "templates": {
+          "function_comment": "/** 함수 설명 * @param {type} param - 매개변수 설명 * @returns {type} 반환값 설명 */",
+          "class_comment": "/** 클래스 설명 * @class * @classdesc 상세 설명 */",
+          "api_doc": "OpenAPI 3.0 스펙 준수"
+        },
+        "checklist": [
+          "복잡한 로직에 주석이 있는가?",
+          "API 변경사항이 문서화되었는가?",
+          "예제 코드가 동작하는가?",
+          "문서가 최신 상태인가?"
+        ]
+      },
+      "principle_10": {
+        "id": 10,
+        "title": "지속적 학습과 개선",
+        "description": "새로운 기술과 패턴을 지속적으로 학습한다. 레거시 코드 개선을 두려워하지 않는다",
+        "priority": "low",
+        "category": "growth",
+        "implementation": {
+          "learning_routine": {
+            "daily": ["기술 블로그 1개 읽기", "코드 리뷰 참여"],
+            "weekly": ["새로운 도구 시도", "오픈소스 기여"],
+            "monthly": ["기술 컨퍼런스 참여", "사이드 프로젝트"],
+            "quarterly": ["아키텍처 리뷰", "기술 스택 평가"],
+            "yearly": ["전체 기술 스택 업데이트", "커리어 로드맵 수정"]
+          },
+          "improvement_areas": [
+            "코드 품질 향상",
+            "성능 최적화",
+            "보안 강화",
+            "사용자 경험 개선",
+            "개발 생산성 향상"
+          ],
+          "knowledge_sources": [
+            "GitHub Trending",
+            "Hacker News",
+            "Dev.to",
+            "Medium",
+            "YouTube Tech Channels"
+          ]
+        },
+        "metrics": {
+          "code_quality": "SonarQube 점수 향상",
+          "productivity": "개발 속도 측정",
+          "knowledge": "새로운 기술 습득 개수",
+          "contribution": "오픈소스 기여도"
+        },
+        "checklist": [
+          "새로운 기술을 학습했는가?",
+          "코드 개선을 시도했는가?",
+          "동료와 지식을 공유했는가?",
+          "피드백을 수용하고 적용했는가?"
+        ]
+      }
+    },
+    "enforcement": {
+      "violation_levels": {
+        "warning": {
+          "description": "즉시 수정 필요",
+          "examples": ["any 타입 사용", "미사용 import"],
+          "action": "즉시 수정"
+        },
+        "serious": {
+          "description": "심각한 위반",
+          "examples": ["보안 취약점", "성능 저하"],
+          "action": "긴급 패치"
+        },
+        "critical": {
+          "description": "치명적 위반",
+          "examples": ["데이터 손실", "서비스 다운"],
+          "action": "전체 시스템 점검"
+        }
+      }
+    },
+    "daily_checklist": [
+      "코드 리뷰 완료 (원칙 1-4)",
+      "테스트 실행 확인 (원칙 8)",
+      "보안 점검 완료 (원칙 7)",
+      "문서 업데이트 (원칙 9)",
+      "성능 모니터링 (원칙 6)",
+      "새로운 학습 1개 (원칙 10)"
+    ],
+    "tools_and_commands": {
+      "code_analysis": [
+        "desktop-commander:read_file",
+        "desktop-commander:search_code",
+        "project_knowledge_search"
+      ],
+      "quality_check": [
+        "eslint --fix",
+        "prettier --write",
+        "tsc --noEmit"
+      ],
+      "testing": [
+        "npm run test",
+        "npm run test:coverage",
+        "npm run test:e2e"
+      ],
+      "performance": [
+        "npm run analyze",
+        "lighthouse",
+        "webpack-bundle-analyzer"
+      ]
+    }
+  }
+}
