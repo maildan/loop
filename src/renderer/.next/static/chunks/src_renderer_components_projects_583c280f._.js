@@ -964,7 +964,7 @@ const WriterSidebar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: "flex-1",
-                                                        children: `${index + 1}장: ${item.title}`
+                                                        children: `${index + 1}챕터: ${item.title}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
                                                         lineNumber: 145,
@@ -1156,7 +1156,7 @@ const WriterSidebar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "flex-1",
-                                                            children: `${index + 1}장: ${item.title}`
+                                                            children: `${index + 1}챕터: ${item.title}`
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
                                                             lineNumber: 191,
@@ -3927,7 +3927,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                                 lineNumber: 217,
-                                columnNumber: 15
+                                columnNumber: 29
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 className: TAB_STYLES.tabTitle,
@@ -3935,7 +3935,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                                 lineNumber: 221,
-                                columnNumber: 15
+                                columnNumber: 29
                             }, this),
                             tab.isDirty && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 className: "text-orange-500 text-xs",
@@ -3943,7 +3943,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                                 lineNumber: 226,
-                                columnNumber: 17
+                                columnNumber: 33
                             }, this),
                             canClose && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: `
@@ -3957,40 +3957,40 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                                     lineNumber: 238,
-                                    columnNumber: 19
+                                    columnNumber: 37
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                                 lineNumber: 230,
-                                columnNumber: 17
+                                columnNumber: 33
                             }, this)
                         ]
                     }, tab.id, true, {
                         fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                         lineNumber: 200,
-                        columnNumber: 13
+                        columnNumber: 25
                     }, this);
                 })
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                 lineNumber: 193,
-                columnNumber: 7
+                columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 className: TAB_STYLES.newTabButton,
                 onClick: onNewTab,
-                title: "새 장 추가",
+                title: "새 챕터 추가",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
                     size: 16
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                     lineNumber: 251,
-                    columnNumber: 9
+                    columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                 lineNumber: 246,
-                columnNumber: 7
+                columnNumber: 13
             }, this),
             contextMenu.isOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: TAB_STYLES.contextMenu,
@@ -4006,7 +4006,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                         lineNumber: 263,
-                        columnNumber: 11
+                        columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: TAB_STYLES.contextMenuItem,
@@ -4015,7 +4015,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                         lineNumber: 270,
-                        columnNumber: 11
+                        columnNumber: 21
                     }, this),
                     contextMenu.tabId !== 'main' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                         children: [
@@ -4024,7 +4024,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                                 lineNumber: 279,
-                                columnNumber: 15
+                                columnNumber: 29
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: TAB_STYLES.contextMenuItem,
@@ -4038,7 +4038,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                                 lineNumber: 280,
-                                columnNumber: 15
+                                columnNumber: 29
                             }, this)
                         ]
                     }, void 0, true)
@@ -4046,15 +4046,15 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
                 lineNumber: 256,
-                columnNumber: 9
+                columnNumber: 17
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
         lineNumber: 192,
-        columnNumber: 5
+        columnNumber: 9
     }, this);
-}, "+D5RTEjR4ncJiQfCIrepJJ/bskU=")), "+D5RTEjR4ncJiQfCIrepJJ/bskU=");
+}, "YJvwobknlRZAGcnwty3OQc8POqo=")), "YJvwobknlRZAGcnwty3OQc8POqo=");
 _c1 = EditorTabBar;
 var _c, _c1;
 __turbopack_context__.k.register(_c, "EditorTabBar$memo");
@@ -4139,11 +4139,11 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                             className: MODAL_STYLES.title,
-                            children: "새 장 만들기"
+                            children: "새 챕터 만들기"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                             lineNumber: 66,
-                            columnNumber: 11
+                            columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             onClick: onClose,
@@ -4154,18 +4154,18 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                                 lineNumber: 72,
-                                columnNumber: 13
+                                columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                             lineNumber: 67,
-                            columnNumber: 11
+                            columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                     lineNumber: 65,
-                    columnNumber: 9
+                    columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                     onSubmit: handleSubmit,
@@ -4176,11 +4176,11 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                     htmlFor: "chapter-title",
                                     className: MODAL_STYLES.label,
-                                    children: "장 제목"
+                                    children: "챕터 제목"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                                     lineNumber: 78,
-                                    columnNumber: 13
+                                    columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                     ref: inputRef,
@@ -4189,18 +4189,18 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                     value: title,
                                     onChange: (e)=>setTitle(e.target.value),
                                     className: MODAL_STYLES.input,
-                                    placeholder: "예: 1장 - 새로운 시작",
+                                    placeholder: "새로운 챕터",
                                     required: true
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                                     lineNumber: 81,
-                                    columnNumber: 13
+                                    columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                             lineNumber: 77,
-                            columnNumber: 11
+                            columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: MODAL_STYLES.footer,
@@ -4213,7 +4213,7 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                                     lineNumber: 94,
-                                    columnNumber: 13
+                                    columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     type: "submit",
@@ -4223,30 +4223,30 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                                     lineNumber: 101,
-                                    columnNumber: 13
+                                    columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                             lineNumber: 93,
-                            columnNumber: 11
+                            columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
                     lineNumber: 76,
-                    columnNumber: 9
+                    columnNumber: 17
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
             lineNumber: 60,
-            columnNumber: 7
+            columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
         lineNumber: 59,
-        columnNumber: 5
+        columnNumber: 9
     }, this);
 }
 _s(NewChapterModal, "tLWZqrOlpdW4vxcWT5pezOctgtQ=");
@@ -5105,12 +5105,12 @@ const CommandMenu = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$proj
                             size: 16
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/SlashCommands.tsx",
-                            lineNumber: 275,
+                            lineNumber: 274,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/SlashCommands.tsx",
-                        lineNumber: 274,
+                        lineNumber: 273,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5121,7 +5121,7 @@ const CommandMenu = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$proj
                                 children: item.title
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/editor/SlashCommands.tsx",
-                                lineNumber: 278,
+                                lineNumber: 277,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5129,13 +5129,13 @@ const CommandMenu = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$proj
                                 children: item.description
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/editor/SlashCommands.tsx",
-                                lineNumber: 279,
+                                lineNumber: 278,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/editor/SlashCommands.tsx",
-                        lineNumber: 277,
+                        lineNumber: 276,
                         columnNumber: 13
                     }, this)
                 ]
@@ -5148,7 +5148,7 @@ const CommandMenu = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$proj
             children: "검색 결과가 없습니다"
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/editor/SlashCommands.tsx",
-            lineNumber: 284,
+            lineNumber: 283,
             columnNumber: 9
         }, this)
     }, void 0, false, {
@@ -6129,18 +6129,34 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
     // 🔥 컴포넌트 언마운트 시 정리 - DOM 에러 방지
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "MarkdownEditor.useEffect": ()=>{
+            const currentEditor = editor;
             return ({
                 "MarkdownEditor.useEffect": ()=>{
-                    if (editor && !editor.isDestroyed) {
+                    if (currentEditor && !currentEditor.isDestroyed) {
                         try {
+                            // 모든 DOM 조작 중단
+                            if (currentEditor.view && currentEditor.view.dom) {
+                                currentEditor.view.dom.style.display = 'none';
+                            }
                             // 에디터 이벤트 리스너 정리
-                            editor.off('transaction');
-                            editor.off('update');
-                            editor.off('create');
-                            editor.off('focus');
-                            editor.off('blur');
+                            currentEditor.off('transaction');
+                            currentEditor.off('update');
+                            currentEditor.off('create');
+                            currentEditor.off('focus');
+                            currentEditor.off('blur');
+                            currentEditor.off('selectionUpdate');
+                            // 모든 pending 트랜잭션 취소
+                            if (currentEditor.view && currentEditor.view.state) {
+                                currentEditor.view.updateState(currentEditor.view.state);
+                            }
                             // 에디터 소멸
-                            editor.destroy();
+                            setTimeout({
+                                "MarkdownEditor.useEffect": ()=>{
+                                    if (!currentEditor.isDestroyed) {
+                                        currentEditor.destroy();
+                                    }
+                                }
+                            }["MarkdownEditor.useEffect"], 0);
                             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('TIPTAP_EDITOR', 'Editor destroyed safely');
                         } catch (error) {
                             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('TIPTAP_EDITOR', 'Error during editor cleanup', error);
@@ -6151,8 +6167,7 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
         }
     }["MarkdownEditor.useEffect"], [
         editor
-    ]);
-    // 🔥 ESC 키 핸들러 (집중모드 해제) 및 복사 이벤트 리스너
+    ]); // 🔥 ESC 키 핸들러 (집중모드 해제) 및 복사 이벤트 리스너
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "MarkdownEditor.useEffect": ()=>{
             const handleEscKey = {
@@ -6258,7 +6273,7 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             className: "w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 561,
+                            lineNumber: 577,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -6266,23 +6281,23 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             children: "에디터 준비 중..."
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 562,
+                            lineNumber: 578,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                    lineNumber: 560,
+                    lineNumber: 576,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 559,
+                lineNumber: 575,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-            lineNumber: 558,
+            lineNumber: 574,
             columnNumber: 7
         }, this);
     }
@@ -6296,12 +6311,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                     children: "📁 파일을 여기에 놓으세요"
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                    lineNumber: 574,
+                    lineNumber: 590,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 573,
+                lineNumber: 589,
                 columnNumber: 9
             }, this),
             editor && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tiptap$2f$react$2f$dist$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["BubbleMenu"], {
@@ -6320,12 +6335,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 598,
+                            lineNumber: 614,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 591,
+                        lineNumber: 608,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6336,12 +6351,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 608,
+                            lineNumber: 623,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 601,
+                        lineNumber: 617,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6352,12 +6367,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 618,
+                            lineNumber: 632,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 611,
+                        lineNumber: 626,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6368,30 +6383,7 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 628,
-                            columnNumber: 13
-                        }, this)
-                    }, void 0, false, {
-                        fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 621,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
-                    }, void 0, false, {
-                        fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 632,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: ()=>editor.chain().focus().toggleCode().run(),
-                        className: `${EDITOR_STYLES.bubbleButton} ${editor.isActive('code') ? 'bg-blue-200 dark:bg-blue-800' : ''}`,
-                        title: "인라인 코드 (Ctrl+`)",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$code$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Code$3e$__["Code"], {
-                            size: 14
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 642,
+                            lineNumber: 641,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
@@ -6403,7 +6395,30 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                         className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 646,
+                        lineNumber: 645,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: ()=>editor.chain().focus().toggleCode().run(),
+                        className: `${EDITOR_STYLES.bubbleButton} ${editor.isActive('code') ? 'bg-blue-200 dark:bg-blue-800' : ''}`,
+                        title: "인라인 코드 (Ctrl+`)",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$code$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Code$3e$__["Code"], {
+                            size: 14
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
+                            lineNumber: 654,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
+                        lineNumber: 648,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
+                        lineNumber: 658,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6417,12 +6432,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 659,
+                            lineNumber: 670,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 649,
+                        lineNumber: 661,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6433,19 +6448,19 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 670,
+                            lineNumber: 680,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 663,
+                        lineNumber: 674,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 674,
+                        lineNumber: 684,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6477,12 +6492,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 701,
+                            lineNumber: 711,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 677,
+                        lineNumber: 687,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6502,12 +6517,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 722,
+                            lineNumber: 732,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 705,
+                        lineNumber: 715,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6528,19 +6543,19 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 741,
+                            lineNumber: 751,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 726,
+                        lineNumber: 736,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 745,
+                        lineNumber: 755,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6556,31 +6571,32 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 756,
+                            lineNumber: 766,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 748,
+                        lineNumber: 758,
                         columnNumber: 11
                     }, this)
                 ]
-            }, void 0, true, {
+            }, "bubble-menu" // 🔥 고유 key 추가
+            , true, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 582,
+                lineNumber: 598,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tiptap$2f$react$2f$dist$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["EditorContent"], {
                 editor: editor
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 762,
+                lineNumber: 772,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-        lineNumber: 570,
+        lineNumber: 586,
         columnNumber: 5
     }, this);
 }
@@ -6746,6 +6762,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 // 🔥 기가차드 스토리 구조 뷰 - 작가 친화적 개선
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/stores/useStructureStore.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-client] (ecmascript)"); // 🔥 Logger import 추가
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/file-text.js [app-client] (ecmascript) <export default as FileText>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$hash$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Hash$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/hash.js [app-client] (ecmascript) <export default as Hash>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bookmark$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Bookmark$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/bookmark.js [app-client] (ecmascript) <export default as Bookmark>");
@@ -6757,6 +6774,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -6861,8 +6879,27 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
     const [showAddMenu, setShowAddMenu] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [editingId, setEditingId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [editTitle, setEditTitle] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
+    // 🔥 스토어 동기화 디버깅
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "StructureView.StructureView.useEffect": ()=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_VIEW', 'Structures updated', {
+                projectId,
+                structuresCount: structures.length,
+                structures: structures.map({
+                    "StructureView.StructureView.useEffect": (s)=>({
+                            id: s.id,
+                            title: s.title,
+                            type: s.type
+                        })
+                }["StructureView.StructureView.useEffect"])
+            });
+        }
+    }["StructureView.StructureView.useEffect"], [
+        structures,
+        projectId
+    ]);
     const handleAddItem = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
-        "StructureView.StructureView.useCallback[handleAddItem]": (type)=>{
+        "StructureView.StructureView.useCallback[handleAddItem]": async (type)=>{
             // 🔥 NEW: chapter 타입일 때는 모달을 통해 처리
             if (type === 'chapter' && onAddNewChapter) {
                 onAddNewChapter();
@@ -6875,9 +6912,18 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 synopsis: `새로운 시놉시스`,
                 idea: `새로운 아이디어`
             };
+            // 🔥 chapter 타입의 경우 올바른 번호 계산
+            let itemTitle = defaultTitles[type];
+            if (type === 'chapter') {
+                const chapterStructures = structures.filter({
+                    "StructureView.StructureView.useCallback[handleAddItem].chapterStructures": (item)=>item.type === 'chapter'
+                }["StructureView.StructureView.useCallback[handleAddItem].chapterStructures"]);
+                const chapterCount = chapterStructures.length + 1;
+                itemTitle = `${chapterCount}챕터`;
+            }
             const newItem = {
                 id: `${type}_${Date.now()}`,
-                title: defaultTitles[type],
+                title: itemTitle,
                 description: '',
                 type,
                 status: 'planning',
@@ -6885,8 +6931,8 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
-            // 🔥 Zustand 스토어에 추가
-            addStructureItem(projectId, newItem);
+            // 🔥 Zustand 스토어에 추가 (비동기)
+            await addStructureItem(projectId, newItem);
             // 🔥 에디터 상태 업데이트
             setCurrentEditor({
                 projectId,
@@ -6963,13 +7009,32 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
         }
     }["StructureView.StructureView.useCallback[handleEditCancel]"], []);
     const handleDelete = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
-        "StructureView.StructureView.useCallback[handleDelete]": (id)=>{
-            // 🔥 Zustand 스토어에서 삭제
-            deleteStructureItem(projectId, id);
+        "StructureView.StructureView.useCallback[handleDelete]": async (id)=>{
+            try {
+                // 🔥 Zustand 스토어에서 삭제 (DB 삭제 포함)
+                await deleteStructureItem(projectId, id);
+                // 🔥 삭제 성공 시 추가 정리 작업
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_VIEW', 'Structure item deleted successfully', {
+                    id,
+                    projectId
+                });
+                // 편집 상태 초기화
+                if (editingId === id) {
+                    setEditingId(null);
+                    setEditTitle('');
+                }
+            } catch (error) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_VIEW', 'Failed to delete structure item', {
+                    id,
+                    projectId,
+                    error
+                });
+            }
         }
     }["StructureView.StructureView.useCallback[handleDelete]"], [
         projectId,
-        deleteStructureItem
+        deleteStructureItem,
+        editingId
     ]);
     const handleKeyPress = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "StructureView.StructureView.useCallback[handleKeyPress]": (e, id)=>{
@@ -6994,7 +7059,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         children: "스토리 구조"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 227,
+                        lineNumber: 258,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -7002,13 +7067,13 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         children: "장, 장면, 메모를 관리하여 이야기의 흐름을 구성하세요"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 228,
+                        lineNumber: 259,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 226,
+                lineNumber: 257,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7030,7 +7095,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         className: STRUCTURE_STYLES.itemIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                        lineNumber: 247,
+                                        lineNumber: 278,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7045,7 +7110,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                             autoFocus: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 250,
+                                            lineNumber: 281,
                                             columnNumber: 21
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                             children: [
@@ -7054,7 +7119,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     children: item.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 261,
+                                                    lineNumber: 292,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7062,14 +7127,14 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     children: item.type === 'chapter' ? '장' : item.type === 'synopsis' ? '시놉시스' : '아이디어'
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 262,
+                                                    lineNumber: 293,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                        lineNumber: 248,
+                                        lineNumber: 279,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7087,12 +7152,12 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 279,
+                                                    lineNumber: 310,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                lineNumber: 270,
+                                                lineNumber: 301,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7107,24 +7172,24 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 290,
+                                                    lineNumber: 321,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                lineNumber: 281,
+                                                lineNumber: 312,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                        lineNumber: 269,
+                                        lineNumber: 300,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, item.id, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                lineNumber: 241,
+                                lineNumber: 272,
                                 columnNumber: 15
                             }, this);
                         }),
@@ -7143,33 +7208,33 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                             className: "w-5 h-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 307,
+                                            lineNumber: 338,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "새 항목 추가"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 308,
+                                            lineNumber: 339,
                                             columnNumber: 15
                                         }, this),
                                         showAddMenu ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 309,
+                                            lineNumber: 340,
                                             columnNumber: 30
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 309,
+                                            lineNumber: 340,
                                             columnNumber: 68
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 299,
+                                    lineNumber: 330,
                                     columnNumber: 13
                                 }, this),
                                 showAddMenu && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7186,7 +7251,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     className: "w-5 h-5 text-blue-600 dark:text-blue-400"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 324,
+                                                    lineNumber: 355,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7197,7 +7262,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                             children: label
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 326,
+                                                            lineNumber: 357,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7205,50 +7270,50 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                             children: description
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 329,
+                                                            lineNumber: 360,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 325,
+                                                    lineNumber: 356,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, type, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 315,
+                                            lineNumber: 346,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 313,
+                                    lineNumber: 344,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                            lineNumber: 298,
+                            lineNumber: 329,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                    lineNumber: 235,
+                    lineNumber: 266,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 234,
+                lineNumber: 265,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-        lineNumber: 224,
+        lineNumber: 255,
         columnNumber: 5
     }, this);
-}, "XdCwylXPmNQkFrMMVrnWzrX7NyA=", false, function() {
+}, "thPfPH/D1ubkcEK84CEzkHOLubE=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"],
@@ -7256,7 +7321,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"]
     ];
-})), "XdCwylXPmNQkFrMMVrnWzrX7NyA=", false, function() {
+})), "thPfPH/D1ubkcEK84CEzkHOLubE=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"],
@@ -11012,7 +11077,7 @@ function IdeaView({ ideaId, onBack }) {
                         '2'
                     ],
                     attachments: [],
-                    notes: '1장 클라이맥스에서 사용',
+                    notes: '1챕터 클라이맥스에서 사용',
                     createdAt: new Date('2024-01-08'),
                     updatedAt: new Date('2024-01-25'),
                     isFavorite: true
@@ -12570,7 +12635,7 @@ function IdeaView({ ideaId, onBack }) {
         columnNumber: 9
     }, this);
 }
-_s(IdeaView, "oZ2+79oo9ddEuIbfCuhFUV3Tky0=");
+_s(IdeaView, "XbiqrljRcREcZh1qepApBtkXzs0=");
 _c = IdeaView;
 var _c;
 __turbopack_context__.k.register(_c, "IdeaView");
@@ -12757,8 +12822,10 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$WriterStats$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/editor/WriterStats.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useAutoSave$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/hooks/useAutoSave.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/stores/useStructureStore.ts [app-client] (ecmascript)"); // 🔥 스토어 import 추가
 var _s = __turbopack_context__.k.signature();
 'use client';
+;
 ;
 ;
 ;
@@ -12845,7 +12912,7 @@ function useProjectData(projectId) {
                     id: '1',
                     projectId: projectId,
                     type: 'chapter',
-                    title: '1장: 시작',
+                    title: '1챕터: 시작',
                     isActive: true,
                     createdAt: defaultDate,
                     updatedAt: defaultDate
@@ -12872,7 +12939,7 @@ function useProjectData(projectId) {
                     id: '4',
                     projectId: projectId,
                     type: 'chapter',
-                    title: '2장: 전개',
+                    title: '2챕터: 전개',
                     isActive: true,
                     createdAt: defaultDate,
                     updatedAt: defaultDate
@@ -12912,6 +12979,7 @@ function useProjectData(projectId) {
     // 🔥 ref로 최신 값 추적 (성능 최적화: useEffect 제거)
     const titleRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])('');
     const contentRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])('');
+    const chaptersRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])('{}'); // 🔥 chapters ref 추가
     // 🔥 최적화: setter에서 직접 ref 업데이트 (useEffect 불필요)
     const setTitleOptimized = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "useProjectData.useCallback[setTitleOptimized]": (newTitle)=>{
@@ -12925,6 +12993,19 @@ function useProjectData(projectId) {
             setContent(newContent);
         }
     }["useProjectData.useCallback[setContentOptimized]"], []);
+    const setChaptersOptimized = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "useProjectData.useCallback[setChaptersOptimized]": (newChapters)=>{
+            console.log('🔥 DEBUG: setChaptersOptimized called', {
+                newChapters,
+                currentRef: chaptersRef.current
+            });
+            chaptersRef.current = newChapters;
+            setChapters(newChapters);
+            console.log('🔥 DEBUG: setChaptersOptimized completed', {
+                updatedRef: chaptersRef.current
+            });
+        }
+    }["useProjectData.useCallback[setChaptersOptimized]"], []);
     // 🔥 작가 데이터
     const [characters, setCharacters] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [structure, setStructure] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
@@ -12980,7 +13061,10 @@ function useProjectData(projectId) {
                 if (result && result.success && result.data) {
                     setTitle(result.data.title);
                     setContent(result.data.content || '');
-                    setChapters(result.data.chapters || '{}'); // chapters 필드 로드
+                    // 🔥 chapters 데이터 로드 및 ref 동기화
+                    const chaptersData = result.data.chapters || '{}';
+                    setChapters(chaptersData);
+                    chaptersRef.current = chaptersData; // ref도 동기화
                     setLastSaved(new Date(result.data.lastModified));
                     setSaveStatus('saved'); // 🔥 저장 상태 업데이트
                     // 🔥 실제 데이터 로드 - 캐릭터 데이터
@@ -13005,7 +13089,9 @@ function useProjectData(projectId) {
                         const structureResult = await window.electronAPI.projects.getStructure(projectId);
                         if (structureResult.success && structureResult.data) {
                             setStructure(structureResult.data);
-                            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_DATA', 'Structure loaded successfully', {
+                            // 🔥 DB 데이터를 Zustand 스토어에 동기화
+                            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().setStructures(projectId, structureResult.data);
+                            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_DATA', 'Structure loaded and synced to store', {
                                 count: structureResult.data.length
                             });
                         } else {
@@ -13067,6 +13153,7 @@ function useProjectData(projectId) {
             try {
                 const currentTitle = titleRef.current;
                 const currentContent = contentRef.current;
+                const currentChapters = chaptersRef.current; // 🔥 ref에서 최신 chapters 가져오기
                 if (!currentTitle.trim() && !currentContent.trim()) return;
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_DATA', 'Saving project to server', {
                     projectId
@@ -13076,6 +13163,7 @@ function useProjectData(projectId) {
                     const backupData = {
                         title: currentTitle,
                         content: currentContent,
+                        chapters: currentChapters,
                         lastModified: new Date()
                     };
                     localStorage.setItem(`project_backup_${projectId}`, JSON.stringify(backupData));
@@ -13087,14 +13175,21 @@ function useProjectData(projectId) {
                 const payload = {
                     title: currentTitle,
                     content: currentContent,
-                    chapters: chapters,
+                    chapters: currentChapters,
                     lastModified: new Date()
                 };
+                console.log('🔥 DEBUG: Saving payload to server', {
+                    payload,
+                    chaptersLength: currentChapters.length,
+                    chaptersPreview: currentChapters.substring(0, 100)
+                });
                 const result = await window.electronAPI.projects.update(projectId, payload);
                 if (result.success) {
                     setLastSaved(new Date());
                     setSaveStatus('saved');
-                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_DATA', 'Project saved successfully to server');
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_DATA', 'Project saved successfully to server', {
+                        hasChapters: !!currentChapters && currentChapters !== '{}'
+                    });
                     // 성공 시 로컬 백업 제거
                     try {
                         localStorage.removeItem(`project_backup_${projectId}`);
@@ -13204,15 +13299,27 @@ function useProjectData(projectId) {
     debouncedSaveRef.current = debouncedSave;
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "useProjectData.useEffect": ()=>{
-            if (title.trim() || content.trim()) {
+            // 🔥 JSON 문자열 검증: 빈 객체가 아닌 실제 데이터가 있을 때만 저장
+            const hasRealChapters = ({
+                "useProjectData.useEffect.hasRealChapters": ()=>{
+                    try {
+                        const parsed = JSON.parse(chapters);
+                        return Object.keys(parsed).length > 0;
+                    } catch  {
+                        return false;
+                    }
+                }
+            })["useProjectData.useEffect.hasRealChapters"]();
+            if (title.trim() || content.trim() || hasRealChapters) {
                 setSaveStatus('unsaved');
                 debouncedSaveRef.current(); // ref를 통해 안전하게 호출
             }
         }
     }["useProjectData.useEffect"], [
         title,
-        content
-    ]); // 🔥 debouncedSave dependency 완전 제거
+        content,
+        chapters
+    ]); // 🔥 chapters 추가로 auto-save 트리거
     // 🔥 저장 중 상태 관리
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "useProjectData.useEffect": ()=>{
@@ -13313,7 +13420,7 @@ function useProjectData(projectId) {
         content,
         setContent: setContentOptimized,
         chapters,
-        setChapters,
+        setChapters: setChaptersOptimized,
         lastSaved,
         saveStatus,
         // 🔥 작가 데이터
@@ -13332,7 +13439,7 @@ function useProjectData(projectId) {
         setWordGoal
     };
 }
-_s(useProjectData, "e/k2GjMRf6jTJE8zGffMkpwkrmU=", false, function() {
+_s(useProjectData, "5byDQ9XXKNfhrwhCCJ0xB6KxBuc=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useAutoSave$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useAutoSave"]
     ];
@@ -13444,11 +13551,12 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$WriterStatsPanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/editor/WriterStatsPanel.tsx [app-client] (ecmascript)"); // 🔥 AI 창작 파트너 패널 추가
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ProjectHeader$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/ProjectHeader.tsx [app-client] (ecmascript)"); // 🔥 새로운 모듈화된 헤더
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$EditorTabBar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/EditorTabBar.tsx [app-client] (ecmascript)"); // 🔥 NEW: 탭 바
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$NewChapterModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/NewChapterModal.tsx [app-client] (ecmascript)"); // 🔥 NEW: 새 장 모달
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$NewChapterModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/NewChapterModal.tsx [app-client] (ecmascript)"); // 🔥 NEW: 새 챕터 모달
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDeleteDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/ConfirmDeleteDialog.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ShareDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/ShareDialog.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$WriteView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/views/WriteView.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$StructureView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/views/StructureView.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/stores/useStructureStore.ts [app-client] (ecmascript)"); // 🔥 스토어 import 추가
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$CharactersView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/views/CharactersView.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$NotesView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/views/NotesView.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$SynopsisView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/views/SynopsisView.tsx [app-client] (ecmascript)");
@@ -13457,7 +13565,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$t
 // 🔥 실제 hooks import (기가차드 수정)
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useProjectData$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/hooks/useProjectData.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useUIState$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/hooks/useUIState.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/stores/useStructureStore.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
@@ -13517,7 +13624,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
     const [showRightSidebar, setShowRightSidebar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // 🔥 AI 사이드바 상태 추가
     const [showDeleteDialog, setShowDeleteDialog] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [showShareDialog, setShowShareDialog] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [showNewChapterModal, setShowNewChapterModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // 🔥 NEW: 새 장 모달 상태
+    const [showNewChapterModal, setShowNewChapterModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // 🔥 NEW: 새 챕터 모달 상태
     // 🔥 NEW: 탭 시스템 상태 (글쓰기 에디터만)
     const [tabs, setTabs] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([
         {
@@ -13531,7 +13638,100 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
     ]);
     const [activeTabId, setActiveTabId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('main');
     const [nextTabOrder, setNextTabOrder] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(1);
+    // 🔥 저장 완료 후 모든 탭의 isDirty 상태 초기화
+    const handleSaveSuccess = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "ProjectEditor.ProjectEditor.useCallback[handleSaveSuccess]": ()=>{
+            setTabs({
+                "ProjectEditor.ProjectEditor.useCallback[handleSaveSuccess]": (prevTabs)=>prevTabs.map({
+                        "ProjectEditor.ProjectEditor.useCallback[handleSaveSuccess]": (tab)=>({
+                                ...tab,
+                                isDirty: false
+                            })
+                    }["ProjectEditor.ProjectEditor.useCallback[handleSaveSuccess]"])
+            }["ProjectEditor.ProjectEditor.useCallback[handleSaveSuccess]"]);
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'All tabs marked as saved');
+        }
+    }["ProjectEditor.ProjectEditor.useCallback[handleSaveSuccess]"], []);
+    // 🔥 저장 상태 변화 감지하여 탭 상태 업데이트
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "ProjectEditor.ProjectEditor.useEffect": ()=>{
+            if (projectData.saveStatus === 'saved') {
+                handleSaveSuccess();
+            }
+        }
+    }["ProjectEditor.ProjectEditor.useEffect"], [
+        projectData.saveStatus,
+        handleSaveSuccess
+    ]);
     const editorRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
+    const hasRestoredTabs = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(false); // 🔥 탭 복원 중복 방지
+    // 🔥 프로젝트 로드 시 chapters에서 탭 복원 (중복 방지)
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "ProjectEditor.ProjectEditor.useEffect": ()=>{
+            if (!isLoading && projectData.chapters && !hasRestoredTabs.current) {
+                try {
+                    const chaptersData = JSON.parse(projectData.chapters);
+                    const chapterIds = Object.keys(chaptersData);
+                    if (chapterIds.length === 0) return; // 빈 chapters는 무시
+                    // 🔥 useStructureStore의 데이터와 교차 검증 (삭제된 챕터 필터링)
+                    const structureStore = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState();
+                    const existingStructures = structureStore.structures[projectId] || [];
+                    const validChapterIds = chapterIds.filter({
+                        "ProjectEditor.ProjectEditor.useEffect.validChapterIds": (chapterId)=>existingStructures.some({
+                                "ProjectEditor.ProjectEditor.useEffect.validChapterIds": (structure)=>structure.id === chapterId && structure.type === 'chapter'
+                            }["ProjectEditor.ProjectEditor.useEffect.validChapterIds"])
+                    }["ProjectEditor.ProjectEditor.useEffect.validChapterIds"]);
+                    if (validChapterIds.length === 0) return; // 유효한 챕터가 없으면 복원하지 않음
+                    // 새로운 챕터 탭들 생성 (고유한 탭 ID 사용)
+                    const chapterTabs = validChapterIds.map({
+                        "ProjectEditor.ProjectEditor.useEffect.chapterTabs": (chapterId, index)=>{
+                            const structure = existingStructures.find({
+                                "ProjectEditor.ProjectEditor.useEffect.chapterTabs.structure": (s)=>s.id === chapterId
+                            }["ProjectEditor.ProjectEditor.useEffect.chapterTabs.structure"]);
+                            return {
+                                id: `tab-chapter-${Date.now()}-${index}-${Math.random().toString(36).substr(2, 9)}`,
+                                title: structure?.title || `${index + 1}챕터`,
+                                type: 'chapter',
+                                isActive: false,
+                                order: index + 1,
+                                content: chaptersData[chapterId],
+                                chapterId,
+                                isDirty: false // 🔥 복원된 탭은 저장된 상태
+                            };
+                        }
+                    }["ProjectEditor.ProjectEditor.useEffect.chapterTabs"]);
+                    // 메인 탭 + 복원된 챕터 탭들
+                    setTabs([
+                        {
+                            id: 'main',
+                            title: '메인',
+                            type: 'main',
+                            isActive: true,
+                            order: 0,
+                            content: projectData.content || '',
+                            isDirty: false // 🔥 초기 로드 시 저장된 상태
+                        },
+                        ...chapterTabs
+                    ]);
+                    // nextTabOrder 설정
+                    setNextTabOrder(chapterTabs.length + 1);
+                    hasRestoredTabs.current = true;
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Tabs restored from chapters with validation', {
+                        chaptersCount: chapterTabs.length,
+                        validChapterIds,
+                        totalChapterIds: chapterIds.length
+                    });
+                } catch (error) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_EDITOR', 'Failed to restore tabs from chapters', error);
+                }
+            }
+        }
+    }["ProjectEditor.ProjectEditor.useEffect"], [
+        isLoading,
+        projectData.chapters,
+        projectData.content,
+        projectId
+    ]);
     const [isEditorReady, setIsEditorReady] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false); // 🔥 에디터 준비 상태 추가
     // 🔥 Google Docs 연동 감지 및 상태 관리
     const [isGoogleDocsProject, setIsGoogleDocsProject] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -13607,7 +13807,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
         projectData.content
     ]);
     // 🔥 에디터 상태 업데이트
-    const { setCurrentEditor, addStructureItem } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"])();
+    const { setCurrentEditor, addStructureItem } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])();
     // 🔥 현재 뷰에 따라 에디터 상태 업데이트 (안전한 버전)
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ProjectEditor.ProjectEditor.useEffect": ()=>{
@@ -13622,7 +13822,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                     projectId,
                     editorType: 'chapter',
                     itemId: editingItemId,
-                    itemTitle: editingItemId ? `${editingItemId}장` : undefined
+                    itemTitle: editingItemId ? `${editingItemId}챕터` : undefined
                 });
             } else if (currentView === 'characters') {
                 setCurrentEditor({
@@ -13688,20 +13888,42 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
         googleDocMeta?.googleDocId,
         projectData
     ]);
-    // 🔥 탭 관리 함수들
+    // 🔥 탭 관리 함수들 (중복 key 방지)
     const createNewTab = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "ProjectEditor.ProjectEditor.useCallback[createNewTab]": (type, title, chapterId)=>{
+            // 🔥 항상 고유한 ID 생성 (chapterId와 구분)
+            const uniqueTabId = `tab-${type}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
             const newTab = {
-                id: chapterId || `${type}-${Date.now()}`,
+                id: uniqueTabId,
                 title,
                 type,
                 chapterId,
                 isActive: false,
                 order: nextTabOrder,
-                content: '' // 새 탭은 빈 content로 시작
+                content: '',
+                isDirty: false // 🔥 새 탭은 초기에 저장된 상태
             };
             setTabs({
                 "ProjectEditor.ProjectEditor.useCallback[createNewTab]": (prevTabs)=>{
+                    // 🔥 중복 chapterId 체크
+                    if (chapterId) {
+                        const existingTab = prevTabs.find({
+                            "ProjectEditor.ProjectEditor.useCallback[createNewTab].existingTab": (tab)=>tab.chapterId === chapterId
+                        }["ProjectEditor.ProjectEditor.useCallback[createNewTab].existingTab"]);
+                        if (existingTab) {
+                            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].warn('PROJECT_EDITOR', 'Tab with same chapterId already exists', {
+                                chapterId
+                            });
+                            // 기존 탭을 활성화
+                            setActiveTabId(existingTab.id);
+                            return prevTabs.map({
+                                "ProjectEditor.ProjectEditor.useCallback[createNewTab]": (tab)=>({
+                                        ...tab,
+                                        isActive: tab.id === existingTab.id
+                                    })
+                            }["ProjectEditor.ProjectEditor.useCallback[createNewTab]"]);
+                        }
+                    }
                     const updatedTabs = prevTabs.map({
                         "ProjectEditor.ProjectEditor.useCallback[createNewTab].updatedTabs": (tab)=>({
                                 ...tab,
@@ -13723,6 +13945,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
             }["ProjectEditor.ProjectEditor.useCallback[createNewTab]"]);
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'New tab created', {
                 tabId: newTab.id,
+                chapterId: newTab.chapterId,
                 type: newTab.type,
                 title: newTab.title
             });
@@ -13750,13 +13973,18 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 if (targetTab.type === 'chapter') {
                     setCurrentView('write');
                     setEditingItemId(targetTab.chapterId || '');
+                } else if (targetTab.type === 'main') {
+                    // 🔥 메인 탭으로 전환 시 쓰기 뷰 활성화
+                    setCurrentView('write');
+                    setEditingItemId(''); // 메인은 editingItemId가 없음
                 } else {
                     setCurrentView(targetTab.type);
                 }
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Switched to tab', {
                     tabId,
                     type: targetTab.type,
-                    title: targetTab.title
+                    title: targetTab.title,
+                    currentView: targetTab.type === 'main' ? 'write' : targetTab.type
                 });
             }
         }
@@ -13764,8 +13992,12 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
         tabs
     ]);
     const closeTab = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
-        "ProjectEditor.ProjectEditor.useCallback[closeTab]": (tabId)=>{
+        "ProjectEditor.ProjectEditor.useCallback[closeTab]": async (tabId)=>{
             if (tabId === 'main') return; // 메인 탭은 닫을 수 없음
+            // 닫힐 탭의 정보 가져오기
+            const tabToClose = tabs.find({
+                "ProjectEditor.ProjectEditor.useCallback[closeTab].tabToClose": (tab)=>tab.id === tabId
+            }["ProjectEditor.ProjectEditor.useCallback[closeTab].tabToClose"]);
             setTabs({
                 "ProjectEditor.ProjectEditor.useCallback[closeTab]": (prevTabs)=>{
                     const filteredTabs = prevTabs.filter({
@@ -13794,12 +14026,35 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                     }["ProjectEditor.ProjectEditor.useCallback[closeTab]"]);
                 }
             }["ProjectEditor.ProjectEditor.useCallback[closeTab]"]);
+            // 🔥 챕터 탭을 닫을 때 chapters JSON에서도 제거
+            if (tabToClose?.type === 'chapter' && tabToClose.chapterId) {
+                try {
+                    const chapters = JSON.parse(projectData.chapters || '{}');
+                    delete chapters[tabToClose.chapterId];
+                    projectData.setChapters(JSON.stringify(chapters));
+                    await projectData.forceSave();
+                    // 🔥 구조 데이터에서도 삭제
+                    await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().deleteStructureItem(projectId, tabToClose.chapterId);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Chapter deleted from both tabs and data', {
+                        tabId,
+                        chapterId: tabToClose.chapterId
+                    });
+                } catch (error) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_EDITOR', 'Failed to delete chapter data', {
+                        tabId,
+                        error
+                    });
+                }
+            }
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Tab closed', {
                 tabId
             });
         }
     }["ProjectEditor.ProjectEditor.useCallback[closeTab]"], [
-        activeTabId
+        activeTabId,
+        tabs,
+        projectData,
+        projectId
     ]);
     // 🔥 탭 재정렬 핸들러
     const handleTabReorder = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
@@ -14016,21 +14271,45 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'New chapter modal opened');
         }
     }["ProjectEditor.ProjectEditor.useCallback[handleAddStructure]"], []);
-    // 🔥 NEW: 새 장 생성 확정 핸들러
+    // 🔥 NEW: 새 챕터 생성 확정 핸들러
     const handleCreateNewChapter = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter]": async (title)=>{
             try {
                 const newChapterId = `chapter-${Date.now()}`;
-                // chapters JSON에 새 장 추가
+                // 1. chapters JSON에 새 챕터 추가
                 const chapters = JSON.parse(projectData.chapters || '{}');
                 chapters[newChapterId] = ''; // 빈 content로 시작
+                console.log('🔥 DEBUG: About to call setChapters', {
+                    newChapterId,
+                    chapters,
+                    stringified: JSON.stringify(chapters)
+                });
                 projectData.setChapters(JSON.stringify(chapters));
-                // 새 탭 생성
-                createNewTab('chapter', title, newChapterId);
-                // 쓰기 뷰로 설정
+                console.log('🔥 DEBUG: setChapters called, now calling forceSave');
+                // 2. 현재 챕터 개수를 계산하여 올바른 번호 생성
+                const chapterCount = Object.keys(chapters).length;
+                const chapterTitle = `${chapterCount}챕터`;
+                // 3. 구조 데이터에도 챕터 정보 저장
+                const newStructureItem = {
+                    id: newChapterId,
+                    title: chapterTitle,
+                    description: '',
+                    type: 'chapter',
+                    status: 'planning',
+                    projectId,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                };
+                // 🔥 Zustand 스토어에 추가 (DB 저장 포함)
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().addStructureItem(projectId, newStructureItem);
+                // 4. 즉시 DB에 저장
+                await projectData.forceSave();
+                // 5. 새 탭 생성 (올바른 번호 사용)
+                createNewTab('chapter', chapterTitle, newChapterId);
+                // 6. 쓰기 뷰로 설정
                 setCurrentView('write');
                 setEditingItemId(newChapterId);
-                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'New chapter created', {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'New chapter created and saved', {
                     chapterId: newChapterId,
                     title
                 });
@@ -14157,7 +14436,11 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
             // 🔥 기본 저장 단축키 (Ctrl+S / Cmd+S)
             if (modKey && key === 's') {
                 event.preventDefault();
-                projectData.forceSave();
+                projectData.forceSave().then({
+                    "ProjectEditor.ProjectEditor.useCallback[handleKeyDown]": ()=>{
+                        handleSaveSuccess(); // 🔥 저장 완료 후 탭 상태 초기화
+                    }
+                }["ProjectEditor.ProjectEditor.useCallback[handleKeyDown]"]);
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Save shortcut triggered');
                 return;
             }
@@ -14265,7 +14548,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         className: "w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 698,
+                        lineNumber: 851,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -14273,18 +14556,18 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         children: "프로젝트를 불러오는 중..."
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 699,
+                        lineNumber: 852,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 697,
+                lineNumber: 850,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-            lineNumber: 696,
+            lineNumber: 849,
             columnNumber: 7
         }, this);
     }
@@ -14297,7 +14580,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-            lineNumber: 706,
+            lineNumber: 859,
             columnNumber: 12
         }, this);
     }
@@ -14328,7 +14611,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         onOpenGoogleDocs: openGoogleDocsExternal
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 713,
+                        lineNumber: 866,
                         columnNumber: 9
                     }, this),
                     [
@@ -14339,11 +14622,11 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         activeTabId: activeTabId,
                         onTabClick: switchToTab,
                         onTabClose: closeTab,
-                        onNewTab: ()=>createNewTab('chapter', `새 장 ${nextTabOrder}`),
+                        onNewTab: ()=>createNewTab('chapter', `새 챕터 ${nextTabOrder}`),
                         onTabReorder: handleTabReorder
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 737,
+                        lineNumber: 890,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -14361,7 +14644,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                 onAddNote: handleAddNote
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                lineNumber: 751,
+                                lineNumber: 904,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -14373,7 +14656,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         isFocusMode: uiState.isFocusMode
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 767,
+                                        lineNumber: 920,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'structure' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$StructureView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StructureView"], {
@@ -14384,7 +14667,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onAddNewChapter: ()=>setShowNewChapterModal(true)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 774,
+                                        lineNumber: 927,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'characters' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$CharactersView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CharactersView"], {
@@ -14393,7 +14676,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onCharactersChange: projectData.setCharacters
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 783,
+                                        lineNumber: 936,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'notes' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$NotesView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["NotesView"], {
@@ -14402,7 +14685,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onNotesChange: projectData.setNotes
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 790,
+                                        lineNumber: 943,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'synopsis' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$SynopsisView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SynopsisView"], {
@@ -14410,7 +14693,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onBack: handleBackToStructure
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 797,
+                                        lineNumber: 950,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'idea' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$IdeaView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["IdeaView"], {
@@ -14418,13 +14701,13 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onBack: handleBackToStructure
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 803,
+                                        lineNumber: 956,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                lineNumber: 765,
+                                lineNumber: 918,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$WriterStatsPanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["WriterStatsPanel"], {
@@ -14436,24 +14719,24 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                 projectId: projectId
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                lineNumber: 811,
+                                lineNumber: 964,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 748,
+                        lineNumber: 901,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 711,
+                lineNumber: 864,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$ShortcutHelp$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ShortcutHelp"], {}, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 823,
+                lineNumber: 976,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDeleteDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ConfirmDeleteDialog"], {
@@ -14463,7 +14746,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 onCancel: ()=>setShowDeleteDialog(false)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 826,
+                lineNumber: 979,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ShareDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ShareDialog"], {
@@ -14473,36 +14756,36 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 onClose: ()=>setShowShareDialog(false)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 834,
+                lineNumber: 987,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$NewChapterModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["NewChapterModal"], {
                 isOpen: showNewChapterModal,
                 onClose: ()=>setShowNewChapterModal(false),
                 onConfirm: handleCreateNewChapter,
-                defaultTitle: `${nextTabOrder}장`
+                defaultTitle: "새로운 챕터"
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 842,
+                lineNumber: 995,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-        lineNumber: 710,
+        lineNumber: 863,
         columnNumber: 5
     }, this);
-}, "Fn+M5iZ4ho54/B4uBmsAdx+fa+E=", false, function() {
+}, "FBdW+7hF6EdqT8R8Wj2t/nju+iA=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useProjectData$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useProjectData"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useUIState$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useUIState"],
-        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
     ];
-})), "Fn+M5iZ4ho54/B4uBmsAdx+fa+E=", false, function() {
+})), "FBdW+7hF6EdqT8R8Wj2t/nju+iA=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useProjectData$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useProjectData"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useUIState$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useUIState"],
-        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"]
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
     ];
 });
 _c1 = ProjectEditor;

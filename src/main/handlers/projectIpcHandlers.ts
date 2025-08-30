@@ -87,6 +87,7 @@ export function setupProjectIpcHandlers(): void {
             title: '새로운 프로젝트',
             description: '새로운 이야기를 시작해보세요',
             content: '',
+            chapters: '{}', // 🔥 빈 chapters 추가
             progress: 0,
             wordCount: 0,
             genre: '기타',
@@ -117,6 +118,7 @@ export function setupProjectIpcHandlers(): void {
         title: project.title,
         description: project.description || '',
         content: project.content || '',
+        chapters: (project as any).chapters || undefined, // 🔥 chapters 필드 추가
         progress: project.progress || 0,
         wordCount: project.wordCount || 0,
         lastModified: project.lastModified,
@@ -231,6 +233,7 @@ export function setupProjectIpcHandlers(): void {
         title: string;
         description: string;
         content: string;
+        chapters: string; // 🔥 chapters 필드 추가
         progress: number;
         wordCount: number;
         genre: string;
@@ -247,10 +250,18 @@ export function setupProjectIpcHandlers(): void {
         updateData.content = updates.content;
         updateData.wordCount = updates.content.split(/\s+/).filter(w => w.length > 0).length;
       }
+      if (updates.chapters !== undefined) updateData.chapters = updates.chapters; // 🔥 chapters 업데이트 로직 추가
       if (updates.progress !== undefined) updateData.progress = updates.progress;
       if (updates.genre) updateData.genre = updates.genre;
       if (updates.status) updateData.status = updates.status;
       if (updates.author) updateData.author = updates.author;
+
+      // 🔥 디버깅 로그: 저장할 데이터 확인
+      console.log('🔥 DEBUG: Backend about to save updateData:', {
+        hasChapters: !!updateData.chapters,
+        chaptersLength: updateData.chapters?.length,
+        chaptersPreview: updateData.chapters?.substring(0, 100)
+      });
 
       // 🔥 즉시 저장 - 트랜잭션으로 성능 개선
       const updatedProject = await prisma.project.update({
@@ -263,6 +274,7 @@ export function setupProjectIpcHandlers(): void {
         title: updatedProject.title,
         description: updatedProject.description || '',
         content: updatedProject.content || '',
+        chapters: (updatedProject as any).chapters || undefined, // 🔥 chapters 필드 추가 (타입 캐스팅)
         progress: updatedProject.progress || 0,
         wordCount: updatedProject.wordCount || 0,
         genre: updatedProject.genre || '기타',
@@ -276,6 +288,8 @@ export function setupProjectIpcHandlers(): void {
       Logger.info('PROJECT_IPC', '✅ 프로젝트 업데이트 완료', {
         id: convertedProject.id,
         wordCount: convertedProject.wordCount,
+        hasChapters: !!convertedProject.chapters,
+        chaptersLength: convertedProject.chapters?.length,
         duration: `${Date.now() - Date.now()}ms`
       });
 
@@ -822,6 +836,34 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
       };
     } catch (error) {
       Logger.error('PROJECT_IPC', 'Failed to upsert structure', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date(),
+      };
+    }
+  });
+
+  // 🔥 구조 아이템 삭제 핸들러
+  ipcMain.handle('projects:delete-structure', async (_event: IpcMainInvokeEvent, structureId: string): Promise<IpcResponse<boolean>> => {
+    try {
+      Logger.debug('PROJECT_IPC', 'Deleting structure item', { structureId });
+
+      const prisma = await prismaService.getClient();
+
+      await prisma.projectStructure.delete({
+        where: { id: structureId }
+      });
+
+      Logger.info('PROJECT_IPC', '✅ Structure item deleted successfully', { structureId });
+
+      return {
+        success: true,
+        data: true,
+        timestamp: new Date(),
+      };
+    } catch (error) {
+      Logger.error('PROJECT_IPC', 'Failed to delete structure item', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error',

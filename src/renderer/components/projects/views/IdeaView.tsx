@@ -231,7 +231,7 @@ export function IdeaView({ ideaId, onBack }: IdeaViewProps): React.ReactElement 
                 priority: 'low',
                 connections: ['2'],
                 attachments: [],
-                notes: '1장 클라이맥스에서 사용',
+                notes: '1챕터 클라이맥스에서 사용',
                 createdAt: new Date('2024-01-08'),
                 updatedAt: new Date('2024-01-25'),
                 isFavorite: true

@@ -142,7 +142,7 @@ export const WriterSidebar = memo(function WriterSidebar({
                 {structure.map((item, index) => (
                   <div key={item.id} className={SIDEBAR_STYLES.structureItem}>
                     <Circle size={12} className="text-blue-500" />
-                    <span className="flex-1">{`${index + 1}장: ${item.title}`}</span>
+                    <span className="flex-1">{`${index + 1}챕터: ${item.title}`}</span>
                     <span className="text-xs text-gray-400">{item.status}</span>
                   </div>
                 ))}
@@ -188,7 +188,7 @@ export const WriterSidebar = memo(function WriterSidebar({
                 <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between`}>
                   <div className="flex items-center gap-2">
                     <Circle size={12} className="text-blue-500" />
-                    <span className="flex-1">{`${index + 1}장: ${item.title}`}</span>
+                    <span className="flex-1">{`${index + 1}챕터: ${item.title}`}</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-xs text-gray-400">{item.status}</span>

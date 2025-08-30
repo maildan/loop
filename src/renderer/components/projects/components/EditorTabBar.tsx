@@ -246,7 +246,7 @@ export const EditorTabBar = memo(function EditorTabBar({
             <button
                 className={TAB_STYLES.newTabButton}
                 onClick={onNewTab}
-                title="새 장 추가"
+                title="새 챕터 추가"
             >
                 <Plus size={16} />
             </button>

@@ -210,21 +210,21 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$t
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const PROJECT_CARD_STYLES = {
     container: 'group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 min-h-[260px] flex flex-col',
-    header: 'flex items-start justify-between p-4 pb-2',
-    title: 'text-lg font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 flex-1 mr-2',
+    header: 'flex items-start justify-between p-4 pb-3',
+    title: 'text-lg font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 flex-1 mr-3 leading-relaxed',
     moreButton: 'opacity-0 group-hover:opacity-100 transition-opacity duration-200 w-8 h-8 p-0',
-    content: 'px-4 pb-2 flex-1',
-    description: 'text-sm text-slate-600 dark:text-slate-400 line-clamp-3 mb-3',
-    metaSection: 'flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 mb-4',
-    metaItem: 'flex items-center gap-1',
-    progressSection: 'mb-4',
-    progressHeader: 'flex items-center justify-between mb-2',
+    content: 'px-4 pb-3 flex-1 space-y-3',
+    description: 'text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed',
+    metaSection: 'flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400',
+    metaItem: 'flex items-center gap-1.5',
+    progressSection: 'space-y-2',
+    progressHeader: 'flex items-center justify-between',
     progressLabel: 'text-sm font-medium text-slate-700 dark:text-slate-300',
     progressValue: 'text-sm text-slate-500 dark:text-slate-400',
-    footer: 'px-4 pb-4',
+    footer: 'px-4 pb-4 pt-2',
     actionButtons: 'flex items-center gap-2',
     actionButton: 'opacity-0 group-hover:opacity-100 transition-opacity duration-200',
-    statusBadge: 'mb-2',
+    statusBadge: 'flex items-center gap-2',
     icon: 'w-4 h-4'
 };
 function ProjectCard({ project, onView, onEdit, onShare, onDelete, onMore, showActions = true }) {

@@ -94,6 +94,7 @@ export interface Project {
   title: string;
   description: string;
   content: string;
+  chapters?: string; // 🔥 chapters 필드 추가 (JSON 문자열, 옵셔널)
   progress: number;
   wordCount: number;
   lastModified: Date;

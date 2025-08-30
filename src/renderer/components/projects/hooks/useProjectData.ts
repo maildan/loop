@@ -5,6 +5,7 @@ import { Logger } from '../../../../shared/logger';
 import { calculateWriterStats, type WriterStats as WriterStatsType } from '../editor/WriterStats';
 import { useAutoSave } from './useAutoSave';
 import { ProjectCharacter, ProjectStructure, ProjectNote } from '../../../../shared/types';
+import useStructureStore from '../../../stores/useStructureStore'; // 🔥 스토어 import 추가
 
 // 저장 상태 타입
 type SaveStatus = 'unsaved' | 'saving' | 'saved' | 'error';
@@ -108,7 +109,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       id: '1',
       projectId: projectId,
       type: 'chapter' as const,
-      title: '1장: 시작',
+      title: '1챕터: 시작',
       isActive: true,
       createdAt: defaultDate,
       updatedAt: defaultDate
@@ -135,7 +136,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       id: '4',
       projectId: projectId,
       type: 'chapter' as const,
-      title: '2장: 전개',
+      title: '2챕터: 전개',
       isActive: true,
       createdAt: defaultDate,
       updatedAt: defaultDate
@@ -174,6 +175,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
   // 🔥 ref로 최신 값 추적 (성능 최적화: useEffect 제거)
   const titleRef = useRef<string>('');
   const contentRef = useRef<string>('');
+  const chaptersRef = useRef<string>('{}'); // 🔥 chapters ref 추가
 
   // 🔥 최적화: setter에서 직접 ref 업데이트 (useEffect 불필요)
   const setTitleOptimized = useCallback((newTitle: string) => {
@@ -184,6 +186,13 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
   const setContentOptimized = useCallback((newContent: string) => {
     contentRef.current = newContent;
     setContent(newContent);
+  }, []);
+
+  const setChaptersOptimized = useCallback((newChapters: string) => {
+    console.log('🔥 DEBUG: setChaptersOptimized called', { newChapters, currentRef: chaptersRef.current });
+    chaptersRef.current = newChapters;
+    setChapters(newChapters);
+    console.log('🔥 DEBUG: setChaptersOptimized completed', { updatedRef: chaptersRef.current });
   }, []);
 
   // 🔥 작가 데이터
@@ -237,7 +246,12 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       if (result && result.success && result.data) {
         setTitle(result.data.title);
         setContent(result.data.content || '');
-        setChapters(result.data.chapters || '{}'); // chapters 필드 로드
+
+        // 🔥 chapters 데이터 로드 및 ref 동기화
+        const chaptersData = result.data.chapters || '{}';
+        setChapters(chaptersData);
+        chaptersRef.current = chaptersData; // ref도 동기화
+
         setLastSaved(new Date(result.data.lastModified));
         setSaveStatus('saved'); // 🔥 저장 상태 업데이트
 
@@ -262,7 +276,9 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
           const structureResult = await window.electronAPI.projects.getStructure(projectId);
           if (structureResult.success && structureResult.data) {
             setStructure(structureResult.data);
-            Logger.debug('PROJECT_DATA', 'Structure loaded successfully', { count: structureResult.data.length });
+            // 🔥 DB 데이터를 Zustand 스토어에 동기화
+            useStructureStore.getState().setStructures(projectId, structureResult.data);
+            Logger.debug('PROJECT_DATA', 'Structure loaded and synced to store', { count: structureResult.data.length });
           } else {
             Logger.warn('PROJECT_DATA', 'No structure found, using defaults');
             // 기본 구조 데이터
@@ -320,6 +336,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
     try {
       const currentTitle = titleRef.current;
       const currentContent = contentRef.current;
+      const currentChapters = chaptersRef.current; // 🔥 ref에서 최신 chapters 가져오기
 
       if (!currentTitle.trim() && !currentContent.trim()) return;
 
@@ -327,7 +344,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
 
       // 🔥 로컬 백업 먼저 저장 (즉시)
       try {
-        const backupData = { title: currentTitle, content: currentContent, lastModified: new Date() };
+        const backupData = { title: currentTitle, content: currentContent, chapters: currentChapters, lastModified: new Date() };
         localStorage.setItem(`project_backup_${projectId}`, JSON.stringify(backupData));
         Logger.debug('PROJECT_DATA', 'Local backup saved');
       } catch (storageError) {
@@ -338,15 +355,20 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       const payload: any = {
         title: currentTitle,
         content: currentContent,
-        chapters: chapters, // chapters 필드 포함
+        chapters: currentChapters, // 🔥 ref에서 가져온 최신 chapters 사용
         lastModified: new Date()
       };
+
+      console.log('🔥 DEBUG: Saving payload to server', { payload, chaptersLength: currentChapters.length, chaptersPreview: currentChapters.substring(0, 100) });
+
       const result = await window.electronAPI.projects.update(projectId, payload);
 
       if (result.success) {
         setLastSaved(new Date());
         setSaveStatus('saved');
-        Logger.info('PROJECT_DATA', 'Project saved successfully to server');
+        Logger.info('PROJECT_DATA', 'Project saved successfully to server', {
+          hasChapters: !!currentChapters && currentChapters !== '{}'
+        });
 
         // 성공 시 로컬 백업 제거
         try {
@@ -427,11 +449,21 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
   debouncedSaveRef.current = debouncedSave;
 
   useEffect(() => {
-    if (title.trim() || content.trim()) {
+    // 🔥 JSON 문자열 검증: 빈 객체가 아닌 실제 데이터가 있을 때만 저장
+    const hasRealChapters = (() => {
+      try {
+        const parsed = JSON.parse(chapters);
+        return Object.keys(parsed).length > 0;
+      } catch {
+        return false;
+      }
+    })();
+
+    if (title.trim() || content.trim() || hasRealChapters) {
       setSaveStatus('unsaved');
       debouncedSaveRef.current(); // ref를 통해 안전하게 호출
     }
-  }, [title, content]); // 🔥 debouncedSave dependency 완전 제거
+  }, [title, content, chapters]); // 🔥 chapters 추가로 auto-save 트리거
 
   // 🔥 저장 중 상태 관리
   useEffect(() => {
@@ -520,7 +552,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
     content,
     setContent: setContentOptimized,
     chapters,
-    setChapters,
+    setChapters: setChaptersOptimized, // 🔥 최적화된 setter 사용
     lastSaved,
     saveStatus,
 

@@ -5,6 +5,7 @@
 import React, { useState, useCallback, useEffect, useMemo, memo } from 'react';
 import { ProjectStructure } from '../../../../shared/types';
 import { useStructureStore } from '../../../stores/useStructureStore';
+import { Logger } from '../../../../shared/logger'; // 🔥 Logger import 추가
 import {
   FileText,
   Hash,
@@ -123,7 +124,16 @@ const StructureView = memo(function StructureView({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState<string>('');
 
-  const handleAddItem = useCallback((type: 'chapter' | 'synopsis' | 'idea'): void => {
+  // 🔥 스토어 동기화 디버깅
+  useEffect(() => {
+    Logger.debug('STRUCTURE_VIEW', 'Structures updated', {
+      projectId,
+      structuresCount: structures.length,
+      structures: structures.map(s => ({ id: s.id, title: s.title, type: s.type }))
+    });
+  }, [structures, projectId]);
+
+  const handleAddItem = useCallback(async (type: 'chapter' | 'synopsis' | 'idea'): Promise<void> => {
     // 🔥 NEW: chapter 타입일 때는 모달을 통해 처리
     if (type === 'chapter' && onAddNewChapter) {
       onAddNewChapter();
@@ -133,14 +143,22 @@ const StructureView = memo(function StructureView({
 
     // 기존 synopsis, idea 처리 로직
     const defaultTitles = {
-      chapter: `새로운 챕터`,
+      chapter: `새로운 챕터`, // 이 부분은 사용되지 않음 (모달 통해 처리)
       synopsis: `새로운 시놉시스`,
       idea: `새로운 아이디어`
     };
 
+    // 🔥 chapter 타입의 경우 올바른 번호 계산
+    let itemTitle = defaultTitles[type];
+    if (type === 'chapter') {
+      const chapterStructures = structures.filter(item => item.type === 'chapter');
+      const chapterCount = chapterStructures.length + 1;
+      itemTitle = `${chapterCount}챕터`;
+    }
+
     const newItem: ProjectStructure = {
       id: `${type}_${Date.now()}`,
-      title: defaultTitles[type],
+      title: itemTitle,
       description: '',
       type,
       status: 'planning',
@@ -149,8 +167,8 @@ const StructureView = memo(function StructureView({
       updatedAt: new Date()
     };
 
-    // 🔥 Zustand 스토어에 추가
-    addStructureItem(projectId, newItem);
+    // 🔥 Zustand 스토어에 추가 (비동기)
+    await addStructureItem(projectId, newItem);
 
     // 🔥 에디터 상태 업데이트
     setCurrentEditor({
@@ -207,10 +225,23 @@ const StructureView = memo(function StructureView({
     setEditTitle('');
   }, []);
 
-  const handleDelete = useCallback((id: string): void => {
-    // 🔥 Zustand 스토어에서 삭제
-    deleteStructureItem(projectId, id);
-  }, [projectId, deleteStructureItem]);
+  const handleDelete = useCallback(async (id: string): Promise<void> => {
+    try {
+      // 🔥 Zustand 스토어에서 삭제 (DB 삭제 포함)
+      await deleteStructureItem(projectId, id);
+
+      // 🔥 삭제 성공 시 추가 정리 작업
+      Logger.info('STRUCTURE_VIEW', 'Structure item deleted successfully', { id, projectId });
+
+      // 편집 상태 초기화
+      if (editingId === id) {
+        setEditingId(null);
+        setEditTitle('');
+      }
+    } catch (error) {
+      Logger.error('STRUCTURE_VIEW', 'Failed to delete structure item', { id, projectId, error });
+    }
+  }, [projectId, deleteStructureItem, editingId]);
 
   const handleKeyPress = useCallback((e: React.KeyboardEvent, id: string): void => {
     if (e.key === 'Enter') {

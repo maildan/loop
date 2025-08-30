@@ -452,27 +452,43 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
 
   // 🔥 컴포넌트 언마운트 시 정리 - DOM 에러 방지
   useEffect(() => {
+    const currentEditor = editor;
+
     return () => {
-      if (editor && !editor.isDestroyed) {
+      if (currentEditor && !currentEditor.isDestroyed) {
         try {
+          // 모든 DOM 조작 중단
+          if (currentEditor.view && currentEditor.view.dom) {
+            currentEditor.view.dom.style.display = 'none';
+          }
+
           // 에디터 이벤트 리스너 정리
-          editor.off('transaction');
-          editor.off('update');
-          editor.off('create');
-          editor.off('focus');
-          editor.off('blur');
+          currentEditor.off('transaction');
+          currentEditor.off('update');
+          currentEditor.off('create');
+          currentEditor.off('focus');
+          currentEditor.off('blur');
+          currentEditor.off('selectionUpdate');
+
+          // 모든 pending 트랜잭션 취소
+          if (currentEditor.view && currentEditor.view.state) {
+            currentEditor.view.updateState(currentEditor.view.state);
+          }
 
           // 에디터 소멸
-          editor.destroy();
+          setTimeout(() => {
+            if (!currentEditor.isDestroyed) {
+              currentEditor.destroy();
+            }
+          }, 0);
+
           Logger.debug('TIPTAP_EDITOR', 'Editor destroyed safely');
         } catch (error) {
           Logger.error('TIPTAP_EDITOR', 'Error during editor cleanup', error);
         }
       }
     };
-  }, [editor]);
-
-  // 🔥 ESC 키 핸들러 (집중모드 해제) 및 복사 이벤트 리스너
+  }, [editor]);  // 🔥 ESC 키 핸들러 (집중모드 해제) 및 복사 이벤트 리스너
   useEffect(() => {
     const handleEscKey = (event: KeyboardEvent): void => {
       if (event.key === 'Escape' && isFocusMode) {
@@ -580,6 +596,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
       {/* 🔥 Enhanced Bubble Menu (선택 시 나타나는 고급 툴바) */}
       {editor && (
         <BubbleMenu
+          key="bubble-menu" // 🔥 고유 key 추가
           editor={editor}
           className={EDITOR_STYLES.bubble}
           shouldShow={({ editor, view, state, oldState, from, to }) => {

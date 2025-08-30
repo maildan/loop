@@ -60,7 +60,8 @@
     "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "analyze": "cross-env ANALYZE=true next build",
     "bundle-analyzer": "npx @next/bundle-analyzer",
-    "clear": "clear;clear"
+    "clear": "clear;clear",
+    "push": "git push origin main"
   },
   "dependencies": {
     "@codemirror/lang-markdown": "^6.3.3",

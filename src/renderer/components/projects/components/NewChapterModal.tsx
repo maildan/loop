@@ -63,7 +63,7 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
                 onKeyDown={handleKeyDown}
             >
                 <div className={MODAL_STYLES.header}>
-                    <h2 className={MODAL_STYLES.title}>새 장 만들기</h2>
+                    <h2 className={MODAL_STYLES.title}>새 챕터 만들기</h2>
                     <button
                         onClick={onClose}
                         className={MODAL_STYLES.closeButton}
@@ -76,7 +76,7 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
                 <form onSubmit={handleSubmit}>
                     <div className={MODAL_STYLES.content}>
                         <label htmlFor="chapter-title" className={MODAL_STYLES.label}>
-                            장 제목
+                            챕터 제목
                         </label>
                         <input
                             ref={inputRef}
@@ -85,7 +85,7 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
                             className={MODAL_STYLES.input}
-                            placeholder="예: 1장 - 새로운 시작"
+                            placeholder="새로운 챕터"
                             required
                         />
                     </div>
