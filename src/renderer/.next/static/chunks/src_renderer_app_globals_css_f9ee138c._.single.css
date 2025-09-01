@@ -429,6 +429,10 @@ img, video {
   top: .75rem;
 }
 
+.top-8 {
+  top: 2rem;
+}
+
 .top-full {
   top: 100%;
 }
@@ -923,6 +927,10 @@ img, video {
 
 .min-w-\[120px\] {
   min-width: 120px;
+}
+
+.min-w-\[140px\] {
+  min-width: 140px;
 }
 
 .min-w-\[180px\] {

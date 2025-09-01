@@ -86,6 +86,7 @@ export function MarkdownEditor({ content, onChange, isFocusMode }: MarkdownEdito
 
   // 🔥 TipTap 에디터 초기화 (Notion 스타일 + 작가 친화적 설정)
   const editor = useEditor({
+    immediatelyRender: false, // 🔥 SSR 하이드레이션 문제 해결
     extensions: [
       StarterKit.configure({
         // 🔥 작가 친화적 설정

@@ -1304,11 +1304,22 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
             setNextTabOrder({
                 "ProjectEditor.ProjectEditor.useCallback[createNewTab]": (prev)=>prev + 1
             }["ProjectEditor.ProjectEditor.useCallback[createNewTab]"]);
-            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'New tab created', {
+            // 🔥 새 탭 생성 후 즉시 해당 뷰로 전환
+            if (type === 'chapter' && chapterId) {
+                setCurrentView('write');
+                setEditingItemId(chapterId);
+            } else if (type === 'main') {
+                setCurrentView('write');
+                setEditingItemId('');
+            } else {
+                setCurrentView(type);
+            }
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'New tab created and activated', {
                 tabId: newTab.id,
-                chapterId: newTab.chapterId,
-                type: newTab.type,
-                title: newTab.title
+                title,
+                type,
+                chapterId,
+                currentView: type === 'chapter' ? 'write' : type
             });
             return newTab;
         }
@@ -1380,16 +1391,35 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
             const tabToClose = tabs.find({
                 "ProjectEditor.ProjectEditor.useCallback[performTabClose].tabToClose": (tab)=>tab.id === tabId
             }["ProjectEditor.ProjectEditor.useCallback[performTabClose].tabToClose"]);
+            // 🔥 탭 삭제 로그
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Performing tab close', {
+                tabId,
+                tabTitle: tabToClose?.title,
+                totalTabs: tabs.length
+            });
             setTabs({
                 "ProjectEditor.ProjectEditor.useCallback[performTabClose]": (prevTabs)=>{
                     const filteredTabs = prevTabs.filter({
                         "ProjectEditor.ProjectEditor.useCallback[performTabClose].filteredTabs": (tab)=>tab.id !== tabId
                     }["ProjectEditor.ProjectEditor.useCallback[performTabClose].filteredTabs"]);
+                    // 🔥 삭제 후 탭 상태 로그
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_EDITOR', 'Tabs after deletion', {
+                        remainingTabs: filteredTabs.length,
+                        remainingTabIds: filteredTabs.map({
+                            "ProjectEditor.ProjectEditor.useCallback[performTabClose]": (tab)=>tab.id
+                        }["ProjectEditor.ProjectEditor.useCallback[performTabClose]"])
+                    });
                     // 닫힌 탭이 활성 탭이었다면 다른 탭으로 전환
                     if (activeTabId === tabId && filteredTabs.length > 0) {
                         const newActiveTab = filteredTabs[filteredTabs.length - 1];
                         if (newActiveTab) {
-                            newActiveTab.isActive = true;
+                            // 🔥 모든 탭의 isActive 상태를 명확히 설정
+                            const updatedTabs = filteredTabs.map({
+                                "ProjectEditor.ProjectEditor.useCallback[performTabClose].updatedTabs": (tab)=>({
+                                        ...tab,
+                                        isActive: tab.id === newActiveTab.id
+                                    })
+                            }["ProjectEditor.ProjectEditor.useCallback[performTabClose].updatedTabs"]);
                             setActiveTabId(newActiveTab.id);
                             // currentView 업데이트
                             if (newActiveTab.type === 'chapter') {
@@ -1398,12 +1428,13 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                             } else {
                                 setCurrentView(newActiveTab.type);
                             }
+                            return updatedTabs;
                         }
                     }
                     return filteredTabs.map({
                         "ProjectEditor.ProjectEditor.useCallback[performTabClose]": (tab)=>({
                                 ...tab,
-                                isActive: tab.id === (activeTabId === tabId ? filteredTabs[filteredTabs.length - 1]?.id : activeTabId)
+                                isActive: tab.id === activeTabId && tab.id !== tabId
                             })
                     }["ProjectEditor.ProjectEditor.useCallback[performTabClose]"]);
                 }
@@ -1612,6 +1643,18 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
     // 🔥 내비게이션 핸들러들
     const handleNavigateToChapterEdit = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "ProjectEditor.ProjectEditor.useCallback[handleNavigateToChapterEdit]": (chapterId)=>{
+            // 🔥 먼저 챕터가 실제로 존재하는지 확인
+            const structureStore = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState();
+            const structures = structureStore.structures[projectId] || [];
+            const chapterStructure = structures.find({
+                "ProjectEditor.ProjectEditor.useCallback[handleNavigateToChapterEdit].chapterStructure": (s)=>s.id === chapterId && s.type === 'chapter'
+            }["ProjectEditor.ProjectEditor.useCallback[handleNavigateToChapterEdit].chapterStructure"]);
+            if (!chapterStructure) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].warn('PROJECT_EDITOR', 'Chapter not found in structure', {
+                    chapterId
+                });
+                return; // 삭제된 챕터면 탭을 열지 않음
+            }
             // 🔥 해당 챕터 탭이 이미 있는지 확인
             const existingTab = tabs.find({
                 "ProjectEditor.ProjectEditor.useCallback[handleNavigateToChapterEdit].existingTab": (tab)=>tab.chapterId === chapterId
@@ -1621,12 +1664,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 switchToTab(existingTab.id);
             } else {
                 // 새 탭 생성 (챕터 제목은 구조에서 가져오기)
-                const structureStore = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState();
-                const structures = structureStore.structures[projectId] || [];
-                const chapterStructure = structures.find({
-                    "ProjectEditor.ProjectEditor.useCallback[handleNavigateToChapterEdit].chapterStructure": (s)=>s.id === chapterId && s.type === 'chapter'
-                }["ProjectEditor.ProjectEditor.useCallback[handleNavigateToChapterEdit].chapterStructure"]);
-                const chapterTitle = chapterStructure?.title || `챕터`;
+                const chapterTitle = chapterStructure.title || `챕터`;
                 createNewTab('chapter', chapterTitle, chapterId);
             }
             setCurrentView('write');
@@ -1680,8 +1718,23 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
         "ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter]": async (title)=>{
             try {
                 const newChapterId = `chapter-${Date.now()}`;
-                // 1. 모달에서 입력받은 제목을 그대로 사용
-                const chapterTitle = title.trim() || '새로운 챕터'; // 🔥 모달 입력값 사용
+                // 1. 자동 챕터 번호 생성 (빈 제목인 경우)
+                let chapterTitle = title.trim();
+                if (!chapterTitle) {
+                    const existingChapters = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().structures[projectId] || [];
+                    const chapterNumbers = existingChapters.filter({
+                        "ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter].chapterNumbers": (s)=>s.type === 'chapter'
+                    }["ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter].chapterNumbers"]).map({
+                        "ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter].chapterNumbers": (s)=>{
+                            const match = s.title.match(/(\d+)장/);
+                            return match && match[1] ? parseInt(match[1]) : 0;
+                        }
+                    }["ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter].chapterNumbers"]).filter({
+                        "ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter].chapterNumbers": (n)=>n > 0
+                    }["ProjectEditor.ProjectEditor.useCallback[handleCreateNewChapter].chapterNumbers"]);
+                    const nextChapterNumber = chapterNumbers.length > 0 ? Math.max(...chapterNumbers) + 1 : 1;
+                    chapterTitle = `${nextChapterNumber}장`;
+                }
                 // 2. chapters JSON에 새 챕터 추가
                 const existingChapters = JSON.parse(projectData.chapters || '{}');
                 existingChapters[newChapterId] = ''; // 빈 content로 시작
@@ -1727,6 +1780,171 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
         projectData,
         projectId
     ]); // 🔥 projectId 의존성 추가
+    // 🔥 챕터 복제 핸들러
+    const handleDuplicateChapter = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "ProjectEditor.ProjectEditor.useCallback[handleDuplicateChapter]": async (originalId, originalTitle)=>{
+            try {
+                const newChapterId = `chapter-${Date.now()}`;
+                const duplicatedTitle = `${originalTitle} (복사본)`;
+                // 1. 원본 챕터 content 가져오기
+                const existingChapters = JSON.parse(projectData.chapters || '{}');
+                const originalContent = existingChapters[originalId] || '';
+                // 2. 새 챕터를 chapters JSON에 추가
+                existingChapters[newChapterId] = originalContent;
+                projectData.setChapters(JSON.stringify(existingChapters));
+                // 3. 구조 데이터에도 복제된 챕터 정보 저장
+                const newStructureItem = {
+                    id: newChapterId,
+                    title: duplicatedTitle,
+                    description: '',
+                    type: 'chapter',
+                    status: 'planning',
+                    projectId,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                };
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().addStructureItem(projectId, newStructureItem);
+                // 4. 즉시 DB에 저장
+                await projectData.forceSave();
+                // 5. 새 탭 생성
+                createNewTab('chapter', duplicatedTitle, newChapterId);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Chapter duplicated successfully', {
+                    originalId,
+                    newChapterId,
+                    originalTitle,
+                    duplicatedTitle
+                });
+            } catch (error) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_EDITOR', 'Chapter duplication error', error);
+            }
+        }
+    }["ProjectEditor.ProjectEditor.useCallback[handleDuplicateChapter]"], [
+        createNewTab,
+        projectData,
+        projectId
+    ]);
+    // 🔥 완전한 챕터 삭제 핸들러 (스토어 + chapters JSON + 탭 정리)
+    const handleDeleteChapter = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]": async (chapterId, title)=>{
+            try {
+                // 1. 구조 스토어에서 삭제
+                await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().deleteStructureItem(projectId, chapterId);
+                // 2. chapters JSON에서도 삭제
+                const existingChapters = JSON.parse(projectData.chapters || '{}');
+                delete existingChapters[chapterId];
+                projectData.setChapters(JSON.stringify(existingChapters));
+                // 3. 해당 챕터의 열린 탭들 모두 닫기
+                setTabs({
+                    "ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]": (prevTabs)=>{
+                        const remainingTabs = prevTabs.filter({
+                            "ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter].remainingTabs": (tab)=>tab.chapterId !== chapterId
+                        }["ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter].remainingTabs"]);
+                        // 활성 탭이 삭제된 경우 다른 탭으로 전환
+                        if (activeTabId && prevTabs.find({
+                            "ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]": (tab)=>tab.id === activeTabId
+                        }["ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]"])?.chapterId === chapterId) {
+                            if (remainingTabs.length > 0) {
+                                const newActiveTab = remainingTabs[remainingTabs.length - 1];
+                                if (newActiveTab) {
+                                    setActiveTabId(newActiveTab.id);
+                                    if (newActiveTab.type === 'chapter') {
+                                        setCurrentView('write');
+                                        setEditingItemId(newActiveTab.chapterId || '');
+                                    }
+                                }
+                            } else {
+                                // 탭이 없으면 구조 뷰로 이동
+                                setCurrentView('structure');
+                                setActiveTabId('');
+                            }
+                        }
+                        return remainingTabs.map({
+                            "ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]": (tab)=>({
+                                    ...tab,
+                                    isActive: tab.id === (remainingTabs.length > 0 ? remainingTabs[remainingTabs.length - 1]?.id || '' : '')
+                                })
+                        }["ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]"]);
+                    }
+                }["ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]"]);
+                // 4. 데이터베이스에 저장
+                await projectData.forceSave();
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'Chapter completely deleted', {
+                    chapterId,
+                    title,
+                    removedFromStore: true,
+                    removedFromChapters: true,
+                    tabsClosed: true
+                });
+            } catch (error) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_EDITOR', 'Complete chapter deletion failed', {
+                    chapterId,
+                    title,
+                    error
+                });
+            }
+        }
+    }["ProjectEditor.ProjectEditor.useCallback[handleDeleteChapter]"], [
+        projectData,
+        projectId,
+        activeTabId
+    ]);
+    // 🔥 자동 챕터 번호 생성 함수
+    const getNextChapterTitle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle]": ()=>{
+            const existingChapters = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().structures[projectId] || [];
+            const chapterNumbers = existingChapters.filter({
+                "ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle].chapterNumbers": (s)=>s.type === 'chapter'
+            }["ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle].chapterNumbers"]).map({
+                "ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle].chapterNumbers": (s)=>{
+                    const match = s.title.match(/(\d+)장/);
+                    return match && match[1] ? parseInt(match[1]) : 0;
+                }
+            }["ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle].chapterNumbers"]).filter({
+                "ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle].chapterNumbers": (n)=>n > 0
+            }["ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle].chapterNumbers"]);
+            const nextChapterNumber = chapterNumbers.length > 0 ? Math.max(...chapterNumbers) + 1 : 1;
+            return `${nextChapterNumber}장`;
+        }
+    }["ProjectEditor.ProjectEditor.useCallback[getNextChapterTitle]"], [
+        projectId
+    ]);
+    // 🔥 탭바에서 새 챕터 생성 핸들러
+    const handleNewTabFromTabBar = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
+        "ProjectEditor.ProjectEditor.useCallback[handleNewTabFromTabBar]": async ()=>{
+            const newChapterId = `chapter-${Date.now()}`;
+            const chapterTitle = getNextChapterTitle();
+            // 1. chapters JSON에 새 챕터 추가
+            const existingChapters = JSON.parse(projectData.chapters || '{}');
+            existingChapters[newChapterId] = '';
+            projectData.setChapters(JSON.stringify(existingChapters));
+            // 2. 구조 데이터에도 챕터 정보 저장
+            const newStructureItem = {
+                id: newChapterId,
+                title: chapterTitle,
+                description: '',
+                type: 'chapter',
+                status: 'planning',
+                projectId,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].getState().addStructureItem(projectId, newStructureItem);
+            await projectData.forceSave();
+            // 3. 새 탭 생성
+            createNewTab('chapter', chapterTitle, newChapterId);
+            setCurrentView('write');
+            setEditingItemId(newChapterId);
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_EDITOR', 'New chapter created from tab bar', {
+                chapterId: newChapterId,
+                title: chapterTitle
+            });
+        }
+    }["ProjectEditor.ProjectEditor.useCallback[handleNewTabFromTabBar]"], [
+        getNextChapterTitle,
+        projectData,
+        projectId,
+        createNewTab
+    ]);
     const handleAddCharacter = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "ProjectEditor.ProjectEditor.useCallback[handleAddCharacter]": ()=>{
             // 인물 뷰로 직접 이동 (탭 시스템 사용하지 않음)
@@ -1975,7 +2193,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         className: "w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 911,
+                        lineNumber: 1114,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1983,18 +2201,18 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         children: "프로젝트를 불러오는 중..."
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 912,
+                        lineNumber: 1115,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 910,
+                lineNumber: 1113,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-            lineNumber: 909,
+            lineNumber: 1112,
             columnNumber: 7
         }, this);
     }
@@ -2007,7 +2225,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-            lineNumber: 919,
+            lineNumber: 1122,
             columnNumber: 12
         }, this);
     }
@@ -2038,7 +2256,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         onOpenGoogleDocs: openGoogleDocsExternal
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 926,
+                        lineNumber: 1129,
                         columnNumber: 9
                     }, this),
                     [
@@ -2049,11 +2267,11 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         activeTabId: activeTabId,
                         onTabClick: switchToTab,
                         onTabClose: closeTab,
-                        onNewTab: ()=>createNewTab('chapter', `새 챕터 ${nextTabOrder}`),
+                        onNewTab: handleNewTabFromTabBar,
                         onTabReorder: handleTabReorder
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 950,
+                        lineNumber: 1153,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2069,10 +2287,13 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                 collapsed: false,
                                 onAddStructure: handleAddStructure,
                                 onAddCharacter: handleAddCharacter,
-                                onAddNote: handleAddNote
+                                onAddNote: handleAddNote,
+                                onEditStructure: handleNavigateToChapterEdit,
+                                onDuplicateStructure: handleDuplicateChapter,
+                                onDeleteStructure: handleDeleteChapter
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                lineNumber: 964,
+                                lineNumber: 1167,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2084,7 +2305,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         isFocusMode: uiState.isFocusMode
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 981,
+                                        lineNumber: 1187,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'structure' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$StructureView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["StructureView"], {
@@ -2095,7 +2316,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onAddNewChapter: ()=>setShowNewChapterModal(true)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 988,
+                                        lineNumber: 1194,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'characters' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$CharactersView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["CharactersView"], {
@@ -2104,7 +2325,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onCharactersChange: projectData.setCharacters
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 997,
+                                        lineNumber: 1203,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'notes' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$NotesView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["NotesView"], {
@@ -2113,7 +2334,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onNotesChange: projectData.setNotes
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 1004,
+                                        lineNumber: 1210,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'synopsis' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$SynopsisView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["SynopsisView"], {
@@ -2121,7 +2342,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onBack: handleBackToStructure
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 1011,
+                                        lineNumber: 1217,
                                         columnNumber: 15
                                     }, this),
                                     currentView === 'idea' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$IdeaView$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["IdeaView"], {
@@ -2129,13 +2350,13 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         onBack: handleBackToStructure
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                        lineNumber: 1017,
+                                        lineNumber: 1223,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                lineNumber: 979,
+                                lineNumber: 1185,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$WriterStatsPanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["WriterStatsPanel"], {
@@ -2147,24 +2368,24 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                 projectId: projectId
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                                lineNumber: 1025,
+                                lineNumber: 1231,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                        lineNumber: 961,
+                        lineNumber: 1164,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 924,
+                lineNumber: 1127,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$ShortcutHelp$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ShortcutHelp"], {}, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 1037,
+                lineNumber: 1243,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDeleteDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ConfirmDeleteDialog"], {
@@ -2174,7 +2395,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 onCancel: ()=>setShowDeleteDialog(false)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 1040,
+                lineNumber: 1246,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ShareDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ShareDialog"], {
@@ -2184,7 +2405,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 onClose: ()=>setShowShareDialog(false)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 1048,
+                lineNumber: 1254,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$NewChapterModal$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["NewChapterModal"], {
@@ -2194,7 +2415,7 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 defaultTitle: "새로운 챕터"
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 1056,
+                lineNumber: 1262,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ConfirmDialog"], {
@@ -2209,22 +2430,22 @@ const ProjectEditor = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 onCancel: handleCancelChapterDelete
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-                lineNumber: 1064,
+                lineNumber: 1270,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/ProjectEditor.tsx",
-        lineNumber: 923,
+        lineNumber: 1126,
         columnNumber: 5
     }, this);
-}, "3h5cCy/GsXDJM3DAOpEQWmYFRVk=", false, function() {
+}, "Roptyx4oCoxs/tr+OXi+SEVxQHA=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useProjectData$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useProjectData"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useUIState$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useUIState"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"]
     ];
-})), "3h5cCy/GsXDJM3DAOpEQWmYFRVk=", false, function() {
+})), "Roptyx4oCoxs/tr+OXi+SEVxQHA=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useProjectData$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useProjectData"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$hooks$2f$useUIState$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useUIState"],
@@ -2273,12 +2494,29 @@ class ProjectErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d
             error,
             errorInfo
         });
+        // 🔥 더 상세한 에러 로깅
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_ERROR_BOUNDARY', 'Client-side exception caught', {
             error: error.message,
             stack: error.stack,
-            componentStack: errorInfo.componentStack
+            componentStack: errorInfo.componentStack,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent
         });
+        // 🔥 DOM 관련 에러인지 확인
+        if (error.message.includes('insertBefore') || error.message.includes('Node')) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].warn('PROJECT_ERROR_BOUNDARY', 'DOM manipulation error detected', {
+                errorMessage: error.message
+            });
+        }
     }
+    // 🔥 에러 복구 함수
+    handleReset = ()=>{
+        this.setState({
+            hasError: false,
+            error: undefined,
+            errorInfo: undefined
+        });
+    };
     render() {
         if (this.state.hasError) {
             if (this.props.fallback) {
@@ -2294,7 +2532,7 @@ class ProjectErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d
                             children: "😵"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                            lineNumber: 46,
+                            lineNumber: 61,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -2302,7 +2540,7 @@ class ProjectErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d
                             children: "앗! 오류가 발생했습니다"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                            lineNumber: 47,
+                            lineNumber: 62,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2310,7 +2548,7 @@ class ProjectErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d
                             children: "클라이언트에서 예외가 발생했습니다. 페이지를 새로고침하거나 다시 시도해보세요."
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                            lineNumber: 48,
+                            lineNumber: 63,
                             columnNumber: 13
                         }, this),
                         ("TURBOPACK compile-time value", "development") === 'development' && this.state.error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("details", {
@@ -2321,7 +2559,7 @@ class ProjectErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d
                                     children: "기술적 세부사항"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                                    lineNumber: 54,
+                                    lineNumber: 69,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pre", {
@@ -2333,25 +2571,34 @@ class ProjectErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                                    lineNumber: 55,
+                                    lineNumber: 70,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                            lineNumber: 53,
+                            lineNumber: 68,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-x-4",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: this.handleReset,
+                                    className: "px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700",
+                                    children: "다시 시도"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
+                                    lineNumber: 79,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>window.location.reload(),
                                     className: "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700",
                                     children: "페이지 새로고침"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                                    lineNumber: 64,
+                                    lineNumber: 85,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2360,24 +2607,24 @@ class ProjectErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d
                                     children: "뒤로 가기"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                                    lineNumber: 70,
+                                    lineNumber: 91,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                            lineNumber: 63,
+                            lineNumber: 78,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                    lineNumber: 45,
+                    lineNumber: 60,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/ErrorBoundary.tsx",
-                lineNumber: 44,
+                lineNumber: 59,
                 columnNumber: 9
             }, this);
         }

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import {
   Edit3,
   FileText,
@@ -10,12 +10,15 @@ import {
   Circle,
   CheckCircle,
   Plus,
-  MoreHorizontal
+  MoreHorizontal,
+  Edit2,
+  Trash2
 } from 'lucide-react';
 import { ProjectCharacter, ProjectStructure } from '../../../../shared/types';
 import { WriterStats } from '../editor/WriterStats';
 import { Logger } from '../../../../shared/logger';
 import { useStructureStore } from '../../../stores/useStructureStore'; // 🔥 구조 스토어 추가
+import { ConfirmDialog } from './ConfirmDialog'; // 🔥 ConfirmDialog 추가
 
 interface WriterSidebarProps {
   projectId: string; // 🔥 projectId 추가
@@ -29,6 +32,9 @@ interface WriterSidebarProps {
   onAddStructure?: () => void;
   onAddCharacter?: () => void;
   onAddNote?: () => void;
+  onEditStructure?: (id: string) => void; // 🔥 구조 편집 핸들러 추가
+  onDuplicateStructure?: (id: string, title: string) => void; // 🔥 복제 핸들러 추가
+  onDeleteStructure?: (id: string, title: string) => void; // 🔥 삭제 핸들러 추가
 }
 
 // 🔥 기가차드 간소화된 사이드바 스타일
@@ -79,18 +85,134 @@ export const WriterSidebar = memo(function WriterSidebar({
   collapsed,
   onAddStructure,
   onAddCharacter,
-  onAddNote
+  onAddNote,
+  onEditStructure, // 🔥 구조 편집 핸들러 추가
+  onDuplicateStructure, // 🔥 복제 핸들러 추가
+  onDeleteStructure // 🔥 삭제 핸들러 추가
 }: WriterSidebarProps): React.ReactElement {
   // 🔥 useStructureStore에서 실시간 구조 데이터 가져오기
   const storeStructures = useStructureStore((state) => {
     const projectStructures = state.structures[projectId];
     return projectStructures || [];
   });
+  const deleteStructureItem = useStructureStore((state) => state.deleteStructureItem); // 🔥 삭제 함수 추가
 
   // 🔥 스토어 데이터를 우선 사용, 없으면 prop 사용
   const structure = storeStructures.length > 0 ? storeStructures : (propStructure || []);
 
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['structure']));
+  const [structureMenuId, setStructureMenuId] = useState<string | null>(null); // 🔥 구조 메뉴 상태 추가
+  const [editingId, setEditingId] = useState<string | null>(null); // 🔥 인라인 편집 상태
+  const [editingTitle, setEditingTitle] = useState<string>(''); // 🔥 편집 중인 제목
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // 🔥 삭제 확인 다이얼로그
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null); // 🔥 삭제할 아이템 정보
+  const [, forceUpdate] = useState({}); // 🔥 강제 리렌더링용 상태
+
+  // 🔥 강제 리렌더링 트리거
+  const triggerUpdate = useCallback(() => {
+    forceUpdate({});
+  }, []);
+
+  // 🔥 구조 데이터 변경 감지 및 로깅
+  React.useEffect(() => {
+    Logger.debug('WRITER_SIDEBAR', 'Structure data updated', {
+      projectId,
+      structureCount: structure.length,
+      structureIds: structure.map(s => s.id)
+    });
+  }, [structure, projectId]);
+
+  // 🔥 메뉴 외부 클릭 시 메뉴 닫기
+  React.useEffect(() => {
+    const handleClickOutside = () => {
+      setStructureMenuId(null);
+    };
+
+    if (structureMenuId) {
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [structureMenuId]);
+
+  // 🔥 구조 아이템 삭제 핸들러 (StructureView와 동일한 방식)
+  const handleDeleteStructure = useCallback((id: string, title: string) => {
+    setItemToDelete({ id, title });
+    setShowDeleteDialog(true);
+    setStructureMenuId(null);
+    Logger.info('WRITER_SIDEBAR', 'Delete dialog opened', { id, title });
+  }, []);
+
+  // 🔥 삭제 확인 핸들러
+  const handleConfirmDelete = useCallback(async () => {
+    if (!itemToDelete) return;
+
+    try {
+      await deleteStructureItem(projectId, itemToDelete.id);
+      setShowDeleteDialog(false);
+      setItemToDelete(null);
+      triggerUpdate();
+      Logger.info('WRITER_SIDEBAR', 'Structure item deleted successfully', {
+        id: itemToDelete.id,
+        title: itemToDelete.title
+      });
+    } catch (error) {
+      Logger.error('WRITER_SIDEBAR', 'Failed to delete structure item', {
+        id: itemToDelete.id,
+        title: itemToDelete.title,
+        error
+      });
+    }
+  }, [itemToDelete, projectId, deleteStructureItem, triggerUpdate]);
+
+  // 🔥 삭제 취소 핸들러
+  const handleCancelDelete = useCallback(() => {
+    setShowDeleteDialog(false);
+    setItemToDelete(null);
+  }, []);
+
+  // 🔥 구조 아이템 편집 핸들러
+  const handleEditStructure = useCallback((id: string) => {
+    setStructureMenuId(null);
+    onEditStructure?.(id);
+    Logger.info('WRITER_SIDEBAR', 'Structure item edit triggered', { id });
+  }, [onEditStructure]);
+
+  // 🔥 인라인 제목 편집 시작
+  const handleStartTitleEdit = useCallback((id: string, currentTitle: string) => {
+    setEditingId(id);
+    setEditingTitle(currentTitle);
+    setStructureMenuId(null);
+    Logger.info('WRITER_SIDEBAR', 'Title edit started', { id, currentTitle });
+  }, []);
+
+  // 🔥 제목 편집 저장
+  const handleSaveTitleEdit = useCallback(async () => {
+    if (!editingId || !editingTitle.trim()) return;
+
+    try {
+      const updateStructureItem = useStructureStore.getState().updateStructureItem;
+      await updateStructureItem(projectId, editingId, { title: editingTitle.trim() });
+      setEditingId(null);
+      setEditingTitle('');
+      triggerUpdate();
+      Logger.info('WRITER_SIDEBAR', 'Title updated', { id: editingId, newTitle: editingTitle.trim() });
+    } catch (error) {
+      Logger.error('WRITER_SIDEBAR', 'Failed to update title', { id: editingId, title: editingTitle, error });
+    }
+  }, [editingId, editingTitle, projectId, triggerUpdate]);
+
+  // 🔥 제목 편집 취소
+  const handleCancelTitleEdit = useCallback(() => {
+    setEditingId(null);
+    setEditingTitle('');
+  }, []);
+
+  // 🔥 챕터 복제 (부모 컴포넌트로 위임)
+  const handleDuplicateStructure = useCallback((id: string, title: string) => {
+    setStructureMenuId(null);
+    onDuplicateStructure?.(id, title);
+    Logger.info('WRITER_SIDEBAR', 'Structure item duplication requested', { id, title });
+  }, [onDuplicateStructure]);
 
   const toggleSection = (sectionId: string): void => {
     const newExpanded = new Set(expandedSections);
@@ -197,10 +319,27 @@ export const WriterSidebar = memo(function WriterSidebar({
             </div>
             <div className={SIDEBAR_STYLES.structureList}>
               {structure.map((item, index) => (
-                <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between`}>
-                  <div className="flex items-center gap-2">
+                <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
+                  <div className="flex items-center gap-2 flex-1">
                     <Circle size={12} className="text-blue-500" />
-                    <span className="flex-1">{`${index + 1}챕터: ${item.title}`}</span>
+                    {editingId === item.id ? (
+                      <input
+                        type="text"
+                        value={editingTitle}
+                        onChange={(e) => setEditingTitle(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleSaveTitleEdit();
+                          if (e.key === 'Escape') handleCancelTitleEdit();
+                        }}
+                        onBlur={handleSaveTitleEdit}
+                        className="flex-1 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autoFocus
+                      />
+                    ) : (
+                      <span className="flex-1 cursor-pointer" onClick={() => handleEditStructure(item.id)}>
+                        {item.title}
+                      </span>
+                    )}
                   </div>
                   <div className="flex items-center gap-1">
                     <span className="text-xs text-gray-400">{item.status}</span>
@@ -208,14 +347,49 @@ export const WriterSidebar = memo(function WriterSidebar({
                       className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       onClick={(e) => {
                         e.stopPropagation();
-                        Logger.info('WRITER_SIDEBAR', '구조 관리 메뉴 클릭', { title: item.title });
-                        // TODO: 구조 아이템 메뉴 표시
+                        setStructureMenuId(structureMenuId === item.id ? null : item.id);
+                        Logger.info('WRITER_SIDEBAR', '구조 관리 메뉴 클릭', { title: item.title, id: item.id });
                       }}
                       title="옵션"
                     >
                       <MoreHorizontal size={12} />
                     </button>
                   </div>
+
+                  {/* 🔥 확장된 구조 아이템 메뉴 */}
+                  {structureMenuId === item.id && (
+                    <div className="absolute top-8 right-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 z-50 min-w-[140px]">
+                      <button
+                        className="w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2 text-left"
+                        onClick={() => handleEditStructure(item.id)}
+                      >
+                        <Edit2 size={14} />
+                        내용 편집
+                      </button>
+                      <button
+                        className="w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2 text-left"
+                        onClick={() => handleStartTitleEdit(item.id, item.title)}
+                      >
+                        <Edit2 size={14} />
+                        제목 변경
+                      </button>
+                      <button
+                        className="w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2 text-left"
+                        onClick={() => handleDuplicateStructure(item.id, item.title)}
+                      >
+                        <FileText size={14} />
+                        복제
+                      </button>
+                      <div className="border-t border-gray-200 dark:border-gray-600 my-1" />
+                      <button
+                        className="w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 cursor-pointer flex items-center gap-2 text-left"
+                        onClick={() => handleDeleteStructure(item.id, item.title)}
+                      >
+                        <Trash2 size={14} />
+                        삭제
+                      </button>
+                    </div>
+                  )}
                 </div>
               ))}
               {structure.length === 0 && (
@@ -309,6 +483,17 @@ export const WriterSidebar = memo(function WriterSidebar({
           </div>
         )}
       </div>
+
+      {/* 🔥 삭제 확인 다이얼로그 */}
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="구조 아이템 삭제"
+        message={itemToDelete ? `"${itemToDelete.title}"을(를) 삭제하시겠습니까?` : ''}
+        confirmText="삭제"
+        cancelText="취소"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 });

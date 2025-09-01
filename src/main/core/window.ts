@@ -7,6 +7,8 @@ import { WindowInfo } from '../../shared/types';
 import { isObject } from '../../shared/common';
 import { Platform } from '../utils/platform';
 import { StaticServer } from '../utils/StaticServer';
+import { CSP } from './security'; // 🔥 보안 정책 import
+
 
 // #DEBUG: Window manager entry point
 Logger.debug('WINDOW', 'Window manager module loaded');
@@ -60,9 +62,14 @@ export class WindowManager {
           sandbox: false,
           preload: join(__dirname, '../../preload/preload.js'),
           webSecurity: true,
-          // 🔥 복사/붙여넣기 허용
-          enableBlinkFeatures: 'ClipboardApi',
+          // 🔥 보안 강화: enableBlinkFeatures 제거하고 다른 방식으로 클립보드 지원
+          // enableBlinkFeatures: 'ClipboardApi', // 보안 경고 제거
           allowRunningInsecureContent: false,
+          experimentalFeatures: false, // 🔥 실험적 기능 비활성화
+          // 🔥 Content Security Policy 설정
+          additionalArguments: [
+            `--content-security-policy=${process.env.NODE_ENV === 'development' ? CSP.development : CSP.production}`
+          ]
         },
         icon: iconPath,
         // macOS 전용 설정

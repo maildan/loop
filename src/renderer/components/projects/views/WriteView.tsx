@@ -31,33 +31,10 @@ const WRITE_STYLES = {
 } as const;
 
 export function WriteView({ content, onChange, isFocusMode }: WriteViewProps): React.ReactElement {
-  // 🔥 빈 상태 처리
-  const isEmpty = !content.trim();
-
-  if (isEmpty) {
-    return (
-      <div className={WRITE_STYLES.container}>
-        <div className={WRITE_STYLES.emptyState}>
-          <Focus className={WRITE_STYLES.emptyIcon} />
-          <h2 className={WRITE_STYLES.emptyTitle}>새로운 이야기를 시작하세요</h2>
-          <p className={WRITE_STYLES.emptyDescription}>
-            이곳에서 당신의 창작 여정이 시작됩니다.
-            첫 번째 문장을 작성하고 상상력을 현실로 만들어보세요.
-          </p>
-          <button
-            className={WRITE_STYLES.startButton}
-            onClick={() => onChange('# 새로운 장\n\n')}
-          >
-            글쓰기 시작하기
-          </button>
-        </div>
-      </div>
-    );
-  }
-
+  // 🔥 빈 상태 처리 제거 - 바로 에디터로 진입
   return (
     <div className={WRITE_STYLES.container}>
-      {/* 🔥 메인 에디터 영역 - 중복 통계 바 제거 */}
+      {/* 🔥 메인 에디터 영역 */}
       <div className={WRITE_STYLES.editorContainer}>
         {isFocusMode && <div className={WRITE_STYLES.focusOverlay} />}
         <div className={WRITE_STYLES.focusContent}>

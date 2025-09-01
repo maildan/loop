@@ -48,6 +48,20 @@ export const EditorTabBar = memo(function EditorTabBar({
 }: EditorTabBarProps): React.ReactElement {
     const [draggedTabId, setDraggedTabId] = useState<string | null>(null);
     const [dragOverTabId, setDragOverTabId] = useState<string | null>(null);
+
+    // 🔥 탭 상태 변경 시 로깅으로 디버깅
+    React.useEffect(() => {
+        Logger.debug('EDITOR_TAB_BAR', 'Tabs updated', {
+            tabCount: tabs.length,
+            activeTabId,
+            tabIds: tabs.map(tab => tab.id)
+        });
+    }, [tabs, activeTabId]);
+
+    // 🔥 안정적인 탭 배열 보장
+    const stableTabs = React.useMemo(() => {
+        return tabs.filter(tab => tab && tab.id); // null/undefined 탭 필터링
+    }, [tabs]);
     const [contextMenu, setContextMenu] = useState<ContextMenuState>({
         isOpen: false,
         x: 0,
@@ -191,14 +205,14 @@ export const EditorTabBar = memo(function EditorTabBar({
     return (
         <div ref={containerRef} className={TAB_STYLES.container}>
             <div className={TAB_STYLES.tabsWrapper}>
-                {tabs.map((tab) => {
+                {stableTabs.map((tab, index) => {
                     const isActive = tab.id === activeTabId;
                     const isDragOver = dragOverTabId === tab.id;
                     const canClose = tab.id !== 'main'; // 메인 탭은 닫을 수 없음
 
                     return (
                         <div
-                            key={tab.id}
+                            key={`${tab.id}-${index}`} // 🔥 안정적인 key 생성
                             draggable
                             className={`
                 ${TAB_STYLES.tab}

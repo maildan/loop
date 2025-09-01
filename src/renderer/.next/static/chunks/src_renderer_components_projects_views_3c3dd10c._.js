@@ -10,9 +10,7 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$MarkdownEditor$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$focus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Focus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/focus.js [app-client] (ecmascript) <export default as Focus>");
 'use client';
-;
 ;
 ;
 // 🔥 기가차드 작가 친화적 스타일 - 단순화
@@ -32,58 +30,7 @@ const WRITE_STYLES = {
     startButton: 'px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium'
 };
 function WriteView({ content, onChange, isFocusMode }) {
-    // 🔥 빈 상태 처리
-    const isEmpty = !content.trim();
-    if (isEmpty) {
-        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: WRITE_STYLES.container,
-            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: WRITE_STYLES.emptyState,
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$focus$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Focus$3e$__["Focus"], {
-                        className: WRITE_STYLES.emptyIcon
-                    }, void 0, false, {
-                        fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                        lineNumber: 41,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        className: WRITE_STYLES.emptyTitle,
-                        children: "새로운 이야기를 시작하세요"
-                    }, void 0, false, {
-                        fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                        lineNumber: 42,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                        className: WRITE_STYLES.emptyDescription,
-                        children: "이곳에서 당신의 창작 여정이 시작됩니다. 첫 번째 문장을 작성하고 상상력을 현실로 만들어보세요."
-                    }, void 0, false, {
-                        fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                        lineNumber: 43,
-                        columnNumber: 11
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        className: WRITE_STYLES.startButton,
-                        onClick: ()=>onChange('# 새로운 장\n\n'),
-                        children: "글쓰기 시작하기"
-                    }, void 0, false, {
-                        fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                        lineNumber: 47,
-                        columnNumber: 11
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                lineNumber: 40,
-                columnNumber: 9
-            }, this)
-        }, void 0, false, {
-            fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-            lineNumber: 39,
-            columnNumber: 7
-        }, this);
-    }
+    // 🔥 빈 상태 처리 제거 - 바로 에디터로 진입
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: WRITE_STYLES.container,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -93,7 +40,7 @@ function WriteView({ content, onChange, isFocusMode }) {
                     className: WRITE_STYLES.focusOverlay
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                    lineNumber: 62,
+                    lineNumber: 39,
                     columnNumber: 25
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -106,28 +53,28 @@ function WriteView({ content, onChange, isFocusMode }) {
                             isFocusMode: isFocusMode
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                            lineNumber: 65,
+                            lineNumber: 42,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                        lineNumber: 64,
+                        lineNumber: 41,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-                    lineNumber: 63,
+                    lineNumber: 40,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-            lineNumber: 61,
+            lineNumber: 38,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/renderer/components/projects/views/WriteView.tsx",
-        lineNumber: 59,
+        lineNumber: 36,
         columnNumber: 5
     }, this);
 }
@@ -824,10 +771,15 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$heart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Heart$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/heart.js [app-client] (ecmascript) <export default as Heart>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/book-open.js [app-client] (ecmascript) <export default as BookOpen>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-client] (ecmascript) <export default as User>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-client] (ecmascript) <export default as Trash2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$hooks$2f$useLongPress$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/hooks/useLongPress.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/ConfirmDialog.tsx [app-client] (ecmascript)"); // 🔥 ConfirmDialog 추가
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
+;
+;
 ;
 ;
 ;
@@ -918,9 +870,13 @@ const CHARACTER_TABS = [
 ];
 function CharactersView({ projectId, characters, onCharactersChange }) {
     _s();
+    var _s1 = __turbopack_context__.k.signature();
     const [activeTab, setActiveTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     const [editingCharacter, setEditingCharacter] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [editForm, setEditForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
+    // 🔥 삭제 관련 상태
+    const [showDeleteDialog, setShowDeleteDialog] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [characterToDelete, setCharacterToDelete] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     // 🔥 통계 계산
     const stats = {
         total: characters.length,
@@ -975,11 +931,41 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
         setEditingCharacter(null);
         setEditForm({});
     };
-    const handleDelete = (id)=>{
-        if (confirm('이 캐릭터를 삭제하시겠습니까?')) {
-            const updatedCharacters = characters.filter((char)=>char.id !== id);
+    const handleDelete = (id, name)=>{
+        setCharacterToDelete({
+            id,
+            name
+        });
+        setShowDeleteDialog(true);
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('CHARACTERS_VIEW', 'Delete dialog opened', {
+            id,
+            name
+        });
+    };
+    // 🔥 삭제 확인 핸들러
+    const handleConfirmDelete = ()=>{
+        if (!characterToDelete) return;
+        try {
+            const updatedCharacters = characters.filter((char)=>char.id !== characterToDelete.id);
             onCharactersChange(updatedCharacters);
+            setShowDeleteDialog(false);
+            setCharacterToDelete(null);
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('CHARACTERS_VIEW', 'Character deleted successfully', {
+                id: characterToDelete.id,
+                name: characterToDelete.name
+            });
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('CHARACTERS_VIEW', 'Failed to delete character', {
+                id: characterToDelete.id,
+                name: characterToDelete.name,
+                error
+            });
         }
+    };
+    // 🔥 삭제 취소 핸들러
+    const handleCancelDelete = ()=>{
+        setShowDeleteDialog(false);
+        setCharacterToDelete(null);
     };
     const getTabForCharacter = (characterId)=>{
         return activeTab[characterId] || 'basic';
@@ -1004,7 +990,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "역할"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 192,
+                                    lineNumber: 224,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1014,18 +1000,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "역할을 설정해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 194,
+                                        lineNumber: 226,
                                         columnNumber: 36
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 193,
+                                    lineNumber: 225,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 191,
+                            lineNumber: 223,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1036,7 +1022,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "설명"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 198,
+                                    lineNumber: 230,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1046,24 +1032,24 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "캐릭터 설명을 추가해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 200,
+                                        lineNumber: 232,
                                         columnNumber: 43
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 199,
+                                    lineNumber: 231,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 197,
+                            lineNumber: 229,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 190,
+                    lineNumber: 222,
                     columnNumber: 11
                 }, this);
             case 'details':
@@ -1078,7 +1064,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "외모"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 210,
+                                    lineNumber: 242,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1088,18 +1074,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "외모를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 212,
+                                        lineNumber: 244,
                                         columnNumber: 42
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 211,
+                                    lineNumber: 243,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 209,
+                            lineNumber: 241,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1110,7 +1096,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "나이"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 216,
+                                    lineNumber: 248,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1120,18 +1106,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "나이를 설정해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 218,
+                                        lineNumber: 250,
                                         columnNumber: 35
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 217,
+                                    lineNumber: 249,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 215,
+                            lineNumber: 247,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1142,7 +1128,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "직업"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 222,
+                                    lineNumber: 254,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1152,18 +1138,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "직업을 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 224,
+                                        lineNumber: 256,
                                         columnNumber: 42
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 223,
+                                    lineNumber: 255,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 221,
+                            lineNumber: 253,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1174,7 +1160,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "출신 / 거주지"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 228,
+                                    lineNumber: 260,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1184,18 +1170,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "출신지와 거주지를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 232,
+                                        lineNumber: 264,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 229,
+                                    lineNumber: 261,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 227,
+                            lineNumber: 259,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1206,7 +1192,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "가족"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 237,
+                                    lineNumber: 269,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1216,24 +1202,24 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "가족 관계를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 239,
+                                        lineNumber: 271,
                                         columnNumber: 38
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 238,
+                                    lineNumber: 270,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 236,
+                            lineNumber: 268,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 208,
+                    lineNumber: 240,
                     columnNumber: 11
                 }, this);
             case 'story':
@@ -1248,7 +1234,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "성격"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 249,
+                                    lineNumber: 281,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1258,18 +1244,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "성격을 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 251,
+                                        lineNumber: 283,
                                         columnNumber: 43
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 250,
+                                    lineNumber: 282,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 248,
+                            lineNumber: 280,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1280,7 +1266,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "배경"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 255,
+                                    lineNumber: 287,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1290,18 +1276,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "캐릭터 배경을 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 257,
+                                        lineNumber: 289,
                                         columnNumber: 42
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 256,
+                                    lineNumber: 288,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 254,
+                            lineNumber: 286,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1312,7 +1298,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "목표"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 261,
+                                    lineNumber: 293,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1322,24 +1308,24 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "캐릭터의 목표를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 263,
+                                        lineNumber: 295,
                                         columnNumber: 37
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 262,
+                                    lineNumber: 294,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 260,
+                            lineNumber: 292,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 247,
+                    lineNumber: 279,
                     columnNumber: 11
                 }, this);
             default:
@@ -1361,7 +1347,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "등장인물"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 280,
+                                    lineNumber: 312,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1369,18 +1355,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "이야기 속 캐릭터들의 상세한 프로필을 관리하세요. 체계적인 캐릭터 설정으로 더욱 생생한 스토리를 만들어보세요."
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 281,
+                                    lineNumber: 313,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 279,
+                            lineNumber: 311,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                        lineNumber: 278,
+                        lineNumber: 310,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1393,7 +1379,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         className: CHARACTERS_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 291,
+                                        lineNumber: 323,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1401,7 +1387,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: stats.total
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 292,
+                                        lineNumber: 324,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1409,13 +1395,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "총 인물"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 293,
+                                        lineNumber: 325,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                lineNumber: 290,
+                                lineNumber: 322,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1425,7 +1411,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         className: CHARACTERS_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 296,
+                                        lineNumber: 328,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1433,7 +1419,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: stats.main
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 297,
+                                        lineNumber: 329,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1441,13 +1427,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "주요 인물"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 298,
+                                        lineNumber: 330,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                lineNumber: 295,
+                                lineNumber: 327,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1457,7 +1443,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         className: CHARACTERS_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 301,
+                                        lineNumber: 333,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1465,7 +1451,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: stats.detailed
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 302,
+                                        lineNumber: 334,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1473,25 +1459,25 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "상세 설정"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 303,
+                                        lineNumber: 335,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                lineNumber: 300,
+                                lineNumber: 332,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                        lineNumber: 289,
+                        lineNumber: 321,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                lineNumber: 277,
+                lineNumber: 309,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1508,7 +1494,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     className: CHARACTERS_STYLES.emptyIcon
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 315,
+                                    lineNumber: 347,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1516,7 +1502,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "첫 번째 인물을 만들어보세요"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 316,
+                                    lineNumber: 348,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1524,7 +1510,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "매력적인 캐릭터들이 당신의 이야기를 더욱 생동감 있게 만들어줄 것입니다. 주인공부터 조연까지, 각자의 특별한 이야기를 담아보세요."
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 317,
+                                    lineNumber: 349,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1533,18 +1519,19 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "첫 인물 만들기"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 321,
+                                    lineNumber: 353,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 314,
+                            lineNumber: 346,
                             columnNumber: 15
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: CHARACTERS_STYLES.characterGrid,
                             children: [
-                                characters.map((character)=>{
+                                characters.map(_s1((character)=>{
+                                    _s1();
                                     const currentTab = getTabForCharacter(character.id);
                                     // 🔥 편집 핸들러
                                     const handleCharacterClick = ()=>{
@@ -1556,10 +1543,23 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             name: character.name
                                         });
                                     };
+                                    // 🔥 Long press 핸들러 - 캐릭터 편집 뷰로 이동
+                                    const longPressHandlers = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$hooks$2f$useLongPress$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLongPress"])({
+                                        onLongPress: {
+                                            "CharactersView.useLongPress[longPressHandlers]": ()=>{
+                                                handleEditStart(character);
+                                                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('CHARACTERS_VIEW', 'Long press detected - entering edit mode', {
+                                                    name: character.name
+                                                });
+                                            }
+                                        }["CharactersView.useLongPress[longPressHandlers]"],
+                                        delay: 500 // 500ms
+                                    });
                                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: CHARACTERS_STYLES.characterCard,
                                         onClick: handleCharacterClick,
                                         onDoubleClick: handleCharacterDoubleClick,
+                                        ...longPressHandlers,
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "relative",
                                             children: [
@@ -1577,37 +1577,37 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                                lineNumber: 361,
+                                                                lineNumber: 403,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 353,
+                                                            lineNumber: 395,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                             onClick: (e)=>{
                                                                 e.stopPropagation();
-                                                                handleDelete(character.id);
+                                                                handleDelete(character.id, character.name);
                                                             },
                                                             className: CHARACTERS_STYLES.deleteButton,
                                                             title: "삭제",
-                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                                lineNumber: 371,
+                                                                lineNumber: 413,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 363,
+                                                            lineNumber: 405,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 352,
+                                                    lineNumber: 394,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1618,7 +1618,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             children: character.name.charAt(0)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 377,
+                                                            lineNumber: 419,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1626,7 +1626,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             children: character.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 380,
+                                                            lineNumber: 422,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1634,13 +1634,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             children: character.role
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 381,
+                                                            lineNumber: 423,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 376,
+                                                    lineNumber: 418,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1653,34 +1653,38 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                                     className: "w-4 h-4 mr-1"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                                    lineNumber: 393,
+                                                                    lineNumber: 435,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 label
                                                             ]
                                                         }, id, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 387,
+                                                            lineNumber: 429,
                                                             columnNumber: 29
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 385,
+                                                    lineNumber: 427,
                                                     columnNumber: 25
                                                 }, this),
                                                 renderTabContent(character, currentTab)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 350,
+                                            lineNumber: 392,
                                             columnNumber: 23
                                         }, this)
                                     }, character.id, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 344,
+                                        lineNumber: 385,
                                         columnNumber: 21
                                     }, this);
-                                }),
+                                }, "t/q2ErN2bLB8v27J4j7dBciAiic=", false, function() {
+                                    return [
+                                        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$hooks$2f$useLongPress$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useLongPress"]
+                                    ];
+                                })),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: handleAddCharacter,
                                     className: CHARACTERS_STYLES.addButton,
@@ -1689,7 +1693,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             className: CHARACTERS_STYLES.addButtonIcon
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 411,
+                                            lineNumber: 453,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1697,34 +1701,34 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: "새 인물 추가"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 412,
+                                            lineNumber: 454,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 407,
+                                    lineNumber: 449,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 329,
+                            lineNumber: 361,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                        lineNumber: 311,
+                        lineNumber: 343,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 310,
+                    lineNumber: 342,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                lineNumber: 309,
+                lineNumber: 341,
                 columnNumber: 7
             }, this),
             editingCharacter && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1742,7 +1746,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: editingCharacter.id === editForm.id ? '캐릭터 편집' : '새 캐릭터'
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 425,
+                                    lineNumber: 467,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1751,18 +1755,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 429,
+                                        lineNumber: 471,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 428,
+                                    lineNumber: 470,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 424,
+                            lineNumber: 466,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1779,7 +1783,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "이름 *"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 436,
+                                                    lineNumber: 478,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1793,13 +1797,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     placeholder: "캐릭터 이름"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 437,
+                                                    lineNumber: 479,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 435,
+                                            lineNumber: 477,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1810,7 +1814,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "역할"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 447,
+                                                    lineNumber: 489,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1824,13 +1828,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     placeholder: "주인공, 조연, 악역 등"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 448,
+                                                    lineNumber: 490,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 446,
+                                            lineNumber: 488,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1841,7 +1845,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "나이"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 458,
+                                                    lineNumber: 500,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1855,13 +1859,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     placeholder: "나이 또는 연령대"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 459,
+                                                    lineNumber: 501,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 457,
+                                            lineNumber: 499,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1872,7 +1876,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "직업"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 469,
+                                                    lineNumber: 511,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1886,13 +1890,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     placeholder: "직업이나 역할"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 470,
+                                                    lineNumber: 512,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 468,
+                                            lineNumber: 510,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1903,7 +1907,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "출신"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 480,
+                                                    lineNumber: 522,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1917,13 +1921,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     placeholder: "출생지"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 481,
+                                                    lineNumber: 523,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 479,
+                                            lineNumber: 521,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1934,7 +1938,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "거주지"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 491,
+                                                    lineNumber: 533,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1948,19 +1952,19 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     placeholder: "현재 거주지"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 492,
+                                                    lineNumber: 534,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 490,
+                                            lineNumber: 532,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 434,
+                                    lineNumber: 476,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1974,7 +1978,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "외모"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 504,
+                                                    lineNumber: 546,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1988,13 +1992,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     rows: 3
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 505,
+                                                    lineNumber: 547,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 503,
+                                            lineNumber: 545,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2005,7 +2009,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "성격"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 515,
+                                                    lineNumber: 557,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -2019,13 +2023,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     rows: 3
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 516,
+                                                    lineNumber: 558,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 514,
+                                            lineNumber: 556,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2036,7 +2040,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "가족"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 526,
+                                                    lineNumber: 568,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -2050,13 +2054,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     rows: 2
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 527,
+                                                    lineNumber: 569,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 525,
+                                            lineNumber: 567,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2067,7 +2071,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "배경"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 537,
+                                                    lineNumber: 579,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -2081,13 +2085,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     rows: 3
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 538,
+                                                    lineNumber: 580,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 536,
+                                            lineNumber: 578,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2098,7 +2102,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "설명"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 548,
+                                                    lineNumber: 590,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -2112,25 +2116,25 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     rows: 3
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 549,
+                                                    lineNumber: 591,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 547,
+                                            lineNumber: 589,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 502,
+                                    lineNumber: 544,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 433,
+                            lineNumber: 475,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2142,7 +2146,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 561,
+                                    lineNumber: 603,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2151,34 +2155,47 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "저장"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 567,
+                                    lineNumber: 609,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 560,
+                            lineNumber: 602,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 423,
+                    lineNumber: 465,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                lineNumber: 422,
+                lineNumber: 464,
                 columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ConfirmDialog"], {
+                isOpen: showDeleteDialog,
+                title: "캐릭터 삭제",
+                message: characterToDelete ? `"${characterToDelete.name}"을(를) 삭제하시겠습니까?` : '',
+                confirmText: "삭제",
+                cancelText: "취소",
+                onConfirm: handleConfirmDelete,
+                onCancel: handleCancelDelete
+            }, void 0, false, {
+                fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
+                lineNumber: 621,
+                columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-        lineNumber: 275,
+        lineNumber: 307,
         columnNumber: 5
     }, this);
 }
-_s(CharactersView, "YcuWD8gnLT36fB2s4th1Mq0waiI=");
+_s(CharactersView, "Sn/eg+aiQ/VH4QmoASTsS+HJp3A=");
 _c = CharactersView;
 var _c;
 __turbopack_context__.k.register(_c, "CharactersView");

@@ -4,9 +4,10 @@
 
 import React, { useState } from 'react';
 import { ProjectCharacter } from '../../../../shared/types';
-import { Plus, Edit3, Save, X as XIcon, Users, Heart, BookOpen, User, Briefcase, Home, MapPin, Calendar, Palette } from 'lucide-react';
+import { Plus, Edit3, Save, X as XIcon, Users, Heart, BookOpen, User, Briefcase, Home, MapPin, Calendar, Palette, Trash2 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
 import { useLongPress } from '../../../hooks/useLongPress';
+import { ConfirmDialog } from '../components/ConfirmDialog'; // 🔥 ConfirmDialog 추가
 
 interface CharactersViewProps {
   projectId: string;
@@ -107,6 +108,10 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
   const [editingCharacter, setEditingCharacter] = useState<ProjectCharacter | null>(null);
   const [editForm, setEditForm] = useState<Partial<ProjectCharacter>>({});
 
+  // 🔥 삭제 관련 상태
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const [characterToDelete, setCharacterToDelete] = useState<{ id: string; name: string } | null>(null);
+
   // 🔥 통계 계산
   const stats = {
     total: characters.length,
@@ -168,11 +173,38 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
     setEditForm({});
   };
 
-  const handleDelete = (id: string): void => {
-    if (confirm('이 캐릭터를 삭제하시겠습니까?')) {
-      const updatedCharacters = characters.filter(char => char.id !== id);
+  const handleDelete = (id: string, name: string): void => {
+    setCharacterToDelete({ id, name });
+    setShowDeleteDialog(true);
+    Logger.info('CHARACTERS_VIEW', 'Delete dialog opened', { id, name });
+  };
+
+  // 🔥 삭제 확인 핸들러
+  const handleConfirmDelete = (): void => {
+    if (!characterToDelete) return;
+
+    try {
+      const updatedCharacters = characters.filter(char => char.id !== characterToDelete.id);
       onCharactersChange(updatedCharacters);
+      setShowDeleteDialog(false);
+      setCharacterToDelete(null);
+      Logger.info('CHARACTERS_VIEW', 'Character deleted successfully', {
+        id: characterToDelete.id,
+        name: characterToDelete.name
+      });
+    } catch (error) {
+      Logger.error('CHARACTERS_VIEW', 'Failed to delete character', {
+        id: characterToDelete.id,
+        name: characterToDelete.name,
+        error
+      });
     }
+  };
+
+  // 🔥 삭제 취소 핸들러
+  const handleCancelDelete = (): void => {
+    setShowDeleteDialog(false);
+    setCharacterToDelete(null);
   };
 
   const getTabForCharacter = (characterId: string): string => {
@@ -340,12 +372,22 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
                     Logger.info('CHARACTERS_VIEW', '더블클릭으로 편집 모드 활성화', { name: character.name });
                   };
 
+                  // 🔥 Long press 핸들러 - 캐릭터 편집 뷰로 이동
+                  const longPressHandlers = useLongPress({
+                    onLongPress: () => {
+                      handleEditStart(character);
+                      Logger.info('CHARACTERS_VIEW', 'Long press detected - entering edit mode', { name: character.name });
+                    },
+                    delay: 500 // 500ms
+                  });
+
                   return (
                     <div
                       key={character.id}
                       className={CHARACTERS_STYLES.characterCard}
                       onClick={handleCharacterClick}
                       onDoubleClick={handleCharacterDoubleClick}
+                      {...longPressHandlers} // 🔥 Long press 이벤트 적용
                     >
                       <div className="relative">
                         {/* 🔥 액션 버튼들 */}
@@ -363,12 +405,12 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleDelete(character.id);
+                              handleDelete(character.id, character.name);
                             }}
                             className={CHARACTERS_STYLES.deleteButton}
                             title="삭제"
                           >
-                            <XIcon size={16} />
+                            <Trash2 size={16} />
                           </button>
                         </div>
 
@@ -574,6 +616,17 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
           </div>
         </div>
       )}
+
+      {/* 🔥 삭제 확인 다이얼로그 */}
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="캐릭터 삭제"
+        message={characterToDelete ? `"${characterToDelete.name}"을(를) 삭제하시겠습니까?` : ''}
+        confirmText="삭제"
+        cancelText="취소"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 }

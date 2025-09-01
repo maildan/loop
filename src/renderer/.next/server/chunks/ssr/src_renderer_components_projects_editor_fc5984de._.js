@@ -3250,6 +3250,7 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
     }, []);
     // 🔥 TipTap 에디터 초기화 (Notion 스타일 + 작가 친화적 설정)
     const editor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tiptap$2f$react$2f$dist$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["useEditor"])({
+        immediatelyRender: false,
         extensions: [
             __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tiptap$2f$starter$2d$kit$2f$dist$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].configure({
                 // 🔥 작가 친화적 설정
@@ -3693,7 +3694,7 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             className: "w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 577,
+                            lineNumber: 578,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3701,23 +3702,23 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             children: "에디터 준비 중..."
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 578,
+                            lineNumber: 579,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                    lineNumber: 576,
+                    lineNumber: 577,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 575,
+                lineNumber: 576,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-            lineNumber: 574,
+            lineNumber: 575,
             columnNumber: 7
         }, this);
     }
@@ -3731,12 +3732,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                     children: "📁 파일을 여기에 놓으세요"
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                    lineNumber: 590,
+                    lineNumber: 591,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 589,
+                lineNumber: 590,
                 columnNumber: 9
             }, this),
             editor && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tiptap$2f$react$2f$dist$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["BubbleMenu"], {
@@ -3755,12 +3756,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 614,
+                            lineNumber: 615,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 608,
+                        lineNumber: 609,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3771,12 +3772,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 623,
+                            lineNumber: 624,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 617,
+                        lineNumber: 618,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3787,12 +3788,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 632,
+                            lineNumber: 633,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 626,
+                        lineNumber: 627,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3803,19 +3804,19 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 641,
+                            lineNumber: 642,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 635,
+                        lineNumber: 636,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 645,
+                        lineNumber: 646,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3826,19 +3827,19 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 654,
+                            lineNumber: 655,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 648,
+                        lineNumber: 649,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 658,
+                        lineNumber: 659,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3852,12 +3853,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 670,
+                            lineNumber: 671,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 661,
+                        lineNumber: 662,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3868,19 +3869,19 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 680,
+                            lineNumber: 681,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 674,
+                        lineNumber: 675,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 684,
+                        lineNumber: 685,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3912,12 +3913,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 711,
+                            lineNumber: 712,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 687,
+                        lineNumber: 688,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3937,12 +3938,12 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 732,
+                            lineNumber: 733,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 715,
+                        lineNumber: 716,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3963,19 +3964,19 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 751,
+                            lineNumber: 752,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 736,
+                        lineNumber: 737,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 755,
+                        lineNumber: 756,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3991,32 +3992,32 @@ function MarkdownEditor({ content, onChange, isFocusMode }) {
                             size: 14
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                            lineNumber: 766,
+                            lineNumber: 767,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                        lineNumber: 758,
+                        lineNumber: 759,
                         columnNumber: 11
                     }, this)
                 ]
             }, "bubble-menu" // 🔥 고유 key 추가
             , true, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 598,
+                lineNumber: 599,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$tiptap$2f$react$2f$dist$2f$index$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$locals$3e$__["EditorContent"], {
                 editor: editor
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-                lineNumber: 772,
+                lineNumber: 773,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/editor/MarkdownEditor.tsx",
-        lineNumber: 586,
+        lineNumber: 587,
         columnNumber: 5
     }, this);
 }

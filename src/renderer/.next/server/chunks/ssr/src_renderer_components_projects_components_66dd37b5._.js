@@ -1,5 +1,200 @@
 module.exports = {
 
+"[project]/src/renderer/components/projects/components/ConfirmDialog.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "ConfirmDialog": (()=>ConfirmDialog)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-ssr] (ecmascript) <export default as X>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/triangle-alert.js [app-ssr] (ecmascript) <export default as AlertTriangle>");
+'use client';
+;
+;
+// 🔥 범용 확인 다이얼로그 스타일
+const CONFIRM_DIALOG_STYLES = {
+    overlay: 'fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50',
+    dialog: 'bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden',
+    header: 'flex items-center gap-3 p-6 border-b border-slate-200 dark:border-slate-700',
+    icon: 'w-8 h-8 text-red-500 flex-shrink-0',
+    headerText: 'flex-1',
+    title: 'text-lg font-bold text-slate-900 dark:text-slate-100',
+    message: 'text-sm text-slate-600 dark:text-slate-400 mt-1',
+    closeButton: 'w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors',
+    content: 'p-6',
+    description: 'text-slate-700 dark:text-slate-300 leading-relaxed mb-4',
+    itemName: 'font-semibold text-slate-900 dark:text-slate-100',
+    warning: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-800 dark:text-red-200',
+    footer: 'flex items-center justify-end gap-3 p-6 border-t border-slate-200 dark:border-slate-700',
+    cancelButton: 'px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors',
+    confirmButton: 'px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium'
+};
+function ConfirmDialog({ isOpen, title, message, itemName, warning, confirmText = "삭제", cancelText = "취소", onConfirm, onCancel }) {
+    if (!isOpen) return null;
+    const handleOverlayClick = (event)=>{
+        if (event.target === event.currentTarget) {
+            onCancel();
+        }
+    };
+    const handleEscapeKey = (event)=>{
+        if (event.key === 'Escape') {
+            onCancel();
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: CONFIRM_DIALOG_STYLES.overlay,
+        onClick: handleOverlayClick,
+        onKeyDown: handleEscapeKey,
+        tabIndex: -1,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: CONFIRM_DIALOG_STYLES.dialog,
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: CONFIRM_DIALOG_STYLES.header,
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"], {
+                            className: CONFIRM_DIALOG_STYLES.icon
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                            lineNumber: 72,
+                            columnNumber: 21
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: CONFIRM_DIALOG_STYLES.headerText,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                    className: CONFIRM_DIALOG_STYLES.title,
+                                    children: title
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                                    lineNumber: 74,
+                                    columnNumber: 25
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: CONFIRM_DIALOG_STYLES.message,
+                                    children: "신중하게 확인해주세요"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                                    lineNumber: 77,
+                                    columnNumber: 25
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                            lineNumber: 73,
+                            columnNumber: 21
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onCancel,
+                            className: CONFIRM_DIALOG_STYLES.closeButton,
+                            type: "button",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                className: "w-5 h-5"
+                            }, void 0, false, {
+                                fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                                lineNumber: 86,
+                                columnNumber: 25
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                            lineNumber: 81,
+                            columnNumber: 21
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                    lineNumber: 71,
+                    columnNumber: 17
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: CONFIRM_DIALOG_STYLES.content,
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: CONFIRM_DIALOG_STYLES.description,
+                            children: [
+                                message,
+                                itemName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                    children: [
+                                        ' ',
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: CONFIRM_DIALOG_STYLES.itemName,
+                                            children: [
+                                                '"',
+                                                itemName,
+                                                '"'
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                                            lineNumber: 97,
+                                            columnNumber: 33
+                                        }, this)
+                                    ]
+                                }, void 0, true)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                            lineNumber: 92,
+                            columnNumber: 21
+                        }, this),
+                        warning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: CONFIRM_DIALOG_STYLES.warning,
+                            children: warning
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                            lineNumber: 105,
+                            columnNumber: 25
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                    lineNumber: 91,
+                    columnNumber: 17
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: CONFIRM_DIALOG_STYLES.footer,
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onCancel,
+                            className: CONFIRM_DIALOG_STYLES.cancelButton,
+                            type: "button",
+                            children: cancelText
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                            lineNumber: 113,
+                            columnNumber: 21
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onConfirm,
+                            className: CONFIRM_DIALOG_STYLES.confirmButton,
+                            type: "button",
+                            children: confirmText
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                            lineNumber: 120,
+                            columnNumber: 21
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+                    lineNumber: 112,
+                    columnNumber: 17
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+            lineNumber: 69,
+            columnNumber: 13
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
+        lineNumber: 63,
+        columnNumber: 9
+    }, this);
+}
+}}),
 "[project]/src/renderer/components/projects/components/WriterSidebar.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
 "use strict";
 
@@ -21,7 +216,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-ssr] (ecmascript) <export default as Trash2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/stores/useStructureStore.ts [app-ssr] (ecmascript)"); // 🔥 구조 스토어 추가
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/components/ConfirmDialog.tsx [app-ssr] (ecmascript)"); // 🔥 ConfirmDialog 추가
 'use client';
+;
 ;
 ;
 ;
@@ -74,7 +271,7 @@ const MENU_ITEMS = [
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"]
     }
 ];
-const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(function WriterSidebar({ projectId, currentView, onViewChange, structure: propStructure, characters, stats, collapsed, onAddStructure, onAddCharacter, onAddNote, onEditStructure, onDuplicateStructure// 🔥 복제 핸들러 추가
+const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(function WriterSidebar({ projectId, currentView, onViewChange, structure: propStructure, characters, stats, collapsed, onAddStructure, onAddCharacter, onAddNote, onEditStructure, onDuplicateStructure, onDeleteStructure// 🔥 삭제 핸들러 추가
  }) {
     // 🔥 useStructureStore에서 실시간 구조 데이터 가져오기
     const storeStructures = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useStructureStore"])((state)=>{
@@ -90,6 +287,8 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
     const [structureMenuId, setStructureMenuId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null); // 🔥 구조 메뉴 상태 추가
     const [editingId, setEditingId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null); // 🔥 인라인 편집 상태
     const [editingTitle, setEditingTitle] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(''); // 🔥 편집 중인 제목
+    const [showDeleteDialog, setShowDeleteDialog] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false); // 🔥 삭제 확인 다이얼로그
+    const [itemToDelete, setItemToDelete] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null); // 🔥 삭제할 아이템 정보
     const [, forceUpdate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({}); // 🔥 강제 리렌더링용 상태
     // 🔥 강제 리렌더링 트리거
     const triggerUpdate = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
@@ -118,30 +317,49 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
     }, [
         structureMenuId
     ]);
-    // 🔥 구조 아이템 삭제 핸들러
-    const handleDeleteStructure = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async (id, title)=>{
-        if (confirm(`"${title}"을(를) 삭제하시겠습니까?`)) {
-            try {
-                await deleteStructureItem(projectId, id);
-                setStructureMenuId(null);
-                triggerUpdate(); // 🔥 강제 리렌더링 트리거
-                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('WRITER_SIDEBAR', 'Structure item deleted', {
-                    id,
-                    title
-                });
-            } catch (error) {
-                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('WRITER_SIDEBAR', 'Failed to delete structure item', {
-                    id,
-                    title,
-                    error
-                });
-            }
+    // 🔥 구조 아이템 삭제 핸들러 (StructureView와 동일한 방식)
+    const handleDeleteStructure = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((id, title)=>{
+        setItemToDelete({
+            id,
+            title
+        });
+        setShowDeleteDialog(true);
+        setStructureMenuId(null);
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('WRITER_SIDEBAR', 'Delete dialog opened', {
+            id,
+            title
+        });
+    }, []);
+    // 🔥 삭제 확인 핸들러
+    const handleConfirmDelete = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async ()=>{
+        if (!itemToDelete) return;
+        try {
+            await deleteStructureItem(projectId, itemToDelete.id);
+            setShowDeleteDialog(false);
+            setItemToDelete(null);
+            triggerUpdate();
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('WRITER_SIDEBAR', 'Structure item deleted successfully', {
+                id: itemToDelete.id,
+                title: itemToDelete.title
+            });
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('WRITER_SIDEBAR', 'Failed to delete structure item', {
+                id: itemToDelete.id,
+                title: itemToDelete.title,
+                error
+            });
         }
     }, [
+        itemToDelete,
         projectId,
         deleteStructureItem,
         triggerUpdate
     ]);
+    // 🔥 삭제 취소 핸들러
+    const handleCancelDelete = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        setShowDeleteDialog(false);
+        setItemToDelete(null);
+    }, []);
     // 🔥 구조 아이템 편집 핸들러
     const handleEditStructure = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((id)=>{
         setStructureMenuId(null);
@@ -229,22 +447,22 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                             size: 16
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                            lineNumber: 215,
+                            lineNumber: 242,
                             columnNumber: 15
                         }, this)
                     }, item.id, false, {
                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                        lineNumber: 206,
+                        lineNumber: 233,
                         columnNumber: 13
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                lineNumber: 204,
+                lineNumber: 231,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-            lineNumber: 203,
+            lineNumber: 230,
             columnNumber: 7
         }, this);
     }
@@ -261,25 +479,25 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                 size: 16
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 234,
+                                lineNumber: 261,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: item.label
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 235,
+                                lineNumber: 262,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, item.id, true, {
                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                        lineNumber: 228,
+                        lineNumber: 255,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                lineNumber: 226,
+                lineNumber: 253,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -295,7 +513,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                         children: "프로젝트 구조"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 247,
+                                        lineNumber: 274,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -308,7 +526,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         className: "text-blue-500"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 251,
+                                                        lineNumber: 278,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -316,7 +534,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         children: `${index + 1}챕터: ${item.title}`
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 252,
+                                                        lineNumber: 279,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -324,24 +542,24 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         children: item.status
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 253,
+                                                        lineNumber: 280,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, item.id, true, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 250,
+                                                lineNumber: 277,
                                                 columnNumber: 19
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 248,
+                                        lineNumber: 275,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 246,
+                                lineNumber: 273,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -352,7 +570,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                         children: "글쓰기 통계"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 261,
+                                        lineNumber: 288,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -366,7 +584,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         children: "단어"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 264,
+                                                        lineNumber: 291,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -374,13 +592,13 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         children: stats.wordCount
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 265,
+                                                        lineNumber: 292,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 263,
+                                                lineNumber: 290,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -391,7 +609,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         children: "문자"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 268,
+                                                        lineNumber: 295,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -399,13 +617,13 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         children: stats.charCount
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 269,
+                                                        lineNumber: 296,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 267,
+                                                lineNumber: 294,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -416,7 +634,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         children: "진행률"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 272,
+                                                        lineNumber: 299,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -427,25 +645,25 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 273,
+                                                        lineNumber: 300,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 271,
+                                                lineNumber: 298,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 262,
+                                        lineNumber: 289,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 260,
+                                lineNumber: 287,
                                 columnNumber: 13
                             }, this)
                         ]
@@ -461,7 +679,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                         children: "구조 관리"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 284,
+                                        lineNumber: 311,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -472,18 +690,18 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                            lineNumber: 290,
+                                            lineNumber: 317,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 285,
+                                        lineNumber: 312,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 283,
+                                lineNumber: 310,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -500,7 +718,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             className: "text-blue-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 297,
+                                                            lineNumber: 324,
                                                             columnNumber: 21
                                                         }, this),
                                                         editingId === item.id ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -516,7 +734,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             autoFocus: true
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 299,
+                                                            lineNumber: 326,
                                                             columnNumber: 23
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                             className: "flex-1 cursor-pointer",
@@ -524,13 +742,13 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             children: item.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 312,
+                                                            lineNumber: 339,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                    lineNumber: 296,
+                                                    lineNumber: 323,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -541,7 +759,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             children: item.status
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 318,
+                                                            lineNumber: 345,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -559,18 +777,18 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                 size: 12
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                                lineNumber: 328,
+                                                                lineNumber: 355,
                                                                 columnNumber: 23
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 319,
+                                                            lineNumber: 346,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                    lineNumber: 317,
+                                                    lineNumber: 344,
                                                     columnNumber: 19
                                                 }, this),
                                                 structureMenuId === item.id && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -584,14 +802,14 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                     size: 14
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                                    lineNumber: 339,
+                                                                    lineNumber: 366,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "내용 편집"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 335,
+                                                            lineNumber: 362,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -602,14 +820,14 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                     size: 14
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                                    lineNumber: 346,
+                                                                    lineNumber: 373,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "제목 변경"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 342,
+                                                            lineNumber: 369,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -620,21 +838,21 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                     size: 14
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                                    lineNumber: 353,
+                                                                    lineNumber: 380,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "복제"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 349,
+                                                            lineNumber: 376,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "border-t border-gray-200 dark:border-gray-600 my-1"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 356,
+                                                            lineNumber: 383,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -645,26 +863,26 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                     size: 14
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                                    lineNumber: 361,
+                                                                    lineNumber: 388,
                                                                     columnNumber: 25
                                                                 }, this),
                                                                 "삭제"
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 357,
+                                                            lineNumber: 384,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                    lineNumber: 334,
+                                                    lineNumber: 361,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, item.id, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                            lineNumber: 295,
+                                            lineNumber: 322,
                                             columnNumber: 17
                                         }, this)),
                                     structure.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -675,7 +893,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                 className: "mx-auto mb-2 opacity-50"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 370,
+                                                lineNumber: 397,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -683,25 +901,25 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                 children: "구조를 추가해보세요"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 371,
+                                                lineNumber: 398,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 369,
+                                        lineNumber: 396,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 293,
+                                lineNumber: 320,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                        lineNumber: 282,
+                        lineNumber: 309,
                         columnNumber: 11
                     }, this),
                     currentView === 'characters' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -715,7 +933,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                         children: "인물 관리"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 382,
+                                        lineNumber: 409,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -730,18 +948,18 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                            lineNumber: 392,
+                                            lineNumber: 419,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 383,
+                                        lineNumber: 410,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 381,
+                                lineNumber: 408,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -758,7 +976,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             children: character.name.charAt(0)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 399,
+                                                            lineNumber: 426,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -769,7 +987,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                     children: character.name
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                                    lineNumber: 403,
+                                                                    lineNumber: 430,
                                                                     columnNumber: 23
                                                                 }, this),
                                                                 character.role && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -777,19 +995,19 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                     children: character.role
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                                    lineNumber: 405,
+                                                                    lineNumber: 432,
                                                                     columnNumber: 25
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                            lineNumber: 402,
+                                                            lineNumber: 429,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                    lineNumber: 398,
+                                                    lineNumber: 425,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -806,18 +1024,18 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                         size: 12
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                        lineNumber: 418,
+                                                        lineNumber: 445,
                                                         columnNumber: 21
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                    lineNumber: 409,
+                                                    lineNumber: 436,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, character.id, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                            lineNumber: 397,
+                                            lineNumber: 424,
                                             columnNumber: 17
                                         }, this)),
                                     characters.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -828,7 +1046,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                 className: "mx-auto mb-2 opacity-50"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 424,
+                                                lineNumber: 451,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -836,25 +1054,25 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                 children: "인물을 추가해보세요"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                                lineNumber: 425,
+                                                lineNumber: 452,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 423,
+                                        lineNumber: 450,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 395,
+                                lineNumber: 422,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                        lineNumber: 380,
+                        lineNumber: 407,
                         columnNumber: 11
                     }, this),
                     currentView === 'notes' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -868,7 +1086,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                         children: "메모 관리"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 436,
+                                        lineNumber: 463,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -883,18 +1101,18 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                            lineNumber: 446,
+                                            lineNumber: 473,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                        lineNumber: 437,
+                                        lineNumber: 464,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 435,
+                                lineNumber: 462,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -907,7 +1125,7 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                             className: "mx-auto mb-2 opacity-50"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                            lineNumber: 452,
+                                            lineNumber: 479,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -915,36 +1133,49 @@ const WriterSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                             children: "메모를 추가해보세요"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                            lineNumber: 453,
+                                            lineNumber: 480,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                    lineNumber: 451,
+                                    lineNumber: 478,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                                lineNumber: 449,
+                                lineNumber: 476,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                        lineNumber: 434,
+                        lineNumber: 461,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-                lineNumber: 241,
+                lineNumber: 268,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ConfirmDialog"], {
+                isOpen: showDeleteDialog,
+                title: "구조 아이템 삭제",
+                message: itemToDelete ? `"${itemToDelete.title}"을(를) 삭제하시겠습니까?` : '',
+                confirmText: "삭제",
+                cancelText: "취소",
+                onConfirm: handleConfirmDelete,
+                onCancel: handleCancelDelete
+            }, void 0, false, {
+                fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
+                lineNumber: 488,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/components/WriterSidebar.tsx",
-        lineNumber: 224,
+        lineNumber: 251,
         columnNumber: 5
     }, this);
 });
@@ -2132,201 +2363,6 @@ function ConfirmDeleteDialog({ isOpen, projectTitle, onConfirm, onCancel }) {
     }, this);
 }
 }}),
-"[project]/src/renderer/components/projects/components/ConfirmDialog.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
-"use strict";
-
-var { g: global, __dirname } = __turbopack_context__;
-{
-__turbopack_context__.s({
-    "ConfirmDialog": (()=>ConfirmDialog)
-});
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-ssr] (ecmascript) <export default as X>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/triangle-alert.js [app-ssr] (ecmascript) <export default as AlertTriangle>");
-'use client';
-;
-;
-// 🔥 범용 확인 다이얼로그 스타일
-const CONFIRM_DIALOG_STYLES = {
-    overlay: 'fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50',
-    dialog: 'bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden',
-    header: 'flex items-center gap-3 p-6 border-b border-slate-200 dark:border-slate-700',
-    icon: 'w-8 h-8 text-red-500 flex-shrink-0',
-    headerText: 'flex-1',
-    title: 'text-lg font-bold text-slate-900 dark:text-slate-100',
-    message: 'text-sm text-slate-600 dark:text-slate-400 mt-1',
-    closeButton: 'w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors',
-    content: 'p-6',
-    description: 'text-slate-700 dark:text-slate-300 leading-relaxed mb-4',
-    itemName: 'font-semibold text-slate-900 dark:text-slate-100',
-    warning: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-800 dark:text-red-200',
-    footer: 'flex items-center justify-end gap-3 p-6 border-t border-slate-200 dark:border-slate-700',
-    cancelButton: 'px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors',
-    confirmButton: 'px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium'
-};
-function ConfirmDialog({ isOpen, title, message, itemName, warning, confirmText = "삭제", cancelText = "취소", onConfirm, onCancel }) {
-    if (!isOpen) return null;
-    const handleOverlayClick = (event)=>{
-        if (event.target === event.currentTarget) {
-            onCancel();
-        }
-    };
-    const handleEscapeKey = (event)=>{
-        if (event.key === 'Escape') {
-            onCancel();
-        }
-    };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: CONFIRM_DIALOG_STYLES.overlay,
-        onClick: handleOverlayClick,
-        onKeyDown: handleEscapeKey,
-        tabIndex: -1,
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: CONFIRM_DIALOG_STYLES.dialog,
-            children: [
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: CONFIRM_DIALOG_STYLES.header,
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"], {
-                            className: CONFIRM_DIALOG_STYLES.icon
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                            lineNumber: 72,
-                            columnNumber: 21
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: CONFIRM_DIALOG_STYLES.headerText,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    className: CONFIRM_DIALOG_STYLES.title,
-                                    children: title
-                                }, void 0, false, {
-                                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                                    lineNumber: 74,
-                                    columnNumber: 25
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    className: CONFIRM_DIALOG_STYLES.message,
-                                    children: "신중하게 확인해주세요"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                                    lineNumber: 77,
-                                    columnNumber: 25
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                            lineNumber: 73,
-                            columnNumber: 21
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: onCancel,
-                            className: CONFIRM_DIALOG_STYLES.closeButton,
-                            type: "button",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                className: "w-5 h-5"
-                            }, void 0, false, {
-                                fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                                lineNumber: 86,
-                                columnNumber: 25
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                            lineNumber: 81,
-                            columnNumber: 21
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                    lineNumber: 71,
-                    columnNumber: 17
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: CONFIRM_DIALOG_STYLES.content,
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                            className: CONFIRM_DIALOG_STYLES.description,
-                            children: [
-                                message,
-                                itemName && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                                    children: [
-                                        ' ',
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            className: CONFIRM_DIALOG_STYLES.itemName,
-                                            children: [
-                                                '"',
-                                                itemName,
-                                                '"'
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                                            lineNumber: 97,
-                                            columnNumber: 33
-                                        }, this)
-                                    ]
-                                }, void 0, true)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                            lineNumber: 92,
-                            columnNumber: 21
-                        }, this),
-                        warning && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: CONFIRM_DIALOG_STYLES.warning,
-                            children: warning
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                            lineNumber: 105,
-                            columnNumber: 25
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                    lineNumber: 91,
-                    columnNumber: 17
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: CONFIRM_DIALOG_STYLES.footer,
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: onCancel,
-                            className: CONFIRM_DIALOG_STYLES.cancelButton,
-                            type: "button",
-                            children: cancelText
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                            lineNumber: 113,
-                            columnNumber: 21
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: onConfirm,
-                            className: CONFIRM_DIALOG_STYLES.confirmButton,
-                            type: "button",
-                            children: confirmText
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                            lineNumber: 120,
-                            columnNumber: 21
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-                    lineNumber: 112,
-                    columnNumber: 17
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-            lineNumber: 69,
-            columnNumber: 13
-        }, this)
-    }, void 0, false, {
-        fileName: "[project]/src/renderer/components/projects/components/ConfirmDialog.tsx",
-        lineNumber: 63,
-        columnNumber: 9
-    }, this);
-}
-}}),
 "[project]/src/renderer/components/projects/components/ShareDialog.tsx [app-ssr] (ecmascript)": ((__turbopack_context__) => {
 "use strict";
 
@@ -2669,4 +2705,4 @@ function ShareDialog({ isOpen, projectTitle, projectId, onClose }) {
 
 };
 
-//# sourceMappingURL=src_renderer_components_projects_components_6ad013e3._.js.map
+//# sourceMappingURL=src_renderer_components_projects_components_66dd37b5._.js.map
