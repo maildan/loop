@@ -10,6 +10,7 @@ import { ProjectHeader } from './components/ProjectHeader'; // 🔥 새로운 �
 import { EditorTabBar } from './components/EditorTabBar'; // 🔥 NEW: 탭 바
 import { NewChapterModal } from './components/NewChapterModal'; // 🔥 NEW: 새 챕터 모달
 import { ConfirmDeleteDialog } from './components/ConfirmDeleteDialog';
+import { ConfirmDialog } from './components/ConfirmDialog'; // 🔥 범용 확인 다이얼로그 추가
 import { ShareDialog } from './components/ShareDialog';
 import { WriteView } from './views/WriteView';
 import { StructureView } from './views/StructureView';
@@ -60,7 +61,7 @@ export interface ProjectEditorProps {
 
 // 🔥 React.memo로 무한 리렌더링 방지 (11원칙: 성능 최적화)
 export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectEditorProps): React.ReactElement {
-  Logger.info('PROJECT_EDITOR', 'ProjectEditor render started', { projectId }); // replaced console.log with Logger
+  Logger.info('PROJECT_EDITOR', 'ProjectEditor render started', { projectId }); // replaced logger.log with Logger
 
   // 🔥 커스텀 hooks 사용
   const { isLoading, error, ...projectData } = useProjectData(projectId);
@@ -73,6 +74,8 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const [showShareDialog, setShowShareDialog] = useState<boolean>(false);
   const [showNewChapterModal, setShowNewChapterModal] = useState<boolean>(false); // 🔥 NEW: 새 챕터 모달 상태
+  const [showChapterDeleteDialog, setShowChapterDeleteDialog] = useState<boolean>(false); // 🔥 챕터 삭제 확인 다이얼로그
+  const [chapterToDelete, setChapterToDelete] = useState<{ id: string; title: string } | null>(null); // 🔥 삭제할 챕터 정보
 
   // 🔥 NEW: 탭 시스템 상태 (글쓰기 에디터만)
   const [tabs, setTabs] = useState<EditorTab[]>([
@@ -391,6 +394,24 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
     // 닫힐 탭의 정보 가져오기
     const tabToClose = tabs.find(tab => tab.id === tabId);
 
+    // 🔥 챕터 탭을 닫을 때 삭제 확인 다이얼로그 표시
+    if (tabToClose?.type === 'chapter' && tabToClose.chapterId) {
+      setChapterToDelete({
+        id: tabToClose.chapterId,
+        title: tabToClose.title
+      });
+      setShowChapterDeleteDialog(true);
+      return; // 다이얼로그 확인 후 실제 삭제 처리
+    }
+
+    // 메인 탭이나 다른 탭들은 바로 닫기
+    performTabClose(tabId);
+  }, [tabs]);
+
+  // 🔥 실제 탭 닫기 처리 함수 (확인 후 실행)
+  const performTabClose = useCallback(async (tabId: string) => {
+    const tabToClose = tabs.find(tab => tab.id === tabId);
+
     setTabs(prevTabs => {
       const filteredTabs = prevTabs.filter(tab => tab.id !== tabId);
 
@@ -582,10 +603,26 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
 
   // 🔥 내비게이션 핸들러들
   const handleNavigateToChapterEdit = useCallback((chapterId: string) => {
+    // 🔥 해당 챕터 탭이 이미 있는지 확인
+    const existingTab = tabs.find(tab => tab.chapterId === chapterId);
+
+    if (existingTab) {
+      // 기존 탭이 있으면 해당 탭으로 전환
+      switchToTab(existingTab.id);
+    } else {
+      // 새 탭 생성 (챕터 제목은 구조에서 가져오기)
+      const structureStore = useStructureStore.getState();
+      const structures = structureStore.structures[projectId] || [];
+      const chapterStructure = structures.find(s => s.id === chapterId && s.type === 'chapter');
+      const chapterTitle = chapterStructure?.title || `챕터`;
+
+      createNewTab('chapter', chapterTitle, chapterId);
+    }
+
     setCurrentView('write');
     setEditingItemId(chapterId);
     Logger.info('PROJECT_EDITOR', 'Navigate to chapter edit', { chapterId });
-  }, []);
+  }, [tabs, switchToTab, createNewTab, projectId]);
 
   const handleNavigateToSynopsisEdit = useCallback((synopsisId: string) => {
     setCurrentView('synopsis');
@@ -618,24 +655,29 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
     try {
       const newChapterId = `chapter-${Date.now()}`;
 
-      // 1. chapters JSON에 새 챕터 추가
-      const chapters = JSON.parse(projectData.chapters || '{}');
-      chapters[newChapterId] = ''; // 빈 content로 시작
+      // 1. 모달에서 입력받은 제목을 그대로 사용
+      const chapterTitle = title.trim() || '새로운 챕터'; // 🔥 모달 입력값 사용
 
-      console.log('🔥 DEBUG: About to call setChapters', { newChapterId, chapters, stringified: JSON.stringify(chapters) });
+      // 2. chapters JSON에 새 챕터 추가
+      const existingChapters = JSON.parse(projectData.chapters || '{}');
+      existingChapters[newChapterId] = ''; // 빈 content로 시작
 
-      projectData.setChapters(JSON.stringify(chapters));
+      console.log('🔥 DEBUG: About to call setChapters', {
+        newChapterId,
+        chapterTitle,
+        userInputTitle: title,
+        chapters: existingChapters,
+        stringified: JSON.stringify(existingChapters)
+      });
+
+      projectData.setChapters(JSON.stringify(existingChapters));
 
       console.log('🔥 DEBUG: setChapters called, now calling forceSave');
-
-      // 2. 현재 챕터 개수를 계산하여 올바른 번호 생성
-      const chapterCount = Object.keys(chapters).length;
-      const chapterTitle = `${chapterCount}챕터`;
 
       // 3. 구조 데이터에도 챕터 정보 저장
       const newStructureItem: ProjectStructure = {
         id: newChapterId,
-        title: chapterTitle, // 🔥 자동 번호 증가 (1챕터, 2챕터, 3챕터...)
+        title: chapterTitle, // 🔥 사용자 입력 제목 사용
         description: '',
         type: 'chapter',
         status: 'planning',
@@ -650,7 +692,7 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
       // 4. 즉시 DB에 저장
       await projectData.forceSave();
 
-      // 5. 새 탭 생성 (올바른 번호 사용)
+      // 5. 새 탭 생성 (사용자 입력 제목 사용)
       createNewTab('chapter', chapterTitle, newChapterId);
 
       // 6. 쓰기 뷰로 설정
@@ -659,12 +701,14 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
 
       Logger.info('PROJECT_EDITOR', 'New chapter created and saved', {
         chapterId: newChapterId,
-        title
+        title: chapterTitle // 🔥 실제 사용된 제목 로그
       });
     } catch (error) {
       Logger.error('PROJECT_EDITOR', 'Chapter creation error', error);
     }
-  }, [createNewTab, projectData]); const handleAddCharacter = useCallback(() => {
+  }, [createNewTab, projectData, projectId]); // 🔥 projectId 의존성 추가
+
+  const handleAddCharacter = useCallback(() => {
     // 인물 뷰로 직접 이동 (탭 시스템 사용하지 않음)
     setCurrentView('characters');
     Logger.info('PROJECT_EDITOR', 'Add character triggered - switched to characters view');
@@ -746,6 +790,22 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
       setCurrentView(view);
     }
   }, [tabs, switchToTab]);
+
+  // 🔥 챕터 삭제 확인 핸들러
+  const handleConfirmChapterDelete = useCallback(async () => {
+    if (!chapterToDelete) return;
+
+    await performTabClose(tabs.find(tab => tab.chapterId === chapterToDelete.id)?.id || '');
+    setShowChapterDeleteDialog(false);
+    setChapterToDelete(null);
+  }, [chapterToDelete, tabs]);
+
+  // 🔥 챕터 삭제 취소 핸들러
+  const handleCancelChapterDelete = useCallback(() => {
+    setShowChapterDeleteDialog(false);
+    setChapterToDelete(null);
+  }, []);
+
   const handleToolbarAction = useCallback((action: string) => Logger.info('PROJECT_EDITOR', 'Toolbar action:', action), []);
 
   // 🔥 작가 친화적 키보드 단축키 핸들러
@@ -902,6 +962,7 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
           {/* 🔥 모듈화된 WriterSidebar 사용 */}
           {!collapsed && (
             <WriterSidebar
+              projectId={projectId} // 🔥 projectId 전달
               currentView={currentView}
               onViewChange={handleViewChange}
               structure={projectData.structure}
@@ -997,6 +1058,19 @@ export const ProjectEditor = memo(function ProjectEditor({ projectId }: ProjectE
         onClose={() => setShowNewChapterModal(false)}
         onConfirm={handleCreateNewChapter}
         defaultTitle="새로운 챕터"
+      />
+
+      {/* 🔥 챕터 삭제 확인 다이얼로그 */}
+      <ConfirmDialog
+        isOpen={showChapterDeleteDialog}
+        title="챕터 삭제"
+        message="이 챕터를 삭제하시겠습니까?"
+        itemName={chapterToDelete?.title}
+        warning="삭제된 챕터는 복구할 수 없습니다."
+        confirmText="삭제"
+        cancelText="취소"
+        onConfirm={handleConfirmChapterDelete}
+        onCancel={handleCancelChapterDelete}
       />
     </EditorProvider>
   );

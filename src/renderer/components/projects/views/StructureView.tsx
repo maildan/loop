@@ -6,6 +6,7 @@ import React, { useState, useCallback, useEffect, useMemo, memo } from 'react';
 import { ProjectStructure } from '../../../../shared/types';
 import { useStructureStore } from '../../../stores/useStructureStore';
 import { Logger } from '../../../../shared/logger'; // 🔥 Logger import 추가
+import { ConfirmDialog } from '../components/ConfirmDialog'; // 🔥 삭제 확인 다이얼로그 추가
 import {
   FileText,
   Hash,
@@ -123,6 +124,14 @@ const StructureView = memo(function StructureView({
   const [showAddMenu, setShowAddMenu] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState<string>('');
+  const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // 🔥 삭제 확인 다이얼로그
+  const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null); // 🔥 삭제할 아이템 정보
+
+  // 🔥 강제 리렌더링을 위한 상태
+  const [, forceUpdate] = useState({});
+  const triggerUpdate = useCallback(() => {
+    forceUpdate({});
+  }, []);
 
   // 🔥 스토어 동기화 디버깅
   useEffect(() => {
@@ -132,6 +141,18 @@ const StructureView = memo(function StructureView({
       structures: structures.map(s => ({ id: s.id, title: s.title, type: s.type }))
     });
   }, [structures, projectId]);
+
+  // 🔥 스토어 구독으로 실시간 업데이트 보장
+  useEffect(() => {
+    const unsubscribe = useStructureStore.subscribe((state) => {
+      const currentStructures = state.structures[projectId] || [];
+      if (currentStructures !== structures) {
+        triggerUpdate();
+      }
+    });
+
+    return unsubscribe;
+  }, [projectId, structures, triggerUpdate]);
 
   const handleAddItem = useCallback(async (type: 'chapter' | 'synopsis' | 'idea'): Promise<void> => {
     // 🔥 NEW: chapter 타입일 때는 모달을 통해 처리
@@ -225,23 +246,60 @@ const StructureView = memo(function StructureView({
     setEditTitle('');
   }, []);
 
-  const handleDelete = useCallback(async (id: string): Promise<void> => {
+  const handleDelete = useCallback((id: string): void => {
+    // 🔥 삭제할 아이템 정보 찾기
+    const itemToDeleteInfo = structures.find(structure => structure.id === id);
+    if (itemToDeleteInfo) {
+      setItemToDelete({
+        id: itemToDeleteInfo.id,
+        title: itemToDeleteInfo.title
+      });
+      setShowDeleteDialog(true);
+    }
+  }, [structures]);
+
+  // 🔥 삭제 확인 핸들러
+  const handleConfirmDelete = useCallback(async (): Promise<void> => {
+    if (!itemToDelete) return;
+
     try {
       // 🔥 Zustand 스토어에서 삭제 (DB 삭제 포함)
-      await deleteStructureItem(projectId, id);
+      await deleteStructureItem(projectId, itemToDelete.id);
 
       // 🔥 삭제 성공 시 추가 정리 작업
-      Logger.info('STRUCTURE_VIEW', 'Structure item deleted successfully', { id, projectId });
+      Logger.info('STRUCTURE_VIEW', 'Structure item deleted successfully', {
+        id: itemToDelete.id,
+        title: itemToDelete.title,
+        projectId
+      });
 
       // 편집 상태 초기화
-      if (editingId === id) {
+      if (editingId === itemToDelete.id) {
         setEditingId(null);
         setEditTitle('');
       }
+
+      // 다이얼로그 상태 초기화
+      setShowDeleteDialog(false);
+      setItemToDelete(null);
+
+      // 강제 리렌더링
+      triggerUpdate();
     } catch (error) {
-      Logger.error('STRUCTURE_VIEW', 'Failed to delete structure item', { id, projectId, error });
+      Logger.error('STRUCTURE_VIEW', 'Failed to delete structure item', {
+        id: itemToDelete.id,
+        title: itemToDelete.title,
+        projectId,
+        error
+      });
     }
-  }, [projectId, deleteStructureItem, editingId]);
+  }, [projectId, deleteStructureItem, editingId, itemToDelete, triggerUpdate]);
+
+  // 🔥 삭제 취소 핸들러
+  const handleCancelDelete = useCallback((): void => {
+    setShowDeleteDialog(false);
+    setItemToDelete(null);
+  }, []);
 
   const handleKeyPress = useCallback((e: React.KeyboardEvent, id: string): void => {
     if (e.key === 'Enter') {
@@ -368,6 +426,19 @@ const StructureView = memo(function StructureView({
           </div>
         </div>
       </div>
+
+      {/* 🔥 삭제 확인 다이얼로그 */}
+      <ConfirmDialog
+        isOpen={showDeleteDialog}
+        title="구조 항목 삭제"
+        message="이 항목을 삭제하시겠습니까?"
+        itemName={itemToDelete?.title}
+        warning="삭제된 항목은 복구할 수 없습니다."
+        confirmText="삭제"
+        cancelText="취소"
+        onConfirm={handleConfirmDelete}
+        onCancel={handleCancelDelete}
+      />
     </div>
   );
 });

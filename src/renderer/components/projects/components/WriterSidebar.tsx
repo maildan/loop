@@ -15,11 +15,13 @@ import {
 import { ProjectCharacter, ProjectStructure } from '../../../../shared/types';
 import { WriterStats } from '../editor/WriterStats';
 import { Logger } from '../../../../shared/logger';
+import { useStructureStore } from '../../../stores/useStructureStore'; // 🔥 구조 스토어 추가
 
 interface WriterSidebarProps {
+  projectId: string; // 🔥 projectId 추가
   currentView: string;
   onViewChange: (view: string) => void;
-  structure: ProjectStructure[];
+  structure?: ProjectStructure[]; // 🔥 optional로 변경 (스토어 사용)
   characters: ProjectCharacter[];
   stats: WriterStats;
   collapsed: boolean;
@@ -68,9 +70,10 @@ const MENU_ITEMS = [
 ];
 
 export const WriterSidebar = memo(function WriterSidebar({
+  projectId, // 🔥 projectId 추가
   currentView,
   onViewChange,
-  structure,
+  structure: propStructure, // 🔥 prop 이름 변경
   characters,
   stats,
   collapsed,
@@ -78,6 +81,15 @@ export const WriterSidebar = memo(function WriterSidebar({
   onAddCharacter,
   onAddNote
 }: WriterSidebarProps): React.ReactElement {
+  // 🔥 useStructureStore에서 실시간 구조 데이터 가져오기
+  const storeStructures = useStructureStore((state) => {
+    const projectStructures = state.structures[projectId];
+    return projectStructures || [];
+  });
+
+  // 🔥 스토어 데이터를 우선 사용, 없으면 prop 사용
+  const structure = storeStructures.length > 0 ? storeStructures : (propStructure || []);
+
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['structure']));
 
   const toggleSection = (sectionId: string): void => {
