@@ -86,43 +86,68 @@ export const ProjectEditor = memo(function ProjectEditor({
         switch (state.currentView) {
             case 'write':
                 return (
-                    <EditorProvider>
-                        <div className="flex flex-col h-full">
-                            {/* 탭 바 */}
-                            <EditorTabBar
-                                tabs={state.tabs}
-                                activeTabId={state.activeTabId}
-                                onTabClick={actions.setActiveTab}
-                                onTabClose={actions.removeTab}
-                                onNewTab={() => {
-                                    const newTab = {
-                                        id: `tab-${Date.now()}`,
-                                        title: `새 탭 ${state.tabs.length}`,
-                                        type: 'chapter' as const,
-                                        isActive: true,
-                                        content: ''
-                                    };
-                                    actions.addTab(newTab);
+                    <div className="flex h-full">
+                        {/* 왼쪽 사이드바 - write 뷰에서만 */}
+                        {!state.collapsed && (
+                            <WriterSidebar
+                                projectId={projectId}
+                                currentView={state.currentView}
+                                onViewChange={actions.setCurrentView}
+                                characters={projectData?.characters || []}
+                                stats={projectData?.writerStats || {
+                                    wordCount: 0,
+                                    characterCount: 0,
+                                    paragraphCount: 0,
+                                    pageCount: 0,
+                                    readingTime: '0분',
+                                    typingSpeed: 0,
+                                    sessionWords: 0,
+                                    dailyGoal: 1000,
+                                    progressPercentage: 0
                                 }}
+                                collapsed={false}
                             />
-
-                            {/* 에디터 */}
-                            <div className="flex-1">
-                                <MarkdownEditor
-                                    content={activeTab?.content || ''}
-                                    onChange={(content) => {
-                                        if (activeTab) {
-                                            actions.updateTab(activeTab.id, {
-                                                content,
-                                                isDirty: true
-                                            });
-                                        }
+                        )}
+                        
+                        {/* 메인 에디터 영역 */}
+                        <EditorProvider>
+                            <div className="flex-1 flex flex-col h-full">
+                                {/* 탭 바 */}
+                                <EditorTabBar
+                                    tabs={state.tabs}
+                                    activeTabId={state.activeTabId}
+                                    onTabClick={actions.setActiveTab}
+                                    onTabClose={actions.removeTab}
+                                    onNewTab={() => {
+                                        const newTab = {
+                                            id: `tab-${Date.now()}`,
+                                            title: `새 탭 ${state.tabs.length}`,
+                                            type: 'chapter' as const,
+                                            isActive: true,
+                                            content: ''
+                                        };
+                                        actions.addTab(newTab);
                                     }}
-                                    isFocusMode={uiState?.isFocusMode || false}
                                 />
+
+                                {/* 에디터 */}
+                                <div className="flex-1">
+                                    <MarkdownEditor
+                                        content={activeTab?.content || ''}
+                                        onChange={(content) => {
+                                            if (activeTab) {
+                                                actions.updateTab(activeTab.id, {
+                                                    content,
+                                                    isDirty: true
+                                                });
+                                            }
+                                        }}
+                                        isFocusMode={uiState?.isFocusMode || false}
+                                    />
+                                </div>
                             </div>
-                        </div>
-                    </EditorProvider>
+                        </EditorProvider>
+                    </div>
                 );
 
             case 'structure':
@@ -183,138 +208,104 @@ export const ProjectEditor = memo(function ProjectEditor({
         <ProjectEditorLayout.Container>
             {/* 헤더 */}
             <ProjectEditorLayout.Header>
-                <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-lg font-semibold">프로젝트 에디터</h1>
-                        <span className="text-sm text-gray-500">모듈화된 버전</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <button
-                            onClick={actions.toggleRightSidebar}
-                            className="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
-                        >
-                            {state.showRightSidebar ? 'AI 패널 숨기기' : 'AI 패널 보기'}
-                        </button>
-                    </div>
-                </div>
+                <ProjectHeader
+                    title={projectData?.title || '프로젝트'}
+                    onTitleChange={(title) => {
+                        projectData?.setTitle(title);
+                        Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
+                    }}
+                    onBack={() => {
+                        // TODO: 뒤로가기 로직
+                        Logger.debug('PROJECT_EDITOR', 'Back button clicked');
+                    }}
+                    sidebarCollapsed={state.collapsed}
+                    onToggleSidebar={actions.toggleCollapsed}
+                    showRightSidebar={state.showRightSidebar}
+                    onToggleAISidebar={actions.toggleRightSidebar}
+                    isFocusMode={uiState?.isFocusMode || false}
+                    onToggleFocusMode={() => {
+                        // TODO: 포커스 모드 토글 로직
+                        Logger.debug('PROJECT_EDITOR', 'Focus mode toggled');
+                    }}
+                    onSave={() => {
+                        // TODO: 저장 로직
+                        actions.markAllTabsAsSaved();
+                        Logger.debug('PROJECT_EDITOR', 'Save clicked');
+                    }}
+                    onShare={actions.openShareDialog}
+                    onDownload={() => {
+                        // TODO: 다운로드 로직
+                        Logger.debug('PROJECT_EDITOR', 'Download clicked');
+                    }}
+                    onDelete={actions.openDeleteDialog}
+                />
             </ProjectEditorLayout.Header>
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 왼쪽 사이드바 */}
-                {!state.collapsed && (
-                    <div className="w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 p-4">
-                        <h3 className="font-semibold mb-4">사이드바</h3>
-                        <div className="space-y-2">
-                            <button
-                                onClick={() => actions.setCurrentView('write')}
-                                className={`w-full text-left px-3 py-2 rounded ${state.currentView === 'write' ? 'bg-blue-500 text-white' : 'hover:bg-gray-200'
-                                    }`}
-                            >
-                                글쓰기
-                            </button>
-                            <button
-                                onClick={() => actions.setCurrentView('structure')}
-                                className={`w-full text-left px-3 py-2 rounded ${state.currentView === 'structure' ? 'bg-blue-500 text-white' : 'hover:bg-gray-200'
-                                    }`}
-                            >
-                                구조
-                            </button>
-                        </div>
-                    </div>
-                )}
-
-                {/* 중앙 컨텐츠 */}
-                <ProjectEditorLayout.Content>
-                    {renderCurrentView()}
-                </ProjectEditorLayout.Content>
+                {/* 각 뷰가 자체 사이드바를 포함 */}
+                {renderCurrentView()}
 
                 {/* 오른쪽 사이드바 (AI 패널) */}
                 {state.showRightSidebar && (
-                    <div className="w-80 bg-gray-50 dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 p-4">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="font-semibold">통계 패널</h3>
-                            <button
-                                onClick={actions.toggleRightSidebar}
-                                className="text-gray-500 hover:text-gray-700"
-                            >
-                                ✕
-                            </button>
-                        </div>
-
-                        <div className="space-y-3">
-                            <div>
-                                <span className="text-sm text-gray-600">총 탭 수:</span>
-                                <span className="ml-2 font-medium">{state.tabs.length}</span>
-                            </div>
-
-                            <div>
-                                <span className="text-sm text-gray-600">현재 탭 글자 수:</span>
-                                <span className="ml-2 font-medium">{activeTab?.content?.length || 0}</span>
-                            </div>
-
-                            <div>
-                                <span className="text-sm text-gray-600">수정된 탭:</span>
-                                <span className="ml-2 font-medium">
-                                    {state.tabs.filter(tab => tab.isDirty).length}개
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    <WriterStatsPanel
+                        showRightSidebar={state.showRightSidebar}
+                        toggleRightSidebar={actions.toggleRightSidebar}
+                        writerStats={projectData?.writerStats || {
+                            wordCount: 0,
+                            characterCount: 0,
+                            paragraphCount: 0,
+                            pageCount: 0,
+                            readingTime: '0분',
+                            typingSpeed: 0,
+                            sessionWords: 0,
+                            dailyGoal: 1000,
+                            progressPercentage: 0
+                        }}
+                        setWordGoal={(goal) => {
+                            projectData?.setWordGoal(goal);
+                        }}
+                        currentText={activeTab?.content || ''}
+                        projectId={projectId}
+                    />
                 )}
             </ProjectEditorLayout.Main>
 
-            {/* 모달들 - 간단한 버전으로 대체 */}
+            {/* 모달들 */}
             {state.showDeleteDialog && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-4">프로젝트 삭제</h3>
-                        <p className="mb-4">정말로 이 프로젝트를 삭제하시겠습니까?</p>
-                        <div className="flex gap-2 justify-end">
-                            <button
-                                onClick={actions.closeDeleteDialog}
-                                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
-                            >
-                                취소
-                            </button>
-                            <button
-                                onClick={() => {
-                                    // TODO: 프로젝트 삭제 로직
-                                    actions.closeDeleteDialog();
-                                }}
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                            >
-                                삭제
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ConfirmDeleteDialog
+                    isOpen={state.showDeleteDialog}
+                    projectTitle={projectData?.title || '프로젝트'}
+                    onConfirm={() => {
+                        // TODO: 프로젝트 삭제 로직
+                        actions.closeDeleteDialog();
+                    }}
+                    onCancel={actions.closeDeleteDialog}
+                />
             )}
 
             {state.showShareDialog && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                        <h3 className="text-lg font-semibold mb-4">프로젝트 공유</h3>
-                        <p className="mb-4">프로젝트 ID: {projectId}</p>
-                        <div className="flex gap-2 justify-end">
-                            <button
-                                onClick={actions.closeShareDialog}
-                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                            >
-                                닫기
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <ShareDialog
+                    isOpen={state.showShareDialog}
+                    onClose={actions.closeShareDialog}
+                    projectId={projectId}
+                    projectTitle={projectData?.title || '프로젝트'}
+                />
+            )}
+
+            {state.showNewChapterModal && (
+                <NewChapterModal
+                    isOpen={state.showNewChapterModal}
+                    onClose={actions.closeNewChapterModal}
+                    onConfirm={(chapterData) => {
+                        // TODO: 새 챕터 생성 로직
+                        actions.closeNewChapterModal();
+                    }}
+                />
             )}
 
             {/* 단축키 도움말 */}
-            <div className="fixed bottom-4 right-4 z-50">
-                <button className="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors">
-                    ?
-                </button>
-            </div>
+            <ShortcutHelp />
         </ProjectEditorLayout.Container>
     );
 });
