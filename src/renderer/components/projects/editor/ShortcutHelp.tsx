@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { HelpCircle, X as XIcon, EyeOff } from 'lucide-react';
-import { getShortcutHelp } from './EditorShortcuts';
+import { getShortcutHelp } from '../modules/markdownEditor/services/EditorShortcuts';
 
 // 🔥 단축키 도움말 스타일
 const HELP_STYLES = {
@@ -128,7 +128,7 @@ export function ShortcutHelp({ className = '', isWriterStatsOpen = false }: Shor
             <div className={HELP_STYLES.content}>
               <div className={HELP_STYLES.helpText}>
                 {/* Render markdown-like shortcuts safely without using innerHTML */}
-                {getShortcutHelp().split('\n').map((line, idx) => {
+                {getShortcutHelp().split('\n').map((line: string, idx: number) => {
                   if (line.startsWith('### ')) return <h3 key={idx} className="text-md font-bold mt-2 mb-1">{line.replace('### ', '')}</h3>;
                   if (line.startsWith('## ')) return <h2 key={idx} className="text-lg font-bold mt-3 mb-2">{line.replace('## ', '')}</h2>;
                   if (line.startsWith('# ')) return <h1 key={idx} className="text-xl font-bold mt-4 mb-2">{line.replace('# ', '')}</h1>;

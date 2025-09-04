@@ -265,8 +265,8 @@ const CommandMenu = forwardRef<CommandMenuRef, CommandMenuProps>(({ items, comma
           <button
             key={index}
             className={`flex items-center gap-3 w-full px-3 py-2 text-left text-sm rounded-md transition-colors ${index === selectedIndex
-                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100'
-                : 'text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
+              ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100'
+              : 'text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             onClick={() => selectItem(index)}
           >

@@ -1,0 +1,47 @@
+[
+    {
+        "type": "entity",
+        "name": "MarkdownEditor Issues",
+        "entityType": "performance_risk",
+        "observations": [
+            "777 lines single file violating SRP",
+            "8 useEffect chains causing infinite render risk",
+            "Global event listeners on document/window causing memory leaks",
+            "Inline markdown parsing in handleKeyDown",
+            "Duplicate clipboard handling in 3 places",
+            "Complex TipTap configuration overloading",
+            "Direct DOM manipulation in cleanup",
+            "setTimeout-based delayed destroy"
+        ]
+    },
+    {
+        "type": "entity",
+        "name": "ProjectEditor Issues",
+        "entityType": "performance_risk",
+        "observations": [
+            "1284 lines mega-file with massive responsibility",
+            "15+ useState hooks causing excessive re-renders",
+            "All View components directly imported and managed",
+            "Modal states mixed with business logic",
+            "forceSave synchronous operations",
+            "Tab system complexity in single component",
+            "Hardcoded styles object inline",
+            "memo() used but dependency management poor"
+        ]
+    },
+    {
+        "type": "entity",
+        "name": "Architecture Problems",
+        "entityType": "structural_issue",
+        "observations": [
+            "Single Responsibility Principle violated",
+            "No proper separation of concerns",
+            "Business logic mixed with UI logic",
+            "Services not abstracted",
+            "Event handling not centralized",
+            "State management chaotic",
+            "No proper dependency injection",
+            "Modules tightly coupled"
+        ]
+    }
+]
