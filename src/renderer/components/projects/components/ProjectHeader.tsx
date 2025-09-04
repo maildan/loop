@@ -126,7 +126,7 @@ export function ProjectHeader({
   isSyncingWithGoogle = false,
   onSyncWithGoogle,
   onOpenGoogleDocs
-}: ProjectHeaderProps): React.ReactElement {
+}: ProjectHeaderProps): React.ReactElement | null {
 
   const [activeSlideBar, setActiveSlideBar] = useState<SlidebarType>(null);
   const [isDarkMode, setIsDarkMode] = useState<boolean>(
@@ -246,6 +246,11 @@ export function ProjectHeader({
     window.addEventListener('global:escape', handleGlobalEscape as EventListener);
     return () => window.removeEventListener('global:escape', handleGlobalEscape as EventListener);
   }, [activeSlideBar]);
+
+  // Focus 모드에서는 헤더를 숨김
+  if (isFocusMode) {
+    return null;
+  }
 
   return (
     <>

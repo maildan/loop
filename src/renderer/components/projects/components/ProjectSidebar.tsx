@@ -48,8 +48,8 @@ const SIDEBAR_STYLES = {
     hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-50 transform -translate-x-full transition-all duration-500 ease-in-out',
     hoverVisible: 'transform translate-x-0',
 
-    // hover 감지 영역
-    hoverTrigger: 'absolute left-0 top-0 w-4 h-full z-40',
+    // hover 감지 영역 - 왼쪽 가장자리에서 더 넓게
+    hoverTrigger: 'absolute left-0 top-0 w-16 h-full z-40',
 
     // 메뉴 섹션
     menuSection: 'p-3 space-y-1',
@@ -143,6 +143,27 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     // 🔥 렌더링 조건부 로직
     const shouldShowHoverable = isCollapsed && !isFocusMode;
     const shouldShowExpanded = !isCollapsed && !isFocusMode;
+
+    // 🔥 전역 마우스 이벤트로 왼쪽 가장자리 감지 (Focus 모드에서 편의성 향상)
+    useEffect(() => {
+        if (!shouldShowHoverable) return;
+
+        const handleGlobalMouseMove = (event: MouseEvent) => {
+            // 화면 왼쪽 50px 이내로 마우스가 오면 사이드바 표시
+            if (event.clientX <= 50 && !isHovered) {
+                setIsHovered(true);
+                Logger.debug('PROJECT_SIDEBAR', 'Mouse near left edge - showing sidebar');
+            }
+            // 화면 오른쪽으로 마우스가 멀어지면 사이드바 숨김
+            else if (event.clientX > 300 && isHovered) {
+                setIsHovered(false);
+                Logger.debug('PROJECT_SIDEBAR', 'Mouse moved away - hiding sidebar');
+            }
+        };
+
+        window.addEventListener('mousemove', handleGlobalMouseMove);
+        return () => window.removeEventListener('mousemove', handleGlobalMouseMove);
+    }, [shouldShowHoverable, isHovered]);
 
     // Focus mode 제어용 플래그 (렌더 경로를 변경하지 않고 UI만 숨김)
     const isHiddenByFocusMode = isFocusMode;

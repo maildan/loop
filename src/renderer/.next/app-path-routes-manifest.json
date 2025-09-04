@@ -1,7 +1,7 @@
 {
+  "/oauth/callback/page": "/oauth/callback",
   "/ai/page": "/ai",
   "/analytics/page": "/analytics",
-  "/oauth/callback/page": "/oauth/callback",
   "/_not-found/page": "/_not-found",
   "/page": "/",
   "/projects/page": "/projects",

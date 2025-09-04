@@ -7,6 +7,7 @@ import { AppHeader } from '../components/layout/AppHeader';
 import { MonitoringProvider } from '../contexts/GlobalMonitoringContext';
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../providers/ThemeProvider';
+import { useSettings } from './settings/hooks/useSettings';
 import { Logger } from '../../shared/logger';
 import './globals.css';
 
@@ -15,11 +16,15 @@ interface ClientLayoutProps {
     readonly initialAuth?: any;
 }
 
-export default function ClientLayout({ children, initialAuth }: ClientLayoutProps): React.ReactElement {
+function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactElement {
     const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
     const [isClientMounted, setIsClientMounted] = useState<boolean>(false);
     const pathname = usePathname();
     const router = useRouter();
+    const { settings } = useSettings();
+
+    // Focus 모드 상태
+    const isFocusMode = settings?.ui?.focusMode ?? false;
 
     // restore sidebar state before paint
     useLayoutEffect(() => {
@@ -83,29 +88,39 @@ export default function ClientLayout({ children, initialAuth }: ClientLayoutProp
     };
 
     return (
+        <div className="min-h-screen flex min-w-0 app-root">
+            {!isFocusMode && (
+                <aside className="flex-shrink-0">
+                    <AppSidebar
+                        activeRoute={pathname}
+                        onNavigate={handleNavigate}
+                        collapsed={sidebarCollapsed}
+                        onToggleCollapse={handleToggleSidebar}
+                    />
+                </aside>
+            )}
+
+            <main className="flex-1 flex flex-col min-w-0">
+                <header className="flex-shrink-0">
+                    <AppHeader />
+                </header>
+
+                <div className="flex-1 min-w-0 p-6 overflow-y-auto">
+                    {children}
+                </div>
+            </main>
+        </div>
+    );
+}
+
+export default function ClientLayout({ children, initialAuth }: ClientLayoutProps): React.ReactElement {
+    return (
         <ThemeProvider defaultTheme="system">
             <AuthProvider initialAuth={initialAuth}>
                 <MonitoringProvider>
-                    <div className="min-h-screen flex min-w-0 app-root">
-                        <aside className="flex-shrink-0">
-                            <AppSidebar
-                                activeRoute={pathname}
-                                onNavigate={handleNavigate}
-                                collapsed={sidebarCollapsed}
-                                onToggleCollapse={handleToggleSidebar}
-                            />
-                        </aside>
-
-                        <main className="flex-1 flex flex-col min-w-0">
-                            <header className="flex-shrink-0">
-                                <AppHeader />
-                            </header>
-
-                            <div className="flex-1 min-w-0 p-6 overflow-y-auto">
-                                {children}
-                            </div>
-                        </main>
-                    </div>
+                    <ClientLayoutInner>
+                        {children}
+                    </ClientLayoutInner>
                 </MonitoringProvider>
             </AuthProvider>
         </ThemeProvider>
