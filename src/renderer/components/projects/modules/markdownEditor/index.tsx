@@ -17,7 +17,7 @@ interface MarkdownEditorProps {
 }
 
 const EDITOR_STYLES = {
-    container: 'w-full h-full flex flex-col',
+    container: 'w-full h-full flex flex-col relative',
     loading: 'flex items-center justify-center h-full',
     dragOverlay: 'absolute inset-0 border-2 border-dashed border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center z-10 pointer-events-none',
 } as const;

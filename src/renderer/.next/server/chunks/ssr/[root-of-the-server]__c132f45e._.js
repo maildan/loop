@@ -557,7 +557,13 @@ function useSettings() {
             sidebarCollapsed: false,
             focusMode: false,
             showLineNumbers: true,
-            showWordCount: true
+            showWordCount: true,
+            // 🔥 Zen Browser 스타일 UI 컨트롤 기본값
+            appSidebarCollapsed: false,
+            zenMode: false,
+            hideToolbars: false,
+            minimalistMode: false,
+            compactMode: false
         },
         performance: {
             enableGPUAcceleration: true,

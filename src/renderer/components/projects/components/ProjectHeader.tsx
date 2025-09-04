@@ -17,24 +17,25 @@ import {
   FileDown,
   Maximize2,
   Focus,
-  Sparkles,  // 🔥 AI 아이콘 추가
-  ExternalLink,  // 🔥 Google Docs 외부 링크
-  RefreshCw,     // 🔥 Google Docs 동기화
-  Cloud          // 🔥 Google Docs 클라우드 표시
+  Sparkles,
+  ExternalLink,
+  RefreshCw,
+  Cloud,
+  Minimize2  // 🔥 Zen mode 아이콘
 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
 
 // 🔥 프리컴파일된 스타일 (기가차드 원칙)
 const PROJECT_HEADER_STYLES = {
-  header: 'flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200',
+  header: 'flex items-center justify-end px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200',
   headerLeft: 'flex items-center gap-3',
-  headerCenter: 'flex-1 max-w-md mx-auto',
+  headerCenter: 'flex items-center gap-3 max-w-md',
   headerRight: 'flex items-center gap-2 relative',
 
   backButton: 'flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors',
-  titleInput: 'border-none bg-transparent focus:outline-none focus:ring-0 text-lg font-medium w-full placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100',
-  iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 relative group',
-  iconButtonActive: 'flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 relative group',
+  titleInput: 'border-none bg-transparent text-lg font-medium w-full placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 outline-none focus:ring-0 focus:border-transparent',
+  iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 relative group outline-none focus:ring-0 focus:border-transparent border-none',
+  iconButtonActive: 'flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 relative group outline-none focus:ring-0 focus:border-transparent border-none',
 
   // 🔥 툴팁 스타일 (완전히 보이도록 z-index 극대화)
   tooltip: 'absolute top-full mt-3 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none z-[9999] shadow-lg border border-gray-600',
@@ -80,6 +81,10 @@ interface ProjectHeaderProps {
   isFocusMode: boolean;
   onToggleFocusMode: () => void;
 
+  // 🔥 Zen mode 컨트롤
+  isZenMode?: boolean;
+  onToggleZenMode?: () => void;
+
   // 🔥 프로젝트 액션들
   onSave: () => void;
   onShare: () => void;
@@ -109,6 +114,8 @@ export function ProjectHeader({
   onToggleAISidebar,
   isFocusMode,
   onToggleFocusMode,
+  isZenMode = false,
+  onToggleZenMode,
   onSave,
   onShare,
   onDownload,
@@ -202,10 +209,23 @@ export function ProjectHeader({
     { icon: Trash2, label: '삭제', shortcut: 'Cmd+Del', onClick: onDelete },
   ];
 
-  // 🔥 툴바 확장 액션들 (테마 원클릭, 집중모드, 복사)
+  // 🔥 툴바 확장 액션들 (테마 원클릭, 집중모드, 복사, zen mode)
   const toolbarActions: HeaderAction[] = [
     { icon: Copy, label: '콘텐츠 복사', shortcut: 'Cmd+C', onClick: copyContent },
-    { icon: Maximize2, label: '집중모드', shortcut: 'ESC로 해제', onClick: handleFocusMode },
+    {
+      icon: isFocusMode ? EyeOff : Eye,
+      label: isFocusMode ? '집중모드 해제' : '집중모드',
+      shortcut: 'ESC로 해제',
+      onClick: handleFocusMode,
+      isActive: isFocusMode
+    },
+    {
+      icon: Minimize2,
+      label: isZenMode ? 'Zen 모드 해제' : 'Zen 모드',
+      shortcut: 'Ctrl+Alt+H',
+      onClick: onToggleZenMode || (() => { }),
+      isActive: isZenMode
+    },
     {
       icon: isDarkMode ? Sun : Moon,
       label: isDarkMode ? '라이트 모드로 변경' : '다크 모드로 변경',
@@ -230,102 +250,94 @@ export function ProjectHeader({
   return (
     <>
       <div className={PROJECT_HEADER_STYLES.header}>
-        {/* 🔥 왼쪽: 뒤로가기 + 네비게이션 */}
-        <div className={PROJECT_HEADER_STYLES.headerLeft}>
-          <button
-            className={PROJECT_HEADER_STYLES.backButton}
-            onClick={onBack}
-          >
-            <ChevronLeft size={16} />
-            <span>프로젝트 목록</span>
-          </button>
-        </div>
-
-        {/* 🔥 중앙: 프로젝트 제목 */}
-        <div className={PROJECT_HEADER_STYLES.headerCenter}>
-          <div className="flex items-center gap-2 w-full">
-            {/* 🔥 Google Docs 표시 배지 */}
-            {isGoogleDocsProject && (
-              <div className="flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-md text-xs font-medium">
-                <Cloud size={12} />
-                <span>Google Docs</span>
-              </div>
-            )}
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => onTitleChange(e.target.value)}
-              placeholder="프로젝트 제목을 입력하세요"
-              className={PROJECT_HEADER_STYLES.titleInput}
-            />
+        {/* 🔥 오른쪽 정렬된 컨텐츠 */}
+        <div className="flex items-center gap-6">
+          {/* 🔥 프로젝트 제목 */}
+          <div className={PROJECT_HEADER_STYLES.headerCenter}>
+            <div className="flex items-center gap-2">{/* 🔥 Google Docs 표시 배지 */}
+              {isGoogleDocsProject && (
+                <div className="flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-md text-xs font-medium">
+                  <Cloud size={12} />
+                  <span>Google Docs</span>
+                </div>
+              )}
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => onTitleChange(e.target.value)}
+                placeholder="프로젝트 제목"
+                className={PROJECT_HEADER_STYLES.titleInput}
+                style={{ width: '200px' }}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* 🔥 오른쪽: 액션 버튼들 */}
-        <div className={PROJECT_HEADER_STYLES.headerRight}>
-          {/* 프로젝트 액션들 */}
-          {headerActions.map((action, index) => (
+          {/* 🔥 액션 버튼들 */}
+          <div className={PROJECT_HEADER_STYLES.headerRight}>
+            {/* 프로젝트 액션들 */}
+            {headerActions.map((action, index) => (
+              <button
+                key={`action-${index}`}
+                className={`${PROJECT_HEADER_STYLES.iconButton} group relative`}
+                onClick={action.onClick}
+              >
+                <action.icon size={16} />
+                {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
+                <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                  <div>{action.label}</div>
+                  {action.shortcut && <div className="text-gray-400 text-xs mt-1">{action.shortcut}</div>}
+                </div>
+              </button>
+            ))}
+
+            {/* 구분선 */}
+            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+
+            {/* 툴바 확장 액션들 */}
+            {toolbarActions.map((action, index) => (
+              <button
+                key={`toolbar-${index}`}
+                className={`${action.isActive ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`}
+                onClick={action.onClick}
+              >
+                <action.icon size={16} />
+                {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
+                <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+                  {action.label}
+                </div>
+              </button>
+            ))}
+
+            {/* 구분선 */}
+            <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
+
+            {/* 🔥 AI 창작 파트너 토글 */}
+            {onToggleAISidebar && (
+              <button
+                className={`${showRightSidebar ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`}
+                onClick={onToggleAISidebar}
+              >
+                <Sparkles size={16} />
+                {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
+                <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
+                  <div>✨ 창작 파트너</div>
+                  <div className="text-blue-200 text-xs mt-1">함께 써봐요</div>
+                </div>
+              </button>
+            )}
+
+            {/* UI 컨트롤들 */}
             <button
-              key={`action-${index}`}
-              className={`${PROJECT_HEADER_STYLES.iconButton} group relative`}
-              onClick={action.onClick}
+              className={`${sidebarCollapsed ? PROJECT_HEADER_STYLES.iconButton : PROJECT_HEADER_STYLES.iconButtonActive} group relative`}
+              onClick={onToggleSidebar}
             >
-              <action.icon size={16} />
-              {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
-              <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                <div>{action.label}</div>
-                {action.shortcut && <div className="text-gray-400 text-xs mt-1">{action.shortcut}</div>}
-              </div>
-            </button>
-          ))}
-
-          {/* 구분선 */}
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
-
-          {/* 툴바 확장 액션들 */}
-          {toolbarActions.map((action, index) => (
-            <button
-              key={`toolbar-${index}`}
-              className={`${action.isActive ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`}
-              onClick={action.onClick}
-            >
-              <action.icon size={16} />
+              <Sidebar size={16} />
               {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
               <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                {action.label}
+                사이드바 토글
               </div>
             </button>
-          ))}
-
-          {/* 구분선 */}
-          <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
-
-          {/* 🔥 AI 창작 파트너 토글 */}
-          {onToggleAISidebar && (
-            <button
-              className={`${showRightSidebar ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`}
-              onClick={onToggleAISidebar}
-            >
-              <Sparkles size={16} />
-              {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
-              <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
-                <div>✨ 창작 파트너</div>
-                <div className="text-blue-200 text-xs mt-1">함께 써봐요</div>
-              </div>
-            </button>
-          )}
-
-          {/* UI 컨트롤들 */}
-          <button
-            className={`${sidebarCollapsed ? PROJECT_HEADER_STYLES.iconButton : PROJECT_HEADER_STYLES.iconButtonActive} group relative`}
-            onClick={onToggleSidebar}
-          >
-            <Sidebar size={16} />
-            {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
-            <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-              사이드바 토글
-            </div>
-          </button>
+          </div>
         </div>
       </div>
 

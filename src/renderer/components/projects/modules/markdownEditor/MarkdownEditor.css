@@ -19,27 +19,32 @@
   --button-hover: #374151;
 }
 
-/* 🔥 TipTap 에디터 기본 스타일 */
+/* 🔥 TipTap 에디터 기본 스타일 - 전체 화면 활용 */
 .ProseMirror {
   background: var(--editor-bg) !important;
   color: var(--editor-text) !important;
-  border: 1px solid var(--editor-border) !important;
-  border-radius: 8px;
-  padding: 1rem;
+  border: none !important;
+  border-radius: 0;
+  padding: 2rem;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.6;
-  min-height: 300px;
+  min-height: 100vh;
+  height: 100%;
+  width: 100%;
   outline: none;
+  overflow-y: auto;
 }
 
 /* 🔥 라이트 모드 명시적 텍스트 색상 */
 :root .ProseMirror {
-  color: #1f2937 !important; /* gray-800 */
+  color: #1f2937 !important;
+  /* gray-800 */
 }
 
 /* 🔥 다크 모드 명시적 텍스트 색상 */
 :root.dark .ProseMirror {
-  color: #f9fafb !important; /* gray-50 */
+  color: #f9fafb !important;
+  /* gray-50 */
 }
 
 /* 🔥 이미지 스타일 */
@@ -155,7 +160,7 @@ div[data-callout]::before {
   font-size: 1.25rem;
 }
 
-div[data-callout] > * {
+div[data-callout]>* {
   margin-left: 2rem;
 }
 
@@ -257,7 +262,8 @@ mark[data-highlight][data-color="red"] {
 }
 
 /* 🔥 리스트 스타일 개선 */
-.ProseMirror ul, .ProseMirror ol {
+.ProseMirror ul,
+.ProseMirror ol {
   margin: 1rem 0;
   padding-left: 1.5rem;
 }
@@ -320,7 +326,8 @@ mark[data-highlight][data-color="red"] {
   overflow: hidden;
 }
 
-.ProseMirror th, .ProseMirror td {
+.ProseMirror th,
+.ProseMirror td {
   border: 1px solid var(--editor-border);
   padding: 0.75rem;
   text-align: left;
@@ -510,8 +517,16 @@ body.focus-mode::before {
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  10%, 90% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+  }
 }
 
 .slash-command-description {
@@ -524,7 +539,8 @@ body.focus-mode::before {
 }
 
 .editor-toolbar {
-  display: none !important; /* 기본 툴바 숨기기 */
+  display: none !important;
+  /* 기본 툴바 숨기기 */
 }
 
 /* 🔥 기가차드 추가: 포커스 모드 스타일링 */
@@ -594,7 +610,7 @@ body.focus-mode::before {
 .CodeMirror .cm-formatting-reference,
 .CodeMirror span[class*="cm-formatting"] {
   /* 🔥 Ultimate 숨김 기법 - 모든 방법 동시 적용 */
-  display: none !important; 
+  display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   font-size: 0 !important;
@@ -602,24 +618,34 @@ body.focus-mode::before {
   height: 0 !important;
   margin: 0 !important;
   padding: 0 !important;
-  position: fixed !important; /* absolute 대신 fixed 사용 */
+  position: fixed !important;
+  /* absolute 대신 fixed 사용 */
   left: -99999px !important;
   top: -99999px !important;
-  z-index: -9999 !important; /* 🔥 추가: z-index 최하위 */
+  z-index: -9999 !important;
+  /* 🔥 추가: z-index 최하위 */
   pointer-events: none !important;
-  color: transparent !important; 
+  color: transparent !important;
   background: transparent !important;
   text-shadow: none !important;
   border: none !important;
-  outline: none !important; /* 🔥 추가: 아웃라인 제거 */
-  box-shadow: none !important; /* 🔥 추가: 그림자 제거 */
-  transform: scale(0) !important; /* 🔥 추가: 크기를 0으로 */
-  overflow: hidden !important; /* 🔥 추가: 넘침 숨김 */
-  clip: rect(0, 0, 0, 0) !important; /* 🔥 추가: 클리핑 */
+  outline: none !important;
+  /* 🔥 추가: 아웃라인 제거 */
+  box-shadow: none !important;
+  /* 🔥 추가: 그림자 제거 */
+  transform: scale(0) !important;
+  /* 🔥 추가: 크기를 0으로 */
+  overflow: hidden !important;
+  /* 🔥 추가: 넘침 숨김 */
+  clip: rect(0, 0, 0, 0) !important;
+  /* 🔥 추가: 클리핑 */
   white-space: nowrap !important;
-  text-indent: -9999px !important; /* 🔥 추가: 텍스트 들여쓰기 */
-  user-select: none !important; /* 🔥 추가: 선택 불가 */
-  content: "" !important; /* 🔥 추가: 내용 제거 */
+  text-indent: -9999px !important;
+  /* 🔥 추가: 텍스트 들여쓰기 */
+  user-select: none !important;
+  /* 🔥 추가: 선택 불가 */
+  content: "" !important;
+  /* 🔥 추가: 내용 제거 */
 }
 
 /* 🔥 CodeMirror 헤딩 색상 문제 해결 */
@@ -630,7 +656,8 @@ body.focus-mode::before {
 .CodeMirror .cm-header-4,
 .CodeMirror .cm-header-5,
 .CodeMirror .cm-header-6 {
-  color: inherit !important; /* 🔥 기본 텍스트 색상 사용 */
+  color: inherit !important;
+  /* 🔥 기본 텍스트 색상 사용 */
   background: transparent !important;
 }
 
@@ -640,15 +667,16 @@ body.focus-mode::before {
 .CodeMirror .cm-link,
 .CodeMirror .cm-url,
 .CodeMirror .cm-quote {
-  color: inherit !important; /* 🔥 모든 마크다운 요소를 기본 색상으로 */
+  color: inherit !important;
+  /* 🔥 모든 마크다운 요소를 기본 색상으로 */
   background: transparent !important;
 }
 
 /* 🔥 헤딩 포매팅 스페이스 완전 제거 (통합) */
-.CodeMirror .cm-formatting-header + .cm-formatting-space,
-.CodeMirror .cm-formatting-strong + .cm-space,
-.CodeMirror .cm-formatting-em + .cm-space,
-.CodeMirror span[class*="cm-formatting"] + .cm-space {
+.CodeMirror .cm-formatting-header+.cm-formatting-space,
+.CodeMirror .cm-formatting-strong+.cm-space,
+.CodeMirror .cm-formatting-em+.cm-space,
+.CodeMirror span[class*="cm-formatting"]+.cm-space {
   /* 🔥 포매팅 다음의 모든 공백 완전 제거 */
   position: fixed !important;
   left: -99999px !important;
@@ -921,7 +949,8 @@ body.focus-mode::before {
 }
 
 .ProseMirror h1 strong {
-  font-weight: 700; /* h1 안에서는 strong(볼드)가 기본과 같게 설정 */
+  font-weight: 700;
+  /* h1 안에서는 strong(볼드)가 기본과 같게 설정 */
 }
 
 .ProseMirror h2 {
@@ -934,7 +963,8 @@ body.focus-mode::before {
 }
 
 .ProseMirror h2 strong {
-  font-weight: 600; /* h2 안에서는 strong(볼드)가 기본과 같게 설정 */
+  font-weight: 600;
+  /* h2 안에서는 strong(볼드)가 기본과 같게 설정 */
 }
 
 .ProseMirror h3 {
@@ -946,7 +976,8 @@ body.focus-mode::before {
 }
 
 .ProseMirror h3 strong {
-  font-weight: 600; /* h3 안에서는 strong(볼드)가 기본과 같게 설정 */
+  font-weight: 600;
+  /* h3 안에서는 strong(볼드)가 기본과 같게 설정 */
 }
 
 .ProseMirror h4 {
@@ -970,12 +1001,12 @@ body.focus-mode::before {
   margin: 0.25rem 0;
 }
 
-.ProseMirror li[data-type="taskItem"] > label {
+.ProseMirror li[data-type="taskItem"]>label {
   flex-shrink: 0;
   margin-top: 0.125rem;
 }
 
-.ProseMirror li[data-type="taskItem"] > div {
+.ProseMirror li[data-type="taskItem"]>div {
   flex: 1;
 }
 
@@ -1140,8 +1171,16 @@ body.focus-mode::after {
 }
 
 @keyframes fadeInOut {
-  0%, 100% { opacity: 0; }
-  10%, 90% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+  }
 }
 
 /* 🔥 기가차드 업데이트: 헤더 스타일링 개선 (# 문자 표시 방지) */
@@ -1180,7 +1219,7 @@ body.focus-mode::after {
 }
 
 /* 🔥 툴바 버튼 사이즈 및 정렬 개선 */
-.tippy-content > div {
+.tippy-content>div {
   display: flex !important;
   flex-wrap: nowrap !important;
   gap: 2px !important;
@@ -1222,6 +1261,7 @@ body.focus-mode::after {
     opacity: 0;
     transform: translate(-50%, -50%) scale(0.8);
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);

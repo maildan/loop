@@ -12,7 +12,9 @@ import {
   Plus,
   MoreHorizontal,
   Edit2,
-  Trash2
+  Trash2,
+  Lightbulb,
+  Target
 } from 'lucide-react';
 import { ProjectCharacter, ProjectStructure } from '../../../../shared/types';
 import { WriterStats } from '../editor/WriterStats';
@@ -67,12 +69,14 @@ const SIDEBAR_STYLES = {
   statValue: 'font-medium text-gray-900 dark:text-gray-100',
 } as const;
 
-// 🔥 메뉴 아이템 정의 (핵심 기능만)
+// 🔥 메뉴 아이템 정의 (모든 기능 포함)
 const MENU_ITEMS = [
   { id: 'write', label: '글쓰기', icon: Edit3 },
   { id: 'structure', label: '구조', icon: FileText },
   { id: 'characters', label: '인물', icon: Users },
   { id: 'notes', label: '메모', icon: BookOpen },
+  { id: 'synopsis', label: '시놉시스', icon: Target },
+  { id: 'idea', label: '아이디어', icon: Lightbulb },
 ];
 
 export const WriterSidebar = memo(function WriterSidebar({

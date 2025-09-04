@@ -28,7 +28,7 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     language: 'ko',
     autoStart: false,
     minimizeToTray: true,
-    
+
     windowBounds: {
       width: 1200,
       height: 800,
@@ -36,7 +36,7 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
       y: undefined
     },
     alwaysOnTop: false,
-    
+
     devMode: false,
     enableLogging: true,
     logLevel: 'info'
@@ -57,18 +57,18 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     batchSize: 100,
     debounceDelay: 10, // 10ms
     enableHealthCheck: true,
-    
+
     // 글로벌 단축키
     globalShortcuts: {
       startStop: 'CommandOrControl+Shift+T',
       pause: 'CommandOrControl+Shift+P',
       showStats: 'CommandOrControl+Shift+S'
     },
-    
+
     // 🔥 앱 필터링 (카테고리 기반)
     ignoreApps: [...APP_CATEGORIES.SYSTEM],
     focusOnlyApps: [],
-    
+
     // 성능 설정
     eventBufferSize: 1000,
     processingDelay: 5 // 5ms
@@ -78,14 +78,22 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
   ui: {
     colorScheme: 'blue',
     accentColor: '#3b82f6',
-    
+
     sidebarPosition: 'left',
     compactMode: false,
     showStatusBar: true,
-    
+
+    // 🔥 Zen Browser 스타일 UI 컨트롤 기본값
+    sidebarCollapsed: false,
+    appSidebarCollapsed: false,
+    focusMode: false,
+    zenMode: false,
+    hideToolbars: false,
+    minimalistMode: false,
+
     enableAnimations: true,
     animationSpeed: 'normal',
-    
+
     fontFamily: 'system-ui, -apple-system, sans-serif',
     fontSize: 14,
     fontWeight: 'normal'
@@ -110,10 +118,10 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
   security: {
     enableAccessibilityPermission: false,
     enableInputMonitoring: false,
-    
+
     encryptLocalData: false,
     anonymizeData: true,
-    
+
     allowTelemetry: false,
     allowUpdates: true,
     allowExternalLinks: false
@@ -123,14 +131,14 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
   notifications: {
     enableNotifications: true,
     enableSounds: false,
-    
+
     notifyGoalAchieved: true,
     notifyDailyGoal: true,
     notifyWeeklyGoal: true,
-    
+
     notifyNewRecord: true,
     notifyMilestone: true,
-    
+
     notifyErrors: true,
     notifyUpdates: true
   },
@@ -140,19 +148,19 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     enableAI: false,
     autoAnalysis: false,
     realTimeAnalysis: false,
-    
+
     enableTypingPatternAnalysis: false,
     enableErrorCorrection: false,
     enableProductivityTips: false,
     enablePersonalizedFeedback: false,
-    
+
     apiProvider: 'local',
     maxTokens: 1000,
     temperature: 0.7,
-    
+
     shareAnonymousData: false,
     localProcessingOnly: true,
-    
+
     analysisFrequency: 'periodic',
     batchSize: 100,
     debounceDelay: 1000
@@ -163,19 +171,19 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     enableClipboard: false,
     enableClipboardHistory: false,
     enableClipboardAnalysis: false,
-    
+
     maxHistoryItems: 100,
     historyRetentionDays: 7,
     enableEncryption: true,
-    
+
     ignorePasswordManagers: true,
     ignoreImageData: false,
     maxTextLength: 10000,
-    
+
     enableAutoClean: true,
     enableSmartPaste: false,
     enableDuplicateDetection: true,
-    
+
     excludePatterns: ['password', 'secret', 'token', 'api_key'],
     includeOnlyApps: [],
     maskSensitiveData: true
@@ -186,23 +194,23 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     enableScreenshots: false,
     autoCapture: false,
     enableOCR: false,
-    
+
     captureFormat: 'png',
     quality: 90,
     captureDelay: 0,
-    
+
     savePath: '~/Documents/Loop/Screenshots',
     filenamePattern: 'Loop_{timestamp}_{app}',
     maxFileSize: 10, // 10MB
     retentionDays: 30,
-    
+
     enableCloudUpload: false,
     cloudProvider: 'none',
-    
+
     blurSensitiveAreas: true,
     excludeApps: ['1Password', 'Keychain Access', 'LastPass'],
     enableWatermark: false,
-    
+
     shortcuts: {
       captureFullScreen: 'CommandOrControl+Shift+3',
       captureWindow: 'CommandOrControl+Shift+4',
@@ -216,17 +224,17 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     enableSync: false,
     syncProvider: 'local',
     syncInterval: 30,
-    
+
     enableTwoFactor: false,
     authProvider: 'local',
     sessionTimeout: 60,
-    
+
     subscriptionType: 'free',
-    
+
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     dateFormat: 'yyyy-mm-dd',
     timeFormat: '24h',
-    
+
     allowAnalytics: false,
     allowCrashReports: true,
     allowUsageStats: false
@@ -237,46 +245,46 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     retentionPeriod: 90,
     autoDeleteOldData: true,
     enableDataArchive: false,
-    
+
     typingData: {
       enabled: true,
       retentionDays: 365,
       enableCompression: true
     },
-    
+
     keystrokeData: {
       enabled: true,
       retentionDays: 30,
       enableAggregation: true
     },
-    
+
     appUsageData: {
       enabled: true,
       retentionDays: 180,
       aggregationLevel: 'daily'
     },
-    
+
     clipboardData: {
       enabled: false,
       retentionDays: 7,
       enableEncryption: true
     },
-    
+
     screenshotData: {
       enabled: false,
       retentionDays: 30,
       compressionLevel: 6
     },
-    
+
     enableAutoBackup: false,
     backupFrequency: 'weekly',
     backupLocation: '~/Documents/Loop/Backups',
     maxBackupFiles: 10,
     enableCloudBackup: false,
-    
+
     exportFormat: 'json',
     enableScheduledExport: false,
-    
+
     enableSmartCleanup: true,
     cleanupThreshold: 5, // 5GB
     prioritizeRecent: true
@@ -319,7 +327,7 @@ export const SETTINGS_CONSTRAINTS = {
       height: { min: 600, max: 2160 }
     }
   },
-  
+
   keyboard: {
     language: ['korean', 'japanese', 'chinese', 'english'],
     autoSaveInterval: { min: 10, max: 300 },
@@ -329,7 +337,7 @@ export const SETTINGS_CONSTRAINTS = {
     eventBufferSize: { min: 100, max: 10000 },
     processingDelay: { min: 1, max: 50 }
   },
-  
+
   ui: {
     colorScheme: ['blue', 'green', 'purple', 'orange'],
     sidebarPosition: ['left', 'right'],
@@ -337,7 +345,7 @@ export const SETTINGS_CONSTRAINTS = {
     fontWeight: ['normal', 'medium', 'bold'],
     fontSize: { min: 10, max: 24 }
   },
-  
+
   analytics: {
     targetWPM: { min: 10, max: 200 },
     targetAccuracy: { min: 50, max: 100 },
@@ -345,7 +353,7 @@ export const SETTINGS_CONSTRAINTS = {
     trackingPeriod: ['session', 'daily', 'weekly', 'monthly'],
     minSessionDuration: { min: 5, max: 300 }
   },
-  
+
   ai: {
     apiProvider: ['openai', 'anthropic', 'local', 'custom'],
     maxTokens: { min: 100, max: 4000 },
@@ -354,13 +362,13 @@ export const SETTINGS_CONSTRAINTS = {
     batchSize: { min: 10, max: 1000 },
     debounceDelay: { min: 100, max: 10000 }
   },
-  
+
   clipboard: {
     maxHistoryItems: { min: 10, max: 1000 },
     historyRetentionDays: { min: 1, max: 365 },
     maxTextLength: { min: 100, max: 100000 }
   },
-  
+
   screenshot: {
     captureFormat: ['png', 'jpg', 'webp'],
     quality: { min: 10, max: 100 },
@@ -368,7 +376,7 @@ export const SETTINGS_CONSTRAINTS = {
     retentionDays: { min: 1, max: 365 },
     cloudProvider: ['none', 'imgur', 'cloudinary', 's3', 'custom']
   },
-  
+
   account: {
     syncProvider: ['local', 'cloud', 'custom'],
     syncInterval: { min: 5, max: 1440 }, // 분 단위
@@ -378,7 +386,7 @@ export const SETTINGS_CONSTRAINTS = {
     dateFormat: ['yyyy-mm-dd', 'mm/dd/yyyy', 'dd/mm/yyyy'],
     timeFormat: ['12h', '24h']
   },
-  
+
   dataRetention: {
     retentionPeriod: { min: 7, max: 365 },
     backupFrequency: ['daily', 'weekly', 'monthly'],

@@ -28,7 +28,7 @@ export interface AppSettingsSchema {
   language: 'ko' | 'en' | 'ja' | 'zh';
   autoStart: boolean;
   minimizeToTray: boolean;
-  
+
   // 윈도우 설정
   windowBounds: {
     width: number;
@@ -37,7 +37,7 @@ export interface AppSettingsSchema {
     y?: number;
   };
   alwaysOnTop: boolean;
-  
+
   // 개발 설정
   devMode: boolean;
   enableLogging: boolean;
@@ -54,11 +54,11 @@ export interface KeyboardSettingsSchema extends BaseKeyboardConfig {
     pause: string;
     showStats: string;
   };
-  
+
   // 감지 설정
   ignoreApps: string[];
   focusOnlyApps: string[];
-  
+
   // 성능 설정
   eventBufferSize: number;
   processingDelay: number;
@@ -71,16 +71,24 @@ export interface UISettingsSchema {
   // 테마
   colorScheme: 'blue' | 'green' | 'purple' | 'orange';
   accentColor: string;
-  
+
   // 레이아웃
   sidebarPosition: 'left' | 'right';
   compactMode: boolean;
   showStatusBar: boolean;
-  
+
+  // 🔥 Zen Browser 스타일 UI 컨트롤
+  sidebarCollapsed: boolean;
+  appSidebarCollapsed: boolean;
+  focusMode: boolean;
+  zenMode: boolean;
+  hideToolbars: boolean;
+  minimalistMode: boolean;
+
   // 애니메이션
   enableAnimations: boolean;
   animationSpeed: 'slow' | 'normal' | 'fast';
-  
+
   // 글꼴
   fontFamily: string;
   fontSize: number;
@@ -95,12 +103,12 @@ export interface AnalyticsSettingsSchema {
   targetWPM: number;
   targetAccuracy: number;
   dailyGoal: number; // 분 단위
-  
+
   // 통계 설정
   trackingPeriod: 'session' | 'daily' | 'weekly' | 'monthly';
   excludeShortSessions: boolean;
   minSessionDuration: number; // 초 단위
-  
+
   // 분석 옵션
   enableAdvancedAnalytics: boolean;
   trackAppUsage: boolean;
@@ -114,11 +122,11 @@ export interface SecuritySettingsSchema {
   // 권한
   enableAccessibilityPermission: boolean;
   enableInputMonitoring: boolean;
-  
+
   // 데이터 보호
   encryptLocalData: boolean;
   anonymizeData: boolean;
-  
+
   // 네트워크
   allowTelemetry: boolean;
   allowUpdates: boolean;
@@ -132,16 +140,16 @@ export interface NotificationSettingsSchema {
   // 알림 활성화
   enableNotifications: boolean;
   enableSounds: boolean;
-  
+
   // 목표 달성 알림
   notifyGoalAchieved: boolean;
   notifyDailyGoal: boolean;
   notifyWeeklyGoal: boolean;
-  
+
   // 성과 알림
   notifyNewRecord: boolean;
   notifyMilestone: boolean;
-  
+
   // 시스템 알림
   notifyErrors: boolean;
   notifyUpdates: boolean;
@@ -155,24 +163,24 @@ export interface AISettingsSchema {
   enableAI: boolean;
   autoAnalysis: boolean;
   realTimeAnalysis: boolean;
-  
+
   // AI 분석 옵션
   enableTypingPatternAnalysis: boolean;
   enableErrorCorrection: boolean;
   enableProductivityTips: boolean;
   enablePersonalizedFeedback: boolean;
-  
+
   // AI 서비스 설정
   apiProvider: 'openai' | 'anthropic' | 'local' | 'custom';
   apiKey?: string;
   apiEndpoint?: string;
   maxTokens: number;
   temperature: number;
-  
+
   // 프라이버시
   shareAnonymousData: boolean;
   localProcessingOnly: boolean;
-  
+
   // 성능
   analysisFrequency: 'realtime' | 'periodic' | 'manual';
   batchSize: number;
@@ -187,22 +195,22 @@ export interface ClipboardSettingsSchema {
   enableClipboard: boolean;
   enableClipboardHistory: boolean;
   enableClipboardAnalysis: boolean;
-  
+
   // 히스토리 설정
   maxHistoryItems: number;
   historyRetentionDays: number;
   enableEncryption: boolean;
-  
+
   // 필터링
   ignorePasswordManagers: boolean;
   ignoreImageData: boolean;
   maxTextLength: number;
-  
+
   // 자동 기능
   enableAutoClean: boolean;
   enableSmartPaste: boolean;
   enableDuplicateDetection: boolean;
-  
+
   // 보안
   excludePatterns: string[];
   includeOnlyApps: string[];
@@ -217,29 +225,29 @@ export interface ScreenshotSettingsSchema {
   enableScreenshots: boolean;
   autoCapture: boolean;
   enableOCR: boolean;
-  
+
   // 캡처 설정
   captureFormat: 'png' | 'jpg' | 'webp';
   quality: number; // 1-100
   captureDelay: number;
-  
+
   // 저장 설정
   savePath: string;
   filenamePattern: string;
   maxFileSize: number; // MB
   retentionDays: number;
-  
+
   // 업로드 설정
   enableCloudUpload: boolean;
   cloudProvider: 'none' | 'imgur' | 'cloudinary' | 's3' | 'custom';
   cloudApiKey?: string;
-  
+
   // 개인정보 보호
   blurSensitiveAreas: boolean;
   excludeApps: string[];
   enableWatermark: boolean;
   watermarkText?: string;
-  
+
   // 단축키
   shortcuts: {
     captureFullScreen: string;
@@ -259,27 +267,27 @@ export interface AccountSettingsSchema {
   email?: string;
   displayName?: string;
   avatar?: string;
-  
+
   // 계정 설정
   enableSync: boolean;
   syncProvider: 'local' | 'cloud' | 'custom';
   syncInterval: number; // 분 단위
-  
+
   // 인증
   enableTwoFactor: boolean;
   authProvider: 'local' | 'google' | 'apple' | 'microsoft';
   sessionTimeout: number; // 분 단위
-  
+
   // 구독/라이선스
   subscriptionType: 'free' | 'premium' | 'enterprise';
   licenseKey?: string;
   expiryDate?: Date;
-  
+
   // 개인화
   timezone: string;
   dateFormat: 'yyyy-mm-dd' | 'mm/dd/yyyy' | 'dd/mm/yyyy';
   timeFormat: '12h' | '24h';
-  
+
   // 개인정보
   allowAnalytics: boolean;
   allowCrashReports: boolean;
@@ -294,50 +302,50 @@ export interface DataRetentionSettingsSchema {
   retentionPeriod: number; // 일 단위
   autoDeleteOldData: boolean;
   enableDataArchive: boolean;
-  
+
   // 데이터 타입별 설정
   typingData: {
     enabled: boolean;
     retentionDays: number;
     enableCompression: boolean;
   };
-  
+
   keystrokeData: {
     enabled: boolean;
     retentionDays: number;
     enableAggregation: boolean;
   };
-  
+
   appUsageData: {
     enabled: boolean;
     retentionDays: number;
     aggregationLevel: 'hourly' | 'daily' | 'weekly';
   };
-  
+
   clipboardData: {
     enabled: boolean;
     retentionDays: number;
     enableEncryption: boolean;
   };
-  
+
   screenshotData: {
     enabled: boolean;
     retentionDays: number;
     compressionLevel: number; // 1-9
   };
-  
+
   // 백업 설정
   enableAutoBackup: boolean;
   backupFrequency: 'daily' | 'weekly' | 'monthly';
   backupLocation: string;
   maxBackupFiles: number;
   enableCloudBackup: boolean;
-  
+
   // 데이터 내보내기
   exportFormat: 'json' | 'csv' | 'sqlite' | 'all';
   enableScheduledExport: boolean;
   exportSchedule?: string; // cron expression
-  
+
   // 정리 설정
   enableSmartCleanup: boolean;
   cleanupThreshold: number; // GB
@@ -359,7 +367,7 @@ export interface SettingsSchema {
   screenshot: ScreenshotSettingsSchema;
   account: AccountSettingsSchema;
   dataRetention: DataRetentionSettingsSchema;
-  
+
   // 메타데이터
   version: string;
   lastModified: Date;

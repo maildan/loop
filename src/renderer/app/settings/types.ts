@@ -34,6 +34,12 @@ export interface SettingsData {
     focusMode: boolean;
     showLineNumbers: boolean;
     showWordCount: boolean;
+    // 🔥 Zen Browser 스타일 UI 컨트롤
+    appSidebarCollapsed: boolean;
+    zenMode: boolean;
+    hideToolbars: boolean;
+    minimalistMode: boolean;
+    compactMode: boolean;
   };
   readonly performance: {
     enableGPUAcceleration: boolean;
