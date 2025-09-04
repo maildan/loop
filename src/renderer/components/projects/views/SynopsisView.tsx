@@ -3,7 +3,6 @@
 // 🔥 시놉시스 편집 뷰 - 타임라인 + 카드 시스템
 
 import React, { useState, useCallback } from 'react';
-import { useLongPress } from '../../../hooks/useLongPress';
 import { Logger } from '../../../../shared/logger';
 import {
     Plus,
@@ -453,25 +452,39 @@ export function SynopsisView({ synopsisId, onBack }: SynopsisViewProps): React.R
                                         </div>
                                         <div className="space-y-3">
                                             {getPlotPointsByAct(act).map((plot) => {
-                                                // 🔥 롱프레스 핸들러
-                                                const longPressHandlers = useLongPress({
-                                                    onLongPress: () => {
-                                                        // 롱프레스 시 편집 모드
+                                                // 🔥 롱프레스 핸들러 - 간단한 타이머 방식
+                                                let pressTimer: NodeJS.Timeout | null = null;
+                                                const handleMouseDown = () => {
+                                                    pressTimer = setTimeout(() => {
                                                         setEditingPlot(plot);
                                                         Logger.info('SYNOPSIS_VIEW', '롱프레스로 편집 모드 활성화', { title: plot.title });
-                                                    },
-                                                    onShortPress: () => {
-                                                        // 짧은 클릭 시 편집 모드
-                                                        setEditingPlot(plot);
-                                                    },
-                                                    delay: 500
-                                                });
+                                                    }, 500);
+                                                };
+                                                const handleMouseUp = () => {
+                                                    if (pressTimer) {
+                                                        clearTimeout(pressTimer);
+                                                        pressTimer = null;
+                                                    }
+                                                };
+                                                const handleMouseLeave = () => {
+                                                    if (pressTimer) {
+                                                        clearTimeout(pressTimer);
+                                                        pressTimer = null;
+                                                    }
+                                                };
+                                                const handleClick = () => {
+                                                    // 짧은 클릭 시 편집 모드
+                                                    setEditingPlot(plot);
+                                                };
 
                                                 return (
                                                     <div
                                                         key={plot.id}
                                                         className="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                                                        {...longPressHandlers}
+                                                        onClick={handleClick}
+                                                        onMouseDown={handleMouseDown}
+                                                        onMouseUp={handleMouseUp}
+                                                        onMouseLeave={handleMouseLeave}
                                                     >
                                                         <div className="font-medium text-gray-900 dark:text-gray-100 mb-1">
                                                             {plot.title}

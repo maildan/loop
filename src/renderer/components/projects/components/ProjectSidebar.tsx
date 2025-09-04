@@ -45,7 +45,7 @@ const SIDEBAR_STYLES = {
     collapsed: 'w-0 overflow-hidden',
 
     // 🔥 Zen Browser 스타일: hover 시 나타나는 버전
-    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-50 transform -translate-x-full transition-transform duration-300 ease-in-out',
+    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-50 transform -translate-x-full transition-all duration-500 ease-in-out',
     hoverVisible: 'transform translate-x-0',
 
     // hover 감지 영역
@@ -108,25 +108,24 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     // 🔥 설정에서 상태 가져오기
     const isCollapsed = settings?.ui?.sidebarCollapsed ?? false;
     const isFocusMode = settings?.ui?.focusMode ?? false;
-    const isZenMode = settings?.ui?.zenMode ?? false;
 
     // Note: Do NOT return early here — keep hooks stable across renders.
     // Focus mode is handled via `shouldShowHoverable` / `shouldShowExpanded` below.
 
     // 🔥 hover 감지 로직
     const handleMouseEnter = useCallback(() => {
-        if (isCollapsed || isZenMode) {
+        if (isCollapsed) {
             setIsHovered(true);
             Logger.debug('PROJECT_SIDEBAR', 'Hover detected - showing sidebar');
         }
-    }, [isCollapsed, isZenMode]);
+    }, [isCollapsed]);
 
     const handleMouseLeave = useCallback(() => {
-        if (isCollapsed || isZenMode) {
+        if (isCollapsed) {
             setIsHovered(false);
             Logger.debug('PROJECT_SIDEBAR', 'Hover left - hiding sidebar');
         }
-    }, [isCollapsed, isZenMode]);
+    }, [isCollapsed]);
 
     // 🔥 키보드 ESC로 사이드바 숨기기
     useEffect(() => {
@@ -142,8 +141,8 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     }, [isHovered]);
 
     // 🔥 렌더링 조건부 로직
-    const shouldShowHoverable = (isCollapsed || isZenMode) && !isFocusMode;
-    const shouldShowExpanded = !isCollapsed && !isZenMode && !isFocusMode;
+    const shouldShowHoverable = isCollapsed && !isFocusMode;
+    const shouldShowExpanded = !isCollapsed && !isFocusMode;
 
     // Focus mode 제어용 플래그 (렌더 경로를 변경하지 않고 UI만 숨김)
     const isHiddenByFocusMode = isFocusMode;
@@ -151,7 +150,6 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     Logger.debug('PROJECT_SIDEBAR', 'Render state', {
         isCollapsed,
         isFocusMode,
-        isZenMode,
         isHovered,
         shouldShowHoverable,
         shouldShowExpanded

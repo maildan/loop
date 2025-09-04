@@ -1,6 +1,10 @@
 {
+  "/ai/page": "app/ai/page.js",
+  "/analytics/page": "app/analytics/page.js",
+  "/oauth/callback/page": "app/oauth/callback/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
   "/page": "app/page.js",
-  "/projects/[id]/page": "app/projects/[id]/page.js",
   "/projects/page": "app/projects/page.js",
-  "/settings/page": "app/settings/page.js"
+  "/settings/page": "app/settings/page.js",
+  "/projects/[id]/page": "app/projects/[id]/page.js"
 }

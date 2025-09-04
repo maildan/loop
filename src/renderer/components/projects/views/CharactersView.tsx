@@ -6,7 +6,6 @@ import React, { useState } from 'react';
 import { ProjectCharacter } from '../../../../shared/types';
 import { Plus, Edit3, Save, X as XIcon, Users, Heart, BookOpen, User, Briefcase, Home, MapPin, Calendar, Palette, Trash2 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
-import { useLongPress } from '../../../hooks/useLongPress';
 import { ConfirmDialog } from '../components/ConfirmDialog'; // 🔥 ConfirmDialog 추가
 
 interface CharactersViewProps {
@@ -372,14 +371,26 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
                     Logger.info('CHARACTERS_VIEW', '더블클릭으로 편집 모드 활성화', { name: character.name });
                   };
 
-                  // 🔥 Long press 핸들러 - 캐릭터 편집 뷰로 이동
-                  const longPressHandlers = useLongPress({
-                    onLongPress: () => {
+                  // 🔥 Long press 핸들러 - 간단한 타이머 방식
+                  let pressTimer: NodeJS.Timeout | null = null;
+                  const handleMouseDown = () => {
+                    pressTimer = setTimeout(() => {
                       handleEditStart(character);
                       Logger.info('CHARACTERS_VIEW', 'Long press detected - entering edit mode', { name: character.name });
-                    },
-                    delay: 500 // 500ms
-                  });
+                    }, 500);
+                  };
+                  const handleMouseUp = () => {
+                    if (pressTimer) {
+                      clearTimeout(pressTimer);
+                      pressTimer = null;
+                    }
+                  };
+                  const handleMouseLeave = () => {
+                    if (pressTimer) {
+                      clearTimeout(pressTimer);
+                      pressTimer = null;
+                    }
+                  };
 
                   return (
                     <div
@@ -387,7 +398,9 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
                       className={CHARACTERS_STYLES.characterCard}
                       onClick={handleCharacterClick}
                       onDoubleClick={handleCharacterDoubleClick}
-                      {...longPressHandlers} // 🔥 Long press 이벤트 적용
+                      onMouseDown={handleMouseDown}
+                      onMouseUp={handleMouseUp}
+                      onMouseLeave={handleMouseLeave} // 🔥 Long press 이벤트 적용
                     >
                       <div className="relative">
                         {/* 🔥 액션 버튼들 */}

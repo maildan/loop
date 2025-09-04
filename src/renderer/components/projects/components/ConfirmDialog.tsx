@@ -95,7 +95,7 @@ export function ConfirmDialog({
                             <>
                                 {' '}
                                 <span className={CONFIRM_DIALOG_STYLES.itemName}>
-                                    "{itemName}"
+                                    &ldquo;{itemName}&rdquo;
                                 </span>
                             </>
                         )}
