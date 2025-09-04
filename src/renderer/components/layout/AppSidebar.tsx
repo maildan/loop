@@ -117,15 +117,24 @@ export function AppSidebar({
   onToggleCollapse
 }: AppSidebarProps): React.ReactElement {
 
-  const [internalCollapsed, setInternalCollapsed] = useState<boolean>(false);
-  const isControlled = controlledCollapsed !== undefined;
-  const collapsed = isControlled ? controlledCollapsed : internalCollapsed;
-
   const authCtx = useAuth() as any;
   const { auth: googleUserInfo, loadAuthStatus, loaded: authLoaded } = authCtx;
 
   // settings hook for account-local profile (displayName, avatar)
-  const { settings: loadedSettings, loading: settingsLoading, setSettings } = useSettings();
+  const { settings: loadedSettings, loading: settingsLoading, setSettings, updateSetting } = useSettings();
+
+  const [internalCollapsed, setInternalCollapsed] = useState<boolean>(false);
+  const isControlled = controlledCollapsed !== undefined;
+
+  // 🔥 settings에서 collapse 및 focus mode 상태 가져오기
+  const settingsCollapsed = loadedSettings?.ui?.appSidebarCollapsed ?? false;
+  const isFocusMode = loadedSettings?.ui?.focusMode ?? false;
+
+  const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
+
+  // Focus 모드로 인해 조기 반환하면 훅 호출 수가 바뀔 수 있으므로
+  // 렌더 경로는 유지하고 UI만 숨깁니다.
+  const isHiddenByFocusMode = isFocusMode;
 
   // avatar src state to handle onError fallback and controlled updates
   const defaultAvatar = '/static/avatar-default.png';
@@ -344,7 +353,8 @@ export function AppSidebar({
     if (isControlled) {
       onToggleCollapse?.();
     } else {
-      setInternalCollapsed(!collapsed);
+      // 🔥 settings와 연동하여 상태 업데이트
+      updateSetting('ui', 'appSidebarCollapsed', !settingsCollapsed);
     }
     Logger.info('SIDEBAR', `Sidebar ${collapsed ? 'expanded' : 'collapsed'}`);
   };
@@ -419,6 +429,122 @@ export function AppSidebar({
       aria-label="사이드바 네비게이션"
       role="navigation"
     >
+      {isHiddenByFocusMode ? null : (
+        <>
+          {/* 로고 */}
+          <div className={collapsed ? SIDEBAR_STYLES.logoCollapsed : SIDEBAR_STYLES.logoSection}>
+            {collapsed ? (
+              <div className="flex flex-col items-center gap-3 py-4">
+                <div className={SIDEBAR_STYLES.logoIcon}>L</div>
+
+                {/* 축소 시 사용자 프로필 - Google 계정 정보 표시 */}
+                <div
+                  className="flex flex-col items-center gap-1 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors mt-2"
+                  onClick={() => {
+                    Logger.info('SIDEBAR', 'User profile clicked (collapsed)');
+                    onNavigate?.('/settings');
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="사용자 프로필"
+                >
+                  {!authLoaded && settingsLoading ? (
+                    // loading skeleton
+                    <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                  ) : (
+                    <Avatar
+                      size="md"
+                      src={avatarSrc || undefined}
+                      aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
+                      className="border-2 border-white dark:border-slate-800 shadow-sm"
+                    >
+                      <span className="text-sm font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
+                    </Avatar>
+                  )}
+                  <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
+                </div>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={SIDEBAR_STYLES.collapseButton}
+                  onClick={handleToggleCollapse}
+                  aria-label="사이드바 확장"
+                >
+                  <ChevronRight className="w-3 h-3" />
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between w-full">
+                  <h1 className={SIDEBAR_STYLES.logoText}>Loop</h1>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className={SIDEBAR_STYLES.collapseButton}
+                    onClick={handleToggleCollapse}
+                    aria-label="사이드바 축소"
+                  >
+                    <ChevronLeft className="w-3 h-3" />
+                  </Button>
+                </div>
+
+                {/* 확장 시 사용자 프로필: Google 계정 정보 노출 */}
+                <div
+                  className="flex items-center gap-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors"
+                  onClick={() => {
+                    Logger.info('SIDEBAR', 'User profile clicked');
+                    onNavigate?.('/settings');
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="사용자 프로필"
+                >
+                  {!authLoaded && settingsLoading ? (
+                    <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                  ) : (
+                    <Avatar
+                      size="lg"
+                      src={avatarSrc || undefined}
+                      aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
+                      className="border-2 border-white dark:border-slate-800 shadow-sm"
+                    >
+                      <span className="text-lg font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
+                    </Avatar>
+                  )}
+                  <div className="flex-1">
+                    <div className="font-medium text-slate-900 dark:text-slate-100 text-sm">{
+                      // skeleton for name until authLoaded
+                      !authLoaded && settingsLoading ? (
+                        <div className="h-4 w-28 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
+                      ) : (
+                        // Show display name from account settings, or fall back to email, or Loop 사용자
+                        (accountProfile?.displayName || accountProfile?.username || accountProfile?.email || (googleUserInfo?.isAuthenticated ? (googleUserInfo.userName || googleUserInfo.userEmail) : null) || 'Loop 사용자')
+                      )
+                    }</div>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
+                      <span suppressHydrationWarning className="text-xs text-slate-500 dark:text-slate-400">{
+                        !authLoaded ? '상태 확인 중...' : (googleUserInfo?.isAuthenticated ? 'Google 계정' : (accountProfile?.displayName || accountProfile?.username || accountProfile?.email ? '로컬 계정' : (isOnline ? '온라인' : '오프라인')))
+                      }</span>
+                    </div>
+                    {visibleProfile && visibleProfile.isAuthenticated && visibleProfile.userEmail && (
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 transition-opacity duration-200">{visibleProfile.userEmail}</div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 네비게이션 */}
+          <nav className={SIDEBAR_STYLES.navSection} aria-label="메인 메뉴">
+            <div className={SIDEBAR_STYLES.navList}>
+              {SIDEBAR_ITEMS.map(renderNavItem)}
+            </div>
+          </nav>
+        </>
+      )}
       {/* 로고 */}
       <div className={collapsed ? SIDEBAR_STYLES.logoCollapsed : SIDEBAR_STYLES.logoSection}>
         {collapsed ? (

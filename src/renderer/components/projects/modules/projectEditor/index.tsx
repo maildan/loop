@@ -8,6 +8,7 @@ import { MarkdownEditor } from '../../editor/MarkdownEditor';
 import { EditorProvider } from '../../editor/EditorProvider';
 import { ShortcutHelp } from '../../editor/ShortcutHelp';
 import { WriterSidebar } from '../../components/WriterSidebar';
+import { ProjectSidebar } from '../../components/ProjectSidebar';
 import { WriterStatsPanel } from '../../editor/WriterStatsPanel';
 import { ProjectHeader } from '../../components/ProjectHeader';
 import { EditorTabBar } from '../../components/EditorTabBar';
@@ -289,8 +290,8 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container>
-            {/* 🔥 Zen mode가 아닐 때만 헤더 표시 */}
-            {!isZenMode && !isFocusMode && (
+            {/* 🔥 집중모드가 아닐 때만 헤더 표시 (Zen mode는 별도 처리) */}
+            {!isFocusMode && (
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
@@ -354,51 +355,48 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 Zen mode나 Focus mode가 아닐 때만 왼쪽 사이드바 표시 */}
-                {!state.collapsed && !isZenMode && !isFocusMode && (
-                    <WriterSidebar
-                        projectId={projectId}
-                        currentView={state.currentView}
-                        onViewChange={actions.setCurrentView}
-                        characters={projectData?.characters || []}
-                        stats={projectData?.writerStats || {
-                            wordCount: 0,
-                            characterCount: 0,
-                            paragraphCount: 0,
-                            pageCount: 0,
-                            readingTime: '0분',
-                            typingSpeed: 0,
-                            sessionWords: 0,
-                            dailyGoal: 1000,
-                            progressPercentage: 0
-                        }}
-                        collapsed={false}
-                        onAddStructure={() => {
-                            actions.openNewChapterModal();
-                            Logger.info('PROJECT_EDITOR', 'Add structure clicked');
-                        }}
-                        onAddCharacter={() => {
-                            // TODO: 캐릭터 추가 모달 열기
-                            Logger.info('PROJECT_EDITOR', 'Add character clicked');
-                        }}
-                        onAddNote={() => {
-                            // TODO: 노트 추가 모달 열기
-                            Logger.info('PROJECT_EDITOR', 'Add note clicked');
-                        }}
-                        onEditStructure={(id) => {
-                            // 구조 편집 - 해당 탭 열기
-                            const newTab = {
-                                id: `structure-${id}`,
-                                title: `구조 ${id}`,
-                                type: 'chapter' as const,
-                                isActive: true,
-                                content: ''
-                            };
-                            actions.addTab(newTab);
-                            Logger.info('PROJECT_EDITOR', 'Edit structure clicked', { id });
-                        }}
-                    />
-                )}
+                {/* 🔥 새로운 ProjectSidebar 사용 (Zen Browser 스타일) */}
+                <ProjectSidebar
+                    projectId={projectId}
+                    currentView={state.currentView}
+                    onViewChange={actions.setCurrentView}
+                    structure={projectData?.structure || []}
+                    characters={projectData?.characters || []}
+                    stats={{
+                        wordCount: projectData?.writerStats?.wordCount || 0,
+                        charCount: projectData?.writerStats?.charCount || 0,
+                        paragraphCount: projectData?.writerStats?.paragraphCount || 0,
+                        readingTime: projectData?.writerStats?.readingTime || 0,
+                        wordGoal: projectData?.writerStats?.wordGoal || 1000,
+                        progress: projectData?.writerStats?.progress || 0,
+                        sessionTime: projectData?.writerStats?.sessionTime || 0,
+                        wpm: projectData?.writerStats?.wpm || 0
+                    }}
+                    onAddStructure={() => {
+                        actions.openNewChapterModal();
+                        Logger.info('PROJECT_EDITOR', 'Add structure clicked');
+                    }}
+                    onAddCharacter={() => {
+                        // TODO: 캐릭터 추가 모달 열기
+                        Logger.info('PROJECT_EDITOR', 'Add character clicked');
+                    }}
+                    onAddNote={() => {
+                        // TODO: 노트 추가 모달 열기
+                        Logger.info('PROJECT_EDITOR', 'Add note clicked');
+                    }}
+                    onEditStructure={(id) => {
+                        // 구조 편집 - 해당 탭 열기
+                        const newTab = {
+                            id: `structure-${id}`,
+                            title: `구조 ${id}`,
+                            type: 'chapter' as const,
+                            isActive: true,
+                            content: ''
+                        };
+                        actions.addTab(newTab);
+                        Logger.info('PROJECT_EDITOR', 'Edit structure clicked', { id });
+                    }}
+                />
 
                 {/* 각 뷰의 메인 컨텐츠 */}
                 <div className="flex-1 h-full">

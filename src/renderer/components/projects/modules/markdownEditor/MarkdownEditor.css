@@ -24,15 +24,32 @@
   background: var(--editor-bg) !important;
   color: var(--editor-text) !important;
   border: none !important;
-  border-radius: 0;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
   padding: 2rem;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   line-height: 1.6;
   min-height: 100vh;
   height: 100%;
   width: 100%;
-  outline: none;
   overflow-y: auto;
+}
+
+/* 🔥 EditorContent 컨테이너도 테두리 제거 */
+.ProseMirror-focused {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* 🔥 모든 가능한 테두리 제거 */
+.tiptap,
+.editor-content,
+div[data-type="editor"] {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* 🔥 라이트 모드 명시적 텍스트 색상 */
@@ -77,8 +94,9 @@
 }
 
 .ProseMirror:focus {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* 🔥 체크박스 스타일 */
