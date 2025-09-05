@@ -24,9 +24,10 @@ import { Logger } from '../../../shared/logger';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const SIDEBAR_STYLES = {
-  container: 'flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 transition-all duration-300 min-w-0',
+  container: 'relative flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 transition-all duration-300',
   collapsed: 'w-16',
   expanded: 'w-64',
+  hoverContent: 'absolute left-full top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
   logoSection: 'h-auto min-h-[4rem] flex flex-col justify-center border-b border-slate-200 dark:border-slate-700 px-6 py-3',
   logoCollapsed: 'h-auto min-h-[8rem] flex items-center justify-center border-b border-slate-200 dark:border-slate-700 px-3 py-4',
   logoText: 'text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent',
@@ -143,6 +144,7 @@ export function AppSidebar({
   // Use consistent initial state to prevent layout shift
   const [mounted, setMounted] = useState<boolean>(false);
   const [isOnline, setIsOnline] = useState<boolean>(true); // Default to online to prevent flash
+  const [isHovered, setIsHovered] = useState(false);
 
   // Prefer account settings when not authenticated via Google. If Google auth present, use google profile.
   const accountProfile = loadedSettings?.account;
@@ -359,6 +361,14 @@ export function AppSidebar({
     Logger.info('SIDEBAR', `Sidebar ${collapsed ? 'expanded' : 'collapsed'}`);
   };
 
+  const handleMouseEnter = () => {
+    if (collapsed) setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (collapsed) setIsHovered(false);
+  };
+
   const handleNavigate = (item: SidebarItem): void => {
     Logger.info('SIDEBAR', `Navigation to ${item.label}`, { href: item.href });
     onNavigate?.(item.href);
@@ -371,20 +381,16 @@ export function AppSidebar({
     }
   };
 
-  const renderNavItem = (item: SidebarItem): React.ReactElement => {
+  const renderNavItem = (item: SidebarItem, isExpanded: boolean): React.ReactElement => {
     const isActive = activeRoute === item.href;
     const Icon = item.icon;
 
     const navItemContent = (
       <div
         className={
-          collapsed
-            ? isActive
-              ? SIDEBAR_STYLES.navItemActiveCollapsed
-              : SIDEBAR_STYLES.navItemCollapsed
-            : isActive
-              ? SIDEBAR_STYLES.navItemActive
-              : SIDEBAR_STYLES.navItem
+          isExpanded
+            ? (isActive ? SIDEBAR_STYLES.navItemActive : SIDEBAR_STYLES.navItem)
+            : (isActive ? SIDEBAR_STYLES.navItemActiveCollapsed : SIDEBAR_STYLES.navItemCollapsed)
         }
         role="button"
         tabIndex={0}
@@ -393,8 +399,8 @@ export function AppSidebar({
         aria-label={item.ariaLabel || item.label}
         aria-current={isActive ? 'page' : undefined}
       >
-        <Icon className={collapsed ? SIDEBAR_STYLES.iconCollapsed : SIDEBAR_STYLES.icon} />
-        {!collapsed && (
+        <Icon className={isExpanded ? SIDEBAR_STYLES.icon : SIDEBAR_STYLES.iconCollapsed} />
+        {isExpanded && (
           <>
             <span className={SIDEBAR_STYLES.text}>{item.label}</span>
             {item.badge && item.badge > 0 && (
@@ -409,186 +415,24 @@ export function AppSidebar({
 
     return (
       <div key={item.id}>
-        {collapsed ? (
+        {isExpanded ? (
+          navItemContent
+        ) : (
           <Tooltip content={item.label} side="right">
             <div>
               {navItemContent}
             </div>
           </Tooltip>
-        ) : (
-          navItemContent
         )}
       </div>
     );
   };
 
-  return (
-    <aside
-      className={`${SIDEBAR_STYLES.container} ${collapsed ? SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded
-        }`}
-      aria-label="사이드바 네비게이션"
-      role="navigation"
-    >
-      {isHiddenByFocusMode ? null : (
-        <>
-          {/* 로고 */}
-          <div className={collapsed ? SIDEBAR_STYLES.logoCollapsed : SIDEBAR_STYLES.logoSection}>
-            {collapsed ? (
-              <div className="flex flex-col items-center gap-3 py-4">
-                <div className={SIDEBAR_STYLES.logoIcon}>L</div>
-
-                {/* 축소 시 사용자 프로필 - Google 계정 정보 표시 */}
-                <div
-                  className="flex flex-col items-center gap-1 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors mt-2"
-                  onClick={() => {
-                    Logger.info('SIDEBAR', 'User profile clicked (collapsed)');
-                    onNavigate?.('/settings');
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="사용자 프로필"
-                >
-                  {!authLoaded && settingsLoading ? (
-                    // loading skeleton
-                    <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
-                  ) : (
-                    <Avatar
-                      size="md"
-                      src={avatarSrc || undefined}
-                      aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
-                      className="border-2 border-white dark:border-slate-800 shadow-sm"
-                    >
-                      <span className="text-sm font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
-                    </Avatar>
-                  )}
-                  <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
-                </div>
-
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={SIDEBAR_STYLES.collapseButton}
-                  onClick={handleToggleCollapse}
-                  aria-label="사이드바 확장"
-                >
-                  <ChevronRight className="w-3 h-3" />
-                </Button>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between w-full">
-                  <h1 className={SIDEBAR_STYLES.logoText}>Loop</h1>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className={SIDEBAR_STYLES.collapseButton}
-                    onClick={handleToggleCollapse}
-                    aria-label="사이드바 축소"
-                  >
-                    <ChevronLeft className="w-3 h-3" />
-                  </Button>
-                </div>
-
-                {/* 확장 시 사용자 프로필: Google 계정 정보 노출 */}
-                <div
-                  className="flex items-center gap-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors"
-                  onClick={() => {
-                    Logger.info('SIDEBAR', 'User profile clicked');
-                    onNavigate?.('/settings');
-                  }}
-                  role="button"
-                  tabIndex={0}
-                  aria-label="사용자 프로필"
-                >
-                  {!authLoaded && settingsLoading ? (
-                    <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
-                  ) : (
-                    <Avatar
-                      size="lg"
-                      src={avatarSrc || undefined}
-                      aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
-                      className="border-2 border-white dark:border-slate-800 shadow-sm"
-                    >
-                      <span className="text-lg font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
-                    </Avatar>
-                  )}
-                  <div className="flex-1">
-                    <div className="font-medium text-slate-900 dark:text-slate-100 text-sm">{
-                      // skeleton for name until authLoaded
-                      !authLoaded && settingsLoading ? (
-                        <div className="h-4 w-28 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
-                      ) : (
-                        // Show display name from account settings, or fall back to email, or Loop 사용자
-                        (accountProfile?.displayName || accountProfile?.username || accountProfile?.email || (googleUserInfo?.isAuthenticated ? (googleUserInfo.userName || googleUserInfo.userEmail) : null) || 'Loop 사용자')
-                      )
-                    }</div>
-                    <div className="flex items-center gap-1 mt-0.5">
-                      <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
-                      <span suppressHydrationWarning className="text-xs text-slate-500 dark:text-slate-400">{
-                        !authLoaded ? '상태 확인 중...' : (googleUserInfo?.isAuthenticated ? 'Google 계정' : (accountProfile?.displayName || accountProfile?.username || accountProfile?.email ? '로컬 계정' : (isOnline ? '온라인' : '오프라인')))
-                      }</span>
-                    </div>
-                    {visibleProfile && visibleProfile.isAuthenticated && visibleProfile.userEmail && (
-                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 transition-opacity duration-200">{visibleProfile.userEmail}</div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* 네비게이션 */}
-          <nav className={SIDEBAR_STYLES.navSection} aria-label="메인 메뉴">
-            <div className={SIDEBAR_STYLES.navList}>
-              {SIDEBAR_ITEMS.map(renderNavItem)}
-            </div>
-          </nav>
-        </>
-      )}
+  const SidebarContent = ({ isExpanded }: { isExpanded: boolean }) => (
+    <div className={`flex flex-col h-full ${isExpanded ? 'w-64' : 'w-16'}`}>
       {/* 로고 */}
-      <div className={collapsed ? SIDEBAR_STYLES.logoCollapsed : SIDEBAR_STYLES.logoSection}>
-        {collapsed ? (
-          <div className="flex flex-col items-center gap-3 py-4">
-            <div className={SIDEBAR_STYLES.logoIcon}>L</div>
-
-            {/* 축소 시 사용자 프로필 - Google 계정 정보 표시 */}
-            <div
-              className="flex flex-col items-center gap-1 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors mt-2"
-              onClick={() => {
-                Logger.info('SIDEBAR', 'User profile clicked (collapsed)');
-                onNavigate?.('/settings');
-              }}
-              role="button"
-              tabIndex={0}
-              aria-label="사용자 프로필"
-            >
-              {!authLoaded && settingsLoading ? (
-                // loading skeleton
-                <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
-              ) : (
-                <Avatar
-                  size="md"
-                  src={avatarSrc || undefined}
-                  aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
-                  className="border-2 border-white dark:border-slate-800 shadow-sm"
-                >
-                  <span className="text-sm font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
-                </Avatar>
-              )}
-              <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
-            </div>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              className={SIDEBAR_STYLES.collapseButton}
-              onClick={handleToggleCollapse}
-              aria-label="사이드바 확장"
-            >
-              <ChevronRight className="w-3 h-3" />
-            </Button>
-          </div>
-        ) : (
+      <div className={isExpanded ? SIDEBAR_STYLES.logoSection : SIDEBAR_STYLES.logoCollapsed}>
+        {isExpanded ? (
           <div className="space-y-3">
             <div className="flex items-center justify-between w-full">
               <h1 className={SIDEBAR_STYLES.logoText}>Loop</h1>
@@ -648,15 +492,68 @@ export function AppSidebar({
               </div>
             </div>
           </div>
+        ) : (
+          <div className="flex flex-col items-center gap-3 py-4">
+            <div className={SIDEBAR_STYLES.logoIcon}>L</div>
+
+            {/* 축소 시 사용자 프로필 - Google 계정 정보 표시 */}
+            <div
+              className="flex flex-col items-center gap-1 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors mt-2"
+              onClick={() => {
+                Logger.info('SIDEBAR', 'User profile clicked (collapsed)');
+                onNavigate?.('/settings');
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label="사용자 프로필"
+            >
+              {!authLoaded && settingsLoading ? (
+                // loading skeleton
+                <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+              ) : (
+                <Avatar
+                  size="md"
+                  src={avatarSrc || undefined}
+                  aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
+                  className="border-2 border-white dark:border-slate-800 shadow-sm"
+                >
+                  <span className="text-sm font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
+                </Avatar>
+              )}
+              <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
+            </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              className={SIDEBAR_STYLES.collapseButton}
+              onClick={handleToggleCollapse}
+              aria-label="사이드바 확장"
+            >
+              <ChevronRight className="w-3 h-3" />
+            </Button>
+          </div>
         )}
       </div>
 
       {/* 네비게이션 */}
       <nav className={SIDEBAR_STYLES.navSection} aria-label="메인 메뉴">
         <div className={SIDEBAR_STYLES.navList}>
-          {SIDEBAR_ITEMS.map(renderNavItem)}
+          {SIDEBAR_ITEMS.map(item => renderNavItem(item, isExpanded))}
         </div>
       </nav>
+    </div>
+  );
+
+  return (
+    <aside
+      className={`${SIDEBAR_STYLES.container} ${collapsed && !isHovered ? SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      aria-label="사이드바 네비게이션"
+      role="navigation"
+    >
+      <SidebarContent isExpanded={!collapsed || isHovered} />
     </aside>
   );
 }

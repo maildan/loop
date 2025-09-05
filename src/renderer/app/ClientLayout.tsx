@@ -102,10 +102,10 @@ function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactEl
 
             <main className="flex-1 flex flex-col min-w-0">
                 <header className="flex-shrink-0">
-                    <AppHeader />
+                    {!isFocusMode && <AppHeader />}
                 </header>
 
-                <div className="flex-1 min-w-0 p-6 overflow-y-auto">
+                <div className="flex-1 min-w-0 p-0 overflow-y-auto">
                     {children}
                 </div>
             </main>

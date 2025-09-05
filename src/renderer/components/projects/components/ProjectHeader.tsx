@@ -27,7 +27,7 @@ import { Logger } from '../../../../shared/logger';
 
 // 🔥 프리컴파일된 스타일 (기가차드 원칙)
 const PROJECT_HEADER_STYLES = {
-  header: 'flex items-center justify-end px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200',
+  header: 'flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full',
   headerLeft: 'flex items-center gap-3',
   headerCenter: 'flex items-center gap-3 max-w-md',
   headerRight: 'flex items-center gap-2 relative',
@@ -247,7 +247,7 @@ export function ProjectHeader({
     return () => window.removeEventListener('global:escape', handleGlobalEscape as EventListener);
   }, [activeSlideBar]);
 
-  // Focus 모드에서는 헤더를 숨김
+  // 🔥 포커스 모드에서는 헤더를 렌더링하지 않음
   if (isFocusMode) {
     return null;
   }
