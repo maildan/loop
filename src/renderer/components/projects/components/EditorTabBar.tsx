@@ -236,16 +236,15 @@ export const EditorTabBar = memo(function EditorTabBar({
                                 {tab.title}
                             </span>
 
+                            {/* 🔥 저장되지 않은 변경사항 표시 (노란색 점) */}
                             {tab.isDirty && (
                                 <span className="text-orange-500 text-xs">●</span>
                             )}
 
+                            {/* 🔥 X 버튼을 기본적으로 표시 (메인 탭 제외) */}
                             {canClose && (
                                 <button
-                                    className={`
-                    ${TAB_STYLES.closeButton}
-                    ${isActive ? TAB_STYLES.closeButtonVisible : ''}
-                  `}
+                                    className={TAB_STYLES.closeButton}
                                     onClick={(e) => handleTabCloseClick(e, tab.id)}
                                     title="탭 닫기"
                                 >

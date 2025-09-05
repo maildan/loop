@@ -166,14 +166,6 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     // Focus mode 제어용 플래그 (렌더 경로를 변경하지 않고 UI만 숨김)
     const isHiddenByFocusMode = isFocusMode;
 
-    Logger.debug('PROJECT_SIDEBAR', 'Render state', {
-        isCollapsed,
-        isFocusMode,
-        isHovered,
-        shouldShowHoverable,
-        shouldShowExpanded
-    });
-
     return (
         <>
             {/* 🔥 Hover 감지 영역 (collapsed/zen mode에서만) */}

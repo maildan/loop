@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 interface NewChapterModalProps {
@@ -55,7 +56,7 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
 
     if (!isOpen) return null;
 
-    return (
+    const modalContent = (
         <div className={MODAL_STYLES.overlay} onClick={onClose}>
             <div
                 className={MODAL_STYLES.modal}
@@ -110,4 +111,9 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
             </div>
         </div>
     );
+
+    // Portal을 사용하여 body에 직접 렌더링
+    return typeof window !== 'undefined'
+        ? createPortal(modalContent, document.body)
+        : null;
 }

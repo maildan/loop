@@ -65,7 +65,7 @@ export const ProjectEditor = memo(function ProjectEditor({
             actions.markAllTabsAsSaved();
             Logger.debug('PROJECT_EDITOR', 'Auto save completed - tabs updated');
         }
-    }, [projectData.saveStatus, actions]);
+    }, [projectData.saveStatus, actions.markAllTabsAsSaved]);
 
     // 🔥 Zen mode 토글 함수들
     const toggleSidebar = useCallback(() => {
@@ -302,8 +302,8 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container>
-            {/* 🔥 집중모드가 아니고 AppSidebar가 접혀있지 않을 때만 헤더 표시 */}
-            {!isFocusMode && !appSidebarCollapsed && (
+            {/* 🔥 집중모드가 아니고 프로젝트 사이드바가 접혀있지 않을 때만 헤더 표시 */}
+            {!isFocusMode && !state.collapsed && (
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
