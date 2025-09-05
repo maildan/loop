@@ -19,6 +19,8 @@ export interface ProjectEditorState {
     showDeleteDialog: boolean;
     showShareDialog: boolean;
     showNewChapterModal: boolean;
+    showNewCharacterModal: boolean;
+    showNewNoteModal: boolean;
     showChapterDeleteDialog: boolean;
     chapterToDelete: { id: string; title: string } | null;
 
@@ -45,6 +47,10 @@ export interface ProjectEditorStateActions {
     closeShareDialog: () => void;
     openNewChapterModal: () => void;
     closeNewChapterModal: () => void;
+    openNewCharacterModal: () => void;
+    closeNewCharacterModal: () => void;
+    openNewNoteModal: () => void;
+    closeNewNoteModal: () => void;
     openChapterDeleteDialog: (chapter: { id: string; title: string }) => void;
     closeChapterDeleteDialog: () => void;
 
@@ -84,6 +90,8 @@ export class ProjectEditorStateService {
             showDeleteDialog: false,
             showShareDialog: false,
             showNewChapterModal: false,
+            showNewCharacterModal: false,
+            showNewNoteModal: false,
             showChapterDeleteDialog: false,
             chapterToDelete: null,
 
@@ -171,6 +179,26 @@ export class ProjectEditorStateService {
             closeNewChapterModal: () => {
                 setState(prev => ({ ...prev, showNewChapterModal: false }));
                 Logger.debug('PROJECT_EDITOR_STATE', 'New chapter modal closed');
+            },
+
+            openNewCharacterModal: () => {
+                setState(prev => ({ ...prev, showNewCharacterModal: true }));
+                Logger.debug('PROJECT_EDITOR_STATE', 'New character modal opened');
+            },
+
+            closeNewCharacterModal: () => {
+                setState(prev => ({ ...prev, showNewCharacterModal: false }));
+                Logger.debug('PROJECT_EDITOR_STATE', 'New character modal closed');
+            },
+
+            openNewNoteModal: () => {
+                setState(prev => ({ ...prev, showNewNoteModal: true }));
+                Logger.debug('PROJECT_EDITOR_STATE', 'New note modal opened');
+            },
+
+            closeNewNoteModal: () => {
+                setState(prev => ({ ...prev, showNewNoteModal: false }));
+                Logger.debug('PROJECT_EDITOR_STATE', 'New note modal closed');
             },
 
             openChapterDeleteDialog: (chapter: { id: string; title: string }) => {

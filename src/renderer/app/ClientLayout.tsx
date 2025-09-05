@@ -26,6 +26,9 @@ function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactEl
     // Focus 모드 상태
     const isFocusMode = settings?.ui?.focusMode ?? false;
 
+    // 프로젝트 페이지 확인
+    const isProjectPage = pathname.startsWith('/projects/');
+
     // restore sidebar state before paint
     useLayoutEffect(() => {
         if (typeof window !== 'undefined') {
@@ -101,9 +104,11 @@ function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactEl
             )}
 
             <main className="flex-1 flex flex-col min-w-0">
-                <header className="flex-shrink-0">
-                    {!isFocusMode && <AppHeader />}
-                </header>
+                {!isProjectPage && (
+                    <header className="flex-shrink-0">
+                        {!isFocusMode && <AppHeader />}
+                    </header>
+                )}
 
                 <div className="flex-1 min-w-0 p-0 overflow-y-auto">
                     {children}

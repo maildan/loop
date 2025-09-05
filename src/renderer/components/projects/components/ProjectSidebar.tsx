@@ -74,13 +74,11 @@ const SIDEBAR_STYLES = {
     scrollArea: 'flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar',
 } as const;
 
-// 🔥 메뉴 아이템 정의 (모든 view 포함)
+// 🔥 메뉴 아이템 정의 (4개 탭으로 단순화)
 const MENU_ITEMS = [
     { id: 'write', label: '글쓰기', icon: Edit3 },
     { id: 'structure', label: '구조', icon: FileText },
     { id: 'characters', label: '인물', icon: Users },
-    { id: 'notes', label: '메모', icon: BookOpen },
-    { id: 'synopsis', label: '시놉시스', icon: Target },
     { id: 'idea', label: '아이디어', icon: Lightbulb },
 ];
 
@@ -303,37 +301,106 @@ const SidebarContent = memo(function SidebarContent({
 
             {/* 🔥 스크롤 가능한 컨텐츠 영역 */}
             <div className={SIDEBAR_STYLES.scrollArea}>
-                {/* 🔥 구조 관리 섹션 */}
+                {/* 🔥 구조 관리 섹션 (확장됨: 챕터, 시놉시스, 메모 포함) */}
                 {currentView === 'structure' && (
-                    <div className="p-3">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className={SIDEBAR_STYLES.sectionHeader}>구조 관리</h3>
-                            <button
-                                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                                onClick={onAddStructure}
-                                title="새 구조 추가"
-                            >
-                                <Plus size={16} />
-                            </button>
-                        </div>
-                        <div className={SIDEBAR_STYLES.structureList}>
-                            {structure.map((item) => (
-                                <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
-                                    <div className="flex items-center gap-2 flex-1">
-                                        <Circle size={12} className="text-blue-500" />
-                                        <span className="truncate">{item.title}</span>
+                    <div className="p-3 space-y-4">
+                        {/* 챕터 서브섹션 */}
+                        <div>
+                            <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">챕터</h4>
+                                <button
+                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                    onClick={onAddStructure}
+                                    title="새 챕터 추가"
+                                >
+                                    <Plus size={14} />
+                                </button>
+                            </div>
+                            <div className={SIDEBAR_STYLES.structureList}>
+                                {structure.filter(item => item.type === 'chapter' || !item.type).map((item) => (
+                                    <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
+                                        <div className="flex items-center gap-2 flex-1">
+                                            <FileText size={12} className="text-blue-500" />
+                                            <span className="truncate">{item.title}</span>
+                                        </div>
+                                        <button
+                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setStructureMenuId(structureMenuId === item.id ? null : item.id);
+                                            }}
+                                        >
+                                            <MoreHorizontal size={12} />
+                                        </button>
                                     </div>
-                                    <button
-                                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setStructureMenuId(structureMenuId === item.id ? null : item.id);
-                                        }}
-                                    >
-                                        <MoreHorizontal size={12} />
-                                    </button>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 시놉시스 서브섹션 */}
+                        <div>
+                            <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">시놉시스</h4>
+                                <button
+                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                    onClick={() => onAddStructure?.()}
+                                    title="새 시놉시스 추가"
+                                >
+                                    <Plus size={14} />
+                                </button>
+                            </div>
+                            <div className={SIDEBAR_STYLES.structureList}>
+                                {structure.filter(item => item.type === 'synopsis').map((item) => (
+                                    <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
+                                        <div className="flex items-center gap-2 flex-1">
+                                            <Target size={12} className="text-green-500" />
+                                            <span className="truncate">{item.title}</span>
+                                        </div>
+                                        <button
+                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setStructureMenuId(structureMenuId === item.id ? null : item.id);
+                                            }}
+                                        >
+                                            <MoreHorizontal size={12} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* 메모 서브섹션 */}
+                        <div>
+                            <div className="flex items-center justify-between mb-2">
+                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">메모</h4>
+                                <button
+                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                    onClick={onAddNote}
+                                    title="새 메모 추가"
+                                >
+                                    <Plus size={14} />
+                                </button>
+                            </div>
+                            <div className={SIDEBAR_STYLES.structureList}>
+                                {structure.filter(item => item.type === 'section').map((item) => (
+                                    <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
+                                        <div className="flex items-center gap-2 flex-1">
+                                            <BookOpen size={12} className="text-yellow-500" />
+                                            <span className="truncate">{item.title}</span>
+                                        </div>
+                                        <button
+                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setStructureMenuId(structureMenuId === item.id ? null : item.id);
+                                            }}
+                                        >
+                                            <MoreHorizontal size={12} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 )}

@@ -2988,6 +2988,8 @@ function ClientLayoutInner({ children }) {
     const { settings } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$hooks$2f$useSettings$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSettings"])();
     // Focus 모드 상태
     const isFocusMode = settings?.ui?.focusMode ?? false;
+    // 프로젝트 페이지 확인
+    const isProjectPage = pathname.startsWith('/projects/');
     // restore sidebar state before paint
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useLayoutEffect"])(()=>{
         if ("TURBOPACK compile-time falsy", 0) {
@@ -3029,47 +3031,47 @@ function ClientLayoutInner({ children }) {
                     onToggleCollapse: handleToggleSidebar
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                    lineNumber: 94,
+                    lineNumber: 97,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                lineNumber: 93,
+                lineNumber: 96,
                 columnNumber: 17
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
                 className: "flex-1 flex flex-col min-w-0",
                 children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
+                    !isProjectPage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
                         className: "flex-shrink-0",
                         children: !isFocusMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$layout$2f$AppHeader$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AppHeader"], {}, void 0, false, {
                             fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                            lineNumber: 105,
-                            columnNumber: 38
+                            lineNumber: 109,
+                            columnNumber: 42
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                        lineNumber: 104,
-                        columnNumber: 17
+                        lineNumber: 108,
+                        columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex-1 min-w-0 p-0 overflow-y-auto",
                         children: children
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                        lineNumber: 108,
+                        lineNumber: 113,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                lineNumber: 103,
+                lineNumber: 106,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-        lineNumber: 91,
+        lineNumber: 94,
         columnNumber: 9
     }, this);
 }
@@ -3083,22 +3085,22 @@ function ClientLayout({ children, initialAuth }) {
                     children: children
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                    lineNumber: 121,
+                    lineNumber: 126,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-                lineNumber: 120,
+                lineNumber: 125,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-            lineNumber: 119,
+            lineNumber: 124,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/renderer/app/ClientLayout.tsx",
-        lineNumber: 118,
+        lineNumber: 123,
         columnNumber: 9
     }, this);
 }

@@ -27,7 +27,7 @@ import { Logger } from '../../../../shared/logger';
 
 // 🔥 프리컴파일된 스타일 (기가차드 원칙)
 const PROJECT_HEADER_STYLES = {
-  header: 'flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full',
+  header: 'flex items-center justify-end px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full',
   headerLeft: 'flex items-center gap-3',
   headerCenter: 'flex items-center gap-3 max-w-md',
   headerRight: 'flex items-center gap-2 relative',
@@ -325,7 +325,7 @@ export function ProjectHeader({
                 <Sparkles size={16} />
                 {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
                 <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-3 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
-                  <div>✨ 창작 파트너</div>
+                  <div>창작 파트너</div>
                   <div className="text-blue-200 text-xs mt-1">함께 써봐요</div>
                 </div>
               </button>

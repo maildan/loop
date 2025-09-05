@@ -190,10 +190,14 @@ export const ProjectEditor = memo(function ProjectEditor({
                                     content={activeTab?.content || ''}
                                     onChange={(content) => {
                                         if (activeTab) {
+                                            // 탭 업데이트
                                             actions.updateTab(activeTab.id, {
                                                 content,
                                                 isDirty: true
                                             });
+
+                                            // 🔥 실제 프로젝트 content도 업데이트 (DB 자동저장)
+                                            projectData.setContent(content);
                                         }
                                     }}
                                     isFocusMode={uiState?.isFocusMode || false}
@@ -290,8 +294,8 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container>
-            {/* 🔥 집중모드가 아닐 때만 헤더 표시 (Zen mode는 별도 처리) */}
-            {!isFocusMode && (
+            {/* 🔥 집중모드가 아니고 AppSidebar가 접혀있지 않을 때만 헤더 표시 */}
+            {!isFocusMode && !appSidebarCollapsed && (
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
@@ -377,11 +381,11 @@ export const ProjectEditor = memo(function ProjectEditor({
                         Logger.info('PROJECT_EDITOR', 'Add structure clicked');
                     }}
                     onAddCharacter={() => {
-                        // TODO: 캐릭터 추가 모달 열기
+                        actions.openNewCharacterModal();
                         Logger.info('PROJECT_EDITOR', 'Add character clicked');
                     }}
                     onAddNote={() => {
-                        // TODO: 노트 추가 모달 열기
+                        actions.openNewNoteModal();
                         Logger.info('PROJECT_EDITOR', 'Add note clicked');
                     }}
                     onEditStructure={(id) => {
@@ -457,6 +461,30 @@ export const ProjectEditor = memo(function ProjectEditor({
                     onConfirm={(chapterData) => {
                         // TODO: 새 챕터 생성 로직
                         actions.closeNewChapterModal();
+                    }}
+                />
+            )}
+
+            {/* TODO: NewCharacterModal과 NewNoteModal 컴포넌트 생성 필요 */}
+            {/* 임시로 NewChapterModal을 재사용하여 기능 테스트 */}
+            {state.showNewCharacterModal && (
+                <NewChapterModal
+                    isOpen={state.showNewCharacterModal}
+                    onClose={actions.closeNewCharacterModal}
+                    onConfirm={(characterData: any) => {
+                        // TODO: 새 캐릭터 생성 로직
+                        actions.closeNewCharacterModal();
+                    }}
+                />
+            )}
+
+            {state.showNewNoteModal && (
+                <NewChapterModal
+                    isOpen={state.showNewNoteModal}
+                    onClose={actions.closeNewNoteModal}
+                    onConfirm={(noteData: any) => {
+                        // TODO: 새 노트 생성 로직
+                        actions.closeNewNoteModal();
                     }}
                 />
             )}
