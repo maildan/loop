@@ -38,15 +38,15 @@ interface ProjectSidebarProps {
     onDeleteStructure?: (id: string, title: string) => void;
 }
 
-// 🔥 Zen Browser 스타일 사이드바 (hover 감지 포함)
+// 🔥 Zen Browser 스타일 사이드바 (hover 감지 포함, tabBar 침범 방지)
 const SIDEBAR_STYLES = {
-    // 기본 컨테이너
-    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative',
+    // 기본 컨테이너 (tabBar보다 낮은 z-index)
+    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative z-1',
     expanded: 'w-64',
     collapsed: 'w-0 overflow-hidden',
 
-    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전
-    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-50 transform -translate-x-full transition-all duration-500 ease-in-out',
+    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전 (적절한 z-index)
+    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-20 transform -translate-x-full transition-all duration-500 ease-in-out',
     hoverVisible: 'transform translate-x-0',
 
     // hover 감지 영역 - 왼쪽 가장자리에서 더 넓게
@@ -107,7 +107,6 @@ export const ProjectSidebar = memo(function ProjectSidebar({
 
     // 🔥 설정에서 상태 가져오기 (props로 전달된 값 우선 사용)
     const isCollapsed = collapsed ?? settings?.ui?.sidebarCollapsed ?? false;
-    const isFocusMode = settings?.ui?.focusMode ?? false;
 
     // Note: Do NOT return early here — keep hooks stable across renders.
     // Focus mode is handled via `shouldShowHoverable` / `shouldShowExpanded` below.
@@ -141,8 +140,8 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     }, [isHovered]);
 
     // 🔥 렌더링 조건부 로직
-    const shouldShowHoverable = isCollapsed && !isFocusMode;
-    const shouldShowExpanded = !isCollapsed && !isFocusMode;
+    const shouldShowHoverable = isCollapsed;
+    const shouldShowExpanded = !isCollapsed;
 
     // 🔥 전역 마우스 이벤트로 왼쪽 가장자리 감지 (Focus 모드에서 편의성 향상)
     useEffect(() => {
@@ -166,7 +165,7 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     }, [shouldShowHoverable, isHovered]);
 
     // Focus mode 제어용 플래그 (렌더 경로를 변경하지 않고 UI만 숨김)
-    const isHiddenByFocusMode = isFocusMode;
+    const isHiddenByFocusMode = false;
 
     return (
         <>

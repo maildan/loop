@@ -77,10 +77,6 @@ interface ProjectHeaderProps {
   showRightSidebar?: boolean;
   onToggleAISidebar?: () => void;
 
-  // 🔥 포커스 모드 컨트롤
-  isFocusMode: boolean;
-  onToggleFocusMode: () => void;
-
   // 🔥 Zen mode 컨트롤
   isZenMode?: boolean;
   onToggleZenMode?: () => void;
@@ -112,8 +108,6 @@ export function ProjectHeader({
   onToggleSidebar,
   showRightSidebar = false,
   onToggleAISidebar,
-  isFocusMode,
-  onToggleFocusMode,
   isZenMode = false,
   onToggleZenMode,
   onSave,
@@ -180,12 +174,6 @@ export function ProjectHeader({
     }
   };
 
-  // 🔥 집중모드 토글 (에디터만 표시) - 통합된 단일 함수
-  const handleFocusMode = (): void => {
-    onToggleFocusMode(); // Props로 전달된 함수 사용
-    Logger.info('PROJECT_HEADER', 'Focus mode toggled');
-  };
-
   // 🔥 헤더 액션 정의 (CRUD + 복사, 공유 개선)
   const headerActions: HeaderAction[] = [
     { icon: Save, label: '저장', shortcut: 'Cmd+S', onClick: onSave },
@@ -209,16 +197,9 @@ export function ProjectHeader({
     { icon: Trash2, label: '삭제', shortcut: 'Cmd+Del', onClick: onDelete },
   ];
 
-  // 🔥 툴바 확장 액션들 (테마 원클릭, 집중모드, 복사, zen mode)
+  // 🔥 툴바 확장 액션들 (테마 원클릭, 복사, zen mode)
   const toolbarActions: HeaderAction[] = [
     { icon: Copy, label: '콘텐츠 복사', shortcut: 'Cmd+C', onClick: copyContent },
-    {
-      icon: isFocusMode ? EyeOff : Eye,
-      label: isFocusMode ? '집중모드 해제' : '집중모드',
-      shortcut: 'ESC로 해제',
-      onClick: handleFocusMode,
-      isActive: isFocusMode
-    },
     {
       icon: Minimize2,
       label: isZenMode ? 'Zen 모드 해제' : 'Zen 모드',
@@ -246,11 +227,6 @@ export function ProjectHeader({
     window.addEventListener('global:escape', handleGlobalEscape as EventListener);
     return () => window.removeEventListener('global:escape', handleGlobalEscape as EventListener);
   }, [activeSlideBar]);
-
-  // 🔥 포커스 모드에서는 헤더를 렌더링하지 않음
-  if (isFocusMode) {
-    return null;
-  }
 
   return (
     <>

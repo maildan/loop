@@ -47,18 +47,16 @@ export const ProjectEditor = memo(function ProjectEditor({
     const { state, actions } = useProjectEditorState();
     const { settings, updateSetting } = useSettings();
 
-    // 🔥 Zen mode 관련 상태
+    // 🔥 사이드바 관련 상태 (집중모드 제거, 사이드바 접기로 통합)
     const isZenMode = settings?.ui?.zenMode ?? false;
-    const isFocusMode = settings?.ui?.focusMode ?? false;
     const sidebarCollapsed = settings?.ui?.sidebarCollapsed ?? false;
     const appSidebarCollapsed = settings?.ui?.appSidebarCollapsed ?? false;
 
     // 🔥 집중모드와 사이드바 접기 분리
     const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
 
-    // 🔥 디버깅: 분리된 상태 확인
-    console.log('🔍 Separated States:', {
-        isFocusMode: isFocusMode, // 완전 숨김
+    // 🔥 디버깅: 사이드바 상태 확인
+    console.log('🔍 Sidebar States:', {
         isSidebarCollapsed: isSidebarCollapsed, // hover시 표시
         reasons: {
             sidebarCollapsed,
@@ -93,11 +91,6 @@ export const ProjectEditor = memo(function ProjectEditor({
         Logger.info('PROJECT_EDITOR', 'Sidebar toggled', { collapsed: !sidebarCollapsed });
     }, [updateSetting, sidebarCollapsed]);
 
-    const toggleFocusMode = useCallback(() => {
-        updateSetting('ui', 'focusMode', !isFocusMode);
-        Logger.info('PROJECT_EDITOR', 'Focus mode toggled', { enabled: !isFocusMode });
-    }, [updateSetting, isFocusMode]);
-
     // 🔥 수동 저장 함수 (Cmd+S / Ctrl+S)
     const handleManualSave = useCallback(async () => {
         if (projectData?.forceSave) {
@@ -124,7 +117,7 @@ export const ProjectEditor = memo(function ProjectEditor({
         updateSetting('ui', 'zenMode', true);
         updateSetting('ui', 'sidebarCollapsed', true);
         updateSetting('ui', 'appSidebarCollapsed', true);
-        updateSetting('ui', 'focusMode', true);
+        updateSetting('ui', 'zenMode', true);
         Logger.info('PROJECT_EDITOR', 'Zen mode enabled');
     }, [updateSetting]);
 
@@ -132,7 +125,7 @@ export const ProjectEditor = memo(function ProjectEditor({
         updateSetting('ui', 'zenMode', false);
         updateSetting('ui', 'sidebarCollapsed', false);
         updateSetting('ui', 'appSidebarCollapsed', false);
-        updateSetting('ui', 'focusMode', false);
+        updateSetting('ui', 'zenMode', false);
         Logger.info('PROJECT_EDITOR', 'Zen mode disabled');
     }, [updateSetting]);
 
@@ -159,13 +152,9 @@ export const ProjectEditor = memo(function ProjectEditor({
                 return;
             }
 
-            // Escape: Focus mode 해제 또는 Zen mode 해제
+            // Escape: Zen mode 해제
             if (event.key === 'Escape') {
-                if (isFocusMode) {
-                    event.preventDefault();
-                    toggleFocusMode();
-                    Logger.info('PROJECT_EDITOR', 'Focus mode disabled via ESC');
-                } else if (isZenMode) {
+                if (isZenMode) {
                     event.preventDefault();
                     disableZenMode();
                     Logger.info('PROJECT_EDITOR', 'Zen mode disabled via ESC');
@@ -176,7 +165,7 @@ export const ProjectEditor = memo(function ProjectEditor({
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isZenMode, isFocusMode, toggleSidebar, toggleFocusMode, enableZenMode, disableZenMode]);
+    }, [isZenMode, toggleSidebar, enableZenMode, disableZenMode]);
 
     // 🔥 로딩 상태 처리
     if (isLoading) {
@@ -344,8 +333,8 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container>
-            {/* 🔥 집중모드가 아닐 때만 헤더 표시 (사이드바 접기와는 독립) */}
-            {!isFocusMode && (
+            {/* 🔥 사이드바가 접혀있지 않을 때만 헤더 표시 (단순한 조건) */}
+            {!isSidebarCollapsed && (
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
@@ -361,8 +350,6 @@ export const ProjectEditor = memo(function ProjectEditor({
                         onToggleSidebar={actions.toggleCollapsed}
                         showRightSidebar={state.showRightSidebar}
                         onToggleAISidebar={actions.toggleRightSidebar}
-                        isFocusMode={isFocusMode}
-                        onToggleFocusMode={toggleFocusMode}
                         isZenMode={isZenMode}
                         onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
                         onSave={async () => {

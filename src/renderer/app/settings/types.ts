@@ -31,7 +31,6 @@ export interface SettingsData {
     windowWidth: number;
     windowHeight: number;
     sidebarCollapsed: boolean;
-    focusMode: boolean;
     showLineNumbers: boolean;
     showWordCount: boolean;
     // 🔥 Zen Browser 스타일 UI 컨트롤

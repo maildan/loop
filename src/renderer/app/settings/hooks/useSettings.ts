@@ -62,7 +62,6 @@ export function useSettings(): UseSettingsReturn {
       windowWidth: 1400,
       windowHeight: 900,
       sidebarCollapsed: false,
-      focusMode: false,
       showLineNumbers: true,
       showWordCount: true,
       // 🔥 Zen Browser 스타일 UI 컨트롤 기본값
