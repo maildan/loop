@@ -13,12 +13,18 @@ export interface FontOption {
     category: string;
 }
 
+// 🔥 폰트 변형 정보
+export interface FontVariant {
+    weight: string | number;
+    style: 'normal' | 'italic';
+}
+
 // 🔥 폰트 패밀리 정보
 export interface FontFamily {
     name: string;
     displayName: string;
     category: string;
-    variants: any[];
+    variants: FontVariant[];
     cssFamily: string;
 }
 

@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { memo, useEffect, useCallback } from 'react';
+import React, { memo, useEffect, useCallback, useRef } from 'react';
 import { MarkdownEditor } from '../../editor/MarkdownEditor';
 import { EditorProvider } from '../../editor/EditorProvider';
 import { ShortcutHelp } from '../../editor/ShortcutHelp';
@@ -59,13 +59,21 @@ export const ProjectEditor = memo(function ProjectEditor({
         Logger.info('PROJECT_EDITOR', 'All tabs marked as saved');
     };
 
-    // 🔥 저장 상태 감시하여 탭 상태 업데이트
+    // 🔥 actions 안정적 참조를 위한 ref
+    const actionsRef = useRef(actions);
+    actionsRef.current = actions;
+
+    // 🔥 저장 상태 감시하여 탭 상태 업데이트 - 중복 실행 방지
+    const saveStatusRef = useRef<string>('');
     useEffect(() => {
-        if (projectData.saveStatus === 'saved') {
-            actions.markAllTabsAsSaved();
+        if (projectData.saveStatus === 'saved' && saveStatusRef.current !== 'saved') {
+            saveStatusRef.current = 'saved';
+            actionsRef.current.markAllTabsAsSaved();
             Logger.debug('PROJECT_EDITOR', 'Auto save completed - tabs updated');
+        } else if (projectData.saveStatus !== 'saved') {
+            saveStatusRef.current = projectData.saveStatus;
         }
-    }, [projectData.saveStatus, actions.markAllTabsAsSaved]);
+    }, [projectData.saveStatus]);
 
     // 🔥 Zen mode 토글 함수들
     const toggleSidebar = useCallback(() => {
@@ -77,6 +85,28 @@ export const ProjectEditor = memo(function ProjectEditor({
         updateSetting('ui', 'focusMode', !isFocusMode);
         Logger.info('PROJECT_EDITOR', 'Focus mode toggled', { enabled: !isFocusMode });
     }, [updateSetting, isFocusMode]);
+
+    // 🔥 수동 저장 함수 (Cmd+S / Ctrl+S)
+    const handleManualSave = useCallback(async () => {
+        if (projectData?.forceSave) {
+            Logger.info('PROJECT_EDITOR', 'Manual save triggered');
+            await projectData.forceSave();
+        }
+    }, [projectData]);
+
+    // 🔥 키보드 단축키 처리 (Cmd+S / Ctrl+S)
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            // Cmd+S (Mac) 또는 Ctrl+S (Windows/Linux)
+            if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+                event.preventDefault(); // 브라우저 기본 저장 동작 방지
+                handleManualSave();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [handleManualSave]);
 
     const enableZenMode = useCallback(() => {
         updateSetting('ui', 'zenMode', true);
@@ -302,8 +332,8 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container>
-            {/* 🔥 집중모드가 아니고 프로젝트 사이드바가 접혀있지 않을 때만 헤더 표시 */}
-            {!isFocusMode && !state.collapsed && (
+            {/* 🔥 집중모드가 아니고 사이드바가 접혀있지 않을 때만 헤더 표시 */}
+            {!isFocusMode && !appSidebarCollapsed && !state.collapsed && (
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
@@ -387,6 +417,10 @@ export const ProjectEditor = memo(function ProjectEditor({
                     onAddStructure={() => {
                         actions.openNewChapterModal();
                         Logger.info('PROJECT_EDITOR', 'Add structure clicked');
+                        // 🔥 디버깅: 상태 확인
+                        setTimeout(() => {
+                            console.log('🔍 Modal state after action:', state.showNewChapterModal);
+                        }, 100);
                     }}
                     onAddCharacter={() => {
                         actions.openNewCharacterModal();
@@ -463,14 +497,18 @@ export const ProjectEditor = memo(function ProjectEditor({
             )}
 
             {state.showNewChapterModal && (
-                <NewChapterModal
-                    isOpen={state.showNewChapterModal}
-                    onClose={actions.closeNewChapterModal}
-                    onConfirm={(chapterData) => {
-                        // TODO: 새 챕터 생성 로직
-                        actions.closeNewChapterModal();
-                    }}
-                />
+                <>
+                    {/* 🔥 디버깅: 모달 렌더링 확인 */}
+                    {console.log('🔍 Rendering NewChapterModal, state:', state.showNewChapterModal)}
+                    <NewChapterModal
+                        isOpen={state.showNewChapterModal}
+                        onClose={actions.closeNewChapterModal}
+                        onConfirm={(chapterData) => {
+                            // TODO: 새 챕터 생성 로직
+                            actions.closeNewChapterModal();
+                        }}
+                    />
+                </>
             )}
 
             {/* TODO: NewCharacterModal과 NewNoteModal 컴포넌트 생성 필요 */}

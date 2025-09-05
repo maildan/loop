@@ -23,7 +23,7 @@ export interface WriterSidebarProps {
 export interface MenuItemType {
     id: string;
     label: string;
-    icon: any;
+    icon: React.ComponentType<{ size?: number; className?: string }>;
 }
 
 export interface WriterSidebarState {

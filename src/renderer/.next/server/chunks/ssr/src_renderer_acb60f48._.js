@@ -12,6 +12,8 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/zustand/esm/react.mjs [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/zustand/esm/middleware.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-ssr] (ecmascript)");
+;
 ;
 ;
 const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["create"])()((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["persist"])((set, get)=>({
@@ -39,9 +41,11 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
             // 2. DB에 저장 요청
             try {
                 await window.electronAPI.projects.upsertStructure(item);
-                console.log('✅ Structure item saved to DB:', item.id);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item saved to DB', {
+                    itemId: item.id
+                });
             } catch (error) {
-                console.error('❌ Failed to save structure item to DB:', error);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to save structure item to DB', error);
             // TODO: 실패 시 UI 롤백 로직 추가
             }
         },
@@ -72,9 +76,11 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
             if (updatedItem) {
                 try {
                     await window.electronAPI.projects.upsertStructure(updatedItem);
-                    console.log('✅ Structure item updated in DB:', itemId);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item updated in DB', {
+                        itemId
+                    });
                 } catch (error) {
-                    console.error('❌ Failed to update structure item in DB:', error);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to update structure item in DB', error);
                 // TODO: 실패 시 UI 롤백 로직 추가
                 }
             }
@@ -91,9 +97,11 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
             // 2. DB에서 삭제 요청
             try {
                 await window.electronAPI.projects.deleteStructure(itemId);
-                console.log('✅ Structure item deleted from DB:', itemId);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item deleted from DB', {
+                    itemId
+                });
             } catch (error) {
-                console.error('❌ Failed to delete structure item from DB:', error);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to delete structure item from DB', error);
             // TODO: 실패 시 UI 롤백 로직 추가
             }
         },

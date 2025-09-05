@@ -37,9 +37,9 @@ const PROJECT_HEADER_STYLES = {
   iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 relative group outline-none focus:ring-0 focus:border-transparent border-none',
   iconButtonActive: 'flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 relative group outline-none focus:ring-0 focus:border-transparent border-none',
 
-  // 🔥 툴팁 스타일 (위로 통일, 그라데이션 제거)
-  tooltip: 'absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
-  tooltipWithShortcut: 'absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
+  // 🔥 툴팁 스타일 (더 아래로 위치 조정)
+  tooltip: 'absolute top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
+  tooltipWithShortcut: 'absolute top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
   shortcut: 'block text-gray-400 text-xs mt-1',
 
   // 슬라이드바 스타일

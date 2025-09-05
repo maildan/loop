@@ -189,10 +189,10 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
   }, []);
 
   const setChaptersOptimized = useCallback((newChapters: string) => {
-    console.log('🔥 DEBUG: setChaptersOptimized called', { newChapters, currentRef: chaptersRef.current });
+    Logger.debug('PROJECT_DATA', 'setChaptersOptimized called', { newChaptersLength: newChapters.length });
     chaptersRef.current = newChapters;
     setChapters(newChapters);
-    console.log('🔥 DEBUG: setChaptersOptimized completed', { updatedRef: chaptersRef.current });
+    Logger.debug('PROJECT_DATA', 'setChaptersOptimized completed', { updatedRefLength: chaptersRef.current.length });
   }, []);
 
   // 🔥 작가 데이터
@@ -359,7 +359,11 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
         lastModified: new Date()
       };
 
-      console.log('🔥 DEBUG: Saving payload to server', { payload, chaptersLength: currentChapters.length, chaptersPreview: currentChapters.substring(0, 100) });
+      Logger.debug('PROJECT_DATA', 'Saving payload to server', {
+        chaptersLength: currentChapters.length,
+        chaptersPreview: currentChapters.substring(0, 100),
+        payloadKeys: Object.keys(payload)
+      });
 
       const result = await window.electronAPI.projects.update(projectId, payload);
 

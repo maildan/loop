@@ -826,9 +826,9 @@ const PROJECT_HEADER_STYLES = {
     titleInput: 'border-none bg-transparent text-lg font-medium w-full placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100 outline-none focus:ring-0 focus:border-transparent',
     iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 relative group outline-none focus:ring-0 focus:border-transparent border-none',
     iconButtonActive: 'flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 relative group outline-none focus:ring-0 focus:border-transparent border-none',
-    // 🔥 툴팁 스타일 (위로 통일, 그라데이션 제거)
-    tooltip: 'absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
-    tooltipWithShortcut: 'absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
+    // 🔥 툴팁 스타일 (더 아래로 위치 조정)
+    tooltip: 'absolute top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
+    tooltipWithShortcut: 'absolute top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50',
     shortcut: 'block text-gray-400 text-xs mt-1',
     // 슬라이드바 스타일
     slidebar: 'fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-700 shadow-xl transform transition-transform duration-300 ease-in-out z-40',
@@ -1619,6 +1619,8 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
         }
     };
     if (!isOpen) return null;
+    // 🔥 디버깅: 모달이 렌더링되는지 확인
+    console.log('🔍 NewChapterModal rendering with isOpen:', isOpen);
     const modalContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: MODAL_STYLES.overlay,
         onClick: onClose,
@@ -1635,7 +1637,7 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                             children: "새 챕터 만들기"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                            lineNumber: 67,
+                            lineNumber: 70,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1646,18 +1648,18 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                 size: 20
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                                lineNumber: 73,
+                                lineNumber: 76,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                            lineNumber: 68,
+                            lineNumber: 71,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                    lineNumber: 66,
+                    lineNumber: 69,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -1672,7 +1674,7 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                     children: "챕터 제목"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                                    lineNumber: 79,
+                                    lineNumber: 82,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1686,13 +1688,13 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                     required: true
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                                    lineNumber: 82,
+                                    lineNumber: 85,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                            lineNumber: 78,
+                            lineNumber: 81,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1705,7 +1707,7 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                                    lineNumber: 95,
+                                    lineNumber: 98,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1715,30 +1717,30 @@ function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' }) {
                                     children: "생성"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                                    lineNumber: 102,
+                                    lineNumber: 105,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                            lineNumber: 94,
+                            lineNumber: 97,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-                    lineNumber: 77,
+                    lineNumber: 80,
                     columnNumber: 17
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-            lineNumber: 61,
+            lineNumber: 64,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/renderer/components/projects/components/NewChapterModal.tsx",
-        lineNumber: 60,
+        lineNumber: 63,
         columnNumber: 9
     }, this);
     // Portal을 사용하여 body에 직접 렌더링

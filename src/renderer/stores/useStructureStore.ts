@@ -3,6 +3,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import { ProjectStructure } from '../../shared/types';
+import { Logger } from '../../shared/logger';
 
 interface StructureStore {
     structures: Record<string, ProjectStructure[]>; // projectId를 키로 하는 구조들
@@ -53,9 +54,9 @@ export const useStructureStore = create<StructureStore>()(
                 // 2. DB에 저장 요청
                 try {
                     await window.electronAPI.projects.upsertStructure(item);
-                    console.log('✅ Structure item saved to DB:', item.id);
+                    Logger.info('STRUCTURE_STORE', 'Structure item saved to DB', { itemId: item.id });
                 } catch (error) {
-                    console.error('❌ Failed to save structure item to DB:', error);
+                    Logger.error('STRUCTURE_STORE', 'Failed to save structure item to DB', error);
                     // TODO: 실패 시 UI 롤백 로직 추가
                 }
             },
@@ -82,9 +83,9 @@ export const useStructureStore = create<StructureStore>()(
                 if (updatedItem) {
                     try {
                         await window.electronAPI.projects.upsertStructure(updatedItem);
-                        console.log('✅ Structure item updated in DB:', itemId);
+                        Logger.info('STRUCTURE_STORE', 'Structure item updated in DB', { itemId });
                     } catch (error) {
-                        console.error('❌ Failed to update structure item in DB:', error);
+                        Logger.error('STRUCTURE_STORE', 'Failed to update structure item in DB', error);
                         // TODO: 실패 시 UI 롤백 로직 추가
                     }
                 }
@@ -103,9 +104,9 @@ export const useStructureStore = create<StructureStore>()(
                 // 2. DB에서 삭제 요청
                 try {
                     await window.electronAPI.projects.deleteStructure(itemId);
-                    console.log('✅ Structure item deleted from DB:', itemId);
+                    Logger.info('STRUCTURE_STORE', 'Structure item deleted from DB', { itemId });
                 } catch (error) {
-                    console.error('❌ Failed to delete structure item from DB:', error);
+                    Logger.error('STRUCTURE_STORE', 'Failed to delete structure item from DB', error);
                     // TODO: 실패 시 UI 롤백 로직 추가
                 }
             },

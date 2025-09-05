@@ -417,6 +417,10 @@ img, video {
   top: 50%;
 }
 
+.top-12 {
+  top: 3rem;
+}
+
 .top-2\.5 {
   top: .625rem;
 }

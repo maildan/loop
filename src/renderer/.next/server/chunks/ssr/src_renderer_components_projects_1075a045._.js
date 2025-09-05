@@ -319,14 +319,13 @@ function useProjectData(projectId) {
         setContent(newContent);
     }, []);
     const setChaptersOptimized = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((newChapters)=>{
-        console.log('🔥 DEBUG: setChaptersOptimized called', {
-            newChapters,
-            currentRef: chaptersRef.current
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_DATA', 'setChaptersOptimized called', {
+            newChaptersLength: newChapters.length
         });
         chaptersRef.current = newChapters;
         setChapters(newChapters);
-        console.log('🔥 DEBUG: setChaptersOptimized completed', {
-            updatedRef: chaptersRef.current
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_DATA', 'setChaptersOptimized completed', {
+            updatedRefLength: chaptersRef.current.length
         });
     }, []);
     // 🔥 작가 데이터
@@ -494,10 +493,10 @@ function useProjectData(projectId) {
                 chapters: currentChapters,
                 lastModified: new Date()
             };
-            console.log('🔥 DEBUG: Saving payload to server', {
-                payload,
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_DATA', 'Saving payload to server', {
                 chaptersLength: currentChapters.length,
-                chaptersPreview: currentChapters.substring(0, 100)
+                chaptersPreview: currentChapters.substring(0, 100),
+                payloadKeys: Object.keys(payload)
             });
             const result = await window.electronAPI.projects.update(projectId, payload);
             if (result.success) {

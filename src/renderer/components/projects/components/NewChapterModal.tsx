@@ -56,6 +56,9 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
 
     if (!isOpen) return null;
 
+    // 🔥 디버깅: 모달이 렌더링되는지 확인
+    console.log('🔍 NewChapterModal rendering with isOpen:', isOpen);
+
     const modalContent = (
         <div className={MODAL_STYLES.overlay} onClick={onClose}>
             <div

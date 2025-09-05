@@ -321,7 +321,13 @@ export function useSettings(): UseSettingsReturn {
   // subscribe to main process broadcasts so UI updates immediately when settings change
   useEffect(() => {
     try {
-      const unsub = (window.electronAPI as any).settings.onDidChange?.((payload: { keyPath: string; value: unknown; reset?: boolean }) => {
+      const electronAPI = window.electronAPI as {
+        settings?: {
+          onDidChange?: (callback: (payload: { keyPath: string; value: unknown; reset?: boolean }) => void) => () => void;
+        };
+      };
+
+      const unsub = electronAPI.settings?.onDidChange?.((payload: { keyPath: string; value: unknown; reset?: boolean }) => {
         if (!payload || !payload.keyPath) return;
 
         // dot-path merge into settings (safe with type guards)
@@ -340,20 +346,20 @@ export function useSettings(): UseSettingsReturn {
           const rest = parts.slice(1) as string[];
           if (!cat) return prev;
 
-          const newCategory = Object.assign({}, (prev as any)[cat]) as Record<string, any>;
-          let target: Record<string, any> = newCategory || {};
+          const newCategory = Object.assign({}, (prev as SettingsData)[cat as keyof SettingsData]) as Record<string, unknown>;
+          let target: Record<string, unknown> = newCategory || {};
 
           for (let i = 0; i < rest.length - 1; i++) {
             const k = rest[i];
             if (!k) continue;
             if (!(k in target)) target[k] = {};
-            target = target[k] as Record<string, any>;
+            target = target[k] as Record<string, unknown>;
           }
 
           const lastKey = rest[rest.length - 1];
           if (lastKey) target[lastKey] = payload.value;
 
-          return Object.assign({}, prev as any, { [(cat as any)]: newCategory }) as SettingsData;
+          return Object.assign({}, prev, { [cat]: newCategory }) as SettingsData;
         });
       });
 

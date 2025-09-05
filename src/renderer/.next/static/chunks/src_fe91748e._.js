@@ -932,7 +932,8 @@ function useSettings() {
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "useSettings.useEffect": ()=>{
             try {
-                const unsub = window.electronAPI.settings.onDidChange?.({
+                const electronAPI = window.electronAPI;
+                const unsub = electronAPI.settings?.onDidChange?.({
                     "useSettings.useEffect": (payload)=>{
                         if (!payload || !payload.keyPath) return;
                         // dot-path merge into settings (safe with type guards)
