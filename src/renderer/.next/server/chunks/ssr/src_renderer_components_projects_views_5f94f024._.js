@@ -31,7 +31,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 // 🔥 기가차드 작가 친화적 구조 스타일
 const STRUCTURE_STYLES = {
-    container: 'flex-1 overflow-hidden bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+    container: 'max-w-screen-xl mx-auto overflow-hidden bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
     // 🔥 개선된 헤더
     header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
     headerTop: 'flex items-center justify-between mb-4',

@@ -30,7 +30,7 @@ const TAB_STYLES = {
     dragOver: 'bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-600',
     tabIcon: 'text-xs',
     tabTitle: 'flex-1 truncate font-medium',
-    closeButton: 'opacity-0 group-hover:opacity-100 hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-1 transition-all duration-150',
+    closeButton: 'hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-1 transition-all duration-150',
     closeButtonVisible: 'opacity-100',
     newTabButton: 'px-3 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-150',
     contextMenu: 'absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg py-1 z-50 min-w-[180px]',

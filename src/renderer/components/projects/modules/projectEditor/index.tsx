@@ -59,6 +59,14 @@ export const ProjectEditor = memo(function ProjectEditor({
         Logger.info('PROJECT_EDITOR', 'All tabs marked as saved');
     };
 
+    // 🔥 저장 상태 감시하여 탭 상태 업데이트
+    useEffect(() => {
+        if (projectData.saveStatus === 'saved') {
+            actions.markAllTabsAsSaved();
+            Logger.debug('PROJECT_EDITOR', 'Auto save completed - tabs updated');
+        }
+    }, [projectData.saveStatus, actions]);
+
     // 🔥 Zen mode 토글 함수들
     const toggleSidebar = useCallback(() => {
         updateSetting('ui', 'sidebarCollapsed', !sidebarCollapsed);

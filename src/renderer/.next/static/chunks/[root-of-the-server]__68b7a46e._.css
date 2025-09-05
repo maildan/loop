@@ -333,10 +333,6 @@ img, video {
   inset: 0;
 }
 
-.-bottom-16 {
-  bottom: -4rem;
-}
-
 .-right-2 {
   right: -.5rem;
 }
@@ -1001,6 +997,10 @@ img, video {
   max-width: none;
 }
 
+.max-w-screen-xl {
+  max-width: 1280px;
+}
+
 .max-w-sm {
   max-width: 24rem;
 }
@@ -1470,11 +1470,6 @@ img, video {
 .border-gray-300 {
   --tw-border-opacity: 1;
   border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
-}
-
-.border-gray-600 {
-  --tw-border-opacity: 1;
-  border-color: rgb(75 85 99 / var(--tw-border-opacity, 1));
 }
 
 .border-green-200 {
