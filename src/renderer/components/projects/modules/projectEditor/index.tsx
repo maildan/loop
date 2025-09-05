@@ -53,7 +53,19 @@ export const ProjectEditor = memo(function ProjectEditor({
     const sidebarCollapsed = settings?.ui?.sidebarCollapsed ?? false;
     const appSidebarCollapsed = settings?.ui?.appSidebarCollapsed ?? false;
 
-    // 🔥 저장 성공 처리
+    // 🔥 집중모드와 사이드바 접기 분리
+    const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
+
+    // 🔥 디버깅: 분리된 상태 확인
+    console.log('🔍 Separated States:', {
+        isFocusMode: isFocusMode, // 완전 숨김
+        isSidebarCollapsed: isSidebarCollapsed, // hover시 표시
+        reasons: {
+            sidebarCollapsed,
+            appSidebarCollapsed,
+            'state.collapsed': state.collapsed
+        }
+    });    // 🔥 저장 성공 처리
     const handleSaveSuccess = () => {
         actions.markAllTabsAsSaved();
         Logger.info('PROJECT_EDITOR', 'All tabs marked as saved');
@@ -332,8 +344,8 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container>
-            {/* 🔥 집중모드가 아니고 사이드바가 접혀있지 않을 때만 헤더 표시 */}
-            {!isFocusMode && !appSidebarCollapsed && !state.collapsed && (
+            {/* 🔥 집중모드가 아닐 때만 헤더 표시 (사이드바 접기와는 독립) */}
+            {!isFocusMode && (
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
@@ -404,6 +416,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                     onViewChange={actions.setCurrentView}
                     structure={projectData?.structure || []}
                     characters={projectData?.characters || []}
+                    collapsed={isSidebarCollapsed}
                     stats={{
                         wordCount: projectData?.writerStats?.wordCount || 0,
                         charCount: projectData?.writerStats?.charCount || 0,

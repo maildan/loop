@@ -12,8 +12,8 @@ interface NewChapterModalProps {
 }
 
 const MODAL_STYLES = {
-    overlay: 'fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]',
-    modal: 'bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-4',
+    overlay: 'fixed inset-0 bg-black/70 flex items-center justify-center z-[99999] backdrop-blur-sm',
+    modal: 'bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-full max-w-md mx-4 border border-gray-300 dark:border-gray-600',
     header: 'flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700',
     title: 'text-lg font-semibold text-gray-900 dark:text-gray-100',
     closeButton: 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors',
@@ -60,7 +60,22 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
     console.log('🔍 NewChapterModal rendering with isOpen:', isOpen);
 
     const modalContent = (
-        <div className={MODAL_STYLES.overlay} onClick={onClose}>
+        <div
+            className={MODAL_STYLES.overlay}
+            onClick={onClose}
+            style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: 99999,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(0, 0, 0, 0.7)'
+            }}
+        >
             <div
                 className={MODAL_STYLES.modal}
                 onClick={(e) => e.stopPropagation()}

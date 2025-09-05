@@ -8,8 +8,8 @@ import {
 
 // 🔥 기가차드 간소화된 사이드바 스타일
 export const SIDEBAR_STYLES = {
-    // 기본 컨테이너 (스크롤바 문제 해결)
-    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full',
+    // 기본 컨테이너 (header 침범 방지, 에디터 영역 침범 방지)
+    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative z-10',
     collapsed: 'w-12',
     expanded: 'w-64',
 

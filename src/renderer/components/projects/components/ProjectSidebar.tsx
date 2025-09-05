@@ -27,6 +27,7 @@ interface ProjectSidebarProps {
     structure?: ProjectStructure[];
     characters: ProjectCharacter[];
     stats: WriterStats;
+    collapsed?: boolean;
 
     // 🔥 핸들러들
     onAddStructure?: () => void;
@@ -89,6 +90,7 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     structure = [],
     characters,
     stats,
+    collapsed = false,
     onAddStructure,
     onAddCharacter,
     onAddNote,
@@ -103,8 +105,8 @@ export const ProjectSidebar = memo(function ProjectSidebar({
     const [editingTitle, setEditingTitle] = useState<string>('');
     const [structureMenuId, setStructureMenuId] = useState<string | null>(null);
 
-    // 🔥 설정에서 상태 가져오기
-    const isCollapsed = settings?.ui?.sidebarCollapsed ?? false;
+    // 🔥 설정에서 상태 가져오기 (props로 전달된 값 우선 사용)
+    const isCollapsed = collapsed ?? settings?.ui?.sidebarCollapsed ?? false;
     const isFocusMode = settings?.ui?.focusMode ?? false;
 
     // Note: Do NOT return early here — keep hooks stable across renders.
