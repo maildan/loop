@@ -27,14 +27,14 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$se
 ;
 ;
 ;
-// 🔥 Zen Browser 스타일 사이드바 (hover 감지 포함)
+// 🔥 Zen Browser 스타일 사이드바 (hover 감지 포함, tabBar 침범 방지)
 const SIDEBAR_STYLES = {
-    // 기본 컨테이너
-    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative',
+    // 기본 컨테이너 (tabBar보다 낮은 z-index)
+    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative z-1',
     expanded: 'w-64',
     collapsed: 'w-0 overflow-hidden',
-    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전
-    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-50 transform -translate-x-full transition-all duration-500 ease-in-out',
+    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전 (적절한 z-index)
+    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-lg z-20 transform -translate-x-full transition-all duration-500 ease-in-out',
     hoverVisible: 'transform translate-x-0',
     // hover 감지 영역 - 왼쪽 가장자리에서 더 넓게
     hoverTrigger: 'absolute left-0 top-0 w-16 h-full z-40',
@@ -87,7 +87,6 @@ const ProjectSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
     const [structureMenuId, setStructureMenuId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     // 🔥 설정에서 상태 가져오기 (props로 전달된 값 우선 사용)
     const isCollapsed = collapsed ?? settings?.ui?.sidebarCollapsed ?? false;
-    const isFocusMode = settings?.ui?.focusMode ?? false;
     // Note: Do NOT return early here — keep hooks stable across renders.
     // Focus mode is handled via `shouldShowHoverable` / `shouldShowExpanded` below.
     // 🔥 hover 감지 로직
@@ -121,8 +120,8 @@ const ProjectSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
         isHovered
     ]);
     // 🔥 렌더링 조건부 로직
-    const shouldShowHoverable = isCollapsed && !isFocusMode;
-    const shouldShowExpanded = !isCollapsed && !isFocusMode;
+    const shouldShowHoverable = isCollapsed;
+    const shouldShowExpanded = !isCollapsed;
     // 🔥 전역 마우스 이벤트로 왼쪽 가장자리 감지 (Focus 모드에서 편의성 향상)
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         if (!shouldShowHoverable) return;
@@ -143,7 +142,7 @@ const ProjectSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
         isHovered
     ]);
     // Focus mode 제어용 플래그 (렌더 경로를 변경하지 않고 UI만 숨김)
-    const isHiddenByFocusMode = isFocusMode;
+    const isHiddenByFocusMode = false;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             shouldShowHoverable && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -151,7 +150,7 @@ const ProjectSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                 onMouseEnter: handleMouseEnter
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                lineNumber: 175,
+                lineNumber: 174,
                 columnNumber: 17
             }, this),
             shouldShowExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -176,12 +175,12 @@ const ProjectSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                     setStructureMenuId: setStructureMenuId
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                    lineNumber: 184,
+                    lineNumber: 183,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                lineNumber: 183,
+                lineNumber: 182,
                 columnNumber: 17
             }, this),
             shouldShowHoverable && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -208,12 +207,12 @@ const ProjectSidebar = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                     setStructureMenuId: setStructureMenuId
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                    lineNumber: 213,
+                    lineNumber: 212,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                lineNumber: 208,
+                lineNumber: 207,
                 columnNumber: 17
             }, this)
         ]
@@ -232,25 +231,25 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                 size: 16
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 290,
+                                lineNumber: 289,
                                 columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: item.label
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 291,
+                                lineNumber: 290,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, item.id, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 284,
+                        lineNumber: 283,
                         columnNumber: 21
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                lineNumber: 282,
+                lineNumber: 281,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -269,7 +268,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                 children: "챕터"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 304,
+                                                lineNumber: 303,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -280,18 +279,18 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                    lineNumber: 310,
+                                                    lineNumber: 309,
                                                     columnNumber: 37
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 305,
+                                                lineNumber: 304,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 303,
+                                        lineNumber: 302,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -307,7 +306,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                                 className: "text-blue-500"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                                lineNumber: 317,
+                                                                lineNumber: 316,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -315,13 +314,13 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                                 children: item.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                                lineNumber: 318,
+                                                                lineNumber: 317,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                        lineNumber: 316,
+                                                        lineNumber: 315,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -334,29 +333,29 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                             size: 12
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                            lineNumber: 327,
+                                                            lineNumber: 326,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                        lineNumber: 320,
+                                                        lineNumber: 319,
                                                         columnNumber: 41
                                                     }, this)
                                                 ]
                                             }, item.id, true, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 315,
+                                                lineNumber: 314,
                                                 columnNumber: 37
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 313,
+                                        lineNumber: 312,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 302,
+                                lineNumber: 301,
                                 columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -369,7 +368,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                 children: "시놉시스"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 337,
+                                                lineNumber: 336,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -380,18 +379,18 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                    lineNumber: 343,
+                                                    lineNumber: 342,
                                                     columnNumber: 37
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 338,
+                                                lineNumber: 337,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 336,
+                                        lineNumber: 335,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -407,7 +406,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                                 className: "text-green-500"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                                lineNumber: 350,
+                                                                lineNumber: 349,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -415,13 +414,13 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                                 children: item.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                                lineNumber: 351,
+                                                                lineNumber: 350,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                        lineNumber: 349,
+                                                        lineNumber: 348,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -434,29 +433,29 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                             size: 12
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                            lineNumber: 360,
+                                                            lineNumber: 359,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                        lineNumber: 353,
+                                                        lineNumber: 352,
                                                         columnNumber: 41
                                                     }, this)
                                                 ]
                                             }, item.id, true, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 348,
+                                                lineNumber: 347,
                                                 columnNumber: 37
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 346,
+                                        lineNumber: 345,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 335,
+                                lineNumber: 334,
                                 columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -469,7 +468,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                 children: "메모"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 370,
+                                                lineNumber: 369,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -480,18 +479,18 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                    lineNumber: 376,
+                                                    lineNumber: 375,
                                                     columnNumber: 37
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 371,
+                                                lineNumber: 370,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 369,
+                                        lineNumber: 368,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -507,7 +506,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                                 className: "text-yellow-500"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                                lineNumber: 383,
+                                                                lineNumber: 382,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -515,13 +514,13 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                                 children: item.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                                lineNumber: 384,
+                                                                lineNumber: 383,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                        lineNumber: 382,
+                                                        lineNumber: 381,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -534,35 +533,35 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                             size: 12
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                            lineNumber: 393,
+                                                            lineNumber: 392,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                        lineNumber: 386,
+                                                        lineNumber: 385,
                                                         columnNumber: 41
                                                     }, this)
                                                 ]
                                             }, item.id, true, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 381,
+                                                lineNumber: 380,
                                                 columnNumber: 37
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 379,
+                                        lineNumber: 378,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 368,
+                                lineNumber: 367,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 300,
+                        lineNumber: 299,
                         columnNumber: 21
                     }, this),
                     currentView === 'characters' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -576,7 +575,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                         children: "캐릭터 관리"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 406,
+                                        lineNumber: 405,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -587,18 +586,18 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                            lineNumber: 412,
+                                            lineNumber: 411,
                                             columnNumber: 33
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 407,
+                                        lineNumber: 406,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 405,
+                                lineNumber: 404,
                                 columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -611,7 +610,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                 className: "text-green-500"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 418,
+                                                lineNumber: 417,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -619,24 +618,24 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                                 children: character.name
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                                lineNumber: 419,
+                                                lineNumber: 418,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, character.id, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 417,
+                                        lineNumber: 416,
                                         columnNumber: 33
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 415,
+                                lineNumber: 414,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 404,
+                        lineNumber: 403,
                         columnNumber: 21
                     }, this),
                     currentView === 'notes' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -649,7 +648,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                     children: "메모 관리"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                    lineNumber: 430,
+                                    lineNumber: 429,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -660,29 +659,29 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                        lineNumber: 436,
+                                        lineNumber: 435,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                    lineNumber: 431,
+                                    lineNumber: 430,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                            lineNumber: 429,
+                            lineNumber: 428,
                             columnNumber: 25
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 428,
+                        lineNumber: 427,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                lineNumber: 297,
+                lineNumber: 296,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -693,7 +692,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                         children: "프로젝트 통계"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 445,
+                        lineNumber: 444,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -704,7 +703,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                 children: "단어 수"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 447,
+                                lineNumber: 446,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -712,13 +711,13 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                 children: stats.wordCount
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 448,
+                                lineNumber: 447,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 446,
+                        lineNumber: 445,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -729,7 +728,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                 children: "문자 수"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 451,
+                                lineNumber: 450,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -737,13 +736,13 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                 children: stats.charCount
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 452,
+                                lineNumber: 451,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 450,
+                        lineNumber: 449,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -754,7 +753,7 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                 children: "예상 읽기 시간"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 455,
+                                lineNumber: 454,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -765,19 +764,19 @@ const SidebarContent = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proj
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                                lineNumber: 456,
+                                lineNumber: 455,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                        lineNumber: 454,
+                        lineNumber: 453,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectSidebar.tsx",
-                lineNumber: 444,
+                lineNumber: 443,
                 columnNumber: 13
             }, this)
         ]
@@ -799,8 +798,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$share$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Share2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/share-2.js [app-ssr] (ecmascript) <export default as Share2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-ssr] (ecmascript) <export default as Trash2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$panel$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Sidebar$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/panel-left.js [app-ssr] (ecmascript) <export default as Sidebar>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/eye.js [app-ssr] (ecmascript) <export default as Eye>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2d$off$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__EyeOff$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/eye-off.js [app-ssr] (ecmascript) <export default as EyeOff>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sun$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Sun$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sun.js [app-ssr] (ecmascript) <export default as Sun>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$moon$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Moon$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/moon.js [app-ssr] (ecmascript) <export default as Moon>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$copy$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Copy$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/copy.js [app-ssr] (ecmascript) <export default as Copy>");
@@ -839,7 +836,7 @@ const PROJECT_HEADER_STYLES = {
     slidebarContent: 'p-4 overflow-y-auto h-full',
     slidebarOverlay: 'fixed inset-0 bg-black/50 z-30'
 };
-function ProjectHeader({ title, onTitleChange, onBack, sidebarCollapsed, onToggleSidebar, showRightSidebar = false, onToggleAISidebar, isFocusMode, onToggleFocusMode, isZenMode = false, onToggleZenMode, onSave, onShare, onDownload, onDelete, // 🔥 Google Docs 관련 props
+function ProjectHeader({ title, onTitleChange, onBack, sidebarCollapsed, onToggleSidebar, showRightSidebar = false, onToggleAISidebar, isZenMode = false, onToggleZenMode, onSave, onShare, onDownload, onDelete, // 🔥 Google Docs 관련 props
 isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, onSyncWithGoogle, onOpenGoogleDocs }) {
     const [activeSlideBar, setActiveSlideBar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [isDarkMode, setIsDarkMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(document.documentElement.classList.contains('dark'));
@@ -883,11 +880,6 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
         } catch (error) {
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Failed to copy content', error);
         }
-    };
-    // 🔥 집중모드 토글 (에디터만 표시) - 통합된 단일 함수
-    const handleFocusMode = ()=>{
-        onToggleFocusMode(); // Props로 전달된 함수 사용
-        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Focus mode toggled');
     };
     // 🔥 헤더 액션 정의 (CRUD + 복사, 공유 개선)
     const headerActions = [
@@ -936,20 +928,13 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
             onClick: onDelete
         }
     ];
-    // 🔥 툴바 확장 액션들 (테마 원클릭, 집중모드, 복사, zen mode)
+    // 🔥 툴바 확장 액션들 (테마 원클릭, 복사, zen mode)
     const toolbarActions = [
         {
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$copy$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Copy$3e$__["Copy"],
             label: '콘텐츠 복사',
             shortcut: 'Cmd+C',
             onClick: copyContent
-        },
-        {
-            icon: isFocusMode ? __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2d$off$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__EyeOff$3e$__["EyeOff"] : __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"],
-            label: isFocusMode ? '집중모드 해제' : '집중모드',
-            shortcut: 'ESC로 해제',
-            onClick: handleFocusMode,
-            isActive: isFocusMode
         },
         {
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minimize$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Minimize2$3e$__["Minimize2"],
@@ -978,10 +963,6 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
     }, [
         activeSlideBar
     ]);
-    // 🔥 포커스 모드에서는 헤더를 렌더링하지 않음
-    if (isFocusMode) {
-        return null;
-    }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -999,20 +980,20 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 12
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 264,
+                                            lineNumber: 240,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Google Docs"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 265,
+                                            lineNumber: 241,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 263,
+                                    lineNumber: 239,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1026,18 +1007,18 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 268,
+                                    lineNumber: 244,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                            lineNumber: 260,
+                            lineNumber: 236,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 259,
+                        lineNumber: 235,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1051,7 +1032,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 288,
+                                            lineNumber: 264,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1061,7 +1042,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 291,
+                                                    lineNumber: 267,
                                                     columnNumber: 17
                                                 }, this),
                                                 action.shortcut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1069,26 +1050,26 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.shortcut
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 292,
+                                                    lineNumber: 268,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 290,
+                                            lineNumber: 266,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `action-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 283,
+                                    lineNumber: 259,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 298,
+                                lineNumber: 274,
                                 columnNumber: 11
                             }, this),
                             toolbarActions.map((action, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1099,7 +1080,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 307,
+                                            lineNumber: 283,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1107,20 +1088,20 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             children: action.label
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 309,
+                                            lineNumber: 285,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `toolbar-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 302,
+                                    lineNumber: 278,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 316,
+                                lineNumber: 292,
                                 columnNumber: 11
                             }, this),
                             onToggleAISidebar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1131,7 +1112,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 324,
+                                        lineNumber: 300,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1141,7 +1122,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "창작 파트너"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 327,
+                                                lineNumber: 303,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1149,19 +1130,19 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "함께 써봐요"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 328,
+                                                lineNumber: 304,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 326,
+                                        lineNumber: 302,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 320,
+                                lineNumber: 296,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1171,24 +1152,24 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 338,
+                                    lineNumber: 314,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 334,
+                                lineNumber: 310,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 280,
+                        lineNumber: 256,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                lineNumber: 257,
+                lineNumber: 233,
                 columnNumber: 7
             }, this),
             activeSlideBar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1196,7 +1177,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                 onClick: ()=>setActiveSlideBar(null)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                lineNumber: 345,
+                lineNumber: 321,
                 columnNumber: 9
             }, this)
         ]

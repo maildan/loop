@@ -1,7 +1,7 @@
 // WriterSidebar 메인 컴포넌트 (리팩토링된 버전)
 'use client';
 
-import React, { memo, useState } from 'react';
+import React, { memo } from 'react';
 import { Plus } from 'lucide-react';
 import { WriterSidebarProps } from './types';
 import { SIDEBAR_STYLES, MENU_ITEMS } from './constants';
@@ -25,24 +25,16 @@ export const WriterSidebar = memo(function WriterSidebar({
     onDuplicateStructure,
     onDeleteStructure
 }: WriterSidebarProps): React.ReactElement {
-    const [isHovered, setIsHovered] = useState<boolean>(false);
 
     const { state, storeStructures, actions } = useWriterSidebar(projectId);
 
     // 구조 데이터는 스토어를 우선으로, fallback으로 props 사용
     const structure = storeStructures.length > 0 ? storeStructures : propStructure;
 
-    // 🔥 사이드바 접기 시 hover로 임시 펼치기
-    const shouldExpand = !collapsed || isHovered;
-
     if (collapsed) {
         return (
-            <div
-                className={`${SIDEBAR_STYLES.container} ${shouldExpand ? SIDEBAR_STYLES.expanded : SIDEBAR_STYLES.collapsed}`}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-            >
-                {/* Collapsed state - 최소화된 상태 또는 hover 시 펼쳐진 상태 */}
+            <div className={`${SIDEBAR_STYLES.container} ${SIDEBAR_STYLES.collapsed}`}>
+                {/* Collapsed state - 최소화된 상태 */}
                 <div className="p-2">
                     {MENU_ITEMS.map((item) => (
                         <button
