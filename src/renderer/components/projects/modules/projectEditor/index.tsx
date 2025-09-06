@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { memo, useEffect, useCallback, useRef } from 'react';
+import React, { memo, useEffect, useCallback, useRef, useState } from 'react';
 import { MarkdownEditor } from '../../editor/MarkdownEditor';
 import { EditorProvider } from '../../editor/EditorProvider';
 import { ShortcutHelp } from '../../editor/ShortcutHelp';
@@ -51,6 +51,9 @@ export const ProjectEditor = memo(function ProjectEditor({
     const isZenMode = settings?.ui?.zenMode ?? false;
     const sidebarCollapsed = settings?.ui?.sidebarCollapsed ?? false;
     const appSidebarCollapsed = settings?.ui?.appSidebarCollapsed ?? false;
+
+    // 🔥 tabBar hover 상태
+    const [tabBarHovered, setTabBarHovered] = useState(false);
 
     // 🔥 집중모드와 사이드바 접기 분리
     const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
@@ -333,7 +336,7 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container>
-            {/* 🔥 사이드바가 접혀있지 않을 때만 헤더 표시 (단순한 조건) */}
+            {/* 🔥 사이드바가 접혀있지 않을 때만 헤더 표시 */}
             {!isSidebarCollapsed && (
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
@@ -343,7 +346,6 @@ export const ProjectEditor = memo(function ProjectEditor({
                             Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
                         }}
                         onBack={() => {
-                            // TODO: 뒤로가기 로직
                             Logger.debug('PROJECT_EDITOR', 'Back button clicked');
                         }}
                         sidebarCollapsed={state.collapsed}

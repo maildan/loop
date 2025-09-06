@@ -1974,11 +1974,6 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
     }, [
         updateSetting
     ]);
-    const handleFocusModeToggle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((checked)=>{
-        updateSetting('ui', 'focusMode', checked);
-    }, [
-        updateSetting
-    ]);
     const handleShowLineNumbersToggle = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((checked)=>{
         updateSetting('ui', 'showLineNumbers', checked);
     }, [
@@ -1999,7 +1994,7 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
                         className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$constants$2f$styles$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SETTINGS_PAGE_STYLES"].sectionIcon
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 62,
+                        lineNumber: 58,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2007,13 +2002,13 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
                         children: "UI/UX 설정"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 63,
+                        lineNumber: 59,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                lineNumber: 61,
+                lineNumber: 57,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2032,12 +2027,12 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$constants$2f$styles$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SETTINGS_PAGE_STYLES"].numberInput
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                            lineNumber: 71,
+                            lineNumber: 67,
                             columnNumber: 13
                         }, void 0)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 67,
+                        lineNumber: 63,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$components$2f$controls$2f$SettingItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SettingItem"], {
@@ -2053,12 +2048,12 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
                             className: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$constants$2f$styles$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SETTINGS_PAGE_STYLES"].numberInput
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                            lineNumber: 87,
+                            lineNumber: 83,
                             columnNumber: 13
                         }, void 0)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 83,
+                        lineNumber: 79,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$components$2f$controls$2f$SettingItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SettingItem"], {
@@ -2069,28 +2064,12 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
                             onChange: handleSidebarCollapsedToggle
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                            lineNumber: 103,
+                            lineNumber: 99,
                             columnNumber: 13
                         }, void 0)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 99,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$components$2f$controls$2f$SettingItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SettingItem"], {
-                        title: "집중 모드",
-                        description: "집중 모드에서는 불필요한 UI 요소를 숨깁니다",
-                        control: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$components$2f$controls$2f$Toggle$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Toggle"], {
-                            checked: settings.focusMode,
-                            onChange: handleFocusModeToggle
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                            lineNumber: 114,
-                            columnNumber: 13
-                        }, void 0)
-                    }, void 0, false, {
-                        fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 110,
+                        lineNumber: 95,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$components$2f$controls$2f$SettingItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SettingItem"], {
@@ -2101,12 +2080,12 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
                             onChange: handleShowLineNumbersToggle
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                            lineNumber: 125,
+                            lineNumber: 110,
                             columnNumber: 13
                         }, void 0)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 121,
+                        lineNumber: 106,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$components$2f$controls$2f$SettingItem$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SettingItem"], {
@@ -2117,24 +2096,24 @@ const UISettingsSection = /*#__PURE__*/ __TURBOPACK__imported__module__$5b$proje
                             onChange: handleShowWordCountToggle
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                            lineNumber: 136,
+                            lineNumber: 121,
                             columnNumber: 13
                         }, void 0)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                        lineNumber: 132,
+                        lineNumber: 117,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-                lineNumber: 66,
+                lineNumber: 62,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/app/settings/components/sections/UISettingsSection.tsx",
-        lineNumber: 60,
+        lineNumber: 56,
         columnNumber: 5
     }, this);
 });

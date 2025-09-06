@@ -19,9 +19,9 @@ interface UISettingsSectionProps {
 /**
  * 🔥 UI 설정 섹션 컴포넌트
  */
-export const UISettingsSection = React.memo<UISettingsSectionProps>(({ 
-  settings, 
-  updateSetting 
+export const UISettingsSection = React.memo<UISettingsSectionProps>(({
+  settings,
+  updateSetting
 }) => {
   // 🔥 창 너비 변경 핸들러
   const handleWindowWidthChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,10 +42,6 @@ export const UISettingsSection = React.memo<UISettingsSectionProps>(({
   // 🔥 토글 핸들러들
   const handleSidebarCollapsedToggle = useCallback((checked: boolean) => {
     updateSetting('ui', 'sidebarCollapsed', checked);
-  }, [updateSetting]);
-
-  const handleFocusModeToggle = useCallback((checked: boolean) => {
-    updateSetting('ui', 'focusMode', checked);
   }, [updateSetting]);
 
   const handleShowLineNumbersToggle = useCallback((checked: boolean) => {
@@ -103,17 +99,6 @@ export const UISettingsSection = React.memo<UISettingsSectionProps>(({
             <Toggle
               checked={settings.sidebarCollapsed}
               onChange={handleSidebarCollapsedToggle}
-            />
-          }
-        />
-
-        <SettingItem
-          title="집중 모드"
-          description="집중 모드에서는 불필요한 UI 요소를 숨깁니다"
-          control={
-            <Toggle
-              checked={settings.focusMode}
-              onChange={handleFocusModeToggle}
             />
           }
         />

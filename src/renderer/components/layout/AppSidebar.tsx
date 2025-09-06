@@ -25,7 +25,7 @@ import { Logger } from '../../../shared/logger';
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const SIDEBAR_STYLES = {
   container: 'relative flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 transition-all duration-300',
-  collapsed: 'w-16',
+  collapsed: 'w-0 overflow-hidden', // 🔥 완전히 숨김 (아이콘까지 모두)
   expanded: 'w-64',
   hoverContent: 'absolute left-full top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
   logoSection: 'h-auto min-h-[4rem] flex flex-col justify-center border-b border-slate-200 dark:border-slate-700 px-6 py-3',
@@ -127,15 +127,10 @@ export function AppSidebar({
   const [internalCollapsed, setInternalCollapsed] = useState<boolean>(false);
   const isControlled = controlledCollapsed !== undefined;
 
-  // 🔥 settings에서 collapse 및 focus mode 상태 가져오기
+  // 🔥 settings에서 collapse 상태 가져오기
   const settingsCollapsed = loadedSettings?.ui?.appSidebarCollapsed ?? false;
-  const isFocusMode = loadedSettings?.ui?.focusMode ?? false;
 
   const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
-
-  // Focus 모드로 인해 조기 반환하면 훅 호출 수가 바뀔 수 있으므로
-  // 렌더 경로는 유지하고 UI만 숨깁니다.
-  const isHiddenByFocusMode = isFocusMode;
 
   // avatar src state to handle onError fallback and controlled updates
   const defaultAvatar = '/static/avatar-default.png';
@@ -546,14 +541,26 @@ export function AppSidebar({
   );
 
   return (
-    <aside
-      className={`${SIDEBAR_STYLES.container} ${collapsed && !isHovered ? SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded}`}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      aria-label="사이드바 네비게이션"
-      role="navigation"
-    >
-      <SidebarContent isExpanded={!collapsed || isHovered} />
-    </aside>
+    <div className="relative">
+      {/* 🔥 hover 감지 영역 - AppSidebar 전용 (ProjectSidebar와 분리) */}
+      {collapsed && !isHovered && (
+        <div
+          className="absolute left-0 top-0 w-4 h-full z-50 hover:cursor-pointer"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          aria-label="앱 사이드바 펼치기"
+        />
+      )}
+
+      <aside
+        className={`${SIDEBAR_STYLES.container} ${collapsed && !isHovered ? SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        aria-label="사이드바 네비게이션"
+        role="navigation"
+      >
+        <SidebarContent isExpanded={!collapsed || isHovered} />
+      </aside>
+    </div>
   );
 }

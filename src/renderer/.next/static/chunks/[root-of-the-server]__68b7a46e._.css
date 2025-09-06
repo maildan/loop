@@ -381,6 +381,10 @@ img, video {
   left: .75rem;
 }
 
+.left-64 {
+  left: 16rem;
+}
+
 .left-full {
   left: 100%;
 }
@@ -3798,6 +3802,10 @@ input, textarea, select, button {
   --tw-scale-x: 1.05;
   --tw-scale-y: 1.05;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.hover\:cursor-pointer:hover {
+  cursor: pointer;
 }
 
 .hover\:border-blue-300:hover {
