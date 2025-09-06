@@ -138,9 +138,8 @@ export function AppSidebar({
   // 🔥 settings에서 collapse 상태 가져오기 
   const settingsCollapsed = loadedSettings?.ui?.appSidebarCollapsed ?? false;
 
-  const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
-
-  // 🔥 hover 영역 크기 설정 (Next.js 문양까지만)
+  // 🔥 테스트를 위해 강제로 collapsed = true 설정
+  const collapsed = true; // isControlled ? controlledCollapsed : settingsCollapsed;  // 🔥 hover 영역 크기 설정 (Next.js 문양까지만)
   const hoverAreaClass = useMemo(() => {
     const isProjectPage = pathname.startsWith('/projects/');
     return isProjectPage ? 'w-8' : 'w-12'; // 프로젝트 페이지: 32px, 다른 페이지: 48px (Next.js 문양까지만)
@@ -576,22 +575,39 @@ export function AppSidebar({
 
   return (
     <div className="relative h-full">
+      {/* 🔥 디버깅 상태 패널 */}
+      <div className="fixed top-2 right-2 bg-black text-white p-2 text-xs z-[10000] rounded">
+        <div>Collapsed: <span className="text-yellow-300">{String(collapsed)}</span></div>
+        <div>IsHovered: <span className="text-green-300">{String(isHovered)}</span></div>
+        <div>Pathname: <span className="text-blue-300">{pathname}</span></div>
+      </div>
+
       {/* 🔥 hover 감지 영역 - 완전 투명 + 임시 너비 테스트 */}
       {collapsed && (
         <div
-          className={`absolute left-0 top-0 w-16 h-full z-[9999] hover:cursor-pointer bg-transparent`}
+          className={`absolute left-0 top-0 w-16 h-full z-[9999] hover:cursor-pointer`}
+          style={{
+            backgroundColor: 'rgba(255, 0, 0, 0.3)', // 임시 빨간 배경으로 영역 확인
+            border: '2px solid red'
+          }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
           onMouseOut={handleMouseLeave}
           aria-label="앱 사이드바 펼치기"
-        />
+        >
+          <div className="text-white text-xs p-1">HOVER TEST</div>
+        </div>
       )}
 
       {/* 🔥 hover 시 절대 위치 오버레이 */}
       {collapsed && isHovered && (
         <div
           className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl z-[9998]"
+          style={{
+            border: '3px solid green', // 임시 녹색 테두리로 hover 사이드바 표시
+            boxShadow: '0 0 20px green'
+          }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
@@ -599,6 +615,9 @@ export function AppSidebar({
           aria-label="사이드바 네비게이션 (hover)"
           role="navigation"
         >
+          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded">
+            HOVER 활성화됨!
+          </div>
           <SidebarContent isExpanded={true} />
         </div>
       )}
