@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSettings } from '../../app/settings/hooks/useSettings';
 import { Avatar } from '../ui/Avatar';
@@ -22,18 +22,15 @@ import { Tooltip } from '../ui/Tooltip';
 import { Badge } from '../ui/Badge';
 import { Logger } from '../../../shared/logger';
 
-// 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
+// 🔥 기가차드 규칙: 프리컴파일된 스타일 상수 (단순화된 상태)
 const SIDEBAR_STYLES = {
   container: 'relative flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 transition-all duration-300',
-  collapsed: 'w-0 overflow-hidden', // 🔥 완전히 숨김 (아이콘까지 모두)
+  collapsed: 'w-0 overflow-hidden', // 🔥 완전히 숨김 (아이콘 없음)
   expanded: 'w-64',
   hoverContent: 'absolute left-full top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
   logoSection: 'h-auto min-h-[4rem] flex flex-col justify-center border-b border-slate-200 dark:border-slate-700 px-6 py-3',
-  logoCollapsed: 'h-auto min-h-[8rem] flex items-center justify-center border-b border-slate-200 dark:border-slate-700 px-3 py-4',
   logoText: 'text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent',
-  logoIcon: 'w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm',
   profileSection: 'border-b border-slate-200 dark:border-slate-700 p-4',
-  profileCollapsed: 'border-b border-slate-200 dark:border-slate-700 p-3 flex flex-col items-center gap-2',
   profileContent: 'flex items-center gap-3',
   profileInfo: 'flex-1',
   profileName: 'font-medium text-slate-900 dark:text-slate-100 text-sm',
@@ -45,14 +42,54 @@ const SIDEBAR_STYLES = {
   navList: 'space-y-1 px-3',
   navItem: 'flex items-center h-10 px-3 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-150 group cursor-pointer',
   navItemActive: 'flex items-center h-10 px-3 bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-lg font-medium',
-  navItemCollapsed: 'flex items-center justify-center h-10 w-10 mx-auto text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-150 cursor-pointer',
-  navItemActiveCollapsed: 'flex items-center justify-center h-10 w-10 mx-auto bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-lg',
   icon: 'w-5 h-5 group-hover:scale-110 transition-transform duration-150 flex-shrink-0',
-  iconCollapsed: 'w-5 h-5',
   text: 'ml-3 font-medium',
   badge: 'ml-auto',
   bottomSection: 'border-t border-slate-200 dark:border-slate-700 p-3',
 } as const;
+
+// 🔥 사이드바 네비게이션 아이템들 (컴포넌트 외부로 이동, id 추가)
+const SIDEBAR_ITEMS: readonly SidebarItem[] = [
+  {
+    id: 'home',
+    icon: Home,
+    label: '홈',
+    href: '/',
+    ariaLabel: '홈으로 이동'
+  },
+  {
+    id: 'projects',
+    icon: Folder,
+    label: '프로젝트',
+    href: '/projects',
+    ariaLabel: '프로젝트 목록으로 이동'
+  },
+  {
+    id: 'dashboard',
+    icon: BarChart3,
+    label: '대시보드',
+    href: '/dashboard',
+    ariaLabel: '대시보드로 이동'
+  },
+  {
+    id: 'ai',
+    icon: Sparkles,
+    label: 'AI 어시스턴트',
+    href: '/ai',
+    badge: 3,
+    ariaLabel: 'AI 어시스턴트로 이동'
+  },
+  {
+    id: 'settings',
+    icon: Settings,
+    label: '설정',
+    href: '/settings',
+    ariaLabel: '설정으로 이동'
+  },
+] as const;
+
+// 🔥 상수들
+const DEFAULT_AVATAR = '/static/avatar-default.png';
 
 // 🔥 기가차드 규칙: 명시적 타입 정의
 interface SidebarItem {
@@ -71,46 +108,6 @@ export interface AppSidebarProps {
   readonly onToggleCollapse?: () => void;
 }
 
-// 🔥 기가차드 규칙: 상수 분리
-const SIDEBAR_ITEMS: readonly SidebarItem[] = [
-  {
-    id: 'dashboard',
-    label: '대시보드',
-    icon: Home,
-    href: '/',
-    ariaLabel: '대시보드로 이동'
-  },
-  {
-    id: 'projects',
-    label: '프로젝트',
-    icon: Folder,
-    href: '/projects',
-    ariaLabel: '프로젝트 관리로 이동'
-  },
-  {
-    id: 'analytics',
-    label: '통계',
-    icon: BarChart3,
-    href: '/analytics',
-    ariaLabel: '분석 및 통계로 이동'
-  },
-  {
-    id: 'ai',
-    label: 'Loop AI',
-    icon: Sparkles,
-    href: '/ai',
-    badge: 2,
-    ariaLabel: 'AI 도구로 이동'
-  },
-  {
-    id: 'settings',
-    label: '설정',
-    icon: Settings,
-    href: '/settings',
-    ariaLabel: '설정으로 이동'
-  },
-] as const;
-
 export function AppSidebar({
   activeRoute = '/',
   onNavigate,
@@ -118,13 +115,22 @@ export function AppSidebar({
   onToggleCollapse
 }: AppSidebarProps): React.ReactElement {
 
+  // 🔥 SSR 안전한 경로 감지 (클라이언트에서만 useRouter 사용)
+  const [currentPath, setCurrentPath] = useState<string>('/');
+
   const authCtx = useAuth() as any;
   const { auth: googleUserInfo, loadAuthStatus, loaded: authLoaded } = authCtx;
 
   // settings hook for account-local profile (displayName, avatar)
   const { settings: loadedSettings, loading: settingsLoading, setSettings, updateSetting } = useSettings();
 
+  // 🔥 최적화된 상태 관리 (중복 제거)
   const [internalCollapsed, setInternalCollapsed] = useState<boolean>(false);
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
+  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClient, setIsClient] = useState<boolean>(false);
+
   const isControlled = controlledCollapsed !== undefined;
 
   // 🔥 settings에서 collapse 상태 가져오기
@@ -132,14 +138,11 @@ export function AppSidebar({
 
   const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
 
-  // avatar src state to handle onError fallback and controlled updates
-  const defaultAvatar = '/static/avatar-default.png';
-  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
-
-  // Use consistent initial state to prevent layout shift
-  const [mounted, setMounted] = useState<boolean>(false);
-  const [isOnline, setIsOnline] = useState<boolean>(true); // Default to online to prevent flash
-  const [isHovered, setIsHovered] = useState(false);
+  // 🔥 경로별 hover 영역 크기 설정 (SSR 안전)
+  const hoverAreaClass = useMemo(() => {
+    const isProjectPage = currentPath.startsWith('/projects/');
+    return isProjectPage ? 'w-16' : 'w-[100px]'; // 프로젝트 페이지: 64px, 다른 페이지: 100px
+  }, [currentPath]);
 
   // Prefer account settings when not authenticated via Google. If Google auth present, use google profile.
   const accountProfile = loadedSettings?.account;
@@ -161,6 +164,21 @@ export function AppSidebar({
           userPicture: accountProfile.avatar,
         }
         : null;
+
+  // 🔥 클라이언트에서만 경로 감지 (SSR 안전)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCurrentPath(window.location.pathname);
+      
+      // 경로 변경 감지 (popstate 이벤트)
+      const handleRouteChange = () => {
+        setCurrentPath(window.location.pathname);
+      };
+      
+      window.addEventListener('popstate', handleRouteChange);
+      return () => window.removeEventListener('popstate', handleRouteChange);
+    }
+  }, []);
 
   // update avatarSrc when authLoaded, googleUserInfo, or account settings change
   useEffect(() => {
@@ -330,12 +348,12 @@ export function AppSidebar({
         setIsOnline(navigator.onLine);
       }
     }
-    setMounted(true);
+    setIsClient(true);
   }, []);
 
   // Online/offline event listeners
   useEffect(() => {
-    if (!mounted) return;
+    if (!isClient) return;
 
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -347,7 +365,7 @@ export function AppSidebar({
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
-  }, [mounted]);
+  }, [isClient]);
 
   // no extra sync needed - AuthContext bootstraps initial state from server
 
@@ -368,31 +386,30 @@ export function AppSidebar({
     Logger.info('SIDEBAR', `Sidebar ${newCollapsed ? 'collapsed' : 'expanded'} permanently`);
   };
 
-  const handleMouseEnter = () => {
-    // hover는 collapsed 상태에서만 동작
+  // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용)
+  const handleMouseEnter = useCallback(() => {
     if (collapsed) {
       setIsHovered(true);
     }
-  };
+  }, [collapsed]);
 
-  const handleMouseLeave = () => {
-    // hover는 collapsed 상태에서만 동작  
+  const handleMouseLeave = useCallback(() => {
     if (collapsed) {
       setIsHovered(false);
     }
-  };
+  }, [collapsed]);
 
-  const handleNavigate = (item: SidebarItem): void => {
+  const handleNavigate = useCallback((item: SidebarItem): void => {
     Logger.info('SIDEBAR', `Navigation to ${item.label}`, { href: item.href });
     onNavigate?.(item.href);
-  };
+  }, [onNavigate]);
 
-  const handleKeyDown = (event: React.KeyboardEvent, item: SidebarItem): void => {
+  const handleKeyDown = useCallback((event: React.KeyboardEvent, item: SidebarItem): void => {
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       handleNavigate(item);
     }
-  };
+  }, [handleNavigate]);
 
   const renderNavItem = (item: SidebarItem, isExpanded: boolean): React.ReactElement => {
     const isActive = activeRoute === item.href;
@@ -403,7 +420,7 @@ export function AppSidebar({
         className={
           isExpanded
             ? (isActive ? SIDEBAR_STYLES.navItemActive : SIDEBAR_STYLES.navItem)
-            : (isActive ? SIDEBAR_STYLES.navItemActiveCollapsed : SIDEBAR_STYLES.navItemCollapsed)
+            : (isActive ? SIDEBAR_STYLES.navItemActive : SIDEBAR_STYLES.navItem)
         }
         role="button"
         tabIndex={0}
@@ -412,7 +429,7 @@ export function AppSidebar({
         aria-label={item.ariaLabel || item.label}
         aria-current={isActive ? 'page' : undefined}
       >
-        <Icon className={isExpanded ? SIDEBAR_STYLES.icon : SIDEBAR_STYLES.iconCollapsed} />
+        <Icon className={SIDEBAR_STYLES.icon} />
         {isExpanded && (
           <>
             <span className={SIDEBAR_STYLES.text}>{item.label}</span>
@@ -444,7 +461,7 @@ export function AppSidebar({
   const SidebarContent = ({ isExpanded }: { isExpanded: boolean }) => (
     <div className={`flex flex-col h-full ${isExpanded ? 'w-64' : 'w-16'}`}>
       {/* 로고 */}
-      <div className={isExpanded ? SIDEBAR_STYLES.logoSection : SIDEBAR_STYLES.logoCollapsed}>
+      <div className={SIDEBAR_STYLES.logoSection}>
         {isExpanded ? (
           <div className="space-y-3">
             <div className="flex items-center justify-between w-full">
@@ -507,7 +524,7 @@ export function AppSidebar({
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3 py-4">
-            <div className={SIDEBAR_STYLES.logoIcon}>L</div>
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">L</div>
 
             {/* 축소 시 사용자 프로필 - Google 계정 정보 표시 */}
             <div
@@ -560,10 +577,10 @@ export function AppSidebar({
 
   return (
     <div className="relative">
-      {/* 🔥 hover 감지 영역 - collapsed 상태에서만 표시 (확장된 영역) */}
+      {/* 🔥 hover 감지 영역 - 경로별 동적 크기 */}
       {collapsed && (
         <div
-          className="absolute left-0 top-0 w-16 h-full z-50 hover:cursor-pointer"
+          className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-50 hover:cursor-pointer`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           aria-label="앱 사이드바 펼치기"

@@ -339,8 +339,15 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container className="relative overflow-hidden">
-            {/* 🔥 tabBar 영역 항상 예약 + 조건부 ProjectHeader 표시 (축소된 높이) */}
+            {/* 🔥 tabBar 영역 항상 예약 + 조건부 ProjectHeader 표시 (확장된 hover 영역) */}
             <div className="h-14 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                {/* 🔥 확장된 hover 감지 영역 - 상단 추가 */}
+                <div
+                    className="absolute -top-6 left-0 right-0 h-6 z-10"
+                    onMouseEnter={() => setTabBarHovered(true)}
+                    onMouseLeave={() => setTabBarHovered(false)}
+                />
+
                 {!isSidebarCollapsed ? (
                     <ProjectEditorLayout.Header>
                         <ProjectHeader
@@ -410,9 +417,12 @@ export const ProjectEditor = memo(function ProjectEditor({
 
                         </div>
 
-                        {/* hover 시 ProjectHeader 오버레이 - 슬라이드 다운 애니메이션 */}
+                        {/* hover 시 ProjectHeader 오버레이 - 부드러운 슬라이드 다운 */}
                         {tabBarHovered && (
-                            <div className="absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transform transition-all duration-300 animate-in slide-in-from-top-2">
+                            <div className={`absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 ${tabBarHovered
+                                    ? 'opacity-100 transform translate-y-0'
+                                    : 'opacity-0 transform -translate-y-2'
+                                }`}>
                                 <ProjectEditorLayout.Header>
                                     <ProjectHeader
                                         title={projectData?.title || '프로젝트'}
