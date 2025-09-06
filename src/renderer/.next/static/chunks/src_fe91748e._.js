@@ -657,14 +657,15 @@ function useSettings() {
             sessionTimeout: 30
         },
         ui: {
-            windowWidth: 1400,
-            windowHeight: 900,
+            windowWidth: 1200,
+            windowHeight: 800,
             sidebarCollapsed: false,
             showLineNumbers: true,
             showWordCount: true,
             // 🔥 Zen Browser 스타일 UI 컨트롤 기본값
             appSidebarCollapsed: false,
             zenMode: false,
+            focusMode: false,
             hideToolbars: false,
             minimalistMode: false,
             compactMode: false
@@ -1565,7 +1566,7 @@ const SIDEBAR_STYLES = {
     container: 'relative flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 transition-all duration-300',
     collapsed: 'w-0 overflow-hidden',
     expanded: 'w-64',
-    hoverContent: 'absolute left-full top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
+    hoverContent: 'absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
     logoSection: 'h-auto min-h-[4rem] flex flex-col justify-center border-b border-slate-200 dark:border-slate-700 px-6 py-3',
     logoText: 'text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent',
     profileSection: 'border-b border-slate-200 dark:border-slate-700 p-4',
@@ -1644,11 +1645,11 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
     // 🔥 settings에서 collapse 상태 가져오기
     const settingsCollapsed = loadedSettings?.ui?.appSidebarCollapsed ?? false;
     const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
-    // 🔥 경로별 hover 영역 크기 설정 (SSR 안전)
+    // 🔥 경로별 hover 영역 크기 설정 (N 지점까지 확장)
     const hoverAreaClass = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "AppSidebar.useMemo[hoverAreaClass]": ()=>{
             const isProjectPage = currentPath.startsWith('/projects/');
-            return isProjectPage ? 'w-16' : 'w-[100px]'; // 프로젝트 페이지: 64px, 다른 페이지: 100px
+            return isProjectPage ? 'w-16' : 'w-[150px]'; // 프로젝트 페이지: 64px, 다른 페이지: 150px (N 지점까지)
         }
     }["AppSidebar.useMemo[hoverAreaClass]"], [
         currentPath
@@ -2276,7 +2277,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
             columnNumber: 5
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "relative",
+        className: "relative h-full",
         children: [
             collapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: `absolute left-0 top-0 ${hoverAreaClass} h-full z-50 hover:cursor-pointer`,
@@ -2289,21 +2290,21 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
-                className: `${SIDEBAR_STYLES.container} ${collapsed && !isHovered ? SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded}`,
+                className: `${SIDEBAR_STYLES.container} ${collapsed ? isHovered ? `${SIDEBAR_STYLES.expanded} ${SIDEBAR_STYLES.hoverContent}` : SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded}`,
                 onMouseEnter: handleMouseEnter,
                 onMouseLeave: handleMouseLeave,
                 "aria-label": "사이드바 네비게이션",
                 role: "navigation",
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContent, {
-                    isExpanded: !collapsed || isHovered
+                children: (!collapsed || isHovered) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContent, {
+                    isExpanded: true
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                    lineNumber: 597,
-                    columnNumber: 9
+                    lineNumber: 602,
+                    columnNumber: 39
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                lineNumber: 590,
+                lineNumber: 591,
                 columnNumber: 7
             }, this)
         ]

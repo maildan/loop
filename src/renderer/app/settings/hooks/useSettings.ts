@@ -59,14 +59,15 @@ export function useSettings(): UseSettingsReturn {
       sessionTimeout: 30,
     },
     ui: {
-      windowWidth: 1400,
-      windowHeight: 900,
+      windowWidth: 1200,
+      windowHeight: 800,
       sidebarCollapsed: false,
       showLineNumbers: true,
       showWordCount: true,
       // 🔥 Zen Browser 스타일 UI 컨트롤 기본값
       appSidebarCollapsed: false,
       zenMode: false,
+      focusMode: false, // 🔥 focusMode 기본값 추가
       hideToolbars: false,
       minimalistMode: false,
       compactMode: false,

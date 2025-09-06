@@ -27,7 +27,7 @@ const SIDEBAR_STYLES = {
   container: 'relative flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 transition-all duration-300',
   collapsed: 'w-0 overflow-hidden', // 🔥 완전히 숨김 (아이콘 없음)
   expanded: 'w-64',
-  hoverContent: 'absolute left-full top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
+  hoverContent: 'absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
   logoSection: 'h-auto min-h-[4rem] flex flex-col justify-center border-b border-slate-200 dark:border-slate-700 px-6 py-3',
   logoText: 'text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent',
   profileSection: 'border-b border-slate-200 dark:border-slate-700 p-4',
@@ -138,10 +138,10 @@ export function AppSidebar({
 
   const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
 
-  // 🔥 경로별 hover 영역 크기 설정 (SSR 안전)
+  // 🔥 경로별 hover 영역 크기 설정 (N 지점까지 확장)
   const hoverAreaClass = useMemo(() => {
     const isProjectPage = currentPath.startsWith('/projects/');
-    return isProjectPage ? 'w-16' : 'w-[100px]'; // 프로젝트 페이지: 64px, 다른 페이지: 100px
+    return isProjectPage ? 'w-16' : 'w-[150px]'; // 프로젝트 페이지: 64px, 다른 페이지: 150px (N 지점까지)
   }, [currentPath]);
 
   // Prefer account settings when not authenticated via Google. If Google auth present, use google profile.
@@ -169,12 +169,12 @@ export function AppSidebar({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       setCurrentPath(window.location.pathname);
-      
+
       // 경로 변경 감지 (popstate 이벤트)
       const handleRouteChange = () => {
         setCurrentPath(window.location.pathname);
       };
-      
+
       window.addEventListener('popstate', handleRouteChange);
       return () => window.removeEventListener('popstate', handleRouteChange);
     }
@@ -576,8 +576,8 @@ export function AppSidebar({
   );
 
   return (
-    <div className="relative">
-      {/* 🔥 hover 감지 영역 - 경로별 동적 크기 */}
+    <div className="relative h-full">
+      {/* 🔥 hover 감지 영역 - N 지점까지 확장된 영역 */}
       {collapsed && (
         <div
           className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-50 hover:cursor-pointer`}
@@ -587,14 +587,19 @@ export function AppSidebar({
         />
       )}
 
+      {/* 🔥 사이드바 컨테이너 (상태에 따라 클래스 변경) */}
       <aside
-        className={`${SIDEBAR_STYLES.container} ${collapsed && !isHovered ? SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded}`}
+        className={`${SIDEBAR_STYLES.container} ${collapsed
+            ? (isHovered ? `${SIDEBAR_STYLES.expanded} ${SIDEBAR_STYLES.hoverContent}` : SIDEBAR_STYLES.collapsed)
+            : SIDEBAR_STYLES.expanded
+          }`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         aria-label="사이드바 네비게이션"
         role="navigation"
       >
-        <SidebarContent isExpanded={!collapsed || isHovered} />
+        {/* 🔥 isHovered 또는 !collapsed일 때만 내용 표시 */}
+        {(!collapsed || isHovered) && <SidebarContent isExpanded={true} />}
       </aside>
     </div>
   );

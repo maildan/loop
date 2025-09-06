@@ -36,6 +36,7 @@ export interface SettingsData {
     // 🔥 Zen Browser 스타일 UI 컨트롤
     appSidebarCollapsed: boolean;
     zenMode: boolean;
+    focusMode: boolean; // 🔥 focusMode 추가
     hideToolbars: boolean;
     minimalistMode: boolean;
     compactMode: boolean;
