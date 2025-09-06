@@ -374,16 +374,22 @@ export function AppSidebar({
 
   // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용)
   const handleMouseEnter = useCallback(() => {
+    console.log('🔥 HOVER ENTER - collapsed:', collapsed, 'isHovered:', isHovered);
     if (collapsed) {
       setIsHovered(true);
+      console.log('🔥 HOVER ENTER - setIsHovered(true) called');
     }
   }, [collapsed]);
 
   const handleMouseLeave = useCallback(() => {
+    console.log('🔥 HOVER LEAVE - collapsed:', collapsed, 'isHovered:', isHovered);
     if (collapsed) {
       setIsHovered(false);
+      console.log('🔥 HOVER LEAVE - setIsHovered(false) called');
     }
-  }, [collapsed]); const handleNavigate = useCallback((item: SidebarItem): void => {
+  }, [collapsed]);
+
+  const handleNavigate = useCallback((item: SidebarItem): void => {
     Logger.info('SIDEBAR', `Navigation to ${item.label}`, { href: item.href });
 
     // 🔥 직접 Next.js router 사용 (onNavigate prop에 의존하지 않음)
@@ -569,22 +575,53 @@ export function AppSidebar({
 
   return (
     <div className="relative h-full">
+      {/* 🔥 임시 디버깅 표시 */}
+      <div className="fixed top-2 left-2 bg-black text-white p-2 text-xs z-[10000] rounded">
+        <div>Collapsed: {String(collapsed)} | Hovered: {String(isHovered)} | Area: {hoverAreaClass}</div>
+        <button
+          className="bg-blue-500 px-2 py-1 rounded mt-1"
+          onClick={() => {
+            console.log('🔥 FORCE HOVER TOGGLE');
+            setIsHovered(!isHovered);
+          }}
+        >
+          Force Toggle Hover
+        </button>
+      </div>
+
       {/* 🔥 hover 감지 영역 */}
       {collapsed && (
         <div
-          className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-[9999] hover:cursor-pointer bg-transparent`}
+          className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-[9999] hover:cursor-pointer`}
+          style={{
+            backgroundColor: 'rgba(255, 0, 0, 0.5)', // 빨간색으로 영역 표시
+            border: '2px solid red'
+          }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
           onMouseOut={handleMouseLeave}
+          onMouseMove={(e) => {
+            console.log('🔥 HOVER AREA MOUSE MOVE', { x: e.clientX, y: e.clientY, collapsed, isHovered });
+          }}
           aria-label="앱 사이드바 펼치기"
-        />
+          onClick={() => {
+            console.log('🔥 HOVER AREA CLICKED - forcing isHovered true');
+            setIsHovered(true);
+          }}
+        >
+          <div className="text-white text-xs p-1 writing-mode-vertical">HOVER</div>
+        </div>
       )}
 
       {/* 🔥 hover 시 절대 위치 오버레이 */}
       {collapsed && isHovered && (
         <div
           className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl z-[9998]"
+          style={{
+            border: '3px solid green', // 녹색 테두리로 hover 사이드바 표시
+            boxShadow: '0 0 20px green'
+          }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
@@ -592,6 +629,9 @@ export function AppSidebar({
           aria-label="사이드바 네비게이션 (hover)"
           role="navigation"
         >
+          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded">
+            HOVER SIDEBAR ACTIVE
+          </div>
           <SidebarContent isExpanded={true} />
         </div>
       )}
