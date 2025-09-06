@@ -372,9 +372,10 @@ export function AppSidebar({
     Logger.info('SIDEBAR', `Sidebar ${newCollapsed ? 'collapsed' : 'expanded'} permanently`);
   };
 
-  // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용) + 진단용 로그
+  // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용) + 진단용 로그 + body 클래스 조작
   const handleMouseEnter = useCallback(() => {
     console.log('🔥 HOVER ENTER - collapsed:', collapsed, 'isHovered:', isHovered);
+    document.body.classList.add('hover-zone-active');
     if (collapsed) {
       setIsHovered(true);
       console.log('🔥 HOVER ENTER - setIsHovered(true) 호출됨');
@@ -383,6 +384,7 @@ export function AppSidebar({
 
   const handleMouseLeave = useCallback(() => {
     console.log('🔥 HOVER LEAVE - collapsed:', collapsed, 'isHovered:', isHovered);
+    document.body.classList.remove('hover-zone-active');
     if (collapsed) {
       setIsHovered(false);
       console.log('🔥 HOVER LEAVE - setIsHovered(false) 호출됨');
@@ -574,39 +576,51 @@ export function AppSidebar({
   );
 
   return (
-    <div className="relative h-full">
+    <div
+      className="relative h-full"
+      style={{ zIndex: 999990 }} // 부모 컨테이너도 높은 z-index 적용
+    >
       {/* 🔥 디버깅 상태 패널 */}
-      <div className="fixed top-2 right-2 bg-black text-white p-2 text-xs z-[10000] rounded">
+      <div
+        className="fixed top-2 right-2 bg-black text-white p-2 text-xs rounded"
+        style={{ zIndex: 1000000 }} // 가장 높은 z-index
+      >
         <div>Collapsed: <span className="text-yellow-300">{String(collapsed)}</span></div>
         <div>IsHovered: <span className="text-green-300">{String(isHovered)}</span></div>
         <div>Pathname: <span className="text-blue-300">{pathname}</span></div>
       </div>
 
-      {/* 🔥 hover 감지 영역 - 완전 투명 + 임시 너비 테스트 */}
+      {/* 🔥 hover 감지 영역 - CSS 클래스 + 이벤트 캡처 */}
       {collapsed && (
         <div
-          className={`absolute left-0 top-0 w-16 h-full z-[9999] hover:cursor-pointer`}
-          style={{
-            backgroundColor: 'rgba(255, 0, 0, 0.3)', // 임시 빨간 배경으로 영역 확인
-            border: '2px solid red'
-          }}
+          className="app-sidebar-hover-zone"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
           onMouseOut={handleMouseLeave}
+          onMouseMove={(e) => {
+            console.log('🔥 MOUSE MOVE DETECTED');
+            e.stopPropagation();
+          }}
+          onClick={(e) => {
+            console.log('🔥 CLICK DETECTED - 강제 hover 활성화');
+            e.stopPropagation();
+            setIsHovered(true);
+          }}
           aria-label="앱 사이드바 펼치기"
         >
-          <div className="text-white text-xs p-1">HOVER TEST</div>
+          <div className="text-white text-xs p-1 font-bold">CSS 최강!</div>
         </div>
       )}
 
-      {/* 🔥 hover 시 절대 위치 오버레이 */}
+      {/* 🔥 hover 시 절대 위치 오버레이 - position fixed + 높은 z-index */}
       {collapsed && isHovered && (
         <div
-          className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl z-[9998]"
+          className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl"
           style={{
             border: '3px solid green', // 임시 녹색 테두리로 hover 사이드바 표시
-            boxShadow: '0 0 20px green'
+            boxShadow: '0 0 20px green',
+            zIndex: 999998 // hover 영역보다 조금 낮게
           }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}

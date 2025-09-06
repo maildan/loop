@@ -3,6 +3,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 🔥 AppSidebar Hover 영역 최강 스타일 - 다른 모든 요소보다 위에 */
+.app-sidebar-hover-zone {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 64px !important;
+  height: 100vh !important;
+  z-index: 2147483647 !important;
+  pointer-events: auto !important;
+  background-color: rgba(255, 0, 0, 0.8) !important;
+  border: 3px solid red !important;
+  cursor: pointer !important;
+}
+
+/* 🔥 hover 영역이 활성화될 때 다른 요소들의 pointer-events 비활성화 */
+body.hover-zone-active * {
+  pointer-events: none !important;
+}
+
+body.hover-zone-active .app-sidebar-hover-zone {
+  pointer-events: auto !important;
+}
+
 /* 🔥 폰트 로딩은 JavaScript로 처리됩니다 - globals.css에서 @font-face 제거 */
 
 /* 🔥 깜빡임 방지: 테마 전환이 즉시 적용되도록 설정 */
