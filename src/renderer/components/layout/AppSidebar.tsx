@@ -135,10 +135,13 @@ export function AppSidebar({
 
   const isControlled = controlledCollapsed !== undefined;
 
-  // 🔥 settings에서 collapse 상태 가져오기
+  // 🔥 settings에서 collapse 상태 가져오기 + 강제 테스트
   const settingsCollapsed = loadedSettings?.ui?.appSidebarCollapsed ?? false;
 
-  const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
+  // 🔥 디버깅: 강제로 collapsed를 true로 설정해서 테스트
+  const collapsed = process.env.NODE_ENV === 'development'
+    ? true  // 개발 모드에서는 항상 collapsed로 테스트
+    : (isControlled ? controlledCollapsed : settingsCollapsed);
 
   // 🔥 hover 영역 크기 설정 (Next.js 문양까지만)
   const hoverAreaClass = useMemo(() => {
@@ -373,22 +376,36 @@ export function AppSidebar({
     Logger.info('SIDEBAR', `Sidebar ${newCollapsed ? 'collapsed' : 'expanded'} permanently`);
   };
 
-  // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용)
+  // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용) + 강화된 디버깅
   const handleMouseEnter = useCallback(() => {
-    console.log('🔥 HOVER: MouseEnter triggered', { collapsed });
+    console.log('🔥 HOVER: MouseEnter triggered', { collapsed, isHovered, timestamp: Date.now() });
     if (collapsed) {
       console.log('🔥 HOVER: Setting isHovered to true');
       setIsHovered(true);
+
+      // 🔥 추가 디버깅: 상태 변경 확인
+      setTimeout(() => {
+        console.log('🔥 HOVER: isHovered state after 100ms:', isHovered);
+      }, 100);
+    } else {
+      console.log('🔥 HOVER: Not setting isHovered because collapsed is false');
     }
-  }, [collapsed]);
+  }, [collapsed, isHovered]);
 
   const handleMouseLeave = useCallback(() => {
-    console.log('🔥 HOVER: MouseLeave triggered', { collapsed });
+    console.log('🔥 HOVER: MouseLeave triggered', { collapsed, isHovered, timestamp: Date.now() });
     if (collapsed) {
       console.log('🔥 HOVER: Setting isHovered to false');
       setIsHovered(false);
+
+      // 🔥 추가 디버깅: 상태 변경 확인
+      setTimeout(() => {
+        console.log('🔥 HOVER: isHovered state after 100ms:', isHovered);
+      }, 100);
+    } else {
+      console.log('🔥 HOVER: Not setting isHovered because collapsed is false');
     }
-  }, [collapsed]);
+  }, [collapsed, isHovered]);
 
   const handleNavigate = useCallback((item: SidebarItem): void => {
     Logger.info('SIDEBAR', `Navigation to ${item.label}`, { href: item.href });
@@ -578,30 +595,55 @@ export function AppSidebar({
     <div className="relative h-full">
       {/* 🔥 디버깅용 상태 표시 */}
       {process.env.NODE_ENV === 'development' && (
-        <div className="fixed top-4 right-4 bg-blue-500 text-white px-3 py-2 text-sm rounded-lg shadow-lg z-[10000]">
-          <div>Collapsed: {String(collapsed)}</div>
-          <div>Hovered: {String(isHovered)}</div>
+        <div className="fixed top-4 right-4 bg-blue-500 text-white px-3 py-2 text-xs rounded-lg shadow-lg z-[10000] font-mono">
+          <div><strong>🔥 DEBUG INFO:</strong></div>
+          <div>Collapsed: <span className="bg-yellow-400 text-black px-1">{String(collapsed)}</span></div>
+          <div>Hovered: <span className="bg-green-400 text-black px-1">{String(isHovered)}</span></div>
+          <div>SettingsCollapsed: {String(settingsCollapsed)}</div>
+          <div>ControlledCollapsed: {String(controlledCollapsed)}</div>
+          <div>IsControlled: {String(isControlled)}</div>
           <div>Pathname: {pathname}</div>
-          <div>HoverClass: {hoverAreaClass}</div>
+          <div>HoverClass: <span className="bg-purple-400 text-black px-1">{hoverAreaClass}</span></div>
+          <div>Client: {String(isClient)}</div>
         </div>
       )}
       {/* 🔥 hover 감지 영역 - Next.js 문양까지만 */}
       {collapsed && (
         <div
-          className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-[9999] hover:cursor-pointer bg-transparent`}
+          className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-[9999] hover:cursor-pointer bg-transparent transition-all duration-300`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           aria-label="앱 사이드바 펼치기"
           style={{
-            // 🔥 디버깅용: 개발 중에만 보이는 진한 빨간색 배경
-            backgroundColor: process.env.NODE_ENV === 'development' ? 'rgba(255, 0, 0, 0.3)' : 'transparent',
-            border: process.env.NODE_ENV === 'development' ? '2px solid red' : 'none'
+            // 🔥 디버깅용: 개발 중에만 보이는 하얀색 배경 + 강화된 표시
+            backgroundColor: process.env.NODE_ENV === 'development' ? 'rgba(255, 255, 255, 0.9)' : 'transparent',
+            border: process.env.NODE_ENV === 'development' ? '3px dashed #3b82f6' : 'none',
+            boxShadow: process.env.NODE_ENV === 'development' ? '0 0 10px rgba(59, 130, 246, 0.5)' : 'none'
           }}
-          onMouseMove={() => {
-            // 🔥 디버깅: 마우스 이벤트 확인
-            console.log('🔥 HOVER AREA: Mouse move detected', { collapsed, isHovered });
+          onMouseMove={(e) => {
+            // 🔥 디버깅: 마우스 이벤트 확인 + 위치 추적
+            console.log('🔥 HOVER AREA: Mouse move detected', {
+              collapsed,
+              isHovered,
+              mouseX: e.clientX,
+              mouseY: e.clientY,
+              target: e.target
+            });
+
+            // 🔥 강제 hover 상태 설정 (마우스가 영역에 있을 때)
+            if (collapsed && !isHovered) {
+              console.log('🔥 HOVER AREA: Forcing isHovered to true via mouse move');
+              setIsHovered(true);
+            }
           }}
-        />
+        >
+          {/* 🔥 디버깅용: hover 영역 표시 텍스트 */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-blue-600 font-bold text-xs writing-mode-vertical rotate-90 whitespace-nowrap">
+              HOVER ZONE
+            </div>
+          )}
+        </div>
       )}
 
       {/* 🔥 완전 숨김 상태 - 아무것도 렌더링하지 않음 */}
@@ -610,23 +652,30 @@ export function AppSidebar({
       {/* 🔥 hover 시 절대 위치 오버레이 */}
       {collapsed && isHovered && (
         <div
-          className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl z-[9998]"
+          className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl z-[9998] transition-all duration-300 transform animate-in slide-in-from-left"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           aria-label="사이드바 네비게이션 (hover)"
           role="navigation"
           style={{
-            // 🔥 디버깅용: hover 사이드바 확인
+            // 🔥 디버깅용: hover 사이드바 확인 + 강화된 시각 효과
             boxShadow: process.env.NODE_ENV === 'development'
-              ? '0 0 20px rgba(0, 255, 0, 0.5), 0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-              : '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+              ? '0 0 30px rgba(0, 255, 0, 0.8), 0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+              : '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+            border: process.env.NODE_ENV === 'development' ? '3px solid #10b981' : undefined
           }}
         >
           <SidebarContent isExpanded={true} />
           {/* 🔥 디버깅 표시 */}
           {process.env.NODE_ENV === 'development' && (
-            <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded">
-              HOVER ACTIVE
+            <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded animate-pulse">
+              🎉 HOVER ACTIVE! 🎉
+            </div>
+          )}
+          {/* 🔥 추가 디버깅 정보 */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="absolute bottom-2 right-2 bg-blue-500 text-white px-2 py-1 text-xs rounded">
+              Time: {new Date().toLocaleTimeString()}
             </div>
           )}
         </div>
