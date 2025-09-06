@@ -67,11 +67,11 @@ const SIDEBAR_ITEMS: readonly SidebarItem[] = [
     ariaLabel: '프로젝트 목록으로 이동'
   },
   {
-    id: 'dashboard',
+    id: 'analytics',
     icon: BarChart3,
-    label: '대시보드',
-    href: '/dashboard',
-    ariaLabel: '대시보드로 이동'
+    label: '분석',
+    href: '/',
+    ariaLabel: '분석으로 이동'
   },
   {
     id: 'ai',
