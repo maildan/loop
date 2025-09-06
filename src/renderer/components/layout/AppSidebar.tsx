@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSettings } from '../../app/settings/hooks/useSettings';
 import { Avatar } from '../ui/Avatar';
@@ -115,8 +116,9 @@ export function AppSidebar({
   onToggleCollapse
 }: AppSidebarProps): React.ReactElement {
 
-  // 🔥 SSR 안전한 경로 감지 (클라이언트에서만 useRouter 사용)
-  const [currentPath, setCurrentPath] = useState<string>('/');
+  // 🔥 Next.js 라우터와 경로 정보 사용
+  const router = useRouter();
+  const pathname = usePathname();
 
   const authCtx = useAuth() as any;
   const { auth: googleUserInfo, loadAuthStatus, loaded: authLoaded } = authCtx;
@@ -138,11 +140,11 @@ export function AppSidebar({
 
   const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
 
-  // 🔥 경로별 hover 영역 크기 설정 (대폭 확장)
+  // 🔥 hover 영역 크기 설정 (Next.js 문양까지만)
   const hoverAreaClass = useMemo(() => {
-    const isProjectPage = currentPath.startsWith('/projects/');
-    return isProjectPage ? 'w-16' : 'w-64'; // 프로젝트 페이지: 64px, 다른 페이지: 256px (사이드바 전체 너비)
-  }, [currentPath]);
+    const isProjectPage = pathname.startsWith('/projects/');
+    return isProjectPage ? 'w-8' : 'w-12'; // 프로젝트 페이지: 32px, 다른 페이지: 48px (Next.js 문양까지만)
+  }, [pathname]);
 
   // Prefer account settings when not authenticated via Google. If Google auth present, use google profile.
   const accountProfile = loadedSettings?.account;
@@ -164,21 +166,6 @@ export function AppSidebar({
           userPicture: accountProfile.avatar,
         }
         : null;
-
-  // 🔥 클라이언트에서만 경로 감지 (SSR 안전)
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setCurrentPath(window.location.pathname);
-
-      // 경로 변경 감지 (popstate 이벤트)
-      const handleRouteChange = () => {
-        setCurrentPath(window.location.pathname);
-      };
-
-      window.addEventListener('popstate', handleRouteChange);
-      return () => window.removeEventListener('popstate', handleRouteChange);
-    }
-  }, []);
 
   // update avatarSrc when authLoaded, googleUserInfo, or account settings change
   useEffect(() => {
@@ -388,21 +375,33 @@ export function AppSidebar({
 
   // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용)
   const handleMouseEnter = useCallback(() => {
+    console.log('🔥 HOVER: MouseEnter triggered', { collapsed });
     if (collapsed) {
+      console.log('🔥 HOVER: Setting isHovered to true');
       setIsHovered(true);
     }
   }, [collapsed]);
 
   const handleMouseLeave = useCallback(() => {
+    console.log('🔥 HOVER: MouseLeave triggered', { collapsed });
     if (collapsed) {
+      console.log('🔥 HOVER: Setting isHovered to false');
       setIsHovered(false);
     }
   }, [collapsed]);
 
   const handleNavigate = useCallback((item: SidebarItem): void => {
     Logger.info('SIDEBAR', `Navigation to ${item.label}`, { href: item.href });
-    onNavigate?.(item.href);
-  }, [onNavigate]);
+
+    // 🔥 직접 Next.js router 사용 (onNavigate prop에 의존하지 않음)
+    try {
+      router.push(item.href);
+    } catch (error) {
+      Logger.error('SIDEBAR', 'Navigation failed', { href: item.href, error });
+      // fallback으로 onNavigate prop 사용
+      onNavigate?.(item.href);
+    }
+  }, [router, onNavigate]);
 
   const handleKeyDown = useCallback((event: React.KeyboardEvent, item: SidebarItem): void => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -577,13 +576,31 @@ export function AppSidebar({
 
   return (
     <div className="relative h-full">
-      {/* 🔥 hover 감지 영역 - 사이드바 전체 너비 */}
+      {/* 🔥 디버깅용 상태 표시 */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="fixed top-4 right-4 bg-blue-500 text-white px-3 py-2 text-sm rounded-lg shadow-lg z-[10000]">
+          <div>Collapsed: {String(collapsed)}</div>
+          <div>Hovered: {String(isHovered)}</div>
+          <div>Pathname: {pathname}</div>
+          <div>HoverClass: {hoverAreaClass}</div>
+        </div>
+      )}
+      {/* 🔥 hover 감지 영역 - Next.js 문양까지만 */}
       {collapsed && (
         <div
-          className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-50 hover:cursor-pointer`}
+          className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-[9999] hover:cursor-pointer bg-transparent`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           aria-label="앱 사이드바 펼치기"
+          style={{
+            // 🔥 디버깅용: 개발 중에만 보이는 진한 빨간색 배경
+            backgroundColor: process.env.NODE_ENV === 'development' ? 'rgba(255, 0, 0, 0.3)' : 'transparent',
+            border: process.env.NODE_ENV === 'development' ? '2px solid red' : 'none'
+          }}
+          onMouseMove={() => {
+            // 🔥 디버깅: 마우스 이벤트 확인
+            console.log('🔥 HOVER AREA: Mouse move detected', { collapsed, isHovered });
+          }}
         />
       )}
 
@@ -593,13 +610,25 @@ export function AppSidebar({
       {/* 🔥 hover 시 절대 위치 오버레이 */}
       {collapsed && isHovered && (
         <div
-          className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-lg z-40"
+          className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl z-[9998]"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           aria-label="사이드바 네비게이션 (hover)"
           role="navigation"
+          style={{
+            // 🔥 디버깅용: hover 사이드바 확인
+            boxShadow: process.env.NODE_ENV === 'development'
+              ? '0 0 20px rgba(0, 255, 0, 0.5), 0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+              : '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          }}
         >
           <SidebarContent isExpanded={true} />
+          {/* 🔥 디버깅 표시 */}
+          {process.env.NODE_ENV === 'development' && (
+            <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded">
+              HOVER ACTIVE
+            </div>
+          )}
         </div>
       )}
 
