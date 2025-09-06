@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSettings } from '../../app/settings/hooks/useSettings';
@@ -372,22 +373,20 @@ export function AppSidebar({
     Logger.info('SIDEBAR', `Sidebar ${newCollapsed ? 'collapsed' : 'expanded'} permanently`);
   };
 
-  // 🔥 최적화된 이벤트 핸들러들 (useCallback 사용) + 진단용 로그 + body 클래스 조작
+  // 🔥 Portal을 사용한 정리된 이벤트 핸들러들
   const handleMouseEnter = useCallback(() => {
-    console.log('🔥 HOVER ENTER - collapsed:', collapsed, 'isHovered:', isHovered);
-    document.body.classList.add('hover-zone-active');
+    console.log('🔥 PORTAL HOVER ENTER - collapsed:', collapsed, 'isHovered:', isHovered);
     if (collapsed) {
       setIsHovered(true);
-      console.log('🔥 HOVER ENTER - setIsHovered(true) 호출됨');
+      console.log('🔥 PORTAL HOVER ENTER - setIsHovered(true) 호출됨');
     }
   }, [collapsed]);
 
   const handleMouseLeave = useCallback(() => {
-    console.log('🔥 HOVER LEAVE - collapsed:', collapsed, 'isHovered:', isHovered);
-    document.body.classList.remove('hover-zone-active');
+    console.log('🔥 PORTAL HOVER LEAVE - collapsed:', collapsed, 'isHovered:', isHovered);
     if (collapsed) {
       setIsHovered(false);
-      console.log('🔥 HOVER LEAVE - setIsHovered(false) 호출됨');
+      console.log('🔥 PORTAL HOVER LEAVE - setIsHovered(false) 호출됨');
     }
   }, [collapsed]);
 
@@ -588,52 +587,57 @@ export function AppSidebar({
         <div>Collapsed: <span className="text-yellow-300">{String(collapsed)}</span></div>
         <div>IsHovered: <span className="text-green-300">{String(isHovered)}</span></div>
         <div>Pathname: <span className="text-blue-300">{pathname}</span></div>
+        <div>Portal: <span className="text-red-300">ACTIVE</span></div>
       </div>
 
-      {/* 🔥 hover 감지 영역 - CSS 클래스 + 이벤트 캡처 */}
-      {collapsed && (
+      {/* 🔥 React Portal을 사용한 완전 독립적 hover 영역 */}
+      {collapsed && typeof window !== 'undefined' && createPortal(
         <div
-          className="app-sidebar-hover-zone"
+          className="fixed left-0 top-0 w-16 h-full hover:cursor-pointer"
+          style={{
+            backgroundColor: 'rgba(255, 0, 0, 0.8)',
+            border: '3px solid red',
+            zIndex: 2147483647,
+            pointerEvents: 'auto'
+          }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
           onMouseOut={handleMouseLeave}
-          onMouseMove={(e) => {
-            console.log('🔥 MOUSE MOVE DETECTED');
-            e.stopPropagation();
-          }}
           onClick={(e) => {
-            console.log('🔥 CLICK DETECTED - 강제 hover 활성화');
+            console.log('🔥 PORTAL HOVER AREA CLICKED');
             e.stopPropagation();
             setIsHovered(true);
           }}
           aria-label="앱 사이드바 펼치기"
         >
-          <div className="text-white text-xs p-1 font-bold">CSS 최강!</div>
-        </div>
+          <div className="text-white text-xs p-1 font-bold">PORTAL!</div>
+        </div>,
+        document.body
       )}
 
-      {/* 🔥 hover 시 절대 위치 오버레이 - position fixed + 높은 z-index */}
-      {collapsed && isHovered && (
+      {/* 🔥 hover 시 Portal을 통한 사이드바 렌더링 */}
+      {collapsed && isHovered && typeof window !== 'undefined' && createPortal(
         <div
           className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl"
           style={{
-            border: '3px solid green', // 임시 녹색 테두리로 hover 사이드바 표시
+            border: '3px solid green',
             boxShadow: '0 0 20px green',
-            zIndex: 999998 // hover 영역보다 조금 낮게
+            zIndex: 2147483646
           }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
           onMouseOut={handleMouseLeave}
-          aria-label="사이드바 네비게이션 (hover)"
+          aria-label="사이드바 네비게이션 (Portal)"
           role="navigation"
         >
           <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded">
-            HOVER 활성화됨!
+            PORTAL 활성화!
           </div>
           <SidebarContent isExpanded={true} />
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* 🔥 완전 펼침 상태 - 일반 사이드바 */}

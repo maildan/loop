@@ -3,28 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🔥 AppSidebar Hover 영역 최강 스타일 - 다른 모든 요소보다 위에 */
-.app-sidebar-hover-zone {
-  position: fixed !important;
-  left: 0 !important;
-  top: 0 !important;
-  width: 64px !important;
-  height: 100vh !important;
-  z-index: 2147483647 !important;
-  pointer-events: auto !important;
-  background-color: rgba(255, 0, 0, 0.8) !important;
-  border: 3px solid red !important;
-  cursor: pointer !important;
-}
-
-/* 🔥 hover 영역이 활성화될 때 다른 요소들의 pointer-events 비활성화 */
-body.hover-zone-active * {
-  pointer-events: none !important;
-}
-
-body.hover-zone-active .app-sidebar-hover-zone {
-  pointer-events: auto !important;
-}
+/* 🔥 React Portal을 통해 stacking context 문제 해결됨 - CSS 강제 스타일 제거 */
 
 /* 🔥 폰트 로딩은 JavaScript로 처리됩니다 - globals.css에서 @font-face 제거 */
 
