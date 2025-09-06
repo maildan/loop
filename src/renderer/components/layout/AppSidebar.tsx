@@ -133,6 +133,7 @@ export function AppSidebar({
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [isHovered, setIsHovered] = useState(false);
   const [isClient, setIsClient] = useState<boolean>(false);
+  const [canRenderPortal, setCanRenderPortal] = useState<boolean>(false);
 
   const isControlled = controlledCollapsed !== undefined;
 
@@ -338,6 +339,13 @@ export function AppSidebar({
     setIsClient(true);
   }, []);
 
+  // 🔥 Portal 렌더링을 위한 클라이언트 준비 상태 (Hydration 이후)
+  useEffect(() => {
+    if (isClient) {
+      setCanRenderPortal(true);
+    }
+  }, [isClient]);
+
   // Online/offline event listeners
   useEffect(() => {
     if (!isClient) return;
@@ -375,18 +383,14 @@ export function AppSidebar({
 
   // 🔥 Portal을 사용한 정리된 이벤트 핸들러들
   const handleMouseEnter = useCallback(() => {
-    console.log('🔥 PORTAL HOVER ENTER - collapsed:', collapsed, 'isHovered:', isHovered);
     if (collapsed) {
       setIsHovered(true);
-      console.log('🔥 PORTAL HOVER ENTER - setIsHovered(true) 호출됨');
     }
   }, [collapsed]);
 
   const handleMouseLeave = useCallback(() => {
-    console.log('🔥 PORTAL HOVER LEAVE - collapsed:', collapsed, 'isHovered:', isHovered);
     if (collapsed) {
       setIsHovered(false);
-      console.log('🔥 PORTAL HOVER LEAVE - setIsHovered(false) 호출됨');
     }
   }, [collapsed]);
 
@@ -575,28 +579,12 @@ export function AppSidebar({
   );
 
   return (
-    <div
-      className="relative h-full"
-      style={{ zIndex: 999990 }} // 부모 컨테이너도 높은 z-index 적용
-    >
-      {/* 🔥 디버깅 상태 패널 */}
-      <div
-        className="fixed top-2 right-2 bg-black text-white p-2 text-xs rounded"
-        style={{ zIndex: 1000000 }} // 가장 높은 z-index
-      >
-        <div>Collapsed: <span className="text-yellow-300">{String(collapsed)}</span></div>
-        <div>IsHovered: <span className="text-green-300">{String(isHovered)}</span></div>
-        <div>Pathname: <span className="text-blue-300">{pathname}</span></div>
-        <div>Portal: <span className="text-red-300">ACTIVE</span></div>
-      </div>
-
-      {/* 🔥 React Portal을 사용한 완전 독립적 hover 영역 */}
-      {collapsed && typeof window !== 'undefined' && createPortal(
+    <div className="relative h-full">
+      {/* 🔥 React Portal을 사용한 완전 독립적 hover 영역 - Hydration Safe */}
+      {collapsed && canRenderPortal && createPortal(
         <div
-          className="fixed left-0 top-0 w-16 h-full hover:cursor-pointer"
+          className="fixed left-0 top-0 w-16 h-full hover:cursor-pointer bg-transparent"
           style={{
-            backgroundColor: 'rgba(255, 0, 0, 0.8)',
-            border: '3px solid red',
             zIndex: 2147483647,
             pointerEvents: 'auto'
           }}
@@ -604,26 +592,18 @@ export function AppSidebar({
           onMouseLeave={handleMouseLeave}
           onMouseOver={handleMouseEnter}
           onMouseOut={handleMouseLeave}
-          onClick={(e) => {
-            console.log('🔥 PORTAL HOVER AREA CLICKED');
-            e.stopPropagation();
-            setIsHovered(true);
-          }}
           aria-label="앱 사이드바 펼치기"
-        >
-          <div className="text-white text-xs p-1 font-bold">PORTAL!</div>
-        </div>,
+        />,
         document.body
       )}
 
-      {/* 🔥 hover 시 Portal을 통한 사이드바 렌더링 */}
-      {collapsed && isHovered && typeof window !== 'undefined' && createPortal(
+      {/* 🔥 hover 시 Portal을 통한 애니메이션 사이드바 */}
+      {collapsed && isHovered && canRenderPortal && createPortal(
         <div
-          className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl"
+          className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl transform transition-transform duration-300 ease-out animate-slide-in-left"
           style={{
-            border: '3px solid green',
-            boxShadow: '0 0 20px green',
-            zIndex: 2147483646
+            zIndex: 2147483646,
+            transform: 'translateX(0)'
           }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -632,9 +612,6 @@ export function AppSidebar({
           aria-label="사이드바 네비게이션 (Portal)"
           role="navigation"
         >
-          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 text-xs rounded">
-            PORTAL 활성화!
-          </div>
           <SidebarContent isExpanded={true} />
         </div>,
         document.body

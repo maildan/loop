@@ -3,7 +3,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🔥 React Portal을 통해 stacking context 문제 해결됨 - CSS 강제 스타일 제거 */
+/* 🔥 AppSidebar 슬라이드 애니메이션 */
+@keyframes slide-in-left {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.3s ease-out forwards;
+}
 
 /* 🔥 폰트 로딩은 JavaScript로 처리됩니다 - globals.css에서 @font-face 제거 */
 
