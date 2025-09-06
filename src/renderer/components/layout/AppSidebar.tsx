@@ -138,10 +138,10 @@ export function AppSidebar({
 
   const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
 
-  // 🔥 경로별 hover 영역 크기 설정 (N 지점까지 확장)
+  // 🔥 경로별 hover 영역 크기 설정 (대폭 확장)
   const hoverAreaClass = useMemo(() => {
     const isProjectPage = currentPath.startsWith('/projects/');
-    return isProjectPage ? 'w-16' : 'w-[150px]'; // 프로젝트 페이지: 64px, 다른 페이지: 150px (N 지점까지)
+    return isProjectPage ? 'w-16' : 'w-64'; // 프로젝트 페이지: 64px, 다른 페이지: 256px (사이드바 전체 너비)
   }, [currentPath]);
 
   // Prefer account settings when not authenticated via Google. If Google auth present, use google profile.
@@ -577,7 +577,7 @@ export function AppSidebar({
 
   return (
     <div className="relative h-full">
-      {/* 🔥 hover 감지 영역 - N 지점까지 확장된 영역 */}
+      {/* 🔥 hover 감지 영역 - 사이드바 전체 너비 */}
       {collapsed && (
         <div
           className={`absolute left-0 top-0 ${hoverAreaClass} h-full z-50 hover:cursor-pointer`}
@@ -587,20 +587,32 @@ export function AppSidebar({
         />
       )}
 
-      {/* 🔥 사이드바 컨테이너 (상태에 따라 클래스 변경) */}
-      <aside
-        className={`${SIDEBAR_STYLES.container} ${collapsed
-            ? (isHovered ? `${SIDEBAR_STYLES.expanded} ${SIDEBAR_STYLES.hoverContent}` : SIDEBAR_STYLES.collapsed)
-            : SIDEBAR_STYLES.expanded
-          }`}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        aria-label="사이드바 네비게이션"
-        role="navigation"
-      >
-        {/* 🔥 isHovered 또는 !collapsed일 때만 내용 표시 */}
-        {(!collapsed || isHovered) && <SidebarContent isExpanded={true} />}
-      </aside>
+      {/* 🔥 완전 숨김 상태 - 아무것도 렌더링하지 않음 */}
+      {collapsed && !isHovered && null}
+
+      {/* 🔥 hover 시 절대 위치 오버레이 */}
+      {collapsed && isHovered && (
+        <div
+          className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-lg z-40"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          aria-label="사이드바 네비게이션 (hover)"
+          role="navigation"
+        >
+          <SidebarContent isExpanded={true} />
+        </div>
+      )}
+
+      {/* 🔥 완전 펼침 상태 - 일반 사이드바 */}
+      {!collapsed && (
+        <aside
+          className={`${SIDEBAR_STYLES.container} ${SIDEBAR_STYLES.expanded}`}
+          aria-label="사이드바 네비게이션"
+          role="navigation"
+        >
+          <SidebarContent isExpanded={true} />
+        </aside>
+      )}
     </div>
   );
 }

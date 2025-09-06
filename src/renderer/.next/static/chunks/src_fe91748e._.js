@@ -1645,11 +1645,11 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
     // 🔥 settings에서 collapse 상태 가져오기
     const settingsCollapsed = loadedSettings?.ui?.appSidebarCollapsed ?? false;
     const collapsed = isControlled ? controlledCollapsed : settingsCollapsed;
-    // 🔥 경로별 hover 영역 크기 설정 (N 지점까지 확장)
+    // 🔥 경로별 hover 영역 크기 설정 (대폭 확장)
     const hoverAreaClass = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "AppSidebar.useMemo[hoverAreaClass]": ()=>{
             const isProjectPage = currentPath.startsWith('/projects/');
-            return isProjectPage ? 'w-16' : 'w-[150px]'; // 프로젝트 페이지: 64px, 다른 페이지: 150px (N 지점까지)
+            return isProjectPage ? 'w-16' : 'w-64'; // 프로젝트 페이지: 64px, 다른 페이지: 256px (사이드바 전체 너비)
         }
     }["AppSidebar.useMemo[hoverAreaClass]"], [
         currentPath
@@ -2289,23 +2289,40 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                 lineNumber: 582,
                 columnNumber: 9
             }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
-                className: `${SIDEBAR_STYLES.container} ${collapsed ? isHovered ? `${SIDEBAR_STYLES.expanded} ${SIDEBAR_STYLES.hoverContent}` : SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded}`,
+            collapsed && !isHovered && null,
+            collapsed && isHovered && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-lg z-40",
                 onMouseEnter: handleMouseEnter,
                 onMouseLeave: handleMouseLeave,
-                "aria-label": "사이드바 네비게이션",
+                "aria-label": "사이드바 네비게이션 (hover)",
                 role: "navigation",
-                children: (!collapsed || isHovered) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContent, {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContent, {
                     isExpanded: true
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
                     lineNumber: 602,
-                    columnNumber: 39
+                    columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                lineNumber: 591,
-                columnNumber: 7
+                lineNumber: 595,
+                columnNumber: 9
+            }, this),
+            !collapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
+                className: `${SIDEBAR_STYLES.container} ${SIDEBAR_STYLES.expanded}`,
+                "aria-label": "사이드바 네비게이션",
+                role: "navigation",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(SidebarContent, {
+                    isExpanded: true
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
+                    lineNumber: 613,
+                    columnNumber: 11
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
+                lineNumber: 608,
+                columnNumber: 9
             }, this)
         ]
     }, void 0, true, {
