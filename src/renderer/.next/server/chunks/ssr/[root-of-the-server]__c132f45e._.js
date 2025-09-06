@@ -1707,7 +1707,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                     className: isExpanded ? SIDEBAR_STYLES.icon : SIDEBAR_STYLES.iconCollapsed
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                    lineNumber: 410,
+                    lineNumber: 415,
                     columnNumber: 9
                 }, this),
                 isExpanded && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1717,7 +1717,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                             children: item.label
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                            lineNumber: 413,
+                            lineNumber: 418,
                             columnNumber: 13
                         }, this),
                         item.badge && item.badge > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
@@ -1727,7 +1727,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                             children: item.badge > 9 ? '9+' : item.badge
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                            lineNumber: 415,
+                            lineNumber: 420,
                             columnNumber: 15
                         }, this)
                     ]
@@ -1735,7 +1735,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-            lineNumber: 397,
+            lineNumber: 402,
             columnNumber: 7
         }, this);
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1746,17 +1746,17 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                     children: navItemContent
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                    lineNumber: 430,
+                    lineNumber: 435,
                     columnNumber: 13
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                lineNumber: 429,
+                lineNumber: 434,
                 columnNumber: 11
             }, this)
         }, item.id, false, {
             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-            lineNumber: 425,
+            lineNumber: 430,
             columnNumber: 7
         }, this);
     };
@@ -1776,7 +1776,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                         children: "Loop"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 446,
+                                        lineNumber: 451,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1789,18 +1789,18 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                             className: "w-3 h-3"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                            lineNumber: 454,
+                                            lineNumber: 459,
                                             columnNumber: 17
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 447,
+                                        lineNumber: 452,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                lineNumber: 445,
+                                lineNumber: 450,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1817,7 +1817,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                         className: "w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 470,
+                                        lineNumber: 475,
                                         columnNumber: 17
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Avatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Avatar"], {
                                         size: "lg",
@@ -1829,12 +1829,12 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                             children: (accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                            lineNumber: 478,
+                                            lineNumber: 483,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 472,
+                                        lineNumber: 477,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1847,12 +1847,12 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                                     className: "h-4 w-28 bg-slate-200 dark:bg-slate-700 rounded animate-pulse"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                                    lineNumber: 485,
+                                                    lineNumber: 490,
                                                     columnNumber: 21
                                                 }, this) : accountProfile?.displayName || accountProfile?.username || accountProfile?.email || (googleUserInfo?.isAuthenticated ? googleUserInfo.userName || googleUserInfo.userEmail : null) || 'Loop 사용자'
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                                lineNumber: 482,
+                                                lineNumber: 487,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1862,7 +1862,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                                         className: isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                                        lineNumber: 492,
+                                                        lineNumber: 497,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1871,13 +1871,13 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                                         children: !authLoaded ? '상태 확인 중...' : googleUserInfo?.isAuthenticated ? 'Google 계정' : accountProfile?.displayName || accountProfile?.username || accountProfile?.email ? '로컬 계정' : isOnline ? '온라인' : '오프라인'
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                                        lineNumber: 493,
+                                                        lineNumber: 498,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                                lineNumber: 491,
+                                                lineNumber: 496,
                                                 columnNumber: 17
                                             }, this),
                                             visibleProfile && visibleProfile.isAuthenticated && visibleProfile.userEmail && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1885,25 +1885,25 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                                 children: visibleProfile.userEmail
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                                lineNumber: 498,
+                                                lineNumber: 503,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 481,
+                                        lineNumber: 486,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                lineNumber: 459,
+                                lineNumber: 464,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                        lineNumber: 444,
+                        lineNumber: 449,
                         columnNumber: 11
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex flex-col items-center gap-3 py-4",
@@ -1913,7 +1913,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                 children: "L"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                lineNumber: 505,
+                                lineNumber: 510,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1931,7 +1931,7 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                         className: "w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 520,
+                                        lineNumber: 525,
                                         columnNumber: 17
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Avatar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Avatar"], {
                                         size: "md",
@@ -1943,25 +1943,25 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                             children: (accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                            lineNumber: 528,
+                                            lineNumber: 533,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 522,
+                                        lineNumber: 527,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                        lineNumber: 531,
+                                        lineNumber: 536,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                lineNumber: 508,
+                                lineNumber: 513,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
@@ -1974,23 +1974,23 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                                     className: "w-3 h-3"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                    lineNumber: 541,
+                                    lineNumber: 546,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                                lineNumber: 534,
+                                lineNumber: 539,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                        lineNumber: 504,
+                        lineNumber: 509,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                    lineNumber: 442,
+                    lineNumber: 447,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -2001,31 +2001,31 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                         children: SIDEBAR_ITEMS.map((item)=>renderNavItem(item, isExpanded))
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                        lineNumber: 549,
+                        lineNumber: 554,
                         columnNumber: 9
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                    lineNumber: 548,
+                    lineNumber: 553,
                     columnNumber: 7
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-            lineNumber: 440,
+            lineNumber: 445,
             columnNumber: 5
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "relative",
         children: [
             collapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "absolute left-0 top-0 w-4 h-full z-50 hover:cursor-pointer",
+                className: "absolute left-0 top-0 w-16 h-full z-50 hover:cursor-pointer",
                 onMouseEnter: handleMouseEnter,
                 onMouseLeave: handleMouseLeave,
                 "aria-label": "앱 사이드바 펼치기"
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                lineNumber: 560,
+                lineNumber: 565,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
@@ -2038,18 +2038,18 @@ function AppSidebar({ activeRoute = '/', onNavigate, collapsed: controlledCollap
                     isExpanded: !collapsed || isHovered
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                    lineNumber: 575,
+                    lineNumber: 580,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-                lineNumber: 568,
+                lineNumber: 573,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/layout/AppSidebar.tsx",
-        lineNumber: 557,
+        lineNumber: 562,
         columnNumber: 5
     }, this);
 }

@@ -55,6 +55,9 @@ export const ProjectEditor = memo(function ProjectEditor({
     // 🔥 tabBar hover 상태
     const [tabBarHovered, setTabBarHovered] = useState(false);
 
+    // 🔥 ProjectSidebar hover 상태
+    const [sidebarHovered, setSidebarHovered] = useState(false);
+
     // 🔥 집중모드와 사이드바 접기 분리
     const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
 
@@ -336,8 +339,8 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container className="relative overflow-hidden">
-            {/* 🔥 tabBar 영역 항상 예약 + 조건부 ProjectHeader 표시 */}
-            <div className="h-16 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+            {/* 🔥 tabBar 영역 항상 예약 + 조건부 ProjectHeader 표시 (축소된 높이) */}
+            <div className="h-14 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
                 {!isSidebarCollapsed ? (
                     <ProjectEditorLayout.Header>
                         <ProjectHeader
@@ -407,9 +410,9 @@ export const ProjectEditor = memo(function ProjectEditor({
 
                         </div>
 
-                        {/* hover 시 ProjectHeader 오버레이 */}
+                        {/* hover 시 ProjectHeader 오버레이 - 슬라이드 다운 애니메이션 */}
                         {tabBarHovered && (
-                            <div className="absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                            <div className="absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transform transition-all duration-300 animate-in slide-in-from-top-2">
                                 <ProjectEditorLayout.Header>
                                     <ProjectHeader
                                         title={projectData?.title || '프로젝트'}
@@ -471,53 +474,82 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 새로운 ProjectSidebar 사용 (Zen Browser 스타일) */}
-                <ProjectSidebar
-                    projectId={projectId}
-                    currentView={state.currentView}
-                    onViewChange={actions.setCurrentView}
-                    structure={projectData?.structure || []}
-                    characters={projectData?.characters || []}
-                    collapsed={isSidebarCollapsed}
-                    stats={{
-                        wordCount: projectData?.writerStats?.wordCount || 0,
-                        charCount: projectData?.writerStats?.charCount || 0,
-                        paragraphCount: projectData?.writerStats?.paragraphCount || 0,
-                        readingTime: projectData?.writerStats?.readingTime || 0,
-                        wordGoal: projectData?.writerStats?.wordGoal || 1000,
-                        progress: projectData?.writerStats?.progress || 0,
-                        sessionTime: projectData?.writerStats?.sessionTime || 0,
-                        wpm: projectData?.writerStats?.wpm || 0
-                    }}
-                    onAddStructure={() => {
-                        actions.openNewChapterModal();
-                        Logger.info('PROJECT_EDITOR', 'Add structure clicked');
-                        // 🔥 디버깅: 상태 확인
-                        setTimeout(() => {
-                            console.log('🔍 Modal state after action:', state.showNewChapterModal);
-                        }, 100);
-                    }}
-                    onAddCharacter={() => {
-                        actions.openNewCharacterModal();
-                        Logger.info('PROJECT_EDITOR', 'Add character clicked');
-                    }}
-                    onAddNote={() => {
-                        actions.openNewNoteModal();
-                        Logger.info('PROJECT_EDITOR', 'Add note clicked');
-                    }}
-                    onEditStructure={(id) => {
-                        // 구조 편집 - 해당 탭 열기
-                        const newTab = {
-                            id: `structure-${id}`,
-                            title: `구조 ${id}`,
-                            type: 'chapter' as const,
-                            isActive: true,
-                            content: ''
-                        };
-                        actions.addTab(newTab);
-                        Logger.info('PROJECT_EDITOR', 'Edit structure clicked', { id });
-                    }}
-                />
+                {/* 🔥 ProjectSidebar hover 영역 - 왼쪽 끝자락 */}
+                {isSidebarCollapsed && (
+                    <div
+                        className="absolute left-0 top-14 w-4 h-[calc(100%-3.5rem)] z-40"
+                        onMouseEnter={() => setSidebarHovered(true)}
+                        onMouseLeave={() => setSidebarHovered(false)}
+                    >
+                        {/* ProjectSidebar hover 시 표시 */}
+                        {sidebarHovered && (
+                            <ProjectSidebar
+                                projectId={projectId}
+                                currentView={state.currentView}
+                                onViewChange={actions.setCurrentView}
+                                structure={projectData?.structure || []}
+                                characters={projectData?.characters || []}
+                                collapsed={false}
+                                stats={{
+                                    wordCount: projectData?.writerStats?.wordCount || 0,
+                                    charCount: projectData?.writerStats?.charCount || 0,
+                                    paragraphCount: projectData?.writerStats?.paragraphCount || 0,
+                                    readingTime: projectData?.writerStats?.readingTime || 0,
+                                    wordGoal: projectData?.writerStats?.wordGoal || 1000,
+                                    progress: projectData?.writerStats?.progress || 0,
+                                    sessionTime: projectData?.writerStats?.sessionTime || 0,
+                                    wpm: projectData?.writerStats?.wpm || 0
+                                }}
+                                onAddStructure={() => {
+                                    actions.openNewChapterModal();
+                                    Logger.info('PROJECT_EDITOR', 'Add structure clicked from hover sidebar');
+                                }}
+                                onAddCharacter={() => {
+                                    actions.openNewCharacterModal();
+                                    Logger.info('PROJECT_EDITOR', 'Add character clicked from hover sidebar');
+                                }}
+                                onAddNote={() => {
+                                    actions.openNewNoteModal();
+                                    Logger.info('PROJECT_EDITOR', 'Add note clicked from hover sidebar');
+                                }}
+                            />
+                        )}
+                    </div>
+                )}
+
+                {/* 🔥 일반 ProjectSidebar (사이드바 펼쳐져 있을 때) */}
+                {!isSidebarCollapsed && (
+                    <ProjectSidebar
+                        projectId={projectId}
+                        currentView={state.currentView}
+                        onViewChange={actions.setCurrentView}
+                        structure={projectData?.structure || []}
+                        characters={projectData?.characters || []}
+                        collapsed={false}
+                        stats={{
+                            wordCount: projectData?.writerStats?.wordCount || 0,
+                            charCount: projectData?.writerStats?.charCount || 0,
+                            paragraphCount: projectData?.writerStats?.paragraphCount || 0,
+                            readingTime: projectData?.writerStats?.readingTime || 0,
+                            wordGoal: projectData?.writerStats?.wordGoal || 1000,
+                            progress: projectData?.writerStats?.progress || 0,
+                            sessionTime: projectData?.writerStats?.sessionTime || 0,
+                            wpm: projectData?.writerStats?.wpm || 0
+                        }}
+                        onAddStructure={() => {
+                            actions.openNewChapterModal();
+                            Logger.info('PROJECT_EDITOR', 'Add structure clicked');
+                        }}
+                        onAddCharacter={() => {
+                            actions.openNewCharacterModal();
+                            Logger.info('PROJECT_EDITOR', 'Add character clicked');
+                        }}
+                        onAddNote={() => {
+                            actions.openNewNoteModal();
+                            Logger.info('PROJECT_EDITOR', 'Add note clicked');
+                        }}
+                    />
+                )}
 
                 {/* 각 뷰의 메인 컨텐츠 */}
                 <div className="flex-1 h-full">
@@ -592,7 +624,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                 <NewChapterModal
                     isOpen={state.showNewCharacterModal}
                     onClose={actions.closeNewCharacterModal}
-                    onConfirm={(characterData: any) => {
+                    onConfirm={(title: string) => {
                         // TODO: 새 캐릭터 생성 로직
                         actions.closeNewCharacterModal();
                     }}
@@ -603,7 +635,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                 <NewChapterModal
                     isOpen={state.showNewNoteModal}
                     onClose={actions.closeNewNoteModal}
-                    onConfirm={(noteData: any) => {
+                    onConfirm={(title: string) => {
                         // TODO: 새 노트 생성 로직
                         actions.closeNewNoteModal();
                     }}

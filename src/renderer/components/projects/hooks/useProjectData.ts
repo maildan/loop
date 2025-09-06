@@ -221,7 +221,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
 
       const maxAttempts = 4;
       let attempt = 0;
-      let result: any = null;
+      let result: { success: boolean; data?: any; error?: string } | null = null;
       while (attempt < maxAttempts) {
         attempt += 1;
         try {
@@ -307,7 +307,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
 
         Logger.info('PROJECT_DATA', 'Project loaded successfully');
       } else {
-        throw new Error(result.error || 'Failed to load project');
+        throw new Error(result?.error || 'Failed to load project');
       }
     } catch (error) {
       Logger.error('PROJECT_DATA', 'Error loading project', error);
@@ -352,7 +352,12 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       }
 
       // 🔥 즉시 서버 저장
-      const payload: any = {
+      const payload: {
+        title: string;
+        content: string;
+        chapters?: string;
+        lastModified: Date;
+      } = {
         title: currentTitle,
         content: currentContent,
         chapters: currentChapters, // 🔥 ref에서 가져온 최신 chapters 사용

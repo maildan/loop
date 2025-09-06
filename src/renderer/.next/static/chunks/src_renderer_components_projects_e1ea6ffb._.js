@@ -478,7 +478,7 @@ function useProjectData(projectId) {
                     }
                     __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_DATA', 'Project loaded successfully');
                 } else {
-                    throw new Error(result.error || 'Failed to load project');
+                    throw new Error(result?.error || 'Failed to load project');
                 }
             } catch (error) {
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_DATA', 'Error loading project', error);

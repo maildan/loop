@@ -146,16 +146,21 @@ export function AppSidebar({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // unify visible profile for legacy UI uses
-  const visibleProfile: any = (authLoaded && googleUserInfo && googleUserInfo.isAuthenticated)
-    ? googleUserInfo
-    : accountProfile
-      ? {
-        isAuthenticated: !!(accountProfile.displayName || accountProfile.username || accountProfile.email),
-        userName: accountProfile.displayName || accountProfile.username,
-        userEmail: accountProfile.email,
-        userPicture: accountProfile.avatar,
-      }
-      : null;
+  const visibleProfile: {
+    isAuthenticated: boolean;
+    userName?: string;
+    userEmail?: string;
+    userPicture?: string;
+  } | null = (authLoaded && googleUserInfo && googleUserInfo.isAuthenticated)
+      ? googleUserInfo
+      : accountProfile
+        ? {
+          isAuthenticated: !!(accountProfile.displayName || accountProfile.username || accountProfile.email),
+          userName: accountProfile.displayName || accountProfile.username,
+          userEmail: accountProfile.email,
+          userPicture: accountProfile.avatar,
+        }
+        : null;
 
   // update avatarSrc when authLoaded, googleUserInfo, or account settings change
   useEffect(() => {
@@ -175,7 +180,7 @@ export function AppSidebar({
       const v = String(avatarValue);
       if (v.startsWith('file://')) {
         const path = v.replace(/^file:\/\//, '');
-        (window.electronAPI as any).files?.readFileAsDataUrl(path).then((r: any) => {
+        (window.electronAPI as any).files?.readFileAsDataUrl(path).then((r: { success: boolean; data?: string }) => {
           if (r && r.success && r.data) {
             Logger.debug('APPSIDEBAR', 'Loaded file:// avatar as data URL');
             setAvatarSrc(r.data as string);
@@ -221,7 +226,7 @@ export function AppSidebar({
   // subscribe to settings change broadcast for account.avatar and other profile fields
   useEffect(() => {
     try {
-      const unsub = (window.electronAPI as any).settings.onDidChange?.((payload: any) => {
+      const unsub = (window.electronAPI as any).settings.onDidChange?.((payload: { keyPath: string; value: any }) => {
         if (!payload || !payload.keyPath) return;
 
         // handle avatar and avatarThumb changes
@@ -241,7 +246,7 @@ export function AppSidebar({
           if (val.startsWith('file://')) {
             const p = val.replace(/^file:\/\//, '');
             Logger.debug('APPSIDEBAR', 'Loading file:// avatar from broadcast', { path: p });
-            (window.electronAPI as any).files?.readFileAsDataUrl(p).then((r: any) => {
+            (window.electronAPI as any).files?.readFileAsDataUrl(p).then((r: { success: boolean; data?: string }) => {
               if (r && r.success && r.data) {
                 Logger.debug('APPSIDEBAR', 'Successfully loaded file:// avatar from broadcast');
                 setAvatarSrc(r.data as string);
@@ -555,10 +560,10 @@ export function AppSidebar({
 
   return (
     <div className="relative">
-      {/* 🔥 hover 감지 영역 - collapsed 상태에서만 표시 (AppSidebar 전용) */}
+      {/* 🔥 hover 감지 영역 - collapsed 상태에서만 표시 (확장된 영역) */}
       {collapsed && (
         <div
-          className="absolute left-0 top-0 w-4 h-full z-50 hover:cursor-pointer"
+          className="absolute left-0 top-0 w-16 h-full z-50 hover:cursor-pointer"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           aria-label="앱 사이드바 펼치기"
