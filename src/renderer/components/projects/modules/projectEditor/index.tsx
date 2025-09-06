@@ -335,66 +335,139 @@ export const ProjectEditor = memo(function ProjectEditor({
     });
 
     return (
-        <ProjectEditorLayout.Container>
-            {/* 🔥 사이드바가 접혀있지 않을 때만 헤더 표시 */}
-            {!isSidebarCollapsed && (
-                <ProjectEditorLayout.Header>
-                    <ProjectHeader
-                        title={projectData?.title || '프로젝트'}
-                        onTitleChange={(title) => {
-                            projectData?.setTitle(title);
-                            Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
-                        }}
-                        onBack={() => {
-                            Logger.debug('PROJECT_EDITOR', 'Back button clicked');
-                        }}
-                        sidebarCollapsed={state.collapsed}
-                        onToggleSidebar={actions.toggleCollapsed}
-                        showRightSidebar={state.showRightSidebar}
-                        onToggleAISidebar={actions.toggleRightSidebar}
-                        isZenMode={isZenMode}
-                        onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
-                        onSave={async () => {
-                            try {
-                                // 모든 변경사항 저장
-                                if (projectData?.saveProject) {
-                                    await projectData.saveProject();
-                                    handleSaveSuccess();
-                                    Logger.info('PROJECT_EDITOR', 'Project saved successfully');
+        <ProjectEditorLayout.Container className="relative overflow-hidden">
+            {/* 🔥 tabBar 영역 항상 예약 + 조건부 ProjectHeader 표시 */}
+            <div className="h-16 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                {!isSidebarCollapsed ? (
+                    <ProjectEditorLayout.Header>
+                        <ProjectHeader
+                            title={projectData?.title || '프로젝트'}
+                            onTitleChange={(title) => {
+                                projectData?.setTitle(title);
+                                Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
+                            }}
+                            onBack={() => {
+                                Logger.debug('PROJECT_EDITOR', 'Back button clicked');
+                            }}
+                            sidebarCollapsed={state.collapsed}
+                            onToggleSidebar={actions.toggleCollapsed}
+                            showRightSidebar={state.showRightSidebar}
+                            onToggleAISidebar={actions.toggleRightSidebar}
+                            isZenMode={isZenMode}
+                            onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
+                            onSave={async () => {
+                                try {
+                                    // 모든 변경사항 저장
+                                    if (projectData?.saveProject) {
+                                        await projectData.saveProject();
+                                        handleSaveSuccess();
+                                        Logger.info('PROJECT_EDITOR', 'Project saved successfully');
+                                    }
+                                } catch (error) {
+                                    Logger.error('PROJECT_EDITOR', 'Save failed', error);
                                 }
-                            } catch (error) {
-                                Logger.error('PROJECT_EDITOR', 'Save failed', error);
-                            }
-                        }}
-                        onShare={() => {
-                            actions.openShareDialog();
-                            Logger.info('PROJECT_EDITOR', 'Share dialog opened');
-                        }}
-                        onDownload={async () => {
-                            try {
-                                // 프로젝트를 파일로 다운로드
-                                const content = JSON.stringify(projectData, null, 2);
-                                const blob = new Blob([content], { type: 'application/json' });
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = `${projectData?.title || 'project'}.json`;
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                URL.revokeObjectURL(url);
-                                Logger.info('PROJECT_EDITOR', 'Project downloaded');
-                            } catch (error) {
-                                Logger.error('PROJECT_EDITOR', 'Download failed', error);
-                            }
-                        }}
-                        onDelete={() => {
-                            actions.openDeleteDialog();
-                            Logger.info('PROJECT_EDITOR', 'Delete dialog opened');
-                        }}
-                    />
-                </ProjectEditorLayout.Header>
-            )}
+                            }}
+                            onShare={() => {
+                                actions.openShareDialog();
+                                Logger.info('PROJECT_EDITOR', 'Share dialog opened');
+                            }}
+                            onDownload={async () => {
+                                try {
+                                    // 프로젝트를 파일로 다운로드
+                                    const content = JSON.stringify(projectData, null, 2);
+                                    const blob = new Blob([content], { type: 'application/json' });
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `${projectData?.title || 'project'}.json`;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                    Logger.info('PROJECT_EDITOR', 'Project downloaded');
+                                } catch (error) {
+                                    Logger.error('PROJECT_EDITOR', 'Download failed', error);
+                                }
+                            }}
+                            onDelete={() => {
+                                actions.openDeleteDialog();
+                                Logger.info('PROJECT_EDITOR', 'Delete dialog opened');
+                            }}
+                        />
+                    </ProjectEditorLayout.Header>
+                ) : (
+                    /* 사이드바 접힘: hover 영역 + 조건부 ProjectHeader */
+                    <div
+                        className="w-full h-full flex items-center justify-center relative"
+                        onMouseEnter={() => setTabBarHovered(true)}
+                        onMouseLeave={() => setTabBarHovered(false)}
+                    >
+                        {/* tabBar 영역 placeholder */}
+                        <div className="text-gray-200 text-sm">
+
+                        </div>
+
+                        {/* hover 시 ProjectHeader 오버레이 */}
+                        {tabBarHovered && (
+                            <div className="absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+                                <ProjectEditorLayout.Header>
+                                    <ProjectHeader
+                                        title={projectData?.title || '프로젝트'}
+                                        onTitleChange={(title) => {
+                                            projectData?.setTitle(title);
+                                            Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
+                                        }}
+                                        onBack={() => {
+                                            Logger.debug('PROJECT_EDITOR', 'Back button clicked');
+                                        }}
+                                        sidebarCollapsed={state.collapsed}
+                                        onToggleSidebar={actions.toggleCollapsed}
+                                        showRightSidebar={state.showRightSidebar}
+                                        onToggleAISidebar={actions.toggleRightSidebar}
+                                        isZenMode={isZenMode}
+                                        onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
+                                        onSave={async () => {
+                                            try {
+                                                if (projectData?.saveProject) {
+                                                    await projectData.saveProject();
+                                                    handleSaveSuccess();
+                                                    Logger.info('PROJECT_EDITOR', 'Project saved successfully');
+                                                }
+                                            } catch (error) {
+                                                Logger.error('PROJECT_EDITOR', 'Save failed', error);
+                                            }
+                                        }}
+                                        onShare={() => {
+                                            Logger.debug('PROJECT_EDITOR', 'Share button clicked');
+                                        }}
+                                        onDownload={() => {
+                                            try {
+                                                const data = JSON.stringify(projectData, null, 2);
+                                                const blob = new Blob([data], { type: 'application/json' });
+                                                const url = URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = `${projectData?.title || 'project'}.json`;
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                document.body.removeChild(a);
+                                                URL.revokeObjectURL(url);
+                                                Logger.info('PROJECT_EDITOR', 'Project downloaded');
+                                            } catch (error) {
+                                                Logger.error('PROJECT_EDITOR', 'Download failed', error);
+                                            }
+                                        }}
+                                        onDelete={() => {
+                                            actions.openDeleteDialog();
+                                            Logger.info('PROJECT_EDITOR', 'Delete dialog opened');
+                                        }}
+                                    />
+                                </ProjectEditorLayout.Header>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>

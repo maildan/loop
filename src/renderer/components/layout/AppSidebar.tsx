@@ -347,21 +347,34 @@ export function AppSidebar({
   // no extra sync needed - AuthContext bootstraps initial state from server
 
   const handleToggleCollapse = (): void => {
+    const newCollapsed = !collapsed;
+
     if (isControlled) {
       onToggleCollapse?.();
     } else {
-      // 🔥 settings와 연동하여 상태 업데이트
-      updateSetting('ui', 'appSidebarCollapsed', !settingsCollapsed);
+      // 🔥 settings와 연동하여 상태 영구 업데이트
+      updateSetting('ui', 'appSidebarCollapsed', newCollapsed);
+
+      // collapsed로 변경 시 hover 상태 초기화
+      if (newCollapsed) {
+        setIsHovered(false);
+      }
     }
-    Logger.info('SIDEBAR', `Sidebar ${collapsed ? 'expanded' : 'collapsed'}`);
+    Logger.info('SIDEBAR', `Sidebar ${newCollapsed ? 'collapsed' : 'expanded'} permanently`);
   };
 
   const handleMouseEnter = () => {
-    if (collapsed) setIsHovered(true);
+    // hover는 collapsed 상태에서만 동작
+    if (collapsed) {
+      setIsHovered(true);
+    }
   };
 
   const handleMouseLeave = () => {
-    if (collapsed) setIsHovered(false);
+    // hover는 collapsed 상태에서만 동작  
+    if (collapsed) {
+      setIsHovered(false);
+    }
   };
 
   const handleNavigate = (item: SidebarItem): void => {
@@ -542,8 +555,8 @@ export function AppSidebar({
 
   return (
     <div className="relative">
-      {/* 🔥 hover 감지 영역 - AppSidebar 전용 (ProjectSidebar와 분리) */}
-      {collapsed && !isHovered && (
+      {/* 🔥 hover 감지 영역 - collapsed 상태에서만 표시 (AppSidebar 전용) */}
+      {collapsed && (
         <div
           className="absolute left-0 top-0 w-4 h-full z-50 hover:cursor-pointer"
           onMouseEnter={handleMouseEnter}

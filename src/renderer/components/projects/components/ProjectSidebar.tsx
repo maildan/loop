@@ -38,15 +38,16 @@ interface ProjectSidebarProps {
     onDeleteStructure?: (id: string, title: string) => void;
 }
 
-// 🔥 Zen Browser 스타일 사이드바 (hover 감지 포함, tabBar/ProjectHeader 침범 방지)
+// 🔥 Zen Browser 스타일 사이드바 (3단계 상태: default/hover/collapsed)
 const SIDEBAR_STYLES = {
-    // 기본 컨테이너 (다른 요소들과 겹치지 않는 독립적 위치)
+    // 기본 컨테이너 (에디터 영역 내부에만 표시)
     container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative',
-    expanded: 'w-64',
-    collapsed: 'w-0 overflow-hidden',
+    default: 'w-16', // 🔥 기본 상태: 아이콘만 표시
+    expanded: 'w-64', // 🔥 hover 시: 전체 표시
+    collapsed: 'w-0 overflow-hidden', // 🔥 완전 숨김
 
-    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전 (독립적 레이어)
-    hoverable: 'fixed left-0 top-0 h-screen w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-xl z-30 transform -translate-x-full transition-all duration-300 ease-in-out',
+    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전 (에디터 영역 기준 absolute)
+    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-xl z-30 transform -translate-x-full transition-all duration-300 ease-in-out',
     hoverVisible: 'transform translate-x-0',
 
     // hover 감지 영역 - 프로젝트 영역에서만 동작 (AppSidebar와 분리)  
@@ -139,9 +140,9 @@ export const ProjectSidebar = memo(function ProjectSidebar({
         return () => window.removeEventListener('keydown', handleEscape);
     }, [isHovered]);
 
-    // 🔥 렌더링 조건부 로직
-    const shouldShowHoverable = isCollapsed;
-    const shouldShowExpanded = !isCollapsed;
+    // 🔥 3단계 상태 로직: default(아이콘만) → hover(전체) → collapsed(완전숨김)
+    const shouldShowHoverable = collapsed;
+    const shouldShowExpanded = !collapsed;
 
     // 🔥 전역 마우스 이벤트로 왼쪽 가장자리 감지 (Focus 모드에서 편의성 향상)
     useEffect(() => {
