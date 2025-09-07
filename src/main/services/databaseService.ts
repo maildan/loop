@@ -71,11 +71,11 @@ export class DatabaseService {
       const prismaModule = await import('@prisma/client');
       const PrismaClientConstructor = (prismaModule as unknown as { PrismaClient: new (...args: unknown[]) => PrismaClient }).PrismaClient ||
         (prismaModule as unknown as { default: { PrismaClient: new (...args: unknown[]) => PrismaClient } }).default?.PrismaClient;
-      
+
       if (!PrismaClientConstructor) {
         throw new Error('PrismaClient not found in module');
       }
-      
+
       this.prisma = new PrismaClientConstructor({
         datasources: {
           db: {
@@ -133,8 +133,8 @@ export class DatabaseService {
       }
 
       // #DEBUG: Saving typing session
-      Logger.debug('DATABASE', 'Saving typing session', { 
-        keyCount: session.keyCount, 
+      Logger.debug('DATABASE', 'Saving typing session', {
+        keyCount: session.keyCount,
         wpm: session.wpm,
         userId: session.userId,
       });
@@ -154,7 +154,7 @@ export class DatabaseService {
       });
 
       const sessionId = isObject(result) && 'id' in result ? String(result.id) : 'unknown';
-      
+
       Logger.info('DATABASE', 'Typing session saved successfully', { id: sessionId });
       return createSuccess(sessionId);
 
@@ -181,11 +181,11 @@ export class DatabaseService {
       });
 
       const typedSessions = sessions.map(session => this.mapToTypingSession(session));
-      
-      Logger.info('DATABASE', 'Typing sessions retrieved successfully', { 
-        count: typedSessions.length 
+
+      Logger.info('DATABASE', 'Typing sessions retrieved successfully', {
+        count: typedSessions.length
       });
-      
+
       return createSuccess(typedSessions);
 
     } catch (error) {
@@ -244,7 +244,7 @@ export class DatabaseService {
       });
 
       const stats = this.calculateStats(sessions);
-      
+
       Logger.info('DATABASE', 'Typing stats calculated successfully', stats);
       return createSuccess(stats);
 
@@ -297,7 +297,7 @@ export class DatabaseService {
 
       await this.prisma!.userSettings.upsert({
         where: { userId: 'default' },
-        create: { 
+        create: {
           userId: 'default',
           theme: settingsData.theme,
           language: settingsData.language,
@@ -348,7 +348,7 @@ export class DatabaseService {
       });
 
       const typedPreferences = preferences ? this.mapToUserPreferences(preferences) : null;
-      
+
       Logger.info('DATABASE', 'User preferences retrieved successfully');
       return createSuccess(typedPreferences);
 
@@ -362,7 +362,7 @@ export class DatabaseService {
   public async healthCheck(): Promise<Result<{ connected: boolean; latency: number }>> {
     try {
       const startTime = Date.now();
-      
+
       if (!this.prisma) {
         return createSuccess({ connected: false, latency: 0 });
       }
@@ -454,7 +454,7 @@ export class DatabaseService {
         totalKeystrokes += Number(session.keyCount || 0);
         totalWpm += Number(session.wpm || 0);
         totalAccuracy += Number(session.accuracy || 0);
-        
+
         const startTime = new Date(session.startTime as string);
         const endTime = new Date(session.endTime as string);
         totalDuration += endTime.getTime() - startTime.getTime();
@@ -495,14 +495,14 @@ export class DatabaseService {
         recentSessionsResult
       ] = await Promise.all([
         this.getProjectsData(),
-        this.getCharactersData(), 
+        this.getCharactersData(),
         this.getTypingSessions(100, 0),
         this.getRecentSessions(7)
       ]);
 
       // 모든 결과가 성공인지 확인
-      if (!projectsResult.success || !charactersResult.success || 
-          !sessionsResult.success || !recentSessionsResult.success) {
+      if (!projectsResult.success || !charactersResult.success ||
+        !sessionsResult.success || !recentSessionsResult.success) {
         throw new Error('Failed to fetch some analytics data');
       }
 
@@ -518,36 +518,36 @@ export class DatabaseService {
         activeProjects: projects.filter((p: any) => p.status === 'active').length,
         completedProjects: projects.filter((p: any) => p.status === 'completed').length,
         totalWords: projects.reduce((sum: number, p: any) => sum + (p.wordCount || 0), 0),
-        
+
         // 캐릭터 통계
         totalCharacters: characters.length,
         charactersByRole: characters.reduce((acc: any, char: any) => {
           acc[char.role] = (acc[char.role] || 0) + 1;
           return acc;
         }, {}),
-        
+
         // 타이핑 통계
         totalSessions: sessions.length,
-        avgWpm: sessions.length > 0 
-          ? sessions.reduce((sum: number, s: any) => sum + (s.wpm || 0), 0) / sessions.length 
+        avgWpm: sessions.length > 0
+          ? sessions.reduce((sum: number, s: any) => sum + (s.wpm || 0), 0) / sessions.length
           : 0,
         avgAccuracy: sessions.length > 0
           ? sessions.reduce((sum: number, s: any) => sum + (s.accuracy || 0), 0) / sessions.length
           : 0,
-        
+
         // 주간 통계
         weeklyWords: recentSessions.reduce((sum: number, s: any) => sum + (s.keyCount || 0), 0),
         weeklyAvgWpm: recentSessions.length > 0
           ? recentSessions.reduce((sum: number, s: any) => sum + (s.wpm || 0), 0) / recentSessions.length
           : 0,
-        
+
         // 오늘 통계
         todayWords: recentSessions.filter((s: any) => {
           const today = new Date();
           const sessionDate = new Date(s.startTime);
           return sessionDate.toDateString() === today.toDateString();
         }).reduce((sum: number, s: any) => sum + (s.keyCount || 0), 0),
-        
+
         // 상세 데이터
         topProjects: projects
           .sort((a: any, b: any) => (b.wordCount || 0) - (a.wordCount || 0))
@@ -558,7 +558,7 @@ export class DatabaseService {
 
       // 🎯 인사이트 생성
       const insights = [];
-      
+
       if (stats.topProjects.length > 0) {
         const topProject = stats.topProjects[0];
         insights.push({
@@ -571,7 +571,7 @@ export class DatabaseService {
           actionable: true
         });
       }
-      
+
       if (stats.avgWpm > 0) {
         const wpmLevel = stats.avgWpm > 80 ? '높음' : stats.avgWpm > 60 ? '보통' : '개선 필요';
         insights.push({
@@ -592,7 +592,7 @@ export class DatabaseService {
         hasData: projects.length > 0 || sessions.length > 0
       };
 
-      Logger.info('DATABASE', 'Analytics data generated successfully', { 
+      Logger.info('DATABASE', 'Analytics data generated successfully', {
         projects: stats.totalProjects,
         characters: stats.totalCharacters,
         sessions: stats.totalSessions

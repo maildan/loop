@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Activity, 
-  BarChart3, 
-  Clock, 
-  Target, 
-  BookOpen, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  BarChart3,
+  Clock,
+  Target,
+  BookOpen,
   Zap,
   Globe,
   Award,
@@ -41,7 +41,7 @@ declare global {
 const ANALYTICS_STYLES = {
   container: 'container mx-auto px-4 py-6 max-w-7xl space-y-6',
   pageTitle: 'text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6',
-  
+
   // 🎯 탭 시스템 스타일
   tabContainer: 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-2 mb-8',
   tabList: 'flex space-x-2',
@@ -50,13 +50,13 @@ const ANALYTICS_STYLES = {
   tabInactive: 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800',
   tabIcon: 'text-2xl',
   tabLabel: 'font-medium',
-  
+
   // 🔥 KPI 카드 우선순위별 스타일
   kpiGrid: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8',
   kpiPrimary: 'lg:col-span-2 scale-105', // 1순위: 오늘 작성량 & 목표
   kpiSecondary: '', // 2순위: WPM & 몰입도
   kpiTertiary: 'opacity-90', // 3순위: 트렌드 & 프로젝트 수
-  
+
   // 💡 액션 카드 스타일
   insightCard: 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/50 rounded-2xl p-6 mb-6',
   insightHeader: 'flex items-center justify-between mb-4',
@@ -64,20 +64,20 @@ const ANALYTICS_STYLES = {
   insightTitle: 'text-blue-200 font-semibold text-lg',
   insightDescription: 'text-slate-300 text-sm mb-4',
   insightAction: 'px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors',
-  
+
   // 📊 차트 그리드
   chartsGrid: 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8',
   chartCard: 'p-6 hover:shadow-lg transition-shadow cursor-pointer',
   chartTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center',
   chartPlaceholder: 'h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 rounded-lg flex flex-col items-center justify-center text-slate-500 dark:text-slate-400',
-  
+
   // 🎯 빈 상태 스타일
   emptyState: 'flex flex-col items-center justify-center py-16 px-8',
   emptyIcon: 'text-8xl mb-6 opacity-50',
   emptyTitle: 'text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4',
   emptyDescription: 'text-lg text-slate-600 dark:text-slate-400 text-center mb-8 max-w-md',
   emptyAction: 'px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors font-medium',
-  
+
   // 🏆 프로젝트 랭킹 스타일
   rankingCard: 'p-4 bg-slate-50 dark:bg-slate-800 rounded-xl mb-4 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer',
   rankingHeader: 'flex items-center justify-between mb-2',
@@ -85,28 +85,28 @@ const ANALYTICS_STYLES = {
   rankingTitle: 'font-semibold text-slate-900 dark:text-slate-100',
   rankingScore: 'text-sm text-green-600 font-medium',
   rankingDetails: 'text-sm text-slate-600 dark:text-slate-400',
-  
+
   // 📱 모바일 최적화
   mobileGrid: 'grid grid-cols-2 gap-4 sm:grid-cols-4',
 } as const;
 
 // 🎯 탭 설정
 const TAB_CONFIG = [
-  { 
-    id: 'global', 
-    label: '전역 통계', 
+  {
+    id: 'global',
+    label: '전역 통계',
     icon: '🌍',
     description: '전체 글쓰기 패턴과 골든타임 분석'
   },
-  { 
-    id: 'project', 
-    label: '프로젝트 분석', 
+  {
+    id: 'project',
+    label: '프로젝트 분석',
     icon: '📖',
     description: '개별 프로젝트 세부 분석과 진행률'
   },
-  { 
-    id: 'compare', 
-    label: '종합 비교', 
+  {
+    id: 'compare',
+    label: '종합 비교',
     icon: '�',
     description: '전체 프로젝트 성과 랭킹과 비교'
   }
@@ -169,15 +169,15 @@ export function AnalyticsPageClient(): React.ReactElement {
     const loadData = async (): Promise<void> => {
       try {
         setLoading(true);
-        
+
         // 🎯 실제 Electron Analytics API 호출
         if (typeof window !== 'undefined' && window.electronAPI) {
           const response = await window.electronAPI.dashboard.getAnalytics();
-          
+
           if (response.success && response.data) {
             const data = response.data;
             setAnalyticsData(data);
-            
+
             // 🎯 대시보드 데이터 업데이트
             setDashboardData({
               todayWords: data.todayWords || 0,
@@ -193,41 +193,41 @@ export function AnalyticsPageClient(): React.ReactElement {
               goldenTime: '14:00-16:00', // TODO: 실제 최고 시간대 분석
               nextTarget: '다음 목표 설정',
               weeklyTrend: ['월', '화', '수', '목', '금'], // TODO: 실제 주간 트렌드
-            totalWords: data.totalWords || 0
-          });
-          
-          // 🎯 인사이트 데이터 업데이트
-          setInsights(data.insights || []);
-          
-          // 🎯 프로젝트 랭킹 데이터 업데이트
-          setProjectRankings(data.topProjects?.map((project: any) => ({
-            id: project.id,
-            title: project.title,
-            score: Math.min(100, Math.round((project.wordCount || 0) / 100)), // 단어수 기반 점수
-            progress: project.progress || 0,
-            genre: project.genre || '기타',
-            insights: [
-              `${(project.wordCount || 0).toLocaleString()}단어`,
-              `진행률 ${project.progress || 0}%`
-            ],
-            trend: (project.wordCount || 0) > 5000 ? 'up' : (project.wordCount || 0) > 1000 ? 'stable' : 'down'
-          })) || []);
-          
-          setHasData(data.hasData);
-          Logger.info('ANALYTICS_PAGE', 'Real data loaded successfully', { 
-            projects: data.totalProjects,
-            characters: data.totalCharacters,
-            sessions: data.totalSessions
-          });
-        } else {
-          throw new Error('Invalid Analytics API response');
-        }
+              totalWords: data.totalWords || 0
+            });
+
+            // 🎯 인사이트 데이터 업데이트
+            setInsights(data.insights || []);
+
+            // 🎯 프로젝트 랭킹 데이터 업데이트
+            setProjectRankings(data.topProjects?.map((project: any) => ({
+              id: project.id,
+              title: project.title,
+              score: Math.min(100, Math.round((project.wordCount || 0) / 100)), // 단어수 기반 점수
+              progress: project.progress || 0,
+              genre: project.genre || '기타',
+              insights: [
+                `${(project.wordCount || 0).toLocaleString()}단어`,
+                `진행률 ${project.progress || 0}%`
+              ],
+              trend: (project.wordCount || 0) > 5000 ? 'up' : (project.wordCount || 0) > 1000 ? 'stable' : 'down'
+            })) || []);
+
+            setHasData(data.hasData);
+            Logger.info('ANALYTICS_PAGE', 'Real data loaded successfully', {
+              projects: data.totalProjects,
+              characters: data.totalCharacters,
+              sessions: data.totalSessions
+            });
+          } else {
+            throw new Error('Invalid Analytics API response');
+          }
         } else {
           throw new Error('ElectronAPI not available');
         }
       } catch (error) {
         Logger.error('ANALYTICS_PAGE', 'Failed to load analytics data', error);
-        
+
         // 🚨 실패시 빈 상태로 설정 (더미 데이터 없음)
         setHasData(false);
         setInsights([]);
@@ -330,10 +330,10 @@ export function AnalyticsPageClient(): React.ReactElement {
           <KpiCard
             title="오늘 작성량 / 목표"
             value={`${dashboardData.todayWords.toLocaleString()} / ${dashboardData.todayGoal.toLocaleString()}자`}
-            change={{ 
-              value: Math.round((dashboardData.todayWords / dashboardData.todayGoal) * 100), 
-              type: 'increase', 
-              period: '목표 달성률' 
+            change={{
+              value: Math.round((dashboardData.todayWords / dashboardData.todayGoal) * 100),
+              type: 'increase',
+              period: '목표 달성률'
             }}
             icon={Target}
             className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
@@ -413,7 +413,7 @@ export function AnalyticsPageClient(): React.ReactElement {
         </h2>
         <div className="flex gap-2 mb-6">
           {['로맨스 소설 A', '에세이 B', '시나리오 C'].map(project => (
-            <Button 
+            <Button
               key={project}
               variant="ghost"
               className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
@@ -513,7 +513,7 @@ export function AnalyticsPageClient(): React.ReactElement {
         {projectRankings.map((project, index) => (
           <ProjectRankingCard key={project.id} project={project} rank={index + 1} />
         ))}
-        
+
         {/* 📊 종합 추천 */}
         <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
           <div className="flex items-center justify-between">
@@ -578,7 +578,7 @@ export function AnalyticsPageClient(): React.ReactElement {
         <h1 className={ANALYTICS_STYLES.pageTitle}>
           작가 전용 분석 대시보드
         </h1>
-        
+
         {/* 🔍 시간 필터 */}
         <div className="flex gap-2">
           {['오늘', '이번 주', '이번 달', '전체'].map(period => (
@@ -600,11 +600,10 @@ export function AnalyticsPageClient(): React.ReactElement {
           {TAB_CONFIG.map(tab => (
             <button
               key={tab.id}
-              className={`${ANALYTICS_STYLES.tab} ${
-                activeTab === tab.id 
-                  ? ANALYTICS_STYLES.tabActive 
+              className={`${ANALYTICS_STYLES.tab} ${activeTab === tab.id
+                  ? ANALYTICS_STYLES.tabActive
                   : ANALYTICS_STYLES.tabInactive
-              }`}
+                }`}
               onClick={() => setActiveTab(tab.id as TabType)}
             >
               <span className={ANALYTICS_STYLES.tabIcon}>{tab.icon}</span>

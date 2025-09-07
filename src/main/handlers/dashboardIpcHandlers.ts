@@ -14,7 +14,7 @@ Logger.debug('DASHBOARD_IPC', 'Setting up dashboard IPC handlers');
 export function setupDashboardIpcHandlers(): void {
   try {
     // #DEBUG: Registering dashboard handlers
-    
+
     // 🔥 타이핑 세션 목록 조회
     ipcMain.handle(
       IPC_CHANNELS.DATABASE.GET_SESSIONS,
@@ -23,9 +23,9 @@ export function setupDashboardIpcHandlers(): void {
           const [, limit, offset] = args;
           // #DEBUG: IPC call - get sessions
           Logger.debug('DASHBOARD_IPC', 'IPC: Get sessions requested', { limit, offset });
-          
+
           const result = await databaseService.getTypingSessions(
-            typeof limit === 'number' ? limit : 50, 
+            typeof limit === 'number' ? limit : 50,
             typeof offset === 'number' ? offset : 0
           );
           if (!result.success) {
@@ -46,7 +46,7 @@ export function setupDashboardIpcHandlers(): void {
           const [, days] = args;
           // #DEBUG: IPC call - get stats
           Logger.debug('DASHBOARD_IPC', 'IPC: Get stats requested', { days });
-          
+
           const result = await databaseService.getTypingStats(
             typeof days === 'number' ? days : 30
           );
@@ -67,7 +67,7 @@ export function setupDashboardIpcHandlers(): void {
         async (...args: unknown[]) => {
           // #DEBUG: IPC call - get analytics
           Logger.debug('DASHBOARD_IPC', 'IPC: Get analytics data requested');
-          
+
           const result = await databaseService.getAnalyticsData();
           if (!result.success) {
             throw new Error('error' in result ? result.error : 'Unknown error');
@@ -86,13 +86,13 @@ export function setupDashboardIpcHandlers(): void {
         async (event) => {
           // #DEBUG: IPC call - get realtime WPM
           Logger.debug('DASHBOARD_IPC', 'IPC: Get realtime WPM requested');
-          
+
           // 🔥 UnifiedHandler에서 실시간 WPM 데이터 가져오기
           const unifiedHandler = globalThis.unifiedHandler;
           if (!unifiedHandler) {
             throw new Error('UnifiedHandler not initialized');
           }
-          
+
           const stats = unifiedHandler.getRealtimeStats();
           return {
             currentWpm: stats.currentWpm,
@@ -113,7 +113,7 @@ export function setupDashboardIpcHandlers(): void {
         (event) => {
           // #DEBUG: IPC call - get app version
           Logger.debug('DASHBOARD_IPC', 'IPC: Get app version requested');
-          
+
           return process.env.npm_package_version || '1.0.0';
         },
         'DASHBOARD_IPC',
@@ -128,7 +128,7 @@ export function setupDashboardIpcHandlers(): void {
         async (event) => {
           // #DEBUG: IPC call - quit app
           Logger.debug('DASHBOARD_IPC', 'IPC: Quit app requested');
-          
+
           const { app } = await import('electron');
           app.quit();
           return true;
@@ -146,7 +146,7 @@ export function setupDashboardIpcHandlers(): void {
           const [event] = args;
           // #DEBUG: IPC call - minimize window
           Logger.debug('DASHBOARD_IPC', 'IPC: Minimize window requested');
-          
+
           if (event && typeof event === 'object' && 'sender' in event) {
             const sender = (event as { sender: { getOwnerBrowserWindow(): unknown } }).sender;
             const window = sender.getOwnerBrowserWindow();
@@ -170,7 +170,7 @@ export function setupDashboardIpcHandlers(): void {
           const [event] = args;
           // #DEBUG: IPC call - maximize window
           Logger.debug('DASHBOARD_IPC', 'IPC: Maximize window requested');
-          
+
           if (event && typeof event === 'object' && 'sender' in event) {
             const sender = (event as { sender: { getOwnerBrowserWindow(): unknown } }).sender;
             const window = sender.getOwnerBrowserWindow();
@@ -201,7 +201,7 @@ export function setupDashboardIpcHandlers(): void {
         async (event) => {
           // #DEBUG: IPC call - health check
           Logger.debug('DASHBOARD_IPC', 'IPC: Health check requested');
-          
+
           const dbHealth = await databaseService.healthCheck();
           return {
             database: dbHealth.success ? dbHealth.data : null,
@@ -221,7 +221,7 @@ export function setupDashboardIpcHandlers(): void {
           const sessionId = args[0] as string;
           // #DEBUG: IPC call - delete session
           Logger.debug('DASHBOARD_IPC', 'IPC: Delete session requested', { sessionId });
-          
+
           if (!sessionId || typeof sessionId !== 'string') {
             Logger.warn('DASHBOARD_IPC', 'Invalid session ID provided');
             return false;
@@ -230,13 +230,13 @@ export function setupDashboardIpcHandlers(): void {
           try {
             // 🔥 데이터베이스에서 세션 삭제
             const result = await databaseService.deleteTypingSession(sessionId);
-            
+
             if (result.success) {
               Logger.info('DASHBOARD_IPC', 'Session deleted successfully', { sessionId });
               return true;
             } else {
-              Logger.error('DASHBOARD_IPC', 'Failed to delete session', { 
-                sessionId, 
+              Logger.error('DASHBOARD_IPC', 'Failed to delete session', {
+                sessionId,
                 error: 'error' in result ? result.error : 'Unknown error'
               });
               return false;
@@ -259,11 +259,11 @@ export function setupDashboardIpcHandlers(): void {
           const format = (args[0] as 'json' | 'csv') || 'json';
           // #DEBUG: IPC call - export data
           Logger.debug('DASHBOARD_IPC', 'IPC: Export data requested', { format });
-          
+
           try {
             // 🔥 세션 데이터 조회
             const sessionsResult = await databaseService.getTypingSessions(1000, 0);
-            
+
             if (!sessionsResult.success || !sessionsResult.data) {
               Logger.error('DASHBOARD_IPC', 'Failed to retrieve sessions for export');
               return null;
@@ -283,7 +283,7 @@ export function setupDashboardIpcHandlers(): void {
                 session.id,
                 session.startTime?.toISOString() || '',
                 session.endTime?.toISOString() || '',
-                session.startTime && session.endTime ? 
+                session.startTime && session.endTime ?
                   Math.round((session.endTime.getTime() - session.startTime.getTime()) / 1000) : 0,
                 session.wpm || 0,
                 session.accuracy || 0,
@@ -292,7 +292,7 @@ export function setupDashboardIpcHandlers(): void {
                 session.windowTitle || '', // appName은 windowTitle로 대체
                 session.windowTitle || ''
               ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(','));
-              
+
               exportData = csvHeaders + csvRows.join('\n');
               mimeType = 'text/csv';
             } else {
@@ -308,7 +308,7 @@ export function setupDashboardIpcHandlers(): void {
                   id: session.id,
                   startTime: session.startTime?.toISOString(),
                   endTime: session.endTime?.toISOString(),
-                  duration: session.endTime && session.startTime 
+                  duration: session.endTime && session.startTime
                     ? session.endTime.getTime() - session.startTime.getTime()
                     : 0,
                   wpm: session.wpm,
@@ -319,7 +319,7 @@ export function setupDashboardIpcHandlers(): void {
                   windowTitle: session.windowTitle
                 }))
               };
-              
+
               exportData = JSON.stringify(exportObject, null, 2);
               mimeType = 'application/json';
             }
@@ -351,7 +351,7 @@ export function setupDashboardIpcHandlers(): void {
     ipcMain.handle('dashboard:get-stats', createSafeAsyncIpcHandler(
       async () => {
         Logger.debug('DASHBOARD_IPC', 'IPC: Get dashboard stats requested');
-        
+
         try {
           // TODO: 실제 통계 데이터 구현
           const stats = {
@@ -364,7 +364,7 @@ export function setupDashboardIpcHandlers(): void {
             wpmImprovement: 0,
             projectGrowth: 0,
           };
-          
+
           return stats;
         } catch (error) {
           Logger.error('DASHBOARD_IPC', 'Failed to get dashboard stats', error);
@@ -379,11 +379,11 @@ export function setupDashboardIpcHandlers(): void {
     ipcMain.handle('dashboard:get-recent-sessions', createSafeAsyncIpcHandler(
       async () => {
         Logger.debug('DASHBOARD_IPC', 'IPC: Get recent sessions requested');
-        
+
         try {
           // TODO: 실제 세션 데이터 구현
           const sessions: unknown[] = [];
-          
+
           return sessions;
         } catch (error) {
           Logger.error('DASHBOARD_IPC', 'Failed to get recent sessions', error);

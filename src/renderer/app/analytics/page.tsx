@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  TrendingUp, 
-  TrendingDown, 
-  Activity, 
-  BarChart3, 
-  Clock, 
-  Target, 
-  BookOpen, 
+import {
+  TrendingUp,
+  TrendingDown,
+  Activity,
+  BarChart3,
+  Clock,
+  Target,
+  BookOpen,
   Zap,
   Globe,
   Award,
@@ -45,30 +45,30 @@ const ANALYTICS_STYLES = {
   container: 'container mx-auto px-4 py-6 max-w-7xl',
   header: 'mb-8',
   pageTitle: 'text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6',
-  
+
   // 탭 시스템
   tabsContainer: 'border-b border-slate-200 dark:border-slate-700 mb-8',
   tabsList: 'flex space-x-8',
   tab: 'py-3 px-4 font-medium text-sm border-b-2 transition-colors cursor-pointer',
   tabActive: 'border-blue-500 text-blue-600 dark:text-blue-400',
   tabInactive: 'border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200',
-  
+
   // KPI 카드 그리드
   kpiGrid: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8',
-  
+
   // 인사이트 카드
   insightCard: 'bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl p-6 text-white mb-6',
   insightTitle: 'text-xl font-bold mb-2',
   insightDescription: 'text-blue-100 mb-4',
   insightAction: 'bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm font-medium hover:bg-white/30 transition-colors cursor-pointer',
-  
+
   // 빈 상태
   emptyState: 'flex flex-col items-center justify-center py-16',
   emptyIcon: 'text-6xl mb-4',
   emptyTitle: 'text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2',
   emptyDescription: 'text-slate-600 dark:text-slate-400 text-center max-w-md mb-6',
   emptyAction: 'bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors cursor-pointer',
-  
+
   // 차트 영역
   chartsGrid: 'grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8',
   chartCard: 'p-6',
@@ -94,7 +94,7 @@ export default function AnalyticsPage(): React.ReactElement {
   useEffect(() => {
     Logger.info('ANALYTICS_PAGE', 'Analytics page loaded');
     loadRealData();
-    
+
     // 🔥 10초마다 실시간 데이터 업데이트
     const interval = setInterval(() => {
       if (!loading) {
@@ -160,7 +160,7 @@ export default function AnalyticsPage(): React.ReactElement {
       }
 
       // 타이핑 통계는 realtime과 keyboard 데이터에서 가져옴
-      
+
       setRealData({
         dashboard: dashboardStats.success ? dashboardStats.data : null,
         realtime: realtimeStats.success ? realtimeStats.data : null,
@@ -262,10 +262,10 @@ export default function AnalyticsPage(): React.ReactElement {
           <KpiCard
             title="오늘 작성량"
             value={
-              realData?.dashboard?.todayWords || 
-              realData?.realtime?.totalWords || 
-              realData?.typing?.todayWords || 
-              realData?.keyboard?.totalKeystrokes || 
+              realData?.dashboard?.todayWords ||
+              realData?.realtime?.totalWords ||
+              realData?.typing?.todayWords ||
+              realData?.keyboard?.totalKeystrokes ||
               0
             }
             change={{ value: 12, type: 'increase' }}
@@ -275,8 +275,8 @@ export default function AnalyticsPage(): React.ReactElement {
           <KpiCard
             title="평균 WPM"
             value={
-              realData?.realtime?.currentWpm || 
-              realData?.keyboard?.avgWpm || 
+              realData?.realtime?.currentWpm ||
+              realData?.keyboard?.avgWpm ||
               realData?.typing?.averageWpm ||
               Math.round((realData?.keyboard?.totalKeystrokes || 0) / 5) || // 대략적 WPM 계산
               0
@@ -288,10 +288,10 @@ export default function AnalyticsPage(): React.ReactElement {
           <KpiCard
             title="세션 시간"
             value={Math.round(
-              (realData?.realtime?.sessionTime || 
-               realData?.keyboard?.sessionTime || 
-               realData?.typing?.sessionTime || 
-               0) / 60
+              (realData?.realtime?.sessionTime ||
+                realData?.keyboard?.sessionTime ||
+                realData?.typing?.sessionTime ||
+                0) / 60
             )}
             icon={Clock}
             color="purple"
@@ -299,8 +299,8 @@ export default function AnalyticsPage(): React.ReactElement {
           <KpiCard
             title="정확도"
             value={
-              realData?.realtime?.accuracy || 
-              realData?.keyboard?.accuracy || 
+              realData?.realtime?.accuracy ||
+              realData?.keyboard?.accuracy ||
               realData?.typing?.accuracy ||
               Math.max(85, Math.round(Math.random() * 15 + 85)) || // 임시 fallback
               0
@@ -322,7 +322,7 @@ export default function AnalyticsPage(): React.ReactElement {
               </div>
             </div>
           </Card>
-          
+
           <Card className={ANALYTICS_STYLES.chartCard}>
             <h3 className={ANALYTICS_STYLES.chartTitle}>시간대별 생산성</h3>
             <div className={ANALYTICS_STYLES.chartPlaceholder}>
@@ -372,7 +372,7 @@ export default function AnalyticsPage(): React.ReactElement {
       {/* 헤더 */}
       <div className={ANALYTICS_STYLES.header}>
         <h1 className={ANALYTICS_STYLES.pageTitle}>분석 및 통계</h1>
-        
+
         {/* 탭 네비게이션 */}
         <div className={ANALYTICS_STYLES.tabsContainer}>
           <div className={ANALYTICS_STYLES.tabsList}>
@@ -381,9 +381,8 @@ export default function AnalyticsPage(): React.ReactElement {
               return (
                 <button
                   key={tab.id}
-                  className={`${ANALYTICS_STYLES.tab} ${
-                    currentTab === tab.id ? ANALYTICS_STYLES.tabActive : ANALYTICS_STYLES.tabInactive
-                  }`}
+                  className={`${ANALYTICS_STYLES.tab} ${currentTab === tab.id ? ANALYTICS_STYLES.tabActive : ANALYTICS_STYLES.tabInactive
+                    }`}
                   onClick={() => setCurrentTab(tab.id)}
                 >
                   <div className="flex items-center gap-2">
