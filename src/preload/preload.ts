@@ -60,6 +60,7 @@ const electronAPI: ElectronAPI = {
   dashboard: {
     getStats: () => ipcRenderer.invoke('dashboard:get-stats'),
     getRecentSessions: () => ipcRenderer.invoke('dashboard:get-recent-sessions'),
+    getAnalytics: () => ipcRenderer.invoke(IPC_CHANNELS.DATABASE.GET_ANALYTICS), // 🔥 새로 추가
   },
 
   projects: {

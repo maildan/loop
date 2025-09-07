@@ -197,6 +197,7 @@ export interface ElectronAPI {
   dashboard: {
     getStats: () => Promise<IpcResponse<DashboardStats>>;
     getRecentSessions: () => Promise<IpcResponse<TypingSession[]>>;
+    getAnalytics: () => Promise<IpcResponse<any>>; // 🔥 새로 추가 - 종합 분석 데이터
   };
 
   // 📁 프로젝트 API
@@ -573,6 +574,7 @@ export const IPC_CHANNELS = {
     SAVE_SESSION: 'database:save-session',
     GET_SESSIONS: 'database:get-sessions',
     GET_STATS: 'database:get-stats',
+    GET_ANALYTICS: 'database:get-analytics', // 🔥 새로 추가
   },
   SETTINGS: {
     GET: 'settings:get',

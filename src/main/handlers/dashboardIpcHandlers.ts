@@ -60,6 +60,25 @@ export function setupDashboardIpcHandlers(): void {
       )
     );
 
+    // 🔥 종합 분석 데이터 조회 (새로 추가)
+    ipcMain.handle(
+      IPC_CHANNELS.DATABASE.GET_ANALYTICS,
+      createSafeAsyncIpcHandler(
+        async (...args: unknown[]) => {
+          // #DEBUG: IPC call - get analytics
+          Logger.debug('DASHBOARD_IPC', 'IPC: Get analytics data requested');
+          
+          const result = await databaseService.getAnalyticsData();
+          if (!result.success) {
+            throw new Error('error' in result ? result.error : 'Unknown error');
+          }
+          return result.data;
+        },
+        'DASHBOARD_IPC',
+        'Get comprehensive analytics data'
+      )
+    );
+
     // 🔥 실시간 WPM 업데이트 (향후 구현)
     ipcMain.handle(
       'dashboard:get-realtime-wpm',

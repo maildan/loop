@@ -893,6 +893,10 @@ img, video {
   width: .875rem;
 }
 
+.w-3\/4 {
+  width: 75%;
+}
+
 .w-32 {
   width: 8rem;
 }

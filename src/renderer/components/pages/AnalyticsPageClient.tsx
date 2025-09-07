@@ -158,93 +158,89 @@ export function AnalyticsPageClient(): React.ReactElement {
     totalWords: 147382
   });
 
-  // 💡 인사이트 데이터
-  const insights: WritingInsight[] = [
-    {
-      id: '1',
-      type: 'goldenTime',
-      title: '오후 2-4시에 가장 높은 생산성을 보입니다',
-      description: '평균 WPM 75로 다른 시간대 대비 47% 높은 효율성',
-      action: '내일 오후 2시 집중 시간 알림 설정',
-      priority: 'high',
-      actionable: true
-    },
-    {
-      id: '2',
-      type: 'goal',
-      title: '오늘 목표의 49.8% 달성 중',
-      description: '2,500자 중 1,247자 완료, 예상 완료 시간: 오후 6시',
-      action: '지금 30분만 더 써보세요',
-      priority: 'medium',
-      actionable: true
-    },
-    {
-      id: '3',
-      type: 'trend',
-      title: '주간 패턴이 일정합니다',
-      description: '월>화>수 순으로 생산성이 높음, 일관된 패턴 유지',
-      action: '이 패턴을 다음 주에도 적용해보세요',
-      priority: 'low',
-      actionable: false
-    }
-  ];
+  // � 실제 Analytics API 데이터 상태
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [insights, setInsights] = useState<WritingInsight[]>([]);
+  const [projectRankings, setProjectRankings] = useState<ProjectRanking[]>([]);
 
-  // 🏆 프로젝트 랭킹 데이터
-  const projectRankings: ProjectRanking[] = [
-    {
-      id: '1',
-      title: '로맨스 소설 A',
-      score: 87,
-      progress: 47.4,
-      genre: '로맨스',
-      insights: ['높은 몰입도', '빠른 진행', '일정한 페이스'],
-      trend: 'up'
-    },
-    {
-      id: '2',
-      title: '에세이 B',
-      score: 72,
-      progress: 23.1,
-      genre: '에세이',
-      insights: ['꾸준한 페이스', '안정적', '개선 여지'],
-      trend: 'stable'
-    },
-    {
-      id: '3',
-      title: '시나리오 C',
-      score: 65,
-      progress: 12.8,
-      genre: '시나리오',
-      insights: ['느린 시작', '개선 필요', '잠재력 높음'],
-      trend: 'down'
-    }
-  ];
-
-  // 🔥 데이터 로드
+  // 🔥 실제 데이터 로드
   useEffect(() => {
     const loadData = async (): Promise<void> => {
       try {
+        setLoading(true);
+        
+        // 🎯 실제 Electron Analytics API 호출
         if (typeof window !== 'undefined' && window.electronAPI) {
-          const response = await window.electronAPI.dashboard.getStats();
+          const response = await window.electronAPI.dashboard.getAnalytics();
+          
           if (response.success && response.data) {
-            setDashboardData(prev => ({
-              ...prev,
-              ...response.data
-            }));
-            setHasData(true);
-          }
+            const data = response.data;
+            setAnalyticsData(data);
+            
+            // 🎯 대시보드 데이터 업데이트
+            setDashboardData({
+              todayWords: data.todayWords || 0,
+              todayGoal: 2500, // 목표는 설정값 유지
+              weekWords: data.weeklyWords || 0,
+              monthWords: data.totalWords || 0,
+              avgWpm: Math.round(data.avgWpm) || 0,
+              totalProjects: data.totalProjects || 0,
+              activeProjects: data.activeProjects || 0,
+              completedProjects: data.completedProjects || 0,
+              accuracy: Math.round(data.avgAccuracy) || 0,
+              streakDays: 7, // TODO: 실제 연속 일수 계산
+              goldenTime: '14:00-16:00', // TODO: 실제 최고 시간대 분석
+              nextTarget: '다음 목표 설정',
+              weeklyTrend: ['월', '화', '수', '목', '금'], // TODO: 실제 주간 트렌드
+            totalWords: data.totalWords || 0
+          });
+          
+          // 🎯 인사이트 데이터 업데이트
+          setInsights(data.insights || []);
+          
+          // 🎯 프로젝트 랭킹 데이터 업데이트
+          setProjectRankings(data.topProjects?.map((project: any) => ({
+            id: project.id,
+            title: project.title,
+            score: Math.min(100, Math.round((project.wordCount || 0) / 100)), // 단어수 기반 점수
+            progress: project.progress || 0,
+            genre: project.genre || '기타',
+            insights: [
+              `${(project.wordCount || 0).toLocaleString()}단어`,
+              `진행률 ${project.progress || 0}%`
+            ],
+            trend: (project.wordCount || 0) > 5000 ? 'up' : (project.wordCount || 0) > 1000 ? 'stable' : 'down'
+          })) || []);
+          
+          setHasData(data.hasData);
+          Logger.info('ANALYTICS_PAGE', 'Real data loaded successfully', { 
+            projects: data.totalProjects,
+            characters: data.totalCharacters,
+            sessions: data.totalSessions
+          });
+        } else {
+          throw new Error('Invalid Analytics API response');
+        }
+        } else {
+          throw new Error('ElectronAPI not available');
         }
       } catch (error) {
-        Logger.error('ANALYTICS_PAGE', '대시보드 데이터 로드 실패', error);
-        // 데모 데이터로 계속 진행
-        setHasData(true);
+        Logger.error('ANALYTICS_PAGE', 'Failed to load analytics data', error);
+        
+        // 🚨 실패시 빈 상태로 설정 (더미 데이터 없음)
+        setHasData(false);
+        setInsights([]);
+        setProjectRankings([]);
+      } finally {
+        setLoading(false);
       }
     };
 
     loadData();
   }, []);
 
-  // 🎯 빈 상태 컴포넌트
+  //  빈 상태 컴포넌트
   const EmptyState = ({ type }: { type: string }) => (
     <div className={ANALYTICS_STYLES.emptyState}>
       <div className={ANALYTICS_STYLES.emptyIcon}>✍️</div>
@@ -622,7 +618,26 @@ export function AnalyticsPageClient(): React.ReactElement {
       </div>
 
       {/* 🎯 탭별 컨텐츠 */}
-      {!hasData ? (
+      {loading ? (
+        /* 🔄 로딩 상태 */
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map(i => (
+              <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
+                <div className="animate-pulse">
+                  <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-2"></div>
+                  <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-2"></div>
+                  <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center py-8">
+            <div className="text-lg text-slate-600 dark:text-slate-400">실제 데이터를 불러오는 중...</div>
+            <div className="text-sm text-slate-500 dark:text-slate-500 mt-1">프로젝트, 캐릭터, 통계 분석 중</div>
+          </div>
+        </div>
+      ) : !hasData ? (
         <EmptyState type="firstWeek" />
       ) : (
         <>

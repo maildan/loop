@@ -477,6 +477,218 @@ export class DatabaseService {
       errorsCount,
     };
   }
+
+  // 🔥 종합 분석 데이터 가져오기 (새로 추가)
+  public async getAnalyticsData(): Promise<Result<any>> {
+    try {
+      if (!this.ensureConnection()) {
+        throw new Error('Database not connected');
+      }
+
+      Logger.debug('DATABASE', 'Getting comprehensive analytics data');
+
+      // 🎯 병렬로 모든 분석 데이터 가져오기
+      const [
+        projectsResult,
+        charactersResult,
+        sessionsResult,
+        recentSessionsResult
+      ] = await Promise.all([
+        this.getProjectsData(),
+        this.getCharactersData(), 
+        this.getTypingSessions(100, 0),
+        this.getRecentSessions(7)
+      ]);
+
+      // 모든 결과가 성공인지 확인
+      if (!projectsResult.success || !charactersResult.success || 
+          !sessionsResult.success || !recentSessionsResult.success) {
+        throw new Error('Failed to fetch some analytics data');
+      }
+
+      const projects = projectsResult.data;
+      const characters = charactersResult.data;
+      const sessions = sessionsResult.data;
+      const recentSessions = recentSessionsResult.data;
+
+      // 🎯 통계 계산
+      const stats = {
+        // 프로젝트 통계
+        totalProjects: projects.length,
+        activeProjects: projects.filter((p: any) => p.status === 'active').length,
+        completedProjects: projects.filter((p: any) => p.status === 'completed').length,
+        totalWords: projects.reduce((sum: number, p: any) => sum + (p.wordCount || 0), 0),
+        
+        // 캐릭터 통계
+        totalCharacters: characters.length,
+        charactersByRole: characters.reduce((acc: any, char: any) => {
+          acc[char.role] = (acc[char.role] || 0) + 1;
+          return acc;
+        }, {}),
+        
+        // 타이핑 통계
+        totalSessions: sessions.length,
+        avgWpm: sessions.length > 0 
+          ? sessions.reduce((sum: number, s: any) => sum + (s.wpm || 0), 0) / sessions.length 
+          : 0,
+        avgAccuracy: sessions.length > 0
+          ? sessions.reduce((sum: number, s: any) => sum + (s.accuracy || 0), 0) / sessions.length
+          : 0,
+        
+        // 주간 통계
+        weeklyWords: recentSessions.reduce((sum: number, s: any) => sum + (s.keyCount || 0), 0),
+        weeklyAvgWpm: recentSessions.length > 0
+          ? recentSessions.reduce((sum: number, s: any) => sum + (s.wpm || 0), 0) / recentSessions.length
+          : 0,
+        
+        // 오늘 통계
+        todayWords: recentSessions.filter((s: any) => {
+          const today = new Date();
+          const sessionDate = new Date(s.startTime);
+          return sessionDate.toDateString() === today.toDateString();
+        }).reduce((sum: number, s: any) => sum + (s.keyCount || 0), 0),
+        
+        // 상세 데이터
+        topProjects: projects
+          .sort((a: any, b: any) => (b.wordCount || 0) - (a.wordCount || 0))
+          .slice(0, 5),
+        characterDetails: characters.slice(0, 10),
+        recentActivity: recentSessions.slice(0, 10)
+      };
+
+      // 🎯 인사이트 생성
+      const insights = [];
+      
+      if (stats.topProjects.length > 0) {
+        const topProject = stats.topProjects[0];
+        insights.push({
+          id: 'top-project',
+          type: 'achievement',
+          title: `'${topProject.title}'이 가장 활발한 프로젝트입니다`,
+          description: `${(topProject.wordCount || 0).toLocaleString()}단어 작성`,
+          action: '프로젝트 상세보기',
+          priority: 'high',
+          actionable: true
+        });
+      }
+      
+      if (stats.avgWpm > 0) {
+        const wpmLevel = stats.avgWpm > 80 ? '높음' : stats.avgWpm > 60 ? '보통' : '개선 필요';
+        insights.push({
+          id: 'wpm-analysis',
+          type: 'performance',
+          title: `평균 타이핑 속도가 ${wpmLevel} 수준입니다`,
+          description: `분당 ${Math.round(stats.avgWpm)}단어, 정확도 ${Math.round(stats.avgAccuracy)}%`,
+          action: '타이핑 연습하기',
+          priority: stats.avgWpm > 70 ? 'medium' : 'high',
+          actionable: true
+        });
+      }
+
+      const result = {
+        ...stats,
+        insights,
+        generatedAt: new Date().toISOString(),
+        hasData: projects.length > 0 || sessions.length > 0
+      };
+
+      Logger.info('DATABASE', 'Analytics data generated successfully', { 
+        projects: stats.totalProjects,
+        characters: stats.totalCharacters,
+        sessions: stats.totalSessions
+      });
+
+      return createSuccess(result);
+
+    } catch (error) {
+      Logger.error('DATABASE', 'Failed to get analytics data', error);
+      return createError(error instanceof Error ? error.message : 'Failed to get analytics data');
+    }
+  }
+
+  // 🔥 프로젝트 데이터 가져오기 (새로 추가)
+  public async getProjectsData(): Promise<Result<any[]>> {
+    try {
+      if (!this.ensureConnection()) {
+        throw new Error('Database not connected');
+      }
+
+      Logger.debug('DATABASE', 'Getting projects data');
+
+      const projects = await this.prisma!.$executeRaw`
+        SELECT 
+          id, title, description, genre, status, progress, wordCount, author,
+          createdAt, lastModified
+        FROM projects 
+        ORDER BY lastModified DESC
+      `;
+
+      return createSuccess(Array.isArray(projects) ? projects : []);
+
+    } catch (error) {
+      Logger.error('DATABASE', 'Failed to get projects data', error);
+      return createError(error instanceof Error ? error.message : 'Failed to get projects');
+    }
+  }
+
+  // 🔥 캐릭터 데이터 가져오기 (새로 추가)
+  public async getCharactersData(): Promise<Result<any[]>> {
+    try {
+      if (!this.ensureConnection()) {
+        throw new Error('Database not connected');
+      }
+
+      Logger.debug('DATABASE', 'Getting characters data');
+
+      const characters = await this.prisma!.$executeRaw`
+        SELECT 
+          pc.id, pc.name, pc.role, pc.description, pc.personality, 
+          pc.background, pc.avatar, pc.color, pc.createdAt,
+          p.title as projectTitle, p.genre as projectGenre
+        FROM project_characters pc
+        JOIN projects p ON pc.projectId = p.id
+        WHERE pc.isActive = 1
+        ORDER BY pc.createdAt DESC
+      `;
+
+      return createSuccess(Array.isArray(characters) ? characters : []);
+
+    } catch (error) {
+      Logger.error('DATABASE', 'Failed to get characters data', error);
+      return createError(error instanceof Error ? error.message : 'Failed to get characters');
+    }
+  }
+
+  // 🔥 최근 세션 데이터 가져오기 (새로 추가)
+  public async getRecentSessions(days = 7): Promise<Result<any[]>> {
+    try {
+      if (!this.ensureConnection()) {
+        throw new Error('Database not connected');
+      }
+
+      Logger.debug('DATABASE', 'Getting recent sessions', { days });
+
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - days);
+
+      const sessions = await this.prisma!.typingSession.findMany({
+        where: {
+          startTime: {
+            gte: cutoffDate,
+          },
+        },
+        orderBy: {
+          startTime: 'desc'
+        }
+      });
+
+      return createSuccess(sessions);
+
+    } catch (error) {
+      Logger.error('DATABASE', 'Failed to get recent sessions', error);
+      return createError(error instanceof Error ? error.message : 'Failed to get recent sessions');
+    }
+  }
 }
 
 // 🔥 기가차드 전역 데이터베이스 서비스
