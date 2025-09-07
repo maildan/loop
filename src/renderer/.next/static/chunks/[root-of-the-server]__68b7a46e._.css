@@ -745,6 +745,10 @@ img, video {
   height: calc(100% - 3.5rem);
 }
 
+.h-\[calc\(100vh-108px\)\] {
+  height: calc(100vh - 108px);
+}
+
 .h-auto {
   height: auto;
 }

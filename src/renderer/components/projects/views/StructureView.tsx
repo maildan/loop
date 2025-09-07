@@ -155,8 +155,11 @@ const StructureView = memo(function StructureView({
   }, [projectId, structures, triggerUpdate]);
 
   const handleAddItem = useCallback(async (type: 'chapter' | 'synopsis' | 'idea'): Promise<void> => {
+    Logger.info('STRUCTURE_VIEW', 'Adding new item', { type, projectId });
+
     // 🔥 NEW: chapter 타입일 때는 모달을 통해 처리
     if (type === 'chapter' && onAddNewChapter) {
+      Logger.info('STRUCTURE_VIEW', 'Using chapter modal');
       onAddNewChapter();
       setShowAddMenu(false);
       return;
@@ -177,6 +180,8 @@ const StructureView = memo(function StructureView({
       itemTitle = `${chapterCount}챕터`;
     }
 
+    Logger.info('STRUCTURE_VIEW', 'Creating new item', { type, title: itemTitle });
+
     const newItem: ProjectStructure = {
       id: `${type}_${Date.now()}`,
       title: itemTitle,
@@ -188,26 +193,34 @@ const StructureView = memo(function StructureView({
       updatedAt: new Date()
     };
 
-    // 🔥 Zustand 스토어에 추가 (비동기)
-    await addStructureItem(projectId, newItem);
+    try {
+      // 🔥 Zustand 스토어에 추가 (비동기)
+      await addStructureItem(projectId, newItem);
+      Logger.info('STRUCTURE_VIEW', 'Item added successfully', { id: newItem.id, type, title: itemTitle });
 
-    // 🔥 에디터 상태 업데이트
-    setCurrentEditor({
-      projectId,
-      editorType: type,
-      itemId: newItem.id,
-      itemTitle: newItem.title
-    });
+      // 🔥 에디터 상태 업데이트
+      setCurrentEditor({
+        projectId,
+        editorType: type,
+        itemId: newItem.id,
+        itemTitle: newItem.title
+      });
 
-    setShowAddMenu(false);
+      setShowAddMenu(false);
 
-    // 🔥 해당 타입의 에디터로 이동
-    if (type === 'idea') {
-      onNavigateToIdeaEdit?.(newItem.id);
-    } else if (type === 'synopsis') {
-      onNavigateToSynopsisEdit?.(newItem.id);
+      // 🔥 해당 타입의 에디터로 이동
+      if (type === 'idea') {
+        onNavigateToIdeaEdit?.(newItem.id);
+      } else if (type === 'synopsis') {
+        onNavigateToSynopsisEdit?.(newItem.id);
+      }
+
+      // 강제 리렌더링
+      triggerUpdate();
+    } catch (error) {
+      Logger.error('STRUCTURE_VIEW', 'Failed to add structure item', { type, error });
     }
-  }, [projectId, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToSynopsisEdit]);
+  }, [projectId, structures, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToSynopsisEdit, triggerUpdate]);
 
   const handleItemClick = useCallback((item: ProjectStructure): void => {
     // 🔥 에디터 상태 업데이트

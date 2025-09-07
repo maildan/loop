@@ -179,8 +179,13 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
     ]);
     const handleAddItem = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "StructureView.StructureView.useCallback[handleAddItem]": async (type)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_VIEW', 'Adding new item', {
+                type,
+                projectId
+            });
             // 🔥 NEW: chapter 타입일 때는 모달을 통해 처리
             if (type === 'chapter' && onAddNewChapter) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_VIEW', 'Using chapter modal');
                 onAddNewChapter();
                 setShowAddMenu(false);
                 return;
@@ -200,6 +205,10 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 const chapterCount = chapterStructures.length + 1;
                 itemTitle = `${chapterCount}챕터`;
             }
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_VIEW', 'Creating new item', {
+                type,
+                title: itemTitle
+            });
             const newItem = {
                 id: `${type}_${Date.now()}`,
                 title: itemTitle,
@@ -210,30 +219,46 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
-            // 🔥 Zustand 스토어에 추가 (비동기)
-            await addStructureItem(projectId, newItem);
-            // 🔥 에디터 상태 업데이트
-            setCurrentEditor({
-                projectId,
-                editorType: type,
-                itemId: newItem.id,
-                itemTitle: newItem.title
-            });
-            setShowAddMenu(false);
-            // 🔥 해당 타입의 에디터로 이동
-            if (type === 'idea') {
-                onNavigateToIdeaEdit?.(newItem.id);
-            } else if (type === 'synopsis') {
-                onNavigateToSynopsisEdit?.(newItem.id);
+            try {
+                // 🔥 Zustand 스토어에 추가 (비동기)
+                await addStructureItem(projectId, newItem);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_VIEW', 'Item added successfully', {
+                    id: newItem.id,
+                    type,
+                    title: itemTitle
+                });
+                // 🔥 에디터 상태 업데이트
+                setCurrentEditor({
+                    projectId,
+                    editorType: type,
+                    itemId: newItem.id,
+                    itemTitle: newItem.title
+                });
+                setShowAddMenu(false);
+                // 🔥 해당 타입의 에디터로 이동
+                if (type === 'idea') {
+                    onNavigateToIdeaEdit?.(newItem.id);
+                } else if (type === 'synopsis') {
+                    onNavigateToSynopsisEdit?.(newItem.id);
+                }
+                // 강제 리렌더링
+                triggerUpdate();
+            } catch (error) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_VIEW', 'Failed to add structure item', {
+                    type,
+                    error
+                });
             }
         }
     }["StructureView.StructureView.useCallback[handleAddItem]"], [
         projectId,
+        structures,
         addStructureItem,
         setCurrentEditor,
         onAddNewChapter,
         onNavigateToIdeaEdit,
-        onNavigateToSynopsisEdit
+        onNavigateToSynopsisEdit,
+        triggerUpdate
     ]);
     const handleItemClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useCallback"])({
         "StructureView.StructureView.useCallback[handleItemClick]": (item)=>{
@@ -373,7 +398,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         children: "스토리 구조"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 316,
+                        lineNumber: 329,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -381,13 +406,13 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                         children: "장, 장면, 메모를 관리하여 이야기의 흐름을 구성하세요"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 317,
+                        lineNumber: 330,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 315,
+                lineNumber: 328,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -409,7 +434,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                         className: STRUCTURE_STYLES.itemIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                        lineNumber: 336,
+                                        lineNumber: 349,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -424,7 +449,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                             autoFocus: true
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 339,
+                                            lineNumber: 352,
                                             columnNumber: 21
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                                             children: [
@@ -433,7 +458,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     children: item.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 350,
+                                                    lineNumber: 363,
                                                     columnNumber: 23
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -441,14 +466,14 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     children: item.type === 'chapter' ? '장' : item.type === 'synopsis' ? '시놉시스' : '아이디어'
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 351,
+                                                    lineNumber: 364,
                                                     columnNumber: 23
                                                 }, this)
                                             ]
                                         }, void 0, true)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                        lineNumber: 337,
+                                        lineNumber: 350,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -466,12 +491,12 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 368,
+                                                    lineNumber: 381,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                lineNumber: 359,
+                                                lineNumber: 372,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -486,24 +511,24 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     className: "w-4 h-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 379,
+                                                    lineNumber: 392,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                lineNumber: 370,
+                                                lineNumber: 383,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                        lineNumber: 358,
+                                        lineNumber: 371,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, item.id, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                lineNumber: 330,
+                                lineNumber: 343,
                                 columnNumber: 15
                             }, this);
                         }),
@@ -522,33 +547,33 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                             className: "w-5 h-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 396,
+                                            lineNumber: 409,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "새 항목 추가"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 397,
+                                            lineNumber: 410,
                                             columnNumber: 15
                                         }, this),
                                         showAddMenu ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 398,
+                                            lineNumber: 411,
                                             columnNumber: 30
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 398,
+                                            lineNumber: 411,
                                             columnNumber: 68
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 388,
+                                    lineNumber: 401,
                                     columnNumber: 13
                                 }, this),
                                 showAddMenu && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -565,7 +590,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                     className: "w-5 h-5 text-blue-600 dark:text-blue-400"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 413,
+                                                    lineNumber: 426,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -576,7 +601,7 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                             children: label
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 415,
+                                                            lineNumber: 428,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -584,41 +609,41 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                                                             children: description
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 418,
+                                                            lineNumber: 431,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 414,
+                                                    lineNumber: 427,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, type, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 404,
+                                            lineNumber: 417,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 402,
+                                    lineNumber: 415,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                            lineNumber: 387,
+                            lineNumber: 400,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                    lineNumber: 324,
+                    lineNumber: 337,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 323,
+                lineNumber: 336,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ConfirmDialog"], {
@@ -633,13 +658,13 @@ const StructureView = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pr
                 onCancel: handleCancelDelete
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 431,
+                lineNumber: 444,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-        lineNumber: 313,
+        lineNumber: 326,
         columnNumber: 5
     }, this);
 }, "DoC2CLdSSclGLA4GWVm9qeX8XT0=", false, function() {

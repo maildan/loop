@@ -41,10 +41,13 @@ interface WriterSidebarProps {
 
 // 🔥 기가차드 간소화된 사이드바 스타일
 const SIDEBAR_STYLES = {
-  // 기본 컨테이너 (스크롤바 문제 해결)
-  container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full',
-  collapsed: 'w-12',
-  expanded: 'w-64',
+  // 기본 컨테이너 (크기 확장 및 슬라이드 효과 개선)
+  container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out transform',
+  // 🔥 크기 확장: 320px → 더 넓게
+  collapsed: 'w-12 -translate-x-full opacity-0',
+  expanded: 'w-80 translate-x-0 opacity-100',
+  // 🔥 높이 계산: ProjectHeader(~60px) + TabBar(~48px) 제외
+  height: 'h-[calc(100vh-108px)]',
 
   // 🔥 얇은 스크롤바 적용 영역
   scrollArea: 'flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar',
@@ -252,7 +255,7 @@ export const WriterSidebar = memo(function WriterSidebar({
   }
 
   return (
-    <div className={`${SIDEBAR_STYLES.container} ${SIDEBAR_STYLES.expanded}`}>
+    <div className={`${SIDEBAR_STYLES.container} ${collapsed ? SIDEBAR_STYLES.collapsed : SIDEBAR_STYLES.expanded} ${SIDEBAR_STYLES.height}`}>
       {/* 🔥 메인 메뉴 */}
       <div className={SIDEBAR_STYLES.menuSection}>
         {MENU_ITEMS.map((item) => (

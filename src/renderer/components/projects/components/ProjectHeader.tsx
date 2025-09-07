@@ -66,6 +66,8 @@ type SlidebarType = null;
 
 interface ProjectHeaderProps {
   title: string;
+  projectId: string; // 🔥 프로젝트 ID 추가 (백엔드 연결용)
+  projectContent?: string; // 🔥 현재 프로젝트 내용 (저장용)
   onTitleChange: (title: string) => void;
   onBack: () => void;
 
@@ -102,6 +104,8 @@ interface ProjectHeaderProps {
 
 export function ProjectHeader({
   title,
+  projectId,
+  projectContent = '',
   onTitleChange,
   onBack,
   sidebarCollapsed,
@@ -148,6 +152,118 @@ export function ProjectHeader({
     Logger.info('PROJECT_HEADER', `Theme changed to ${newDarkMode ? 'dark' : 'light'}`);
   };
 
+  // 🔥 실제 프로젝트 저장 기능
+  const handleSave = async (): Promise<void> => {
+    try {
+      Logger.info('PROJECT_HEADER', 'Saving project', { projectId, title });
+
+      // 현재 에디터 내용 가져오기
+      const editorContent = await new Promise<string>((resolve) => {
+        const event = new CustomEvent('project:getContent', {
+          detail: { callback: resolve }
+        });
+        window.dispatchEvent(event);
+        // 타임아웃 처리
+        setTimeout(() => resolve(projectContent), 1000);
+      });
+
+      const result = await window.electronAPI.projects.update(projectId, {
+        title: title.trim(),
+        content: editorContent,
+        lastModified: new Date()
+      });
+
+      if (result.success) {
+        Logger.info('PROJECT_HEADER', 'Project saved successfully');
+        // 성공 알림 (선택사항)
+      } else {
+        Logger.error('PROJECT_HEADER', 'Failed to save project', result.error);
+      }
+    } catch (error) {
+      Logger.error('PROJECT_HEADER', 'Save operation failed', error);
+    }
+  };
+
+  // 🔥 실제 프로젝트 삭제 기능
+  const handleDelete = async (): Promise<void> => {
+    try {
+      // 삭제 확인
+      const confirmed = confirm(`"${title}" 프로젝트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`);
+      if (!confirmed) return;
+
+      Logger.info('PROJECT_HEADER', 'Deleting project', { projectId, title });
+
+      const result = await window.electronAPI.projects.delete(projectId);
+
+      if (result.success) {
+        Logger.info('PROJECT_HEADER', 'Project deleted successfully');
+        // 프로젝트 목록으로 돌아가기
+        onBack();
+      } else {
+        Logger.error('PROJECT_HEADER', 'Failed to delete project', result.error);
+      }
+    } catch (error) {
+      Logger.error('PROJECT_HEADER', 'Delete operation failed', error);
+    }
+  };
+
+  // 🔥 프로젝트 내보내기 기능 (텍스트 다운로드)
+  const handleExport = async (): Promise<void> => {
+    try {
+      Logger.info('PROJECT_HEADER', 'Exporting project', { projectId, title });
+
+      // 현재 에디터 내용 가져오기
+      const editorContent = await new Promise<string>((resolve) => {
+        const event = new CustomEvent('project:getContent', {
+          detail: { callback: resolve }
+        });
+        window.dispatchEvent(event);
+        setTimeout(() => resolve(projectContent), 1000);
+      });
+
+      // 브라우저의 다운로드 기능을 사용하여 파일 저장
+      const blob = new Blob([editorContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${title.replace(/[^\w\s-]/g, '')}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      Logger.info('PROJECT_HEADER', 'Project exported successfully');
+    } catch (error) {
+      Logger.error('PROJECT_HEADER', 'Export operation failed', error);
+    }
+  };
+
+  // 🔥 프로젝트 공유 기능
+  const handleShare = async (): Promise<void> => {
+    try {
+      Logger.info('PROJECT_HEADER', 'Sharing project', { projectId, title });
+
+      // 현재 에디터 내용 가져오기
+      const editorContent = await new Promise<string>((resolve) => {
+        const event = new CustomEvent('project:getContent', {
+          detail: { callback: resolve }
+        });
+        window.dispatchEvent(event);
+        setTimeout(() => resolve(projectContent), 1000);
+      });
+
+      // 클립보드에 프로젝트 정보 복사
+      const shareText = `${title}\n\n${editorContent}`;
+      await navigator.clipboard.writeText(shareText);
+
+      Logger.info('PROJECT_HEADER', 'Project copied to clipboard for sharing');
+
+      // TODO: 추후 실제 공유 기능 (이메일, 소셜 미디어 등) 구현
+    } catch (error) {
+      Logger.error('PROJECT_HEADER', 'Share operation failed', error);
+    }
+  };
+
   // 🔥 에디터 내용 복사 (QA 가이드: 에디터 내용 복사 구현)
   const copyContent = async (): Promise<void> => {
     try {
@@ -174,12 +290,12 @@ export function ProjectHeader({
     }
   };
 
-  // 🔥 헤더 액션 정의 (CRUD + 복사, 공유 개선)
+  // 🔥 헤더 액션 정의 (실제 백엔드 연결된 CRUD + 복사, 공유 개선)
   const headerActions: HeaderAction[] = [
-    { icon: Save, label: '저장', shortcut: 'Cmd+S', onClick: onSave },
+    { icon: Save, label: '저장', shortcut: 'Cmd+S', onClick: handleSave },
     { icon: Copy, label: '복사', shortcut: 'Cmd+C', onClick: copyContent },
-    { icon: Share2, label: '공유', shortcut: 'Cmd+Shift+S', onClick: onShare },
-    { icon: FileDown, label: '내보내기', shortcut: 'Cmd+E', onClick: onDownload },
+    { icon: Share2, label: '공유', shortcut: 'Cmd+Shift+S', onClick: handleShare },
+    { icon: FileDown, label: '내보내기', shortcut: 'Cmd+E', onClick: handleExport },
     // 🔥 Google Docs 관련 액션들 (Google Docs 프로젝트인 경우에만)
     ...(isGoogleDocsProject ? [
       {
@@ -194,7 +310,7 @@ export function ProjectHeader({
         onClick: onOpenGoogleDocs || (() => { })
       }
     ] : []),
-    { icon: Trash2, label: '삭제', shortcut: 'Cmd+Del', onClick: onDelete },
+    { icon: Trash2, label: '삭제', shortcut: 'Cmd+Del', onClick: handleDelete },
   ];
 
   // 🔥 툴바 확장 액션들 (테마 원클릭, 복사, zen mode)
@@ -281,9 +397,10 @@ export function ProjectHeader({
               onClick={action.onClick}
             >
               <action.icon size={16} />
-              {/* 🔥 Context7 패턴: 올바른 툴팁 구현 */}
+              {/* 🔥 Context7 패턴: 올바른 툴팁 구현 (headerActions와 동일한 위치) */}
               <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-                {action.label}
+                <div>{action.label}</div>
+                {action.shortcut && <div className="text-gray-400 text-xs mt-1">{action.shortcut}</div>}
               </div>
             </button>
           ))}

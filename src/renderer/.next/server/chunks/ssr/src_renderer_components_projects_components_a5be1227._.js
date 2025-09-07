@@ -837,7 +837,7 @@ const PROJECT_HEADER_STYLES = {
     slidebarContent: 'p-4 overflow-y-auto h-full',
     slidebarOverlay: 'fixed inset-0 bg-black/50 z-30'
 };
-function ProjectHeader({ title, onTitleChange, onBack, sidebarCollapsed, onToggleSidebar, showRightSidebar = false, onToggleAISidebar, isZenMode = false, onToggleZenMode, onSave, onShare, onDownload, onDelete, // 🔥 Google Docs 관련 props
+function ProjectHeader({ title, projectId, projectContent = '', onTitleChange, onBack, sidebarCollapsed, onToggleSidebar, showRightSidebar = false, onToggleAISidebar, isZenMode = false, onToggleZenMode, onSave, onShare, onDownload, onDelete, // 🔥 Google Docs 관련 props
 isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, onSyncWithGoogle, onOpenGoogleDocs }) {
     const [activeSlideBar, setActiveSlideBar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [isDarkMode, setIsDarkMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(document.documentElement.classList.contains('dark'));
@@ -857,6 +857,123 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
             localStorage.setItem('theme', 'light');
         }
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', `Theme changed to ${newDarkMode ? 'dark' : 'light'}`);
+    };
+    // 🔥 실제 프로젝트 저장 기능
+    const handleSave = async ()=>{
+        try {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Saving project', {
+                projectId,
+                title
+            });
+            // 현재 에디터 내용 가져오기
+            const editorContent = await new Promise((resolve)=>{
+                const event = new CustomEvent('project:getContent', {
+                    detail: {
+                        callback: resolve
+                    }
+                });
+                window.dispatchEvent(event);
+                // 타임아웃 처리
+                setTimeout(()=>resolve(projectContent), 1000);
+            });
+            const result = await window.electronAPI.projects.update(projectId, {
+                title: title.trim(),
+                content: editorContent,
+                lastModified: new Date()
+            });
+            if (result.success) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Project saved successfully');
+            // 성공 알림 (선택사항)
+            } else {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Failed to save project', result.error);
+            }
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Save operation failed', error);
+        }
+    };
+    // 🔥 실제 프로젝트 삭제 기능
+    const handleDelete = async ()=>{
+        try {
+            // 삭제 확인
+            const confirmed = confirm(`"${title}" 프로젝트를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`);
+            if (!confirmed) return;
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Deleting project', {
+                projectId,
+                title
+            });
+            const result = await window.electronAPI.projects.delete(projectId);
+            if (result.success) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Project deleted successfully');
+                // 프로젝트 목록으로 돌아가기
+                onBack();
+            } else {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Failed to delete project', result.error);
+            }
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Delete operation failed', error);
+        }
+    };
+    // 🔥 프로젝트 내보내기 기능 (텍스트 다운로드)
+    const handleExport = async ()=>{
+        try {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Exporting project', {
+                projectId,
+                title
+            });
+            // 현재 에디터 내용 가져오기
+            const editorContent = await new Promise((resolve)=>{
+                const event = new CustomEvent('project:getContent', {
+                    detail: {
+                        callback: resolve
+                    }
+                });
+                window.dispatchEvent(event);
+                setTimeout(()=>resolve(projectContent), 1000);
+            });
+            // 브라우저의 다운로드 기능을 사용하여 파일 저장
+            const blob = new Blob([
+                editorContent
+            ], {
+                type: 'text/plain'
+            });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${title.replace(/[^\w\s-]/g, '')}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Project exported successfully');
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Export operation failed', error);
+        }
+    };
+    // 🔥 프로젝트 공유 기능
+    const handleShare = async ()=>{
+        try {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Sharing project', {
+                projectId,
+                title
+            });
+            // 현재 에디터 내용 가져오기
+            const editorContent = await new Promise((resolve)=>{
+                const event = new CustomEvent('project:getContent', {
+                    detail: {
+                        callback: resolve
+                    }
+                });
+                window.dispatchEvent(event);
+                setTimeout(()=>resolve(projectContent), 1000);
+            });
+            // 클립보드에 프로젝트 정보 복사
+            const shareText = `${title}\n\n${editorContent}`;
+            await navigator.clipboard.writeText(shareText);
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_HEADER', 'Project copied to clipboard for sharing');
+        // TODO: 추후 실제 공유 기능 (이메일, 소셜 미디어 등) 구현
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Share operation failed', error);
+        }
     };
     // 🔥 에디터 내용 복사 (QA 가이드: 에디터 내용 복사 구현)
     const copyContent = async ()=>{
@@ -882,13 +999,13 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_HEADER', 'Failed to copy content', error);
         }
     };
-    // 🔥 헤더 액션 정의 (CRUD + 복사, 공유 개선)
+    // 🔥 헤더 액션 정의 (실제 백엔드 연결된 CRUD + 복사, 공유 개선)
     const headerActions = [
         {
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__["Save"],
             label: '저장',
             shortcut: 'Cmd+S',
-            onClick: onSave
+            onClick: handleSave
         },
         {
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$copy$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Copy$3e$__["Copy"],
@@ -900,13 +1017,13 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$share$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Share2$3e$__["Share2"],
             label: '공유',
             shortcut: 'Cmd+Shift+S',
-            onClick: onShare
+            onClick: handleShare
         },
         {
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileDown$3e$__["FileDown"],
             label: '내보내기',
             shortcut: 'Cmd+E',
-            onClick: onDownload
+            onClick: handleExport
         },
         // 🔥 Google Docs 관련 액션들 (Google Docs 프로젝트인 경우에만)
         ...isGoogleDocsProject ? [
@@ -926,7 +1043,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"],
             label: '삭제',
             shortcut: 'Cmd+Del',
-            onClick: onDelete
+            onClick: handleDelete
         }
     ];
     // 🔥 툴바 확장 액션들 (테마 원클릭, 복사, zen mode)
@@ -981,20 +1098,20 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 12
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 240,
+                                            lineNumber: 356,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Google Docs"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 241,
+                                            lineNumber: 357,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 239,
+                                    lineNumber: 355,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1008,18 +1125,18 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 244,
+                                    lineNumber: 360,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                            lineNumber: 236,
+                            lineNumber: 352,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 235,
+                        lineNumber: 351,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1033,7 +1150,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 264,
+                                            lineNumber: 380,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1043,7 +1160,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 267,
+                                                    lineNumber: 383,
                                                     columnNumber: 17
                                                 }, this),
                                                 action.shortcut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1051,26 +1168,26 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.shortcut
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 268,
+                                                    lineNumber: 384,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 266,
+                                            lineNumber: 382,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `action-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 259,
+                                    lineNumber: 375,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 274,
+                                lineNumber: 390,
                                 columnNumber: 11
                             }, this),
                             toolbarActions.map((action, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1081,28 +1198,44 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 283,
+                                            lineNumber: 399,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "absolute -top-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50",
-                                            children: action.label
-                                        }, void 0, false, {
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    children: action.label
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                                                    lineNumber: 402,
+                                                    columnNumber: 17
+                                                }, this),
+                                                action.shortcut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "text-gray-400 text-xs mt-1",
+                                                    children: action.shortcut
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                                                    lineNumber: 403,
+                                                    columnNumber: 37
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 285,
+                                            lineNumber: 401,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `toolbar-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 278,
+                                    lineNumber: 394,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 292,
+                                lineNumber: 409,
                                 columnNumber: 11
                             }, this),
                             onToggleAISidebar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1113,7 +1246,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 300,
+                                        lineNumber: 417,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1123,7 +1256,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "창작 파트너"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 303,
+                                                lineNumber: 420,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1131,19 +1264,19 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "함께 써봐요"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 304,
+                                                lineNumber: 421,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 302,
+                                        lineNumber: 419,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 296,
+                                lineNumber: 413,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1153,24 +1286,24 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 314,
+                                    lineNumber: 431,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 310,
+                                lineNumber: 427,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 256,
+                        lineNumber: 372,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                lineNumber: 233,
+                lineNumber: 349,
                 columnNumber: 7
             }, this),
             activeSlideBar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1178,7 +1311,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                 onClick: ()=>setActiveSlideBar(null)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                lineNumber: 321,
+                lineNumber: 438,
                 columnNumber: 9
             }, this)
         ]
