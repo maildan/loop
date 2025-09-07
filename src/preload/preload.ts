@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer, nativeTheme } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as crypto from 'crypto';
 import {
   IPC_CHANNELS,
   IpcResponse,
@@ -200,8 +201,13 @@ const electronAPI: ElectronAPI = {
 
     // fallback to file (userData then cwd)
     try {
-      const { app } = require('electron');
-      const userDataPath = app && typeof app.getPath === 'function' ? app.getPath('userData') : process.cwd();
+      // Try to get userData path via IPC first
+      let userDataPath: string;
+      try {
+        userDataPath = await ipcRenderer.invoke('app:get-user-data-path') || process.cwd();
+      } catch (e) {
+        userDataPath = process.cwd();
+      }
       const filePath = path.join(userDataPath, '.auth_snapshot.json');
       if (fs.existsSync(filePath)) {
         const raw = fs.readFileSync(filePath, { encoding: 'utf-8' });
@@ -263,10 +269,8 @@ try {
   (electronAPI as any).__internal = {
     getResourcesPath: () => {
       try {
-        const { app } = require('electron');
-        if (app && typeof app.getAppPath === 'function' && app.getAppPath()) {
-          return app.getAppPath();
-        }
+        // Try to get app path via IPC (synchronous fallback)
+        return process.cwd(); // Safe fallback to current working directory
       } catch (e) {
         // ignore
       }
@@ -293,16 +297,10 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
       try {
         // Prefer userData location (production fallback) then fallback to project root (dev)
         let snapPath = path.join(process.cwd(), '.auth_snapshot.json');
-        try {
-          const { app } = require('electron');
-          if (app && typeof app.getPath === 'function') {
-            const userDataPath = app.getPath('userData');
-            snapPath = path.join(userDataPath, '.auth_snapshot.json');
-          }
-        } catch (e) {
-          // ignore - keep process.cwd() path
-        }
-
+        // Note: In preload context, we cannot directly access app.getPath()
+        // This should be handled via IPC if userData path is needed
+        // For now, using safe fallback to current working directory
+        
         if (fs.existsSync(snapPath)) {
           const raw = fs.readFileSync(snapPath, { encoding: 'utf-8' });
           let auth: any = null;
@@ -315,7 +313,7 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
                 const iv = b.slice(0, 12);
                 const tag = b.slice(12, 28);
                 const encrypted = b.slice(28);
-                const decipher = require('crypto').createDecipheriv('aes-256-gcm', Buffer.from(encKey, 'hex'), iv);
+                const decipher = crypto.createDecipheriv('aes-256-gcm', Buffer.from(encKey, 'hex'), iv);
                 decipher.setAuthTag(tag);
                 const dec = Buffer.concat([decipher.update(encrypted), decipher.final()]);
                 auth = JSON.parse(dec.toString('utf-8'));

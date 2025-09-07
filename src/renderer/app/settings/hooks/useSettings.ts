@@ -346,18 +346,52 @@ export function useSettings(): UseSettingsReturn {
           const rest = parts.slice(1) as string[];
           if (!cat) return prev;
 
+          // 🔒 보안: Prototype Pollution 방지를 위한 위험한 키 필터링
+          const dangerousKeys = ['__proto__', 'constructor', 'prototype'];
+          const isDangerous = (key: string) => dangerousKeys.includes(key);
+
+          if (isDangerous(cat) || rest.some(isDangerous)) {
+            console.warn('Settings: Blocked dangerous key for security:', parts);
+            return prev;
+          }
+
           const newCategory = Object.assign({}, (prev as SettingsData)[cat as keyof SettingsData]) as Record<string, unknown>;
           let target: Record<string, unknown> = newCategory || {};
 
           for (let i = 0; i < rest.length - 1; i++) {
             const k = rest[i];
-            if (!k) continue;
-            if (!(k in target)) target[k] = {};
-            target = target[k] as Record<string, unknown>;
+            if (!k || isDangerous(k)) continue;
+            
+            // 🔒 완전히 안전한 객체 접근 (Prototype Pollution 완전 차단)
+            if (!Object.prototype.hasOwnProperty.call(target, k)) {
+              Object.defineProperty(target, k, {
+                value: Object.create(null),
+                writable: true,
+                enumerable: true,
+                configurable: true
+              });
+            }
+            
+            const nextTarget = Object.prototype.hasOwnProperty.call(target, k) ? target[k] : null;
+            if (nextTarget && typeof nextTarget === 'object') {
+              target = nextTarget as Record<string, unknown>;
+            } else {
+              // 안전하지 않은 경우 빈 객체로 대체
+              const safeObj = Object.create(null);
+              Object.defineProperty(target, k, {
+                value: safeObj,
+                writable: true,
+                enumerable: true,
+                configurable: true
+              });
+              target = safeObj;
+            }
           }
 
           const lastKey = rest[rest.length - 1];
-          if (lastKey) target[lastKey] = payload.value;
+          if (lastKey && !isDangerous(lastKey)) {
+            target[lastKey] = payload.value;
+          }
 
           return Object.assign({}, prev, { [cat]: newCategory }) as SettingsData;
         });

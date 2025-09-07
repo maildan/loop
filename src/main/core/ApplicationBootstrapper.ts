@@ -1,6 +1,6 @@
 // 🔥 기가차드 Application Bootstrapper - 메인 오케스트레이터
 
-import { app, protocol, net } from 'electron';
+import { app, protocol, net, BrowserWindow, nativeImage } from 'electron';
 import { Logger } from '../../shared/logger';
 import { ManagerCoordinator } from './ManagerCoordinator';
 import { EventController } from './EventController';
@@ -19,8 +19,7 @@ import * as path from 'path';
 function resolveAndValidate(filePath: string | null, baseDir: string, allowedFilenames?: string[]): string | null {
   try {
     if (!filePath) return null;
-    const fs = require('fs');
-    const path = require('path');
+    
     const resolvedCandidate = path.resolve(filePath);
     const resolvedBaseDir = path.resolve(baseDir);
 
@@ -43,7 +42,6 @@ function resolveAndValidate(filePath: string | null, baseDir: string, allowedFil
 // Helper: safely get file stats for validated paths
 function getValidatedFileStats(validatedPath: string): { size: number } | null {
   try {
-    const fs = require('fs');
     return fs.statSync(validatedPath);
   } catch (e) {
     return null;
@@ -145,9 +143,22 @@ export class ApplicationBootstrapper {
 
     // loop-avatar:// 프로토콜 등록
     protocol.handle('loop-avatar', (request: Electron.ProtocolRequest) => {
-      const filePath = path.join(avatarsDir, path.normalize(request.url.slice('loop-avatar://'.length)));
       try {
-        return net.fetch(new URL(`file://${filePath}`).toString());
+        const requestedPath = request.url.slice('loop-avatar://'.length);
+        
+        // 🔒 보안: Path Traversal 방지를 위한 검증
+        const safePath = resolveAndValidate(
+          requestedPath, 
+          avatarsDir, 
+          undefined // 모든 파일명 허용하되 디렉토리 제한
+        );
+        
+        if (!safePath) {
+          Logger.warn('PROTOCOL_HANDLER', `Invalid avatar path requested: ${requestedPath}`);
+          return new Response(null, { status: 403 });
+        }
+
+        return net.fetch(new URL(`file://${safePath}`).toString());
       } catch (error) {
         Logger.error('PROTOCOL_HANDLER', `Failed to fetch ${request.url}`, error);
         return new Response(null, { status: 404 });
@@ -168,7 +179,6 @@ export class ApplicationBootstrapper {
 
         // 메인 윈도우 포커스
         try {
-          const { windowManager } = require('./window');
           if (windowManager && windowManager.focusMainWindow) {
             windowManager.focusMainWindow();
           }
@@ -285,7 +295,7 @@ export class ApplicationBootstrapper {
    * 🔥 앱 Activate 이벤트 핸들러
    */
   private async handleAppActivate(): Promise<void> {
-    const windows = require('electron').BrowserWindow.getAllWindows();
+    const windows = BrowserWindow.getAllWindows();
     if (windows.length === 0) {
       await this.handleAppReady();
     }
@@ -313,10 +323,6 @@ export class ApplicationBootstrapper {
    */
   private setupAppIcons(): void {
     try {
-      const path = require('path');
-      const fs = require('fs');
-      const { nativeImage } = require('electron');
-
       // 🔥 개발 환경과 프로덕션 환경 구분
       const isDev = process.env.NODE_ENV === 'development';
 

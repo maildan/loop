@@ -48,20 +48,6 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactEl
     // ignore
   }
 
-  const themeInitializerScript = `
-    (function() {
-      // Prevent CSS transitions during initial theme application to avoid flash
-      try { document.documentElement.classList.add('disable-theme-transitions'); } catch(e){}
-
-      const theme = localStorage.getItem('loop-theme') || localStorage.getItem('theme') || 'system';
-      if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    })();
-  `;
-
   return (
     <html lang="ko" className={`${inter.className} ${LAYOUT_STYLES.html}`} suppressHydrationWarning>
       <head>
@@ -71,7 +57,7 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactEl
         <title>Loop</title>
       </head>
       <body className={`${LAYOUT_STYLES.body} overflow-x-hidden`}>
-        <script dangerouslySetInnerHTML={{ __html: themeInitializerScript }} />
+        <script src="/theme-init.js"></script>
         <div className={LAYOUT_STYLES.container}>
           <ClientLayout initialAuth={initialAuth}>
             {children}

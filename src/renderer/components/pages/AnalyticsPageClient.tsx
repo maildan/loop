@@ -139,7 +139,7 @@ interface ProjectRanking {
 // 🔥 분리된 Analytics 페이지 클라이언트 컴포넌트
 export function AnalyticsPageClient(): React.ReactElement {
   const router = useRouter(); // 🔥 라우터 추가
-  
+
   // 🎯 상태 관리
   const [activeTab, setActiveTab] = useState<TabType>('global');
   const [timeFilter, setTimeFilter] = useState<string>('이번 주');
@@ -176,7 +176,7 @@ export function AnalyticsPageClient(): React.ReactElement {
         // 🎯 실제 Electron Analytics API 호출
         if (typeof window !== 'undefined' && window.electronAPI) {
           const response = await window.electronAPI.dashboard.getAnalytics();
-          
+
           // 🔥 디버깅: API 응답 구조 로깅
           Logger.info('ANALYTICS_PAGE', 'API Response received', {
             hasResponse: !!response,
@@ -266,7 +266,7 @@ export function AnalyticsPageClient(): React.ReactElement {
         {type === 'firstWeek' && '조금만 더 써보시면 더 정확한 분석이 가능해요!'}
         {type === 'analyzing' && '더 정확한 분석을 위해 계속 써보세요!'}
       </p>
-      <Button 
+      <Button
         className={ANALYTICS_STYLES.emptyAction}
         onClick={() => {
           Logger.info('ANALYTICS_PAGE', 'Redirecting to project creator');
@@ -475,7 +475,7 @@ export function AnalyticsPageClient(): React.ReactElement {
                   </div>
                 </div>
                 <div className="mt-4 flex justify-end">
-                  <Button 
+                  <Button
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
                     onClick={() => {
                       Logger.info('ANALYTICS_PAGE', 'Navigating to project details', { projectId: project.id });
@@ -494,7 +494,7 @@ export function AnalyticsPageClient(): React.ReactElement {
             <p className="text-lg text-slate-600 dark:text-slate-400 mb-4">
               아직 생성된 프로젝트가 없습니다
             </p>
-            <Button 
+            <Button
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
               onClick={() => {
                 Logger.info('ANALYTICS_PAGE', 'Creating new project from analytics');
@@ -594,7 +594,7 @@ export function AnalyticsPageClient(): React.ReactElement {
                     return acc;
                   }, {});
                   return Object.entries(genreScores)
-                    .sort(([,a], [,b]) => (b as number) - (a as number))
+                    .sort(([, a], [, b]) => (b as number) - (a as number))
                     .slice(0, 3)
                     .map(([genre, score]) => `${genre} ${score}점`)
                     .join(' > ');

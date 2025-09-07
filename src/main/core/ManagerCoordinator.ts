@@ -41,7 +41,7 @@ export class ManagerCoordinator {
   public setPermissionState(hasPermission: boolean): void {
     this.hasAccessibilityPermission = hasPermission;
     Logger.info(this.componentName, '권한 상태 설정됨', { hasPermission });
-    
+
     // 권한 의존적 매니저들에게 권한 상태 전달
     if (browserDetector) {
       browserDetector.setAccessibilityPermission(hasPermission);
@@ -57,10 +57,10 @@ export class ManagerCoordinator {
 
       // 1. 데이터베이스 (최우선)
       await this.initializeDatabase();
-      
+
       // 2. 설정 시스템
       await this.initializeSettings();
-      
+
       // 3. 핸들러 관리자
       await this.initializeHandlers();
 
@@ -83,14 +83,14 @@ export class ManagerCoordinator {
 
       // Phase 1: 필수 매니저들 (즉시)
       await this.initializeEssentialManagers();
-      
+
       // Phase 2: 일반 매니저들 (2초 후 - CPU 부하 분산)
       setTimeout(() => {
         this.initializeGeneralManagers().catch(error => {
           Logger.error(this.componentName, '일반 매니저 초기화 실패', error);
         });
       }, 2000);
-      
+
       // Phase 3: 권한 의존 매니저들 (4초 후)
       if (this.hasAccessibilityPermission) {
         setTimeout(() => {
@@ -253,7 +253,7 @@ export class ManagerCoordinator {
       const { getSettingsManager } = await import('../settings');
       const settingsManager = getSettingsManager();
       // ElectronStoreSettingsManager는 initialize 메서드가 없으므로 제거
-      
+
       Logger.info(this.componentName, '✅ Settings 초기화 완료');
     } catch (error) {
       Logger.error(this.componentName, '❌ 설정 초기화 실패', error);
@@ -358,9 +358,9 @@ export class ManagerCoordinator {
   public async restartManager(managerName: string): Promise<void> {
     try {
       Logger.info(this.componentName, `${managerName} 매니저 재시작 시작`);
-      
+
       // 구현 필요시 추가
-      
+
       Logger.info(this.componentName, `✅ ${managerName} 매니저 재시작 완료`);
     } catch (error) {
       Logger.error(this.componentName, `❌ ${managerName} 매니저 재시작 실패`, error);
