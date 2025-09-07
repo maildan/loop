@@ -23,6 +23,20 @@ interface PrismaClient {
     upsert(args: { where: { userId: string }; create: unknown; update: unknown }): Promise<unknown>;
     findUnique(args: { where: { userId: string } }): Promise<unknown | null>;
   };
+  project: {
+    findMany(args?: unknown): Promise<unknown[]>;
+    findUnique(args: { where: { id: string } }): Promise<unknown | null>;
+    create(data: { data: unknown }): Promise<unknown>;
+    update(args: { where: { id: string }; data: unknown }): Promise<unknown>;
+    delete(args: { where: { id: string } }): Promise<unknown>;
+  };
+  projectCharacter: {
+    findMany(args?: unknown): Promise<unknown[]>;
+    findUnique(args: { where: { id: string } }): Promise<unknown | null>;
+    create(data: { data: unknown }): Promise<unknown>;
+    update(args: { where: { id: string }; data: unknown }): Promise<unknown>;
+    delete(args: { where: { id: string } }): Promise<unknown>;
+  };
 }
 
 // 🔥 기가차드 데이터베이스 설정 인터페이스
@@ -615,8 +629,24 @@ export class DatabaseService {
 
       Logger.debug('DATABASE', 'Getting projects data');
 
-      // 🎯 임시로 빈 배열 반환 (실제 Prisma findMany 사용 예정)
-      const projects: any[] = [];
+      // 🎯 실제 Prisma 쿼리 사용
+      const projects = await this.prisma!.project.findMany({
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          genre: true,
+          status: true,
+          progress: true,
+          wordCount: true,
+          author: true,
+          createdAt: true,
+          lastModified: true
+        },
+        orderBy: {
+          lastModified: 'desc'
+        }
+      });
 
       return createSuccess(projects);
 
@@ -635,8 +665,32 @@ export class DatabaseService {
 
       Logger.debug('DATABASE', 'Getting characters data');
 
-      // 🎯 임시로 빈 배열 반환 (실제 Prisma findMany 사용 예정)
-      const characters: any[] = [];
+      // 🎯 실제 Prisma 쿼리 사용
+      const characters = await this.prisma!.projectCharacter.findMany({
+        select: {
+          id: true,
+          name: true,
+          role: true,
+          description: true,
+          personality: true,
+          background: true,
+          avatar: true,
+          color: true,
+          createdAt: true,
+          project: {
+            select: {
+              title: true,
+              genre: true
+            }
+          }
+        },
+        where: {
+          isActive: true
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+      });
 
       return createSuccess(characters);
 
