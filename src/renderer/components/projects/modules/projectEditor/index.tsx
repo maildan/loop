@@ -352,6 +352,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <ProjectEditorLayout.Header>
                         <ProjectHeader
                             title={projectData?.title || '프로젝트'}
+                            projectId={projectId} // 🔥 올바른 projectId 전달
+                            projectContent={projectData?.content || ''} // 🔥 누락된 projectContent 추가
                             onTitleChange={(title) => {
                                 projectData?.setTitle(title);
                                 Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
@@ -420,12 +422,14 @@ export const ProjectEditor = memo(function ProjectEditor({
                         {/* hover 시 ProjectHeader 오버레이 - 부드러운 슬라이드 다운 */}
                         {tabBarHovered && (
                             <div className={`absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 ${tabBarHovered
-                                    ? 'opacity-100 transform translate-y-0'
-                                    : 'opacity-0 transform -translate-y-2'
+                                ? 'opacity-100 transform translate-y-0'
+                                : 'opacity-0 transform -translate-y-2'
                                 }`}>
                                 <ProjectEditorLayout.Header>
                                     <ProjectHeader
                                         title={projectData?.title || '프로젝트'}
+                                        projectId={projectId} // 🔥 올바른 projectId 전달
+                                        projectContent={projectData?.content || ''} // 🔥 누락된 projectContent 추가
                                         onTitleChange={(title) => {
                                             projectData?.setTitle(title);
                                             Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
