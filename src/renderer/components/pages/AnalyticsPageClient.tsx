@@ -383,7 +383,12 @@ export function AnalyticsPageClient(): React.ReactElement {
           </h3>
           <div className={ANALYTICS_STYLES.chartPlaceholder}>
             <BarChart3 className="w-12 h-12 mb-4 opacity-50" />
-            <p className="font-medium">{dashboardData.weeklyTrend.join(' > ')} 순 생산성</p>
+            <p className="font-medium">
+              {analyticsData?.recentActivity?.length > 0
+                ? `최근 ${analyticsData.recentActivity.length}개 세션 활동`
+                : '주간 활동 데이터 없음'
+              }
+            </p>
             <p className="text-sm mt-2">클릭하여 패턴 분석 보기 →</p>
           </div>
         </Card>
@@ -395,7 +400,22 @@ export function AnalyticsPageClient(): React.ReactElement {
           </h3>
           <div className={ANALYTICS_STYLES.chartPlaceholder}>
             <PieChart className="w-12 h-12 mb-4 opacity-50" />
-            <p className="font-medium">로맨스 60% • 에세이 25% • 기타 15%</p>
+            <p className="font-medium">
+              {analyticsData?.topProjects?.length > 0
+                ? (() => {
+                  const genreCount = analyticsData.topProjects.reduce((acc: Record<string, number>, project: any) => {
+                    const genre = project.genre || '기타';
+                    acc[genre] = (acc[genre] || 0) + 1;
+                    return acc;
+                  }, {});
+                  const total = analyticsData.topProjects.length;
+                  return Object.entries(genreCount)
+                    .map(([genre, count]) => `${genre} ${Math.round((count as number) / total * 100)}%`)
+                    .join(' • ');
+                })()
+                : '장르 데이터 없음'
+              }
+            </p>
             <p className="text-sm mt-2">클릭하여 상세 분석 보기 →</p>
           </div>
         </Card>
@@ -601,8 +621,8 @@ export function AnalyticsPageClient(): React.ReactElement {
             <button
               key={tab.id}
               className={`${ANALYTICS_STYLES.tab} ${activeTab === tab.id
-                  ? ANALYTICS_STYLES.tabActive
-                  : ANALYTICS_STYLES.tabInactive
+                ? ANALYTICS_STYLES.tabActive
+                : ANALYTICS_STYLES.tabInactive
                 }`}
               onClick={() => setActiveTab(tab.id as TabType)}
             >
