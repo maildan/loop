@@ -502,6 +502,7 @@ export class DatabaseService {
       Logger.debug('DATABASE', 'Getting comprehensive analytics data');
 
       // 🎯 병렬로 모든 분석 데이터 가져오기
+      Logger.debug('DATABASE', 'Starting parallel data fetch...');
       const [
         projectsResult,
         charactersResult,
@@ -514,10 +515,32 @@ export class DatabaseService {
         this.getRecentSessions(7)
       ]);
 
+      // 🔥 각 결과를 상세히 로깅
+      Logger.debug('DATABASE', 'Results received', {
+        projects: { success: projectsResult.success, dataLength: projectsResult.success ? projectsResult.data.length : 0 },
+        characters: { success: charactersResult.success, dataLength: charactersResult.success ? charactersResult.data.length : 0 },
+        sessions: { success: sessionsResult.success, dataLength: sessionsResult.success ? sessionsResult.data.length : 0 },
+        recentSessions: { success: recentSessionsResult.success, dataLength: recentSessionsResult.success ? recentSessionsResult.data.length : 0 }
+      });
+
+      // 각 실패 원인을 개별적으로 로깅
+      if (!projectsResult.success) {
+        Logger.error('DATABASE', 'Projects data failed', projectsResult.error || 'No error message');
+      }
+      if (!charactersResult.success) {
+        Logger.error('DATABASE', 'Characters data failed', charactersResult.error || 'No error message');
+      }
+      if (!sessionsResult.success) {
+        Logger.error('DATABASE', 'Sessions data failed', sessionsResult.error || 'No error message');
+      }
+      if (!recentSessionsResult.success) {
+        Logger.error('DATABASE', 'Recent sessions data failed', recentSessionsResult.error || 'No error message');
+      }
+
       // 모든 결과가 성공인지 확인
       if (!projectsResult.success || !charactersResult.success ||
         !sessionsResult.success || !recentSessionsResult.success) {
-        throw new Error('Failed to fetch some analytics data');
+        throw new Error('Failed to fetch some analytics data - check individual errors above');
       }
 
       const projects = projectsResult.data;

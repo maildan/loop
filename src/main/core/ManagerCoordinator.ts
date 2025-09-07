@@ -218,13 +218,26 @@ export class ManagerCoordinator {
    */
   private async initializeDatabase(): Promise<void> {
     try {
-      // DatabaseManager 사용 (기존 databaseService 대신)
+      // DatabaseManager 사용 (기존)
       if (databaseManager && !this.initializedManagers.has('database')) {
         await databaseManager.initialize();
         await databaseManager.start();
         this.initializedManagers.add('database');
         this.startedManagers.add('database');
         Logger.info(this.componentName, '✅ DatabaseManager 초기화 완료');
+      }
+
+      // 🔥 databaseService도 초기화 (Analytics API용)
+      if (!this.initializedManagers.has('databaseService')) {
+        const { databaseService } = await import('../services/databaseService');
+        const result = await databaseService.initialize();
+        if (result.success) {
+          this.initializedManagers.add('databaseService');
+          Logger.info(this.componentName, '✅ databaseService 초기화 완료');
+        } else {
+          Logger.error(this.componentName, '❌ databaseService 초기화 실패', result.error);
+          throw new Error(`databaseService 초기화 실패: ${result.error}`);
+        }
       }
     } catch (error) {
       Logger.error(this.componentName, '❌ 데이터베이스 초기화 실패', error);
