@@ -176,6 +176,15 @@ export function AnalyticsPageClient(): React.ReactElement {
         // 🎯 실제 Electron Analytics API 호출
         if (typeof window !== 'undefined' && window.electronAPI) {
           const response = await window.electronAPI.dashboard.getAnalytics();
+          
+          // 🔥 디버깅: API 응답 구조 로깅
+          Logger.info('ANALYTICS_PAGE', 'API Response received', {
+            hasResponse: !!response,
+            success: response?.success,
+            hasData: !!response?.data,
+            responseKeys: response ? Object.keys(response) : [],
+            dataKeys: response?.data ? Object.keys(response.data) : []
+          });
 
           if (response.success && response.data) {
             const data = response.data;
@@ -261,7 +270,7 @@ export function AnalyticsPageClient(): React.ReactElement {
         className={ANALYTICS_STYLES.emptyAction}
         onClick={() => {
           Logger.info('ANALYTICS_PAGE', 'Redirecting to project creator');
-          router.push('/projects/new');
+          router.push('/projects?create=true');
         }}
       >
         글쓰기 시작하기
