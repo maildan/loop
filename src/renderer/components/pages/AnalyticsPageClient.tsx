@@ -443,100 +443,92 @@ export function AnalyticsPageClient(): React.ReactElement {
 
   const renderProjectView = () => (
     <div className="space-y-8">
-      {/* 🎯 프로젝트 선택 */}
+      {/* 🎯 프로젝트 목록 */}
       <Card className="p-6">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6">
           <BookOpen className="w-5 h-5 inline mr-2" />
-          프로젝트별 세부 분석
+          프로젝트별 분석
         </h2>
-        <div className="flex gap-2 mb-6">
-          {['로맨스 소설 A', '에세이 B', '시나리오 C'].map(project => (
-            <Button
-              key={project}
-              variant="ghost"
-              className="px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
-            >
-              {project}
-            </Button>
-          ))}
-        </div>
 
-        {/* 선택된 프로젝트 상세 정보 */}
-        <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-6">
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4">
-            📖 로맨스 소설 A - 세부 분석
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">진행률</div>
-              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-                47,382 / 100,000자 (47.4%)
+        {projectRankings.length > 0 ? (
+          <div className="space-y-4">
+            {projectRankings.map((project, index) => (
+              <div key={project.id} className={ANALYTICS_STYLES.rankingCard}>
+                <div className={ANALYTICS_STYLES.rankingHeader}>
+                  <div className="flex items-center space-x-4">
+                    <div className={ANALYTICS_STYLES.rankingRank}>#{index + 1}</div>
+                    <div className="flex-1">
+                      <div className={ANALYTICS_STYLES.rankingTitle}>{project.title}</div>
+                      <div className={ANALYTICS_STYLES.rankingDetails}>
+                        {project.genre} • {project.insights.join(' • ')}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className={ANALYTICS_STYLES.rankingScore}>
+                        {project.trend === 'up' && <ArrowUp className="w-4 h-4 inline text-green-600" />}
+                        {project.trend === 'down' && <ArrowDown className="w-4 h-4 inline text-red-600" />}
+                        {project.trend === 'stable' && <span className="w-4 h-4 inline-block text-blue-600">-</span>}
+                        진행률 {project.progress}%
+                      </div>
+                      <ProgressBar value={project.progress} className="w-32 mt-1" />
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 flex justify-end">
+                  <Button 
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                    onClick={() => {
+                      Logger.info('ANALYTICS_PAGE', 'Navigating to project details', { projectId: project.id });
+                      router.push(`/projects/${project.id}`);
+                    }}
+                  >
+                    자세히 보기
+                  </Button>
+                </div>
               </div>
-              <ProgressBar value={47.4} className="mt-2" />
-            </div>
-            <div>
-              <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">예상 완료</div>
-              <div className="text-lg font-semibold text-blue-600">2024년 8월 15일</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">현재 페이스 기준</div>
-            </div>
-            <div>
-              <div className="text-sm text-slate-600 dark:text-slate-400 mb-1">장르 벤치마크</div>
-              <div className="text-lg font-semibold text-green-600">평균 대비 12% 빠름</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">로맨스 소설 기준</div>
-            </div>
+            ))}
           </div>
-          <div className="mt-6 p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="font-medium text-blue-900 dark:text-blue-100">다음 액션</div>
-                <div className="text-sm text-blue-700 dark:text-blue-200">이번 주 3,500자 더 써야 일정 맞춤</div>
-              </div>
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                목표 설정
-              </Button>
-            </div>
+        ) : (
+          <div className="text-center py-8">
+            <BookOpen className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+            <p className="text-lg text-slate-600 dark:text-slate-400 mb-4">
+              아직 생성된 프로젝트가 없습니다
+            </p>
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+              onClick={() => {
+                Logger.info('ANALYTICS_PAGE', 'Creating new project from analytics');
+                router.push('/projects?create=true');
+              }}
+            >
+              첫 프로젝트 만들기
+            </Button>
           </div>
-        </div>
+        )}
       </Card>
 
-      {/* 📊 프로젝트 차트 */}
-      <div className={ANALYTICS_STYLES.chartsGrid}>
-        <Card className={ANALYTICS_STYLES.chartCard}>
-          <h3 className={ANALYTICS_STYLES.chartTitle}>
-            <LineChart className="w-5 h-5 mr-2" />
-            일일 진행률
+      {/* 🎯 프로젝트 통계 개요 */}
+      {projectRankings.length > 0 && (
+        <Card className="p-6">
+          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+            프로젝트 통계 개요
           </h3>
-          <div className={ANALYTICS_STYLES.chartPlaceholder}>
-            <LineChart className="w-12 h-12 mb-4 opacity-50" />
-            <p className="font-medium">지난 7일 평균: 1,247자/일</p>
-            <p className="text-sm mt-2">일관된 페이스 유지 중</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600">{dashboardData.totalProjects}</div>
+              <div className="text-sm text-slate-600 dark:text-slate-400">총 프로젝트</div>
+            </div>
+            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+              <div className="text-2xl font-bold text-green-600">{dashboardData.activeProjects}</div>
+              <div className="text-sm text-slate-600 dark:text-slate-400">진행 중</div>
+            </div>
+            <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+              <div className="text-2xl font-bold text-purple-600">{dashboardData.completedProjects}</div>
+              <div className="text-sm text-slate-600 dark:text-slate-400">완료됨</div>
+            </div>
           </div>
         </Card>
-
-        <Card className={ANALYTICS_STYLES.chartCard}>
-          <h3 className={ANALYTICS_STYLES.chartTitle}>
-            <Target className="w-5 h-5 mr-2" />
-            목표 달성률
-          </h3>
-          <div className={ANALYTICS_STYLES.chartPlaceholder}>
-            <Target className="w-12 h-12 mb-4 opacity-50" />
-            <p className="font-medium">이번 주: 89% 달성</p>
-            <p className="text-sm mt-2">목표보다 앞서 진행 중</p>
-          </div>
-        </Card>
-
-        <Card className={ANALYTICS_STYLES.chartCard}>
-          <h3 className={ANALYTICS_STYLES.chartTitle}>
-            <Activity className="w-5 h-5 mr-2" />
-            집중도 분석
-          </h3>
-          <div className={ANALYTICS_STYLES.chartPlaceholder}>
-            <Activity className="w-12 h-12 mb-4 opacity-50" />
-            <p className="font-medium">평균 집중도: 87%</p>
-            <p className="text-sm mt-2">높은 몰입 상태 유지</p>
-          </div>
-        </Card>
-      </div>
+      )}
     </div>
   );
 
@@ -548,24 +540,37 @@ export function AnalyticsPageClient(): React.ReactElement {
           <Award className="w-5 h-5 inline mr-2" />
           프로젝트 성과 랭킹
         </h2>
-        {projectRankings.map((project, index) => (
-          <ProjectRankingCard key={project.id} project={project} rank={index + 1} />
-        ))}
+        {projectRankings.length > 0 ? (
+          <div className="space-y-4">
+            {projectRankings.map((project, index) => (
+              <ProjectRankingCard key={project.id} project={project} rank={index + 1} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <Award className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+            <p className="text-lg text-slate-600 dark:text-slate-400">
+              프로젝트 랭킹을 위해서는 더 많은 데이터가 필요합니다
+            </p>
+          </div>
+        )}
 
         {/* 📊 종합 추천 */}
-        <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium text-green-900 dark:text-green-100">💡 추천</div>
-              <div className="text-sm text-green-700 dark:text-green-200">
-                로맨스 소설의 성공 패턴을 다른 프로젝트에 적용해보세요
+        {projectRankings.length > 0 && (
+          <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <div className="font-medium text-green-900 dark:text-green-100">💡 추천</div>
+                <div className="text-sm text-green-700 dark:text-green-200">
+                  {projectRankings[0]?.title}의 성공 패턴을 다른 프로젝트에 적용해보세요
+                </div>
               </div>
+              <Button className="bg-green-600 hover:bg-green-700 text-white">
+                패턴 적용
+              </Button>
             </div>
-            <Button className="bg-green-600 hover:bg-green-700 text-white">
-              패턴 적용
-            </Button>
           </div>
-        </div>
+        )}
       </Card>
 
       {/* 📊 비교 차트 */}
@@ -577,7 +582,26 @@ export function AnalyticsPageClient(): React.ReactElement {
           </h3>
           <div className={ANALYTICS_STYLES.chartPlaceholder}>
             <BarChart3 className="w-12 h-12 mb-4 opacity-50" />
-            <p className="font-medium">로맨스 87점 &gt; 에세이 72점 &gt; 시나리오 65점</p>
+            <p className="font-medium">
+              {analyticsData?.topProjects?.length > 0
+                ? (() => {
+                  const genreScores = analyticsData.topProjects.reduce((acc: Record<string, number>, project: any) => {
+                    const genre = project.genre || '기타';
+                    const score = Math.min(100, Math.round((project.wordCount || 0) / 100));
+                    if (!acc[genre] || acc[genre] < score) {
+                      acc[genre] = score;
+                    }
+                    return acc;
+                  }, {});
+                  return Object.entries(genreScores)
+                    .sort(([,a], [,b]) => (b as number) - (a as number))
+                    .slice(0, 3)
+                    .map(([genre, score]) => `${genre} ${score}점`)
+                    .join(' > ');
+                })()
+                : '장르별 데이터 없음'
+              }
+            </p>
             <p className="text-sm mt-2">클릭하여 상세 비교 보기 →</p>
           </div>
         </Card>
@@ -589,7 +613,12 @@ export function AnalyticsPageClient(): React.ReactElement {
           </h3>
           <div className={ANALYTICS_STYLES.chartPlaceholder}>
             <TrendingUp className="w-12 h-12 mb-4 opacity-50" />
-            <p className="font-medium">평균 1,200자/일 • 최고 2,100자/일</p>
+            <p className="font-medium">
+              {dashboardData.totalWords > 0
+                ? `평균 ${Math.round(dashboardData.totalWords / 30)}자/일 • 총 ${dashboardData.totalWords.toLocaleString()}자`
+                : '속도 분석 데이터 없음'
+              }
+            </p>
             <p className="text-sm mt-2">프로젝트별 속도 차이 분석</p>
           </div>
         </Card>

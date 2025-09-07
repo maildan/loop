@@ -340,7 +340,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/calendar.js [app-client] (ecmascript) <export default as Calendar>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/users.js [app-client] (ecmascript) <export default as Users>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$pie$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__PieChart$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chart-pie.js [app-client] (ecmascript) <export default as PieChart>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$line$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LineChart$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chart-line.js [app-client] (ecmascript) <export default as LineChart>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-client] (ecmascript) <export default as Sparkles>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$KpiCard$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/ui/KpiCard.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/ui/Card.tsx [app-client] (ecmascript)");
@@ -1108,7 +1107,7 @@ function AnalyticsPageClient() {
                     className: "p-6",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                            className: "text-xl font-bold text-slate-900 dark:text-slate-100 mb-4",
+                            className: "text-xl font-bold text-slate-900 dark:text-slate-100 mb-6",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
                                     className: "w-5 h-5 inline mr-2"
@@ -1117,202 +1116,191 @@ function AnalyticsPageClient() {
                                     lineNumber: 449,
                                     columnNumber: 11
                                 }, this),
-                                "프로젝트별 세부 분석"
+                                "프로젝트별 분석"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
                             lineNumber: 448,
                             columnNumber: 9
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex gap-2 mb-6",
-                            children: [
-                                '로맨스 소설 A',
-                                '에세이 B',
-                                '시나리오 C'
-                            ].map((project)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                    variant: "ghost",
-                                    className: "px-4 py-2 border border-slate-300 dark:border-slate-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20",
-                                    children: project
-                                }, project, false, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 454,
-                                    columnNumber: 13
-                                }, this))
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 452,
-                            columnNumber: 9
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl p-6",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: "text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4",
-                                    children: "📖 로맨스 소설 A - 세부 분석"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 466,
-                                    columnNumber: 11
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "grid grid-cols-1 md:grid-cols-3 gap-6",
+                        projectRankings.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "space-y-4",
+                            children: projectRankings.map((project, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: ANALYTICS_STYLES.rankingCard,
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-sm text-slate-600 dark:text-slate-400 mb-1",
-                                                    children: "진행률"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 471,
-                                                    columnNumber: 15
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-2xl font-bold text-slate-900 dark:text-slate-100",
-                                                    children: "47,382 / 100,000자 (47.4%)"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 472,
-                                                    columnNumber: 15
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$ProgressBar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ProgressBar"], {
-                                                    value: 47.4,
-                                                    className: "mt-2"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 475,
-                                                    columnNumber: 15
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 470,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-sm text-slate-600 dark:text-slate-400 mb-1",
-                                                    children: "예상 완료"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 478,
-                                                    columnNumber: 15
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-lg font-semibold text-blue-600",
-                                                    children: "2024년 8월 15일"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 479,
-                                                    columnNumber: 15
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-sm text-slate-600 dark:text-slate-400",
-                                                    children: "현재 페이스 기준"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 480,
-                                                    columnNumber: 15
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 477,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-sm text-slate-600 dark:text-slate-400 mb-1",
-                                                    children: "장르 벤치마크"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 483,
-                                                    columnNumber: 15
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-lg font-semibold text-green-600",
-                                                    children: "평균 대비 12% 빠름"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 484,
-                                                    columnNumber: 15
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "text-sm text-slate-600 dark:text-slate-400",
-                                                    children: "로맨스 소설 기준"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                    lineNumber: 485,
-                                                    columnNumber: 15
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 482,
-                                            columnNumber: 13
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 469,
-                                    columnNumber: 11
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "mt-6 p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg",
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "flex items-center justify-between",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: ANALYTICS_STYLES.rankingHeader,
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex items-center space-x-4",
                                                 children: [
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "font-medium text-blue-900 dark:text-blue-100",
-                                                        children: "다음 액션"
-                                                    }, void 0, false, {
+                                                        className: ANALYTICS_STYLES.rankingRank,
+                                                        children: [
+                                                            "#",
+                                                            index + 1
+                                                        ]
+                                                    }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                        lineNumber: 491,
-                                                        columnNumber: 17
+                                                        lineNumber: 459,
+                                                        columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "text-sm text-blue-700 dark:text-blue-200",
-                                                        children: "이번 주 3,500자 더 써야 일정 맞춤"
-                                                    }, void 0, false, {
+                                                        className: "flex-1",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: ANALYTICS_STYLES.rankingTitle,
+                                                                children: project.title
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                                lineNumber: 461,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: ANALYTICS_STYLES.rankingDetails,
+                                                                children: [
+                                                                    project.genre,
+                                                                    " • ",
+                                                                    project.insights.join(' • ')
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                                lineNumber: 462,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                        lineNumber: 492,
-                                                        columnNumber: 17
+                                                        lineNumber: 460,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "text-right",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: ANALYTICS_STYLES.rankingScore,
+                                                                children: [
+                                                                    project.trend === 'up' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowUp$3e$__["ArrowUp"], {
+                                                                        className: "w-4 h-4 inline text-green-600"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                                        lineNumber: 468,
+                                                                        columnNumber: 52
+                                                                    }, this),
+                                                                    project.trend === 'down' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$arrow$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ArrowDown$3e$__["ArrowDown"], {
+                                                                        className: "w-4 h-4 inline text-red-600"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                                        lineNumber: 469,
+                                                                        columnNumber: 54
+                                                                    }, this),
+                                                                    project.trend === 'stable' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "w-4 h-4 inline-block text-blue-600",
+                                                                        children: "-"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                                        lineNumber: 470,
+                                                                        columnNumber: 56
+                                                                    }, this),
+                                                                    "진행률 ",
+                                                                    project.progress,
+                                                                    "%"
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                                lineNumber: 467,
+                                                                columnNumber: 23
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$ProgressBar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ProgressBar"], {
+                                                                value: project.progress,
+                                                                className: "w-32 mt-1"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                                lineNumber: 473,
+                                                                columnNumber: 23
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                                        lineNumber: 466,
+                                                        columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                lineNumber: 490,
-                                                columnNumber: 15
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                className: "bg-blue-600 hover:bg-blue-700 text-white",
-                                                children: "목표 설정"
+                                                lineNumber: 458,
+                                                columnNumber: 19
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 457,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "mt-4 flex justify-end",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                                className: "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg",
+                                                onClick: ()=>{
+                                                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('ANALYTICS_PAGE', 'Navigating to project details', {
+                                                        projectId: project.id
+                                                    });
+                                                    router.push(`/projects/${project.id}`);
+                                                },
+                                                children: "자세히 보기"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                lineNumber: 494,
-                                                columnNumber: 15
+                                                lineNumber: 478,
+                                                columnNumber: 19
                                             }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                        lineNumber: 489,
-                                        columnNumber: 13
-                                    }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 477,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, project.id, true, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 456,
+                                    columnNumber: 15
+                                }, this))
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                            lineNumber: 454,
+                            columnNumber: 11
+                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "text-center py-8",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
+                                    className: "w-16 h-16 mx-auto text-slate-400 mb-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 488,
-                                    columnNumber: 11
+                                    lineNumber: 493,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-lg text-slate-600 dark:text-slate-400 mb-4",
+                                    children: "아직 생성된 프로젝트가 없습니다"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 494,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
+                                    className: "bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg",
+                                    onClick: ()=>{
+                                        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('ANALYTICS_PAGE', 'Creating new project from analytics');
+                                        router.push('/projects?create=true');
+                                    },
+                                    children: "첫 프로젝트 만들기"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 497,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 465,
-                            columnNumber: 9
+                            lineNumber: 492,
+                            columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
@@ -1320,188 +1308,106 @@ function AnalyticsPageClient() {
                     lineNumber: 447,
                     columnNumber: 7
                 }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: ANALYTICS_STYLES.chartsGrid,
+                projectRankings.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
+                    className: "p-6",
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                            className: ANALYTICS_STYLES.chartCard,
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                            className: "text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4",
+                            children: "프로젝트 통계 개요"
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                            lineNumber: 513,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "grid grid-cols-1 md:grid-cols-3 gap-6",
                             children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: ANALYTICS_STYLES.chartTitle,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$line$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LineChart$3e$__["LineChart"], {
-                                            className: "w-5 h-5 mr-2"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 506,
-                                            columnNumber: 13
-                                        }, this),
-                                        "일일 진행률"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 505,
-                                    columnNumber: 11
-                                }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: ANALYTICS_STYLES.chartPlaceholder,
+                                    className: "text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg",
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chart$2d$line$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LineChart$3e$__["LineChart"], {
-                                            className: "w-12 h-12 mb-4 opacity-50"
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-2xl font-bold text-blue-600",
+                                            children: dashboardData.totalProjects
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 510,
-                                            columnNumber: 13
+                                            lineNumber: 518,
+                                            columnNumber: 15
                                         }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "font-medium",
-                                            children: "지난 7일 평균: 1,247자/일"
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-sm text-slate-600 dark:text-slate-400",
+                                            children: "총 프로젝트"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 511,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm mt-2",
-                                            children: "일관된 페이스 유지 중"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 512,
-                                            columnNumber: 13
+                                            lineNumber: 519,
+                                            columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 509,
-                                    columnNumber: 11
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 504,
-                            columnNumber: 9
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                            className: ANALYTICS_STYLES.chartCard,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: ANALYTICS_STYLES.chartTitle,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__["Target"], {
-                                            className: "w-5 h-5 mr-2"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 518,
-                                            columnNumber: 13
-                                        }, this),
-                                        "목표 달성률"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
                                     lineNumber: 517,
-                                    columnNumber: 11
+                                    columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: ANALYTICS_STYLES.chartPlaceholder,
+                                    className: "text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg",
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__["Target"], {
-                                            className: "w-12 h-12 mb-4 opacity-50"
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-2xl font-bold text-green-600",
+                                            children: dashboardData.activeProjects
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
                                             lineNumber: 522,
-                                            columnNumber: 13
+                                            columnNumber: 15
                                         }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "font-medium",
-                                            children: "이번 주: 89% 달성"
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-sm text-slate-600 dark:text-slate-400",
+                                            children: "진행 중"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
                                             lineNumber: 523,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm mt-2",
-                                            children: "목표보다 앞서 진행 중"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 524,
-                                            columnNumber: 13
+                                            columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
                                     lineNumber: 521,
-                                    columnNumber: 11
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-2xl font-bold text-purple-600",
+                                            children: dashboardData.completedProjects
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 526,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-sm text-slate-600 dark:text-slate-400",
+                                            children: "완료됨"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 527,
+                                            columnNumber: 15
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 525,
+                                    columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
                             lineNumber: 516,
-                            columnNumber: 9
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                            className: ANALYTICS_STYLES.chartCard,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: ANALYTICS_STYLES.chartTitle,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$activity$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Activity$3e$__["Activity"], {
-                                            className: "w-5 h-5 mr-2"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 530,
-                                            columnNumber: 13
-                                        }, this),
-                                        "집중도 분석"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 529,
-                                    columnNumber: 11
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: ANALYTICS_STYLES.chartPlaceholder,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$activity$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Activity$3e$__["Activity"], {
-                                            className: "w-12 h-12 mb-4 opacity-50"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 534,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "font-medium",
-                                            children: "평균 집중도: 87%"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 535,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm mt-2",
-                                            children: "높은 몰입 상태 유지"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 536,
-                                            columnNumber: 13
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 533,
-                                    columnNumber: 11
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 528,
-                            columnNumber: 9
+                            columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                    lineNumber: 503,
-                    columnNumber: 7
+                    lineNumber: 512,
+                    columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
@@ -1522,25 +1428,55 @@ function AnalyticsPageClient() {
                                     className: "w-5 h-5 inline mr-2"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 548,
+                                    lineNumber: 540,
                                     columnNumber: 11
                                 }, this),
                                 "프로젝트 성과 랭킹"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 547,
+                            lineNumber: 539,
                             columnNumber: 9
                         }, this),
-                        projectRankings.map((project, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ProjectRankingCard, {
-                                project: project,
-                                rank: index + 1
-                            }, project.id, false, {
-                                fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                lineNumber: 552,
-                                columnNumber: 11
-                            }, this)),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        projectRankings.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "space-y-4",
+                            children: projectRankings.map((project, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(ProjectRankingCard, {
+                                    project: project,
+                                    rank: index + 1
+                                }, project.id, false, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 546,
+                                    columnNumber: 15
+                                }, this))
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                            lineNumber: 544,
+                            columnNumber: 11
+                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "text-center py-8",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$award$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Award$3e$__["Award"], {
+                                    className: "w-16 h-16 mx-auto text-slate-400 mb-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 551,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-lg text-slate-600 dark:text-slate-400",
+                                    children: "프로젝트 랭킹을 위해서는 더 많은 데이터가 필요합니다"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 552,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                            lineNumber: 550,
+                            columnNumber: 11
+                        }, this),
+                        projectRankings.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "flex items-center justify-between",
@@ -1552,46 +1488,49 @@ function AnalyticsPageClient() {
                                                 children: "💡 추천"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                lineNumber: 559,
-                                                columnNumber: 15
+                                                lineNumber: 563,
+                                                columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                 className: "text-sm text-green-700 dark:text-green-200",
-                                                children: "로맨스 소설의 성공 패턴을 다른 프로젝트에 적용해보세요"
-                                            }, void 0, false, {
+                                                children: [
+                                                    projectRankings[0]?.title,
+                                                    "의 성공 패턴을 다른 프로젝트에 적용해보세요"
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                                lineNumber: 560,
-                                                columnNumber: 15
+                                                lineNumber: 564,
+                                                columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                        lineNumber: 558,
-                                        columnNumber: 13
+                                        lineNumber: 562,
+                                        columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
                                         className: "bg-green-600 hover:bg-green-700 text-white",
                                         children: "패턴 적용"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                        lineNumber: 564,
-                                        columnNumber: 13
+                                        lineNumber: 568,
+                                        columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                lineNumber: 557,
-                                columnNumber: 11
+                                lineNumber: 561,
+                                columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 556,
-                            columnNumber: 9
+                            lineNumber: 560,
+                            columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                    lineNumber: 546,
+                    lineNumber: 538,
                     columnNumber: 7
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1607,14 +1546,14 @@ function AnalyticsPageClient() {
                                             className: "w-5 h-5 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 575,
+                                            lineNumber: 580,
                                             columnNumber: 13
                                         }, this),
                                         "장르별 성과 비교"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 574,
+                                    lineNumber: 579,
                                     columnNumber: 11
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1624,136 +1563,30 @@ function AnalyticsPageClient() {
                                             className: "w-12 h-12 mb-4 opacity-50"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 579,
+                                            lineNumber: 584,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "font-medium",
-                                            children: "로맨스 87점 > 에세이 72점 > 시나리오 65점"
+                                            children: analyticsData?.topProjects?.length > 0 ? (()=>{
+                                                const genreScores = analyticsData.topProjects.reduce((acc, project)=>{
+                                                    const genre = project.genre || '기타';
+                                                    const score = Math.min(100, Math.round((project.wordCount || 0) / 100));
+                                                    if (!acc[genre] || acc[genre] < score) {
+                                                        acc[genre] = score;
+                                                    }
+                                                    return acc;
+                                                }, {});
+                                                return Object.entries(genreScores).sort(([, a], [, b])=>b - a).slice(0, 3).map(([genre, score])=>`${genre} ${score}점`).join(' > ');
+                                            })() : '장르별 데이터 없음'
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 580,
+                                            lineNumber: 585,
                                             columnNumber: 13
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-sm mt-2",
                                             children: "클릭하여 상세 비교 보기 →"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 581,
-                                            columnNumber: 13
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 578,
-                                    columnNumber: 11
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 573,
-                            columnNumber: 9
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                            className: ANALYTICS_STYLES.chartCard,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: ANALYTICS_STYLES.chartTitle,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__["TrendingUp"], {
-                                            className: "w-5 h-5 mr-2"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 587,
-                                            columnNumber: 13
-                                        }, this),
-                                        "진행 속도 분석"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 586,
-                                    columnNumber: 11
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: ANALYTICS_STYLES.chartPlaceholder,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__["TrendingUp"], {
-                                            className: "w-12 h-12 mb-4 opacity-50"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 591,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "font-medium",
-                                            children: "평균 1,200자/일 • 최고 2,100자/일"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 592,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm mt-2",
-                                            children: "프로젝트별 속도 차이 분석"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 593,
-                                            columnNumber: 13
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 590,
-                                    columnNumber: 11
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 585,
-                            columnNumber: 9
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
-                            className: ANALYTICS_STYLES.chartCard,
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: ANALYTICS_STYLES.chartTitle,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
-                                            className: "w-5 h-5 mr-2"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 599,
-                                            columnNumber: 13
-                                        }, this),
-                                        "작가 벤치마크"
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 598,
-                                    columnNumber: 11
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: ANALYTICS_STYLES.chartPlaceholder,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
-                                            className: "w-12 h-12 mb-4 opacity-50"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 603,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "font-medium",
-                                            children: "상위 23% 작가군"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 604,
-                                            columnNumber: 13
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                            className: "text-sm mt-2",
-                                            children: "동일 장르 작가 대비 성과"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
                                             lineNumber: 605,
@@ -1762,25 +1595,141 @@ function AnalyticsPageClient() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 602,
+                                    lineNumber: 583,
                                     columnNumber: 11
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 597,
+                            lineNumber: 578,
+                            columnNumber: 9
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
+                            className: ANALYTICS_STYLES.chartCard,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                    className: ANALYTICS_STYLES.chartTitle,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__["TrendingUp"], {
+                                            className: "w-5 h-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 611,
+                                            columnNumber: 13
+                                        }, this),
+                                        "진행 속도 분석"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 610,
+                                    columnNumber: 11
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: ANALYTICS_STYLES.chartPlaceholder,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__["TrendingUp"], {
+                                            className: "w-12 h-12 mb-4 opacity-50"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 615,
+                                            columnNumber: 13
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "font-medium",
+                                            children: dashboardData.totalWords > 0 ? `평균 ${Math.round(dashboardData.totalWords / 30)}자/일 • 총 ${dashboardData.totalWords.toLocaleString()}자` : '속도 분석 데이터 없음'
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 616,
+                                            columnNumber: 13
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-sm mt-2",
+                                            children: "프로젝트별 속도 차이 분석"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 622,
+                                            columnNumber: 13
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 614,
+                                    columnNumber: 11
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                            lineNumber: 609,
+                            columnNumber: 9
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
+                            className: ANALYTICS_STYLES.chartCard,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                    className: ANALYTICS_STYLES.chartTitle,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
+                                            className: "w-5 h-5 mr-2"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 628,
+                                            columnNumber: 13
+                                        }, this),
+                                        "작가 벤치마크"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 627,
+                                    columnNumber: 11
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: ANALYTICS_STYLES.chartPlaceholder,
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
+                                            className: "w-12 h-12 mb-4 opacity-50"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 632,
+                                            columnNumber: 13
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "font-medium",
+                                            children: "상위 23% 작가군"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 633,
+                                            columnNumber: 13
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-sm mt-2",
+                                            children: "동일 장르 작가 대비 성과"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                            lineNumber: 634,
+                                            columnNumber: 13
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                                    lineNumber: 631,
+                                    columnNumber: 11
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
+                            lineNumber: 626,
                             columnNumber: 9
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                    lineNumber: 572,
+                    lineNumber: 577,
                     columnNumber: 7
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-            lineNumber: 544,
+            lineNumber: 536,
             columnNumber: 5
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1794,7 +1743,7 @@ function AnalyticsPageClient() {
                         children: "작가 전용 분석 대시보드"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                        lineNumber: 616,
+                        lineNumber: 645,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1811,18 +1760,18 @@ function AnalyticsPageClient() {
                                 children: period
                             }, period, false, {
                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                lineNumber: 623,
+                                lineNumber: 652,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                        lineNumber: 621,
+                        lineNumber: 650,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                lineNumber: 615,
+                lineNumber: 644,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1838,7 +1787,7 @@ function AnalyticsPageClient() {
                                     children: tab.icon
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 647,
+                                    lineNumber: 676,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1849,7 +1798,7 @@ function AnalyticsPageClient() {
                                             children: tab.label
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 649,
+                                            lineNumber: 678,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1857,29 +1806,29 @@ function AnalyticsPageClient() {
                                             children: tab.description
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 650,
+                                            lineNumber: 679,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 648,
+                                    lineNumber: 677,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, tab.id, true, {
                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                            lineNumber: 639,
+                            lineNumber: 668,
                             columnNumber: 13
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                    lineNumber: 637,
+                    lineNumber: 666,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                lineNumber: 636,
+                lineNumber: 665,
                 columnNumber: 7
             }, this),
             loading ? /* 🔄 로딩 상태 */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1901,37 +1850,37 @@ function AnalyticsPageClient() {
                                             className: "h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 665,
+                                            lineNumber: 694,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 666,
+                                            lineNumber: 695,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "h-3 bg-slate-200 dark:bg-slate-700 rounded w-full"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                            lineNumber: 667,
+                                            lineNumber: 696,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                    lineNumber: 664,
+                                    lineNumber: 693,
                                     columnNumber: 17
                                 }, this)
                             }, i, false, {
                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                lineNumber: 663,
+                                lineNumber: 692,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                        lineNumber: 661,
+                        lineNumber: 690,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1942,7 +1891,7 @@ function AnalyticsPageClient() {
                                 children: "실제 데이터를 불러오는 중..."
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                lineNumber: 673,
+                                lineNumber: 702,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1950,25 +1899,25 @@ function AnalyticsPageClient() {
                                 children: "프로젝트, 캐릭터, 통계 분석 중"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                                lineNumber: 674,
+                                lineNumber: 703,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                        lineNumber: 672,
+                        lineNumber: 701,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                lineNumber: 660,
+                lineNumber: 689,
                 columnNumber: 9
             }, this) : !hasData ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(EmptyState, {
                 type: "firstWeek"
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-                lineNumber: 678,
+                lineNumber: 707,
                 columnNumber: 9
             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                 children: [
@@ -1980,7 +1929,7 @@ function AnalyticsPageClient() {
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/pages/AnalyticsPageClient.tsx",
-        lineNumber: 613,
+        lineNumber: 642,
         columnNumber: 5
     }, this);
 }
