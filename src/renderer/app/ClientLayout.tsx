@@ -92,7 +92,7 @@ function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactEl
 
     return (
         <div className="min-h-screen flex min-w-0 app-root">
-            {!isFocusMode && (
+            {!isFocusMode && !isProjectPage && (
                 <aside className="flex-shrink-0">
                     <AppSidebar
                         activeRoute={pathname}

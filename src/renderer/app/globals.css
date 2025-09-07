@@ -20,6 +20,23 @@
   animation: slide-in-left 0.3s ease-out forwards;
 }
 
+/* 🔥 ProjectHeader 슬라이드 다운 애니메이션 */
+@keyframes slide-down {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideDown {
+  animation: slide-down 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* 🔥 폰트 로딩은 JavaScript로 처리됩니다 - globals.css에서 @font-face 제거 */
 
 /* 🔥 깜빡임 방지: 테마 전환이 즉시 적용되도록 설정 */

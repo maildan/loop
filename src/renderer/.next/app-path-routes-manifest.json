@@ -1,10 +1,10 @@
 {
-  "/analytics/page": "/analytics",
   "/_not-found/page": "/_not-found",
   "/ai/page": "/ai",
   "/dashboard/page": "/dashboard",
-  "/page": "/",
+  "/analytics/page": "/analytics",
   "/oauth/callback/page": "/oauth/callback",
+  "/page": "/",
   "/projects/page": "/projects",
   "/settings/page": "/settings",
   "/projects/[id]/page": "/projects/[id]"

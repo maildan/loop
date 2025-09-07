@@ -300,7 +300,7 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
         // Note: In preload context, we cannot directly access app.getPath()
         // This should be handled via IPC if userData path is needed
         // For now, using safe fallback to current working directory
-        
+
         if (fs.existsSync(snapPath)) {
           const raw = fs.readFileSync(snapPath, { encoding: 'utf-8' });
           let auth: any = null;

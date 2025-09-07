@@ -19,7 +19,7 @@ import * as path from 'path';
 function resolveAndValidate(filePath: string | null, baseDir: string, allowedFilenames?: string[]): string | null {
   try {
     if (!filePath) return null;
-    
+
     const resolvedCandidate = path.resolve(filePath);
     const resolvedBaseDir = path.resolve(baseDir);
 
@@ -145,14 +145,14 @@ export class ApplicationBootstrapper {
     protocol.handle('loop-avatar', (request: Electron.ProtocolRequest) => {
       try {
         const requestedPath = request.url.slice('loop-avatar://'.length);
-        
+
         // 🔒 보안: Path Traversal 방지를 위한 검증
         const safePath = resolveAndValidate(
-          requestedPath, 
-          avatarsDir, 
+          requestedPath,
+          avatarsDir,
           undefined // 모든 파일명 허용하되 디렉토리 제한
         );
-        
+
         if (!safePath) {
           Logger.warn('PROTOCOL_HANDLER', `Invalid avatar path requested: ${requestedPath}`);
           return new Response(null, { status: 403 });

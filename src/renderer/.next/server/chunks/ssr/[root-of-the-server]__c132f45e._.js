@@ -825,16 +825,50 @@ function useSettings() {
                     const cat = parts[0];
                     const rest = parts.slice(1);
                     if (!cat) return prev;
+                    // 🔒 보안: Prototype Pollution 방지를 위한 위험한 키 필터링
+                    const dangerousKeys = [
+                        '__proto__',
+                        'constructor',
+                        'prototype'
+                    ];
+                    const isDangerous = (key)=>dangerousKeys.includes(key);
+                    if (isDangerous(cat) || rest.some(isDangerous)) {
+                        console.warn('Settings: Blocked dangerous key for security:', parts);
+                        return prev;
+                    }
                     const newCategory = Object.assign({}, prev[cat]);
                     let target = newCategory || {};
                     for(let i = 0; i < rest.length - 1; i++){
                         const k = rest[i];
-                        if (!k) continue;
-                        if (!(k in target)) target[k] = {};
-                        target = target[k];
+                        if (!k || isDangerous(k)) continue;
+                        // 🔒 완전히 안전한 객체 접근 (Prototype Pollution 완전 차단)
+                        if (!Object.prototype.hasOwnProperty.call(target, k)) {
+                            Object.defineProperty(target, k, {
+                                value: Object.create(null),
+                                writable: true,
+                                enumerable: true,
+                                configurable: true
+                            });
+                        }
+                        const nextTarget = Object.prototype.hasOwnProperty.call(target, k) ? target[k] : null;
+                        if (nextTarget && typeof nextTarget === 'object') {
+                            target = nextTarget;
+                        } else {
+                            // 안전하지 않은 경우 빈 객체로 대체
+                            const safeObj = Object.create(null);
+                            Object.defineProperty(target, k, {
+                                value: safeObj,
+                                writable: true,
+                                enumerable: true,
+                                configurable: true
+                            });
+                            target = safeObj;
+                        }
                     }
                     const lastKey = rest[rest.length - 1];
-                    if (lastKey) target[lastKey] = payload.value;
+                    if (lastKey && !isDangerous(lastKey)) {
+                        target[lastKey] = payload.value;
+                    }
                     return Object.assign({}, prev, {
                         [cat]: newCategory
                     });
@@ -3112,7 +3146,7 @@ function ClientLayoutInner({ children }) {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "min-h-screen flex min-w-0 app-root",
         children: [
-            !isFocusMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
+            !isFocusMode && !isProjectPage && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("aside", {
                 className: "flex-shrink-0",
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$layout$2f$AppSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AppSidebar"], {
                     activeRoute: pathname,

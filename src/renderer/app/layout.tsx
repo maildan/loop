@@ -5,8 +5,9 @@ import * as path from 'path';
 if (typeof global === 'undefined') {
   (globalThis as any).global = globalThis;
 }
-import ClientLayout from './ClientLayout';
+import React from 'react';
 import Script from 'next/script';
+import ClientLayout from './ClientLayout';
 import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 import './globals.css';
@@ -57,7 +58,10 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactEl
         <title>Loop</title>
       </head>
       <body className={`${LAYOUT_STYLES.body} overflow-x-hidden`}>
-        <script src="/theme-init.js"></script>
+        <Script
+          src="/theme-init.js"
+          strategy="beforeInteractive"
+        />
         <div className={LAYOUT_STYLES.container}>
           <ClientLayout initialAuth={initialAuth}>
             {children}

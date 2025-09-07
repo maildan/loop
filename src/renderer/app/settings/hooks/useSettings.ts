@@ -361,7 +361,7 @@ export function useSettings(): UseSettingsReturn {
           for (let i = 0; i < rest.length - 1; i++) {
             const k = rest[i];
             if (!k || isDangerous(k)) continue;
-            
+
             // 🔒 완전히 안전한 객체 접근 (Prototype Pollution 완전 차단)
             if (!Object.prototype.hasOwnProperty.call(target, k)) {
               Object.defineProperty(target, k, {
@@ -371,7 +371,7 @@ export function useSettings(): UseSettingsReturn {
                 configurable: true
               });
             }
-            
+
             const nextTarget = Object.prototype.hasOwnProperty.call(target, k) ? target[k] : null;
             if (nextTarget && typeof nextTarget === 'object') {
               target = nextTarget as Record<string, unknown>;

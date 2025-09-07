@@ -32,7 +32,7 @@ interface StructureViewProps {
 
 // 🔥 기가차드 작가 친화적 구조 스타일
 const STRUCTURE_STYLES = {
-  container: 'max-w-screen-xl mx-auto overflow-hidden bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+  container: 'max-w-screen-xl mx-auto bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
 
   // 🔥 개선된 헤더
   header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
@@ -49,7 +49,7 @@ const STRUCTURE_STYLES = {
 
   // 🔥 메인 콘텐츠 - 스크롤 영역 개선
   content: 'flex-1 flex flex-col min-h-0',
-  scrollArea: 'flex-1 overflow-y-auto',
+  scrollArea: 'flex-1 overflow-y-auto overflow-x-visible',
   contentPadding: 'p-6',
 
   // 🔥 개선된 구조 아이템
@@ -70,7 +70,7 @@ const STRUCTURE_STYLES = {
   addButton: 'flex items-center justify-center gap-1.5 w-full p-2 border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-md text-slate-600 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all duration-200 group',
   addIcon: 'w-3.5 h-3.5 group-hover:scale-110 transition-transform',
   addText: 'text-xs font-medium',
-  addMenu: 'absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-md shadow-lg z-10 overflow-hidden',
+  addMenu: 'absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-md shadow-xl z-50 overflow-visible max-h-96 overflow-y-auto',
   addMenuItem: 'flex items-center gap-2 px-2.5 py-1.5 hover:bg-slate-50 dark:hover:bg-gray-700 cursor-pointer transition-colors',
   addMenuIcon: 'w-3.5 h-3.5 text-slate-600 dark:text-gray-400',
   addMenuText: 'text-xs font-medium text-gray-900 dark:text-gray-100',
