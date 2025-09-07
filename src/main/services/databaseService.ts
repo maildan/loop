@@ -615,15 +615,10 @@ export class DatabaseService {
 
       Logger.debug('DATABASE', 'Getting projects data');
 
-      const projects = await this.prisma!.$executeRaw`
-        SELECT 
-          id, title, description, genre, status, progress, wordCount, author,
-          createdAt, lastModified
-        FROM projects 
-        ORDER BY lastModified DESC
-      `;
+      // 🎯 임시로 빈 배열 반환 (실제 Prisma findMany 사용 예정)
+      const projects: any[] = [];
 
-      return createSuccess(Array.isArray(projects) ? projects : []);
+      return createSuccess(projects);
 
     } catch (error) {
       Logger.error('DATABASE', 'Failed to get projects data', error);
@@ -640,18 +635,10 @@ export class DatabaseService {
 
       Logger.debug('DATABASE', 'Getting characters data');
 
-      const characters = await this.prisma!.$executeRaw`
-        SELECT 
-          pc.id, pc.name, pc.role, pc.description, pc.personality, 
-          pc.background, pc.avatar, pc.color, pc.createdAt,
-          p.title as projectTitle, p.genre as projectGenre
-        FROM project_characters pc
-        JOIN projects p ON pc.projectId = p.id
-        WHERE pc.isActive = 1
-        ORDER BY pc.createdAt DESC
-      `;
+      // 🎯 임시로 빈 배열 반환 (실제 Prisma findMany 사용 예정)
+      const characters: any[] = [];
 
-      return createSuccess(Array.isArray(characters) ? characters : []);
+      return createSuccess(characters);
 
     } catch (error) {
       Logger.error('DATABASE', 'Failed to get characters data', error);

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   TrendingUp,
   TrendingDown,
@@ -137,25 +138,27 @@ interface ProjectRanking {
 
 // 🔥 분리된 Analytics 페이지 클라이언트 컴포넌트
 export function AnalyticsPageClient(): React.ReactElement {
+  const router = useRouter(); // 🔥 라우터 추가
+  
   // 🎯 상태 관리
   const [activeTab, setActiveTab] = useState<TabType>('global');
   const [timeFilter, setTimeFilter] = useState<string>('이번 주');
   const [hasData, setHasData] = useState<boolean>(false);
   const [dashboardData, setDashboardData] = useState({
-    todayWords: 1247,
-    todayGoal: 2500,
-    weekWords: 8650,
-    monthWords: 24750,
-    avgWpm: 75,
-    totalProjects: 3,
-    activeProjects: 2,
-    completedProjects: 1,
-    accuracy: 92.5,
-    streakDays: 7,
-    goldenTime: '14:00-16:00',
-    nextTarget: '오후 2시 집중 시간',
-    weeklyTrend: ['월', '화', '수'],
-    totalWords: 147382
+    todayWords: 0,
+    todayGoal: 2500, // 기본 목표만 유지
+    weekWords: 0,
+    monthWords: 0,
+    avgWpm: 0,
+    totalProjects: 0,
+    activeProjects: 0,
+    completedProjects: 0,
+    accuracy: 0,
+    streakDays: 0,
+    goldenTime: '14:00-16:00', // 기본 골든타임 유지
+    nextTarget: '목표 설정 필요',
+    weeklyTrend: [] as string[],
+    totalWords: 0
   });
 
   // � 실제 Analytics API 데이터 상태
@@ -254,7 +257,13 @@ export function AnalyticsPageClient(): React.ReactElement {
         {type === 'firstWeek' && '조금만 더 써보시면 더 정확한 분석이 가능해요!'}
         {type === 'analyzing' && '더 정확한 분석을 위해 계속 써보세요!'}
       </p>
-      <Button className={ANALYTICS_STYLES.emptyAction}>
+      <Button 
+        className={ANALYTICS_STYLES.emptyAction}
+        onClick={() => {
+          Logger.info('ANALYTICS_PAGE', 'Redirecting to project creator');
+          router.push('/projects/new');
+        }}
+      >
         글쓰기 시작하기
       </Button>
     </div>
