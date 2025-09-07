@@ -70,7 +70,7 @@ const SIDEBAR_ITEMS: readonly SidebarItem[] = [
     id: 'analytics',
     icon: BarChart3,
     label: '분석',
-    href: '/',
+    href: '/analytics',
     ariaLabel: '분석으로 이동'
   },
   {
@@ -415,7 +415,7 @@ export function AppSidebar({
   }, [handleNavigate]);
 
   const renderNavItem = (item: SidebarItem, isExpanded: boolean): React.ReactElement => {
-    const isActive = activeRoute === item.href;
+    const isActive = pathname === item.href; // 🔥 pathname 사용으로 수정
     const Icon = item.icon;
 
     const navItemContent = (
