@@ -478,7 +478,20 @@ function useProjectData(projectId) {
                     }
                     __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_DATA', 'Project loaded successfully');
                 } else {
-                    throw new Error(result?.error || 'Failed to load project');
+                    // 🔥 프로젝트가 존재하지 않는 경우 처리 개선
+                    const errorMsg = result?.error || 'Failed to load project';
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_DATA', 'Project not found or failed to load', {
+                        projectId,
+                        error: errorMsg
+                    });
+                    // 🔥 프로젝트가 삭제되었거나 존재하지 않는 경우 프로젝트 목록으로 리다이렉트
+                    if (errorMsg.includes('찾을 수 없습니다') || errorMsg.includes('not found')) {
+                        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('PROJECT_DATA', 'Project does not exist, redirecting to projects page');
+                        // 브라우저 히스토리를 통해 프로젝트 목록으로 이동
+                        window.location.href = '/projects';
+                        return;
+                    }
+                    throw new Error(errorMsg);
                 }
             } catch (error) {
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_DATA', 'Error loading project', error);
@@ -539,6 +552,21 @@ function useProjectData(projectId) {
                     chaptersPreview: currentChapters.substring(0, 100),
                     payloadKeys: Object.keys(payload)
                 });
+                // 🔥 저장 전 프로젝트 존재 여부 확인
+                try {
+                    const existsResult = await window.electronAPI.projects.getById(projectId);
+                    if (!existsResult.success) {
+                        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_DATA', 'Cannot save: project does not exist', {
+                            projectId
+                        });
+                        throw new Error('프로젝트가 존재하지 않습니다. 프로젝트 목록으로 이동합니다.');
+                    }
+                } catch (checkError) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_DATA', 'Project existence check failed', checkError);
+                    // 프로젝트가 존재하지 않는 경우 리다이렉트
+                    window.location.href = '/projects';
+                    throw new Error('프로젝트를 찾을 수 없어 저장할 수 없습니다.');
+                }
                 const result = await window.electronAPI.projects.update(projectId, payload);
                 if (result.success) {
                     setLastSaved(new Date());

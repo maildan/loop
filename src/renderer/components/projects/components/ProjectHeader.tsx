@@ -197,8 +197,24 @@ export function ProjectHeader({
 
       if (result.success) {
         Logger.info('PROJECT_HEADER', 'Project deleted successfully');
-        // 프로젝트 목록으로 돌아가기
-        onBack();
+
+        // 🔥 확실한 리다이렉트: 여러 방법 시도
+        try {
+          // 1. onBack 콜백 호출
+          onBack();
+
+          // 2. 잠시 후 강제 리다이렉트 (onBack이 실패할 경우 대비)
+          setTimeout(() => {
+            if (window.location.pathname.includes('/projects/')) {
+              Logger.info('PROJECT_HEADER', 'Force redirecting to projects page');
+              window.location.href = '/projects';
+            }
+          }, 1000);
+        } catch (redirectError) {
+          Logger.error('PROJECT_HEADER', 'Redirect failed, using fallback', redirectError);
+          // 최후 수단: 직접 페이지 이동
+          window.location.href = '/projects';
+        }
       } else {
         Logger.error('PROJECT_HEADER', 'Failed to delete project', result.error);
       }
