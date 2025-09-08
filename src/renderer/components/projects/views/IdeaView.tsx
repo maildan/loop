@@ -2,8 +2,9 @@
 
 // 🔥 아이디어 편집 뷰 - 창의적 발상과 영감 관리 시스템
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import { Logger } from '../../../../shared/logger';
+import { useStructureStore } from '../../../stores/useStructureStore';
 import {
     Plus,
     Edit3,
@@ -158,28 +159,52 @@ const IDEA_STYLES = {
     secondaryButton: 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100',
 } as const;
 
-export function IdeaView({ ideaId, onBack }: IdeaViewProps): React.ReactElement {
-    // 🔥 상태 관리 - localStorage에서 데이터 복원
+export function IdeaView({ ideaId: propIdeaId, onBack }: IdeaViewProps): React.ReactElement {
+    // 🔥 우선적으로 StructureStore의 현재 에디터/구조 항목을 사용하여 초기 상태 구성
+    const structures = useStructureStore((s) => s.structures);
+    const currentEditor = useStructureStore((s) => s.currentEditor);
+    const ideaId = propIdeaId || (currentEditor?.editorType === 'idea' ? currentEditor.itemId : undefined) || 'global_ideas';
+
+    const storedStructureItem = (() => {
+        try {
+            const pid = currentEditor?.projectId;
+            if (pid && structures[pid]) {
+                return structures[pid].find((it) => it.id === ideaId);
+            }
+        } catch (e) {
+            // ignore
+        }
+        return undefined;
+    })();
+
     const [ideas, setIdeas] = useState<IdeaItem[]>(() => {
+        // 1) 스토어에서 항목이 있으면 그걸 기반으로 초기화
+        if (storedStructureItem) {
+            return [
+                {
+                    id: storedStructureItem.id,
+                    title: storedStructureItem.title,
+                    content: storedStructureItem.content || '',
+                    category: 'other',
+                    stage: 'initial',
+                    tags: [],
+                    priority: 'medium',
+                    connections: [],
+                    attachments: [],
+                    notes: storedStructureItem.description || '',
+                    createdAt: storedStructureItem.createdAt || new Date(),
+                    updatedAt: storedStructureItem.updatedAt || new Date(),
+                    isFavorite: false
+                }
+            ];
+        }
+
+        // 2) 기존 localStorage fallback
         try {
             const saved = localStorage.getItem(`ideas_${ideaId}`);
             if (saved) {
                 const parsed = JSON.parse(saved);
-                return parsed.map((idea: {
-                    id: string;
-                    title: string;
-                    content: string;
-                    category: string;
-                    stage: string;
-                    tags: string[];
-                    priority: string;
-                    connections: string[];
-                    attachments: string[];
-                    notes: string;
-                    createdAt: string;
-                    updatedAt: string;
-                    isFavorite?: boolean;
-                }) => ({
+                return parsed.map((idea: any) => ({
                     ...idea,
                     createdAt: new Date(idea.createdAt),
                     updatedAt: new Date(idea.updatedAt)
@@ -189,7 +214,7 @@ export function IdeaView({ ideaId, onBack }: IdeaViewProps): React.ReactElement 
             Logger.error('IDEA_VIEW', 'Failed to load ideas from localStorage', { error });
         }
 
-        // 기본 mock 데이터
+        // 3) 기본 mock 데이터
         return [
             {
                 id: '1',
@@ -205,39 +230,61 @@ export function IdeaView({ ideaId, onBack }: IdeaViewProps): React.ReactElement 
                 createdAt: new Date('2024-01-15'),
                 updatedAt: new Date('2024-01-20'),
                 isFavorite: true
-            },
-            {
-                id: '2',
-                title: '시간을 먹는 괴물',
-                content: '사람들의 시간을 훔쳐먹는 보이지 않는 괴물. 피해자는 점점 늙어간다. 주인공만이 이를 볼 수 있다.',
-                category: 'character',
-                stage: 'concrete',
-                tags: ['판타지', '괴물', '시간'],
-                priority: 'medium',
-                connections: ['1'],
-                attachments: [],
-                notes: '',
-                createdAt: new Date('2024-01-10'),
-                updatedAt: new Date('2024-01-18'),
-                isFavorite: false
-            },
-            {
-                id: '3',
-                title: '"시간이 멈췄네"',
-                content: '주인공이 위기 상황에서 시간 정지 능력을 처음 발견했을 때의 첫 마디. 놀라움과 당황이 섞인 톤.',
-                category: 'dialogue',
-                stage: 'applied',
-                tags: ['대사', '능력각성', '첫발견'],
-                priority: 'low',
-                connections: ['2'],
-                attachments: [],
-                notes: '1챕터 클라이맥스에서 사용',
-                createdAt: new Date('2024-01-08'),
-                updatedAt: new Date('2024-01-25'),
-                isFavorite: true
             }
         ];
     });
+
+    // 🔁 currentEditor 또는 스토어 구조가 변경되면 상태 동기화
+    useEffect(() => {
+        const stored = (() => {
+            try {
+                const pid = currentEditor?.projectId;
+                if (pid && structures[pid]) {
+                    return structures[pid].find((it) => it.id === ideaId);
+                }
+            } catch (e) {
+                // ignore
+            }
+            return undefined;
+        })();
+
+        if (stored) {
+            setIdeas([{
+                id: stored.id,
+                title: stored.title,
+                content: stored.content || '',
+                category: 'other',
+                stage: 'initial',
+                tags: [],
+                priority: 'medium',
+                connections: [],
+                attachments: [],
+                notes: stored.description || '',
+                createdAt: stored.createdAt || new Date(),
+                updatedAt: stored.updatedAt || new Date(),
+                isFavorite: false
+            }]);
+            return;
+        }
+
+        // fallback: localStorage
+        try {
+            const saved = localStorage.getItem(`ideas_${ideaId}`);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                setIdeas(parsed.map((idea: any) => ({
+                    ...idea,
+                    createdAt: new Date(idea.createdAt),
+                    updatedAt: new Date(idea.updatedAt)
+                })));
+                return;
+            }
+        } catch (err) {
+            Logger.error('IDEA_VIEW', 'Failed to sync ideas from localStorage', { err });
+        }
+
+        // otherwise keep existing state (mock)
+    }, [structures, currentEditor, ideaId]);
 
     // 🔥 데이터 저장 함수
     const saveToLocalStorage = useCallback((newIdeas: IdeaItem[]) => {

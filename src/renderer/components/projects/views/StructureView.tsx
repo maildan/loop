@@ -30,6 +30,7 @@ interface StructureViewProps {
   onAddNewChapter?: () => void; // 🔥 NEW: 새 장 추가 핸들러
 }
 
+
 // 🔥 기가차드 작가 친화적 구조 스타일
 const STRUCTURE_STYLES = {
   container: 'max-w-screen-xl mx-auto bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
@@ -126,6 +127,7 @@ const StructureView = memo(function StructureView({
   const [editTitle, setEditTitle] = useState<string>('');
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // 🔥 삭제 확인 다이얼로그
   const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null); // 🔥 삭제할 아이템 정보
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // 🔥 강제 리렌더링을 위한 상태
   const [, forceUpdate] = useState({});
@@ -194,6 +196,7 @@ const StructureView = memo(function StructureView({
     };
 
     try {
+      setIsLoading(true);
       // 🔥 Zustand 스토어에 추가 (비동기)
       await addStructureItem(projectId, newItem);
       Logger.info('STRUCTURE_VIEW', 'Item added successfully', { id: newItem.id, type, title: itemTitle });
@@ -219,6 +222,8 @@ const StructureView = memo(function StructureView({
       triggerUpdate();
     } catch (error) {
       Logger.error('STRUCTURE_VIEW', 'Failed to add structure item', { type, error });
+    } finally {
+      setIsLoading(false);
     }
   }, [projectId, structures, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToSynopsisEdit, triggerUpdate]);
 
@@ -276,6 +281,7 @@ const StructureView = memo(function StructureView({
     if (!itemToDelete) return;
 
     try {
+      setIsLoading(true);
       // 🔥 Zustand 스토어에서 삭제 (DB 삭제 포함)
       await deleteStructureItem(projectId, itemToDelete.id);
 
@@ -305,6 +311,8 @@ const StructureView = memo(function StructureView({
         projectId,
         error
       });
+    } finally {
+      setIsLoading(false);
     }
   }, [projectId, deleteStructureItem, editingId, itemToDelete, triggerUpdate]);
 
@@ -335,66 +343,70 @@ const StructureView = memo(function StructureView({
       {/* 구조 목록 */}
       <div className={STRUCTURE_STYLES.content}>
         <div className={STRUCTURE_STYLES.structureList}>
-          {structures.map((item) => {
-            const IconComponent = TYPE_ICONS[item.type as keyof typeof TYPE_ICONS] || FileText;
-            const isEditing = editingId === item.id;
+          {isLoading ? (
+            <div className="p-6 text-center text-sm text-gray-500">로딩중...</div>
+          ) : (
+            structures.map((item) => {
+              const IconComponent = TYPE_ICONS[item.type as keyof typeof TYPE_ICONS] || FileText;
+              const isEditing = editingId === item.id;
 
-            return (
-              <div
-                key={item.id}
-                className={STRUCTURE_STYLES.structureItem}
-                onClick={() => handleItemClick(item)}
-                style={{ cursor: 'pointer' }}
-              >
-                <IconComponent className={STRUCTURE_STYLES.itemIcon} />
-                <div className={STRUCTURE_STYLES.itemContent}>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={editTitle}
-                      onChange={(e) => setEditTitle(e.target.value)}
-                      onKeyDown={(e) => handleKeyPress(e, item.id)}
-                      onBlur={() => handleEditSave(item.id)}
-                      className={STRUCTURE_STYLES.editInput}
-                      autoFocus
-                    />
-                  ) : (
-                    <>
-                      <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
-                      <div className={STRUCTURE_STYLES.itemType}>
-                        {item.type === 'chapter' ? '장' :
-                          item.type === 'synopsis' ? '시놉시스' : '아이디어'}
-                      </div>
-                    </>
-                  )}
+              return (
+                <div
+                  key={item.id}
+                  className={STRUCTURE_STYLES.structureItem}
+                  onClick={() => handleItemClick(item)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <IconComponent className={STRUCTURE_STYLES.itemIcon} />
+                  <div className={STRUCTURE_STYLES.itemContent}>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        onKeyDown={(e) => handleKeyPress(e, item.id)}
+                        onBlur={() => handleEditSave(item.id)}
+                        className={STRUCTURE_STYLES.editInput}
+                        autoFocus
+                      />
+                    ) : (
+                      <>
+                        <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
+                        <div className={STRUCTURE_STYLES.itemType}>
+                          {item.type === 'chapter' ? '장' :
+                            item.type === 'synopsis' ? '시놉시스' : '아이디어'}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className={STRUCTURE_STYLES.itemActions}>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleEditStart(item);
+                      }}
+                      className={STRUCTURE_STYLES.actionButton}
+                      title="편집"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleDelete(item.id);
+                      }}
+                      className={STRUCTURE_STYLES.actionButton}
+                      title="삭제"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-                <div className={STRUCTURE_STYLES.itemActions}>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleEditStart(item);
-                    }}
-                    className={STRUCTURE_STYLES.actionButton}
-                    title="편집"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      handleDelete(item.id);
-                    }}
-                    className={STRUCTURE_STYLES.actionButton}
-                    title="삭제"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          )}
 
           {/* 추가 메뉴 */}
           <div className={STRUCTURE_STYLES.addMenuContainer}>

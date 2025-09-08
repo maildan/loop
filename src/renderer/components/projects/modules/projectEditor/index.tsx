@@ -264,10 +264,14 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <StructureView
                         projectId={projectId}
                         onNavigateToChapterEdit={(chapterId) => {
-                            // 새 탭으로 챕터 열기
+                            // 가능한 경우 스토어에서 챕터 제목을 찾아 사용
+                            const all = useStructureStore.getState().structures[projectId] || [];
+                            const chapter = all.find((s) => s.id === chapterId);
+                            const title = chapter?.title || `챕터 ${chapterId}`;
+
                             const newTab = {
                                 id: `chapter-${chapterId}`,
-                                title: `챕터 ${chapterId}`,
+                                title,
                                 type: 'chapter' as const,
                                 isActive: true,
                                 content: ''
@@ -279,6 +283,20 @@ export const ProjectEditor = memo(function ProjectEditor({
                         onAddNewChapter={() => {
                             actions.openNewChapterModal();
                             Logger.info('PROJECT_EDITOR', 'New chapter modal opened');
+                        }}
+                        onNavigateToIdeaEdit={(ideaId) => {
+                            const all = useStructureStore.getState().structures[projectId] || [];
+                            const idea = all.find((s) => s.id === ideaId);
+                            setCurrentEditor({ projectId, editorType: 'idea', itemId: ideaId, itemTitle: idea?.title });
+                            actions.setCurrentView('idea');
+                            Logger.info('PROJECT_EDITOR', 'Idea view opened', { ideaId });
+                        }}
+                        onNavigateToSynopsisEdit={(synopsisId) => {
+                            const all = useStructureStore.getState().structures[projectId] || [];
+                            const syn = all.find((s) => s.id === synopsisId);
+                            setCurrentEditor({ projectId, editorType: 'synopsis', itemId: synopsisId, itemTitle: syn?.title });
+                            actions.setCurrentView('synopsis');
+                            Logger.info('PROJECT_EDITOR', 'Synopsis view opened', { synopsisId });
                         }}
                     />
                 );

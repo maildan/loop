@@ -2,10 +2,11 @@
 
 // 🔥 기가차드 노트 뷰 - 드래그, 크기조절, 타입별 생성 완전 개선
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { ProjectNote } from '../../../../shared/types';
 import { Plus, Edit3, Save, X as XIcon, Lightbulb, Target, BookOpen, StickyNote, Palette, Move, Maximize2 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
+import { useStructureStore } from '../../../stores/useStructureStore';
 import { useLongPress } from '../../../hooks/useLongPress';
 
 interface NotesViewProps {
@@ -108,7 +109,9 @@ const NOTE_TYPE_STYLES = {
   reference: NOTES_STYLES.noteCardReference,
 };
 
-export function NotesView({ projectId, notes: propNotes, onNotesChange }: NotesViewProps): React.ReactElement {
+export function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }: NotesViewProps): React.ReactElement {
+  const currentEditor = useStructureStore((s) => s.currentEditor);
+  const projectId = propProjectId || currentEditor?.projectId || 'global_notes';
   const [notes, setNotes] = useState<(ProjectNote & { position?: NotePosition })[]>(
     (propNotes || DEFAULT_NOTES).map((note, index) => ({
       ...note,
@@ -121,6 +124,25 @@ export function NotesView({ projectId, notes: propNotes, onNotesChange }: NotesV
       }
     }))
   );
+
+  // 🔁 currentEditor / store 변경 시 notes 동기화 (여기서는 propNotes 우선, store 확장 시 그 값을 사용할 수 있음)
+  const structures = useStructureStore((s) => s.structures);
+  useEffect(() => {
+    try {
+      const pid = currentEditor?.projectId || projectId;
+      // If later we store notes in structures or a dedicated store, we can pull them here.
+      // For now, if propNotes changed, update; otherwise keep local canvas state.
+      if (propNotes) {
+        const mapped = propNotes.map((note, index) => ({
+          ...note,
+          position: { x: 50 + (index % 3) * 250, y: 50 + Math.floor(index / 3) * 200, width: 240, height: 180 }
+        }));
+        setNotes(mapped);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [propNotes, currentEditor, structures, projectId]);
   const [selectedType, setSelectedType] = useState<string>('all');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<ProjectNote>>({});

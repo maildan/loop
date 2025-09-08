@@ -23,7 +23,8 @@
     "**/*.dylib",
     "**/*.so",
     "fonts/**",
-    "resources/fonts/**"
+    "resources/fonts/**",
+    "node_modules/.prisma/client/**/*"
   ],
   "extraResources": [
     {
@@ -31,7 +32,7 @@
       "to": "schema.prisma"
     },
     {
-      "from": "node_modules/@prisma/client/runtime/query-engine-darwin-arm64",
+      "from": "node_modules/.prisma/client/query-engine-darwin-arm64",
       "to": "prisma/query-engine"
     },
     {

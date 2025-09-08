@@ -2,8 +2,9 @@
 
 // 🔥 시놉시스 편집 뷰 - 타임라인 + 카드 시스템
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Logger } from '../../../../shared/logger';
+import { useStructureStore } from '../../../stores/useStructureStore';
 import {
     Plus,
     Edit3,
@@ -112,7 +113,9 @@ const SYNOPSIS_STYLES = {
     secondaryButton: 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100',
 } as const;
 
-export function SynopsisView({ synopsisId, onBack }: SynopsisViewProps): React.ReactElement {
+export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisViewProps): React.ReactElement {
+    const currentEditor = useStructureStore((s) => s.currentEditor);
+    const synopsisId = propSynopsisId || (currentEditor?.editorType === 'synopsis' ? currentEditor.itemId : undefined) || 'global_synopsis';
     // 🔥 상태 관리 - localStorage에서 데이터 복원
     const [plotPoints, setPlotPoints] = useState<PlotPoint[]>(() => {
         try {
@@ -188,6 +191,23 @@ export function SynopsisView({ synopsisId, onBack }: SynopsisViewProps): React.R
             }
         ];
     });
+
+    // 🔁 currentEditor 또는 구조 변경시 동기화
+    const structures = useStructureStore((s) => s.structures);
+    useEffect(() => {
+        try {
+            const pid = currentEditor?.projectId;
+            if (pid && structures[pid]) {
+                const stored = structures[pid].find((it) => it.id === synopsisId);
+                if (stored && stored.content) {
+                    // content를 파싱하거나 필요한 형태로 변환해 setPlotPoints 할 수 있음
+                    // 현재는 단일 텍스트라 mock fallback 유지
+                }
+            }
+        } catch (e) {
+            // ignore
+        }
+    }, [structures, currentEditor, synopsisId]);
 
     // 🔥 데이터 저장 함수
     const saveToLocalStorage = useCallback((newPlots: PlotPoint[]) => {
