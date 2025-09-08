@@ -326,6 +326,10 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 Logger.info('PROJECT_EDITOR', 'Notes updated', { count: notes.length });
                             }
                         }}
+                        onBack={() => {
+                            Logger.info('PROJECT_EDITOR', 'Notes view back - returning to structure view');
+                            actions.setCurrentView('structure');
+                        }}
                     />
                 );
 
@@ -334,7 +338,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <SynopsisView
                         synopsisId={projectId}
                         onBack={() => {
-                            Logger.info('PROJECT_EDITOR', 'Synopsis view back');
+                            Logger.info('PROJECT_EDITOR', 'Synopsis view back - returning to structure view');
+                            actions.setCurrentView('structure');
                         }}
                     />
                 );
@@ -344,7 +349,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <IdeaView
                         ideaId={projectId}
                         onBack={() => {
-                            Logger.info('PROJECT_EDITOR', 'Idea view back');
+                            Logger.info('PROJECT_EDITOR', 'Idea view back - returning to structure view');
+                            actions.setCurrentView('structure');
                         }}
                     />
                 ); default:

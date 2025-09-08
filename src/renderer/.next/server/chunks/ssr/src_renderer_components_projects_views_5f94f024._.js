@@ -2112,65 +2112,106 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f
 ;
 ;
 ;
-// 🔥 기가차드 작가 친화적 노트 스타일
+// 🔥 작가 친화적 노트 스타일 - 창작 영감을 자극하는 디자인
 const NOTES_STYLES = {
-    container: 'flex-1 overflow-hidden bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
-    // 🔥 개선된 헤더
-    header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
-    headerTop: 'flex items-center justify-between mb-4',
-    title: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
-    subtitle: 'text-slate-600 dark:text-gray-400 leading-relaxed',
-    // 🔥 통계 카드
-    statsGrid: 'grid grid-cols-4 gap-4 mt-4',
-    statCard: 'p-3 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700',
-    statIcon: 'w-5 h-5 text-blue-600 dark:text-blue-400 mb-2',
-    statValue: 'text-lg font-semibold text-gray-900 dark:text-gray-100',
-    statLabel: 'text-xs text-slate-600 dark:text-gray-400',
+    container: 'flex-1 overflow-hidden bg-gradient-to-br from-white via-amber-50/30 to-orange-50/30 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900',
+    // 🔥 우아한 헤더
+    header: 'p-8 bg-white/70 dark:bg-gray-800/70 backdrop-blur-md border-b border-amber-200/60 dark:border-gray-700/60 shadow-sm',
+    headerTop: 'flex items-center justify-between mb-6',
+    title: 'text-3xl font-bold bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent',
+    subtitle: 'text-amber-700/80 dark:text-amber-300/80 leading-relaxed font-medium',
+    // 🔥 아름다운 통계 카드
+    statsGrid: 'grid grid-cols-4 gap-6 mt-6',
+    statCard: 'p-4 bg-gradient-to-br from-white to-amber-50/50 dark:from-gray-800 dark:to-amber-900/20 rounded-2xl border border-amber-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-md transition-all duration-200',
+    statIcon: 'w-6 h-6 text-amber-600 dark:text-amber-400 mb-3',
+    statValue: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
+    statLabel: 'text-sm text-amber-700/70 dark:text-amber-300/70 font-medium',
     // 🔥 컨텐츠 영역
     content: 'flex-1 relative overflow-hidden',
-    // 🔥 개선된 타입 필터
-    typeButtons: 'flex gap-3 mb-6 flex-wrap',
-    typeButton: 'flex items-center gap-2 px-4 py-2 text-sm font-medium border border-slate-200 dark:border-gray-700 rounded-full hover:bg-slate-100 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-105 cursor-pointer',
-    typeButtonActive: 'bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-md',
-    // 🔥 캔버스 영역 (드래그 가능)
-    canvas: 'absolute inset-0 overflow-auto p-6',
-    // 🔥 개선된 노트 카드 (드래그 가능, 크기 조절 가능)
-    noteCard: 'absolute group select-none bg-gradient-to-br shadow-lg rounded-xl border-2 transition-all duration-200 cursor-move',
-    noteCardIdea: 'from-yellow-100 to-yellow-200 dark:from-yellow-900/30 dark:to-yellow-800/30 border-yellow-300 dark:border-yellow-700',
-    noteCardGoal: 'from-green-100 to-green-200 dark:from-green-900/30 dark:to-green-800/30 border-green-300 dark:border-green-700',
-    noteCardReference: 'from-blue-100 to-blue-200 dark:from-blue-900/30 dark:to-blue-800/30 border-blue-300 dark:border-blue-700',
-    noteCardHover: 'hover:shadow-xl hover:scale-105 hover:z-10',
+    // 🔥 세련된 타입 필터
+    typeButtons: 'flex gap-4 mb-8 flex-wrap',
+    typeButton: 'flex items-center gap-3 px-6 py-3 text-sm font-semibold border-2 border-amber-200/60 dark:border-gray-600 rounded-2xl hover:bg-amber-50 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-105 cursor-pointer shadow-sm',
+    typeButtonActive: 'bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-500 hover:from-amber-600 hover:to-orange-600 shadow-lg transform scale-105',
+    // 🔥 창작 캔버스
+    canvas: 'absolute inset-0 overflow-auto p-8',
+    // 🔥 아름다운 노트 카드
+    noteCard: 'absolute group select-none bg-gradient-to-br shadow-xl rounded-2xl border-2 transition-all duration-300 cursor-move backdrop-blur-sm',
+    noteCardIdea: 'from-yellow-100/90 to-amber-100/90 dark:from-yellow-900/40 dark:to-amber-900/40 border-yellow-300/60 dark:border-yellow-600/60',
+    noteCardGoal: 'from-emerald-100/90 to-green-100/90 dark:from-emerald-900/40 dark:to-green-900/40 border-emerald-300/60 dark:border-emerald-600/60',
+    noteCardReference: 'from-blue-100/90 to-cyan-100/90 dark:from-blue-900/40 dark:to-cyan-900/40 border-blue-300/60 dark:border-blue-600/60',
+    noteCardHover: 'hover:shadow-2xl hover:scale-105 hover:z-20 hover:-rotate-1',
     // 🔥 노트 헤더
-    noteHeader: 'flex items-center justify-between p-4 border-b border-current/20',
-    noteIcon: 'w-5 h-5 mr-2',
-    noteTitle: 'font-bold text-gray-900 dark:text-gray-100 flex-1 text-sm',
-    noteActions: 'flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity',
+    noteHeader: 'flex items-center justify-between p-5 border-b border-current/20',
+    noteIcon: 'w-5 h-5 mr-3',
+    noteTitle: 'font-bold text-gray-900 dark:text-gray-100 flex-1 text-base leading-tight',
+    noteActions: 'flex gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200',
     // 🔥 노트 컨텐츠
-    noteContent: 'p-4 text-gray-700 dark:text-gray-300 text-xs leading-relaxed overflow-hidden',
-    noteDate: 'text-xs text-gray-500 dark:text-gray-500 px-4 pb-3 font-medium',
+    noteContent: 'p-5 text-gray-700 dark:text-gray-300 text-sm leading-relaxed overflow-hidden',
+    noteDate: 'text-xs text-gray-500 dark:text-gray-400 px-5 pb-4 font-medium italic',
     // 🔥 크기 조절 핸들
-    resizeHandle: 'absolute bottom-0 right-0 w-4 h-4 cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity',
-    resizeIcon: 'w-3 h-3 text-gray-400',
-    // 🔥 개선된 추가 버튼들
-    addButtonsContainer: 'absolute bottom-6 right-6 flex flex-col gap-3',
-    addButton: 'group relative flex items-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-xl hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl',
-    addButtonIcon: 'w-5 h-5 text-slate-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors',
-    addButtonText: 'text-sm font-medium text-slate-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors',
-    // 🔥 편집 버튼 개선
-    editButton: 'relative z-10 p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors cursor-pointer',
-    saveButton: 'relative z-10 p-1.5 text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors cursor-pointer',
-    cancelButton: 'relative z-10 p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors cursor-pointer',
+    resizeHandle: 'absolute bottom-0 right-0 w-6 h-6 cursor-se-resize opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-tl from-gray-400/30 to-transparent rounded-tl-lg',
+    resizeIcon: 'w-4 h-4 text-gray-500 absolute bottom-1 right-1',
+    // 🔥 매력적인 추가 버튼들
+    addButtonsContainer: 'absolute bottom-8 right-8 flex flex-col gap-4',
+    addButton: 'group relative flex items-center gap-4 px-6 py-4 bg-gradient-to-r from-white to-amber-50/80 dark:from-gray-800 dark:to-amber-900/20 border-2 border-dashed border-amber-300/60 dark:border-amber-600/60 rounded-2xl hover:border-amber-400 hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 dark:hover:from-amber-900/30 dark:hover:to-orange-900/30 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl hover:scale-105',
+    addButtonIcon: 'w-6 h-6 text-amber-500 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors',
+    addButtonText: 'text-sm font-semibold text-amber-700 dark:text-amber-300 group-hover:text-amber-800 dark:group-hover:text-amber-200 transition-colors',
+    // 🔥 세련된 편집 버튼
+    editButton: 'relative z-10 p-2 text-gray-500 hover:text-amber-600 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 rounded-xl transition-all duration-200 hover:scale-110',
+    saveButton: 'relative z-10 p-2 text-gray-500 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-xl transition-all duration-200 hover:scale-110',
+    cancelButton: 'relative z-10 p-2 text-gray-500 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 rounded-xl transition-all duration-200 hover:scale-110',
     // 🔥 편집 인풋
-    editInput: 'w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500',
-    editTextarea: 'w-full px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none',
-    // 🔥 빈 상태
+    editInput: 'w-full px-3 py-2 text-sm border-2 border-amber-300 dark:border-amber-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500',
+    editTextarea: 'w-full px-3 py-2 text-sm border-2 border-amber-300 dark:border-amber-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 resize-none',
+    // 🔥 영감을 주는 빈 상태
     emptyState: 'absolute inset-0 flex flex-col items-center justify-center text-center',
     emptyIcon: 'w-16 h-16 text-slate-400 dark:text-gray-500 mb-4',
     emptyTitle: 'text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2',
     emptyDescription: 'text-slate-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed'
 };
-// 기본 메모 데이터
-const DEFAULT_NOTES = [];
+// 작가에게 유용한 기본 노트 템플릿
+const DEFAULT_NOTES = [
+    {
+        id: 'template-idea-1',
+        projectId: 'global_notes',
+        title: '캐릭터 아이디어',
+        content: '주인공의 숨겨진 과거나 트라우마가 현재 행동에 미치는 영향을 탐구해보세요. 독자가 공감할 수 있는 구체적인 경험을 설정하면 캐릭터가 더 생생해집니다.',
+        type: 'idea',
+        tags: [
+            '캐릭터',
+            '배경스토리',
+            '심리'
+        ],
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01')
+    },
+    {
+        id: 'template-goal-1',
+        projectId: 'global_notes',
+        title: '이번 주 창작 목표',
+        content: '1. 주인공의 성격 확립하기\n2. 갈등의 핵심 설정하기\n3. 첫 장 초안 완성하기\n4. 전체 플롯 개요 정리하기',
+        type: 'goal',
+        tags: [
+            '목표',
+            '진행상황'
+        ],
+        createdAt: new Date('2024-01-02'),
+        updatedAt: new Date('2024-01-02')
+    },
+    {
+        id: 'template-reference-1',
+        projectId: 'global_notes',
+        title: '참고 자료',
+        content: '장르별 참고작품이나 영감을 준 자료들을 정리해보세요. 톤앤매너, 문체, 구조 등에서 배울 점들을 메모하면 창작에 도움이 됩니다.',
+        type: 'reference',
+        tags: [
+            '참고자료',
+            '영감'
+        ],
+        createdAt: new Date('2024-01-03'),
+        updatedAt: new Date('2024-01-03')
+    }
+];
 const NOTE_TYPES = [
     {
         id: 'all',
@@ -2198,7 +2239,7 @@ const NOTE_TYPE_STYLES = {
     goal: NOTES_STYLES.noteCardGoal,
     reference: NOTES_STYLES.noteCardReference
 };
-function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }) {
+function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange, onBack }) {
     const currentEditor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useStructureStore"])((s)=>s.currentEditor);
     const projectId = propProjectId || currentEditor?.projectId || 'global_notes';
     const [notes, setNotes] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])((propNotes || DEFAULT_NOTES).map((note, index)=>({
@@ -2238,6 +2279,19 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
         currentEditor,
         structures,
         projectId
+    ]);
+    // 🔥 ESC 키로 뒤로가기 (onBack이 있을 때만)
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (!onBack) return;
+        const handleGlobalEscape = (event)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('NOTES_VIEW', 'ESC key pressed, going back');
+            onBack();
+            event.preventDefault();
+        };
+        window.addEventListener('global:escape', handleGlobalEscape);
+        return ()=>window.removeEventListener('global:escape', handleGlobalEscape);
+    }, [
+        onBack
     ]);
     const [selectedType, setSelectedType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('all');
     const [editingId, setEditingId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -2446,7 +2500,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                     children: "창작 노트"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                    lineNumber: 341,
+                                    lineNumber: 388,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2454,18 +2508,18 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                     children: "아이디어, 목표, 참고사항을 자유롭게 배치하고 관리하세요. 드래그로 위치를 조정하고 크기를 조절할 수 있습니다."
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                    lineNumber: 342,
+                                    lineNumber: 389,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                            lineNumber: 340,
+                            lineNumber: 387,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                        lineNumber: 339,
+                        lineNumber: 386,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2478,7 +2532,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: NOTES_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 352,
+                                        lineNumber: 399,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2486,7 +2540,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: stats.total
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 353,
+                                        lineNumber: 400,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2494,13 +2548,13 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: "총 노트"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 354,
+                                        lineNumber: 401,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 351,
+                                lineNumber: 398,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2510,7 +2564,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: NOTES_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 357,
+                                        lineNumber: 404,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2518,7 +2572,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: stats.ideas
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 358,
+                                        lineNumber: 405,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2526,13 +2580,13 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: "아이디어"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 359,
+                                        lineNumber: 406,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 356,
+                                lineNumber: 403,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2542,7 +2596,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: NOTES_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 362,
+                                        lineNumber: 409,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2550,7 +2604,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: stats.goals
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 363,
+                                        lineNumber: 410,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2558,13 +2612,13 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: "목표"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 364,
+                                        lineNumber: 411,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 361,
+                                lineNumber: 408,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2574,7 +2628,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: NOTES_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 367,
+                                        lineNumber: 414,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2582,7 +2636,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: stats.references
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 368,
+                                        lineNumber: 415,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2590,19 +2644,19 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: "참고"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 369,
+                                        lineNumber: 416,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 366,
+                                lineNumber: 413,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                        lineNumber: 350,
+                        lineNumber: 397,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2615,31 +2669,31 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: "w-4 h-4"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 382,
+                                        lineNumber: 429,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: label
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 383,
+                                        lineNumber: 430,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, id, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 376,
+                                lineNumber: 423,
                                 columnNumber: 13
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                        lineNumber: 374,
+                        lineNumber: 421,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                lineNumber: 338,
+                lineNumber: 385,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2656,7 +2710,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                     className: NOTES_STYLES.emptyIcon
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                    lineNumber: 395,
+                                    lineNumber: 442,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -2664,7 +2718,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                     children: selectedType === 'all' ? '첫 번째 노트를 만들어보세요' : `${NOTE_TYPES.find((t)=>t.id === selectedType)?.label} 노트를 추가해보세요`
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                    lineNumber: 396,
+                                    lineNumber: 443,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2672,13 +2726,13 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                     children: "창작 과정에서 떠오르는 아이디어나 중요한 정보들을 자유롭게 배치할 수 있는 캔버스입니다."
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                    lineNumber: 399,
+                                    lineNumber: 446,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                            lineNumber: 394,
+                            lineNumber: 441,
                             columnNumber: 13
                         }, this) : // 노트들
                         filteredNotes.map((note)=>{
@@ -2724,7 +2778,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                                         className: NOTES_STYLES.noteIcon
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                        lineNumber: 442,
+                                                        lineNumber: 489,
                                                         columnNumber: 23
                                                     }, this),
                                                     isEditing ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -2738,20 +2792,20 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                                         onClick: (e)=>e.stopPropagation()
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                        lineNumber: 444,
+                                                        lineNumber: 491,
                                                         columnNumber: 25
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         className: NOTES_STYLES.noteTitle,
                                                         children: note.title
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                        lineNumber: 452,
+                                                        lineNumber: 499,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                lineNumber: 441,
+                                                lineNumber: 488,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2768,12 +2822,12 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                                                 size: 12
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                                lineNumber: 466,
+                                                                lineNumber: 513,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                            lineNumber: 459,
+                                                            lineNumber: 506,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2786,12 +2840,12 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                                                 size: 12
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                                lineNumber: 475,
+                                                                lineNumber: 522,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                            lineNumber: 468,
+                                                            lineNumber: 515,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
@@ -2807,12 +2861,12 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                                                 size: 12
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                                lineNumber: 487,
+                                                                lineNumber: 534,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                            lineNumber: 480,
+                                                            lineNumber: 527,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2825,25 +2879,25 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                                                 size: 12
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                                lineNumber: 496,
+                                                                lineNumber: 543,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                            lineNumber: 489,
+                                                            lineNumber: 536,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                                lineNumber: 456,
+                                                lineNumber: 503,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 440,
+                                        lineNumber: 487,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2859,18 +2913,18 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                             onClick: (e)=>e.stopPropagation()
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                            lineNumber: 506,
+                                            lineNumber: 553,
                                             columnNumber: 23
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             children: note.content
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                            lineNumber: 514,
+                                            lineNumber: 561,
                                             columnNumber: 23
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 504,
+                                        lineNumber: 551,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2878,7 +2932,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: note.updatedAt.toLocaleDateString()
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 519,
+                                        lineNumber: 566,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2888,24 +2942,24 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                             className: NOTES_STYLES.resizeIcon
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                            lineNumber: 528,
+                                            lineNumber: 575,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 524,
+                                        lineNumber: 571,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, note.id, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 423,
+                                lineNumber: 470,
                                 columnNumber: 17
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                        lineNumber: 391,
+                        lineNumber: 438,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2919,7 +2973,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: NOTES_STYLES.addButtonIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 542,
+                                        lineNumber: 589,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2927,13 +2981,13 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: "아이디어"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 543,
+                                        lineNumber: 590,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 538,
+                                lineNumber: 585,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2944,7 +2998,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: NOTES_STYLES.addButtonIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 549,
+                                        lineNumber: 596,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2952,13 +3006,13 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: "목표"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 550,
+                                        lineNumber: 597,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 545,
+                                lineNumber: 592,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2969,7 +3023,7 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         className: NOTES_STYLES.addButtonIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 556,
+                                        lineNumber: 603,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2977,31 +3031,31 @@ function NotesView({ projectId: propProjectId, notes: propNotes, onNotesChange }
                                         children: "참고"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                        lineNumber: 557,
+                                        lineNumber: 604,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                                lineNumber: 552,
+                                lineNumber: 599,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                        lineNumber: 537,
+                        lineNumber: 584,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-                lineNumber: 390,
+                lineNumber: 437,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/NotesView.tsx",
-        lineNumber: 336,
+        lineNumber: 383,
         columnNumber: 5
     }, this);
 }
@@ -3039,78 +3093,82 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 ;
 ;
-// 🔥 3막 구조 템플릿
+// 🔥 3막 구조 템플릿 - 작가 친화적 색상과 설명
 const ACT_TEMPLATES = {
     1: {
-        title: 'Act 1: 설정',
-        color: 'from-green-500 to-emerald-600',
-        description: '인물, 배경, 상황 소개'
+        title: '1막: 설정과 시작',
+        color: 'from-emerald-400 to-teal-500',
+        description: '세계관 구축, 캐릭터 소개, 갈등의 씨앗',
+        bgColor: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20'
     },
     2: {
-        title: 'Act 2: 전개',
-        color: 'from-blue-500 to-indigo-600',
-        description: '갈등 발생과 전개'
+        title: '2막: 갈등과 발전',
+        color: 'from-amber-400 to-orange-500',
+        description: '갈등 심화, 캐릭터 성장, 중요한 전환점',
+        bgColor: 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20'
     },
     3: {
-        title: 'Act 3: 해결',
-        color: 'from-purple-500 to-violet-600',
-        description: '클라이맥스와 결말'
+        title: '3막: 절정과 해결',
+        color: 'from-purple-400 to-indigo-500',
+        description: '클라이맥스, 갈등 해결, 새로운 균형',
+        bgColor: 'bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20'
     }
 };
-// 🔥 플롯 타입별 스타일
+// 🔥 플롯 타입별 스타일 - 작가가 이해하기 쉬운 색상과 아이콘
 const PLOT_TYPE_STYLES = {
     setup: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"],
-        color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+        color: 'bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-600'
     },
     conflict: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"],
-        color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300'
+        color: 'bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/30 dark:to-orange-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-600'
     },
     resolution: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__["Target"],
-        color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+        color: 'bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-600'
     },
     twist: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreHorizontal$3e$__["MoreHorizontal"],
-        color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+        color: 'bg-gradient-to-r from-purple-100 to-violet-100 dark:from-purple-900/30 dark:to-violet-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-600'
     },
     climax: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"],
-        color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+        color: 'bg-gradient-to-r from-rose-100 to-pink-100 dark:from-rose-900/30 dark:to-pink-900/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-600'
     }
 };
-// 🔥 스타일 정의
+// 🔥 작가 친화적 스타일 정의
 const SYNOPSIS_STYLES = {
-    container: 'flex flex-col h-full bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
-    // 🔥 헤더
-    header: 'flex-shrink-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-gray-700 p-4',
+    container: 'flex flex-col h-full bg-gradient-to-br from-white via-slate-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900',
+    // 🔥 헤더 - 더 우아하고 전문적인 느낌
+    header: 'flex-shrink-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-slate-200/60 dark:border-gray-700/60 p-6 shadow-sm',
     headerContent: 'flex items-center justify-between',
-    backButton: 'flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors',
-    title: 'text-xl font-bold text-gray-900 dark:text-gray-100',
-    actions: 'flex items-center gap-2',
-    actionButton: 'p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors',
+    backButton: 'flex items-center gap-3 px-4 py-2.5 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all duration-200 font-medium',
+    title: 'text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent',
+    actions: 'flex items-center gap-3',
+    actionButton: 'p-2.5 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all duration-200 hover:scale-105',
     // 🔥 메인 컨텐츠
     content: 'flex-1 min-h-0 overflow-hidden',
-    timeline: 'h-full overflow-y-auto p-6',
-    actsContainer: 'space-y-8',
-    actSection: 'bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden',
-    actHeader: 'p-4 bg-gradient-to-r text-white',
-    actTitle: 'text-lg font-bold',
-    actDescription: 'text-sm opacity-90 mt-1',
-    actContent: 'p-4',
-    // 🔥 플롯 포인트
-    plotPoints: 'space-y-3',
-    plotPoint: 'group bg-slate-50 dark:bg-gray-700/50 rounded-lg p-4 border border-slate-200 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 transition-colors cursor-pointer',
-    plotHeader: 'flex items-start justify-between',
+    timeline: 'h-full overflow-y-auto p-8 space-y-8',
+    // 🔥 3막 구조 - 더 아름답고 직관적인 디자인
+    actsContainer: 'space-y-10',
+    actSection: 'bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-gray-700/50 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300',
+    actHeader: 'p-6 bg-gradient-to-r text-white shadow-sm',
+    actTitle: 'text-xl font-bold tracking-wide',
+    actDescription: 'text-sm opacity-95 mt-2 font-medium',
+    actContent: 'p-6',
+    // 🔥 플롯 포인트 - 카드형 디자인
+    plotPoints: 'space-y-4',
+    plotPoint: 'group bg-white/80 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-5 border border-slate-200/60 dark:border-gray-600/60 hover:bg-white dark:hover:bg-gray-700/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer',
+    plotHeader: 'flex items-start justify-between mb-3',
     plotInfo: 'flex-1',
-    plotTitle: 'font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400',
-    plotDescription: 'text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2',
-    plotMeta: 'flex items-center gap-3 mt-2 text-xs text-gray-500 dark:text-gray-400',
-    plotType: 'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
-    plotActions: 'opacity-0 group-hover:opacity-100 transition-opacity flex gap-1',
-    // 🔥 추가 버튼
-    addButton: 'w-full mt-3 p-3 border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-lg text-slate-600 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-center gap-2 text-sm',
+    plotTitle: 'font-bold text-lg text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 leading-tight',
+    plotDescription: 'text-gray-600 dark:text-gray-400 mt-2 leading-relaxed line-clamp-3',
+    plotMeta: 'flex items-center gap-4 mt-4 text-sm text-gray-500 dark:text-gray-400',
+    plotType: 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm',
+    plotActions: 'opacity-0 group-hover:opacity-100 transition-all duration-200 flex gap-2',
+    // 🔥 추가 버튼 - 더 매력적인 디자인
+    addButton: 'w-full mt-4 p-4 border-2 border-dashed border-indigo-300 dark:border-indigo-600 rounded-xl text-indigo-600 dark:text-indigo-400 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all duration-200 flex items-center justify-center gap-3 text-sm font-medium hover:scale-105',
     // 🔥 편집 모달
     modal: 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50',
     modalContent: 'bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden',
@@ -3148,60 +3206,109 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                 error
             });
         }
-        // 기본 mock 데이터
+        // 작가에게 실제로 도움이 되는 시놉시스 템플릿
         return [
             {
                 id: '1',
                 act: 1,
-                title: '주인공 소개',
-                description: '평범한 일상을 보내는 주인공의 모습을 보여준다. 성격과 배경을 자연스럽게 드러낸다.',
+                title: '후크 (Hook) - 독자의 관심 끌기',
+                description: '독자가 계속 읽고 싶어지도록 하는 강력한 시작. 흥미로운 상황이나 갈등을 암시하여 호기심을 자극합니다.',
                 type: 'setup',
                 characters: [
                     '주인공'
                 ],
-                location: '주인공의 집',
-                order: 1,
-                duration: undefined,
-                notes: undefined,
-                importance: 'medium',
-                createdAt: new Date('2024-01-10'),
-                updatedAt: new Date('2024-01-15')
+                location: '이야기가 시작되는 공간',
+                order: 1
             },
             {
                 id: '2',
                 act: 1,
-                title: '사건의 시작',
-                description: '평범한 일상을 깨뜨리는 중요한 사건이 발생한다. 주인공이 선택해야 할 기로에 선다.',
+                title: '일상 세계 (Ordinary World)',
+                description: '주인공의 평범한 일상을 보여줌으로써 독자가 캐릭터에 공감할 수 있게 합니다. 앞으로 벌어질 변화와 대비됩니다.',
+                type: 'setup',
+                characters: [
+                    '주인공',
+                    '주변 인물들'
+                ],
+                location: '주인공의 일상 공간',
+                order: 2
+            },
+            {
+                id: '3',
+                act: 1,
+                title: '인사이팅 인시던트 (Inciting Incident)',
+                description: '이야기의 중심 갈등을 촉발하는 사건. 주인공이 행동을 취해야 하는 상황을 만듭니다.',
                 type: 'conflict',
+                characters: [
+                    '주인공',
+                    '갈등 요소'
+                ],
+                location: '갈등이 시작되는 장소',
+                order: 3
+            },
+            {
+                id: '4',
+                act: 2,
+                title: '플롯 포인트 1 - 새로운 세계로',
+                description: '주인공이 익숙한 환경을 떠나 새로운 도전에 직면합니다. 본격적인 모험이 시작됩니다.',
+                type: 'twist',
                 characters: [
                     '주인공',
                     '조력자'
                 ],
-                location: '사건 현장',
-                order: 2,
-                duration: undefined,
-                notes: undefined,
-                importance: 'high',
-                createdAt: new Date('2024-01-11'),
-                updatedAt: new Date('2024-01-16')
+                location: '새로운 환경',
+                order: 4
             },
             {
-                id: '3',
+                id: '5',
                 act: 2,
-                title: '첫 번째 시련',
-                description: '주인공이 목표를 향해 나아가면서 겪는 첫 번째 큰 어려움. 실패와 좌절을 경험한다.',
-                type: 'conflict',
+                title: '중간점 (Midpoint) - 인식의 전환',
+                description: '주인공이 진실을 깨닫거나 상황이 예상과 다르게 전개됩니다. 이야기의 방향이 바뀝니다.',
+                type: 'twist',
                 characters: [
                     '주인공',
-                    '적대자'
+                    '핵심 인물'
                 ],
-                location: '시련의 장소',
-                order: 3,
-                duration: undefined,
-                notes: undefined,
-                importance: 'medium',
-                createdAt: new Date('2024-01-12'),
-                updatedAt: new Date('2024-01-17')
+                location: '진실이 밝혀지는 곳',
+                order: 5
+            },
+            {
+                id: '6',
+                act: 3,
+                title: '다크 모멘트 (All is Lost)',
+                description: '주인공이 가장 절망적인 상황에 처합니다. 모든 것이 실패한 것처럼 보이는 순간입니다.',
+                type: 'conflict',
+                characters: [
+                    '주인공'
+                ],
+                location: '절망의 장소',
+                order: 6
+            },
+            {
+                id: '7',
+                act: 3,
+                title: '클라이맥스 (Climax) - 최종 대결',
+                description: '주인공이 내적/외적 갈등을 해결하는 최고조의 순간. 이야기의 핵심 질문에 답합니다.',
+                type: 'climax',
+                characters: [
+                    '주인공',
+                    '적대자/갈등 요소'
+                ],
+                location: '최종 대결의 장소',
+                order: 7
+            },
+            {
+                id: '8',
+                act: 3,
+                title: '해결 (Resolution) - 새로운 균형',
+                description: '갈등이 해결되고 새로운 현실이 자리잡습니다. 주인공의 변화가 확실히 드러납니다.',
+                type: 'resolution',
+                characters: [
+                    '주인공',
+                    '주요 인물들'
+                ],
+                location: '이야기가 마무리되는 곳',
+                order: 8
             }
         ];
     });
@@ -3224,6 +3331,18 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
         structures,
         currentEditor,
         synopsisId
+    ]);
+    // 🔥 ESC 키로 뒤로가기
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const handleGlobalEscape = (event)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('SYNOPSIS_VIEW', 'ESC key pressed, going back to structure view');
+            onBack();
+            event.preventDefault();
+        };
+        window.addEventListener('global:escape', handleGlobalEscape);
+        return ()=>window.removeEventListener('global:escape', handleGlobalEscape);
+    }, [
+        onBack
     ]);
     // 🔥 데이터 저장 함수
     const saveToLocalStorage = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((newPlots)=>{
@@ -3321,20 +3440,20 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     size: 20
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 287,
+                                    lineNumber: 351,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "구조로 돌아가기"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 288,
+                                    lineNumber: 352,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 283,
+                            lineNumber: 347,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -3342,7 +3461,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                             children: "시놉시스 편집"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 291,
+                            lineNumber: 355,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3361,14 +3480,14 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 303,
+                                                    lineNumber: 367,
                                                     columnNumber: 33
                                                 }, this),
                                                 "타임라인"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 295,
+                                            lineNumber: 359,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3381,14 +3500,14 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 314,
+                                                    lineNumber: 378,
                                                     columnNumber: 33
                                                 }, this),
                                                 "아웃라인"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 306,
+                                            lineNumber: 370,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3401,20 +3520,20 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 325,
+                                                    lineNumber: 389,
                                                     columnNumber: 33
                                                 }, this),
                                                 "마인드맵"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 317,
+                                            lineNumber: 381,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 294,
+                                    lineNumber: 358,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3424,29 +3543,29 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 330,
+                                        lineNumber: 394,
                                         columnNumber: 29
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 329,
+                                    lineNumber: 393,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 293,
+                            lineNumber: 357,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 282,
+                    lineNumber: 346,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 281,
+                lineNumber: 345,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3474,7 +3593,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: actTemplate.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 351,
+                                                    lineNumber: 415,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3482,13 +3601,13 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: actTemplate.description
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 352,
+                                                    lineNumber: 416,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 350,
+                                            lineNumber: 414,
                                             columnNumber: 41
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3512,7 +3631,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                                 children: plot.title
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 369,
+                                                                                lineNumber: 433,
                                                                                 columnNumber: 69
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3520,7 +3639,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                                 children: plot.description
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 372,
+                                                                                lineNumber: 436,
                                                                                 columnNumber: 69
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3533,14 +3652,14 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                                                 size: 12
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                                lineNumber: 377,
+                                                                                                lineNumber: 441,
                                                                                                 columnNumber: 77
                                                                                             }, this),
                                                                                             plot.type
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                        lineNumber: 376,
+                                                                                        lineNumber: 440,
                                                                                         columnNumber: 73
                                                                                     }, this),
                                                                                     plot.characters.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3550,14 +3669,14 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                                                 size: 12
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                                lineNumber: 382,
+                                                                                                lineNumber: 446,
                                                                                                 columnNumber: 81
                                                                                             }, this),
                                                                                             plot.characters.join(', ')
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                        lineNumber: 381,
+                                                                                        lineNumber: 445,
                                                                                         columnNumber: 77
                                                                                     }, this),
                                                                                     plot.location && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3567,26 +3686,26 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                                                 size: 12
                                                                                             }, void 0, false, {
                                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                                lineNumber: 388,
+                                                                                                lineNumber: 452,
                                                                                                 columnNumber: 81
                                                                                             }, this),
                                                                                             plot.location
                                                                                         ]
                                                                                     }, void 0, true, {
                                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                        lineNumber: 387,
+                                                                                        lineNumber: 451,
                                                                                         columnNumber: 77
                                                                                     }, this)
                                                                                 ]
                                                                             }, void 0, true, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 375,
+                                                                                lineNumber: 439,
                                                                                 columnNumber: 69
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 368,
+                                                                        lineNumber: 432,
                                                                         columnNumber: 65
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3602,12 +3721,12 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                                     size: 14
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                    lineNumber: 403,
+                                                                                    lineNumber: 467,
                                                                                     columnNumber: 73
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 396,
+                                                                                lineNumber: 460,
                                                                                 columnNumber: 69
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3620,35 +3739,35 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                                     size: 14
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                    lineNumber: 412,
+                                                                                    lineNumber: 476,
                                                                                     columnNumber: 73
                                                                                 }, this)
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 405,
+                                                                                lineNumber: 469,
                                                                                 columnNumber: 69
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 395,
+                                                                        lineNumber: 459,
                                                                         columnNumber: 65
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 367,
+                                                                lineNumber: 431,
                                                                 columnNumber: 61
                                                             }, this)
                                                         }, plot.id, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 362,
+                                                            lineNumber: 426,
                                                             columnNumber: 57
                                                         }, this);
                                                     })
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 357,
+                                                    lineNumber: 421,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3659,32 +3778,32 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                             size: 16
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 426,
+                                                            lineNumber: 490,
                                                             columnNumber: 49
                                                         }, this),
                                                         "새 플롯 포인트 추가"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 422,
+                                                    lineNumber: 486,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 356,
+                                            lineNumber: 420,
                                             columnNumber: 41
                                         }, this)
                                     ]
                                 }, act, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 348,
+                                    lineNumber: 412,
                                     columnNumber: 37
                                 }, this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 341,
+                            lineNumber: 405,
                             columnNumber: 25
                         }, this),
                         viewMode === 'outline' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3697,7 +3816,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                         children: "구조 개요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 440,
+                                        lineNumber: 504,
                                         columnNumber: 33
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3716,7 +3835,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 445,
+                                                                lineNumber: 509,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3726,13 +3845,13 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                 })
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 448,
+                                                                lineNumber: 512,
                                                                 columnNumber: 49
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 444,
+                                                        lineNumber: 508,
                                                         columnNumber: 45
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
@@ -3740,7 +3859,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                         children: plot.title
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 454,
+                                                        lineNumber: 518,
                                                         columnNumber: 45
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3748,29 +3867,29 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                         children: plot.description
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 455,
+                                                        lineNumber: 519,
                                                         columnNumber: 45
                                                     }, this)
                                                 ]
                                             }, plot.id, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 443,
+                                                lineNumber: 507,
                                                 columnNumber: 41
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 441,
+                                        lineNumber: 505,
                                         columnNumber: 33
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 439,
+                                lineNumber: 503,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 438,
+                            lineNumber: 502,
                             columnNumber: 25
                         }, this),
                         viewMode === 'mindmap' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3781,7 +3900,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     children: "관계도"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 466,
+                                    lineNumber: 530,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3798,7 +3917,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: ACT_TEMPLATES[act].title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 470,
+                                                    lineNumber: 534,
                                                     columnNumber: 41
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3842,7 +3961,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                     children: plot.title
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 509,
+                                                                    lineNumber: 573,
                                                                     columnNumber: 57
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3853,47 +3972,47 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 512,
+                                                                    lineNumber: 576,
                                                                     columnNumber: 57
                                                                 }, this)
                                                             ]
                                                         }, plot.id, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 501,
+                                                            lineNumber: 565,
                                                             columnNumber: 53
                                                         }, this);
                                                     })
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 473,
+                                                    lineNumber: 537,
                                                     columnNumber: 41
                                                 }, this)
                                             ]
                                         }, act, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 469,
+                                            lineNumber: 533,
                                             columnNumber: 37
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 467,
+                                    lineNumber: 531,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 465,
+                            lineNumber: 529,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 338,
+                    lineNumber: 402,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 337,
+                lineNumber: 401,
                 columnNumber: 13
             }, this),
             (editingPlot || showAddModal.show) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3909,7 +4028,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     children: showAddModal.show ? '새 플롯 포인트' : '플롯 포인트 편집'
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 532,
+                                    lineNumber: 596,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3924,18 +4043,18 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 542,
+                                        lineNumber: 606,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 535,
+                                    lineNumber: 599,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 531,
+                            lineNumber: 595,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3949,7 +4068,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             children: "제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 548,
+                                            lineNumber: 612,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -3963,13 +4082,13 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             placeholder: "플롯 포인트 제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 549,
+                                            lineNumber: 613,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 547,
+                                    lineNumber: 611,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3980,7 +4099,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             children: "설명"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 559,
+                                            lineNumber: 623,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -3994,13 +4113,13 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             placeholder: "상세한 설명을 입력하세요..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 560,
+                                            lineNumber: 624,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 558,
+                                    lineNumber: 622,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4011,7 +4130,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             children: "타입"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 570,
+                                            lineNumber: 634,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -4027,7 +4146,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: "설정"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 576,
+                                                    lineNumber: 640,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4035,7 +4154,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: "갈등"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 577,
+                                                    lineNumber: 641,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4043,7 +4162,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: "해결"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 578,
+                                                    lineNumber: 642,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4051,7 +4170,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: "반전"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 579,
+                                                    lineNumber: 643,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4059,19 +4178,19 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                                     children: "클라이맥스"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 580,
+                                                    lineNumber: 644,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 571,
+                                            lineNumber: 635,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 569,
+                                    lineNumber: 633,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4082,7 +4201,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             children: "장소"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 585,
+                                            lineNumber: 649,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4096,19 +4215,19 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             placeholder: "이벤트가 일어나는 장소"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 586,
+                                            lineNumber: 650,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 584,
+                                    lineNumber: 648,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 546,
+                            lineNumber: 610,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4125,7 +4244,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 597,
+                                    lineNumber: 661,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4134,30 +4253,30 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     children: "저장"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 606,
+                                    lineNumber: 670,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 596,
+                            lineNumber: 660,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 530,
+                    lineNumber: 594,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 529,
+                lineNumber: 593,
                 columnNumber: 17
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-        lineNumber: 279,
+        lineNumber: 343,
         columnNumber: 9
     }, this);
 }
@@ -4200,55 +4319,55 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 ;
 ;
 ;
-// 🔥 카테고리별 스타일
+// 🔥 카테고리별 스타일 - 세련된 색상 팔레트
 const CATEGORY_STYLES = {
     character: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"],
-        color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
+        color: 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700',
         label: '캐릭터'
     },
     plot: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"],
-        color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
+        color: 'bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700',
         label: '플롯'
     },
     setting: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"],
-        color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300',
+        color: 'bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700',
         label: '설정'
     },
     dialogue: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__["MessageSquare"],
-        color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300',
+        color: 'bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-700',
         label: '대사'
     },
     theme: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$heart$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Heart$3e$__["Heart"],
-        color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300',
+        color: 'bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-700',
         label: '테마'
     },
     other: {
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreHorizontal$3e$__["MoreHorizontal"],
-        color: 'bg-gray-100 dark:bg-gray-700/30 text-gray-700 dark:text-gray-300',
+        color: 'bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/20 dark:to-slate-800/20 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600',
         label: '기타'
     }
 };
-// 🔥 개발 단계별 스타일
+// 🔥 개발 단계별 스타일 - 진행 상태를 나타내는 세련된 색상
 const STAGE_STYLES = {
     initial: {
-        color: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400',
-        label: '초기'
+        color: 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-500',
+        label: '아이디어'
     },
     developing: {
-        color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300',
-        label: '발전'
+        color: 'bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-600',
+        label: '발전 중'
     },
     concrete: {
-        color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
+        color: 'bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-600',
         label: '구체화'
     },
     applied: {
-        color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300',
+        color: 'bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600',
         label: '적용됨'
     }
 };
@@ -4280,23 +4399,23 @@ const IDEA_STYLES = {
     // 🔥 메인 컨텐츠
     content: 'flex-1 overflow-hidden',
     scrollArea: 'h-full overflow-y-auto p-6',
-    // 🔥 카드 뷰
-    cardsContainer: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
-    ideaCard: 'group bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-200 cursor-pointer',
-    cardHeader: 'flex items-start justify-between mb-3',
-    cardTitle: 'font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400',
-    cardActions: 'opacity-0 group-hover:opacity-100 transition-opacity flex gap-1',
-    cardContent: 'text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-3',
-    cardFooter: 'flex items-center justify-between',
-    cardMeta: 'flex items-center gap-2',
-    cardTags: 'flex items-center gap-1 flex-wrap',
+    // 🔥 카드 뷰 - 모던하고 세련된 디자인
+    cardsContainer: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6',
+    ideaCard: 'group bg-white dark:bg-gray-800 rounded-2xl border border-slate-200/60 dark:border-gray-700/60 p-6 hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-300/60 dark:hover:border-blue-600/60 hover:-translate-y-1 transition-all duration-300 cursor-pointer backdrop-blur-sm',
+    cardHeader: 'flex items-start justify-between mb-4',
+    cardTitle: 'font-bold text-lg text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 leading-tight',
+    cardActions: 'opacity-0 group-hover:opacity-100 transition-all duration-200 flex gap-1',
+    cardContent: 'text-sm text-gray-600 dark:text-gray-400 line-clamp-4 mb-4 leading-relaxed',
+    cardFooter: 'flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-700',
+    cardMeta: 'flex items-center gap-3',
+    cardTags: 'flex items-center gap-2 flex-wrap',
     // 🔥 리스트 뷰
     listContainer: 'space-y-2',
     listItem: 'group bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-4 hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer',
-    // 🔥 공통 요소
-    badge: 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap',
-    tag: 'inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs whitespace-nowrap',
-    actionButton: 'p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors',
+    // 🔥 공통 요소 - 세련된 배지와 태그
+    badge: 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap shadow-sm',
+    tag: 'inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium whitespace-nowrap border border-gray-200 dark:border-gray-600 hover:shadow-sm transition-all duration-200',
+    actionButton: 'p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 hover:scale-105',
     statsGrid: 'grid grid-cols-4 gap-4 mb-6',
     statCard: 'bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-4 text-center',
     statValue: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
@@ -4377,26 +4496,113 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                 error
             });
         }
-        // 3) 기본 mock 데이터
+        // 3) 현실적이고 다양한 창작 아이디어 모음
         return [
             {
                 id: '1',
-                title: '신비로운 도서관',
-                content: '각 책이 살아있는 도서관. 독자가 책을 열면 그 세계로 빨려들어간다. 사서는 실제로는 차원의 수호자.',
-                category: 'setting',
-                stage: 'developing',
+                title: '완벽주의자의 작은 실수',
+                content: '10년간 완벽한 기록을 유지해온 회계사가 커피를 쏟아 중요한 서류를 더럽히면서 시작되는 이야기. 작은 실수가 인생의 전환점이 되는 과정을 그린다.',
+                category: 'character',
+                stage: 'concrete',
                 tags: [
-                    '판타지',
-                    '도서관',
-                    '차원이동'
+                    '현실',
+                    '성장',
+                    '직장인',
+                    '변화'
                 ],
                 priority: 'high',
                 connections: [],
                 attachments: [],
-                notes: 'Harry Potter의 움직이는 계단에서 영감을 받음',
+                notes: '현대인의 완벽주의 압박과 인간적 실수의 가치를 다룸',
                 createdAt: new Date('2024-01-15'),
                 updatedAt: new Date('2024-01-20'),
                 isFavorite: true
+            },
+            {
+                id: '2',
+                title: '서로 다른 방법, 같은 목표',
+                content: '같은 문제를 해결하려는 두 사람이 정반대의 접근 방식으로 갈등하다가, 결국 각자의 장점을 인정하고 협력하게 되는 플롯 구조.',
+                category: 'plot',
+                stage: 'developing',
+                tags: [
+                    '갈등',
+                    '협력',
+                    '성장',
+                    '관계'
+                ],
+                priority: 'medium',
+                connections: [
+                    '1'
+                ],
+                attachments: [],
+                notes: '다양성과 상호보완의 가치를 보여주는 범용적 구조',
+                createdAt: new Date('2024-01-10'),
+                updatedAt: new Date('2024-01-18'),
+                isFavorite: false
+            },
+            {
+                id: '3',
+                title: '1990년대 소도시 서점',
+                content: '인터넷이 없던 시절, 작은 서점이 동네 사람들의 정보 교환 허브 역할을 했던 공간. 책방 주인과 단골들 사이의 특별한 관계.',
+                category: 'setting',
+                stage: 'initial',
+                tags: [
+                    '향수',
+                    '공동체',
+                    '서점',
+                    '90년대'
+                ],
+                priority: 'medium',
+                connections: [],
+                attachments: [],
+                notes: '디지털 시대 이전의 따뜻한 인간관계와 정보 공유 문화',
+                createdAt: new Date('2024-01-08'),
+                updatedAt: new Date('2024-01-25'),
+                isFavorite: true
+            },
+            {
+                id: '4',
+                title: '진정성 vs 완벽함',
+                content: '겉으로는 완벽해 보이지만 속은 비어있는 것과, 불완전하지만 진실한 것 사이의 대립. 현대 사회의 SNS 문화와 연결.',
+                category: 'theme',
+                stage: 'applied',
+                tags: [
+                    '진정성',
+                    'SNS',
+                    '현대사회',
+                    '자아'
+                ],
+                priority: 'high',
+                connections: [
+                    '1'
+                ],
+                attachments: [],
+                notes: '현대인의 정체성 고민을 다루는 핵심 테마',
+                createdAt: new Date('2024-01-12'),
+                updatedAt: new Date('2024-01-22'),
+                isFavorite: true
+            },
+            {
+                id: '5',
+                title: '"네가 옳다고 해서 내가 틀린 건 아니야"',
+                content: '갈등 상황에서 상대방의 의견을 인정하면서도 자신의 입장을 포기하지 않는 성숙한 대화의 시작점이 되는 대사.',
+                category: 'dialogue',
+                stage: 'concrete',
+                tags: [
+                    '대화',
+                    '갈등해결',
+                    '성숙',
+                    '소통'
+                ],
+                priority: 'medium',
+                connections: [
+                    '2'
+                ],
+                attachments: [],
+                notes: '상대방을 존중하면서도 자신을 지키는 균형잡힌 표현',
+                createdAt: new Date('2024-01-14'),
+                updatedAt: new Date('2024-01-24'),
+                isFavorite: false
             }
         ];
     });
@@ -4455,6 +4661,18 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
         structures,
         currentEditor,
         ideaId
+    ]);
+    // 🔥 ESC 키로 뒤로가기 - ProjectHeader와 동일한 방식
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        const handleGlobalEscape = (event)=>{
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('IDEA_VIEW', 'ESC key pressed, going back to structure view');
+            onBack();
+            event.preventDefault();
+        };
+        window.addEventListener('global:escape', handleGlobalEscape);
+        return ()=>window.removeEventListener('global:escape', handleGlobalEscape);
+    }, [
+        onBack
     ]);
     // 🔥 데이터 저장 함수
     const saveToLocalStorage = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((newIdeas)=>{
@@ -4752,20 +4970,20 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 541,
+                                        lineNumber: 613,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: "구조로 돌아가기"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 542,
+                                        lineNumber: 614,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                lineNumber: 540,
+                                lineNumber: 612,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -4773,7 +4991,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                 children: "아이디어 관리"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                lineNumber: 545,
+                                lineNumber: 617,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4791,12 +5009,12 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 555,
+                                                    lineNumber: 627,
                                                     columnNumber: 33
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 549,
+                                                lineNumber: 621,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4808,18 +5026,18 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     size: 16
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 563,
+                                                    lineNumber: 635,
                                                     columnNumber: 33
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 557,
+                                                lineNumber: 629,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 548,
+                                        lineNumber: 620,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4831,26 +5049,26 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                 className: "mr-1"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 570,
+                                                lineNumber: 642,
                                                 columnNumber: 29
                                             }, this),
                                             "새 아이디어"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 566,
+                                        lineNumber: 638,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                lineNumber: 547,
+                                lineNumber: 619,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                        lineNumber: 539,
+                        lineNumber: 611,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4871,7 +5089,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 579,
+                                    lineNumber: 651,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4881,18 +5099,18 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     children: "저장"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 591,
+                                    lineNumber: 663,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 578,
+                            lineNumber: 650,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                        lineNumber: 577,
+                        lineNumber: 649,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4909,7 +5127,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                 className: IDEA_STYLES.searchIcon
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 605,
+                                                lineNumber: 677,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4920,13 +5138,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                 className: IDEA_STYLES.searchInput
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 606,
+                                                lineNumber: 678,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 604,
+                                        lineNumber: 676,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -4939,7 +5157,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                 children: "모든 카테고리"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 620,
+                                                lineNumber: 692,
                                                 columnNumber: 29
                                             }, this),
                                             Object.entries(CATEGORY_STYLES).map(([key, value])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4947,13 +5165,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     children: value.label
                                                 }, key, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 622,
+                                                    lineNumber: 694,
                                                     columnNumber: 33
                                                 }, this))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 615,
+                                        lineNumber: 687,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -4966,7 +5184,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                 children: "모든 단계"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 631,
+                                                lineNumber: 703,
                                                 columnNumber: 29
                                             }, this),
                                             Object.entries(STAGE_STYLES).map(([key, value])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -4974,19 +5192,19 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     children: value.label
                                                 }, key, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 633,
+                                                    lineNumber: 705,
                                                     columnNumber: 33
                                                 }, this))
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 626,
+                                        lineNumber: 698,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                lineNumber: 603,
+                                lineNumber: 675,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5001,12 +5219,12 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                 size: 16
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 645,
+                                                lineNumber: 717,
                                                 columnNumber: 33
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 640,
+                                            lineNumber: 712,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5016,35 +5234,35 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                 size: 16
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 652,
+                                                lineNumber: 724,
                                                 columnNumber: 33
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 647,
+                                            lineNumber: 719,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 639,
+                                    lineNumber: 711,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                lineNumber: 638,
+                                lineNumber: 710,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                        lineNumber: 602,
+                        lineNumber: 674,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                lineNumber: 538,
+                lineNumber: 610,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5062,7 +5280,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             className: IDEA_STYLES.statIcon
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 665,
+                                            lineNumber: 737,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5070,7 +5288,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: stats.total
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 666,
+                                            lineNumber: 738,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5078,13 +5296,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "총 아이디어"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 667,
+                                            lineNumber: 739,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 664,
+                                    lineNumber: 736,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5094,7 +5312,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             className: IDEA_STYLES.statIcon
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 670,
+                                            lineNumber: 742,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5102,7 +5320,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: stats.favorites
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 671,
+                                            lineNumber: 743,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5110,13 +5328,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "즐겨찾기"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 672,
+                                            lineNumber: 744,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 669,
+                                    lineNumber: 741,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5126,7 +5344,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             className: IDEA_STYLES.statIcon
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 675,
+                                            lineNumber: 747,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5134,7 +5352,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: stats.applied
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 676,
+                                            lineNumber: 748,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5142,13 +5360,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "적용됨"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 677,
+                                            lineNumber: 749,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 674,
+                                    lineNumber: 746,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5158,7 +5376,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             className: IDEA_STYLES.statIcon
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 680,
+                                            lineNumber: 752,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5166,7 +5384,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: stats.highPriority
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 681,
+                                            lineNumber: 753,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5174,19 +5392,19 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "높은 우선순위"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 682,
+                                            lineNumber: 754,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 679,
+                                    lineNumber: 751,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 663,
+                            lineNumber: 735,
                             columnNumber: 21
                         }, this),
                         filteredIdeas.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5196,7 +5414,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     className: IDEA_STYLES.emptyIcon
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 689,
+                                    lineNumber: 761,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -5204,7 +5422,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     children: "아이디어가 없습니다"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 690,
+                                    lineNumber: 762,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5212,13 +5430,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     children: "위의 빠른 캡처를 사용하여 첫 번째 아이디어를 추가해보세요!"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 691,
+                                    lineNumber: 763,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 688,
+                            lineNumber: 760,
                             columnNumber: 25
                         }, this) : viewMode === 'cards' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: IDEA_STYLES.cardsContainer,
@@ -5254,7 +5472,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     children: idea.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 728,
+                                                    lineNumber: 800,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5271,12 +5489,12 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                 className: idea.isFavorite ? 'fill-yellow-400 text-yellow-400' : ''
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 737,
+                                                                lineNumber: 809,
                                                                 columnNumber: 53
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 730,
+                                                            lineNumber: 802,
                                                             columnNumber: 49
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5291,24 +5509,24 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                 size: 14
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 751,
+                                                                lineNumber: 823,
                                                                 columnNumber: 53
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 742,
+                                                            lineNumber: 814,
                                                             columnNumber: 49
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 729,
+                                                    lineNumber: 801,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 727,
+                                            lineNumber: 799,
                                             columnNumber: 41
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5316,7 +5534,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: idea.content
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 756,
+                                            lineNumber: 828,
                                             columnNumber: 41
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5332,14 +5550,14 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                     size: 12
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                    lineNumber: 761,
+                                                                    lineNumber: 833,
                                                                     columnNumber: 53
                                                                 }, this),
                                                                 CATEGORY_STYLES[idea.category].label
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 760,
+                                                            lineNumber: 832,
                                                             columnNumber: 49
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5347,13 +5565,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             children: STAGE_STYLES[idea.stage].label
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 764,
+                                                            lineNumber: 836,
                                                             columnNumber: 49
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 759,
+                                                    lineNumber: 831,
                                                     columnNumber: 45
                                                 }, this),
                                                 idea.tags.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5364,7 +5582,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                 children: tag
                                                             }, index, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 772,
+                                                                lineNumber: 844,
                                                                 columnNumber: 57
                                                             }, this)),
                                                         idea.tags.length > 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5375,31 +5593,31 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 777,
+                                                            lineNumber: 849,
                                                             columnNumber: 57
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 770,
+                                                    lineNumber: 842,
                                                     columnNumber: 49
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 758,
+                                            lineNumber: 830,
                                             columnNumber: 41
                                         }, this)
                                     ]
                                 }, idea.id, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 712,
+                                    lineNumber: 784,
                                     columnNumber: 37
                                 }, this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 696,
+                            lineNumber: 768,
                             columnNumber: 25
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: IDEA_STYLES.listContainer,
@@ -5422,7 +5640,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                 children: idea.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 800,
+                                                                lineNumber: 872,
                                                                 columnNumber: 53
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5432,14 +5650,14 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                         size: 12
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                        lineNumber: 804,
+                                                                        lineNumber: 876,
                                                                         columnNumber: 57
                                                                     }, this),
                                                                     CATEGORY_STYLES[idea.category].label
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 803,
+                                                                lineNumber: 875,
                                                                 columnNumber: 53
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5447,7 +5665,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                 children: STAGE_STYLES[idea.stage].label
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 807,
+                                                                lineNumber: 879,
                                                                 columnNumber: 53
                                                             }, this),
                                                             idea.isFavorite && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$star$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Star$3e$__["Star"], {
@@ -5455,13 +5673,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                 className: "fill-yellow-400 text-yellow-400"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 811,
+                                                                lineNumber: 883,
                                                                 columnNumber: 57
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                        lineNumber: 799,
+                                                        lineNumber: 871,
                                                         columnNumber: 49
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5469,7 +5687,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                         children: idea.content
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                        lineNumber: 814,
+                                                        lineNumber: 886,
                                                         columnNumber: 49
                                                     }, this),
                                                     idea.tags.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5479,18 +5697,18 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                                 children: tag
                                                             }, index, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                                lineNumber: 820,
+                                                                lineNumber: 892,
                                                                 columnNumber: 61
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                        lineNumber: 818,
+                                                        lineNumber: 890,
                                                         columnNumber: 53
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 798,
+                                                lineNumber: 870,
                                                 columnNumber: 45
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5507,12 +5725,12 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             className: idea.isFavorite ? 'fill-yellow-400 text-yellow-400' : ''
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 836,
+                                                            lineNumber: 908,
                                                             columnNumber: 53
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                        lineNumber: 829,
+                                                        lineNumber: 901,
                                                         columnNumber: 49
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5525,46 +5743,46 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             size: 14
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 845,
+                                                            lineNumber: 917,
                                                             columnNumber: 53
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                        lineNumber: 838,
+                                                        lineNumber: 910,
                                                         columnNumber: 49
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                lineNumber: 828,
+                                                lineNumber: 900,
                                                 columnNumber: 45
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 797,
+                                        lineNumber: 869,
                                         columnNumber: 41
                                     }, this)
                                 }, idea.id, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 792,
+                                    lineNumber: 864,
                                     columnNumber: 37
                                 }, this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 787,
+                            lineNumber: 859,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                    lineNumber: 661,
+                    lineNumber: 733,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                lineNumber: 660,
+                lineNumber: 732,
                 columnNumber: 13
             }, this),
             (editingIdea || showAddModal) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5580,7 +5798,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     children: showAddModal ? '새 아이디어' : '아이디어 편집'
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 862,
+                                    lineNumber: 934,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5593,18 +5811,18 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                        lineNumber: 872,
+                                        lineNumber: 944,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 865,
+                                    lineNumber: 937,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 861,
+                            lineNumber: 933,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5618,7 +5836,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 878,
+                                            lineNumber: 950,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -5632,13 +5850,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             placeholder: "아이디어 제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 879,
+                                            lineNumber: 951,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 877,
+                                    lineNumber: 949,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5649,7 +5867,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "내용"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 889,
+                                            lineNumber: 961,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -5663,13 +5881,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             placeholder: "아이디어의 상세한 설명을 입력하세요..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 890,
+                                            lineNumber: 962,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 888,
+                                    lineNumber: 960,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5683,7 +5901,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     children: "카테고리"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 901,
+                                                    lineNumber: 973,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -5698,18 +5916,18 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             children: value.label
                                                         }, key, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 908,
+                                                            lineNumber: 980,
                                                             columnNumber: 45
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 902,
+                                                    lineNumber: 974,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 900,
+                                            lineNumber: 972,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5720,7 +5938,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     children: "개발 단계"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 914,
+                                                    lineNumber: 986,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -5735,18 +5953,18 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             children: value.label
                                                         }, key, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 921,
+                                                            lineNumber: 993,
                                                             columnNumber: 45
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 915,
+                                                    lineNumber: 987,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 913,
+                                            lineNumber: 985,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5757,7 +5975,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                     children: "우선순위"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 927,
+                                                    lineNumber: 999,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -5773,7 +5991,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             children: "낮음"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 933,
+                                                            lineNumber: 1005,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5781,7 +5999,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             children: "보통"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 934,
+                                                            lineNumber: 1006,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5789,25 +6007,25 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                                             children: "높음"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                            lineNumber: 935,
+                                                            lineNumber: 1007,
                                                             columnNumber: 41
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                                    lineNumber: 928,
+                                                    lineNumber: 1000,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 926,
+                                            lineNumber: 998,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 899,
+                                    lineNumber: 971,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5818,7 +6036,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "태그 (쉼표로 구분)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 941,
+                                            lineNumber: 1013,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -5832,13 +6050,13 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             placeholder: "예: 판타지, 마법, 모험"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 942,
+                                            lineNumber: 1014,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 940,
+                                    lineNumber: 1012,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5849,7 +6067,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             children: "메모"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 952,
+                                            lineNumber: 1024,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -5863,19 +6081,19 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                             placeholder: "추가 메모나 영감의 출처를 기록하세요..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                            lineNumber: 953,
+                                            lineNumber: 1025,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 951,
+                                    lineNumber: 1023,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 876,
+                            lineNumber: 948,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5890,7 +6108,7 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 964,
+                                    lineNumber: 1036,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5899,30 +6117,30 @@ function IdeaView({ ideaId: propIdeaId, onBack }) {
                                     children: "저장"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                                    lineNumber: 973,
+                                    lineNumber: 1045,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                            lineNumber: 963,
+                            lineNumber: 1035,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                    lineNumber: 860,
+                    lineNumber: 932,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-                lineNumber: 859,
+                lineNumber: 931,
                 columnNumber: 17
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/IdeaView.tsx",
-        lineNumber: 536,
+        lineNumber: 608,
         columnNumber: 9
     }, this);
 }

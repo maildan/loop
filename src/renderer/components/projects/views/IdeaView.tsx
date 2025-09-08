@@ -57,22 +57,22 @@ interface IdeaViewProps {
     onBack: () => void;
 }
 
-// 🔥 카테고리별 스타일
+// 🔥 카테고리별 스타일 - 세련된 색상 팔레트
 const CATEGORY_STYLES = {
-    character: { icon: Users, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', label: '캐릭터' },
-    plot: { icon: FileText, color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300', label: '플롯' },
-    setting: { icon: MapPin, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300', label: '설정' },
-    dialogue: { icon: MessageSquare, color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300', label: '대사' },
-    theme: { icon: Heart, color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300', label: '테마' },
-    other: { icon: MoreHorizontal, color: 'bg-gray-100 dark:bg-gray-700/30 text-gray-700 dark:text-gray-300', label: '기타' }
+    character: { icon: Users, color: 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700', label: '캐릭터' },
+    plot: { icon: FileText, color: 'bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700', label: '플롯' },
+    setting: { icon: MapPin, color: 'bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700', label: '설정' },
+    dialogue: { icon: MessageSquare, color: 'bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-700', label: '대사' },
+    theme: { icon: Heart, color: 'bg-gradient-to-r from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-700', label: '테마' },
+    other: { icon: MoreHorizontal, color: 'bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/20 dark:to-slate-800/20 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600', label: '기타' }
 } as const;
 
-// 🔥 개발 단계별 스타일
+// 🔥 개발 단계별 스타일 - 진행 상태를 나타내는 세련된 색상
 const STAGE_STYLES = {
-    initial: { color: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400', label: '초기' },
-    developing: { color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300', label: '발전' },
-    concrete: { color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300', label: '구체화' },
-    applied: { color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300', label: '적용됨' }
+    initial: { color: 'bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-500', label: '아이디어' },
+    developing: { color: 'bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 text-amber-700 dark:text-amber-300 border border-amber-300 dark:border-amber-600', label: '발전 중' },
+    concrete: { color: 'bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-700 dark:text-blue-300 border border-blue-300 dark:border-blue-600', label: '구체화' },
+    applied: { color: 'bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600', label: '적용됨' }
 } as const;
 
 // 🔥 스타일 정의
@@ -108,25 +108,25 @@ const IDEA_STYLES = {
     content: 'flex-1 overflow-hidden',
     scrollArea: 'h-full overflow-y-auto p-6',
 
-    // 🔥 카드 뷰
-    cardsContainer: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4',
-    ideaCard: 'group bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-200 cursor-pointer',
-    cardHeader: 'flex items-start justify-between mb-3',
-    cardTitle: 'font-semibold text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400',
-    cardActions: 'opacity-0 group-hover:opacity-100 transition-opacity flex gap-1',
-    cardContent: 'text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-3',
-    cardFooter: 'flex items-center justify-between',
-    cardMeta: 'flex items-center gap-2',
-    cardTags: 'flex items-center gap-1 flex-wrap',
+    // 🔥 카드 뷰 - 모던하고 세련된 디자인
+    cardsContainer: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6',
+    ideaCard: 'group bg-white dark:bg-gray-800 rounded-2xl border border-slate-200/60 dark:border-gray-700/60 p-6 hover:shadow-xl hover:shadow-blue-500/10 hover:border-blue-300/60 dark:hover:border-blue-600/60 hover:-translate-y-1 transition-all duration-300 cursor-pointer backdrop-blur-sm',
+    cardHeader: 'flex items-start justify-between mb-4',
+    cardTitle: 'font-bold text-lg text-gray-900 dark:text-gray-100 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 leading-tight',
+    cardActions: 'opacity-0 group-hover:opacity-100 transition-all duration-200 flex gap-1',
+    cardContent: 'text-sm text-gray-600 dark:text-gray-400 line-clamp-4 mb-4 leading-relaxed',
+    cardFooter: 'flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-gray-700',
+    cardMeta: 'flex items-center gap-3',
+    cardTags: 'flex items-center gap-2 flex-wrap',
 
     // 🔥 리스트 뷰
     listContainer: 'space-y-2',
     listItem: 'group bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-4 hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors cursor-pointer',
 
-    // 🔥 공통 요소
-    badge: 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap',
-    tag: 'inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-xs whitespace-nowrap',
-    actionButton: 'p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors',    // 🔥 통계 영역
+    // 🔥 공통 요소 - 세련된 배지와 태그
+    badge: 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium whitespace-nowrap shadow-sm',
+    tag: 'inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 text-gray-700 dark:text-gray-300 rounded-full text-xs font-medium whitespace-nowrap border border-gray-200 dark:border-gray-600 hover:shadow-sm transition-all duration-200',
+    actionButton: 'p-2 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-all duration-200 hover:scale-105',    // 🔥 통계 영역
     statsGrid: 'grid grid-cols-4 gap-4 mb-6',
     statCard: 'bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 p-4 text-center',
     statValue: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
@@ -214,22 +214,82 @@ export function IdeaView({ ideaId: propIdeaId, onBack }: IdeaViewProps): React.R
             Logger.error('IDEA_VIEW', 'Failed to load ideas from localStorage', { error });
         }
 
-        // 3) 기본 mock 데이터
+        // 3) 현실적이고 다양한 창작 아이디어 모음
         return [
             {
                 id: '1',
-                title: '신비로운 도서관',
-                content: '각 책이 살아있는 도서관. 독자가 책을 열면 그 세계로 빨려들어간다. 사서는 실제로는 차원의 수호자.',
-                category: 'setting',
-                stage: 'developing',
-                tags: ['판타지', '도서관', '차원이동'],
+                title: '완벽주의자의 작은 실수',
+                content: '10년간 완벽한 기록을 유지해온 회계사가 커피를 쏟아 중요한 서류를 더럽히면서 시작되는 이야기. 작은 실수가 인생의 전환점이 되는 과정을 그린다.',
+                category: 'character',
+                stage: 'concrete',
+                tags: ['현실', '성장', '직장인', '변화'],
                 priority: 'high',
                 connections: [],
                 attachments: [],
-                notes: 'Harry Potter의 움직이는 계단에서 영감을 받음',
+                notes: '현대인의 완벽주의 압박과 인간적 실수의 가치를 다룸',
                 createdAt: new Date('2024-01-15'),
                 updatedAt: new Date('2024-01-20'),
                 isFavorite: true
+            },
+            {
+                id: '2',
+                title: '서로 다른 방법, 같은 목표',
+                content: '같은 문제를 해결하려는 두 사람이 정반대의 접근 방식으로 갈등하다가, 결국 각자의 장점을 인정하고 협력하게 되는 플롯 구조.',
+                category: 'plot',
+                stage: 'developing',
+                tags: ['갈등', '협력', '성장', '관계'],
+                priority: 'medium',
+                connections: ['1'],
+                attachments: [],
+                notes: '다양성과 상호보완의 가치를 보여주는 범용적 구조',
+                createdAt: new Date('2024-01-10'),
+                updatedAt: new Date('2024-01-18'),
+                isFavorite: false
+            },
+            {
+                id: '3',
+                title: '1990년대 소도시 서점',
+                content: '인터넷이 없던 시절, 작은 서점이 동네 사람들의 정보 교환 허브 역할을 했던 공간. 책방 주인과 단골들 사이의 특별한 관계.',
+                category: 'setting',
+                stage: 'initial',
+                tags: ['향수', '공동체', '서점', '90년대'],
+                priority: 'medium',
+                connections: [],
+                attachments: [],
+                notes: '디지털 시대 이전의 따뜻한 인간관계와 정보 공유 문화',
+                createdAt: new Date('2024-01-08'),
+                updatedAt: new Date('2024-01-25'),
+                isFavorite: true
+            },
+            {
+                id: '4',
+                title: '진정성 vs 완벽함',
+                content: '겉으로는 완벽해 보이지만 속은 비어있는 것과, 불완전하지만 진실한 것 사이의 대립. 현대 사회의 SNS 문화와 연결.',
+                category: 'theme',
+                stage: 'applied',
+                tags: ['진정성', 'SNS', '현대사회', '자아'],
+                priority: 'high',
+                connections: ['1'],
+                attachments: [],
+                notes: '현대인의 정체성 고민을 다루는 핵심 테마',
+                createdAt: new Date('2024-01-12'),
+                updatedAt: new Date('2024-01-22'),
+                isFavorite: true
+            },
+            {
+                id: '5',
+                title: '"네가 옳다고 해서 내가 틀린 건 아니야"',
+                content: '갈등 상황에서 상대방의 의견을 인정하면서도 자신의 입장을 포기하지 않는 성숙한 대화의 시작점이 되는 대사.',
+                category: 'dialogue',
+                stage: 'concrete',
+                tags: ['대화', '갈등해결', '성숙', '소통'],
+                priority: 'medium',
+                connections: ['2'],
+                attachments: [],
+                notes: '상대방을 존중하면서도 자신을 지키는 균형잡힌 표현',
+                createdAt: new Date('2024-01-14'),
+                updatedAt: new Date('2024-01-24'),
+                isFavorite: false
             }
         ];
     });
@@ -285,6 +345,18 @@ export function IdeaView({ ideaId: propIdeaId, onBack }: IdeaViewProps): React.R
 
         // otherwise keep existing state (mock)
     }, [structures, currentEditor, ideaId]);
+
+    // 🔥 ESC 키로 뒤로가기 - ProjectHeader와 동일한 방식
+    useEffect(() => {
+        const handleGlobalEscape = (event: CustomEvent): void => {
+            Logger.info('IDEA_VIEW', 'ESC key pressed, going back to structure view');
+            onBack();
+            event.preventDefault();
+        };
+
+        window.addEventListener('global:escape', handleGlobalEscape as EventListener);
+        return () => window.removeEventListener('global:escape', handleGlobalEscape as EventListener);
+    }, [onBack]);
 
     // 🔥 데이터 저장 함수
     const saveToLocalStorage = useCallback((newIdeas: IdeaItem[]) => {

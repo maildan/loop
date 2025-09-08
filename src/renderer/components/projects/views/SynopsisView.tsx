@@ -41,57 +41,74 @@ interface SynopsisViewProps {
     onBack: () => void;
 }
 
-// 🔥 3막 구조 템플릿
+// 🔥 3막 구조 템플릿 - 작가 친화적 색상과 설명
 const ACT_TEMPLATES = {
-    1: { title: 'Act 1: 설정', color: 'from-green-500 to-emerald-600', description: '인물, 배경, 상황 소개' },
-    2: { title: 'Act 2: 전개', color: 'from-blue-500 to-indigo-600', description: '갈등 발생과 전개' },
-    3: { title: 'Act 3: 해결', color: 'from-purple-500 to-violet-600', description: '클라이맥스와 결말' }
+    1: {
+        title: '1막: 설정과 시작',
+        color: 'from-emerald-400 to-teal-500',
+        description: '세계관 구축, 캐릭터 소개, 갈등의 씨앗',
+        bgColor: 'bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20'
+    },
+    2: {
+        title: '2막: 갈등과 발전',
+        color: 'from-amber-400 to-orange-500',
+        description: '갈등 심화, 캐릭터 성장, 중요한 전환점',
+        bgColor: 'bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20'
+    },
+    3: {
+        title: '3막: 절정과 해결',
+        color: 'from-purple-400 to-indigo-500',
+        description: '클라이맥스, 갈등 해결, 새로운 균형',
+        bgColor: 'bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20'
+    }
 } as const;
 
-// 🔥 플롯 타입별 스타일
+// 🔥 플롯 타입별 스타일 - 작가가 이해하기 쉬운 색상과 아이콘
 const PLOT_TYPE_STYLES = {
-    setup: { icon: MapPin, color: 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300' },
-    conflict: { icon: Zap, color: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300' },
-    resolution: { icon: Target, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
-    twist: { icon: MoreHorizontal, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' },
-    climax: { icon: Zap, color: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300' }
+    setup: { icon: MapPin, color: 'bg-gradient-to-r from-emerald-100 to-green-100 dark:from-emerald-900/30 dark:to-green-900/30 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-600' },
+    conflict: { icon: Zap, color: 'bg-gradient-to-r from-red-100 to-orange-100 dark:from-red-900/30 dark:to-orange-900/30 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-600' },
+    resolution: { icon: Target, color: 'bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-600' },
+    twist: { icon: MoreHorizontal, color: 'bg-gradient-to-r from-purple-100 to-violet-100 dark:from-purple-900/30 dark:to-violet-900/30 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-600' },
+    climax: { icon: Zap, color: 'bg-gradient-to-r from-rose-100 to-pink-100 dark:from-rose-900/30 dark:to-pink-900/30 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-600' }
 } as const;
 
-// 🔥 스타일 정의
+// 🔥 작가 친화적 스타일 정의
 const SYNOPSIS_STYLES = {
-    container: 'flex flex-col h-full bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+    container: 'flex flex-col h-full bg-gradient-to-br from-white via-slate-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900',
 
-    // 🔥 헤더
-    header: 'flex-shrink-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-gray-700 p-4',
+    // 🔥 헤더 - 더 우아하고 전문적인 느낌
+    header: 'flex-shrink-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-slate-200/60 dark:border-gray-700/60 p-6 shadow-sm',
     headerContent: 'flex items-center justify-between',
-    backButton: 'flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors',
-    title: 'text-xl font-bold text-gray-900 dark:text-gray-100',
-    actions: 'flex items-center gap-2',
-    actionButton: 'p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors',
+    backButton: 'flex items-center gap-3 px-4 py-2.5 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all duration-200 font-medium',
+    title: 'text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent',
+    actions: 'flex items-center gap-3',
+    actionButton: 'p-2.5 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 rounded-xl transition-all duration-200 hover:scale-105',
 
     // 🔥 메인 컨텐츠
     content: 'flex-1 min-h-0 overflow-hidden',
-    timeline: 'h-full overflow-y-auto p-6',    // 🔥 3막 구조
-    actsContainer: 'space-y-8',
-    actSection: 'bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden',
-    actHeader: 'p-4 bg-gradient-to-r text-white',
-    actTitle: 'text-lg font-bold',
-    actDescription: 'text-sm opacity-90 mt-1',
-    actContent: 'p-4',
+    timeline: 'h-full overflow-y-auto p-8 space-y-8',
 
-    // 🔥 플롯 포인트
-    plotPoints: 'space-y-3',
-    plotPoint: 'group bg-slate-50 dark:bg-gray-700/50 rounded-lg p-4 border border-slate-200 dark:border-gray-600 hover:bg-slate-100 dark:hover:bg-gray-700 transition-colors cursor-pointer',
-    plotHeader: 'flex items-start justify-between',
+    // 🔥 3막 구조 - 더 아름답고 직관적인 디자인
+    actsContainer: 'space-y-10',
+    actSection: 'bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-gray-700/50 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300',
+    actHeader: 'p-6 bg-gradient-to-r text-white shadow-sm',
+    actTitle: 'text-xl font-bold tracking-wide',
+    actDescription: 'text-sm opacity-95 mt-2 font-medium',
+    actContent: 'p-6',
+
+    // 🔥 플롯 포인트 - 카드형 디자인
+    plotPoints: 'space-y-4',
+    plotPoint: 'group bg-white/80 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-5 border border-slate-200/60 dark:border-gray-600/60 hover:bg-white dark:hover:bg-gray-700/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer',
+    plotHeader: 'flex items-start justify-between mb-3',
     plotInfo: 'flex-1',
-    plotTitle: 'font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400',
-    plotDescription: 'text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2',
-    plotMeta: 'flex items-center gap-3 mt-2 text-xs text-gray-500 dark:text-gray-400',
-    plotType: 'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
-    plotActions: 'opacity-0 group-hover:opacity-100 transition-opacity flex gap-1',
+    plotTitle: 'font-bold text-lg text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 leading-tight',
+    plotDescription: 'text-gray-600 dark:text-gray-400 mt-2 leading-relaxed line-clamp-3',
+    plotMeta: 'flex items-center gap-4 mt-4 text-sm text-gray-500 dark:text-gray-400',
+    plotType: 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm',
+    plotActions: 'opacity-0 group-hover:opacity-100 transition-all duration-200 flex gap-2',
 
-    // 🔥 추가 버튼
-    addButton: 'w-full mt-3 p-3 border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-lg text-slate-600 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors flex items-center justify-center gap-2 text-sm',
+    // 🔥 추가 버튼 - 더 매력적인 디자인
+    addButton: 'w-full mt-4 p-4 border-2 border-dashed border-indigo-300 dark:border-indigo-600 rounded-xl text-indigo-600 dark:text-indigo-400 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all duration-200 flex items-center justify-center gap-3 text-sm font-medium hover:scale-105',
 
     // 🔥 편집 모달
     modal: 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50',
@@ -142,52 +159,87 @@ export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisVie
             Logger.error('SYNOPSIS_VIEW', 'Failed to load synopsis from localStorage', { error });
         }
 
-        // 기본 mock 데이터
+        // 작가에게 실제로 도움이 되는 시놉시스 템플릿
         return [
             {
                 id: '1',
                 act: 1,
-                title: '주인공 소개',
-                description: '평범한 일상을 보내는 주인공의 모습을 보여준다. 성격과 배경을 자연스럽게 드러낸다.',
+                title: '후크 (Hook) - 독자의 관심 끌기',
+                description: '독자가 계속 읽고 싶어지도록 하는 강력한 시작. 흥미로운 상황이나 갈등을 암시하여 호기심을 자극합니다.',
                 type: 'setup',
                 characters: ['주인공'],
-                location: '주인공의 집',
-                order: 1,
-                duration: undefined,
-                notes: undefined,
-                importance: 'medium' as const,
-                createdAt: new Date('2024-01-10'),
-                updatedAt: new Date('2024-01-15')
+                location: '이야기가 시작되는 공간',
+                order: 1
             },
             {
                 id: '2',
                 act: 1,
-                title: '사건의 시작',
-                description: '평범한 일상을 깨뜨리는 중요한 사건이 발생한다. 주인공이 선택해야 할 기로에 선다.',
-                type: 'conflict',
-                characters: ['주인공', '조력자'],
-                location: '사건 현장',
-                order: 2,
-                duration: undefined,
-                notes: undefined,
-                importance: 'high' as const,
-                createdAt: new Date('2024-01-11'),
-                updatedAt: new Date('2024-01-16')
+                title: '일상 세계 (Ordinary World)',
+                description: '주인공의 평범한 일상을 보여줌으로써 독자가 캐릭터에 공감할 수 있게 합니다. 앞으로 벌어질 변화와 대비됩니다.',
+                type: 'setup',
+                characters: ['주인공', '주변 인물들'],
+                location: '주인공의 일상 공간',
+                order: 2
             },
             {
                 id: '3',
-                act: 2,
-                title: '첫 번째 시련',
-                description: '주인공이 목표를 향해 나아가면서 겪는 첫 번째 큰 어려움. 실패와 좌절을 경험한다.',
+                act: 1,
+                title: '인사이팅 인시던트 (Inciting Incident)',
+                description: '이야기의 중심 갈등을 촉발하는 사건. 주인공이 행동을 취해야 하는 상황을 만듭니다.',
                 type: 'conflict',
-                characters: ['주인공', '적대자'],
-                location: '시련의 장소',
-                order: 3,
-                duration: undefined,
-                notes: undefined,
-                importance: 'medium' as const,
-                createdAt: new Date('2024-01-12'),
-                updatedAt: new Date('2024-01-17')
+                characters: ['주인공', '갈등 요소'],
+                location: '갈등이 시작되는 장소',
+                order: 3
+            },
+            {
+                id: '4',
+                act: 2,
+                title: '플롯 포인트 1 - 새로운 세계로',
+                description: '주인공이 익숙한 환경을 떠나 새로운 도전에 직면합니다. 본격적인 모험이 시작됩니다.',
+                type: 'twist',
+                characters: ['주인공', '조력자'],
+                location: '새로운 환경',
+                order: 4
+            },
+            {
+                id: '5',
+                act: 2,
+                title: '중간점 (Midpoint) - 인식의 전환',
+                description: '주인공이 진실을 깨닫거나 상황이 예상과 다르게 전개됩니다. 이야기의 방향이 바뀝니다.',
+                type: 'twist',
+                characters: ['주인공', '핵심 인물'],
+                location: '진실이 밝혀지는 곳',
+                order: 5
+            },
+            {
+                id: '6',
+                act: 3,
+                title: '다크 모멘트 (All is Lost)',
+                description: '주인공이 가장 절망적인 상황에 처합니다. 모든 것이 실패한 것처럼 보이는 순간입니다.',
+                type: 'conflict',
+                characters: ['주인공'],
+                location: '절망의 장소',
+                order: 6
+            },
+            {
+                id: '7',
+                act: 3,
+                title: '클라이맥스 (Climax) - 최종 대결',
+                description: '주인공이 내적/외적 갈등을 해결하는 최고조의 순간. 이야기의 핵심 질문에 답합니다.',
+                type: 'climax',
+                characters: ['주인공', '적대자/갈등 요소'],
+                location: '최종 대결의 장소',
+                order: 7
+            },
+            {
+                id: '8',
+                act: 3,
+                title: '해결 (Resolution) - 새로운 균형',
+                description: '갈등이 해결되고 새로운 현실이 자리잡습니다. 주인공의 변화가 확실히 드러납니다.',
+                type: 'resolution',
+                characters: ['주인공', '주요 인물들'],
+                location: '이야기가 마무리되는 곳',
+                order: 8
             }
         ];
     });
@@ -208,6 +260,18 @@ export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisVie
             // ignore
         }
     }, [structures, currentEditor, synopsisId]);
+
+    // 🔥 ESC 키로 뒤로가기
+    useEffect(() => {
+        const handleGlobalEscape = (event: CustomEvent): void => {
+            Logger.info('SYNOPSIS_VIEW', 'ESC key pressed, going back to structure view');
+            onBack();
+            event.preventDefault();
+        };
+
+        window.addEventListener('global:escape', handleGlobalEscape as EventListener);
+        return () => window.removeEventListener('global:escape', handleGlobalEscape as EventListener);
+    }, [onBack]);
 
     // 🔥 데이터 저장 함수
     const saveToLocalStorage = useCallback((newPlots: PlotPoint[]) => {
