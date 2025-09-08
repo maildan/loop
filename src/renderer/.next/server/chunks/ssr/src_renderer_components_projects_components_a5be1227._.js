@@ -29,13 +29,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$se
 ;
 // 🔥 Zen Browser 스타일 사이드바 (3단계 상태: default/hover/collapsed)
 const SIDEBAR_STYLES = {
-    // 기본 컨테이너 (tabBar 아래 영역에만 표시)
-    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-[calc(100%-3.5rem)] relative mt-14',
+    // 기본 컨테이너 - 전체 높이 사용 (tabBar 고려하지 않음)
+    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative',
     default: 'w-16',
     expanded: 'w-64',
     collapsed: 'w-0 overflow-hidden',
-    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전 (tabBar 아래 영역에만 제한)
-    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-xl z-30 transform -translate-x-full transition-all duration-300 ease-in-out',
+    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전 (슬라이드 효과)
+    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-xl z-30 transform -translate-x-full transition-all duration-300 ease-in-out',
     hoverVisible: 'transform translate-x-0',
     // hover 감지 영역 - 프로젝트 영역에서만 동작 (AppSidebar와 분리)  
     hoverTrigger: 'absolute left-64 top-0 w-8 h-full z-25',

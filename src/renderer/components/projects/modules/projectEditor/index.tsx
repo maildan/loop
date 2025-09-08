@@ -522,42 +522,44 @@ export const ProjectEditor = memo(function ProjectEditor({
                 {/* 🔥 ProjectSidebar hover 영역 - 왼쪽 끝자락 */}
                 {isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-14 w-4 h-[calc(100%-3.5rem)] z-40"
+                        className="absolute left-0 top-0 w-4 h-full z-40"
                         onMouseEnter={() => setSidebarHovered(true)}
                         onMouseLeave={() => setSidebarHovered(false)}
                     >
                         {/* ProjectSidebar hover 시 표시 */}
                         {sidebarHovered && (
-                            <ProjectSidebar
-                                projectId={projectId}
-                                currentView={state.currentView}
-                                onViewChange={actions.setCurrentView}
-                                structure={projectData?.structure || []}
-                                characters={projectData?.characters || []}
-                                collapsed={false}
-                                stats={{
-                                    wordCount: projectData?.writerStats?.wordCount || 0,
-                                    charCount: projectData?.writerStats?.charCount || 0,
-                                    paragraphCount: projectData?.writerStats?.paragraphCount || 0,
-                                    readingTime: projectData?.writerStats?.readingTime || 0,
-                                    wordGoal: projectData?.writerStats?.wordGoal || 1000,
-                                    progress: projectData?.writerStats?.progress || 0,
-                                    sessionTime: projectData?.writerStats?.sessionTime || 0,
-                                    wpm: projectData?.writerStats?.wpm || 0
-                                }}
-                                onAddStructure={() => {
-                                    actions.openNewChapterModal();
-                                    Logger.info('PROJECT_EDITOR', 'Add structure clicked from hover sidebar');
-                                }}
-                                onAddCharacter={() => {
-                                    actions.openNewCharacterModal();
-                                    Logger.info('PROJECT_EDITOR', 'Add character clicked from hover sidebar');
-                                }}
-                                onAddNote={() => {
-                                    actions.openNewNoteModal();
-                                    Logger.info('PROJECT_EDITOR', 'Add note clicked from hover sidebar');
-                                }}
-                            />
+                            <div className="absolute left-0 top-0 h-full transition-all duration-300 ease-in-out transform translate-x-0">
+                                <ProjectSidebar
+                                    projectId={projectId}
+                                    currentView={state.currentView}
+                                    onViewChange={actions.setCurrentView}
+                                    structure={projectData?.structure || []}
+                                    characters={projectData?.characters || []}
+                                    collapsed={false}
+                                    stats={{
+                                        wordCount: projectData?.writerStats?.wordCount || 0,
+                                        charCount: projectData?.writerStats?.charCount || 0,
+                                        paragraphCount: projectData?.writerStats?.paragraphCount || 0,
+                                        readingTime: projectData?.writerStats?.readingTime || 0,
+                                        wordGoal: projectData?.writerStats?.wordGoal || 1000,
+                                        progress: projectData?.writerStats?.progress || 0,
+                                        sessionTime: projectData?.writerStats?.sessionTime || 0,
+                                        wpm: projectData?.writerStats?.wpm || 0
+                                    }}
+                                    onAddStructure={() => {
+                                        actions.openNewChapterModal();
+                                        Logger.info('PROJECT_EDITOR', 'Add structure clicked from hover sidebar');
+                                    }}
+                                    onAddCharacter={() => {
+                                        actions.openNewCharacterModal();
+                                        Logger.info('PROJECT_EDITOR', 'Add character clicked from hover sidebar');
+                                    }}
+                                    onAddNote={() => {
+                                        actions.openNewNoteModal();
+                                        Logger.info('PROJECT_EDITOR', 'Add note clicked from hover sidebar');
+                                    }}
+                                />
+                            </div>
                         )}
                     </div>
                 )}

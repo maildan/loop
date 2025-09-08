@@ -3069,24 +3069,21 @@ __turbopack_context__.s({
     "SynopsisView": (()=>SynopsisView)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
-// 🔥 시놉시스 편집 뷰 - 타임라인 + 카드 시스템
+// 🔥 시놉시스 편집 뷰 - 완전 리팩토링 버전
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/stores/useStructureStore.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2d$line$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit3$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/pen-line.js [app-ssr] (ecmascript) <export default as Edit3>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-ssr] (ecmascript) <export default as Trash2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/clock.js [app-ssr] (ecmascript) <export default as Clock>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/target.js [app-ssr] (ecmascript) <export default as Target>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/zap.js [app-ssr] (ecmascript) <export default as Zap>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/users.js [app-ssr] (ecmascript) <export default as Users>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/map-pin.js [app-ssr] (ecmascript) <export default as MapPin>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$ellipsis$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MoreHorizontal$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/ellipsis.js [app-ssr] (ecmascript) <export default as MoreHorizontal>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/save.js [app-ssr] (ecmascript) <export default as Save>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-ssr] (ecmascript) <export default as X>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-left.js [app-ssr] (ecmascript) <export default as ChevronLeft>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$workflow$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Workflow$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/workflow.js [app-ssr] (ecmascript) <export default as Workflow>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/file-text.js [app-ssr] (ecmascript) <export default as FileText>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/eye.js [app-ssr] (ecmascript) <export default as Eye>");
 'use client';
 ;
 ;
@@ -3150,25 +3147,6 @@ const SYNOPSIS_STYLES = {
     // 🔥 메인 컨텐츠
     content: 'flex-1 min-h-0 overflow-hidden',
     timeline: 'h-full overflow-y-auto p-8 space-y-8',
-    // 🔥 3막 구조 - 더 아름답고 직관적인 디자인
-    actsContainer: 'space-y-10',
-    actSection: 'bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-gray-700/50 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300',
-    actHeader: 'p-6 bg-gradient-to-r text-white shadow-sm',
-    actTitle: 'text-xl font-bold tracking-wide',
-    actDescription: 'text-sm opacity-95 mt-2 font-medium',
-    actContent: 'p-6',
-    // 🔥 플롯 포인트 - 카드형 디자인
-    plotPoints: 'space-y-4',
-    plotPoint: 'group bg-white/80 dark:bg-gray-700/40 backdrop-blur-sm rounded-xl p-5 border border-slate-200/60 dark:border-gray-600/60 hover:bg-white dark:hover:bg-gray-700/60 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer',
-    plotHeader: 'flex items-start justify-between mb-3',
-    plotInfo: 'flex-1',
-    plotTitle: 'font-bold text-lg text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 leading-tight',
-    plotDescription: 'text-gray-600 dark:text-gray-400 mt-2 leading-relaxed line-clamp-3',
-    plotMeta: 'flex items-center gap-4 mt-4 text-sm text-gray-500 dark:text-gray-400',
-    plotType: 'inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm',
-    plotActions: 'opacity-0 group-hover:opacity-100 transition-all duration-200 flex gap-2',
-    // 🔥 추가 버튼 - 더 매력적인 디자인
-    addButton: 'w-full mt-4 p-4 border-2 border-dashed border-indigo-300 dark:border-indigo-600 rounded-xl text-indigo-600 dark:text-indigo-400 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-all duration-200 flex items-center justify-center gap-3 text-sm font-medium hover:scale-105',
     // 🔥 편집 모달
     modal: 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50',
     modalContent: 'bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden',
@@ -3189,143 +3167,60 @@ const SYNOPSIS_STYLES = {
 function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
     const currentEditor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useStructureStore"])((s)=>s.currentEditor);
     const synopsisId = propSynopsisId || (currentEditor?.editorType === 'synopsis' ? currentEditor.itemId : undefined) || 'global_synopsis';
-    // 🔥 상태 관리 - localStorage에서 데이터 복원
+    // 🔥 상태 관리 - useStructureStore와 완전 연동
     const [plotPoints, setPlotPoints] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(()=>{
+        // 스토어에서 데이터 로드 시도
         try {
-            const saved = localStorage.getItem(`synopsis_${synopsisId}`);
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                return parsed.map((plot)=>({
-                        ...plot,
-                        createdAt: new Date(plot.createdAt),
-                        updatedAt: new Date(plot.updatedAt)
-                    }));
+            const pid = currentEditor?.projectId;
+            if (pid && structures[pid]) {
+                const stored = structures[pid].find((it)=>it.id === synopsisId);
+                if (stored && stored.content) {
+                    try {
+                        const parsed = JSON.parse(stored.content);
+                        if (Array.isArray(parsed)) {
+                            return parsed;
+                        }
+                    } catch (e) {
+                        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].warn('SYNOPSIS_VIEW', 'Failed to parse stored content', {
+                            error: e
+                        });
+                    }
+                }
             }
         } catch (error) {
-            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('SYNOPSIS_VIEW', 'Failed to load synopsis from localStorage', {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('SYNOPSIS_VIEW', 'Failed to load synopsis from store', {
                 error
             });
         }
-        // 작가에게 실제로 도움이 되는 시놉시스 템플릿
-        return [
-            {
-                id: '1',
-                act: 1,
-                title: '후크 (Hook) - 독자의 관심 끌기',
-                description: '독자가 계속 읽고 싶어지도록 하는 강력한 시작. 흥미로운 상황이나 갈등을 암시하여 호기심을 자극합니다.',
-                type: 'setup',
-                characters: [
-                    '주인공'
-                ],
-                location: '이야기가 시작되는 공간',
-                order: 1
-            },
-            {
-                id: '2',
-                act: 1,
-                title: '일상 세계 (Ordinary World)',
-                description: '주인공의 평범한 일상을 보여줌으로써 독자가 캐릭터에 공감할 수 있게 합니다. 앞으로 벌어질 변화와 대비됩니다.',
-                type: 'setup',
-                characters: [
-                    '주인공',
-                    '주변 인물들'
-                ],
-                location: '주인공의 일상 공간',
-                order: 2
-            },
-            {
-                id: '3',
-                act: 1,
-                title: '인사이팅 인시던트 (Inciting Incident)',
-                description: '이야기의 중심 갈등을 촉발하는 사건. 주인공이 행동을 취해야 하는 상황을 만듭니다.',
-                type: 'conflict',
-                characters: [
-                    '주인공',
-                    '갈등 요소'
-                ],
-                location: '갈등이 시작되는 장소',
-                order: 3
-            },
-            {
-                id: '4',
-                act: 2,
-                title: '플롯 포인트 1 - 새로운 세계로',
-                description: '주인공이 익숙한 환경을 떠나 새로운 도전에 직면합니다. 본격적인 모험이 시작됩니다.',
-                type: 'twist',
-                characters: [
-                    '주인공',
-                    '조력자'
-                ],
-                location: '새로운 환경',
-                order: 4
-            },
-            {
-                id: '5',
-                act: 2,
-                title: '중간점 (Midpoint) - 인식의 전환',
-                description: '주인공이 진실을 깨닫거나 상황이 예상과 다르게 전개됩니다. 이야기의 방향이 바뀝니다.',
-                type: 'twist',
-                characters: [
-                    '주인공',
-                    '핵심 인물'
-                ],
-                location: '진실이 밝혀지는 곳',
-                order: 5
-            },
-            {
-                id: '6',
-                act: 3,
-                title: '다크 모멘트 (All is Lost)',
-                description: '주인공이 가장 절망적인 상황에 처합니다. 모든 것이 실패한 것처럼 보이는 순간입니다.',
-                type: 'conflict',
-                characters: [
-                    '주인공'
-                ],
-                location: '절망의 장소',
-                order: 6
-            },
-            {
-                id: '7',
-                act: 3,
-                title: '클라이맥스 (Climax) - 최종 대결',
-                description: '주인공이 내적/외적 갈등을 해결하는 최고조의 순간. 이야기의 핵심 질문에 답합니다.',
-                type: 'climax',
-                characters: [
-                    '주인공',
-                    '적대자/갈등 요소'
-                ],
-                location: '최종 대결의 장소',
-                order: 7
-            },
-            {
-                id: '8',
-                act: 3,
-                title: '해결 (Resolution) - 새로운 균형',
-                description: '갈등이 해결되고 새로운 현실이 자리잡습니다. 주인공의 변화가 확실히 드러납니다.',
-                type: 'resolution',
-                characters: [
-                    '주인공',
-                    '주요 인물들'
-                ],
-                location: '이야기가 마무리되는 곳',
-                order: 8
-            }
-        ];
+        // 빈 배열로 시작 (더미 데이터 제거)
+        return [];
     });
-    // 🔁 currentEditor 또는 구조 변경시 동기화
+    // 🔥 currentEditor 또는 스토어 구조가 변경되면 상태 동기화
     const structures = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useStructureStore"])((s)=>s.structures);
+    const updateStructureItem = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useStructureStore"])((s)=>s.updateStructureItem);
+    const setCurrentEditor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useStructureStore"])((s)=>s.setCurrentEditor);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         try {
             const pid = currentEditor?.projectId;
             if (pid && structures[pid]) {
                 const stored = structures[pid].find((it)=>it.id === synopsisId);
                 if (stored && stored.content) {
-                // content를 파싱하거나 필요한 형태로 변환해 setPlotPoints 할 수 있음
-                // 현재는 단일 텍스트라 mock fallback 유지
+                    try {
+                        const parsed = JSON.parse(stored.content);
+                        if (Array.isArray(parsed)) {
+                            setPlotPoints(parsed);
+                        }
+                    } catch (e) {
+                        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].warn('SYNOPSIS_VIEW', 'Failed to parse stored content during sync', {
+                            error: e
+                        });
+                    }
                 }
             }
         } catch (e) {
-        // ignore
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].warn('SYNOPSIS_VIEW', 'Sync error', {
+                error: e
+            });
         }
     }, [
         structures,
@@ -3344,38 +3239,64 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
     }, [
         onBack
     ]);
-    // 🔥 데이터 저장 함수
-    const saveToLocalStorage = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((newPlots)=>{
+    // 🔥 데이터 저장 함수 - useStructureStore로 완전 전환
+    const saveToStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((newPlots)=>{
         try {
-            localStorage.setItem(`synopsis_${synopsisId}`, JSON.stringify(newPlots));
+            const pid = currentEditor?.projectId;
+            if (pid && synopsisId) {
+                const content = JSON.stringify(newPlots);
+                updateStructureItem(pid, synopsisId, {
+                    content
+                });
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('SYNOPSIS_VIEW', 'Synopsis saved to store', {
+                    projectId: pid,
+                    synopsisId,
+                    plotCount: newPlots.length
+                });
+            }
         } catch (error) {
-            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('SYNOPSIS_VIEW', 'Failed to save synopsis to localStorage', {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('SYNOPSIS_VIEW', 'Failed to save synopsis to store', {
                 error
             });
         }
     }, [
-        synopsisId
+        currentEditor?.projectId,
+        synopsisId,
+        updateStructureItem
     ]);
     // 🔥 자동 저장이 포함된 setPlotPoints 래퍼
     const updatePlotPoints = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((newPlots)=>{
         if (typeof newPlots === 'function') {
             setPlotPoints((prev)=>{
                 const updated = newPlots(prev);
-                saveToLocalStorage(updated);
+                saveToStore(updated);
                 return updated;
             });
         } else {
             setPlotPoints(newPlots);
-            saveToLocalStorage(newPlots);
+            saveToStore(newPlots);
         }
     }, [
-        saveToLocalStorage
+        saveToStore
     ]);
     const [viewMode, setViewMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('timeline');
     const [editingPlot, setEditingPlot] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [showAddModal, setShowAddModal] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
         show: false
     });
+    const [detailPlot, setDetailPlot] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null); // 🔥 아웃라인 상세 정보용
+    // 🔥 마인드맵 상태 관리 (컴포넌트 레벨)
+    const [mindmapZoom, setMindmapZoom] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1);
+    const [mindmapPan, setMindmapPan] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
+        x: 0,
+        y: 0
+    });
+    const [mindmapDragging, setMindmapDragging] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [mindmapDragStart, setMindmapDragStart] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
+        x: 0,
+        y: 0
+    });
+    const mindmapSvgRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRef"])(null);
     // 🔥 플롯 포인트 생성
     const createPlotPoint = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((act)=>{
         const newPlot = {
@@ -3385,7 +3306,9 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
             description: '',
             type: 'setup',
             characters: [],
-            order: plotPoints.filter((p)=>p.act === act).length + 1
+            order: plotPoints.filter((p)=>p.act === act).length + 1,
+            readerPredictability: 'predictable',
+            tensionLevel: 3
         };
         setEditingPlot(newPlot);
         setShowAddModal({
@@ -3399,12 +3322,12 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
     const savePlotPoint = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
         if (!editingPlot) return;
         if (showAddModal.show) {
-            setPlotPoints((prev)=>[
+            updatePlotPoints((prev)=>[
                     ...prev,
                     editingPlot
                 ]);
         } else {
-            setPlotPoints((prev)=>prev.map((p)=>p.id === editingPlot.id ? editingPlot : p));
+            updatePlotPoints((prev)=>prev.map((p)=>p.id === editingPlot.id ? editingPlot : p));
         }
         setEditingPlot(null);
         setShowAddModal({
@@ -3412,18 +3335,1175 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
         });
     }, [
         editingPlot,
-        showAddModal.show
+        showAddModal.show,
+        updatePlotPoints
     ]);
     // 🔥 플롯 포인트 삭제
     const deletePlotPoint = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((id)=>{
-        setPlotPoints((prev)=>prev.filter((p)=>p.id !== id));
-    }, []);
+        updatePlotPoints((prev)=>prev.filter((p)=>p.id !== id));
+    }, [
+        updatePlotPoints
+    ]);
     // 🔥 막별 플롯 포인트 필터링
     const getPlotPointsByAct = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((act)=>{
         return plotPoints.filter((p)=>p.act === act).sort((a, b)=>a.order - b.order);
     }, [
         plotPoints
     ]);
+    // 🔥 타임라인에서 에디터로 이동 (플롯 포인트 기반으로 새 문서 생성)
+    const navigateToEditor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((plot)=>{
+        const projectId = currentEditor?.projectId;
+        if (!projectId) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].warn('SYNOPSIS_VIEW', 'No project ID available for editor navigation');
+            return;
+        }
+        // 플롯 포인트를 기반으로 새 구조 아이템 생성
+        const newStructureId = `chapter_${plot.id}_${Date.now()}`;
+        const structureTitle = `${plot.title} (${plot.act}막)`;
+        const initialContent = `# ${structureTitle}
+
+## 플롯 개요
+${plot.description}
+
+## 시간대
+${plot.timeframe || '시간 미정'}
+
+## 등장 인물
+${plot.characters ? plot.characters.join(', ') : '없음'}
+
+${plot.characterActions ? Object.entries(plot.characterActions).map(([char, action])=>`### ${char}의 행동
+${action}`).join('\n\n') : ''}
+
+${plot.isReversalPoint ? `
+## ⚠️ 중요: 반전 지점
+이 장면에서 스토리의 중요한 전환이 일어납니다.
+` : ''}
+
+${plot.foreshadowingPoints && plot.foreshadowingPoints.length > 0 ? `
+## 복선 요소들
+${plot.foreshadowingPoints.map((f)=>`- ${f}`).join('\n')}
+` : ''}
+
+---
+*이 문서는 시놉시스에서 자동 생성되었습니다. 자유롭게 수정하세요.*
+`;
+        try {
+            // 스토어에 새 구조 아이템 추가
+            const newStructureItem = {
+                id: newStructureId,
+                title: structureTitle,
+                type: 'chapter',
+                content: initialContent,
+                order: plot.order,
+                parentId: null,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            };
+            // 스토어에 구조 추가하고 에디터 설정
+            setCurrentEditor({
+                projectId,
+                itemId: newStructureId,
+                editorType: 'chapter'
+            });
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('SYNOPSIS_VIEW', 'Created new chapter from plot point and navigated to editor', {
+                plotId: plot.id,
+                structureId: newStructureId,
+                title: structureTitle
+            });
+        } catch (error) {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('SYNOPSIS_VIEW', 'Failed to create chapter from plot point', {
+                error
+            });
+        }
+    }, [
+        currentEditor,
+        setCurrentEditor
+    ]);
+    // 🔥 타임라인 뷰 렌더링 (캐릭터별 시간선)
+    const renderTimelineView = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "space-y-8",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-6",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                        className: "text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
+                                className: "text-blue-500",
+                                size: 24
+                            }, void 0, false, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 360,
+                                columnNumber: 21
+                            }, this),
+                            "캐릭터별 타임라인"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                        lineNumber: 359,
+                        columnNumber: 17
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "space-y-6",
+                        children: plotPoints.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "text-center py-12 text-gray-500 dark:text-gray-400",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
+                                    size: 48,
+                                    className: "mx-auto mb-4 opacity-50"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 366,
+                                    columnNumber: 29
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-lg mb-2",
+                                    children: "아직 플롯 포인트가 없습니다"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 367,
+                                    columnNumber: 29
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-sm",
+                                    children: "마인드맵에서 플롯을 추가해보세요"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 368,
+                                    columnNumber: 29
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                            lineNumber: 365,
+                            columnNumber: 25
+                        }, this) : plotPoints.map((plot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "relative pl-8 pb-8 border-l-2 border-blue-200 dark:border-blue-700 last:border-l-0",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "absolute -left-2 top-0 w-4 h-4 bg-blue-500 rounded-full"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 373,
+                                        columnNumber: 33
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors cursor-pointer group",
+                                        onClick: ()=>navigateToEditor(plot),
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex justify-between items-start mb-2",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                        className: "font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400",
+                                                        children: plot.title
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 379,
+                                                        columnNumber: 41
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex gap-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-xs px-2 py-1 bg-blue-100 dark:bg-blue-800 text-blue-700 dark:text-blue-300 rounded-full",
+                                                                children: plot.timeframe || '시간 미정'
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 383,
+                                                                columnNumber: 45
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-xs px-2 py-1 bg-purple-100 dark:bg-purple-800 text-purple-700 dark:text-purple-300 rounded-full opacity-0 group-hover:opacity-100 transition-opacity",
+                                                                children: "클릭하여 편집"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 386,
+                                                                columnNumber: 45
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 382,
+                                                        columnNumber: 41
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 378,
+                                                columnNumber: 37
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-sm text-gray-600 dark:text-gray-400 mb-3",
+                                                children: plot.description
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 391,
+                                                columnNumber: 37
+                                            }, this),
+                                            plot.characterActions && Object.keys(plot.characterActions).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "space-y-2",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                                        className: "text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide",
+                                                        children: "캐릭터별 행동"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 394,
+                                                        columnNumber: 45
+                                                    }, this),
+                                                    Object.entries(plot.characterActions).map(([character, action])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "flex items-center gap-2 text-sm",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "font-medium text-gray-700 dark:text-gray-300",
+                                                                    children: [
+                                                                        character,
+                                                                        ":"
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                    lineNumber: 397,
+                                                                    columnNumber: 53
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                    className: "text-gray-600 dark:text-gray-400",
+                                                                    children: action
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                    lineNumber: 398,
+                                                                    columnNumber: 53
+                                                                }, this)
+                                                            ]
+                                                        }, character, true, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 396,
+                                                            columnNumber: 49
+                                                        }, this))
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 393,
+                                                columnNumber: 41
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 374,
+                                        columnNumber: 33
+                                    }, this)
+                                ]
+                            }, plot.id, true, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 372,
+                                columnNumber: 29
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                        lineNumber: 363,
+                        columnNumber: 17
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                lineNumber: 358,
+                columnNumber: 13
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+            lineNumber: 357,
+            columnNumber: 9
+        }, this);
+    // 🔥 아웃라인 뷰 렌더링 (독자 예측 중심)
+    const renderOutlineView = ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "space-y-8",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-6",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                        className: "text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
+                                className: "text-purple-500",
+                                size: 24
+                            }, void 0, false, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 417,
+                                columnNumber: 21
+                            }, this),
+                            "독자 예측 분석 (읽기 전용)"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                        lineNumber: 416,
+                        columnNumber: 17
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "space-y-6",
+                        children: plotPoints.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "text-center py-12 text-gray-500 dark:text-gray-400",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
+                                    size: 48,
+                                    className: "mx-auto mb-4 opacity-50"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 423,
+                                    columnNumber: 29
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-lg mb-2",
+                                    children: "아직 플롯 포인트가 없습니다"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 424,
+                                    columnNumber: 29
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                    className: "text-sm",
+                                    children: "마인드맵이나 타임라인에서 플롯을 추가해보세요"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 425,
+                                    columnNumber: 29
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                            lineNumber: 422,
+                            columnNumber: 25
+                        }, this) : plotPoints.map((plot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20",
+                                onClick: ()=>setDetailPlot(plot),
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex justify-between items-start mb-3",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                                className: "font-semibold text-gray-900 dark:text-gray-100",
+                                                children: plot.title
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 431,
+                                                columnNumber: 37
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex gap-2",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: `text-xs px-2 py-1 rounded-full ${plot.readerPredictability === 'predictable' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : plot.readerPredictability === 'surprising' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' : plot.readerPredictability === 'shocking' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'}`,
+                                                        children: plot.readerPredictability === 'predictable' ? '예측 가능' : plot.readerPredictability === 'surprising' ? '놀라운' : plot.readerPredictability === 'shocking' ? '충격적' : '복선'
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 433,
+                                                        columnNumber: 41
+                                                    }, this),
+                                                    plot.tensionLevel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-xs px-2 py-1 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300 rounded-full",
+                                                        children: [
+                                                            "긴장도 ",
+                                                            plot.tensionLevel,
+                                                            "/5"
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 443,
+                                                        columnNumber: 45
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 432,
+                                                columnNumber: 37
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 430,
+                                        columnNumber: 33
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-sm text-gray-600 dark:text-gray-400 mb-3",
+                                        children: plot.description
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 449,
+                                        columnNumber: 33
+                                    }, this),
+                                    plot.isReversalPoint && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 mb-3",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "flex items-center gap-2 text-red-700 dark:text-red-300",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
+                                                    size: 16
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 453,
+                                                    columnNumber: 45
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "font-medium text-sm",
+                                                    children: "반전 지점"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 454,
+                                                    columnNumber: 45
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 452,
+                                            columnNumber: 41
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 451,
+                                        columnNumber: 37
+                                    }, this),
+                                    plot.foreshadowingPoints && plot.foreshadowingPoints.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "space-y-2",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h5", {
+                                                className: "text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide",
+                                                children: "복선 요소"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 460,
+                                                columnNumber: 41
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "flex flex-wrap gap-2",
+                                                children: plot.foreshadowingPoints.map((foreshadow, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                        className: "text-xs px-2 py-1 bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 rounded-full",
+                                                        children: foreshadow
+                                                    }, index, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 463,
+                                                        columnNumber: 49
+                                                    }, this))
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 461,
+                                                columnNumber: 41
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 459,
+                                        columnNumber: 37
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "mt-3 text-xs text-blue-600 dark:text-blue-400 flex items-center gap-1",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
+                                                size: 12
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 471,
+                                                columnNumber: 37
+                                            }, this),
+                                            "클릭하여 상세 분석 보기"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 470,
+                                        columnNumber: 33
+                                    }, this)
+                                ]
+                            }, plot.id, true, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 429,
+                                columnNumber: 29
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                        lineNumber: 420,
+                        columnNumber: 17
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                lineNumber: 415,
+                columnNumber: 13
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+            lineNumber: 414,
+            columnNumber: 9
+        }, this);
+    // 🔥 마인드맵 뷰 렌더링 (XMind 스타일)
+    const renderMindmapView = ()=>{
+        // 🔥 중심 노드 위치 (캔버스 중앙)
+        const centerX = 400;
+        const centerY = 300;
+        // 🔥 막별 노드 위치 계산 (원형 배치)
+        const getNodePosition = (act, index, total)=>{
+            const radius = 200;
+            const actAngle = (act - 1) * 120 * Math.PI / 180; // 각 막은 120도씩 간격
+            const nodeAngle = actAngle + (index - total / 2) * (Math.PI / 6); // 막 내에서 노드들 배치
+            return {
+                x: centerX + Math.cos(nodeAngle) * radius,
+                y: centerY + Math.sin(nodeAngle) * radius
+            };
+        };
+        // 🔥 마우스 이벤트 핸들러
+        const handleMouseDown = (e)=>{
+            setMindmapDragging(true);
+            setMindmapDragStart({
+                x: e.clientX - mindmapPan.x,
+                y: e.clientY - mindmapPan.y
+            });
+        };
+        const handleMouseMove = (e)=>{
+            if (mindmapDragging) {
+                setMindmapPan({
+                    x: e.clientX - mindmapDragStart.x,
+                    y: e.clientY - mindmapDragStart.y
+                });
+            }
+        };
+        const handleMouseUp = ()=>{
+            setMindmapDragging(false);
+        };
+        const handleWheel = (e)=>{
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            setMindmapZoom((prev)=>Math.max(0.1, Math.min(3, prev * delta)));
+        };
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "space-y-6",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "p-6 border-b border-slate-200 dark:border-gray-700",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center justify-between",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                        className: "text-xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$workflow$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Workflow$3e$__["Workflow"], {
+                                                className: "text-green-500",
+                                                size: 24
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 532,
+                                                columnNumber: 33
+                                            }, this),
+                                            "스토리 마인드맵"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 531,
+                                        columnNumber: 29
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "flex items-center gap-3",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-sm text-gray-600 dark:text-gray-400",
+                                                children: [
+                                                    "줌: ",
+                                                    (mindmapZoom * 100).toFixed(0),
+                                                    "%"
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 536,
+                                                columnNumber: 33
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>{
+                                                    setMindmapZoom(1);
+                                                    setMindmapPan({
+                                                        x: 0,
+                                                        y: 0
+                                                    });
+                                                },
+                                                className: "px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-md transition-colors",
+                                                children: "초기화"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 537,
+                                                columnNumber: 33
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 535,
+                                        columnNumber: 29
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 530,
+                                columnNumber: 25
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-sm text-gray-600 dark:text-gray-400 mt-2",
+                                children: "마우스 휠로 줌, 드래그로 이동, 노드 클릭으로 편집"
+                            }, void 0, false, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 545,
+                                columnNumber: 25
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                        lineNumber: 529,
+                        columnNumber: 21
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "relative h-[600px] bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 overflow-hidden",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                ref: mindmapSvgRef,
+                                className: "absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing",
+                                onMouseDown: handleMouseDown,
+                                onMouseMove: handleMouseMove,
+                                onMouseUp: handleMouseUp,
+                                onMouseLeave: handleMouseUp,
+                                onWheel: handleWheel,
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("defs", {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("marker", {
+                                                id: "arrowhead",
+                                                markerWidth: "10",
+                                                markerHeight: "7",
+                                                refX: "10",
+                                                refY: "3.5",
+                                                orient: "auto",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("polygon", {
+                                                    points: "0 0, 10 3.5, 0 7",
+                                                    fill: "#6B7280"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 571,
+                                                    columnNumber: 37
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 563,
+                                                columnNumber: 33
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
+                                                id: "act1Gradient",
+                                                x1: "0%",
+                                                y1: "0%",
+                                                x2: "100%",
+                                                y2: "100%",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                                                        offset: "0%",
+                                                        style: {
+                                                            stopColor: '#EF4444',
+                                                            stopOpacity: 0.8
+                                                        }
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 579,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                                                        offset: "100%",
+                                                        style: {
+                                                            stopColor: '#DC2626',
+                                                            stopOpacity: 1
+                                                        }
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 580,
+                                                        columnNumber: 37
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 578,
+                                                columnNumber: 33
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
+                                                id: "act2Gradient",
+                                                x1: "0%",
+                                                y1: "0%",
+                                                x2: "100%",
+                                                y2: "100%",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                                                        offset: "0%",
+                                                        style: {
+                                                            stopColor: '#F59E0B',
+                                                            stopOpacity: 0.8
+                                                        }
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 583,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                                                        offset: "100%",
+                                                        style: {
+                                                            stopColor: '#D97706',
+                                                            stopOpacity: 1
+                                                        }
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 584,
+                                                        columnNumber: 37
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 582,
+                                                columnNumber: 33
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
+                                                id: "act3Gradient",
+                                                x1: "0%",
+                                                y1: "0%",
+                                                x2: "100%",
+                                                y2: "100%",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                                                        offset: "0%",
+                                                        style: {
+                                                            stopColor: '#10B981',
+                                                            stopOpacity: 0.8
+                                                        }
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 587,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
+                                                        offset: "100%",
+                                                        style: {
+                                                            stopColor: '#059669',
+                                                            stopOpacity: 1
+                                                        }
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 588,
+                                                        columnNumber: 37
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 586,
+                                                columnNumber: 33
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 561,
+                                        columnNumber: 29
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                                        transform: `translate(${mindmapPan.x}, ${mindmapPan.y}) scale(${mindmapZoom})`,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                                        cx: centerX,
+                                                        cy: centerY,
+                                                        r: "60",
+                                                        fill: "url(#act2Gradient)",
+                                                        stroke: "#1F2937",
+                                                        strokeWidth: "3",
+                                                        className: "drop-shadow-lg"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 595,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                                        x: centerX,
+                                                        y: centerY - 5,
+                                                        textAnchor: "middle",
+                                                        className: "fill-white font-bold text-sm",
+                                                        children: "스토리"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 604,
+                                                        columnNumber: 37
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                                        x: centerX,
+                                                        y: centerY + 10,
+                                                        textAnchor: "middle",
+                                                        className: "fill-white text-xs",
+                                                        children: "시놉시스"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 612,
+                                                        columnNumber: 37
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 594,
+                                                columnNumber: 33
+                                            }, this),
+                                            [
+                                                1,
+                                                2,
+                                                3
+                                            ].map((act)=>{
+                                                const actPlots = getPlotPointsByAct(act);
+                                                const actGradient = `url(#act${act}Gradient)`;
+                                                return actPlots.map((plot, index)=>{
+                                                    const pos = getNodePosition(act, index, actPlots.length);
+                                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
+                                                                x1: centerX,
+                                                                y1: centerY,
+                                                                x2: pos.x,
+                                                                y2: pos.y,
+                                                                stroke: "#6B7280",
+                                                                strokeWidth: "2",
+                                                                strokeDasharray: "5,5",
+                                                                markerEnd: "url(#arrowhead)",
+                                                                className: "opacity-60"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 633,
+                                                                columnNumber: 49
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                                                                className: "cursor-pointer hover:opacity-80 transition-opacity",
+                                                                onClick: (e)=>{
+                                                                    e.stopPropagation();
+                                                                    setEditingPlot(plot);
+                                                                },
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("ellipse", {
+                                                                        cx: pos.x,
+                                                                        cy: pos.y,
+                                                                        rx: "80",
+                                                                        ry: "45",
+                                                                        fill: actGradient,
+                                                                        stroke: "#1F2937",
+                                                                        strokeWidth: "2",
+                                                                        className: "drop-shadow-md"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 653,
+                                                                        columnNumber: 53
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                                                        x: pos.x,
+                                                                        y: pos.y - 8,
+                                                                        textAnchor: "middle",
+                                                                        className: "fill-white font-semibold text-xs",
+                                                                        style: {
+                                                                            maxWidth: '140px'
+                                                                        },
+                                                                        children: plot.title.length > 15 ? plot.title.slice(0, 15) + '...' : plot.title
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 665,
+                                                                        columnNumber: 53
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                                                        x: pos.x,
+                                                                        y: pos.y + 8,
+                                                                        textAnchor: "middle",
+                                                                        className: "fill-white text-xs opacity-80",
+                                                                        children: [
+                                                                            act,
+                                                                            "막"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 676,
+                                                                        columnNumber: 53
+                                                                    }, this),
+                                                                    plot.tensionLevel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                                                        x: pos.x,
+                                                                        y: pos.y + 20,
+                                                                        textAnchor: "middle",
+                                                                        className: "fill-white text-xs",
+                                                                        children: [
+                                                                            "⚡",
+                                                                            plot.tensionLevel
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 687,
+                                                                        columnNumber: 57
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 646,
+                                                                columnNumber: 49
+                                                            }, this),
+                                                            plot.isReversalPoint && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                                                        cx: pos.x + 70,
+                                                                        cy: pos.y - 35,
+                                                                        r: "12",
+                                                                        fill: "#EF4444",
+                                                                        stroke: "#FFF",
+                                                                        strokeWidth: "2",
+                                                                        className: "animate-pulse"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 701,
+                                                                        columnNumber: 57
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                                                        x: pos.x + 70,
+                                                                        y: pos.y - 30,
+                                                                        textAnchor: "middle",
+                                                                        className: "fill-white text-xs font-bold",
+                                                                        children: "!"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 710,
+                                                                        columnNumber: 57
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 700,
+                                                                columnNumber: 53
+                                                            }, this)
+                                                        ]
+                                                    }, plot.id, true, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 631,
+                                                        columnNumber: 45
+                                                    }, this);
+                                                });
+                                            }),
+                                            [
+                                                1,
+                                                2,
+                                                3
+                                            ].map((act)=>{
+                                                const angle = (act - 1) * 120 * Math.PI / 180;
+                                                const labelPos = {
+                                                    x: centerX + Math.cos(angle) * 320,
+                                                    y: centerY + Math.sin(angle) * 320
+                                                };
+                                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                                                            x: labelPos.x - 40,
+                                                            y: labelPos.y - 15,
+                                                            width: "80",
+                                                            height: "30",
+                                                            rx: "15",
+                                                            fill: ACT_TEMPLATES[act].color.includes('red') ? '#EF4444' : ACT_TEMPLATES[act].color.includes('amber') ? '#F59E0B' : '#10B981',
+                                                            className: "opacity-90"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 735,
+                                                            columnNumber: 45
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                                            x: labelPos.x,
+                                                            y: labelPos.y + 5,
+                                                            textAnchor: "middle",
+                                                            className: "fill-white font-bold text-sm",
+                                                            children: ACT_TEMPLATES[act].title
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 745,
+                                                            columnNumber: 45
+                                                        }, this)
+                                                    ]
+                                                }, `act-label-${act}`, true, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 734,
+                                                    columnNumber: 41
+                                                }, this);
+                                            })
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 592,
+                                        columnNumber: 29
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 552,
+                                columnNumber: 25
+                            }, this),
+                            plotPoints.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "absolute inset-0 flex items-center justify-center",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-center text-gray-500 dark:text-gray-400",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$workflow$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Workflow$3e$__["Workflow"], {
+                                            size: 64,
+                                            className: "mx-auto mb-4 opacity-50"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 763,
+                                            columnNumber: 37
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-lg mb-2",
+                                            children: "마인드맵이 비어있습니다"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 764,
+                                            columnNumber: 37
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-sm",
+                                            children: "플롯 포인트를 추가하여 스토리 구조를 시각화해보세요"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 765,
+                                            columnNumber: 37
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 762,
+                                    columnNumber: 33
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 761,
+                                columnNumber: 29
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                        lineNumber: 551,
+                        columnNumber: 21
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "p-4 border-t border-slate-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center justify-between",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-3",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>createPlotPoint(1),
+                                            className: "px-3 py-2 text-sm bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors flex items-center gap-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                                    size: 14
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 779,
+                                                    columnNumber: 37
+                                                }, this),
+                                                "1막 추가"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 775,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>createPlotPoint(2),
+                                            className: "px-3 py-2 text-sm bg-amber-500 hover:bg-amber-600 text-white rounded-md transition-colors flex items-center gap-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                                    size: 14
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 786,
+                                                    columnNumber: 37
+                                                }, this),
+                                                "2막 추가"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 782,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>createPlotPoint(3),
+                                            className: "px-3 py-2 text-sm bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors flex items-center gap-2",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                                    size: 14
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 793,
+                                                    columnNumber: 37
+                                                }, this),
+                                                "3막 추가"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 789,
+                                            columnNumber: 33
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 774,
+                                    columnNumber: 29
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: "💡 드래그: 이동"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 799,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: "🔍 휠: 줌"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 800,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: "👆 클릭: 편집"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 801,
+                                            columnNumber: 33
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 798,
+                                    columnNumber: 29
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                            lineNumber: 773,
+                            columnNumber: 25
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                        lineNumber: 772,
+                        columnNumber: 21
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                lineNumber: 527,
+                columnNumber: 17
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+            lineNumber: 526,
+            columnNumber: 13
+        }, this);
+    };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: SYNOPSIS_STYLES.container,
         children: [
@@ -3440,20 +4520,20 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     size: 20
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 351,
+                                    lineNumber: 819,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "구조로 돌아가기"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 352,
+                                    lineNumber: 820,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 347,
+                            lineNumber: 815,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -3461,7 +4541,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                             children: "시놉시스 편집"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 355,
+                            lineNumber: 823,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3473,67 +4553,67 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>setViewMode('timeline'),
                                             className: `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'timeline' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'}`,
-                                            title: "타임라인 뷰",
+                                            title: "캐릭터별 시간선 추적",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__["Clock"], {
                                                     size: 16,
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 367,
+                                                    lineNumber: 835,
                                                     columnNumber: 33
                                                 }, this),
                                                 "타임라인"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 359,
+                                            lineNumber: 827,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>setViewMode('outline'),
                                             className: `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'outline' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'}`,
-                                            title: "아웃라인 뷰",
+                                            title: "독자 예측 분석",
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
                                                     size: 16,
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 378,
+                                                    lineNumber: 846,
                                                     columnNumber: 33
                                                 }, this),
                                                 "아웃라인"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 370,
+                                            lineNumber: 838,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>setViewMode('mindmap'),
                                             className: `px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'mindmap' ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-gray-100 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'}`,
-                                            title: "마인드맵 뷰",
+                                            title: "인물 관계도 & 스토리 연결",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$workflow$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Workflow$3e$__["Workflow"], {
                                                     size: 16,
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 389,
+                                                    lineNumber: 857,
                                                     columnNumber: 33
                                                 }, this),
                                                 "마인드맵"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 381,
+                                            lineNumber: 849,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 358,
+                                    lineNumber: 826,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3543,29 +4623,29 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 394,
+                                        lineNumber: 862,
                                         columnNumber: 29
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 393,
+                                    lineNumber: 861,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 357,
+                            lineNumber: 825,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 346,
+                    lineNumber: 814,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 345,
+                lineNumber: 813,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3573,446 +4653,18 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: SYNOPSIS_STYLES.timeline,
                     children: [
-                        viewMode === 'timeline' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: SYNOPSIS_STYLES.actsContainer,
-                            children: [
-                                1,
-                                2,
-                                3
-                            ].map((act)=>{
-                                const actTemplate = ACT_TEMPLATES[act];
-                                const actPlots = getPlotPointsByAct(act);
-                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: SYNOPSIS_STYLES.actSection,
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: `${SYNOPSIS_STYLES.actHeader} bg-gradient-to-r ${actTemplate.color}`,
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: SYNOPSIS_STYLES.actTitle,
-                                                    children: actTemplate.title
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 415,
-                                                    columnNumber: 45
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: SYNOPSIS_STYLES.actDescription,
-                                                    children: actTemplate.description
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 416,
-                                                    columnNumber: 45
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 414,
-                                            columnNumber: 41
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: SYNOPSIS_STYLES.actContent,
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: SYNOPSIS_STYLES.plotPoints,
-                                                    children: actPlots.map((plot)=>{
-                                                        const TypeIcon = PLOT_TYPE_STYLES[plot.type].icon;
-                                                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: SYNOPSIS_STYLES.plotPoint,
-                                                            onClick: ()=>setEditingPlot(plot),
-                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: SYNOPSIS_STYLES.plotHeader,
-                                                                children: [
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                        className: SYNOPSIS_STYLES.plotInfo,
-                                                                        children: [
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                                className: SYNOPSIS_STYLES.plotTitle,
-                                                                                children: plot.title
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 433,
-                                                                                columnNumber: 69
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                                className: SYNOPSIS_STYLES.plotDescription,
-                                                                                children: plot.description
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 436,
-                                                                                columnNumber: 69
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                                className: SYNOPSIS_STYLES.plotMeta,
-                                                                                children: [
-                                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                                        className: `${SYNOPSIS_STYLES.plotType} ${PLOT_TYPE_STYLES[plot.type].color}`,
-                                                                                        children: [
-                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(TypeIcon, {
-                                                                                                size: 12
-                                                                                            }, void 0, false, {
-                                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                                lineNumber: 441,
-                                                                                                columnNumber: 77
-                                                                                            }, this),
-                                                                                            plot.type
-                                                                                        ]
-                                                                                    }, void 0, true, {
-                                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                        lineNumber: 440,
-                                                                                        columnNumber: 73
-                                                                                    }, this),
-                                                                                    plot.characters.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                                        className: "flex items-center gap-1",
-                                                                                        children: [
-                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__["Users"], {
-                                                                                                size: 12
-                                                                                            }, void 0, false, {
-                                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                                lineNumber: 446,
-                                                                                                columnNumber: 81
-                                                                                            }, this),
-                                                                                            plot.characters.join(', ')
-                                                                                        ]
-                                                                                    }, void 0, true, {
-                                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                        lineNumber: 445,
-                                                                                        columnNumber: 77
-                                                                                    }, this),
-                                                                                    plot.location && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                                        className: "flex items-center gap-1",
-                                                                                        children: [
-                                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2d$pin$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MapPin$3e$__["MapPin"], {
-                                                                                                size: 12
-                                                                                            }, void 0, false, {
-                                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                                lineNumber: 452,
-                                                                                                columnNumber: 81
-                                                                                            }, this),
-                                                                                            plot.location
-                                                                                        ]
-                                                                                    }, void 0, true, {
-                                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                        lineNumber: 451,
-                                                                                        columnNumber: 77
-                                                                                    }, this)
-                                                                                ]
-                                                                            }, void 0, true, {
-                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 439,
-                                                                                columnNumber: 69
-                                                                            }, this)
-                                                                        ]
-                                                                    }, void 0, true, {
-                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 432,
-                                                                        columnNumber: 65
-                                                                    }, this),
-                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                        className: SYNOPSIS_STYLES.plotActions,
-                                                                        children: [
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                                onClick: (e)=>{
-                                                                                    e.stopPropagation();
-                                                                                    setEditingPlot(plot);
-                                                                                },
-                                                                                className: SYNOPSIS_STYLES.actionButton,
-                                                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2d$line$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit3$3e$__["Edit3"], {
-                                                                                    size: 14
-                                                                                }, void 0, false, {
-                                                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                    lineNumber: 467,
-                                                                                    columnNumber: 73
-                                                                                }, this)
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 460,
-                                                                                columnNumber: 69
-                                                                            }, this),
-                                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                                                onClick: (e)=>{
-                                                                                    e.stopPropagation();
-                                                                                    deletePlotPoint(plot.id);
-                                                                                },
-                                                                                className: SYNOPSIS_STYLES.actionButton,
-                                                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
-                                                                                    size: 14
-                                                                                }, void 0, false, {
-                                                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                    lineNumber: 476,
-                                                                                    columnNumber: 73
-                                                                                }, this)
-                                                                            }, void 0, false, {
-                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 469,
-                                                                                columnNumber: 69
-                                                                            }, this)
-                                                                        ]
-                                                                    }, void 0, true, {
-                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 459,
-                                                                        columnNumber: 65
-                                                                    }, this)
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 431,
-                                                                columnNumber: 61
-                                                            }, this)
-                                                        }, plot.id, false, {
-                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 426,
-                                                            columnNumber: 57
-                                                        }, this);
-                                                    })
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 421,
-                                                    columnNumber: 45
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                                    onClick: ()=>createPlotPoint(act),
-                                                    className: SYNOPSIS_STYLES.addButton,
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
-                                                            size: 16
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 490,
-                                                            columnNumber: 49
-                                                        }, this),
-                                                        "새 플롯 포인트 추가"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 486,
-                                                    columnNumber: 45
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 420,
-                                            columnNumber: 41
-                                        }, this)
-                                    ]
-                                }, act, true, {
-                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 412,
-                                    columnNumber: 37
-                                }, this);
-                            })
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 405,
-                            columnNumber: 25
-                        }, this),
-                        viewMode === 'outline' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "space-y-6",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-6",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                        className: "text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4",
-                                        children: "구조 개요"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 504,
-                                        columnNumber: 33
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "space-y-4",
-                                        children: plotPoints.map((plot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "border-l-4 border-blue-400 pl-4 py-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "flex items-center gap-2 mb-1",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "text-sm font-medium text-blue-600 dark:text-blue-400",
-                                                                children: [
-                                                                    "Act ",
-                                                                    plot.act
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 509,
-                                                                columnNumber: 49
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                className: "text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full",
-                                                                children: PLOT_TYPE_STYLES[plot.type].icon && /*#__PURE__*/ __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].createElement(PLOT_TYPE_STYLES[plot.type].icon, {
-                                                                    size: 12
-                                                                })
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 512,
-                                                                columnNumber: 49
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 508,
-                                                        columnNumber: 45
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                                        className: "font-medium text-gray-900 dark:text-gray-100",
-                                                        children: plot.title
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 518,
-                                                        columnNumber: 45
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                        className: "text-sm text-gray-600 dark:text-gray-400 mt-1",
-                                                        children: plot.description
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 519,
-                                                        columnNumber: 45
-                                                    }, this)
-                                                ]
-                                            }, plot.id, true, {
-                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 507,
-                                                columnNumber: 41
-                                            }, this))
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 505,
-                                        columnNumber: 33
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 503,
-                                columnNumber: 29
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 502,
-                            columnNumber: 25
-                        }, this),
-                        viewMode === 'mindmap' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-6",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    className: "text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6",
-                                    children: "관계도"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 530,
-                                    columnNumber: 29
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "grid grid-cols-3 gap-8 min-h-[400px]",
-                                    children: [
-                                        1,
-                                        2,
-                                        3
-                                    ].map((act)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "space-y-4",
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: `text-center p-3 rounded-lg bg-gradient-to-r ${ACT_TEMPLATES[act].color} text-white font-semibold`,
-                                                    children: ACT_TEMPLATES[act].title
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 534,
-                                                    columnNumber: 41
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                    className: "space-y-3",
-                                                    children: getPlotPointsByAct(act).map((plot)=>{
-                                                        // 🔥 롱프레스 핸들러 - 간단한 타이머 방식
-                                                        let pressTimer = null;
-                                                        const handleMouseDown = ()=>{
-                                                            pressTimer = setTimeout(()=>{
-                                                                setEditingPlot(plot);
-                                                                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('SYNOPSIS_VIEW', '롱프레스로 편집 모드 활성화', {
-                                                                    title: plot.title
-                                                                });
-                                                            }, 500);
-                                                        };
-                                                        const handleMouseUp = ()=>{
-                                                            if (pressTimer) {
-                                                                clearTimeout(pressTimer);
-                                                                pressTimer = null;
-                                                            }
-                                                        };
-                                                        const handleMouseLeave = ()=>{
-                                                            if (pressTimer) {
-                                                                clearTimeout(pressTimer);
-                                                                pressTimer = null;
-                                                            }
-                                                        };
-                                                        const handleClick = ()=>{
-                                                            // 짧은 클릭 시 편집 모드
-                                                            setEditingPlot(plot);
-                                                        };
-                                                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "bg-gray-50 dark:bg-gray-700 p-3 rounded-lg text-sm cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors",
-                                                            onClick: handleClick,
-                                                            onMouseDown: handleMouseDown,
-                                                            onMouseUp: handleMouseUp,
-                                                            onMouseLeave: handleMouseLeave,
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    className: "font-medium text-gray-900 dark:text-gray-100 mb-1",
-                                                                    children: plot.title
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 573,
-                                                                    columnNumber: 57
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    className: "text-xs text-gray-600 dark:text-gray-400",
-                                                                    children: [
-                                                                        plot.description?.slice(0, 60),
-                                                                        "..."
-                                                                    ]
-                                                                }, void 0, true, {
-                                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 576,
-                                                                    columnNumber: 57
-                                                                }, this)
-                                                            ]
-                                                        }, plot.id, true, {
-                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 565,
-                                                            columnNumber: 53
-                                                        }, this);
-                                                    })
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 537,
-                                                    columnNumber: 41
-                                                }, this)
-                                            ]
-                                        }, act, true, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 533,
-                                            columnNumber: 37
-                                        }, this))
-                                }, void 0, false, {
-                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 531,
-                                    columnNumber: 29
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 529,
-                            columnNumber: 25
-                        }, this)
+                        viewMode === 'timeline' && renderTimelineView(),
+                        viewMode === 'outline' && renderOutlineView(),
+                        viewMode === 'mindmap' && renderMindmapView()
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 402,
+                    lineNumber: 870,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 401,
+                lineNumber: 869,
                 columnNumber: 13
             }, this),
             (editingPlot || showAddModal.show) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4028,7 +4680,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     children: showAddModal.show ? '새 플롯 포인트' : '플롯 포인트 편집'
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 596,
+                                    lineNumber: 883,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4043,18 +4695,18 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 606,
+                                        lineNumber: 893,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 599,
+                                    lineNumber: 886,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 595,
+                            lineNumber: 882,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4068,7 +4720,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             children: "제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 612,
+                                            lineNumber: 899,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4082,13 +4734,13 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             placeholder: "플롯 포인트 제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 613,
+                                            lineNumber: 900,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 611,
+                                    lineNumber: 898,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4099,7 +4751,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             children: "설명"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 623,
+                                            lineNumber: 910,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -4113,84 +4765,267 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             placeholder: "상세한 설명을 입력하세요..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 624,
+                                            lineNumber: 911,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 622,
+                                    lineNumber: 909,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: SYNOPSIS_STYLES.formGroup,
+                                    className: "grid grid-cols-2 gap-4",
                                     children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                            className: SYNOPSIS_STYLES.label,
-                                            children: "타입"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 634,
-                                            columnNumber: 33
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                            value: editingPlot?.type || 'setup',
-                                            onChange: (e)=>setEditingPlot((prev)=>prev ? {
-                                                        ...prev,
-                                                        type: e.target.value
-                                                    } : null),
-                                            className: SYNOPSIS_STYLES.select,
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: SYNOPSIS_STYLES.formGroup,
                                             children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "setup",
-                                                    children: "설정"
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: SYNOPSIS_STYLES.label,
+                                                    children: "타입"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 640,
+                                                    lineNumber: 922,
                                                     columnNumber: 37
                                                 }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "conflict",
-                                                    children: "갈등"
-                                                }, void 0, false, {
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                    value: editingPlot?.type || 'setup',
+                                                    onChange: (e)=>setEditingPlot((prev)=>prev ? {
+                                                                ...prev,
+                                                                type: e.target.value
+                                                            } : null),
+                                                    className: SYNOPSIS_STYLES.select,
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "setup",
+                                                            children: "설정"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 928,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "conflict",
+                                                            children: "갈등"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 929,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "resolution",
+                                                            children: "해결"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 930,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "twist",
+                                                            children: "반전"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 931,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "climax",
+                                                            children: "클라이맥스"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 932,
+                                                            columnNumber: 41
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 641,
-                                                    columnNumber: 37
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "resolution",
-                                                    children: "해결"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 642,
-                                                    columnNumber: 37
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "twist",
-                                                    children: "반전"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 643,
-                                                    columnNumber: 37
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                                    value: "climax",
-                                                    children: "클라이맥스"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 644,
+                                                    lineNumber: 923,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 635,
+                                            lineNumber: 921,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: SYNOPSIS_STYLES.formGroup,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: SYNOPSIS_STYLES.label,
+                                                    children: "독자 예측도"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 937,
+                                                    columnNumber: 37
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                    value: editingPlot?.readerPredictability || 'predictable',
+                                                    onChange: (e)=>setEditingPlot((prev)=>prev ? {
+                                                                ...prev,
+                                                                readerPredictability: e.target.value
+                                                            } : null),
+                                                    className: SYNOPSIS_STYLES.select,
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "predictable",
+                                                            children: "예측 가능"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 943,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "foreshadowed",
+                                                            children: "복선"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 944,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "surprising",
+                                                            children: "놀라운"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 945,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: "shocking",
+                                                            children: "충격적"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 946,
+                                                            columnNumber: 41
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 938,
+                                                    columnNumber: 37
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 936,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 633,
+                                    lineNumber: 920,
+                                    columnNumber: 29
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "grid grid-cols-2 gap-4",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: SYNOPSIS_STYLES.formGroup,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: SYNOPSIS_STYLES.label,
+                                                    children: "시간대"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 953,
+                                                    columnNumber: 37
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "text",
+                                                    value: editingPlot?.timeframe || '',
+                                                    onChange: (e)=>setEditingPlot((prev)=>prev ? {
+                                                                ...prev,
+                                                                timeframe: e.target.value
+                                                            } : null),
+                                                    className: SYNOPSIS_STYLES.input,
+                                                    placeholder: "오전 10시, 3일 후 등"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 954,
+                                                    columnNumber: 37
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 952,
+                                            columnNumber: 33
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: SYNOPSIS_STYLES.formGroup,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: SYNOPSIS_STYLES.label,
+                                                    children: "긴장도 (1-5)"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 964,
+                                                    columnNumber: 37
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                                                    value: editingPlot?.tensionLevel || 3,
+                                                    onChange: (e)=>setEditingPlot((prev)=>prev ? {
+                                                                ...prev,
+                                                                tensionLevel: Number(e.target.value)
+                                                            } : null),
+                                                    className: SYNOPSIS_STYLES.select,
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: 1,
+                                                            children: "1 - 평온"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 970,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: 2,
+                                                            children: "2 - 약간 긴장"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 971,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: 3,
+                                                            children: "3 - 보통"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 972,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: 4,
+                                                            children: "4 - 높은 긴장"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 973,
+                                                            columnNumber: 41
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                                            value: 5,
+                                                            children: "5 - 최고조"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                            lineNumber: 974,
+                                                            columnNumber: 41
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 965,
+                                                    columnNumber: 37
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 963,
+                                            columnNumber: 33
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 951,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4201,7 +5036,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             children: "장소"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 649,
+                                            lineNumber: 980,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -4215,19 +5050,19 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                             placeholder: "이벤트가 일어나는 장소"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 650,
+                                            lineNumber: 981,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 648,
+                                    lineNumber: 979,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 610,
+                            lineNumber: 897,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4244,7 +5079,7 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 661,
+                                    lineNumber: 992,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4253,30 +5088,418 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
                                     children: "저장"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 670,
+                                    lineNumber: 1001,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 660,
+                            lineNumber: 991,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 594,
+                    lineNumber: 881,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 593,
+                lineNumber: 880,
+                columnNumber: 17
+            }, this),
+            detailPlot && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: SYNOPSIS_STYLES.modal,
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: SYNOPSIS_STYLES.modalContent,
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: SYNOPSIS_STYLES.modalHeader,
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                                    className: SYNOPSIS_STYLES.modalTitle,
+                                    children: [
+                                        "독자 관점 분석 - ",
+                                        detailPlot.title
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 1017,
+                                    columnNumber: 29
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>setDetailPlot(null),
+                                    className: SYNOPSIS_STYLES.actionButton,
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
+                                        size: 18
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 1024,
+                                        columnNumber: 33
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 1020,
+                                    columnNumber: 29
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                            lineNumber: 1016,
+                            columnNumber: 25
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: SYNOPSIS_STYLES.modalBody,
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "space-y-6",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                className: "font-semibold text-blue-700 dark:text-blue-300 mb-2",
+                                                children: "📖 플롯 요약"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1032,
+                                                columnNumber: 37
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-gray-700 dark:text-gray-300",
+                                                children: detailPlot.description
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1033,
+                                                columnNumber: 37
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 1031,
+                                        columnNumber: 33
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                className: "font-semibold text-purple-700 dark:text-purple-300 mb-3",
+                                                children: "🔮 독자 예측 분석"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1038,
+                                                columnNumber: 37
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "space-y-3",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex justify-between items-center",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-gray-600 dark:text-gray-400",
+                                                                children: "예측 가능성"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1041,
+                                                                columnNumber: 45
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: `px-3 py-1 rounded-full text-sm font-medium ${detailPlot.readerPredictability === 'predictable' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' : detailPlot.readerPredictability === 'surprising' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' : detailPlot.readerPredictability === 'shocking' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'}`,
+                                                                children: detailPlot.readerPredictability === 'predictable' ? '예측 가능' : detailPlot.readerPredictability === 'surprising' ? '놀라운' : detailPlot.readerPredictability === 'shocking' ? '충격적' : '복선'
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1042,
+                                                                columnNumber: 45
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1040,
+                                                        columnNumber: 41
+                                                    }, this),
+                                                    detailPlot.tensionLevel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex justify-between items-center",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-gray-600 dark:text-gray-400",
+                                                                children: "긴장도"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1054,
+                                                                columnNumber: 49
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "flex items-center gap-2",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: "flex gap-1",
+                                                                        children: [
+                                                                            1,
+                                                                            2,
+                                                                            3,
+                                                                            4,
+                                                                            5
+                                                                        ].map((i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                                className: `w-3 h-3 rounded-full ${i <= (detailPlot.tensionLevel || 0) ? 'bg-orange-500' : 'bg-gray-200 dark:bg-gray-600'}`
+                                                                            }, i, false, {
+                                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                                lineNumber: 1058,
+                                                                                columnNumber: 61
+                                                                            }, this))
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 1056,
+                                                                        columnNumber: 53
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "text-sm font-medium",
+                                                                        children: [
+                                                                            detailPlot.tensionLevel,
+                                                                            "/5"
+                                                                        ]
+                                                                    }, void 0, true, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 1062,
+                                                                        columnNumber: 53
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1055,
+                                                                columnNumber: 49
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1053,
+                                                        columnNumber: 45
+                                                    }, this),
+                                                    detailPlot.isReversalPoint && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-700 rounded-lg p-3",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "flex items-center gap-2 text-red-700 dark:text-red-300",
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
+                                                                        size: 16
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 1069,
+                                                                        columnNumber: 53
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                        className: "font-medium",
+                                                                        children: "이 지점은 스토리의 중요한 반전을 일으킵니다"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                        lineNumber: 1070,
+                                                                        columnNumber: 53
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1068,
+                                                                columnNumber: 49
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                                className: "text-sm text-red-600 dark:text-red-400 mt-1",
+                                                                children: "독자의 기대를 뒤엎고 새로운 방향으로 이야기를 이끌어가는 전환점입니다."
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1072,
+                                                                columnNumber: 49
+                                                            }, this)
+                                                        ]
+                                                    }, void 0, true, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1067,
+                                                        columnNumber: 45
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1039,
+                                                columnNumber: 37
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 1037,
+                                        columnNumber: 33
+                                    }, this),
+                                    detailPlot.foreshadowingPoints && detailPlot.foreshadowingPoints.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-4",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                className: "font-semibold text-indigo-700 dark:text-indigo-300 mb-3",
+                                                children: "🔍 복선 요소들"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1083,
+                                                columnNumber: 41
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "space-y-2",
+                                                children: detailPlot.foreshadowingPoints.map((foreshadow, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex items-start gap-2",
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                className: "w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1087,
+                                                                columnNumber: 53
+                                                            }, this),
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-gray-700 dark:text-gray-300",
+                                                                children: foreshadow
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1088,
+                                                                columnNumber: 53
+                                                            }, this)
+                                                        ]
+                                                    }, index, true, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1086,
+                                                        columnNumber: 49
+                                                    }, this))
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1084,
+                                                columnNumber: 41
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-xs text-indigo-600 dark:text-indigo-400 mt-3",
+                                                children: "💡 이 복선들이 나중에 어떻게 회수될지 계획해보세요"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1092,
+                                                columnNumber: 41
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 1082,
+                                        columnNumber: 37
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "grid grid-cols-1 md:grid-cols-2 gap-4",
+                                        children: [
+                                            detailPlot.characters && detailPlot.characters.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-4",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                        className: "font-semibold text-emerald-700 dark:text-emerald-300 mb-2",
+                                                        children: "👥 등장 인물"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1102,
+                                                        columnNumber: 45
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "flex flex-wrap gap-2",
+                                                        children: detailPlot.characters.map((char, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "px-2 py-1 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 rounded-full text-sm",
+                                                                children: char
+                                                            }, index, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                                lineNumber: 1105,
+                                                                columnNumber: 53
+                                                            }, this))
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1103,
+                                                        columnNumber: 45
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1101,
+                                                columnNumber: 41
+                                            }, this),
+                                            detailPlot.timeframe && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4",
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                        className: "font-semibold text-amber-700 dark:text-amber-300 mb-2",
+                                                        children: "⏰ 시간대"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1115,
+                                                        columnNumber: 45
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                        className: "text-gray-700 dark:text-gray-300",
+                                                        children: detailPlot.timeframe
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                        lineNumber: 1116,
+                                                        columnNumber: 45
+                                                    }, this)
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1114,
+                                                columnNumber: 41
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 1099,
+                                        columnNumber: 33
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border-l-4 border-blue-500",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                className: "font-semibold text-gray-700 dark:text-gray-300 mb-2",
+                                                children: "✍️ 작가 팁"
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1123,
+                                                columnNumber: 37
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                className: "text-sm text-gray-600 dark:text-gray-400",
+                                                children: detailPlot.readerPredictability === 'predictable' ? '독자가 예측할 수 있는 전개입니다. 안정감을 주지만 때로는 작은 반전을 섞어 긴장감을 유지하세요.' : detailPlot.readerPredictability === 'foreshadowed' ? '복선이 깔린 전개입니다. 앞서 뿌린 떡밥들을 적절히 회수하여 독자에게 만족감을 주세요.' : detailPlot.readerPredictability === 'surprising' ? '독자를 놀라게 할 전개입니다. 하지만 무리하지 않은 범위에서 논리적으로 연결되도록 주의하세요.' : '충격적인 반전입니다. 이전 전개와의 연결고리를 명확히 하여 독자가 납득할 수 있게 만드세요.'
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                lineNumber: 1124,
+                                                columnNumber: 37
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                        lineNumber: 1122,
+                                        columnNumber: 33
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                lineNumber: 1029,
+                                columnNumber: 29
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                            lineNumber: 1028,
+                            columnNumber: 25
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                    lineNumber: 1015,
+                    columnNumber: 21
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                lineNumber: 1014,
                 columnNumber: 17
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-        lineNumber: 343,
+        lineNumber: 811,
         columnNumber: 9
     }, this);
 }
@@ -4397,7 +5620,7 @@ const IDEA_STYLES = {
     searchInput: 'pl-9 pr-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
     searchIcon: 'absolute left-3 top-2.5 text-gray-400',
     // 🔥 메인 컨텐츠
-    content: 'flex-1 overflow-hidden',
+    content: 'flex-1 min-h-0',
     scrollArea: 'h-full overflow-y-auto p-6',
     // 🔥 카드 뷰 - 모던하고 세련된 디자인
     cardsContainer: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6',

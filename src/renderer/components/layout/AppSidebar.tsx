@@ -415,7 +415,10 @@ export function AppSidebar({
   }, [handleNavigate]);
 
   const renderNavItem = (item: SidebarItem, isExpanded: boolean): React.ReactElement => {
-    const isActive = pathname === item.href; // 🔥 pathname 사용으로 수정
+    // 🔥 프로젝트 탭은 /projects로 시작하는 모든 경로에서 활성화
+    const isActive = item.id === 'projects'
+      ? pathname.startsWith('/projects')
+      : pathname === item.href;
     const Icon = item.icon;
 
     const navItemContent = (
