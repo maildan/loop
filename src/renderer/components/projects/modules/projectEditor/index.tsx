@@ -47,41 +47,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     const { state, actions } = useProjectEditorState();
     const { settings, updateSetting } = useSettings();
 
-    // 🔥 에러 상태 처리
-    if (error) {
-        Logger.error('PROJECT_EDITOR', 'Project loading error', { error, projectId });
-        return (
-            <div className="flex items-center justify-center h-full bg-white dark:bg-gray-900">
-                <div className="text-center">
-                    <div className="text-red-500 text-xl mb-4">⚠️</div>
-                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
-                        프로젝트를 불러올 수 없습니다
-                    </h2>
-                    <p className="text-gray-600 dark:text-gray-400 mb-4">
-                        {error}
-                    </p>
-                    <button
-                        onClick={() => window.location.href = '/projects'}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        프로젝트 목록으로 돌아가기
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
-    // 🔥 로딩 상태 처리
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-full bg-white dark:bg-gray-900">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                    <p className="text-gray-600 dark:text-gray-400">프로젝트를 불러오는 중...</p>
-                </div>
-            </div>
-        );
-    }
+    // NOTE: error/loading rendering handled later after hooks are declared
 
     // 🔥 사이드바 관련 상태 (집중모드 제거, 사이드바 접기로 통합)
     const isZenMode = settings?.ui?.zenMode ?? false;
