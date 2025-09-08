@@ -23,6 +23,8 @@ import { NotesView } from '../../views/NotesView';
 import { SynopsisView } from '../../views/SynopsisView';
 import { IdeaView } from '../../views/IdeaView';
 import { Logger } from '../../../../../shared/logger';
+import { ProjectStructure } from '../../../../../shared/types';
+import { useStructureStore } from '../../../../stores/useStructureStore';
 
 // 🔥 모듈화된 hooks 및 services
 import { useProjectData } from '../../hooks/useProjectData';
@@ -45,6 +47,9 @@ export const ProjectEditor = memo(function ProjectEditor({
     const { isLoading, error, ...projectData } = useProjectData(projectId);
     const uiState = useUIState();
     const { state, actions } = useProjectEditorState();
+    // structure store actions
+    const addStructureItem = useStructureStore((s) => s.addStructureItem);
+    const setCurrentEditor = useStructureStore((s) => s.setCurrentEditor);
     const { settings, updateSetting } = useSettings();
 
     // NOTE: error/loading rendering handled later after hooks are declared
@@ -626,9 +631,44 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <NewChapterModal
                         isOpen={state.showNewChapterModal}
                         onClose={actions.closeNewChapterModal}
-                        onConfirm={(chapterData) => {
-                            // TODO: 새 챕터 생성 로직
-                            actions.closeNewChapterModal();
+                        onConfirm={async (title: string) => {
+                            // 새 챕터 생성 로직
+                            const safeTitle = (title && title.trim()) || `새 챕터 ${Date.now()}`;
+
+                            const newItem: ProjectStructure = {
+                                id: `chapter_${Date.now()}`,
+                                title: safeTitle,
+                                description: '',
+                                type: 'chapter',
+                                status: 'planning',
+                                projectId,
+                                createdAt: new Date(),
+                                updatedAt: new Date(),
+                            };
+
+                            try {
+                                await addStructureItem(projectId, newItem);
+
+                                // 에디터 상태로 전환
+                                setCurrentEditor({ projectId, editorType: 'chapter', itemId: newItem.id, itemTitle: newItem.title });
+
+                                // 새 탭으로 챕터 열기
+                                const newTab = {
+                                    id: `chapter-${newItem.id}`,
+                                    title: newItem.title,
+                                    type: 'chapter' as const,
+                                    isActive: true,
+                                    content: ''
+                                };
+                                actions.addTab(newTab);
+                                actions.setActiveTab(newTab.id);
+
+                                Logger.info('PROJECT_EDITOR', 'New chapter created', { id: newItem.id, title: newItem.title });
+                            } catch (error) {
+                                Logger.error('PROJECT_EDITOR', 'Failed to create new chapter', { error });
+                            } finally {
+                                actions.closeNewChapterModal();
+                            }
                         }}
                     />
                 </>
