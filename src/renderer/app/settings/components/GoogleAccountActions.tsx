@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { LogOut } from 'lucide-react';
 import { SETTINGS_PAGE_STYLES } from '../constants/styles';
 import { SettingItem } from './SettingItem';
+import { Logger } from '../../../../shared/logger';
 
 export const GoogleAccountActions: React.FC = () => {
     const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ export const GoogleAccountActions: React.FC = () => {
                 alert('로그아웃에 실패했습니다. 콘솔을 확인하세요.');
             }
         } catch (err) {
-            console.error('Failed to revoke auth', err);
+            Logger.error('GOOGLE_ACCOUNT_ACTIONS', 'Failed to revoke auth', err);
             alert('로그아웃 중 오류가 발생했습니다');
         } finally {
             setLoading(false);

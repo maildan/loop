@@ -4,6 +4,7 @@
 import React, { useCallback } from 'react';
 import { Save, RotateCcw } from 'lucide-react';
 import { SETTINGS_PAGE_STYLES } from '../constants/styles';
+import { Logger } from '../../../../shared/logger';
 
 /**
  * 🔥 액션 버튼 Props
@@ -17,17 +18,17 @@ interface SettingsActionsProps {
 /**
  * 🔥 설정 액션 버튼 컴포넌트
  */
-export const SettingsActions = React.memo<SettingsActionsProps>(({ 
-  saving, 
-  onSave, 
-  onReset 
+export const SettingsActions = React.memo<SettingsActionsProps>(({
+  saving,
+  onSave,
+  onReset
 }) => {
   // 🔥 저장 핸들러
   const handleSave = useCallback(async () => {
     try {
       await onSave();
     } catch (error) {
-      console.error('Failed to save settings:', error);
+      Logger.error('SETTINGS_ACTIONS', 'Failed to save settings', error);
     }
   }, [onSave]);
 
@@ -36,12 +37,12 @@ export const SettingsActions = React.memo<SettingsActionsProps>(({
     const confirmed = window.confirm(
       '모든 설정을 기본값으로 초기화하시겠습니까?\n이 작업은 되돌릴 수 없습니다.'
     );
-    
+
     if (confirmed) {
       try {
         await onReset();
       } catch (error) {
-        console.error('Failed to reset settings:', error);
+        Logger.error('SETTINGS_ACTIONS', 'Failed to reset settings', error);
       }
     }
   }, [onReset]);
@@ -57,7 +58,7 @@ export const SettingsActions = React.memo<SettingsActionsProps>(({
         <RotateCcw className="w-4 h-4 mr-2" />
         기본값으로 복원
       </button>
-      
+
       <button
         type="button"
         className={`${SETTINGS_PAGE_STYLES.button} ${SETTINGS_PAGE_STYLES.primaryButton}`}

@@ -961,7 +961,9 @@ function useSettings() {
                                     "useSettings.useEffect.isDangerous": (key)=>dangerousKeys.includes(key)
                                 }["useSettings.useEffect.isDangerous"];
                                 if (isDangerous(cat) || rest.some(isDangerous)) {
-                                    console.warn('Settings: Blocked dangerous key for security:', parts);
+                                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].warn('SETTINGS', 'Blocked dangerous key for security', {
+                                        parts
+                                    });
                                     return prev;
                                 }
                                 const newCategory = Object.assign({}, prev[cat]);

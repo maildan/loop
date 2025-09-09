@@ -307,12 +307,12 @@ export const ProjectEditor = memo(function ProjectEditor({
                                             } else if (activeTab.type === 'chapter') {
                                                 // 챕터 탭: 해당 챕터 구조체에 저장
                                                 console.log('🔥 [ProjectEditor] Saving to CHAPTER:', activeTab.title);
-                                                
+
                                                 // 탭 ID에서 구조체 ID 추출 (탭 ID 형식: 'chapter-{structureId}' 또는 구조체 ID 자체)
-                                                const structureId = activeTab.id.startsWith('chapter-') 
-                                                    ? activeTab.id.replace('chapter-', '') 
+                                                const structureId = activeTab.id.startsWith('chapter-')
+                                                    ? activeTab.id.replace('chapter-', '')
                                                     : activeTab.id;
-                                                
+
                                                 // 비동기 저장 (Promise로 처리, 에러는 로그로만)
                                                 updateStructureItem(projectId, structureId, {
                                                     content: content
@@ -353,10 +353,10 @@ export const ProjectEditor = memo(function ProjectEditor({
                             };
                             actions.addTab(newTab);
                             actions.setCurrentView('write');
-                            Logger.info('PROJECT_EDITOR', 'Chapter tab opened', { 
-                                chapterId, 
+                            Logger.info('PROJECT_EDITOR', 'Chapter tab opened', {
+                                chapterId,
                                 hasContent: !!chapter?.content,
-                                contentLength: chapter?.content?.length || 0 
+                                contentLength: chapter?.content?.length || 0
                             });
                         }}
                         onAddNewChapter={() => {
@@ -519,14 +519,14 @@ export const ProjectEditor = memo(function ProjectEditor({
                 {/* 🔥 ProjectSidebar hover 영역 - 완전 투명 */}
                 {isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-0 w-20 h-full z-[100] opacity-0 cursor-pointer"
+                        className="absolute left-0 top-0 w-8 h-full z-[100] opacity-0 cursor-pointer transition-all duration-200 hover:w-12"
                         onMouseEnter={() => {
                             setSidebarHovered(true);
-                            Logger.info('PROJECT_SIDEBAR', 'Hover activated');
+                            Logger.debug('PROJECT_SIDEBAR', 'Hover activated');
                         }}
                         onMouseLeave={() => {
                             setSidebarHovered(false);
-                            Logger.info('PROJECT_SIDEBAR', 'Hover deactivated');
+                            Logger.debug('PROJECT_SIDEBAR', 'Hover deactivated');
                         }}
                     >
                         {/* 완전 투명 hover 영역 */}
@@ -536,13 +536,13 @@ export const ProjectEditor = memo(function ProjectEditor({
                 {/* 🔥 ProjectSidebar 표시 - 헤더 아래 위치 조정 */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-14 w-64 h-[calc(100%-3.5rem)] z-[150] bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-r border-gray-200 dark:border-gray-700 shadow-xl transition-all duration-300 ease-out pointer-events-auto"
+                        className="absolute left-0 top-14 w-64 h-[calc(100%-3.5rem)] z-[150] bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-500 ease-in-out transform translate-x-0 pointer-events-auto animate-slide-in-left"
                         onMouseEnter={() => {
-                            console.log('🔥 SIDEBAR AREA ENTERED!!!');
+                            Logger.debug('PROJECT_SIDEBAR', 'Hover area entered');
                             setSidebarHovered(true);
                         }}
                         onMouseLeave={() => {
-                            console.log('🔥 SIDEBAR AREA LEFT!!!');
+                            Logger.debug('PROJECT_SIDEBAR', 'Hover area left');
                             setSidebarHovered(false);
                         }}
                     >

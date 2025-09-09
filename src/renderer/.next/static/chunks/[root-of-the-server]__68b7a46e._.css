@@ -1985,10 +1985,6 @@ body {
   background-color: #ffffffe6;
 }
 
-.bg-white\/95 {
-  background-color: #fffffff2;
-}
-
 .bg-yellow-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1));
@@ -3025,6 +3021,11 @@ body {
 
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.backdrop-blur-lg {
+  --tw-backdrop-blur: blur(16px);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
 .backdrop-blur-md {
@@ -4228,6 +4229,10 @@ input, textarea, select, button {
   z-index: 20;
 }
 
+.hover\:w-12:hover {
+  width: 3rem;
+}
+
 .hover\:w-16:hover {
   width: 4rem;
 }
@@ -4958,10 +4963,6 @@ input, textarea, select, button {
 .dark\:bg-gray-900:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
-}
-
-.dark\:bg-gray-900\/95:is(.dark *) {
-  background-color: #111827f2;
 }
 
 .dark\:bg-green-900:is(.dark *) {

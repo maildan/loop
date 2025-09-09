@@ -1,12 +1,13 @@
 import React, { Suspense } from 'react';
 import { PrismaClient } from '@prisma/client';
 import ProjectPageClient from './ProjectPageClient';
+import { Logger } from '../../../../shared/logger';
 
 // 🔥 동적 generateStaticParams - 안전한 정적 경로 생성
 export async function generateStaticParams() {
   try {
-    console.log('[BUILD] Generating static params for projects');
-    
+    Logger.info('BUILD', 'Generating static params for projects');
+
     // 빌드 환경에서는 기본 경로만 사용 (안전성 우선)
     // 런타임에서 동적 라우팅으로 실제 프로젝트 처리
     const staticPaths = [
@@ -15,15 +16,15 @@ export async function generateStaticParams() {
       { id: 'draft' },      // 임시저장 프로젝트
       { id: 'template' },   // 템플릿 프로젝트
     ];
-    
-    console.log(`[BUILD] Generated ${staticPaths.length} static paths`);
+
+    Logger.info('BUILD', `Generated ${staticPaths.length} static paths`);
     return staticPaths;
-    
+
   } catch (error) {
-    console.error('[BUILD] Error in generateStaticParams:', error);
+    Logger.error('BUILD', 'Error in generateStaticParams', error);
     // 에러 발생 시에도 기본 경로 반환
     return [
-    { id: 'new' },
+      { id: 'new' },
       { id: 'sample' },
       { id: 'draft' }
     ];

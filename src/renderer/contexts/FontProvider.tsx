@@ -637,7 +637,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const initializeFonts = async () => {
       try {
-        console.log('--- [EFFECT 1] 데이터 로딩 및 상태 설정 시작 ---');
+        Logger.debug('FONT_PROVIDER', 'EFFECT 1: 데이터 로딩 및 상태 설정 시작');
         setIsLoading(true);
 
         // 1. localStorage에서 값 복원 (DOM 조작은 하지 않음)

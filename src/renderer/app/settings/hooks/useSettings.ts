@@ -351,7 +351,7 @@ export function useSettings(): UseSettingsReturn {
           const isDangerous = (key: string) => dangerousKeys.includes(key);
 
           if (isDangerous(cat) || rest.some(isDangerous)) {
-            console.warn('Settings: Blocked dangerous key for security:', parts);
+            Logger.warn('SETTINGS', 'Blocked dangerous key for security', { parts });
             return prev;
           }
 

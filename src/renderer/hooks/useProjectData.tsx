@@ -212,7 +212,7 @@ export function useIntegratedProjectData(projectId: string) {
                 title: element.title,
                 type: element.type,
                 timestamp: element.createdAt?.toISOString() || new Date().toISOString(),
-                description: element.content.slice(0, 100) + '...'
+                description: (element.content ? element.content.slice(0, 100) : '') + '...'
             }))
             .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 

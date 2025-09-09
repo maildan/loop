@@ -73,7 +73,7 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
         },
         // 🔥 구조 아이템 추가 (DB 저장 포함)
         addStructureItem: async (projectId, item)=>{
-            console.log('🚀 [useStructureStore] addStructureItem called:', {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_STORE', 'addStructureItem called', {
                 projectId,
                 itemId: item.id,
                 itemType: item.type,
@@ -91,11 +91,11 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                         ]
                     }
                 }));
-            console.log('✅ [useStructureStore] UI updated, new count:', get().structures[projectId]?.length || 0);
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_STORE', 'UI updated, new count', get().structures[projectId]?.length || 0);
             // 2. DB에 저장 요청
             try {
                 // 🔥 electronAPI 존재 확인
-                console.log('🔍 [useStructureStore] Checking electronAPI:', {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_STORE', 'Checking electronAPI', {
                     hasWindow: "undefined" !== 'undefined',
                     hasElectronAPI: "undefined" !== 'undefined' && !!window.electronAPI,
                     hasProjects: "undefined" !== 'undefined' && !!window.electronAPI?.projects,
@@ -105,19 +105,17 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                     throw new Error('electronAPI.projects.upsertStructure is not available');
                 }
                 await window.electronAPI.projects.upsertStructure(item);
-                console.log('💾 [useStructureStore] Item saved to DB successfully:', item.id);
-                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item saved to DB', {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Item saved to DB successfully', {
                     itemId: item.id
                 });
             } catch (error) {
-                console.error('❌ [useStructureStore] Failed to save to DB:', error);
-                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to save structure item to DB', error);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to save to DB', error);
             // TODO: 실패 시 UI 롤백 로직 추가
             }
         },
         // 🔥 구조 아이템 업데이트 (DB 저장 포함)
         updateStructureItem: async (projectId, itemId, updates)=>{
-            console.log('🔄 [useStructureStore] updateStructureItem called:', {
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_STORE', 'updateStructureItem called', {
                 projectId,
                 itemId,
                 updates: Object.keys(updates),
@@ -144,22 +142,24 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                     }
                 };
             });
-            console.log('✅ [useStructureStore] UI updated for item:', itemId);
+            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_STORE', 'UI updated for item', {
+                itemId
+            });
             // 2. DB에 저장 요청
             if (updatedItem) {
                 try {
                     await window.electronAPI.projects.upsertStructure(updatedItem);
-                    console.log('💾 [useStructureStore] Item updated in DB successfully:', itemId);
-                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item updated in DB', {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Item updated in DB successfully', {
                         itemId
                     });
                 } catch (error) {
-                    console.error('❌ [useStructureStore] Failed to update in DB:', error);
-                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to update structure item in DB', error);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to update in DB', error);
                 // TODO: 실패 시 UI 롤백 로직 추가
                 }
             } else {
-                console.warn('⚠️ [useStructureStore] No item found to update:', itemId);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].warn('STRUCTURE_STORE', 'No item found to update', {
+                    itemId
+                });
             }
         },
         // 🔥 구조 아이템 삭제 (DB 삭제 포함)
@@ -369,7 +369,7 @@ function useIntegratedProjectData(projectId) {
                 title: element.title,
                 type: element.type,
                 timestamp: element.createdAt?.toISOString() || new Date().toISOString(),
-                description: element.content.slice(0, 100) + '...'
+                description: (element.content ? element.content.slice(0, 100) : '') + '...'
             })).sort((a, b)=>new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
         // 관계성 분석 (간단한 시뮬레이션)
         const relationships = [];

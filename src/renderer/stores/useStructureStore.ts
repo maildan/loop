@@ -58,10 +58,10 @@ export const useStructureStore = create<StructureStore>()(
                         console.log('📊 [useStructureStore] Loaded structures from DB:', {
                             projectId,
                             count: result.data.length,
-                            structures: result.data.map(s => ({ 
-                                id: s.id, 
-                                title: s.title, 
-                                type: s.type, 
+                            structures: result.data.map(s => ({
+                                id: s.id,
+                                title: s.title,
+                                type: s.type,
                                 content: s.content ? `${s.content.substring(0, 50)}...` : 'EMPTY',
                                 contentLength: s.content?.length || 0
                             }))
@@ -88,7 +88,7 @@ export const useStructureStore = create<StructureStore>()(
 
             // 🔥 구조 아이템 추가 (DB 저장 포함)
             addStructureItem: async (projectId, item) => {
-                console.log('🚀 [useStructureStore] addStructureItem called:', {
+                Logger.debug('STRUCTURE_STORE', 'addStructureItem called', {
                     projectId,
                     itemId: item.id,
                     itemType: item.type,
@@ -105,14 +105,14 @@ export const useStructureStore = create<StructureStore>()(
                     },
                 }));
 
-                console.log('✅ [useStructureStore] UI updated, new count:',
+                Logger.debug('STRUCTURE_STORE', 'UI updated, new count',
                     get().structures[projectId]?.length || 0
                 );
 
                 // 2. DB에 저장 요청
                 try {
                     // 🔥 electronAPI 존재 확인
-                    console.log('🔍 [useStructureStore] Checking electronAPI:', {
+                    Logger.debug('STRUCTURE_STORE', 'Checking electronAPI', {
                         hasWindow: typeof window !== 'undefined',
                         hasElectronAPI: typeof window !== 'undefined' && !!window.electronAPI,
                         hasProjects: typeof window !== 'undefined' && !!window.electronAPI?.projects,
@@ -124,18 +124,16 @@ export const useStructureStore = create<StructureStore>()(
                     }
 
                     await window.electronAPI.projects.upsertStructure(item);
-                    console.log('💾 [useStructureStore] Item saved to DB successfully:', item.id);
-                    Logger.info('STRUCTURE_STORE', 'Structure item saved to DB', { itemId: item.id });
+                    Logger.info('STRUCTURE_STORE', 'Item saved to DB successfully', { itemId: item.id });
                 } catch (error) {
-                    console.error('❌ [useStructureStore] Failed to save to DB:', error);
-                    Logger.error('STRUCTURE_STORE', 'Failed to save structure item to DB', error);
+                    Logger.error('STRUCTURE_STORE', 'Failed to save to DB', error);
                     // TODO: 실패 시 UI 롤백 로직 추가
                 }
             },
 
             // 🔥 구조 아이템 업데이트 (DB 저장 포함)
             updateStructureItem: async (projectId, itemId, updates) => {
-                console.log('🔄 [useStructureStore] updateStructureItem called:', {
+                Logger.debug('STRUCTURE_STORE', 'updateStructureItem called', {
                     projectId,
                     itemId,
                     updates: Object.keys(updates),
@@ -158,21 +156,19 @@ export const useStructureStore = create<StructureStore>()(
                     };
                 });
 
-                console.log('✅ [useStructureStore] UI updated for item:', itemId);
+                Logger.debug('STRUCTURE_STORE', 'UI updated for item', { itemId });
 
                 // 2. DB에 저장 요청
                 if (updatedItem) {
                     try {
                         await window.electronAPI.projects.upsertStructure(updatedItem);
-                        console.log('💾 [useStructureStore] Item updated in DB successfully:', itemId);
-                        Logger.info('STRUCTURE_STORE', 'Structure item updated in DB', { itemId });
+                        Logger.info('STRUCTURE_STORE', 'Item updated in DB successfully', { itemId });
                     } catch (error) {
-                        console.error('❌ [useStructureStore] Failed to update in DB:', error);
-                        Logger.error('STRUCTURE_STORE', 'Failed to update structure item in DB', error);
+                        Logger.error('STRUCTURE_STORE', 'Failed to update in DB', error);
                         // TODO: 실패 시 UI 롤백 로직 추가
                     }
                 } else {
-                    console.warn('⚠️ [useStructureStore] No item found to update:', itemId);
+                    Logger.warn('STRUCTURE_STORE', 'No item found to update', { itemId });
                 }
             },
 
