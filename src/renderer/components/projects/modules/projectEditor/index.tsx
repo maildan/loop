@@ -522,13 +522,15 @@ export const ProjectEditor = memo(function ProjectEditor({
                 {/* 🔥 ProjectSidebar hover 영역 - 왼쪽 끝자락 */}
                 {isSidebarCollapsed && !tabBarHovered && (
                     <div
-                        className="absolute left-0 top-0 w-4 h-full z-30"
+                        className="absolute left-0 top-0 w-8 h-full z-20 hover:w-12 transition-all duration-200"
                         onMouseEnter={() => setSidebarHovered(true)}
                         onMouseLeave={() => setSidebarHovered(false)}
+                        style={{ marginTop: '56px' }} // TabBar 높이만큼 아래로 이동
                     >
                         {/* ProjectSidebar hover 시 표시 */}
                         {sidebarHovered && (
-                            <div className="absolute left-0 top-0 h-full transition-all duration-300 ease-in-out transform translate-x-0 z-30">
+                            <div className={`absolute left-0 h-full transition-all duration-500 ease-out transform z-40 ${sidebarHovered ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
+                                }`} style={{ top: '56px', height: 'calc(100% - 56px)' }}>
                                 <ProjectSidebar
                                     projectId={projectId}
                                     currentView={state.currentView}

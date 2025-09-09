@@ -5,6 +5,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Logger } from '../../../../shared/logger';
 import { useStructureStore } from '../../../stores/useStructureStore';
+import { NCPStoryAnalyzer, NCPNarrativeStructure, ReaderEngagementPrediction, TimelineAnalysis, MindmapAnalysis } from '../../../../shared/narrative/ncpAnalyzer';
 import {
     Plus,
     Edit3,
@@ -23,7 +24,9 @@ import {
     ChevronRight,
     Workflow,
     FileText,
-    Eye
+    Eye,
+    Lightbulb,
+    AlertTriangle
 } from 'lucide-react';
 
 interface PlotPoint {
@@ -138,6 +141,12 @@ export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisVie
     // 🔥 상태 관리 - 빈 배열로 시작하고 useEffect에서 로드
     const [plotPoints, setPlotPoints] = useState<PlotPoint[]>([]);
 
+    // 🔥 NCP 기반 분석 결과 상태
+    const [readerAnalysis, setReaderAnalysis] = useState<ReaderEngagementPrediction | null>(null);
+    const [timelineAnalysis, setTimelineAnalysis] = useState<TimelineAnalysis | null>(null);
+    const [mindmapAnalysis, setMindmapAnalysis] = useState<MindmapAnalysis | null>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+
     // 🔥 초기 데이터 로드 및 스토어 변경 시 동기화
     useEffect(() => {
         try {
@@ -224,6 +233,94 @@ export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisVie
     const [mindmapDragging, setMindmapDragging] = useState(false);
     const [mindmapDragStart, setMindmapDragStart] = useState({ x: 0, y: 0 });
     const mindmapSvgRef = useRef<SVGSVGElement>(null);
+
+    // 🔥 NCP 기반 스토리 분석 실행
+    const runStoryAnalysis = useCallback(async () => {
+        if (plotPoints.length === 0) return;
+
+        setIsAnalyzing(true);
+        try {
+            // 🔥 기본 NCP 구조 생성 (실제 구현에서는 사용자 입력받음)
+            const ncpStructure: NCPNarrativeStructure = {
+                id: synopsisId,
+                title: "현재 스토리",
+                authoralIntent: "독자에게 감동과 깨달음을 주는 이야기",
+                mainCharacter: {
+                    name: plotPoints.find(p => p.characters.length > 0)?.characters[0] || "주인공",
+                    motivation: "목표 달성",
+                    methodology: "직접 행동",
+                    evaluation: "성공/실패 판단",
+                    purpose: "성장과 변화"
+                },
+                impactCharacter: {
+                    name: "조력자",
+                    influence: "새로운 관점 제시",
+                    alternative: "다른 접근법 제안"
+                },
+                conflictMethods: {
+                    universe: 'psychology',
+                    domain: "개인적 성장",
+                    concern: "정체성 확립",
+                    issue: "자아 실현"
+                },
+                storyDynamics: {
+                    driver: 'decision',
+                    limit: 'optionlock',
+                    outcome: 'success',
+                    judgment: 'good'
+                },
+                vectors: {
+                    goal: plotPoints.find(p => p.type === 'setup')?.description || "목표 설정",
+                    consequence: plotPoints.find(p => p.type === 'conflict')?.description || "갈등 발생",
+                    cost: "대가와 희생",
+                    dividend: "성장과 보상",
+                    requirement: "필요 조건",
+                    prerequisite: "사전 준비",
+                    precondition: "전제 조건",
+                    forewarning: "경고와 복선"
+                }
+            };
+
+            const analyzer = new NCPStoryAnalyzer(ncpStructure);
+
+            // 🔥 프로젝트 캐릭터 정보 가져오기 (임시로 빈 배열 사용)
+            const pid = currentEditor?.projectId;
+            const characters: any[] = []; // 추후 캐릭터 스토어에서 가져올 예정
+
+            // 병렬로 분석 실행
+            const [readerPrediction, timelineResult, mindmapResult] = await Promise.all([
+                Promise.resolve(analyzer.predictReaderEngagement(plotPoints)),
+                Promise.resolve(analyzer.analyzeTimeline(plotPoints)),
+                Promise.resolve(analyzer.analyzeMindmap(plotPoints, characters))
+            ]);
+
+            setReaderAnalysis(readerPrediction);
+            setTimelineAnalysis(timelineResult);
+            setMindmapAnalysis(mindmapResult);
+
+            Logger.info('SYNOPSIS_VIEW', 'Story analysis completed', {
+                engagementScore: readerPrediction.engagementScore,
+                plotHolesFound: readerPrediction.plotHoles.length,
+                predictability: readerPrediction.predictability
+            });
+
+        } catch (error) {
+            Logger.error('SYNOPSIS_VIEW', 'Story analysis failed', error);
+        } finally {
+            setIsAnalyzing(false);
+        }
+    }, [plotPoints, synopsisId, currentEditor, structures]);
+
+    // 🔥 플롯 포인트 변경 시 자동 분석 실행
+    useEffect(() => {
+        if (plotPoints.length > 0) {
+            const timer = setTimeout(() => {
+                runStoryAnalysis();
+            }, 1000); // 1초 debounce
+
+            return () => clearTimeout(timer);
+        }
+    }, [plotPoints, runStoryAnalysis]);
 
     // 🔥 플롯 포인트 생성
     const createPlotPoint = useCallback((act: 1 | 2 | 3) => {
@@ -341,6 +438,54 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
     // 🔥 타임라인 뷰 렌더링 (캐릭터별 시간선)
     const renderTimelineView = () => (
         <div className="space-y-8">
+            {/* 🔥 시간 흐름 분석 결과 */}
+            {timelineAnalysis && (
+                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border border-blue-200 dark:border-blue-700 p-6">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
+                        <Clock className="text-blue-500" size={24} />
+                        시간 흐름 분석
+                        {isAnalyzing && <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />}
+                    </h3>
+
+                    {/* 긴장감 그래프 */}
+                    {readerAnalysis && (
+                        <div className="mb-6">
+                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3">긴장감 곡선</h4>
+                            <div className="flex items-end space-x-1 h-20">
+                                {readerAnalysis.tensionCurve.map((tension, index) => (
+                                    <div
+                                        key={index}
+                                        className="bg-blue-500 rounded-t flex-1 transition-all duration-300"
+                                        style={{ height: `${(tension / 10) * 100}%` }}
+                                        title={`플롯 ${index + 1}: 긴장감 ${tension}/10`}
+                                    />
+                                ))}
+                            </div>
+                            <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>시작</span>
+                                <span>절정</span>
+                                <span>결말</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 시간적 일관성 체크 */}
+                    {timelineAnalysis.temporalInconsistencies && timelineAnalysis.temporalInconsistencies.length > 0 && (
+                        <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+                            <h4 className="font-semibold text-yellow-800 dark:text-yellow-200 mb-2 flex items-center gap-2">
+                                <AlertTriangle size={16} />
+                                시간적 불일치 발견
+                            </h4>
+                            <ul className="space-y-1 text-sm text-yellow-700 dark:text-yellow-300">
+                                {timelineAnalysis.temporalInconsistencies.slice(0, 3).map((issue, idx) => (
+                                    <li key={idx}>• {issue.description}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            )}
+
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-6">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
                     <Clock className="text-blue-500" size={24} />
@@ -398,10 +543,106 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
     // 🔥 아웃라인 뷰 렌더링 (독자 예측 중심)
     const renderOutlineView = () => (
         <div className="space-y-8">
+            {/* 🔥 NCP 기반 전체 분석 결과 */}
+            {readerAnalysis && (
+                <div className="bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-xl border border-purple-200 dark:border-purple-700 p-6">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
+                        <Eye className="text-purple-500" size={24} />
+                        NCP 기반 독자 반응 예측
+                        {isAnalyzing && <div className="w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />}
+                    </h3>
+
+                    {/* 핵심 지표들 */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div className="text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                            <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                                {readerAnalysis.engagementScore}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">몰입도 점수</div>
+                        </div>
+                        <div className="text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                            <div className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                                {readerAnalysis.emotionalResonance}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">감정적 공명</div>
+                        </div>
+                        <div className="text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                            <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                                {readerAnalysis.characterArcSatisfaction}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">캐릭터 아크</div>
+                        </div>
+                        <div className="text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg">
+                            <div className="text-lg font-bold text-rose-600 dark:text-rose-400">
+                                {readerAnalysis.plotHoles.length}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">플롯홀 발견</div>
+                        </div>
+                    </div>
+
+                    {/* 독자 예측 분석 */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                                <Target size={16} className="text-purple-500" />
+                                독자 예측
+                            </h4>
+                            <div className="space-y-2 text-sm">
+                                <div>
+                                    <span className="text-gray-600 dark:text-gray-400">예측성: </span>
+                                    <span className={`font-medium ${readerAnalysis.predictability === 'predictable' ? 'text-green-600' :
+                                            readerAnalysis.predictability === 'surprising' ? 'text-yellow-600' :
+                                                readerAnalysis.predictability === 'shocking' ? 'text-red-600' :
+                                                    'text-blue-600'
+                                        }`}>
+                                        {readerAnalysis.predictability === 'predictable' ? '예측 가능' :
+                                            readerAnalysis.predictability === 'surprising' ? '놀라운 전개' :
+                                                readerAnalysis.predictability === 'shocking' ? '충격적 반전' : '적절한 복선'}
+                                    </span>
+                                </div>
+                                <div>
+                                    <span className="text-gray-600 dark:text-gray-400">주제 인식: </span>
+                                    <span className="text-gray-900 dark:text-gray-100">{readerAnalysis.readerPredictions.themeRealization || '주제가 명확하게 전달됨'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 className="font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+                                <Lightbulb size={16} className="text-indigo-500" />
+                                개선 제안
+                            </h4>
+                            <div className="space-y-1 text-sm">
+                                {readerAnalysis.improvements.foreshadowing.slice(0, 3).map((suggestion, idx) => (
+                                    <div key={idx} className="text-gray-600 dark:text-gray-400">
+                                        • {suggestion || '복선 배치를 더욱 정교하게 조정해보세요'}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 플롯홀 경고 */}
+                    {readerAnalysis.plotHoles.length > 0 && (
+                        <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-lg">
+                            <h4 className="font-semibold text-red-800 dark:text-red-200 mb-2 flex items-center gap-2">
+                                <AlertTriangle size={16} />
+                                발견된 플롯홀들
+                            </h4>
+                            <ul className="space-y-1 text-sm text-red-700 dark:text-red-300">
+                                {readerAnalysis.plotHoles.slice(0, 3).map((hole, idx) => (
+                                    <li key={idx}>• {hole}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
+            )}
+
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 p-6">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100 mb-6 flex items-center gap-3">
                     <Eye className="text-purple-500" size={24} />
-                    독자 예측 분석 (읽기 전용)
+                    플롯 포인트별 독자 반응 분석
                 </h3>
                 <div className="space-y-6">
                     {plotPoints.length === 0 ? (
