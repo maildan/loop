@@ -3096,8 +3096,20 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
     const currentEditor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useStructureStore"])((s)=>s.currentEditor);
     const [viewMode, setViewMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('timeline');
     const [selectedElement, setSelectedElement] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    // 🔥 디버깅: projectId 확인
+    console.log('🔍 [SynopsisView] Props:', {
+        projectId,
+        synopsisId,
+        currentEditor
+    });
     // 통합 프로젝트 데이터 가져오기
     const { elements, analysis, loading, getElementsByType, getRelatedElements } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$hooks$2f$useProjectData$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useIntegratedProjectData"])(projectId);
+    // 🔥 디버깅: 데이터 상태 확인
+    console.log('📊 [SynopsisView] Data state:', {
+        elementsCount: elements.length,
+        hasAnalysis: !!analysis,
+        loading
+    });
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         // 전역 ESC 키 처리
         const handleGlobalEscape = (event)=>{
@@ -3121,7 +3133,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         className: "animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-500 mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 67,
+                        lineNumber: 77,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3129,18 +3141,18 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         children: "프로젝트 분석 중..."
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 68,
+                        lineNumber: 78,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 66,
+                lineNumber: 76,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-            lineNumber: 65,
+            lineNumber: 75,
             columnNumber: 13
         }, this);
     }
@@ -3154,7 +3166,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         className: "h-12 w-12 text-yellow-500 mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 78,
+                        lineNumber: 88,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3162,18 +3174,18 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         children: "분석할 데이터가 없습니다"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 79,
+                        lineNumber: 89,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 77,
+                lineNumber: 87,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-            lineNumber: 76,
+            lineNumber: 86,
             columnNumber: 13
         }, this);
     }
@@ -3192,7 +3204,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: "프로젝트 시놉시스"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 91,
+                                    lineNumber: 101,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3205,7 +3217,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 94,
+                                                    lineNumber: 104,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3215,13 +3227,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 95,
+                                                    lineNumber: 105,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 93,
+                                            lineNumber: 103,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3231,7 +3243,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 98,
+                                                    lineNumber: 108,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3241,13 +3253,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 99,
+                                                    lineNumber: 109,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 97,
+                                            lineNumber: 107,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3257,7 +3269,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 102,
+                                                    lineNumber: 112,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3267,13 +3279,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 103,
+                                                    lineNumber: 113,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 101,
+                                            lineNumber: 111,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3283,7 +3295,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     className: "h-4 w-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 106,
+                                                    lineNumber: 116,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3293,25 +3305,25 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 107,
+                                                    lineNumber: 117,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 105,
+                                            lineNumber: 115,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 92,
+                                    lineNumber: 102,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 90,
+                            lineNumber: 100,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3325,7 +3337,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                             children: "스토리 일관성"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 115,
+                                            lineNumber: 125,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3336,13 +3348,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 116,
+                                            lineNumber: 126,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 114,
+                                    lineNumber: 124,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3352,7 +3364,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                             children: "캐릭터 일관성"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 119,
+                                            lineNumber: 129,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3363,30 +3375,30 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 120,
+                                            lineNumber: 130,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 118,
+                                    lineNumber: 128,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 113,
+                            lineNumber: 123,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 89,
+                    lineNumber: 99,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 88,
+                lineNumber: 98,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3417,30 +3429,30 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     className: "h-4 w-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 143,
+                                    lineNumber: 152,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: label
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 153,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, mode, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 134,
+                            lineNumber: 144,
                             columnNumber: 25
                         }, this))
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 128,
+                    lineNumber: 138,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 127,
+                lineNumber: 137,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3456,12 +3468,12 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: "프로젝트 요소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 155,
+                                    lineNumber: 164,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 154,
+                                lineNumber: 163,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3476,7 +3488,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         className: "h-4 w-4 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 162,
+                                                        lineNumber: 171,
                                                         columnNumber: 33
                                                     }, this),
                                                     "챕터 (",
@@ -3485,7 +3497,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 161,
+                                                lineNumber: 170,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3499,7 +3511,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 176,
+                                                                lineNumber: 184,
                                                                 columnNumber: 41
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3512,24 +3524,24 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 177,
+                                                                lineNumber: 185,
                                                                 columnNumber: 41
                                                             }, this)
                                                         ]
                                                     }, element.id, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 167,
+                                                        lineNumber: 176,
                                                         columnNumber: 37
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 165,
+                                                lineNumber: 174,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 160,
+                                        lineNumber: 169,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3541,7 +3553,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         className: "h-4 w-4 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 188,
+                                                        lineNumber: 196,
                                                         columnNumber: 33
                                                     }, this),
                                                     "캐릭터 (",
@@ -3550,7 +3562,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 187,
+                                                lineNumber: 195,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3564,7 +3576,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 202,
+                                                                lineNumber: 209,
                                                                 columnNumber: 41
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3575,24 +3587,24 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 203,
+                                                                lineNumber: 210,
                                                                 columnNumber: 41
                                                             }, this)
                                                         ]
                                                     }, element.id, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 193,
+                                                        lineNumber: 201,
                                                         columnNumber: 37
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 191,
+                                                lineNumber: 199,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 186,
+                                        lineNumber: 194,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3604,7 +3616,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         className: "h-4 w-4 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 215,
+                                                        lineNumber: 222,
                                                         columnNumber: 33
                                                     }, this),
                                                     "아이디어 (",
@@ -3613,7 +3625,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 214,
+                                                lineNumber: 221,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3627,7 +3639,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 229,
+                                                                lineNumber: 235,
                                                                 columnNumber: 41
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3635,24 +3647,24 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.tags?.join(', ')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 230,
+                                                                lineNumber: 236,
                                                                 columnNumber: 41
                                                             }, this)
                                                         ]
                                                     }, element.id, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 220,
+                                                        lineNumber: 227,
                                                         columnNumber: 37
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 218,
+                                                lineNumber: 225,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 213,
+                                        lineNumber: 220,
                                         columnNumber: 25
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3664,7 +3676,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         className: "h-4 w-4 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 241,
+                                                        lineNumber: 247,
                                                         columnNumber: 33
                                                     }, this),
                                                     "메모 (",
@@ -3673,7 +3685,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 240,
+                                                lineNumber: 246,
                                                 columnNumber: 29
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3686,35 +3698,35 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                             children: element.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 255,
+                                                            lineNumber: 260,
                                                             columnNumber: 41
                                                         }, this)
                                                     }, element.id, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 246,
+                                                        lineNumber: 252,
                                                         columnNumber: 37
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 244,
+                                                lineNumber: 250,
                                                 columnNumber: 29
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 239,
+                                        lineNumber: 245,
                                         columnNumber: 25
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 158,
+                                lineNumber: 167,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 153,
+                        lineNumber: 162,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3730,14 +3742,14 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 className: "h-5 w-5 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 268,
+                                                lineNumber: 273,
                                                 columnNumber: 33
                                             }, this),
                                             "타임라인 뷰"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 267,
+                                        lineNumber: 272,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3752,20 +3764,20 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 className: "w-3 h-3 bg-indigo-500 rounded-full"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 275,
+                                                                lineNumber: 280,
                                                                 columnNumber: 45
                                                             }, this),
                                                             index < analysis.timeline.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "w-0.5 h-16 bg-gray-300 dark:bg-gray-600 mt-2"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 277,
+                                                                lineNumber: 282,
                                                                 columnNumber: 49
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 274,
+                                                        lineNumber: 279,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3781,7 +3793,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                             children: item.title
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                            lineNumber: 283,
+                                                                            lineNumber: 288,
                                                                             columnNumber: 53
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3789,13 +3801,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                             children: item.type
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                            lineNumber: 284,
+                                                                            lineNumber: 289,
                                                                             columnNumber: 53
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 282,
+                                                                    lineNumber: 287,
                                                                     columnNumber: 49
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3803,7 +3815,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                     children: item.description
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 288,
+                                                                    lineNumber: 293,
                                                                     columnNumber: 49
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3811,35 +3823,35 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                     children: new Date(item.timestamp).toLocaleDateString('ko-KR')
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 291,
+                                                                    lineNumber: 296,
                                                                     columnNumber: 49
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 281,
+                                                            lineNumber: 286,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 280,
+                                                        lineNumber: 285,
                                                         columnNumber: 41
                                                     }, this)
                                                 ]
                                             }, item.id, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 273,
+                                                lineNumber: 278,
                                                 columnNumber: 37
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 271,
+                                        lineNumber: 276,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 266,
+                                lineNumber: 271,
                                 columnNumber: 25
                             }, this),
                             viewMode === 'outline' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3852,14 +3864,14 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 className: "h-5 w-5 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 305,
+                                                lineNumber: 310,
                                                 columnNumber: 33
                                             }, this),
                                             "아웃라인 뷰"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 304,
+                                        lineNumber: 309,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3875,20 +3887,20 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 315,
+                                                                lineNumber: 320,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: `w-3 h-3 rounded-full ${element.plotRelevance && element.plotRelevance >= 4 ? 'bg-red-500' : element.plotRelevance && element.plotRelevance >= 3 ? 'bg-yellow-500' : 'bg-green-500'}`
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 316,
+                                                                lineNumber: 321,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 314,
+                                                        lineNumber: 319,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3896,7 +3908,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         children: element.content
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 324,
+                                                        lineNumber: 328,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3906,7 +3918,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.type
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 328,
+                                                                lineNumber: 332,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3917,30 +3929,30 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 329,
+                                                                lineNumber: 333,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 327,
+                                                        lineNumber: 331,
                                                         columnNumber: 41
                                                     }, this)
                                                 ]
                                             }, element.id, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 310,
+                                                lineNumber: 315,
                                                 columnNumber: 37
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 308,
+                                        lineNumber: 313,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 303,
+                                lineNumber: 308,
                                 columnNumber: 25
                             }, this),
                             viewMode === 'mindmap' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3953,14 +3965,14 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 className: "h-5 w-5 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 340,
+                                                lineNumber: 344,
                                                 columnNumber: 33
                                             }, this),
                                             "마인드맵 뷰"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 339,
+                                        lineNumber: 343,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3972,7 +3984,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     className: "h-12 w-12 text-gray-400 mx-auto mb-4"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 345,
+                                                    lineNumber: 349,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3980,7 +3992,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     children: "마인드맵 뷰는 곧 구현 예정입니다"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 346,
+                                                    lineNumber: 350,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3988,30 +4000,30 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                     children: "React Flow를 사용한 상호작용 노드 기반 시각화"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 349,
+                                                    lineNumber: 353,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 344,
+                                            lineNumber: 348,
                                             columnNumber: 33
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 343,
+                                        lineNumber: 347,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 338,
+                                lineNumber: 342,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 264,
+                        lineNumber: 269,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4026,19 +4038,19 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                             className: "h-4 w-4 mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 362,
+                                            lineNumber: 366,
                                             columnNumber: 29
                                         }, this),
                                         "AI 분석 결과"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 361,
+                                    lineNumber: 365,
                                     columnNumber: 25
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 360,
+                                lineNumber: 364,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4053,14 +4065,14 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         className: "h-4 w-4 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 372,
+                                                        lineNumber: 376,
                                                         columnNumber: 37
                                                     }, this),
                                                     "발견된 문제점"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 371,
+                                                lineNumber: 375,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4072,23 +4084,23 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                             children: issue
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 378,
+                                                            lineNumber: 382,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, index, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 377,
+                                                        lineNumber: 381,
                                                         columnNumber: 41
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 375,
+                                                lineNumber: 379,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 370,
+                                        lineNumber: 374,
                                         columnNumber: 29
                                     }, this),
                                     analysis.suggestions.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4100,14 +4112,14 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         className: "h-4 w-4 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 389,
+                                                        lineNumber: 393,
                                                         columnNumber: 37
                                                     }, this),
                                                     "개선 제안"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 388,
+                                                lineNumber: 392,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4119,23 +4131,23 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                             children: suggestion
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 395,
+                                                            lineNumber: 399,
                                                             columnNumber: 45
                                                         }, this)
                                                     }, index, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 394,
+                                                        lineNumber: 398,
                                                         columnNumber: 41
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 392,
+                                                lineNumber: 396,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 387,
+                                        lineNumber: 391,
                                         columnNumber: 29
                                     }, this),
                                     selectedElement && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4147,14 +4159,14 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                         className: "h-4 w-4 mr-2"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 406,
+                                                        lineNumber: 410,
                                                         columnNumber: 37
                                                     }, this),
                                                     "연관 요소"
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 405,
+                                                lineNumber: 409,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4167,7 +4179,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.title
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 412,
+                                                                lineNumber: 416,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4175,48 +4187,48 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                                 children: element.type
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 413,
+                                                                lineNumber: 417,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, element.id, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 411,
+                                                        lineNumber: 415,
                                                         columnNumber: 41
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 409,
+                                                lineNumber: 413,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 404,
+                                        lineNumber: 408,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 367,
+                                lineNumber: 371,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 359,
+                        lineNumber: 363,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 151,
+                lineNumber: 160,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-        lineNumber: 86,
+        lineNumber: 96,
         columnNumber: 9
     }, this);
 };

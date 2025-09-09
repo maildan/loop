@@ -28,7 +28,15 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                 })),
         // 🔥 구조 아이템 추가 (DB 저장 포함)
         addStructureItem: async (projectId, item)=>{
+            console.log('🚀 [useStructureStore] addStructureItem called:', {
+                projectId,
+                itemId: item.id,
+                itemType: item.type,
+                itemTitle: item.title,
+                currentStructuresCount: get().structures[projectId]?.length || 0
+            });
             // 1. UI에 즉시 반영 (Optimistic Update)
+            const previousState = get().structures[projectId] || [];
             set((state)=>({
                     structures: {
                         ...state.structures,
@@ -38,19 +46,38 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                         ]
                     }
                 }));
+            console.log('✅ [useStructureStore] UI updated, new count:', get().structures[projectId]?.length || 0);
             // 2. DB에 저장 요청
             try {
+                // 🔥 electronAPI 존재 확인
+                console.log('🔍 [useStructureStore] Checking electronAPI:', {
+                    hasWindow: "undefined" !== 'undefined',
+                    hasElectronAPI: "undefined" !== 'undefined' && !!window.electronAPI,
+                    hasProjects: "undefined" !== 'undefined' && !!window.electronAPI?.projects,
+                    hasUpsertStructure: "undefined" !== 'undefined' && !!window.electronAPI?.projects?.upsertStructure
+                });
+                if (!window.electronAPI?.projects?.upsertStructure) {
+                    throw new Error('electronAPI.projects.upsertStructure is not available');
+                }
                 await window.electronAPI.projects.upsertStructure(item);
+                console.log('💾 [useStructureStore] Item saved to DB successfully:', item.id);
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item saved to DB', {
                     itemId: item.id
                 });
             } catch (error) {
+                console.error('❌ [useStructureStore] Failed to save to DB:', error);
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to save structure item to DB', error);
             // TODO: 실패 시 UI 롤백 로직 추가
             }
         },
         // 🔥 구조 아이템 업데이트 (DB 저장 포함)
         updateStructureItem: async (projectId, itemId, updates)=>{
+            console.log('🔄 [useStructureStore] updateStructureItem called:', {
+                projectId,
+                itemId,
+                updates: Object.keys(updates),
+                currentItem: get().structures[projectId]?.find((item)=>item.id === itemId)?.title
+            });
             let updatedItem = null;
             // 1. UI에 즉시 반영
             set((state)=>{
@@ -72,17 +99,22 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                     }
                 };
             });
+            console.log('✅ [useStructureStore] UI updated for item:', itemId);
             // 2. DB에 저장 요청
             if (updatedItem) {
                 try {
                     await window.electronAPI.projects.upsertStructure(updatedItem);
+                    console.log('💾 [useStructureStore] Item updated in DB successfully:', itemId);
                     __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item updated in DB', {
                         itemId
                     });
                 } catch (error) {
+                    console.error('❌ [useStructureStore] Failed to update in DB:', error);
                     __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to update structure item in DB', error);
                 // TODO: 실패 시 UI 롤백 로직 추가
                 }
+            } else {
+                console.warn('⚠️ [useStructureStore] No item found to update:', itemId);
             }
         },
         // 🔥 구조 아이템 삭제 (DB 삭제 포함)
@@ -152,18 +184,51 @@ function useIntegratedProjectData(projectId) {
     const [elements, setElements] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [analysis, setAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
+    // 🔥 디버깅 로그 추가
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        console.log('🔍 [useIntegratedProjectData] Debug Info:', {
+            projectId,
+            structures,
+            hasProjectData: !!structures[projectId],
+            projectItems: structures[projectId]?.length || 0,
+            allProjects: Object.keys(structures)
+        });
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('INTEGRATED_PROJECT_DATA', 'Debug info', {
+            projectId,
+            structureKeys: Object.keys(structures),
+            hasProjectData: !!structures[projectId],
+            itemCount: structures[projectId]?.length || 0
+        });
+    }, [
+        projectId,
+        structures
+    ]);
     // 프로젝트 요소들을 통합 데이터 형태로 변환
     const processStructureItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        console.log('🔄 [processStructureItems] Starting processing for projectId:', projectId);
         if (!projectId || !structures[projectId]) {
+            console.log('❌ [processStructureItems] No data found:', {
+                hasProjectId: !!projectId,
+                hasStructureData: !!structures[projectId],
+                availableProjects: Object.keys(structures)
+            });
             return [];
         }
         const items = structures[projectId] || [];
+        console.log('📊 [processStructureItems] Found items:', items.length);
         const processedElements = [];
-        items.forEach((item)=>{
+        items.forEach((item, index)=>{
+            console.log(`📝 [processStructureItems] Processing item ${index + 1}:`, {
+                id: item.id,
+                type: item.type,
+                title: item.title,
+                hasContent: !!item.content
+            });
             let content = '';
             try {
                 content = typeof item.content === 'string' ? item.content : JSON.stringify(item.content);
             } catch (e) {
+                console.warn(`⚠️ [processStructureItems] Failed to parse content for item ${item.id}:`, e);
                 content = String(item.content || '');
             }
             const element = {
@@ -199,14 +264,25 @@ function useIntegratedProjectData(projectId) {
             }
             processedElements.push(element);
         });
-        return processedElements.sort((a, b)=>(a.order || 0) - (b.order || 0));
+        const result = processedElements.sort((a, b)=>(a.order || 0) - (b.order || 0));
+        console.log('✅ [processStructureItems] Processing completed:', {
+            inputItemsCount: items.length,
+            processedElementsCount: result.length,
+            elementTypes: result.reduce((acc, el)=>{
+                acc[el.type] = (acc[el.type] || 0) + 1;
+                return acc;
+            }, {})
+        });
+        return result;
     }, [
         structures,
         projectId
     ]);
     // AI 분석 수행 (시뮬레이션)
     const performAnalysis = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        console.log('🧠 [performAnalysis] Starting analysis with elements:', processStructureItems.length);
         if (processStructureItems.length === 0) {
+            console.log('❌ [performAnalysis] No elements to analyze');
             return null;
         }
         const chapters = processStructureItems.filter((e)=>e.type === 'chapter');
@@ -265,15 +341,108 @@ function useIntegratedProjectData(projectId) {
     ]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
         setLoading(true);
-        setElements(processStructureItems);
-        setAnalysis(performAnalysis);
+        console.log('🔄 [useProjectData] useEffect triggered:', {
+            elementsCount: processStructureItems.length,
+            hasAnalysis: !!performAnalysis,
+            projectId
+        });
+        // 실제 데이터가 있으면 그것을 사용
+        if (processStructureItems.length > 0) {
+            console.log('📊 [useProjectData] Using real data from store');
+            setElements(processStructureItems);
+            setAnalysis(performAnalysis);
+        } else {
+            console.log('🔧 [useProjectData] No real data, creating mock data for testing');
+            // 🔥 임시 테스트 데이터 생성 (실제 데이터가 없을 때만)
+            const mockElements = [
+                {
+                    id: 'mock-chapter-1',
+                    type: 'chapter',
+                    title: '1장: 시작',
+                    content: '이것은 테스트용 첫 번째 챕터입니다. 주인공이 모험을 시작하는 내용입니다.',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 1,
+                    wordCount: 150,
+                    plotRelevance: 5,
+                    location: '마을'
+                },
+                {
+                    id: 'mock-character-1',
+                    type: 'character',
+                    title: '주인공',
+                    content: '용감하고 정의로운 성격의 주인공',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 2,
+                    wordCount: 50,
+                    plotRelevance: 5,
+                    characterTraits: [
+                        '용감함',
+                        '정의로움',
+                        '호기심'
+                    ]
+                },
+                {
+                    id: 'mock-idea-1',
+                    type: 'idea',
+                    title: '마법 시스템',
+                    content: '원소 기반의 마법 시스템 아이디어',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 3,
+                    wordCount: 30,
+                    plotRelevance: 4,
+                    tags: [
+                        '마법',
+                        '시스템',
+                        '원소'
+                    ]
+                }
+            ];
+            const mockAnalysis = {
+                totalWords: 230,
+                totalChapters: 1,
+                totalCharacters: 1,
+                totalMemos: 0,
+                totalIdeas: 1,
+                storyConsistency: 85,
+                characterConsistency: 92,
+                plotHoles: [
+                    '⚠️ 실제 프로젝트 데이터가 없습니다. 챕터나 캐릭터를 추가해주세요.'
+                ],
+                suggestions: [
+                    '더 많은 콘텐츠를 추가해보세요',
+                    '캐릭터 간의 관계를 더 자세히 설정해보세요'
+                ],
+                timeline: [
+                    {
+                        id: 'mock-chapter-1',
+                        title: '1장: 시작 (테스트 데이터)',
+                        type: 'chapter',
+                        timestamp: new Date().toISOString(),
+                        description: '이것은 테스트용 첫 번째 챕터입니다...'
+                    }
+                ],
+                relationships: [
+                    {
+                        from: 'mock-character-1',
+                        to: 'mock-chapter-1',
+                        type: 'appears_in',
+                        strength: 0.9
+                    }
+                ]
+            };
+            setElements(mockElements);
+            setAnalysis(mockAnalysis);
+        }
         // 로딩 시뮬레이션
         setTimeout(()=>{
             setLoading(false);
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('INTEGRATED_PROJECT_DATA', 'Data processing completed', {
                 projectId,
-                elementsCount: processStructureItems.length,
-                hasAnalysis: !!performAnalysis
+                elementsCount: processStructureItems.length > 0 ? processStructureItems.length : 3,
+                usingMockData: processStructureItems.length === 0
             });
         }, 500);
     }, [

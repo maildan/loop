@@ -43,7 +43,16 @@ export const useStructureStore = create<StructureStore>()(
 
             // 🔥 구조 아이템 추가 (DB 저장 포함)
             addStructureItem: async (projectId, item) => {
+                console.log('🚀 [useStructureStore] addStructureItem called:', {
+                    projectId,
+                    itemId: item.id,
+                    itemType: item.type,
+                    itemTitle: item.title,
+                    currentStructuresCount: get().structures[projectId]?.length || 0
+                });
+
                 // 1. UI에 즉시 반영 (Optimistic Update)
+                const previousState = get().structures[projectId] || [];
                 set((state) => ({
                     structures: {
                         ...state.structures,
@@ -51,11 +60,29 @@ export const useStructureStore = create<StructureStore>()(
                     },
                 }));
 
+                console.log('✅ [useStructureStore] UI updated, new count:',
+                    get().structures[projectId]?.length || 0
+                );
+
                 // 2. DB에 저장 요청
                 try {
+                    // 🔥 electronAPI 존재 확인
+                    console.log('🔍 [useStructureStore] Checking electronAPI:', {
+                        hasWindow: typeof window !== 'undefined',
+                        hasElectronAPI: typeof window !== 'undefined' && !!window.electronAPI,
+                        hasProjects: typeof window !== 'undefined' && !!window.electronAPI?.projects,
+                        hasUpsertStructure: typeof window !== 'undefined' && !!window.electronAPI?.projects?.upsertStructure
+                    });
+
+                    if (!window.electronAPI?.projects?.upsertStructure) {
+                        throw new Error('electronAPI.projects.upsertStructure is not available');
+                    }
+
                     await window.electronAPI.projects.upsertStructure(item);
+                    console.log('💾 [useStructureStore] Item saved to DB successfully:', item.id);
                     Logger.info('STRUCTURE_STORE', 'Structure item saved to DB', { itemId: item.id });
                 } catch (error) {
+                    console.error('❌ [useStructureStore] Failed to save to DB:', error);
                     Logger.error('STRUCTURE_STORE', 'Failed to save structure item to DB', error);
                     // TODO: 실패 시 UI 롤백 로직 추가
                 }
@@ -63,6 +90,13 @@ export const useStructureStore = create<StructureStore>()(
 
             // 🔥 구조 아이템 업데이트 (DB 저장 포함)
             updateStructureItem: async (projectId, itemId, updates) => {
+                console.log('🔄 [useStructureStore] updateStructureItem called:', {
+                    projectId,
+                    itemId,
+                    updates: Object.keys(updates),
+                    currentItem: get().structures[projectId]?.find(item => item.id === itemId)?.title
+                });
+
                 let updatedItem: ProjectStructure | null = null;
 
                 // 1. UI에 즉시 반영
@@ -79,15 +113,21 @@ export const useStructureStore = create<StructureStore>()(
                     };
                 });
 
+                console.log('✅ [useStructureStore] UI updated for item:', itemId);
+
                 // 2. DB에 저장 요청
                 if (updatedItem) {
                     try {
                         await window.electronAPI.projects.upsertStructure(updatedItem);
+                        console.log('💾 [useStructureStore] Item updated in DB successfully:', itemId);
                         Logger.info('STRUCTURE_STORE', 'Structure item updated in DB', { itemId });
                     } catch (error) {
+                        console.error('❌ [useStructureStore] Failed to update in DB:', error);
                         Logger.error('STRUCTURE_STORE', 'Failed to update structure item in DB', error);
                         // TODO: 실패 시 UI 롤백 로직 추가
                     }
+                } else {
+                    console.warn('⚠️ [useStructureStore] No item found to update:', itemId);
                 }
             },
 

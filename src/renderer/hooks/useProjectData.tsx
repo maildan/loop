@@ -16,7 +16,7 @@ export interface ProjectElement {
     createdAt?: Date;
     updatedAt?: Date;
     order?: number;
-    
+
     // 타입별 추가 속성
     characterTraits?: string[];      // 캐릭터용
     location?: string;               // 챕터용
@@ -32,13 +32,13 @@ export interface ProjectAnalysis {
     totalCharacters: number;
     totalMemos: number;
     totalIdeas: number;
-    
+
     // AI 분석 결과
     storyConsistency: number;        // 스토리 일관성 점수 (0-100)
     characterConsistency: number;    // 캐릭터 일관성 점수 (0-100)
     plotHoles: string[];             // 발견된 플롯홀들
     suggestions: string[];           // 개선 제안사항
-    
+
     // 타임라인 분석
     timeline: {
         id: string;
@@ -47,7 +47,7 @@ export interface ProjectAnalysis {
         timestamp: string;
         description: string;
     }[];
-    
+
     // 관계성 분석 (마인드맵용)
     relationships: {
         from: string;
@@ -65,24 +65,58 @@ export function useIntegratedProjectData(projectId: string) {
     const [elements, setElements] = useState<ProjectElement[]>([]);
     const [analysis, setAnalysis] = useState<ProjectAnalysis | null>(null);
     const [loading, setLoading] = useState(true);
-    
+
+    // 🔥 디버깅 로그 추가
+    useEffect(() => {
+        console.log('🔍 [useIntegratedProjectData] Debug Info:', {
+            projectId,
+            structures,
+            hasProjectData: !!structures[projectId],
+            projectItems: structures[projectId]?.length || 0,
+            allProjects: Object.keys(structures)
+        });
+        Logger.debug('INTEGRATED_PROJECT_DATA', 'Debug info', {
+            projectId,
+            structureKeys: Object.keys(structures),
+            hasProjectData: !!structures[projectId],
+            itemCount: structures[projectId]?.length || 0
+        });
+    }, [projectId, structures]);
+
     // 프로젝트 요소들을 통합 데이터 형태로 변환
     const processStructureItems = useMemo(() => {
+        console.log('🔄 [processStructureItems] Starting processing for projectId:', projectId);
+
         if (!projectId || !structures[projectId]) {
+            console.log('❌ [processStructureItems] No data found:', {
+                hasProjectId: !!projectId,
+                hasStructureData: !!structures[projectId],
+                availableProjects: Object.keys(structures)
+            });
             return [];
         }
-        
+
         const items = structures[projectId] || [];
+        console.log('📊 [processStructureItems] Found items:', items.length);
+
         const processedElements: ProjectElement[] = [];
-        
-        items.forEach((item: any) => {
+
+        items.forEach((item: any, index: number) => {
+            console.log(`📝 [processStructureItems] Processing item ${index + 1}:`, {
+                id: item.id,
+                type: item.type,
+                title: item.title,
+                hasContent: !!item.content
+            });
+
             let content = '';
             try {
                 content = typeof item.content === 'string' ? item.content : JSON.stringify(item.content);
             } catch (e) {
+                console.warn(`⚠️ [processStructureItems] Failed to parse content for item ${item.id}:`, e);
                 content = String(item.content || '');
             }
-            
+
             const element: ProjectElement = {
                 id: item.id,
                 type: item.type as ProjectElement['type'],
@@ -94,7 +128,7 @@ export function useIntegratedProjectData(projectId: string) {
                 wordCount: content.split(/\s+/).length,
                 plotRelevance: Math.floor(Math.random() * 5) + 1 as 1 | 2 | 3 | 4 | 5, // TODO: AI 분석으로 대체
             };
-            
+
             // 타입별 특수 처리
             if (item.type === 'character') {
                 try {
@@ -104,34 +138,47 @@ export function useIntegratedProjectData(projectId: string) {
                     element.characterTraits = [];
                 }
             }
-            
+
             if (item.type === 'chapter') {
                 element.location = '미정'; // TODO: 내용에서 추출
             }
-            
+
             if (['memo', 'idea'].includes(item.type)) {
                 element.tags = ['general']; // TODO: 내용에서 태그 추출
             }
-            
+
             processedElements.push(element);
         });
-        
-        return processedElements.sort((a, b) => (a.order || 0) - (b.order || 0));
+
+        const result = processedElements.sort((a, b) => (a.order || 0) - (b.order || 0));
+        console.log('✅ [processStructureItems] Processing completed:', {
+            inputItemsCount: items.length,
+            processedElementsCount: result.length,
+            elementTypes: result.reduce((acc, el) => {
+                acc[el.type] = (acc[el.type] || 0) + 1;
+                return acc;
+            }, {} as Record<string, number>)
+        });
+
+        return result;
     }, [structures, projectId]);
-    
+
     // AI 분석 수행 (시뮬레이션)
     const performAnalysis = useMemo(() => {
+        console.log('🧠 [performAnalysis] Starting analysis with elements:', processStructureItems.length);
+
         if (processStructureItems.length === 0) {
+            console.log('❌ [performAnalysis] No elements to analyze');
             return null;
         }
-        
+
         const chapters = processStructureItems.filter(e => e.type === 'chapter');
         const characters = processStructureItems.filter(e => e.type === 'character');
         const memos = processStructureItems.filter(e => e.type === 'memo');
         const ideas = processStructureItems.filter(e => e.type === 'idea');
-        
+
         const totalWords = chapters.reduce((sum, ch) => sum + (ch.wordCount || 0), 0);
-        
+
         // 타임라인 생성 (시간순 정렬)
         const timeline = processStructureItems
             .map(element => ({
@@ -142,7 +189,7 @@ export function useIntegratedProjectData(projectId: string) {
                 description: element.content.slice(0, 100) + '...'
             }))
             .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-        
+
         // 관계성 분석 (간단한 시뮬레이션)
         const relationships = [];
         for (const character of characters) {
@@ -157,14 +204,14 @@ export function useIntegratedProjectData(projectId: string) {
                 }
             }
         }
-        
+
         const analysis: ProjectAnalysis = {
             totalWords,
             totalChapters: chapters.length,
             totalCharacters: characters.length,
             totalMemos: memos.length,
             totalIdeas: ideas.length,
-            
+
             // 임시 AI 분석 결과
             storyConsistency: Math.floor(Math.random() * 30) + 70, // 70-100
             characterConsistency: Math.floor(Math.random() * 40) + 60, // 60-100
@@ -173,49 +220,134 @@ export function useIntegratedProjectData(projectId: string) {
                 '주인공의 나이가 일관되지 않음',
                 '2장의 시간 설정과 4장이 모순됨'
             ].slice(0, Math.floor(Math.random() * 4)),
-            
+
             suggestions: [
                 '캐릭터 간의 대화가 더 자연스러워야 함',
                 '액션 시퀀스에 더 많은 디테일 필요',
                 '배경 설명을 점진적으로 공개하는 것이 좋겠음',
                 '갈등의 해결이 너무 급작스러움'
             ].slice(0, Math.floor(Math.random() * 5)),
-            
+
             timeline,
             relationships
         };
-        
+
         return analysis;
     }, [processStructureItems]);
-    
+
     useEffect(() => {
         setLoading(true);
-        setElements(processStructureItems);
-        setAnalysis(performAnalysis);
-        
+
+        console.log('🔄 [useProjectData] useEffect triggered:', {
+            elementsCount: processStructureItems.length,
+            hasAnalysis: !!performAnalysis,
+            projectId
+        });
+
+        // 실제 데이터가 있으면 그것을 사용
+        if (processStructureItems.length > 0) {
+            console.log('📊 [useProjectData] Using real data from store');
+            setElements(processStructureItems);
+            setAnalysis(performAnalysis);
+        } else {
+            console.log('🔧 [useProjectData] No real data, creating mock data for testing');
+
+            // 🔥 임시 테스트 데이터 생성 (실제 데이터가 없을 때만)
+            const mockElements: ProjectElement[] = [
+                {
+                    id: 'mock-chapter-1',
+                    type: 'chapter',
+                    title: '1장: 시작',
+                    content: '이것은 테스트용 첫 번째 챕터입니다. 주인공이 모험을 시작하는 내용입니다.',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 1,
+                    wordCount: 150,
+                    plotRelevance: 5,
+                    location: '마을'
+                },
+                {
+                    id: 'mock-character-1',
+                    type: 'character',
+                    title: '주인공',
+                    content: '용감하고 정의로운 성격의 주인공',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 2,
+                    wordCount: 50,
+                    plotRelevance: 5,
+                    characterTraits: ['용감함', '정의로움', '호기심']
+                },
+                {
+                    id: 'mock-idea-1',
+                    type: 'idea',
+                    title: '마법 시스템',
+                    content: '원소 기반의 마법 시스템 아이디어',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 3,
+                    wordCount: 30,
+                    plotRelevance: 4,
+                    tags: ['마법', '시스템', '원소']
+                }
+            ];
+
+            const mockAnalysis: ProjectAnalysis = {
+                totalWords: 230,
+                totalChapters: 1,
+                totalCharacters: 1,
+                totalMemos: 0,
+                totalIdeas: 1,
+                storyConsistency: 85,
+                characterConsistency: 92,
+                plotHoles: ['⚠️ 실제 프로젝트 데이터가 없습니다. 챕터나 캐릭터를 추가해주세요.'],
+                suggestions: ['더 많은 콘텐츠를 추가해보세요', '캐릭터 간의 관계를 더 자세히 설정해보세요'],
+                timeline: [
+                    {
+                        id: 'mock-chapter-1',
+                        title: '1장: 시작 (테스트 데이터)',
+                        type: 'chapter',
+                        timestamp: new Date().toISOString(),
+                        description: '이것은 테스트용 첫 번째 챕터입니다...'
+                    }
+                ],
+                relationships: [
+                    {
+                        from: 'mock-character-1',
+                        to: 'mock-chapter-1',
+                        type: 'appears_in',
+                        strength: 0.9
+                    }
+                ]
+            };
+
+            setElements(mockElements);
+            setAnalysis(mockAnalysis);
+        }
+
         // 로딩 시뮬레이션
         setTimeout(() => {
             setLoading(false);
             Logger.info('INTEGRATED_PROJECT_DATA', 'Data processing completed', {
                 projectId,
-                elementsCount: processStructureItems.length,
-                hasAnalysis: !!performAnalysis
+                elementsCount: processStructureItems.length > 0 ? processStructureItems.length : 3,
+                usingMockData: processStructureItems.length === 0
             });
         }, 500);
     }, [processStructureItems, performAnalysis, projectId]);
-    
+
     return {
         elements,
         analysis,
         loading,
-        
+
         // 유틸리티 함수들
-        getElementsByType: (type: ProjectElement['type']) => 
+        getElementsByType: (type: ProjectElement['type']) =>
             elements.filter(e => e.type === type),
-        
-        getElementByTitle: (title: string) => 
+
+        getElementByTitle: (title: string) =>
             elements.find(e => e.title.toLowerCase().includes(title.toLowerCase())),
-        
+
         getRelatedElements: (elementId: string) => {
             if (!analysis) return [];
             return analysis.relationships

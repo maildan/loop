@@ -336,7 +336,8 @@ export const ProjectEditor = memo(function ProjectEditor({
             case 'synopsis':
                 return (
                     <SynopsisView
-                        synopsisId={projectId}
+                        projectId={projectId}
+                        synopsisId="default" // 기본 시놉시스 ID
                         onBack={() => {
                             Logger.info('PROJECT_EDITOR', 'Synopsis view back - returning to structure view');
                             actions.setCurrentView('structure');

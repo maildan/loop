@@ -43,19 +43,9 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
     const [viewMode, setViewMode] = useState<ViewMode>('timeline');
     const [selectedElement, setSelectedElement] = useState<string | null>(null);
 
-    // 🔥 디버깅: projectId 확인
-    console.log('🔍 [SynopsisView] Props:', { projectId, synopsisId, currentEditor });
-
     // 통합 프로젝트 데이터 가져오기
     const { elements, analysis, loading, getElementsByType, getRelatedElements } =
         useIntegratedProjectData(projectId);
-
-    // 🔥 디버깅: 데이터 상태 확인
-    console.log('📊 [SynopsisView] Data state:', {
-        elementsCount: elements.length,
-        hasAnalysis: !!analysis,
-        loading
-    });
 
     useEffect(() => {
         // 전역 ESC 키 처리
