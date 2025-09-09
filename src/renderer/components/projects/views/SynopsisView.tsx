@@ -147,6 +147,11 @@ export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisVie
     const [mindmapAnalysis, setMindmapAnalysis] = useState<MindmapAnalysis | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
+    // 🔥 iA Writer 스타일 Focus Mode - 작가 집중을 위한 UI
+    const [focusMode, setFocusMode] = useState(false);
+    const [currentFocusPlot, setCurrentFocusPlot] = useState<string | null>(null);
+    const [distractionFree, setDistractionFree] = useState(false);
+
     // 🔥 초기 데이터 로드 및 스토어 변경 시 동기화
     useEffect(() => {
         try {
@@ -503,8 +508,15 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                             <div key={plot.id} className="relative pl-8 pb-8 border-l-2 border-blue-200 dark:border-blue-700 last:border-l-0">
                                 <div className="absolute -left-2 top-0 w-4 h-4 bg-blue-500 rounded-full"></div>
                                 <div
-                                    className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors cursor-pointer group"
-                                    onClick={() => navigateToEditor(plot)}
+                                    className={`bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group ${focusMode && currentFocusPlot !== plot.id
+                                            ? 'opacity-30 blur-[1px] scale-95'
+                                            : 'opacity-100 blur-0 scale-100'
+                                        }`}
+                                    onClick={() => {
+                                        setCurrentFocusPlot(plot.id);
+                                        navigateToEditor(plot);
+                                    }}
+                                    onMouseEnter={() => focusMode && setCurrentFocusPlot(plot.id)}
                                 >
                                     <div className="flex justify-between items-start mb-2">
                                         <h4 className="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400">
@@ -591,9 +603,9 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                 <div>
                                     <span className="text-gray-600 dark:text-gray-400">예측성: </span>
                                     <span className={`font-medium ${readerAnalysis.predictability === 'predictable' ? 'text-green-600' :
-                                            readerAnalysis.predictability === 'surprising' ? 'text-yellow-600' :
-                                                readerAnalysis.predictability === 'shocking' ? 'text-red-600' :
-                                                    'text-blue-600'
+                                        readerAnalysis.predictability === 'surprising' ? 'text-yellow-600' :
+                                            readerAnalysis.predictability === 'shocking' ? 'text-red-600' :
+                                                'text-blue-600'
                                         }`}>
                                         {readerAnalysis.predictability === 'predictable' ? '예측 가능' :
                                             readerAnalysis.predictability === 'surprising' ? '놀라운 전개' :
@@ -875,11 +887,16 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
 
                                                 {/* 🔥 플롯 노드 */}
                                                 <g
-                                                    className="cursor-pointer hover:opacity-80 transition-opacity"
+                                                    className={`cursor-pointer hover:opacity-80 transition-all duration-300 ${focusMode && currentFocusPlot !== plot.id
+                                                            ? 'opacity-30 blur-[1px]'
+                                                            : 'opacity-100 blur-0'
+                                                        }`}
                                                     onClick={(e) => {
                                                         e.stopPropagation();
+                                                        setCurrentFocusPlot(plot.id);
                                                         setEditingPlot(plot);
                                                     }}
+                                                    onMouseEnter={() => focusMode && setCurrentFocusPlot(plot.id)}
                                                 >
                                                     <ellipse
                                                         cx={pos.x}
@@ -1094,6 +1111,33 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                 마인드맵
                             </button>
                         </div>
+
+                        {/* 🔥 iA Writer 스타일 Focus Mode 컨트롤 */}
+                        <div className="flex items-center gap-2 mr-4">
+                            <button
+                                onClick={() => setFocusMode(!focusMode)}
+                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${focusMode
+                                    ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300'
+                                    : 'text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-300'
+                                    }`}
+                                title="Focus Mode - 현재 작업 중인 플롯만 하이라이트"
+                            >
+                                <Eye size={16} className="mr-1 inline" />
+                                Focus
+                            </button>
+                            <button
+                                onClick={() => setDistractionFree(!distractionFree)}
+                                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${distractionFree
+                                    ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300'
+                                    : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300'
+                                    }`}
+                                title="방해 요소 제거 모드"
+                            >
+                                <Zap size={16} className="mr-1 inline" />
+                                Zen
+                            </button>
+                        </div>
+
                         <button className={SYNOPSIS_STYLES.actionButton} title="저장">
                             <Save size={18} />
                         </button>
@@ -1101,10 +1145,10 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                 </div>
             </div>
 
-            {/* 🔥 메인 컨텐츠 */}
-            <div className={SYNOPSIS_STYLES.content}>
-                <div className={SYNOPSIS_STYLES.timeline}>
-                    {/* 🔥 뷰 모드별 렌더링 */}
+            {/* 🔥 메인 컨텐츠 - Focus Mode & Distraction Free 지원 */}
+            <div className={`${SYNOPSIS_STYLES.content} ${distractionFree ? 'bg-gray-50 dark:bg-gray-900' : ''}`}>
+                <div className={`${SYNOPSIS_STYLES.timeline} ${focusMode ? 'focus-mode-active' : ''}`}>
+                    {/* 🔥 뷰 모드별 렌더링 - Focus Mode 적용 */}
                     {viewMode === 'timeline' && renderTimelineView()}
                     {viewMode === 'outline' && renderOutlineView()}
                     {viewMode === 'mindmap' && renderMindmapView()}

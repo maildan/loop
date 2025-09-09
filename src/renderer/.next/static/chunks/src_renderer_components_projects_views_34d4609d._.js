@@ -820,8 +820,9 @@ const CHARACTER_TABS = [
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$heart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Heart$3e$__["Heart"]
     }
 ];
-function CharactersView({ projectId, characters, onCharactersChange }) {
+function CharactersView({ projectId, characters, onCharactersChange, focusMode = false }) {
     _s();
+    const [selectedCharacterId, setSelectedCharacterId] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [activeTab, setActiveTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     const [editingCharacter, setEditingCharacter] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [editForm, setEditForm] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
@@ -941,7 +942,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "역할"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 223,
+                                    lineNumber: 230,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -951,18 +952,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "역할을 설정해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 225,
+                                        lineNumber: 232,
                                         columnNumber: 36
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 224,
+                                    lineNumber: 231,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 222,
+                            lineNumber: 229,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -973,7 +974,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "설명"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 229,
+                                    lineNumber: 236,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -983,24 +984,24 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "캐릭터 설명을 추가해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 231,
+                                        lineNumber: 238,
                                         columnNumber: 43
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 230,
+                                    lineNumber: 237,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 228,
+                            lineNumber: 235,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 221,
+                    lineNumber: 228,
                     columnNumber: 11
                 }, this);
             case 'details':
@@ -1015,7 +1016,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "외모"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 241,
+                                    lineNumber: 248,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1025,18 +1026,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "외모를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 243,
+                                        lineNumber: 250,
                                         columnNumber: 42
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 242,
+                                    lineNumber: 249,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 240,
+                            lineNumber: 247,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1047,7 +1048,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "나이"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 247,
+                                    lineNumber: 254,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1057,18 +1058,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "나이를 설정해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 249,
+                                        lineNumber: 256,
                                         columnNumber: 35
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 248,
+                                    lineNumber: 255,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 246,
+                            lineNumber: 253,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1079,7 +1080,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "직업"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 253,
+                                    lineNumber: 260,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1089,18 +1090,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "직업을 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 255,
+                                        lineNumber: 262,
                                         columnNumber: 42
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 254,
+                                    lineNumber: 261,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 252,
+                            lineNumber: 259,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1111,7 +1112,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "출신 / 거주지"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 259,
+                                    lineNumber: 266,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1121,18 +1122,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "출신지와 거주지를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 263,
+                                        lineNumber: 270,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 260,
+                                    lineNumber: 267,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 258,
+                            lineNumber: 265,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1143,7 +1144,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "가족"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 268,
+                                    lineNumber: 275,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1153,24 +1154,24 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "가족 관계를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 270,
+                                        lineNumber: 277,
                                         columnNumber: 38
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 269,
+                                    lineNumber: 276,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 267,
+                            lineNumber: 274,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 239,
+                    lineNumber: 246,
                     columnNumber: 11
                 }, this);
             case 'story':
@@ -1185,7 +1186,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "성격"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 280,
+                                    lineNumber: 287,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1195,18 +1196,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "성격을 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 282,
+                                        lineNumber: 289,
                                         columnNumber: 43
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 281,
+                                    lineNumber: 288,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 279,
+                            lineNumber: 286,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1217,7 +1218,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "배경"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 286,
+                                    lineNumber: 293,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1227,18 +1228,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "캐릭터 배경을 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 288,
+                                        lineNumber: 295,
                                         columnNumber: 42
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 287,
+                                    lineNumber: 294,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 285,
+                            lineNumber: 292,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1249,7 +1250,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "목표"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 292,
+                                    lineNumber: 299,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1259,24 +1260,24 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "캐릭터의 목표를 기록해주세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 294,
+                                        lineNumber: 301,
                                         columnNumber: 37
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 293,
+                                    lineNumber: 300,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 291,
+                            lineNumber: 298,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 278,
+                    lineNumber: 285,
                     columnNumber: 11
                 }, this);
             default:
@@ -1298,7 +1299,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "등장인물"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 311,
+                                    lineNumber: 318,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1306,18 +1307,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "이야기 속 캐릭터들의 상세한 프로필을 관리하세요. 체계적인 캐릭터 설정으로 더욱 생생한 스토리를 만들어보세요."
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 312,
+                                    lineNumber: 319,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 310,
+                            lineNumber: 317,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                        lineNumber: 309,
+                        lineNumber: 316,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1330,7 +1331,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         className: CHARACTERS_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 322,
+                                        lineNumber: 329,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1338,7 +1339,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: stats.total
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 323,
+                                        lineNumber: 330,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1346,13 +1347,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "총 인물"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 324,
+                                        lineNumber: 331,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                lineNumber: 321,
+                                lineNumber: 328,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1362,7 +1363,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         className: CHARACTERS_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 327,
+                                        lineNumber: 334,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1370,7 +1371,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: stats.main
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 328,
+                                        lineNumber: 335,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1378,13 +1379,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "주요 인물"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 329,
+                                        lineNumber: 336,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                lineNumber: 326,
+                                lineNumber: 333,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1394,7 +1395,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         className: CHARACTERS_STYLES.statIcon
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 332,
+                                        lineNumber: 339,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1402,7 +1403,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: stats.detailed
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 333,
+                                        lineNumber: 340,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1410,25 +1411,25 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         children: "상세 설정"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 334,
+                                        lineNumber: 341,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                lineNumber: 331,
+                                lineNumber: 338,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                        lineNumber: 320,
+                        lineNumber: 327,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                lineNumber: 308,
+                lineNumber: 315,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1445,7 +1446,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     className: CHARACTERS_STYLES.emptyIcon
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 346,
+                                    lineNumber: 353,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -1453,7 +1454,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "첫 번째 인물을 만들어보세요"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 347,
+                                    lineNumber: 354,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1461,7 +1462,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "매력적인 캐릭터들이 당신의 이야기를 더욱 생동감 있게 만들어줄 것입니다. 주인공부터 조연까지, 각자의 특별한 이야기를 담아보세요."
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 348,
+                                    lineNumber: 355,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1470,13 +1471,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "첫 인물 만들기"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 352,
+                                    lineNumber: 359,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 345,
+                            lineNumber: 352,
                             columnNumber: 15
                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: CHARACTERS_STYLES.characterGrid,
@@ -1516,12 +1517,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         }
                                     };
                                     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: CHARACTERS_STYLES.characterCard,
+                                        className: `${CHARACTERS_STYLES.characterCard} ${focusMode && selectedCharacterId !== character.id ? 'opacity-30 blur-[1px] scale-95 transition-all duration-300' : 'opacity-100 blur-0 scale-100 transition-all duration-300'}`,
                                         onClick: handleCharacterClick,
                                         onDoubleClick: handleCharacterDoubleClick,
                                         onMouseDown: handleMouseDown,
                                         onMouseUp: handleMouseUp,
                                         onMouseLeave: handleMouseLeave,
+                                        onMouseEnter: ()=>focusMode && setSelectedCharacterId(character.id),
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "relative",
                                             children: [
@@ -1539,12 +1541,12 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                                lineNumber: 416,
+                                                                lineNumber: 427,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 408,
+                                                            lineNumber: 419,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1558,18 +1560,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                                 size: 16
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                                lineNumber: 426,
+                                                                lineNumber: 437,
                                                                 columnNumber: 29
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 418,
+                                                            lineNumber: 429,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 407,
+                                                    lineNumber: 418,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1580,7 +1582,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             children: character.name.charAt(0)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 432,
+                                                            lineNumber: 443,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -1588,7 +1590,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             children: character.name
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 435,
+                                                            lineNumber: 446,
                                                             columnNumber: 27
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1596,13 +1598,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             children: character.role
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 436,
+                                                            lineNumber: 447,
                                                             columnNumber: 27
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 431,
+                                                    lineNumber: 442,
                                                     columnNumber: 25
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1615,31 +1617,31 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                                     className: "w-4 h-4 mr-1"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                                    lineNumber: 448,
+                                                                    lineNumber: 459,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 label
                                                             ]
                                                         }, id, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                            lineNumber: 442,
+                                                            lineNumber: 453,
                                                             columnNumber: 29
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 440,
+                                                    lineNumber: 451,
                                                     columnNumber: 25
                                                 }, this),
                                                 renderTabContent(character, currentTab)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 405,
+                                            lineNumber: 416,
                                             columnNumber: 23
                                         }, this)
                                     }, character.id, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 396,
+                                        lineNumber: 403,
                                         columnNumber: 21
                                     }, this);
                                 }),
@@ -1651,7 +1653,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             className: CHARACTERS_STYLES.addButtonIcon
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 466,
+                                            lineNumber: 477,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1659,34 +1661,34 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: "새 인물 추가"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 467,
+                                            lineNumber: 478,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 462,
+                                    lineNumber: 473,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 360,
+                            lineNumber: 367,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                        lineNumber: 342,
+                        lineNumber: 349,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 341,
+                    lineNumber: 348,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                lineNumber: 340,
+                lineNumber: 347,
                 columnNumber: 7
             }, this),
             editingCharacter && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1704,7 +1706,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: editingCharacter.id === editForm.id ? '캐릭터 편집' : '새 캐릭터'
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 480,
+                                    lineNumber: 491,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1713,18 +1715,18 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                         size: 20
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                        lineNumber: 484,
+                                        lineNumber: 495,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 483,
+                                    lineNumber: 494,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 479,
+                            lineNumber: 490,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1741,7 +1743,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "이름 *"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 491,
+                                                    lineNumber: 502,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1753,37 +1755,6 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             })),
                                                     className: CHARACTERS_STYLES.formInput,
                                                     placeholder: "캐릭터 이름"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 492,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 490,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: CHARACTERS_STYLES.formField,
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                    className: CHARACTERS_STYLES.formLabel,
-                                                    children: "역할"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 502,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                                    type: "text",
-                                                    value: editForm.role || '',
-                                                    onChange: (e)=>setEditForm((prev)=>({
-                                                                ...prev,
-                                                                role: e.target.value
-                                                            })),
-                                                    className: CHARACTERS_STYLES.formInput,
-                                                    placeholder: "주인공, 조연, 악역 등"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 503,
@@ -1800,7 +1771,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: CHARACTERS_STYLES.formLabel,
-                                                    children: "나이"
+                                                    children: "역할"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 513,
@@ -1808,13 +1779,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                     type: "text",
-                                                    value: editForm.age || '',
+                                                    value: editForm.role || '',
                                                     onChange: (e)=>setEditForm((prev)=>({
                                                                 ...prev,
-                                                                age: e.target.value
+                                                                role: e.target.value
                                                             })),
                                                     className: CHARACTERS_STYLES.formInput,
-                                                    placeholder: "나이 또는 연령대"
+                                                    placeholder: "주인공, 조연, 악역 등"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 514,
@@ -1831,7 +1802,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: CHARACTERS_STYLES.formLabel,
-                                                    children: "직업"
+                                                    children: "나이"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 524,
@@ -1839,13 +1810,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                     type: "text",
-                                                    value: editForm.occupation || '',
+                                                    value: editForm.age || '',
                                                     onChange: (e)=>setEditForm((prev)=>({
                                                                 ...prev,
-                                                                occupation: e.target.value
+                                                                age: e.target.value
                                                             })),
                                                     className: CHARACTERS_STYLES.formInput,
-                                                    placeholder: "직업이나 역할"
+                                                    placeholder: "나이 또는 연령대"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 525,
@@ -1862,7 +1833,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: CHARACTERS_STYLES.formLabel,
-                                                    children: "출신"
+                                                    children: "직업"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 535,
@@ -1870,13 +1841,13 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                                     type: "text",
-                                                    value: editForm.birthplace || '',
+                                                    value: editForm.occupation || '',
                                                     onChange: (e)=>setEditForm((prev)=>({
                                                                 ...prev,
-                                                                birthplace: e.target.value
+                                                                occupation: e.target.value
                                                             })),
                                                     className: CHARACTERS_STYLES.formInput,
-                                                    placeholder: "출생지"
+                                                    placeholder: "직업이나 역할"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 536,
@@ -1893,10 +1864,41 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: CHARACTERS_STYLES.formLabel,
-                                                    children: "거주지"
+                                                    children: "출신"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 546,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    type: "text",
+                                                    value: editForm.birthplace || '',
+                                                    onChange: (e)=>setEditForm((prev)=>({
+                                                                ...prev,
+                                                                birthplace: e.target.value
+                                                            })),
+                                                    className: CHARACTERS_STYLES.formInput,
+                                                    placeholder: "출생지"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
+                                                    lineNumber: 547,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
+                                            lineNumber: 545,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: CHARACTERS_STYLES.formField,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: CHARACTERS_STYLES.formLabel,
+                                                    children: "거주지"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
+                                                    lineNumber: 557,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1910,19 +1912,19 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     placeholder: "현재 거주지"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 547,
+                                                    lineNumber: 558,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 545,
+                                            lineNumber: 556,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 489,
+                                    lineNumber: 500,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1936,7 +1938,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     children: "외모"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 559,
+                                                    lineNumber: 570,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -1947,37 +1949,6 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                             })),
                                                     className: CHARACTERS_STYLES.formTextarea,
                                                     placeholder: "키, 몸무게, 헤어스타일, 특징 등",
-                                                    rows: 3
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 560,
-                                                    columnNumber: 19
-                                                }, this)
-                                            ]
-                                        }, void 0, true, {
-                                            fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 558,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: CHARACTERS_STYLES.formField,
-                                            children: [
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
-                                                    className: CHARACTERS_STYLES.formLabel,
-                                                    children: "성격"
-                                                }, void 0, false, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 570,
-                                                    columnNumber: 19
-                                                }, this),
-                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                                    value: editForm.personality || '',
-                                                    onChange: (e)=>setEditForm((prev)=>({
-                                                                ...prev,
-                                                                personality: e.target.value
-                                                            })),
-                                                    className: CHARACTERS_STYLES.formTextarea,
-                                                    placeholder: "성격적 특징, 말투, 습관 등",
                                                     rows: 3
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
@@ -1995,21 +1966,21 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: CHARACTERS_STYLES.formLabel,
-                                                    children: "가족"
+                                                    children: "성격"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 581,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                                    value: editForm.family || '',
+                                                    value: editForm.personality || '',
                                                     onChange: (e)=>setEditForm((prev)=>({
                                                                 ...prev,
-                                                                family: e.target.value
+                                                                personality: e.target.value
                                                             })),
                                                     className: CHARACTERS_STYLES.formTextarea,
-                                                    placeholder: "가족 구성원과 관계",
-                                                    rows: 2
+                                                    placeholder: "성격적 특징, 말투, 습관 등",
+                                                    rows: 3
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 582,
@@ -2026,21 +1997,21 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: CHARACTERS_STYLES.formLabel,
-                                                    children: "배경"
+                                                    children: "가족"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 592,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                                    value: editForm.background || '',
+                                                    value: editForm.family || '',
                                                     onChange: (e)=>setEditForm((prev)=>({
                                                                 ...prev,
-                                                                background: e.target.value
+                                                                family: e.target.value
                                                             })),
                                                     className: CHARACTERS_STYLES.formTextarea,
-                                                    placeholder: "과거 경험, 중요한 사건 등",
-                                                    rows: 3
+                                                    placeholder: "가족 구성원과 관계",
+                                                    rows: 2
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 593,
@@ -2057,10 +2028,41 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                                     className: CHARACTERS_STYLES.formLabel,
-                                                    children: "설명"
+                                                    children: "배경"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
                                                     lineNumber: 603,
+                                                    columnNumber: 19
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
+                                                    value: editForm.background || '',
+                                                    onChange: (e)=>setEditForm((prev)=>({
+                                                                ...prev,
+                                                                background: e.target.value
+                                                            })),
+                                                    className: CHARACTERS_STYLES.formTextarea,
+                                                    placeholder: "과거 경험, 중요한 사건 등",
+                                                    rows: 3
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
+                                                    lineNumber: 604,
+                                                    columnNumber: 19
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
+                                            lineNumber: 602,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: CHARACTERS_STYLES.formField,
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                    className: CHARACTERS_STYLES.formLabel,
+                                                    children: "설명"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
+                                                    lineNumber: 614,
                                                     columnNumber: 19
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -2074,25 +2076,25 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                                     rows: 3
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                                    lineNumber: 604,
+                                                    lineNumber: 615,
                                                     columnNumber: 19
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                            lineNumber: 602,
+                                            lineNumber: 613,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 557,
+                                    lineNumber: 568,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 488,
+                            lineNumber: 499,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2104,7 +2106,7 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 616,
+                                    lineNumber: 627,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2113,24 +2115,24 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                                     children: "저장"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                                    lineNumber: 622,
+                                    lineNumber: 633,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                            lineNumber: 615,
+                            lineNumber: 626,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                    lineNumber: 478,
+                    lineNumber: 489,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                lineNumber: 477,
+                lineNumber: 488,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ConfirmDialog"], {
@@ -2143,17 +2145,17 @@ function CharactersView({ projectId, characters, onCharactersChange }) {
                 onCancel: handleCancelDelete
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-                lineNumber: 634,
+                lineNumber: 645,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/CharactersView.tsx",
-        lineNumber: 306,
+        lineNumber: 313,
         columnNumber: 5
     }, this);
 }
-_s(CharactersView, "Sn/eg+aiQ/VH4QmoASTsS+HJp3A=");
+_s(CharactersView, "rzA5Yb2VWYYwd2WkEm4HmqSiYcc=");
 _c = CharactersView;
 var _c;
 __turbopack_context__.k.register(_c, "CharactersView");
@@ -3341,6 +3343,10 @@ function SynopsisView({ synopsisId: propSynopsisId, onBack }) {
     const [timelineAnalysis, setTimelineAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [mindmapAnalysis, setMindmapAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const [isAnalyzing, setIsAnalyzing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // 🔥 iA Writer 스타일 Focus Mode - 작가 집중을 위한 UI
+    const [focusMode, setFocusMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [currentFocusPlot, setCurrentFocusPlot] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [distractionFree, setDistractionFree] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     // 🔥 초기 데이터 로드 및 스토어 변경 시 동기화
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "SynopsisView.useEffect": ()=>{
@@ -3731,7 +3737,7 @@ ${plot.foreshadowingPoints.map({
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 445,
+                                    lineNumber: 450,
                                     columnNumber: 25
                                 }, this),
                                 "시간 흐름 분석",
@@ -3739,13 +3745,13 @@ ${plot.foreshadowingPoints.map({
                                     className: "w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 447,
+                                    lineNumber: 452,
                                     columnNumber: 41
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 444,
+                            lineNumber: 449,
                             columnNumber: 21
                         }, this),
                         readerAnalysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3756,7 +3762,7 @@ ${plot.foreshadowingPoints.map({
                                     children: "긴장감 곡선"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 453,
+                                    lineNumber: 458,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3769,12 +3775,12 @@ ${plot.foreshadowingPoints.map({
                                             title: `플롯 ${index + 1}: 긴장감 ${tension}/10`
                                         }, index, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 456,
+                                            lineNumber: 461,
                                             columnNumber: 37
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 454,
+                                    lineNumber: 459,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3784,33 +3790,33 @@ ${plot.foreshadowingPoints.map({
                                             children: "시작"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 465,
+                                            lineNumber: 470,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "절정"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 466,
+                                            lineNumber: 471,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "결말"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 467,
+                                            lineNumber: 472,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 464,
+                                    lineNumber: 469,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 452,
+                            lineNumber: 457,
                             columnNumber: 25
                         }, this),
                         timelineAnalysis.temporalInconsistencies && timelineAnalysis.temporalInconsistencies.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3823,14 +3829,14 @@ ${plot.foreshadowingPoints.map({
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 476,
+                                            lineNumber: 481,
                                             columnNumber: 33
                                         }, this),
                                         "시간적 불일치 발견"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 475,
+                                    lineNumber: 480,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -3842,24 +3848,24 @@ ${plot.foreshadowingPoints.map({
                                             ]
                                         }, idx, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 481,
+                                            lineNumber: 486,
                                             columnNumber: 37
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 479,
+                                    lineNumber: 484,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 474,
+                            lineNumber: 479,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 443,
+                    lineNumber: 448,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3873,14 +3879,14 @@ ${plot.foreshadowingPoints.map({
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 491,
+                                    lineNumber: 496,
                                     columnNumber: 21
                                 }, this),
                                 "캐릭터별 타임라인"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 490,
+                            lineNumber: 495,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3893,7 +3899,7 @@ ${plot.foreshadowingPoints.map({
                                         className: "mx-auto mb-4 opacity-50"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 497,
+                                        lineNumber: 502,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3901,7 +3907,7 @@ ${plot.foreshadowingPoints.map({
                                         children: "아직 플롯 포인트가 없습니다"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 498,
+                                        lineNumber: 503,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3909,13 +3915,13 @@ ${plot.foreshadowingPoints.map({
                                         children: "마인드맵에서 플롯을 추가해보세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 499,
+                                        lineNumber: 504,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 496,
+                                lineNumber: 501,
                                 columnNumber: 25
                             }, this) : plotPoints.map((plot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "relative pl-8 pb-8 border-l-2 border-blue-200 dark:border-blue-700 last:border-l-0",
@@ -3924,12 +3930,16 @@ ${plot.foreshadowingPoints.map({
                                             className: "absolute -left-2 top-0 w-4 h-4 bg-blue-500 rounded-full"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 504,
+                                            lineNumber: 509,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors cursor-pointer group",
-                                            onClick: ()=>navigateToEditor(plot),
+                                            className: `bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 cursor-pointer group ${focusMode && currentFocusPlot !== plot.id ? 'opacity-30 blur-[1px] scale-95' : 'opacity-100 blur-0 scale-100'}`,
+                                            onClick: ()=>{
+                                                setCurrentFocusPlot(plot.id);
+                                                navigateToEditor(plot);
+                                            },
+                                            onMouseEnter: ()=>focusMode && setCurrentFocusPlot(plot.id),
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex justify-between items-start mb-2",
@@ -3939,7 +3949,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: plot.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 510,
+                                                            lineNumber: 522,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3950,7 +3960,7 @@ ${plot.foreshadowingPoints.map({
                                                                     children: plot.timeframe || '시간 미정'
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 514,
+                                                                    lineNumber: 526,
                                                                     columnNumber: 45
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3958,19 +3968,19 @@ ${plot.foreshadowingPoints.map({
                                                                     children: "클릭하여 편집"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                    lineNumber: 517,
+                                                                    lineNumber: 529,
                                                                     columnNumber: 45
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 513,
+                                                            lineNumber: 525,
                                                             columnNumber: 41
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 509,
+                                                    lineNumber: 521,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3978,7 +3988,7 @@ ${plot.foreshadowingPoints.map({
                                                     children: plot.description
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 522,
+                                                    lineNumber: 534,
                                                     columnNumber: 37
                                                 }, this),
                                                 plot.characterActions && Object.keys(plot.characterActions).length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3989,7 +3999,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "캐릭터별 행동"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 525,
+                                                            lineNumber: 537,
                                                             columnNumber: 45
                                                         }, this),
                                                         Object.entries(plot.characterActions).map(([character, action])=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4003,7 +4013,7 @@ ${plot.foreshadowingPoints.map({
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 528,
+                                                                        lineNumber: 540,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4011,48 +4021,48 @@ ${plot.foreshadowingPoints.map({
                                                                         children: action
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 529,
+                                                                        lineNumber: 541,
                                                                         columnNumber: 53
                                                                     }, this)
                                                                 ]
                                                             }, character, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 527,
+                                                                lineNumber: 539,
                                                                 columnNumber: 49
                                                             }, this))
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 524,
+                                                    lineNumber: 536,
                                                     columnNumber: 41
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 505,
+                                            lineNumber: 510,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, plot.id, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 503,
+                                    lineNumber: 508,
                                     columnNumber: 29
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 494,
+                            lineNumber: 499,
                             columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 489,
+                    lineNumber: 494,
                     columnNumber: 13
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-            lineNumber: 440,
+            lineNumber: 445,
             columnNumber: 9
         }, this);
     // 🔥 아웃라인 뷰 렌더링 (독자 예측 중심)
@@ -4070,7 +4080,7 @@ ${plot.foreshadowingPoints.map({
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 550,
+                                    lineNumber: 562,
                                     columnNumber: 25
                                 }, this),
                                 "NCP 기반 독자 반응 예측",
@@ -4078,13 +4088,13 @@ ${plot.foreshadowingPoints.map({
                                     className: "w-4 h-4 border-2 border-purple-500 border-t-transparent rounded-full animate-spin"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 552,
+                                    lineNumber: 564,
                                     columnNumber: 41
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 549,
+                            lineNumber: 561,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4098,62 +4108,12 @@ ${plot.foreshadowingPoints.map({
                                             children: readerAnalysis.engagementScore
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 558,
-                                            columnNumber: 29
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-sm text-gray-600 dark:text-gray-400",
-                                            children: "몰입도 점수"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 561,
-                                            columnNumber: 29
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 557,
-                                    columnNumber: 25
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-2xl font-bold text-indigo-600 dark:text-indigo-400",
-                                            children: readerAnalysis.emotionalResonance
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 564,
-                                            columnNumber: 29
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-sm text-gray-600 dark:text-gray-400",
-                                            children: "감정적 공명"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 567,
-                                            columnNumber: 29
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 563,
-                                    columnNumber: 25
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-2xl font-bold text-emerald-600 dark:text-emerald-400",
-                                            children: readerAnalysis.characterArcSatisfaction
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
                                             lineNumber: 570,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-sm text-gray-600 dark:text-gray-400",
-                                            children: "캐릭터 아크"
+                                            children: "몰입도 점수"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
                                             lineNumber: 573,
@@ -4169,8 +4129,8 @@ ${plot.foreshadowingPoints.map({
                                     className: "text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-lg font-bold text-rose-600 dark:text-rose-400",
-                                            children: readerAnalysis.plotHoles.length
+                                            className: "text-2xl font-bold text-indigo-600 dark:text-indigo-400",
+                                            children: readerAnalysis.emotionalResonance
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
                                             lineNumber: 576,
@@ -4178,7 +4138,7 @@ ${plot.foreshadowingPoints.map({
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "text-sm text-gray-600 dark:text-gray-400",
-                                            children: "플롯홀 발견"
+                                            children: "감정적 공명"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
                                             lineNumber: 579,
@@ -4189,11 +4149,61 @@ ${plot.foreshadowingPoints.map({
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
                                     lineNumber: 575,
                                     columnNumber: 25
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-2xl font-bold text-emerald-600 dark:text-emerald-400",
+                                            children: readerAnalysis.characterArcSatisfaction
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 582,
+                                            columnNumber: 29
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-sm text-gray-600 dark:text-gray-400",
+                                            children: "캐릭터 아크"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 585,
+                                            columnNumber: 29
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 581,
+                                    columnNumber: 25
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-center p-4 bg-white/60 dark:bg-gray-800/60 rounded-lg",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-lg font-bold text-rose-600 dark:text-rose-400",
+                                            children: readerAnalysis.plotHoles.length
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 588,
+                                            columnNumber: 29
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-sm text-gray-600 dark:text-gray-400",
+                                            children: "플롯홀 발견"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 591,
+                                            columnNumber: 29
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 587,
+                                    columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 556,
+                            lineNumber: 568,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4209,14 +4219,14 @@ ${plot.foreshadowingPoints.map({
                                                     className: "text-purple-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 587,
+                                                    lineNumber: 599,
                                                     columnNumber: 33
                                                 }, this),
                                                 "독자 예측"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 586,
+                                            lineNumber: 598,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4229,7 +4239,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "예측성: "
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 592,
+                                                            lineNumber: 604,
                                                             columnNumber: 37
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4237,13 +4247,13 @@ ${plot.foreshadowingPoints.map({
                                                             children: readerAnalysis.predictability === 'predictable' ? '예측 가능' : readerAnalysis.predictability === 'surprising' ? '놀라운 전개' : readerAnalysis.predictability === 'shocking' ? '충격적 반전' : '적절한 복선'
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 593,
+                                                            lineNumber: 605,
                                                             columnNumber: 37
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 591,
+                                                    lineNumber: 603,
                                                     columnNumber: 33
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4253,7 +4263,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "주제 인식: "
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 605,
+                                                            lineNumber: 616,
                                                             columnNumber: 37
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4261,25 +4271,25 @@ ${plot.foreshadowingPoints.map({
                                                             children: readerAnalysis.readerPredictions.themeRealization || '주제가 명확하게 전달됨'
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 606,
+                                                            lineNumber: 617,
                                                             columnNumber: 37
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 604,
+                                                    lineNumber: 615,
                                                     columnNumber: 33
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 590,
+                                            lineNumber: 602,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 585,
+                                    lineNumber: 597,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4292,14 +4302,14 @@ ${plot.foreshadowingPoints.map({
                                                     className: "text-indigo-500"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 613,
+                                                    lineNumber: 624,
                                                     columnNumber: 33
                                                 }, this),
                                                 "개선 제안"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 612,
+                                            lineNumber: 623,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4312,24 +4322,24 @@ ${plot.foreshadowingPoints.map({
                                                     ]
                                                 }, idx, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 618,
+                                                    lineNumber: 629,
                                                     columnNumber: 37
                                                 }, this))
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 616,
+                                            lineNumber: 627,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 611,
+                                    lineNumber: 622,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 584,
+                            lineNumber: 596,
                             columnNumber: 21
                         }, this),
                         readerAnalysis.plotHoles.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4342,14 +4352,14 @@ ${plot.foreshadowingPoints.map({
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 630,
+                                            lineNumber: 641,
                                             columnNumber: 33
                                         }, this),
                                         "발견된 플롯홀들"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 629,
+                                    lineNumber: 640,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -4361,24 +4371,24 @@ ${plot.foreshadowingPoints.map({
                                             ]
                                         }, idx, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 635,
+                                            lineNumber: 646,
                                             columnNumber: 37
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 633,
+                                    lineNumber: 644,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 628,
+                            lineNumber: 639,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 548,
+                    lineNumber: 560,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4392,14 +4402,14 @@ ${plot.foreshadowingPoints.map({
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 645,
+                                    lineNumber: 656,
                                     columnNumber: 21
                                 }, this),
                                 "플롯 포인트별 독자 반응 분석"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 644,
+                            lineNumber: 655,
                             columnNumber: 17
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4412,7 +4422,7 @@ ${plot.foreshadowingPoints.map({
                                         className: "mx-auto mb-4 opacity-50"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 651,
+                                        lineNumber: 662,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4420,7 +4430,7 @@ ${plot.foreshadowingPoints.map({
                                         children: "아직 플롯 포인트가 없습니다"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 652,
+                                        lineNumber: 663,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4428,13 +4438,13 @@ ${plot.foreshadowingPoints.map({
                                         children: "마인드맵이나 타임라인에서 플롯을 추가해보세요"
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 653,
+                                        lineNumber: 664,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 650,
+                                lineNumber: 661,
                                 columnNumber: 25
                             }, this) : plotPoints.map((plot)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "border rounded-lg p-4 hover:shadow-md transition-all duration-200 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20",
@@ -4448,7 +4458,7 @@ ${plot.foreshadowingPoints.map({
                                                     children: plot.title
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 659,
+                                                    lineNumber: 670,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4459,7 +4469,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: plot.readerPredictability === 'predictable' ? '예측 가능' : plot.readerPredictability === 'surprising' ? '놀라운' : plot.readerPredictability === 'shocking' ? '충격적' : '복선'
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 661,
+                                                            lineNumber: 672,
                                                             columnNumber: 41
                                                         }, this),
                                                         plot.tensionLevel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4471,19 +4481,19 @@ ${plot.foreshadowingPoints.map({
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 671,
+                                                            lineNumber: 682,
                                                             columnNumber: 45
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 660,
+                                                    lineNumber: 671,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 658,
+                                            lineNumber: 669,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4491,7 +4501,7 @@ ${plot.foreshadowingPoints.map({
                                             children: plot.description
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 677,
+                                            lineNumber: 688,
                                             columnNumber: 33
                                         }, this),
                                         plot.isReversalPoint && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4503,7 +4513,7 @@ ${plot.foreshadowingPoints.map({
                                                         size: 16
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 681,
+                                                        lineNumber: 692,
                                                         columnNumber: 45
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4511,18 +4521,18 @@ ${plot.foreshadowingPoints.map({
                                                         children: "반전 지점"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 682,
+                                                        lineNumber: 693,
                                                         columnNumber: 45
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 680,
+                                                lineNumber: 691,
                                                 columnNumber: 41
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 679,
+                                            lineNumber: 690,
                                             columnNumber: 37
                                         }, this),
                                         plot.foreshadowingPoints && plot.foreshadowingPoints.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4533,7 +4543,7 @@ ${plot.foreshadowingPoints.map({
                                                     children: "복선 요소"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 688,
+                                                    lineNumber: 699,
                                                     columnNumber: 41
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4543,18 +4553,18 @@ ${plot.foreshadowingPoints.map({
                                                             children: foreshadow
                                                         }, index, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 691,
+                                                            lineNumber: 702,
                                                             columnNumber: 49
                                                         }, this))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 689,
+                                                    lineNumber: 700,
                                                     columnNumber: 41
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 687,
+                                            lineNumber: 698,
                                             columnNumber: 37
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4564,37 +4574,37 @@ ${plot.foreshadowingPoints.map({
                                                     size: 12
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 699,
+                                                    lineNumber: 710,
                                                     columnNumber: 37
                                                 }, this),
                                                 "클릭하여 상세 분석 보기"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 698,
+                                            lineNumber: 709,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, plot.id, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 657,
+                                    lineNumber: 668,
                                     columnNumber: 29
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 648,
+                            lineNumber: 659,
                             columnNumber: 17
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 643,
+                    lineNumber: 654,
                     columnNumber: 13
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-            lineNumber: 545,
+            lineNumber: 557,
             columnNumber: 9
         }, this);
     // 🔥 마인드맵 뷰 렌더링 (XMind 스타일)
@@ -4655,14 +4665,14 @@ ${plot.foreshadowingPoints.map({
                                                 size: 24
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 760,
+                                                lineNumber: 771,
                                                 columnNumber: 33
                                             }, this),
                                             "스토리 마인드맵"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 759,
+                                        lineNumber: 770,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4677,7 +4687,7 @@ ${plot.foreshadowingPoints.map({
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 764,
+                                                lineNumber: 775,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -4692,19 +4702,19 @@ ${plot.foreshadowingPoints.map({
                                                 children: "초기화"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 765,
+                                                lineNumber: 776,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 763,
+                                        lineNumber: 774,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 758,
+                                lineNumber: 769,
                                 columnNumber: 25
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4712,13 +4722,13 @@ ${plot.foreshadowingPoints.map({
                                 children: "마우스 휠로 줌, 드래그로 이동, 노드 클릭으로 편집"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 773,
+                                lineNumber: 784,
                                 columnNumber: 25
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 757,
+                        lineNumber: 768,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4747,12 +4757,12 @@ ${plot.foreshadowingPoints.map({
                                                     fill: "#6B7280"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 799,
+                                                    lineNumber: 810,
                                                     columnNumber: 37
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 791,
+                                                lineNumber: 802,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
@@ -4770,7 +4780,7 @@ ${plot.foreshadowingPoints.map({
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 807,
+                                                        lineNumber: 818,
                                                         columnNumber: 37
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
@@ -4781,13 +4791,13 @@ ${plot.foreshadowingPoints.map({
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 808,
+                                                        lineNumber: 819,
                                                         columnNumber: 37
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 806,
+                                                lineNumber: 817,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
@@ -4805,7 +4815,7 @@ ${plot.foreshadowingPoints.map({
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 811,
+                                                        lineNumber: 822,
                                                         columnNumber: 37
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
@@ -4816,13 +4826,13 @@ ${plot.foreshadowingPoints.map({
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 812,
+                                                        lineNumber: 823,
                                                         columnNumber: 37
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 810,
+                                                lineNumber: 821,
                                                 columnNumber: 33
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("linearGradient", {
@@ -4840,7 +4850,7 @@ ${plot.foreshadowingPoints.map({
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 815,
+                                                        lineNumber: 826,
                                                         columnNumber: 37
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("stop", {
@@ -4851,19 +4861,19 @@ ${plot.foreshadowingPoints.map({
                                                         }
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 816,
+                                                        lineNumber: 827,
                                                         columnNumber: 37
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 814,
+                                                lineNumber: 825,
                                                 columnNumber: 33
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 789,
+                                        lineNumber: 800,
                                         columnNumber: 29
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
@@ -4881,7 +4891,7 @@ ${plot.foreshadowingPoints.map({
                                                         className: "drop-shadow-lg"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 823,
+                                                        lineNumber: 834,
                                                         columnNumber: 37
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -4896,7 +4906,7 @@ ${plot.foreshadowingPoints.map({
                                                         children: "스토리"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 832,
+                                                        lineNumber: 843,
                                                         columnNumber: 37
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -4911,13 +4921,13 @@ ${plot.foreshadowingPoints.map({
                                                         children: "시놉시스"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 842,
+                                                        lineNumber: 853,
                                                         columnNumber: 37
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 822,
+                                                lineNumber: 833,
                                                 columnNumber: 33
                                             }, this),
                                             [
@@ -4943,15 +4953,17 @@ ${plot.foreshadowingPoints.map({
                                                                 className: "opacity-60"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 865,
+                                                                lineNumber: 876,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
-                                                                className: "cursor-pointer hover:opacity-80 transition-opacity",
+                                                                className: `cursor-pointer hover:opacity-80 transition-all duration-300 ${focusMode && currentFocusPlot !== plot.id ? 'opacity-30 blur-[1px]' : 'opacity-100 blur-0'}`,
                                                                 onClick: (e)=>{
                                                                     e.stopPropagation();
+                                                                    setCurrentFocusPlot(plot.id);
                                                                     setEditingPlot(plot);
                                                                 },
+                                                                onMouseEnter: ()=>focusMode && setCurrentFocusPlot(plot.id),
                                                                 children: [
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ellipse", {
                                                                         cx: pos.x,
@@ -4964,7 +4976,7 @@ ${plot.foreshadowingPoints.map({
                                                                         className: "drop-shadow-md"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 885,
+                                                                        lineNumber: 901,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -4979,7 +4991,7 @@ ${plot.foreshadowingPoints.map({
                                                                         children: plot.title.length > 12 ? plot.title.slice(0, 12) + '...' : plot.title
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 897,
+                                                                        lineNumber: 913,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -4997,7 +5009,7 @@ ${plot.foreshadowingPoints.map({
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 909,
+                                                                        lineNumber: 925,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     plot.tensionLevel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -5015,13 +5027,13 @@ ${plot.foreshadowingPoints.map({
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 922,
+                                                                        lineNumber: 938,
                                                                         columnNumber: 57
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 878,
+                                                                lineNumber: 889,
                                                                 columnNumber: 49
                                                             }, this),
                                                             plot.isReversalPoint && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
@@ -5036,7 +5048,7 @@ ${plot.foreshadowingPoints.map({
                                                                         className: "animate-pulse"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 938,
+                                                                        lineNumber: 954,
                                                                         columnNumber: 57
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -5047,19 +5059,19 @@ ${plot.foreshadowingPoints.map({
                                                                         children: "!"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 947,
+                                                                        lineNumber: 963,
                                                                         columnNumber: 57
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 937,
+                                                                lineNumber: 953,
                                                                 columnNumber: 53
                                                             }, this)
                                                         ]
                                                     }, plot.id, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 863,
+                                                        lineNumber: 874,
                                                         columnNumber: 45
                                                     }, this);
                                                 });
@@ -5086,7 +5098,7 @@ ${plot.foreshadowingPoints.map({
                                                             className: "opacity-90"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 972,
+                                                            lineNumber: 988,
                                                             columnNumber: 45
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -5097,26 +5109,26 @@ ${plot.foreshadowingPoints.map({
                                                             children: ACT_TEMPLATES[act].title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 982,
+                                                            lineNumber: 998,
                                                             columnNumber: 45
                                                         }, this)
                                                     ]
                                                 }, `act-label-${act}`, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 971,
+                                                    lineNumber: 987,
                                                     columnNumber: 41
                                                 }, this);
                                             })
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 820,
+                                        lineNumber: 831,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 780,
+                                lineNumber: 791,
                                 columnNumber: 25
                             }, this),
                             plotPoints.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5129,7 +5141,7 @@ ${plot.foreshadowingPoints.map({
                                             className: "mx-auto mb-4 opacity-50"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1000,
+                                            lineNumber: 1016,
                                             columnNumber: 37
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5137,7 +5149,7 @@ ${plot.foreshadowingPoints.map({
                                             children: "마인드맵이 비어있습니다"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1001,
+                                            lineNumber: 1017,
                                             columnNumber: 37
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5145,24 +5157,24 @@ ${plot.foreshadowingPoints.map({
                                             children: "플롯 포인트를 추가하여 스토리 구조를 시각화해보세요"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1002,
+                                            lineNumber: 1018,
                                             columnNumber: 37
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 999,
+                                    lineNumber: 1015,
                                     columnNumber: 33
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 998,
+                                lineNumber: 1014,
                                 columnNumber: 29
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 779,
+                        lineNumber: 790,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5181,14 +5193,14 @@ ${plot.foreshadowingPoints.map({
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1016,
+                                                    lineNumber: 1032,
                                                     columnNumber: 37
                                                 }, this),
                                                 "1막 추가"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1012,
+                                            lineNumber: 1028,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5199,14 +5211,14 @@ ${plot.foreshadowingPoints.map({
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1023,
+                                                    lineNumber: 1039,
                                                     columnNumber: 37
                                                 }, this),
                                                 "2막 추가"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1019,
+                                            lineNumber: 1035,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5217,20 +5229,20 @@ ${plot.foreshadowingPoints.map({
                                                     size: 14
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1030,
+                                                    lineNumber: 1046,
                                                     columnNumber: 37
                                                 }, this),
                                                 "3막 추가"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1026,
+                                            lineNumber: 1042,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1011,
+                                    lineNumber: 1027,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5240,49 +5252,49 @@ ${plot.foreshadowingPoints.map({
                                             children: "💡 드래그: 이동"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1036,
+                                            lineNumber: 1052,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "🔍 휠: 줌"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1037,
+                                            lineNumber: 1053,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "👆 클릭: 편집"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1038,
+                                            lineNumber: 1054,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1035,
+                                    lineNumber: 1051,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1010,
+                            lineNumber: 1026,
                             columnNumber: 25
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 1009,
+                        lineNumber: 1025,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 755,
+                lineNumber: 766,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-            lineNumber: 754,
+            lineNumber: 765,
             columnNumber: 13
         }, this);
     };
@@ -5302,20 +5314,20 @@ ${plot.foreshadowingPoints.map({
                                     size: 20
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1056,
+                                    lineNumber: 1072,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "구조로 돌아가기"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1057,
+                                    lineNumber: 1073,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1052,
+                            lineNumber: 1068,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -5323,7 +5335,7 @@ ${plot.foreshadowingPoints.map({
                             children: "시놉시스 편집"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1060,
+                            lineNumber: 1076,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5342,14 +5354,14 @@ ${plot.foreshadowingPoints.map({
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1072,
+                                                    lineNumber: 1088,
                                                     columnNumber: 33
                                                 }, this),
                                                 "타임라인"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1064,
+                                            lineNumber: 1080,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5362,14 +5374,14 @@ ${plot.foreshadowingPoints.map({
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1083,
+                                                    lineNumber: 1099,
                                                     columnNumber: 33
                                                 }, this),
                                                 "아웃라인"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1075,
+                                            lineNumber: 1091,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5382,20 +5394,69 @@ ${plot.foreshadowingPoints.map({
                                                     className: "mr-1.5 inline"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1094,
+                                                    lineNumber: 1110,
                                                     columnNumber: 33
                                                 }, this),
                                                 "마인드맵"
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1086,
+                                            lineNumber: 1102,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1063,
+                                    lineNumber: 1079,
+                                    columnNumber: 25
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-2 mr-4",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>setFocusMode(!focusMode),
+                                            className: `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${focusMode ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300' : 'text-gray-500 dark:text-gray-400 hover:text-purple-600 dark:hover:text-purple-300'}`,
+                                            title: "Focus Mode - 현재 작업 중인 플롯만 하이라이트",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$eye$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Eye$3e$__["Eye"], {
+                                                    size: 16,
+                                                    className: "mr-1 inline"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 1125,
+                                                    columnNumber: 33
+                                                }, this),
+                                                "Focus"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 1117,
+                                            columnNumber: 29
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: ()=>setDistractionFree(!distractionFree),
+                                            className: `px-3 py-1.5 rounded-md text-sm font-medium transition-all ${distractionFree ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-300'}`,
+                                            title: "방해 요소 제거 모드",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
+                                                    size: 16,
+                                                    className: "mr-1 inline"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                                    lineNumber: 1136,
+                                                    columnNumber: 33
+                                                }, this),
+                                                "Zen"
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                            lineNumber: 1128,
+                                            columnNumber: 29
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
+                                    lineNumber: 1116,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5405,35 +5466,35 @@ ${plot.foreshadowingPoints.map({
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1099,
+                                        lineNumber: 1142,
                                         columnNumber: 29
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1098,
+                                    lineNumber: 1141,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1062,
+                            lineNumber: 1078,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 1051,
+                    lineNumber: 1067,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 1050,
+                lineNumber: 1066,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: SYNOPSIS_STYLES.content,
+                className: `${SYNOPSIS_STYLES.content} ${distractionFree ? 'bg-gray-50 dark:bg-gray-900' : ''}`,
                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: SYNOPSIS_STYLES.timeline,
+                    className: `${SYNOPSIS_STYLES.timeline} ${focusMode ? 'focus-mode-active' : ''}`,
                     children: [
                         viewMode === 'timeline' && renderTimelineView(),
                         viewMode === 'outline' && renderOutlineView(),
@@ -5441,12 +5502,12 @@ ${plot.foreshadowingPoints.map({
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 1107,
+                    lineNumber: 1150,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 1106,
+                lineNumber: 1149,
                 columnNumber: 13
             }, this),
             (editingPlot || showAddModal.show) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5462,7 +5523,7 @@ ${plot.foreshadowingPoints.map({
                                     children: showAddModal.show ? '새 플롯 포인트' : '플롯 포인트 편집'
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1120,
+                                    lineNumber: 1163,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5477,18 +5538,18 @@ ${plot.foreshadowingPoints.map({
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1130,
+                                        lineNumber: 1173,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1123,
+                                    lineNumber: 1166,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1119,
+                            lineNumber: 1162,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5502,7 +5563,7 @@ ${plot.foreshadowingPoints.map({
                                             children: "제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1136,
+                                            lineNumber: 1179,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -5516,13 +5577,13 @@ ${plot.foreshadowingPoints.map({
                                             placeholder: "플롯 포인트 제목"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1137,
+                                            lineNumber: 1180,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1135,
+                                    lineNumber: 1178,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5533,7 +5594,7 @@ ${plot.foreshadowingPoints.map({
                                             children: "설명"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1147,
+                                            lineNumber: 1190,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
@@ -5547,13 +5608,13 @@ ${plot.foreshadowingPoints.map({
                                             placeholder: "상세한 설명을 입력하세요..."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1148,
+                                            lineNumber: 1191,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1146,
+                                    lineNumber: 1189,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5567,7 +5628,7 @@ ${plot.foreshadowingPoints.map({
                                                     children: "타입"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1159,
+                                                    lineNumber: 1202,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -5583,7 +5644,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "설정"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1165,
+                                                            lineNumber: 1208,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5591,7 +5652,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "갈등"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1166,
+                                                            lineNumber: 1209,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5599,7 +5660,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "해결"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1167,
+                                                            lineNumber: 1210,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5607,7 +5668,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "반전"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1168,
+                                                            lineNumber: 1211,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5615,19 +5676,19 @@ ${plot.foreshadowingPoints.map({
                                                             children: "클라이맥스"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1169,
+                                                            lineNumber: 1212,
                                                             columnNumber: 41
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1160,
+                                                    lineNumber: 1203,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1158,
+                                            lineNumber: 1201,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5638,7 +5699,7 @@ ${plot.foreshadowingPoints.map({
                                                     children: "독자 예측도"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1174,
+                                                    lineNumber: 1217,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -5654,7 +5715,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "예측 가능"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1180,
+                                                            lineNumber: 1223,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5662,7 +5723,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "복선"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1181,
+                                                            lineNumber: 1224,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5670,7 +5731,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "놀라운"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1182,
+                                                            lineNumber: 1225,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5678,25 +5739,25 @@ ${plot.foreshadowingPoints.map({
                                                             children: "충격적"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1183,
+                                                            lineNumber: 1226,
                                                             columnNumber: 41
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1175,
+                                                    lineNumber: 1218,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1173,
+                                            lineNumber: 1216,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1157,
+                                    lineNumber: 1200,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5710,7 +5771,7 @@ ${plot.foreshadowingPoints.map({
                                                     children: "시간대"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1190,
+                                                    lineNumber: 1233,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -5724,13 +5785,13 @@ ${plot.foreshadowingPoints.map({
                                                     placeholder: "오전 10시, 3일 후 등"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1191,
+                                                    lineNumber: 1234,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1189,
+                                            lineNumber: 1232,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5741,7 +5802,7 @@ ${plot.foreshadowingPoints.map({
                                                     children: "긴장도 (1-5)"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1201,
+                                                    lineNumber: 1244,
                                                     columnNumber: 37
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
@@ -5757,7 +5818,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "1 - 평온"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1207,
+                                                            lineNumber: 1250,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5765,7 +5826,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "2 - 약간 긴장"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1208,
+                                                            lineNumber: 1251,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5773,7 +5834,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "3 - 보통"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1209,
+                                                            lineNumber: 1252,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5781,7 +5842,7 @@ ${plot.foreshadowingPoints.map({
                                                             children: "4 - 높은 긴장"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1210,
+                                                            lineNumber: 1253,
                                                             columnNumber: 41
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
@@ -5789,25 +5850,25 @@ ${plot.foreshadowingPoints.map({
                                                             children: "5 - 최고조"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                            lineNumber: 1211,
+                                                            lineNumber: 1254,
                                                             columnNumber: 41
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                    lineNumber: 1202,
+                                                    lineNumber: 1245,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1200,
+                                            lineNumber: 1243,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1188,
+                                    lineNumber: 1231,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5818,7 +5879,7 @@ ${plot.foreshadowingPoints.map({
                                             children: "장소"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1217,
+                                            lineNumber: 1260,
                                             columnNumber: 33
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -5832,19 +5893,19 @@ ${plot.foreshadowingPoints.map({
                                             placeholder: "이벤트가 일어나는 장소"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                            lineNumber: 1218,
+                                            lineNumber: 1261,
                                             columnNumber: 33
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1216,
+                                    lineNumber: 1259,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1134,
+                            lineNumber: 1177,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5861,7 +5922,7 @@ ${plot.foreshadowingPoints.map({
                                     children: "취소"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1229,
+                                    lineNumber: 1272,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5870,24 +5931,24 @@ ${plot.foreshadowingPoints.map({
                                     children: "저장"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1238,
+                                    lineNumber: 1281,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1228,
+                            lineNumber: 1271,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 1118,
+                    lineNumber: 1161,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 1117,
+                lineNumber: 1160,
                 columnNumber: 17
             }, this),
             detailPlot && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5906,7 +5967,7 @@ ${plot.foreshadowingPoints.map({
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1254,
+                                    lineNumber: 1297,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5916,18 +5977,18 @@ ${plot.foreshadowingPoints.map({
                                         size: 18
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1261,
+                                        lineNumber: 1304,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 1257,
+                                    lineNumber: 1300,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1253,
+                            lineNumber: 1296,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5943,7 +6004,7 @@ ${plot.foreshadowingPoints.map({
                                                 children: "📖 플롯 요약"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1269,
+                                                lineNumber: 1312,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5951,13 +6012,13 @@ ${plot.foreshadowingPoints.map({
                                                 children: detailPlot.description
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1270,
+                                                lineNumber: 1313,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1268,
+                                        lineNumber: 1311,
                                         columnNumber: 33
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5968,7 +6029,7 @@ ${plot.foreshadowingPoints.map({
                                                 children: "🔮 독자 예측 분석"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1275,
+                                                lineNumber: 1318,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5982,7 +6043,7 @@ ${plot.foreshadowingPoints.map({
                                                                 children: "예측 가능성"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1278,
+                                                                lineNumber: 1321,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5990,13 +6051,13 @@ ${plot.foreshadowingPoints.map({
                                                                 children: detailPlot.readerPredictability === 'predictable' ? '예측 가능' : detailPlot.readerPredictability === 'surprising' ? '놀라운' : detailPlot.readerPredictability === 'shocking' ? '충격적' : '복선'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1279,
+                                                                lineNumber: 1322,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1277,
+                                                        lineNumber: 1320,
                                                         columnNumber: 41
                                                     }, this),
                                                     detailPlot.tensionLevel && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6007,7 +6068,7 @@ ${plot.foreshadowingPoints.map({
                                                                 children: "긴장도"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1291,
+                                                                lineNumber: 1334,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6025,12 +6086,12 @@ ${plot.foreshadowingPoints.map({
                                                                                 className: `w-3 h-3 rounded-full ${i <= (detailPlot.tensionLevel || 0) ? 'bg-orange-500' : 'bg-gray-200 dark:bg-gray-600'}`
                                                                             }, i, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                                lineNumber: 1295,
+                                                                                lineNumber: 1338,
                                                                                 columnNumber: 61
                                                                             }, this))
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 1293,
+                                                                        lineNumber: 1336,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -6041,19 +6102,19 @@ ${plot.foreshadowingPoints.map({
                                                                         ]
                                                                     }, void 0, true, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 1299,
+                                                                        lineNumber: 1342,
                                                                         columnNumber: 53
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1292,
+                                                                lineNumber: 1335,
                                                                 columnNumber: 49
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1290,
+                                                        lineNumber: 1333,
                                                         columnNumber: 45
                                                     }, this),
                                                     detailPlot.isReversalPoint && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6066,7 +6127,7 @@ ${plot.foreshadowingPoints.map({
                                                                         size: 16
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 1306,
+                                                                        lineNumber: 1349,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -6074,13 +6135,13 @@ ${plot.foreshadowingPoints.map({
                                                                         children: "이 지점은 스토리의 중요한 반전을 일으킵니다"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                        lineNumber: 1307,
+                                                                        lineNumber: 1350,
                                                                         columnNumber: 53
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1305,
+                                                                lineNumber: 1348,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6088,25 +6149,25 @@ ${plot.foreshadowingPoints.map({
                                                                 children: "독자의 기대를 뒤엎고 새로운 방향으로 이야기를 이끌어가는 전환점입니다."
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1309,
+                                                                lineNumber: 1352,
                                                                 columnNumber: 49
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1304,
+                                                        lineNumber: 1347,
                                                         columnNumber: 45
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1276,
+                                                lineNumber: 1319,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1274,
+                                        lineNumber: 1317,
                                         columnNumber: 33
                                     }, this),
                                     detailPlot.foreshadowingPoints && detailPlot.foreshadowingPoints.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6117,7 +6178,7 @@ ${plot.foreshadowingPoints.map({
                                                 children: "🔍 복선 요소들"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1320,
+                                                lineNumber: 1363,
                                                 columnNumber: 41
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6129,7 +6190,7 @@ ${plot.foreshadowingPoints.map({
                                                                 className: "w-2 h-2 bg-indigo-400 rounded-full mt-2 flex-shrink-0"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1324,
+                                                                lineNumber: 1367,
                                                                 columnNumber: 53
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -6137,18 +6198,18 @@ ${plot.foreshadowingPoints.map({
                                                                 children: foreshadow
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1325,
+                                                                lineNumber: 1368,
                                                                 columnNumber: 53
                                                             }, this)
                                                         ]
                                                     }, index, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1323,
+                                                        lineNumber: 1366,
                                                         columnNumber: 49
                                                     }, this))
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1321,
+                                                lineNumber: 1364,
                                                 columnNumber: 41
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6156,13 +6217,13 @@ ${plot.foreshadowingPoints.map({
                                                 children: "💡 이 복선들이 나중에 어떻게 회수될지 계획해보세요"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1329,
+                                                lineNumber: 1372,
                                                 columnNumber: 41
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1319,
+                                        lineNumber: 1362,
                                         columnNumber: 37
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6176,7 +6237,7 @@ ${plot.foreshadowingPoints.map({
                                                         children: "👥 등장 인물"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1339,
+                                                        lineNumber: 1382,
                                                         columnNumber: 45
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6186,18 +6247,18 @@ ${plot.foreshadowingPoints.map({
                                                                 children: char
                                                             }, index, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                                lineNumber: 1342,
+                                                                lineNumber: 1385,
                                                                 columnNumber: 53
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1340,
+                                                        lineNumber: 1383,
                                                         columnNumber: 45
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1338,
+                                                lineNumber: 1381,
                                                 columnNumber: 41
                                             }, this),
                                             detailPlot.timeframe && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6208,7 +6269,7 @@ ${plot.foreshadowingPoints.map({
                                                         children: "⏰ 시간대"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1352,
+                                                        lineNumber: 1395,
                                                         columnNumber: 45
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6216,19 +6277,19 @@ ${plot.foreshadowingPoints.map({
                                                         children: detailPlot.timeframe
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                        lineNumber: 1353,
+                                                        lineNumber: 1396,
                                                         columnNumber: 45
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1351,
+                                                lineNumber: 1394,
                                                 columnNumber: 41
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1336,
+                                        lineNumber: 1379,
                                         columnNumber: 33
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6239,7 +6300,7 @@ ${plot.foreshadowingPoints.map({
                                                 children: "✍️ 작가 팁"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1360,
+                                                lineNumber: 1403,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6247,45 +6308,45 @@ ${plot.foreshadowingPoints.map({
                                                 children: detailPlot.readerPredictability === 'predictable' ? '독자가 예측할 수 있는 전개입니다. 안정감을 주지만 때로는 작은 반전을 섞어 긴장감을 유지하세요.' : detailPlot.readerPredictability === 'foreshadowed' ? '복선이 깔린 전개입니다. 앞서 뿌린 떡밥들을 적절히 회수하여 독자에게 만족감을 주세요.' : detailPlot.readerPredictability === 'surprising' ? '독자를 놀라게 할 전개입니다. 하지만 무리하지 않은 범위에서 논리적으로 연결되도록 주의하세요.' : '충격적인 반전입니다. 이전 전개와의 연결고리를 명확히 하여 독자가 납득할 수 있게 만드세요.'
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 1361,
+                                                lineNumber: 1404,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 1359,
+                                        lineNumber: 1402,
                                         columnNumber: 33
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 1266,
+                                lineNumber: 1309,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 1265,
+                            lineNumber: 1308,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 1252,
+                    lineNumber: 1295,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 1251,
+                lineNumber: 1294,
                 columnNumber: 17
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-        lineNumber: 1048,
+        lineNumber: 1064,
         columnNumber: 9
     }, this);
 }
-_s(SynopsisView, "cJAaEBdtHU/1ri8hQD77Eby9SLM=", false, function() {
+_s(SynopsisView, "Ip1Z8yoytVZ7t0qdDFIrnyXXVIQ=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"],
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"],

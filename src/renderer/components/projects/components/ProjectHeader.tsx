@@ -25,9 +25,9 @@ import {
 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
 
-// 🔥 프리컴파일된 스타일 (기가차드 원칙)
+// 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar와 같은 수준 배치
 const PROJECT_HEADER_STYLES = {
-  header: 'flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown',
+  header: 'flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-40',
   headerLeft: 'flex items-center gap-3',
   headerCenter: 'flex items-center gap-3 max-w-md',
   headerRight: 'flex items-center gap-2 relative',
@@ -207,13 +207,16 @@ export function ProjectHeader({
           setTimeout(() => {
             if (window.location.pathname.includes('/projects/')) {
               Logger.info('PROJECT_HEADER', 'Force redirecting to projects page');
-              window.location.href = '/projects';
+              // 🔒 보안: XSS 방지를 위한 안전한 네비게이션
+              window.history.pushState(null, '', '/projects');
+              window.dispatchEvent(new PopStateEvent('popstate'));
             }
           }, 1000);
         } catch (redirectError) {
           Logger.error('PROJECT_HEADER', 'Redirect failed, using fallback', redirectError);
-          // 최후 수단: 직접 페이지 이동
-          window.location.href = '/projects';
+          // 최후 수단: 안전한 페이지 이동
+          window.history.pushState(null, '', '/projects');
+          window.dispatchEvent(new PopStateEvent('popstate'));
         }
       } else {
         Logger.error('PROJECT_HEADER', 'Failed to delete project', result.error);

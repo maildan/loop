@@ -12,6 +12,7 @@ interface CharactersViewProps {
   projectId: string;
   characters: ProjectCharacter[];
   onCharactersChange: (characters: ProjectCharacter[]) => void;
+  focusMode?: boolean;  // 🔥 Focus Mode 지원
 }
 
 // 🔥 기가차드 캐릭터 스타일 - 카드 기반 레이아웃
@@ -102,7 +103,13 @@ const CHARACTER_TABS = [
   { id: 'story', label: '스토리', icon: Heart },
 ] as const;
 
-export function CharactersView({ projectId, characters, onCharactersChange }: CharactersViewProps): React.ReactElement {
+export function CharactersView({
+  projectId,
+  characters,
+  onCharactersChange,
+  focusMode = false
+}: CharactersViewProps): React.ReactElement {
+  const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Record<string, string>>({});
   const [editingCharacter, setEditingCharacter] = useState<ProjectCharacter | null>(null);
   const [editForm, setEditForm] = useState<Partial<ProjectCharacter>>({});
@@ -395,12 +402,16 @@ export function CharactersView({ projectId, characters, onCharactersChange }: Ch
                   return (
                     <div
                       key={character.id}
-                      className={CHARACTERS_STYLES.characterCard}
+                      className={`${CHARACTERS_STYLES.characterCard} ${focusMode && selectedCharacterId !== character.id
+                          ? 'opacity-30 blur-[1px] scale-95 transition-all duration-300'
+                          : 'opacity-100 blur-0 scale-100 transition-all duration-300'
+                        }`}
                       onClick={handleCharacterClick}
                       onDoubleClick={handleCharacterDoubleClick}
                       onMouseDown={handleMouseDown}
                       onMouseUp={handleMouseUp}
                       onMouseLeave={handleMouseLeave} // 🔥 Long press 이벤트 적용
+                      onMouseEnter={() => focusMode && setSelectedCharacterId(character.id)}
                     >
                       <div className="relative">
                         {/* 🔥 액션 버튼들 */}

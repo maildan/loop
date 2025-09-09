@@ -38,26 +38,28 @@ interface ProjectSidebarProps {
     onDeleteStructure?: (id: string, title: string) => void;
 }
 
-// 🔥 Zen Browser 스타일 사이드바 (3단계 상태: default/hover/collapsed)
+// 🔥 Scrivener Binder + iA Writer 스타일 사이드바
 const SIDEBAR_STYLES = {
-    // 기본 컨테이너 - 전체 높이 사용 (tabBar 고려하지 않음)
-    container: 'flex flex-col bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 h-full relative',
-    default: 'w-16', // 🔥 기본 상태: 아이콘만 표시
-    expanded: 'w-64', // 🔥 hover 시: 전체 표시
+    // 기본 컨테이너 - 작가 친화적 디자인
+    container: 'flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out h-full relative shadow-sm',
+    default: 'w-16', // 🔥 기본 상태: 아이콘만 표시 (미니멀)
+    expanded: 'w-72', // 🔥 hover 시: Scrivener Binder 크기로 확장
     collapsed: 'w-0 overflow-hidden', // 🔥 완전 숨김
 
-    // 🔥 Zen Browser 스타일: hover 시 나타나는 버전 (슬라이드 효과)
-    hoverable: 'absolute left-0 top-0 h-full w-64 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 shadow-xl z-30 transform -translate-x-full transition-all duration-300 ease-in-out',
-    hoverVisible: 'transform translate-x-0',
+    // 🔥 Scrivener Binder 스타일: 부드러운 슬라이드 효과
+    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-72 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-2xl z-40 transform -translate-x-full transition-all duration-500 ease-out backdrop-blur-sm',
+    hoverVisible: 'transform translate-x-0 opacity-100',
+    hoverHidden: 'transform -translate-x-full opacity-90',
 
-    // hover 감지 영역 - 프로젝트 영역에서만 동작 (AppSidebar와 분리)  
-    hoverTrigger: 'absolute left-64 top-0 w-8 h-full z-25',
+    // hover 감지 영역 - 더 넓게 설정하여 사용성 향상  
+    hoverTrigger: 'absolute left-0 top-14 w-12 h-[calc(100%-3.5rem)] z-35 hover:w-16 transition-all duration-300',
 
-    // 메뉴 섹션
-    menuSection: 'p-3 space-y-1',
-    menuItem: 'flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors duration-200 cursor-pointer rounded-md',
-    menuItemActive: 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
-    menuItemInactive: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
+    // 🔥 Scrivener Binder 스타일 메뉴 섹션
+    menuSection: 'p-4 space-y-2 border-b border-gray-200/50 dark:border-gray-700/50',
+    menuSectionTitle: 'text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 px-2',
+    menuItem: 'flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer rounded-lg group relative',
+    menuItemActive: 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-700 dark:text-blue-300 shadow-sm border-l-3 border-blue-500',
+    menuItemInactive: 'text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-700 dark:hover:to-gray-600 hover:shadow-sm',
 
     // 섹션 헤더
     sectionHeader: 'text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 px-3',

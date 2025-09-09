@@ -519,50 +519,66 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 ProjectSidebar hover 영역 - 왼쪽 끝자락 */}
+                {/* 🔥 ProjectSidebar hover 영역 - 크기 확대 및 위치 수정 */}
                 {isSidebarCollapsed && !tabBarHovered && (
                     <div
-                        className="absolute left-0 top-0 w-8 h-full z-20 hover:w-12 transition-all duration-200"
+                        className="absolute left-0 w-20 h-full z-35 transition-all duration-300 bg-gradient-to-r from-blue-50/10 to-transparent hover:from-blue-100/20 hover:to-blue-50/10 dark:from-blue-900/10 dark:to-transparent dark:hover:from-blue-800/20 dark:hover:to-blue-900/10"
+                        style={{ top: '0px' }}
+                        onMouseEnter={() => {
+                            console.log('Hover detected - setting sidebar hovered to true');
+                            setSidebarHovered(true);
+                        }}
+                        onMouseLeave={() => {
+                            console.log('Mouse left hover area - setting sidebar hovered to false');
+                            setSidebarHovered(false);
+                        }}
+                    >
+                        {/* 🔥 hover 가이드 힌트 */}
+                        <div className="absolute left-4 top-20 text-xs text-gray-500 dark:text-gray-400 writing-vertical-rl opacity-60 hover:opacity-100 transition-opacity duration-200">
+                            사이드바
+                        </div>
+                        <div className="absolute left-2 top-32 w-1 h-8 bg-blue-400 dark:bg-blue-500 rounded-full opacity-30 hover:opacity-70 transition-opacity duration-200"></div>
+                    </div>
+                )}
+
+                {/* 🔥 ProjectSidebar 표시 - 더 넓은 영역에서 나타남 */}
+                {sidebarHovered && isSidebarCollapsed && (
+                    <div
+                        className="absolute left-0 w-80 h-full transition-all duration-400 ease-out transform backdrop-blur-lg z-50 bg-white/95 dark:bg-gray-900/95 border-r border-gray-200 dark:border-gray-700 shadow-2xl"
+                        style={{ top: '0px' }}
                         onMouseEnter={() => setSidebarHovered(true)}
                         onMouseLeave={() => setSidebarHovered(false)}
-                        style={{ marginTop: '56px' }} // TabBar 높이만큼 아래로 이동
                     >
-                        {/* ProjectSidebar hover 시 표시 */}
-                        {sidebarHovered && (
-                            <div className={`absolute left-0 h-full transition-all duration-500 ease-out transform z-40 ${sidebarHovered ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
-                                }`} style={{ top: '56px', height: 'calc(100% - 56px)' }}>
-                                <ProjectSidebar
-                                    projectId={projectId}
-                                    currentView={state.currentView}
-                                    onViewChange={actions.setCurrentView}
-                                    structure={projectData?.structure || []}
-                                    characters={projectData?.characters || []}
-                                    collapsed={false}
-                                    stats={{
-                                        wordCount: projectData?.writerStats?.wordCount || 0,
-                                        charCount: projectData?.writerStats?.charCount || 0,
-                                        paragraphCount: projectData?.writerStats?.paragraphCount || 0,
-                                        readingTime: projectData?.writerStats?.readingTime || 0,
-                                        wordGoal: projectData?.writerStats?.wordGoal || 1000,
-                                        progress: projectData?.writerStats?.progress || 0,
-                                        sessionTime: projectData?.writerStats?.sessionTime || 0,
-                                        wpm: projectData?.writerStats?.wpm || 0
-                                    }}
-                                    onAddStructure={() => {
-                                        actions.openNewChapterModal();
-                                        Logger.info('PROJECT_EDITOR', 'Add structure clicked from hover sidebar');
-                                    }}
-                                    onAddCharacter={() => {
-                                        actions.openNewCharacterModal();
-                                        Logger.info('PROJECT_EDITOR', 'Add character clicked from hover sidebar');
-                                    }}
-                                    onAddNote={() => {
-                                        actions.openNewNoteModal();
-                                        Logger.info('PROJECT_EDITOR', 'Add note clicked from hover sidebar');
-                                    }}
-                                />
-                            </div>
-                        )}
+                        <ProjectSidebar
+                            projectId={projectId}
+                            currentView={state.currentView}
+                            onViewChange={actions.setCurrentView}
+                            structure={projectData?.structure || []}
+                            characters={projectData?.characters || []}
+                            collapsed={false}
+                            stats={{
+                                wordCount: projectData?.writerStats?.wordCount || 0,
+                                charCount: projectData?.writerStats?.charCount || 0,
+                                paragraphCount: projectData?.writerStats?.paragraphCount || 0,
+                                readingTime: projectData?.writerStats?.readingTime || 0,
+                                wordGoal: projectData?.writerStats?.wordGoal || 1000,
+                                progress: projectData?.writerStats?.progress || 0,
+                                sessionTime: projectData?.writerStats?.sessionTime || 0,
+                                wpm: projectData?.writerStats?.wpm || 0
+                            }}
+                            onAddStructure={() => {
+                                actions.openNewChapterModal();
+                                Logger.info('PROJECT_EDITOR', 'Add structure clicked from hover sidebar');
+                            }}
+                            onAddCharacter={() => {
+                                actions.openNewCharacterModal();
+                                Logger.info('PROJECT_EDITOR', 'Add character clicked from hover sidebar');
+                            }}
+                            onAddNote={() => {
+                                actions.openNewNoteModal();
+                                Logger.info('PROJECT_EDITOR', 'Add note clicked from hover sidebar');
+                            }}
+                        />
                     </div>
                 )}
 

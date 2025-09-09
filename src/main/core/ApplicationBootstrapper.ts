@@ -20,11 +20,28 @@ function resolveAndValidate(filePath: string | null, baseDir: string, allowedFil
   try {
     if (!filePath) return null;
 
-    const resolvedCandidate = path.resolve(filePath);
-    const resolvedBaseDir = path.resolve(baseDir);
+    // 🔒 보안: 입력값 strict sanitization
+    const sanitizedPath = filePath.replace(/[<>:"|?*\x00-\x1f]/g, '').trim();
+    if (!sanitizedPath || sanitizedPath.includes('..') || sanitizedPath.startsWith('/') || sanitizedPath.startsWith('\\')) {
+      return null;
+    }
 
-    // Ensure candidate is inside base directory
-    if (!resolvedCandidate.startsWith(resolvedBaseDir + path.sep) && resolvedCandidate !== resolvedBaseDir) return null;
+    // 🔒 보안: baseDir를 사전에 검증된 안전한 경로로 제한
+    const safeBases = [
+      app.getPath('userData'),
+      app.getPath('temp'),
+      process.resourcesPath || '',
+      path.join(process.cwd(), 'assets')
+    ].filter(Boolean);
+
+    if (!safeBases.some(safe => baseDir.startsWith(safe))) {
+      return null;
+    }
+
+    const resolvedCandidate = path.join(baseDir, sanitizedPath);
+
+    // Ensure candidate is inside base directory (double check)
+    if (!resolvedCandidate.startsWith(baseDir + path.sep) && resolvedCandidate !== baseDir) return null;
 
     // If a basename whitelist is provided, enforce it
     if (allowedFilenames && allowedFilenames.length > 0) {

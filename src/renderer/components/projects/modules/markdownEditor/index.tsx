@@ -14,6 +14,8 @@ interface MarkdownEditorProps {
     content: string;
     onChange: (content: string) => void;
     isFocusMode: boolean;
+    typewriterMode?: boolean;
+    distractionFree?: boolean;
 }
 
 const EDITOR_STYLES = {
@@ -25,7 +27,9 @@ const EDITOR_STYLES = {
 export function MarkdownEditor({
     content,
     onChange,
-    isFocusMode
+    isFocusMode,
+    typewriterMode = false,
+    distractionFree = false
 }: MarkdownEditorProps): React.ReactElement {
     const [isDragOver, setIsDragOver] = useState(false);
     const [isReady, setIsReady] = useState(false);
