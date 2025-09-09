@@ -231,21 +231,24 @@ function useIntegratedProjectData(projectId) {
                 console.warn(`⚠️ [processStructureItems] Failed to parse content for item ${item.id}:`, e);
                 content = String(item.content || '');
             }
+            // 🔥 안전한 content 처리
+            const safeContent = content || '';
+            const safeTitle = item.title || '';
             const element = {
                 id: item.id,
                 type: item.type,
-                title: item.title,
-                content,
+                title: safeTitle,
+                content: safeContent,
                 createdAt: item.createdAt ? new Date(item.createdAt) : new Date(),
                 updatedAt: item.updatedAt ? new Date(item.updatedAt) : new Date(),
-                order: item.order,
-                wordCount: content.split(/\s+/).length,
+                order: item.order || 0,
+                wordCount: safeContent ? safeContent.split(/\s+/).filter((word)=>word.length > 0).length : 0,
                 plotRelevance: Math.floor(Math.random() * 5) + 1
             };
             // 타입별 특수 처리
             if (item.type === 'character') {
                 try {
-                    const parsed = JSON.parse(content);
+                    const parsed = safeContent ? JSON.parse(safeContent) : {};
                     element.characterTraits = parsed.traits || [];
                 } catch (e) {
                     element.characterTraits = [];

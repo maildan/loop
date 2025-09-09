@@ -241,6 +241,12 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 <MarkdownEditor
                                     content={activeTab?.content || ''}
                                     onChange={(content) => {
+                                        console.log('🔥 [ProjectEditor] MarkdownEditor onChange:', {
+                                            activeTabId: activeTab?.id,
+                                            contentLength: content.length,
+                                            contentPreview: content.substring(0, 100) + '...'
+                                        });
+                                        
                                         if (activeTab) {
                                             // 탭 업데이트
                                             actions.updateTab(activeTab.id, {
@@ -249,6 +255,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                             });
 
                                             // 🔥 실제 프로젝트 content도 업데이트 (DB 자동저장)
+                                            console.log('🔥 [ProjectEditor] Calling setContent with:', content.length + ' characters');
                                             projectData.setContent(content);
                                         }
                                     }}
