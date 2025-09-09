@@ -82,8 +82,8 @@ export const ProjectEditor = memo(function ProjectEditor({
     const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
 
     // 🔥 디버깅: 사이드바 상태 확인
-    console.log('🔍 Sidebar States:', {
-        isSidebarCollapsed: isSidebarCollapsed, // hover시 표시
+    Logger.debug('PROJECT_EDITOR', 'Sidebar States', {
+        isSidebarCollapsed: isSidebarCollapsed,
         reasons: {
             sidebarCollapsed,
             appSidebarCollapsed,
@@ -468,7 +468,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 window.location.href = '/projects';
                             }
                         }}
-                        sidebarCollapsed={sidebarCollapsed}
+                        sidebarCollapsed={isSidebarCollapsed}
                         onToggleSidebar={toggleSidebar}
                         showRightSidebar={state.showRightSidebar}
                         onToggleAISidebar={actions.toggleRightSidebar}

@@ -1,0 +1,798 @@
+# 🔥 Loop AI Story Analysis Workflow - 종합 스토리 분석 워크플로우
+# Gemini AI를 활용한 대규모 문학 작품 분석 시스템
+# Version: 2.0
+# Author: Loop AI Analysis Team
+# Description: NCP 이론 기반의 체계적인 스토리 분석 및 평가 워크플로우
+
+name: comprehensive_story_analysis
+version: "2.0"
+description: "NCP 이론과 Gemini AI를 결합한 종합적인 스토리 분석 시스템"
+author: "Loop AI Team"
+created: "2024-12-10"
+updated: "2024-12-10"
+
+# 🎯 워크플로우 메타데이터
+metadata:
+  estimated_duration: "15-30분"
+  complexity_level: "high"
+  ai_provider: "gemini"
+  analysis_depth: "comprehensive"
+  output_format: "structured_json"
+  supported_languages: ["korean", "english"]
+  
+# ⚙️ 글로벌 설정
+global_config:
+  # AI 모델 설정
+  ai_model: "gemini-1.5-flash"
+  max_tokens: 4096
+  temperature: 0.3
+  top_p: 0.8
+  top_k: 40
+  
+  # 분석 파라미터
+  analysis_depth: "comprehensive"
+  scoring_scale: 100
+  confidence_threshold: 0.7
+  retry_attempts: 3
+  timeout_seconds: 300
+  
+  # 출력 설정
+  output_language: "korean"
+  include_raw_responses: false
+  generate_summary: true
+  create_actionable_items: true
+
+# 🔧 입력 데이터 스키마
+input_schema:
+  required:
+    - project_id: 
+        type: string
+        description: "프로젝트 고유 ID"
+    - story_content:
+        type: string
+        description: "분석할 스토리 내용"
+        min_length: 100
+        max_length: 50000
+    - characters:
+        type: array
+        description: "등장인물 목록"
+        items:
+          name: string
+          role: string
+          description: string
+          
+  optional:
+    - plot_points:
+        type: array
+        description: "플롯 포인트 목록"
+    - themes:
+        type: array
+        description: "작가가 의도한 테마"
+    - target_audience:
+        type: string
+        description: "목표 독자층"
+    - genre:
+        type: string
+        description: "장르"
+    - additional_context:
+        type: string
+        description: "추가 컨텍스트"
+
+# 📊 분석 단계 정의
+stages:
+  # Stage 1: 사전 분석 및 데이터 준비
+  - name: "data_preparation"
+    display_name: "데이터 준비 및 사전 분석"
+    description: "입력 데이터 검증 및 기본 통계 분석"
+    order: 1
+    dependencies: []
+    timeout_seconds: 60
+    
+    steps:
+      - name: "validate_input"
+        description: "입력 데이터 유효성 검사"
+        type: "validation"
+        config:
+          required_fields: ["story_content", "characters"]
+          min_content_length: 100
+          max_content_length: 50000
+          character_count_min: 1
+          
+      - name: "basic_statistics"
+        description: "기본 통계 계산"
+        type: "analysis"
+        config:
+          calculate:
+            - word_count
+            - character_count
+            - paragraph_count
+            - dialogue_ratio
+            - narrative_ratio
+            
+      - name: "content_preprocessing"
+        description: "내용 전처리 및 구조화"
+        type: "preprocessing"
+        config:
+          operations:
+            - remove_excess_whitespace
+            - normalize_quotations
+            - identify_dialogue
+            - extract_scene_breaks
+
+  # Stage 2: NCP 구조 분석
+  - name: "ncp_structural_analysis"
+    display_name: "NCP 구조 분석"
+    description: "Narrative Context Protocol 기반 구조 분석"
+    order: 2
+    dependencies: ["data_preparation"]
+    timeout_seconds: 120
+    
+    steps:
+      - name: "conflict_methodology_analysis"
+        description: "갈등 방법론 분석"
+        type: "ncp_analysis"
+        prompt_template: |
+          다음 스토리를 NCP 갈등 방법론으로 분석해주세요:
+          
+          {story_content}
+          
+          분석 항목:
+          1. 갈등 영역 (Universe): physics/biology/psychology/mind
+          2. 갈등 관심사 (Concern): 구체적인 문제 영역
+          3. 갈등 이슈 (Issue): 핵심 쟁점
+          4. 갈등 도메인 (Domain): 영향 범위
+          
+          각 항목을 명확히 식별하고 근거를 제시해주세요.
+        config:
+          max_tokens: 1500
+          temperature: 0.2
+          
+      - name: "character_methodology_analysis"
+        description: "캐릭터 방법론 분석 (MEEP)"
+        type: "ncp_analysis"
+        prompt_template: |
+          다음 등장인물들을 NCP MEEP 방법론으로 분석해주세요:
+          
+          등장인물: {characters}
+          스토리 컨텍스트: {story_content_summary}
+          
+          각 주요 캐릭터에 대해 분석:
+          1. Motivation (동기): 무엇을 원하는가?
+          2. Evaluation (평가): 어떻게 판단하는가?
+          3. Emotion (감정): 어떻게 느끼는가?
+          4. Purpose (목적): 왜 그렇게 행동하는가?
+        config:
+          max_tokens: 2000
+          temperature: 0.3
+          
+      - name: "story_dynamics_analysis"
+        description: "스토리 역학 시스템 분석"
+        type: "ncp_analysis"
+        prompt_template: |
+          스토리의 역학 시스템을 분석해주세요:
+          
+          {story_content}
+          
+          분석할 벡터:
+          1. Goal - Consequence (목표-결과)
+          2. Requirement - Prerequisite (요구-전제)
+          3. Cost - Dividend (비용-이익)  
+          4. Precondition - Forewarning (전제조건-예고)
+          
+          각 벡터 쌍의 균형과 논리성을 평가해주세요.
+        config:
+          max_tokens: 1800
+
+  # Stage 3: AI 강화 분석
+  - name: "ai_enhanced_analysis"
+    display_name: "AI 강화 종합 분석"
+    description: "Gemini AI를 활용한 심층 분석"
+    order: 3
+    dependencies: ["ncp_structural_analysis"]
+    timeout_seconds: 300
+    
+    parallel_execution: true
+    
+    steps:
+      - name: "synopsis_analysis"
+        description: "시놉시스 종합 분석"
+        type: "ai_analysis"
+        prompt_template: |
+          전문 소설 편집자로서 다음 작품을 종합 분석해주세요:
+          
+          [작품 정보]
+          장르: {genre}
+          목표 독자: {target_audience}
+          
+          [스토리]
+          {story_content}
+          
+          분석 요청:
+          1. 전체적인 완성도 (0-100점, 근거 포함)
+          2. 스토리텔링 강점 (5가지 이상)
+          3. 개선 필요 약점 (5가지 이상)
+          4. 독자 몰입도 예측 및 근거
+          5. 시장성 및 상업적 가능성
+          6. 구체적인 개선 제안 (우선순위 포함)
+          7. 출간 준비도 평가
+          
+          각 항목에 대해 구체적인 예시와 근거를 들어 설명해주세요.
+        config:
+          max_tokens: 3000
+          temperature: 0.2
+          
+      - name: "character_development_analysis"
+        description: "캐릭터 발전 분석"
+        type: "ai_analysis"
+        prompt_template: |
+          캐릭터 개발 전문가로서 등장인물들을 심층 분석해주세요:
+          
+          [등장인물 정보]
+          {characters_detailed}
+          
+          [스토리 컨텍스트]
+          {story_content}
+          
+          분석 항목:
+          1. 각 캐릭터의 아크 완성도 (0-100점)
+          2. 캐릭터 간 관계의 복잡성과 발전
+          3. 동기의 명확성과 일관성
+          4. 캐릭터 성장의 현실성
+          5. 독자 공감도 예측
+          6. 캐릭터별 개선 제안
+          7. 새로운 캐릭터 추가 필요성
+          
+          심리학적 관점에서 캐릭터의 행동 동기를 분석해주세요.
+        config:
+          max_tokens: 2500
+          temperature: 0.3
+          
+      - name: "plot_structure_analysis"
+        description: "플롯 구조 분석"
+        type: "ai_analysis"
+        prompt_template: |
+          플롯 구조 전문가로서 스토리 구조를 분석해주세요:
+          
+          [스토리]
+          {story_content}
+          
+          [플롯 포인트]
+          {plot_points}
+          
+          구조 분석:
+          1. 3막 구조의 균형성 (각 막의 비중과 기능)
+          2. 갈등의 단계적 발전과 강도
+          3. 클라이맥스의 위치와 효과성
+          4. 해결의 만족도와 완결성
+          5. 페이싱과 리듬감
+          6. 복선과 복회의 효과성
+          7. 플롯홀 및 논리적 오류 식별
+          8. 구조 개선을 위한 구체적 제안
+          
+          시나리오 기법 관점에서도 평가해주세요.
+        config:
+          max_tokens: 2800
+          temperature: 0.2
+          
+      - name: "theme_resonance_analysis"
+        description: "테마 공명 분석"
+        type: "ai_analysis"
+        prompt_template: |
+          문학 평론가로서 작품의 테마를 깊이 있게 분석해주세요:
+          
+          [작품]
+          {story_content}
+          
+          [작가 의도 테마]
+          {intended_themes}
+          
+          테마 분석:
+          1. 핵심 테마 식별 및 명확성 (0-100점)
+          2. 테마의 형상화 방식과 효과성
+          3. 서브테마와의 조화와 갈등
+          4. 현대적 의미와 독자 공감도
+          5. 테마 전달의 직접성 vs 은유성
+          6. 메시지의 독창성과 깊이
+          7. 사회적/철학적 가치와 의미
+          8. 테마 강화를 위한 제안
+          
+          문학사적 맥락에서도 평가해주세요.
+        config:
+          max_tokens: 2200
+          temperature: 0.4
+
+  # Stage 4: 독자 반응 예측 분석
+  - name: "reader_response_prediction"
+    display_name: "독자 반응 예측"
+    description: "다양한 독자층의 반응 예측 및 분석"
+    order: 4
+    dependencies: ["ai_enhanced_analysis"]
+    timeout_seconds: 180
+    
+    steps:
+      - name: "target_audience_analysis"
+        description: "타겟 독자층별 반응 분석"
+        type: "prediction_analysis"
+        prompt_template: |
+          독자 행동 분석가로서 다음 독자층별 반응을 예측해주세요:
+          
+          [작품 정보]
+          장르: {genre}
+          주요 테마: {main_themes}
+          캐릭터: {main_characters}
+          
+          [스토리 요약]
+          {story_summary}
+          
+          독자층별 분석:
+          1. 10-20대 독자 반응
+             - 관심도 예측 (0-100점)
+             - 몰입 포인트
+             - 거부감 요소
+             - 추천 가능성
+          
+          2. 30-40대 독자 반응
+             - 공감도 예측
+             - 현실성 평가
+             - 메시지 수용성
+             
+          3. 50대 이상 독자 반응
+             - 문학적 가치 평가
+             - 전통성 vs 혁신성
+             - 완성도 기대치
+          
+          각 연령대별 구체적 근거와 개선 방향을 제시해주세요.
+        config:
+          max_tokens: 2000
+          
+      - name: "engagement_prediction"
+        description: "독자 참여도 및 몰입도 예측"
+        type: "prediction_analysis"
+        prompt_template: |
+          독자 몰입도 전문가로서 다음을 분석해주세요:
+          
+          [작품]
+          {story_content}
+          
+          몰입도 분석:
+          1. 첫 장면의 흡입력 (0-100점)
+          2. 중간 이탈 위험 구간 식별
+          3. 클라이맥스까지 긴장감 유지도
+          4. 감정적 고조점들의 배치와 효과
+          5. 독자의 예측 가능성 vs 의외성
+          6. 페이지 터너 요소들
+          7. 완독률 예측과 근거
+          8. 재독률 가능성
+          
+          심리학적 근거와 함께 분석해주세요.
+        config:
+          max_tokens: 1800
+          
+      - name: "viral_potential_analysis"
+        description: "화제성 및 확산 가능성 분석"
+        type: "market_analysis"
+        prompt_template: |
+          콘텐츠 마케팅 전문가로서 작품의 화제성을 분석해주세요:
+          
+          [작품 정보]
+          {story_content}
+          {characters}
+          {themes}
+          
+          화제성 분석:
+          1. SNS 확산 가능성 (0-100점)
+          2. 밈 생성 가능한 요소들
+          3. 논쟁 유발 요소와 리스크
+          4. 인플루언서 관심도 예측
+          5. 미디어 어댑테이션 가능성
+          6. 팬덤 형성 가능성
+          7. 상품화/굿즈 잠재력
+          8. 마케팅 포인트 제안
+          
+          구체적인 마케팅 전략도 제시해주세요.
+        config:
+          max_tokens: 2000
+
+  # Stage 5: 기술적 품질 평가
+  - name: "technical_quality_assessment"
+    display_name: "기술적 품질 평가"
+    description: "문학 기법과 언어 사용의 기술적 품질 평가"
+    order: 5
+    dependencies: ["reader_response_prediction"]
+    timeout_seconds: 240
+    
+    steps:
+      - name: "prose_style_analysis"
+        description: "문체 및 산문 기법 분석"
+        type: "technical_analysis"
+        prompt_template: |
+          문체 분석 전문가로서 다음을 평가해주세요:
+          
+          [작품 텍스트]
+          {story_content}
+          
+          문체 분석:
+          1. 문장 구조와 리듬감 (0-100점)
+          2. 어휘 선택의 적절성과 다양성
+          3. 문체의 일관성과 개성
+          4. 장르에 맞는 톤 매치도
+          5. 대화체와 서술체의 균형
+          6. 은유와 직유의 효과적 사용
+          7. 감각적 표현과 이미지
+          8. 문체 개선을 위한 구체적 제안
+          
+          문학적 기법의 숙련도를 평가해주세요.
+        config:
+          max_tokens: 2000
+          
+      - name: "dialogue_analysis"
+        description: "대화 기법 분석"
+        type: "technical_analysis"
+        prompt_template: |
+          대화 작법 전문가로서 분석해주세요:
+          
+          [작품에서 대화 부분 추출]
+          {dialogue_samples}
+          
+          대화 분석:
+          1. 캐릭터별 말투 차별화 (0-100점)
+          2. 자연스러움과 현실성
+          3. 정보 전달의 효율성
+          4. 갈등과 긴장감 조성 효과
+          5. 하위 텍스트(subtext) 활용
+          6. 대화 태그와 동작 묘사
+          7. 대화를 통한 캐릭터 개성 표현
+          8. 개선이 필요한 대화 패턴
+          
+          시나리오 작법 관점에서도 평가해주세요.
+        config:
+          max_tokens: 1800
+          
+      - name: "pacing_rhythm_analysis"
+        description: "페이싱과 리듬 분석"
+        type: "technical_analysis"
+        prompt_template: |
+          페이싱 전문가로서 스토리의 리듬을 분석해주세요:
+          
+          [구조화된 스토리]
+          {story_segments}
+          
+          페이싱 분석:
+          1. 전체적인 리듬감 (0-100점)
+          2. 긴장-이완의 적절한 배치
+          3. 액션과 반성의 균형
+          4. 장면 전환의 부드러움
+          5. 정보 공개의 타이밍
+          6. 독자 호흡 고려도
+          7. 클라이맥스 준비 과정
+          8. 페이싱 개선 제안
+          
+          영화 편집 기법 관점에서도 분석해주세요.
+        config:
+          max_tokens: 1800
+
+  # Stage 6: 시장성 및 상업성 평가
+  - name: "commercial_viability_assessment"
+    display_name: "시장성 및 상업성 평가"
+    description: "출판 시장에서의 성공 가능성 평가"
+    order: 6
+    dependencies: ["technical_quality_assessment"]
+    timeout_seconds: 150
+    
+    steps:
+      - name: "market_positioning_analysis"
+        description: "시장 포지셔닝 분석"
+        type: "market_analysis"
+        prompt_template: |
+          출판 시장 분석가로서 다음을 평가해주세요:
+          
+          [작품 정보]
+          장르: {genre}
+          타겟: {target_audience}
+          주요 테마: {themes}
+          길이: {word_count}단어
+          
+          [스토리 요약]
+          {story_summary}
+          
+          시장성 분석:
+          1. 현재 시장 트렌드 매치도 (0-100점)
+          2. 경쟁 작품 대비 차별화 요소
+          3. 타겟 독자층 크기와 구매력
+          4. 계절성 및 출간 타이밍
+          5. 마케팅 포인트와 셀링 포인트
+          6. 예상 판매 부수와 근거
+          7. 시리즈화 가능성
+          8. 해외 번역 출간 가능성
+          
+          구체적인 시장 데이터와 함께 분석해주세요.
+        config:
+          max_tokens: 2200
+          
+      - name: "publisher_appeal_analysis"
+        description: "출판사 어필 포인트 분석"
+        type: "business_analysis"
+        prompt_template: |
+          출판 기획자로서 출판사 관점에서 평가해주세요:
+          
+          [작품 상세]
+          {story_content}
+          {market_analysis_summary}
+          
+          출판사 어필도:
+          1. 투자 대비 수익성 예측 (0-100점)
+          2. 편집 작업량과 비용
+          3. 마케팅 난이도와 전략
+          4. 리스크 요소와 대응 방안
+          5. 작가의 성장 가능성
+          6. 브랜딩과 시리즈 확장성
+          7. 출판사별 적합성 (문학/장르/대중)
+          8. 출판 제안서 작성 가이드
+          
+          출판사 의사결정 관점에서 분석해주세요.
+        config:
+          max_tokens: 1800
+
+  # Stage 7: 종합 평가 및 제안
+  - name: "comprehensive_evaluation"
+    display_name: "종합 평가 및 개선 제안"
+    description: "모든 분석 결과를 종합한 최종 평가"
+    order: 7
+    dependencies: ["commercial_viability_assessment"]
+    timeout_seconds: 200
+    
+    steps:
+      - name: "overall_score_calculation"
+        description: "종합 점수 산출"
+        type: "evaluation"
+        config:
+          scoring_weights:
+            story_structure: 0.25
+            character_development: 0.20
+            technical_quality: 0.20
+            reader_engagement: 0.15
+            theme_depth: 0.10
+            commercial_viability: 0.10
+          passing_score: 70
+          excellence_score: 85
+          
+      - name: "grade_assignment"
+        description: "등급 부여 및 평가"
+        type: "evaluation"
+        prompt_template: |
+          종합 문학 평가자로서 최종 등급을 부여해주세요:
+          
+          [모든 분석 결과 종합]
+          {all_analysis_summary}
+          
+          [점수 요약]
+          {score_breakdown}
+          
+          최종 평가:
+          1. 종합 등급 (A+ ~ F)
+          2. 등급 부여 근거
+          3. 주요 강점 TOP 5
+          4. 핵심 약점 TOP 5
+          5. 출간 준비도 (%)
+          6. 개선 우선순위 TOP 10
+          7. 예상 수정 기간
+          8. 작가 성장 잠재력 평가
+          
+          건설적이고 격려적인 톤으로 평가해주세요.
+        config:
+          max_tokens: 2500
+          
+      - name: "actionable_recommendations"
+        description: "실행 가능한 개선 제안"
+        type: "recommendation"
+        prompt_template: |
+          편집 컨설턴트로서 구체적인 개선 방안을 제시해주세요:
+          
+          [작품 현황]
+          {current_status}
+          
+          [분석 결과]
+          {comprehensive_analysis}
+          
+          실행 계획:
+          
+          Phase 1 (즉시 실행 - 1-2주):
+          - 즉각적인 수정 사항
+          - 명백한 오류 수정
+          - 쉬운 개선점
+          
+          Phase 2 (단기 개선 - 1-2개월):
+          - 구조적 수정
+          - 캐릭터 보완
+          - 플롯 정교화
+          
+          Phase 3 (중장기 발전 - 3-6개월):
+          - 전면적 재구성 (필요시)
+          - 스타일 개선
+          - 심화 작업
+          
+          각 단계별 구체적 작업 목록과 체크포인트를 제공해주세요.
+        config:
+          max_tokens: 3000
+
+# 🔍 품질 보증 및 검증
+quality_assurance:
+  validation_steps:
+    - name: "completeness_check"
+      description: "모든 분석 단계 완료 확인"
+      
+    - name: "consistency_validation"
+      description: "분석 결과 간 일관성 검증"
+      
+    - name: "score_verification"
+      description: "점수 산출 로직 검증"
+      
+    - name: "recommendation_quality"
+      description: "제안사항 실행 가능성 검토"
+
+# 🚨 에러 처리 및 복구
+error_handling:
+  retry_policy:
+    max_attempts: 3
+    backoff_strategy: "exponential"
+    base_delay: 5000  # milliseconds
+    
+  fallback_strategies:
+    - name: "partial_analysis"
+      description: "일부 단계 실패 시 가능한 분석만 수행"
+      
+    - name: "simplified_workflow"
+      description: "전체 실패 시 핵심 분석만 수행"
+      
+    - name: "human_review_required"
+      description: "중요한 오류 발생 시 수동 개입 요청"
+
+# 📊 출력 스키마
+output_schema:
+  structure:
+    metadata:
+      workflow_version: string
+      execution_time: string
+      total_steps: number
+      completed_steps: number
+      success_rate: number
+      
+    analysis_results:
+      ncp_analysis:
+        conflict_methodology: object
+        character_methodology: object
+        story_dynamics: object
+        
+      ai_analysis:
+        synopsis: object
+        characters: object
+        plot: object
+        themes: object
+        
+      predictions:
+        reader_response: object
+        engagement: object
+        market_viability: object
+        
+      evaluation:
+        overall_score: number
+        grade: string
+        strengths: array
+        weaknesses: array
+        recommendations: array
+        
+    actionable_items:
+      immediate_actions: array
+      short_term_goals: array
+      long_term_vision: array
+      
+    appendix:
+      raw_ai_responses: object  # optional
+      detailed_scores: object
+      confidence_intervals: object
+
+# 📈 성능 최적화
+performance_optimization:
+  parallel_execution:
+    enabled: true
+    max_concurrent_steps: 4
+    priority_queue: true
+    
+  caching:
+    enabled: true
+    cache_duration: 3600  # seconds
+    cache_key_strategy: "content_hash"
+    
+  resource_management:
+    memory_limit: "2GB"
+    cpu_limit: "4 cores"
+    network_timeout: 300
+
+# 🔒 보안 및 프라이버시
+security:
+  data_handling:
+    encrypt_in_transit: true
+    encrypt_at_rest: true
+    retention_policy: "30_days"
+    
+  access_control:
+    authentication_required: true
+    role_based_access: true
+    audit_logging: true
+    
+  privacy:
+    anonymize_logs: true
+    gdpr_compliant: true
+    opt_out_available: true
+
+# 📊 모니터링 및 분석
+monitoring:
+  metrics:
+    - execution_time
+    - success_rate
+    - user_satisfaction
+    - ai_response_quality
+    - error_frequency
+    
+  alerting:
+    - high_error_rate
+    - slow_performance
+    - ai_service_unavailable
+    - quota_exceeded
+    
+  reporting:
+    daily_summary: true
+    weekly_analytics: true
+    monthly_trends: true
+
+# 🔧 확장성 고려사항
+extensibility:
+  plugin_system:
+    enabled: true
+    supported_types:
+      - custom_analyzers
+      - specialized_evaluators
+      - domain_specific_workflows
+      
+  api_integration:
+    webhook_support: true
+    rest_api: true
+    graphql: true
+    
+  multi_language:
+    supported_languages: ["ko", "en", "ja", "zh"]
+    auto_detection: true
+    translation_support: true
+
+# 📚 문서화 및 지원
+documentation:
+  user_guide: "workflow_user_guide.md"
+  api_reference: "api_documentation.md"
+  troubleshooting: "troubleshooting_guide.md"
+  
+support:
+  community_forum: true
+  email_support: true
+  video_tutorials: true
+  
+training:
+  onboarding_flow: true
+  best_practices: true
+  case_studies: true
+
+# 🏁 워크플로우 완료
+completion_criteria:
+  required_conditions:
+    - all_critical_steps_completed
+    - minimum_quality_threshold_met
+    - no_blocking_errors
+    
+  success_indicators:
+    - overall_score_calculated
+    - recommendations_generated
+    - actionable_plan_created
+    
+  failure_conditions:
+    - critical_analysis_failed
+    - ai_service_unavailable
+    - invalid_input_data

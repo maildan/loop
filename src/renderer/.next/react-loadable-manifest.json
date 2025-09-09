@@ -1,1 +1,29 @@
-{}
+{
+  "components/common/AIAnalysisPanel.tsx -> @/shared/services/aiAnalysisService": {
+    "id": 3716,
+    "files": [
+      "static/chunks/vendors-5af1bd56-4d5703410efe9bb9.js",
+      "static/chunks/vendors-27f02048-11ae6b35cee68e79.js",
+      "static/chunks/vendors-4a7382ad-a6c60ecfc2632d68.js",
+      "static/chunks/vendors-4c7823de-7e28e81a4a92a81b.js",
+      "static/chunks/vendors-362d063c-fce59d021e3ff5a0.js",
+      "static/chunks/vendors-4aa88247-0e2b71fee6a1602f.js",
+      "static/chunks/vendors-6808aa01-a7897cc463b5e0b9.js",
+      "static/chunks/vendors-98a6762f-69eb37b41f0bba91.js",
+      "static/chunks/vendors-4f2283c0-030f633637803dfd.js",
+      "static/chunks/vendors-0fbe0e3f-474407fe7d6863f8.js",
+      "static/chunks/vendors-9a5e4ce4-32e29788cf16a046.js",
+      "static/chunks/vendors-89d5c698-13be9e9004610761.js",
+      "static/chunks/vendors-3dd6af37-4b767f538833b2fd.js",
+      "static/chunks/vendors-abbc7793-a22ba1979d51a727.js",
+      "static/chunks/vendors-238a3b35-cd4e2ff117d36ceb.js",
+      "static/chunks/vendors-dbd62b4f-afa6baed090230eb.js",
+      "static/chunks/vendors-fa70753b-9acf69cf3a1c7c49.js",
+      "static/chunks/vendors-eb2fbf4c-8fa39c3a65cd9827.js",
+      "static/chunks/vendors-b882d176-47d3f308124f7019.js",
+      "static/chunks/vendors-dbef7665-257833a420d9cfa3.js",
+      "static/chunks/vendors-377fed06-b7dbc18c1df9e177.js",
+      "static/chunks/716.768683d567496211.js"
+    ]
+  }
+}

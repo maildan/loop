@@ -2894,7 +2894,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
     // 🔥 집중모드와 사이드바 접기 분리
     const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
     // 🔥 디버깅: 사이드바 상태 확인
-    console.log('🔍 Sidebar States:', {
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_EDITOR', 'Sidebar States', {
         isSidebarCollapsed: isSidebarCollapsed,
         reasons: {
             sidebarCollapsed,
@@ -3396,7 +3396,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                 "TURBOPACK unreachable";
                             }
                         },
-                        sidebarCollapsed: sidebarCollapsed,
+                        sidebarCollapsed: isSidebarCollapsed,
                         onToggleSidebar: toggleSidebar,
                         showRightSidebar: state.showRightSidebar,
                         onToggleAISidebar: actions.toggleRightSidebar,
