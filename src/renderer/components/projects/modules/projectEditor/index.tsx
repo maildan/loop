@@ -519,36 +519,27 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 ProjectSidebar hover 영역 - pointer-events 강제 활성화 */}
+                {/* 🔥 ProjectSidebar hover 영역 - 완전 투명 */}
                 {isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-0 w-20 h-full z-[100] bg-red-500/50 cursor-pointer pointer-events-auto"
-                        style={{ pointerEvents: 'auto' }}
-                        onMouseEnter={(e) => {
-                            console.log('🚨 HOVER ACTIVATED!!! Event:', e);
-                            console.log('🚨 isSidebarCollapsed:', isSidebarCollapsed);
-                            console.log('🚨 Setting sidebarHovered to TRUE');
+                        className="absolute left-0 top-0 w-20 h-full z-[100] opacity-0 cursor-pointer"
+                        onMouseEnter={() => {
                             setSidebarHovered(true);
                             Logger.info('PROJECT_SIDEBAR', 'Hover activated');
                         }}
-                        onMouseLeave={(e) => {
-                            console.log('🚨 HOVER DEACTIVATED!!! Event:', e);
-                            console.log('🚨 Setting sidebarHovered to FALSE');
+                        onMouseLeave={() => {
                             setSidebarHovered(false);
                             Logger.info('PROJECT_SIDEBAR', 'Hover deactivated');
                         }}
-                        onClick={() => {
-                            console.log('🚨 CLICK DETECTED!!! This area is clickable!');
-                        }}
                     >
-                        {/* 완전 투명 - 시각적 요소 없음 */}
+                        {/* 완전 투명 hover 영역 */}
                     </div>
                 )}
 
-                {/* 🔥 ProjectSidebar 표시 - 디버깅 강화 */}
+                {/* 🔥 ProjectSidebar 표시 - 헤더 아래 위치 조정 */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-0 w-64 h-full z-[95] bg-blue-500/80 backdrop-blur-md border-r-4 border-blue-600 shadow-2xl transition-all duration-300 ease-out"
+                        className="absolute left-0 top-14 w-64 h-[calc(100%-3.5rem)] z-[150] bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-r border-gray-200 dark:border-gray-700 shadow-xl transition-all duration-300 ease-out pointer-events-auto"
                         onMouseEnter={() => {
                             console.log('🔥 SIDEBAR AREA ENTERED!!!');
                             setSidebarHovered(true);
@@ -558,43 +549,38 @@ export const ProjectEditor = memo(function ProjectEditor({
                             setSidebarHovered(false);
                         }}
                     >
-                        <div className="p-4 text-white font-bold text-xl">
-                            🎯 SIDEBAR IS VISIBLE!!!
-                            <br />
-                            sidebarHovered: {sidebarHovered.toString()}
-                            <br />
-                            isSidebarCollapsed: {isSidebarCollapsed.toString()}
+                        <div className="h-full overflow-y-auto p-4 pointer-events-auto">
+                            <ProjectSidebar
+                                projectId={projectId}
+                                currentView={state.currentView}
+                                onViewChange={actions.setCurrentView}
+                                structure={projectData?.structure || []}
+                                characters={projectData?.characters || []}
+                                collapsed={false}
+                                stats={{
+                                    wordCount: projectData?.writerStats?.wordCount || 0,
+                                    charCount: projectData?.writerStats?.charCount || 0,
+                                    paragraphCount: projectData?.writerStats?.paragraphCount || 0,
+                                    readingTime: projectData?.writerStats?.readingTime || 0,
+                                    wordGoal: projectData?.writerStats?.wordGoal || 1000,
+                                    progress: projectData?.writerStats?.progress || 0,
+                                    sessionTime: projectData?.writerStats?.sessionTime || 0,
+                                    wpm: projectData?.writerStats?.wpm || 0
+                                }}
+                                onAddStructure={() => {
+                                    actions.openNewChapterModal();
+                                    Logger.info('PROJECT_EDITOR', 'Add structure clicked from hover sidebar');
+                                }}
+                                onAddCharacter={() => {
+                                    actions.openNewCharacterModal();
+                                    Logger.info('PROJECT_EDITOR', 'Add character clicked from hover sidebar');
+                                }}
+                                onAddNote={() => {
+                                    actions.openNewNoteModal();
+                                    Logger.info('PROJECT_EDITOR', 'Add note clicked from hover sidebar');
+                                }}
+                            />
                         </div>
-                        <ProjectSidebar
-                            projectId={projectId}
-                            currentView={state.currentView}
-                            onViewChange={actions.setCurrentView}
-                            structure={projectData?.structure || []}
-                            characters={projectData?.characters || []}
-                            collapsed={false}
-                            stats={{
-                                wordCount: projectData?.writerStats?.wordCount || 0,
-                                charCount: projectData?.writerStats?.charCount || 0,
-                                paragraphCount: projectData?.writerStats?.paragraphCount || 0,
-                                readingTime: projectData?.writerStats?.readingTime || 0,
-                                wordGoal: projectData?.writerStats?.wordGoal || 1000,
-                                progress: projectData?.writerStats?.progress || 0,
-                                sessionTime: projectData?.writerStats?.sessionTime || 0,
-                                wpm: projectData?.writerStats?.wpm || 0
-                            }}
-                            onAddStructure={() => {
-                                actions.openNewChapterModal();
-                                Logger.info('PROJECT_EDITOR', 'Add structure clicked from hover sidebar');
-                            }}
-                            onAddCharacter={() => {
-                                actions.openNewCharacterModal();
-                                Logger.info('PROJECT_EDITOR', 'Add character clicked from hover sidebar');
-                            }}
-                            onAddNote={() => {
-                                actions.openNewNoteModal();
-                                Logger.info('PROJECT_EDITOR', 'Add note clicked from hover sidebar');
-                            }}
-                        />
                     </div>
                 )}
 

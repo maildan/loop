@@ -9,6 +9,7 @@ import { Project, ProjectCharacter, ProjectStructure, ProjectNote } from '../../
  * 🔥 Prisma 싱글톤 서비스
  * 매번 새로운 연결을 생성하지 않고 하나의 인스턴스를 재사용하여 성능 개선
  */
+
 class PrismaService {
   private static instance: PrismaService;
   private client: PrismaClient | null = null;
