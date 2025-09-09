@@ -2020,6 +2020,10 @@ body {
   background-color: #ffffffe6;
 }
 
+.bg-white\/95 {
+  background-color: #fffffff2;
+}
+
 .bg-yellow-100 {
   --tw-bg-opacity: 1;
   background-color: rgb(254 249 195 / var(--tw-bg-opacity, 1));
@@ -5181,8 +5185,8 @@ input, textarea, select, button {
   background-color: rgb(17 24 39 / var(--tw-bg-opacity, 1));
 }
 
-.dark\:bg-gray-900\/90:is(.dark *) {
-  background-color: #111827e6;
+.dark\:bg-gray-900\/95:is(.dark *) {
+  background-color: #111827f2;
 }
 
 .dark\:bg-green-900:is(.dark *) {

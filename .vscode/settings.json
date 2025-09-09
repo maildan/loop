@@ -3,7 +3,7 @@
     "*": true,
     "plaintext": false,
     "markdown": true,
-    "scminput": true
+    "scminput": true,
   },
   "github.copilot.advanced": {
     "length": 500,
@@ -12,8 +12,8 @@
     "stops": {
       "*": [
         "\n\n\n"
-      ]
-    }
+      ],
+    },
   },
   "github.copilot.chat.localeOverride": "ko",
   "github.copilot.chat.welcomeMessage": "disabled",
@@ -25,5 +25,5 @@
   },
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
-  "less.lint.unknownAtRules": "ignore"
+  "less.lint.unknownAtRules": "ignore",
 }

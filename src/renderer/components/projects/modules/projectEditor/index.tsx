@@ -519,10 +519,10 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 ProjectSidebar hover 영역 - 완전 투명 */}
+                {/* 🔥 ProjectSidebar hover 영역 - absolute positioning으로 수정 */}
                 {isSidebarCollapsed && (
                     <div
-                        className="fixed left-0 top-0 w-16 h-full z-50 opacity-0 cursor-pointer"
+                        className="absolute left-0 top-0 w-16 h-full z-50 opacity-0 cursor-pointer"
                         onMouseEnter={() => {
                             Logger.info('PROJECT_SIDEBAR', 'Hover activated');
                             setSidebarHovered(true);
@@ -536,10 +536,10 @@ export const ProjectEditor = memo(function ProjectEditor({
                     </div>
                 )}
 
-                {/* 🔥 ProjectSidebar 오버레이 - 축소된 크기 */}
+                {/* 🔥 ProjectSidebar 표시 - absolute positioning */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="fixed left-0 top-0 w-64 h-full z-60 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-r border-gray-200/50 dark:border-gray-700/50 shadow-2xl transform transition-all duration-300 ease-out"
+                        className="absolute left-0 top-0 w-64 h-full z-60 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-r border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-300 ease-out"
                         onMouseEnter={() => setSidebarHovered(true)}
                         onMouseLeave={() => setSidebarHovered(false)}
                     >
