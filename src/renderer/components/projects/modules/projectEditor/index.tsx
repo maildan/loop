@@ -519,45 +519,29 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 ProjectSidebar hover 영역 - 훨씬 큰 영역과 명확한 시각 피드백 */}
-                {isSidebarCollapsed && !tabBarHovered && (
+                {/* 🔥 ProjectSidebar hover 영역 - 완전 투명 */}
+                {isSidebarCollapsed && (
                     <div
-                        className="fixed left-0 top-0 w-12 h-full z-30 bg-blue-400/10 hover:bg-blue-500/20 transition-all duration-200 border-r-2 border-blue-400/30 hover:border-blue-500/50 cursor-pointer"
+                        className="fixed left-0 top-0 w-16 h-full z-50 opacity-0 cursor-pointer"
                         onMouseEnter={() => {
-                            console.log('🔥 HOVER DETECTED - Sidebar opening');
+                            Logger.info('PROJECT_SIDEBAR', 'Hover activated');
                             setSidebarHovered(true);
                         }}
                         onMouseLeave={() => {
-                            console.log('🔥 HOVER LEFT - Sidebar should close');
+                            Logger.info('PROJECT_SIDEBAR', 'Hover deactivated');
                             setSidebarHovered(false);
                         }}
                     >
-                        {/* 🔥 시각적 가이드 - 더 명확하게 */}
-                        <div className="absolute inset-0 flex flex-col items-center justify-center text-blue-600 dark:text-blue-400">
-                            <div className="w-6 h-6 mb-2 opacity-60 hover:opacity-100 transition-opacity">
-                                <svg viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-                                </svg>
-                            </div>
-                            <div className="text-xs font-medium transform rotate-90 whitespace-nowrap opacity-60 hover:opacity-100 transition-opacity">
-                                SIDEBAR
-                            </div>
-                        </div>
+                        {/* 완전 투명 - 시각적 요소 없음 */}
                     </div>
                 )}
 
-                {/* 🔥 ProjectSidebar hover 시 표시 - 더 안정적인 위치 */}
+                {/* 🔥 ProjectSidebar 오버레이 - 축소된 크기 */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="fixed left-0 top-0 w-80 h-full z-50 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-r border-gray-200 dark:border-gray-700 shadow-2xl transform transition-all duration-300 ease-out"
-                        onMouseEnter={() => {
-                            console.log('🔥 SIDEBAR ENTERED - Keeping open');
-                            setSidebarHovered(true);
-                        }}
-                        onMouseLeave={() => {
-                            console.log('🔥 SIDEBAR LEFT - Closing');
-                            setSidebarHovered(false);
-                        }}
+                        className="fixed left-0 top-0 w-64 h-full z-60 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-r border-gray-200/50 dark:border-gray-700/50 shadow-2xl transform transition-all duration-300 ease-out"
+                        onMouseEnter={() => setSidebarHovered(true)}
+                        onMouseLeave={() => setSidebarHovered(false)}
                     >
                         <ProjectSidebar
                             projectId={projectId}

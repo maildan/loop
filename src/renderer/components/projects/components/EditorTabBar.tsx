@@ -22,8 +22,8 @@ interface ContextMenuState {
 }
 
 const TAB_STYLES = {
-    // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar가 최상위 z-index 유지
-    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-50',
+    // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar가 절대 최상위 z-index 유지
+    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-[100]',
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
     tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-gray-200 dark:border-gray-700 cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
     activeTab: 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm',

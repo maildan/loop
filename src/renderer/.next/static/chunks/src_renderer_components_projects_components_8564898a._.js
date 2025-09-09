@@ -852,9 +852,9 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-// 🔥 프리컴파일된 스타일 (기가차드 원칙) - 상단 고정 위치
+// 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어
 const PROJECT_HEADER_STYLES = {
-    header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-50 h-12',
+    header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[90] h-12',
     headerLeft: 'flex items-center gap-3',
     headerCenter: 'flex items-center gap-3 max-w-md',
     headerRight: 'flex items-center gap-2 relative',
@@ -1407,8 +1407,8 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 const TAB_STYLES = {
-    // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar가 최상위 z-index 유지
-    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-50',
+    // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar가 절대 최상위 z-index 유지
+    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-[100]',
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
     tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-gray-200 dark:border-gray-700 cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
     activeTab: 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm',
