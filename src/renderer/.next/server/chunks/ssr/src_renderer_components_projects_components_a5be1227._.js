@@ -816,9 +816,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$t
 ;
 ;
 ;
-// 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar와 같은 수준 배치
+// 🔥 프리컴파일된 스타일 (기가차드 원칙) - 상단 고정 위치
 const PROJECT_HEADER_STYLES = {
-    header: 'flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-40',
+    header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-50 h-12',
     headerLeft: 'flex items-center gap-3',
     headerCenter: 'flex items-center gap-3 max-w-md',
     headerRight: 'flex items-center gap-2 relative',

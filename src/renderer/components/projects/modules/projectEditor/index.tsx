@@ -519,35 +519,45 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 ProjectSidebar hover 영역 - 크기 확대 및 위치 수정 */}
+                {/* 🔥 ProjectSidebar hover 영역 - 훨씬 큰 영역과 명확한 시각 피드백 */}
                 {isSidebarCollapsed && !tabBarHovered && (
                     <div
-                        className="absolute left-0 w-20 h-full z-35 transition-all duration-300 bg-gradient-to-r from-blue-50/10 to-transparent hover:from-blue-100/20 hover:to-blue-50/10 dark:from-blue-900/10 dark:to-transparent dark:hover:from-blue-800/20 dark:hover:to-blue-900/10"
-                        style={{ top: '0px' }}
+                        className="fixed left-0 top-0 w-12 h-full z-30 bg-blue-400/10 hover:bg-blue-500/20 transition-all duration-200 border-r-2 border-blue-400/30 hover:border-blue-500/50 cursor-pointer"
                         onMouseEnter={() => {
-                            console.log('Hover detected - setting sidebar hovered to true');
+                            console.log('🔥 HOVER DETECTED - Sidebar opening');
                             setSidebarHovered(true);
                         }}
                         onMouseLeave={() => {
-                            console.log('Mouse left hover area - setting sidebar hovered to false');
+                            console.log('🔥 HOVER LEFT - Sidebar should close');
                             setSidebarHovered(false);
                         }}
                     >
-                        {/* 🔥 hover 가이드 힌트 */}
-                        <div className="absolute left-4 top-20 text-xs text-gray-500 dark:text-gray-400 writing-vertical-rl opacity-60 hover:opacity-100 transition-opacity duration-200">
-                            사이드바
+                        {/* 🔥 시각적 가이드 - 더 명확하게 */}
+                        <div className="absolute inset-0 flex flex-col items-center justify-center text-blue-600 dark:text-blue-400">
+                            <div className="w-6 h-6 mb-2 opacity-60 hover:opacity-100 transition-opacity">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                                </svg>
+                            </div>
+                            <div className="text-xs font-medium transform rotate-90 whitespace-nowrap opacity-60 hover:opacity-100 transition-opacity">
+                                SIDEBAR
+                            </div>
                         </div>
-                        <div className="absolute left-2 top-32 w-1 h-8 bg-blue-400 dark:bg-blue-500 rounded-full opacity-30 hover:opacity-70 transition-opacity duration-200"></div>
                     </div>
                 )}
 
-                {/* 🔥 ProjectSidebar 표시 - 더 넓은 영역에서 나타남 */}
+                {/* 🔥 ProjectSidebar hover 시 표시 - 더 안정적인 위치 */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 w-80 h-full transition-all duration-400 ease-out transform backdrop-blur-lg z-50 bg-white/95 dark:bg-gray-900/95 border-r border-gray-200 dark:border-gray-700 shadow-2xl"
-                        style={{ top: '0px' }}
-                        onMouseEnter={() => setSidebarHovered(true)}
-                        onMouseLeave={() => setSidebarHovered(false)}
+                        className="fixed left-0 top-0 w-80 h-full z-50 bg-white/98 dark:bg-gray-900/98 backdrop-blur-md border-r border-gray-200 dark:border-gray-700 shadow-2xl transform transition-all duration-300 ease-out"
+                        onMouseEnter={() => {
+                            console.log('🔥 SIDEBAR ENTERED - Keeping open');
+                            setSidebarHovered(true);
+                        }}
+                        onMouseLeave={() => {
+                            console.log('🔥 SIDEBAR LEFT - Closing');
+                            setSidebarHovered(false);
+                        }}
                     >
                         <ProjectSidebar
                             projectId={projectId}
