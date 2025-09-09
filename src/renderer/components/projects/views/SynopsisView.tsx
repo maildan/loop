@@ -129,39 +129,16 @@ const SYNOPSIS_STYLES = {
 
 export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisViewProps): React.ReactElement {
     const currentEditor = useStructureStore((s) => s.currentEditor);
-    const synopsisId = propSynopsisId || (currentEditor?.editorType === 'synopsis' ? currentEditor.itemId : undefined) || 'global_synopsis';
-
-    // 🔥 상태 관리 - useStructureStore와 완전 연동
-    const [plotPoints, setPlotPoints] = useState<PlotPoint[]>(() => {
-        // 스토어에서 데이터 로드 시도
-        try {
-            const pid = currentEditor?.projectId;
-            if (pid && structures[pid]) {
-                const stored = structures[pid].find((it) => it.id === synopsisId);
-                if (stored && stored.content) {
-                    try {
-                        const parsed = JSON.parse(stored.content);
-                        if (Array.isArray(parsed)) {
-                            return parsed;
-                        }
-                    } catch (e) {
-                        Logger.warn('SYNOPSIS_VIEW', 'Failed to parse stored content', { error: e });
-                    }
-                }
-            }
-        } catch (error) {
-            Logger.error('SYNOPSIS_VIEW', 'Failed to load synopsis from store', { error });
-        }
-
-        // 빈 배열로 시작 (더미 데이터 제거)
-        return [];
-    });
-
-    // 🔥 currentEditor 또는 스토어 구조가 변경되면 상태 동기화
     const structures = useStructureStore((s) => s.structures);
     const updateStructureItem = useStructureStore((s) => s.updateStructureItem);
     const setCurrentEditor = useStructureStore((s) => s.setCurrentEditor);
 
+    const synopsisId = propSynopsisId || (currentEditor?.editorType === 'synopsis' ? currentEditor.itemId : undefined) || 'global_synopsis';
+
+    // 🔥 상태 관리 - 빈 배열로 시작하고 useEffect에서 로드
+    const [plotPoints, setPlotPoints] = useState<PlotPoint[]>([]);
+
+    // 🔥 초기 데이터 로드 및 스토어 변경 시 동기화
     useEffect(() => {
         try {
             const pid = currentEditor?.projectId;
@@ -172,14 +149,23 @@ export function SynopsisView({ synopsisId: propSynopsisId, onBack }: SynopsisVie
                         const parsed = JSON.parse(stored.content);
                         if (Array.isArray(parsed)) {
                             setPlotPoints(parsed);
+                            Logger.info('SYNOPSIS_VIEW', 'Synopsis loaded from store', {
+                                plotCount: parsed.length,
+                                projectId: pid,
+                                synopsisId
+                            });
+                            return;
                         }
                     } catch (e) {
                         Logger.warn('SYNOPSIS_VIEW', 'Failed to parse stored content during sync', { error: e });
                     }
                 }
             }
+
+            // 데이터가 없으면 빈 배열 유지
+            Logger.info('SYNOPSIS_VIEW', 'No stored synopsis data found, starting with empty array');
         } catch (e) {
-            Logger.warn('SYNOPSIS_VIEW', 'Sync error', { error: e });
+            Logger.warn('SYNOPSIS_VIEW', 'Error during synopsis sync', { error: e });
         }
     }, [structures, currentEditor, synopsisId]);
 
@@ -595,7 +581,7 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                     <circle
                                         cx={centerX}
                                         cy={centerY}
-                                        r="60"
+                                        r="70"
                                         fill="url(#act2Gradient)"
                                         stroke="#1F2937"
                                         strokeWidth="3"
@@ -605,15 +591,19 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                         x={centerX}
                                         y={centerY - 5}
                                         textAnchor="middle"
-                                        className="fill-white font-bold text-sm"
+                                        dominantBaseline="central"
+                                        className="fill-white font-bold text-base pointer-events-none"
+                                        style={{ fontSize: '16px' }}
                                     >
                                         스토리
                                     </text>
                                     <text
                                         x={centerX}
-                                        y={centerY + 10}
+                                        y={centerY + 15}
                                         textAnchor="middle"
-                                        className="fill-white text-xs"
+                                        dominantBaseline="central"
+                                        className="fill-white text-sm pointer-events-none"
+                                        style={{ fontSize: '12px' }}
                                     >
                                         시놉시스
                                     </text>
@@ -653,8 +643,8 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                                     <ellipse
                                                         cx={pos.x}
                                                         cy={pos.y}
-                                                        rx="80"
-                                                        ry="45"
+                                                        rx="90"
+                                                        ry="50"
                                                         fill={actGradient}
                                                         stroke="#1F2937"
                                                         strokeWidth="2"
@@ -664,12 +654,13 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                                     {/* 🔥 플롯 제목 */}
                                                     <text
                                                         x={pos.x}
-                                                        y={pos.y - 8}
+                                                        y={pos.y - 10}
                                                         textAnchor="middle"
-                                                        className="fill-white font-semibold text-xs"
-                                                        style={{ maxWidth: '140px' }}
+                                                        dominantBaseline="central"
+                                                        className="fill-white font-semibold pointer-events-none"
+                                                        style={{ fontSize: '13px' }}
                                                     >
-                                                        {plot.title.length > 15 ? plot.title.slice(0, 15) + '...' : plot.title}
+                                                        {plot.title.length > 12 ? plot.title.slice(0, 12) + '...' : plot.title}
                                                     </text>
 
                                                     {/* 🔥 막 표시 */}
@@ -677,7 +668,9 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                                         x={pos.x}
                                                         y={pos.y + 8}
                                                         textAnchor="middle"
-                                                        className="fill-white text-xs opacity-80"
+                                                        dominantBaseline="central"
+                                                        className="fill-white opacity-90 pointer-events-none"
+                                                        style={{ fontSize: '11px' }}
                                                     >
                                                         {act}막
                                                     </text>
@@ -686,9 +679,11 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                                     {plot.tensionLevel && (
                                                         <text
                                                             x={pos.x}
-                                                            y={pos.y + 20}
+                                                            y={pos.y + 25}
                                                             textAnchor="middle"
-                                                            className="fill-white text-xs"
+                                                            dominantBaseline="central"
+                                                            className="fill-white pointer-events-none"
+                                                            style={{ fontSize: '10px' }}
                                                         >
                                                             ⚡{plot.tensionLevel}
                                                         </text>
@@ -1040,9 +1035,9 @@ ${plot.foreshadowingPoints.map(f => `- ${f}`).join('\n')}
                                         <div className="flex justify-between items-center">
                                             <span className="text-gray-600 dark:text-gray-400">예측 가능성</span>
                                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${detailPlot.readerPredictability === 'predictable' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300' :
-                                                    detailPlot.readerPredictability === 'surprising' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
-                                                        detailPlot.readerPredictability === 'shocking' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
-                                                            'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
+                                                detailPlot.readerPredictability === 'surprising' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
+                                                    detailPlot.readerPredictability === 'shocking' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
+                                                        'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                                                 }`}>
                                                 {detailPlot.readerPredictability === 'predictable' ? '예측 가능' :
                                                     detailPlot.readerPredictability === 'surprising' ? '놀라운' :

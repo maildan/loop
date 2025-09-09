@@ -371,7 +371,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     return (
         <ProjectEditorLayout.Container className="relative overflow-hidden">
             {/* 🔥 tabBar 영역 항상 예약 + 조건부 ProjectHeader 표시 (확장된 hover 영역) */}
-            <div className="h-14 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+            <div className="h-14 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-50">
                 {/* 🔥 확장된 hover 감지 영역 - 상단 추가 */}
                 <div
                     className="absolute -top-6 left-0 right-0 h-6 z-10"
@@ -452,7 +452,7 @@ export const ProjectEditor = memo(function ProjectEditor({
 
                         {/* hover 시 ProjectHeader 오버레이 - 부드러운 슬라이드 다운 */}
                         {tabBarHovered && (
-                            <div className={`absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 ${tabBarHovered
+                            <div className={`absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 z-40 ${tabBarHovered
                                 ? 'opacity-100 transform translate-y-0'
                                 : 'opacity-0 transform -translate-y-2'
                                 }`}>
@@ -520,15 +520,15 @@ export const ProjectEditor = memo(function ProjectEditor({
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
                 {/* 🔥 ProjectSidebar hover 영역 - 왼쪽 끝자락 */}
-                {isSidebarCollapsed && (
+                {isSidebarCollapsed && !tabBarHovered && (
                     <div
-                        className="absolute left-0 top-0 w-4 h-full z-40"
+                        className="absolute left-0 top-0 w-4 h-full z-30"
                         onMouseEnter={() => setSidebarHovered(true)}
                         onMouseLeave={() => setSidebarHovered(false)}
                     >
                         {/* ProjectSidebar hover 시 표시 */}
                         {sidebarHovered && (
-                            <div className="absolute left-0 top-0 h-full transition-all duration-300 ease-in-out transform translate-x-0">
+                            <div className="absolute left-0 top-0 h-full transition-all duration-300 ease-in-out transform translate-x-0 z-30">
                                 <ProjectSidebar
                                     projectId={projectId}
                                     currentView={state.currentView}
