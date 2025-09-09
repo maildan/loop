@@ -498,10 +498,6 @@ body {
   z-index: 50;
 }
 
-.z-\[1000\] {
-  z-index: 1000;
-}
-
 .z-\[100\] {
   z-index: 100;
 }
@@ -516,6 +512,14 @@ body {
 
 .z-\[900\] {
   z-index: 900;
+}
+
+.z-\[950\] {
+  z-index: 950;
+}
+
+.z-\[960\] {
+  z-index: 960;
 }
 
 .z-\[99999\] {
@@ -795,6 +799,10 @@ body {
 
 .h-96 {
   height: 24rem;
+}
+
+.h-\[800px\] {
+  height: 800px;
 }
 
 .h-\[calc\(100\%-3\.5rem\)\] {
@@ -2526,6 +2534,10 @@ body {
 
 .pb-4 {
   padding-bottom: 1rem;
+}
+
+.pb-6 {
+  padding-bottom: 1.5rem;
 }
 
 .pb-8 {
@@ -4303,12 +4315,6 @@ input, textarea, select, button {
 .hover\:scale-110:hover {
   --tw-scale-x: 1.1;
   --tw-scale-y: 1.1;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.hover\:scale-\[1\.02\]:hover {
-  --tw-scale-x: 1.02;
-  --tw-scale-y: 1.02;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 

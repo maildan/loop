@@ -22,8 +22,8 @@ interface ContextMenuState {
 }
 
 const TAB_STYLES = {
-    // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar가 절대 최상위 z-index 유지
-    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-[1000]',
+    // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar z-index 적정선으로 조정
+    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-[950]', // 1000 → 950으로 감소
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
     tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-gray-200 dark:border-gray-700 cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
     activeTab: 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm',
@@ -34,7 +34,7 @@ const TAB_STYLES = {
     closeButton: 'hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-1 transition-all duration-200 opacity-0 group-hover:opacity-100',
     closeButtonVisible: 'opacity-100',
     newTabButton: 'px-3 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 rounded-md mx-2',
-    contextMenu: 'absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 z-[60] min-w-[180px]',
+    contextMenu: 'absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 z-[960] min-w-[180px]', // 60 → 960으로 증가
     contextMenuItem: 'px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2',
     contextMenuSeparator: 'border-t border-gray-200 dark:border-gray-600 my-1',
 } as const;

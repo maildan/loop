@@ -462,9 +462,32 @@ export function ProjectHeader({
             type="button"
             className={`${sidebarCollapsed ? PROJECT_HEADER_STYLES.iconButton : PROJECT_HEADER_STYLES.iconButtonActive} group relative`}
             onClick={onToggleSidebar}
+            onMouseEnter={() => {
+              // Zen Mode에서는 hover 시에만 사이드바 일시적으로 표시
+              if (sidebarCollapsed && onToggleZenMode) {
+                Logger.debug('PROJECT_HEADER', 'Sidebar hover in zen mode');
+              }
+            }}
           >
             <Sidebar size={16} />
+            <div className={PROJECT_HEADER_STYLES.tooltip}>
+              {sidebarCollapsed ? '사이드바 펼치기' : '사이드바 접기'}
+            </div>
           </button>
+
+          {/* Zen Mode 토글 버튼 */}
+          {onToggleZenMode && (
+            <button
+              type="button"
+              className={`${isZenMode ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`}
+              onClick={onToggleZenMode}
+            >
+              {isZenMode ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+              <div className={PROJECT_HEADER_STYLES.tooltip}>
+                {isZenMode ? '집중 모드 끄기' : '집중 모드 켜기'}
+              </div>
+            </button>
+          )}
         </div>
       </div>
 
