@@ -30,17 +30,17 @@ var _s = __turbopack_context__.k.signature();
 ;
 // 🔥 Scrivener Binder + iA Writer 스타일 사이드바
 const SIDEBAR_STYLES = {
-    // 기본 컨테이너 - 작가 친화적 디자인
-    container: 'flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out h-full relative shadow-sm',
+    // 기본 컨테이너 - 작가 친화적 디자인 (애니메이션 개선)
+    container: 'flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-out h-full relative shadow-sm will-change-transform',
     default: 'w-16',
-    expanded: 'w-72',
+    expanded: 'w-80',
     collapsed: 'w-0 overflow-hidden',
-    // 🔥 Scrivener Binder 스타일: 부드러운 슬라이드 효과
-    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-72 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-2xl z-40 transform -translate-x-full transition-all duration-500 ease-out backdrop-blur-sm',
+    // 🔥 Scrivener Binder 스타일: 부드러운 슬라이드 효과 (개선된 애니메이션)
+    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-80 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-2xl z-40 transform -translate-x-full transition-all duration-300 ease-out backdrop-blur-sm will-change-transform',
     hoverVisible: 'transform translate-x-0 opacity-100',
     hoverHidden: 'transform -translate-x-full opacity-90',
-    // hover 감지 영역 - 더 넓게 설정하여 사용성 향상  
-    hoverTrigger: 'absolute left-0 top-14 w-12 h-[calc(100%-3.5rem)] z-35 hover:w-16 transition-all duration-300',
+    // hover 감지 영역 - 더 넓게 설정하여 사용성 향상 (애니메이션 개선)
+    hoverTrigger: 'absolute left-0 top-14 w-12 h-[calc(100%-3.5rem)] z-35 hover:w-16 transition-all duration-200 ease-out will-change-transform',
     // 🔥 Scrivener Binder 스타일 메뉴 섹션
     menuSection: 'p-4 space-y-2 border-b border-gray-200/50 dark:border-gray-700/50',
     menuSectionTitle: 'text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 px-2',
@@ -832,6 +832,7 @@ __turbopack_context__.s({
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-left.js [app-client] (ecmascript) <export default as ChevronLeft>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$save$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Save$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/save.js [app-client] (ecmascript) <export default as Save>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$share$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Share2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/share-2.js [app-client] (ecmascript) <export default as Share2>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.js [app-client] (ecmascript) <export default as Trash2>");
@@ -854,7 +855,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 // 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어
 const PROJECT_HEADER_STYLES = {
-    header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[90] h-12',
+    header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[900] h-12',
     headerLeft: 'flex items-center gap-3',
     headerCenter: 'flex items-center gap-3 max-w-md',
     headerRight: 'flex items-center gap-2 relative',
@@ -1149,45 +1150,24 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                 className: PROJECT_HEADER_STYLES.header,
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: PROJECT_HEADER_STYLES.headerCenter,
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex items-center gap-2",
+                        className: PROJECT_HEADER_STYLES.headerLeft,
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            type: "button",
+                            className: PROJECT_HEADER_STYLES.backButton,
+                            onClick: onBack,
                             children: [
-                                isGoogleDocsProject && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-md text-xs font-medium",
-                                    children: [
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$cloud$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Cloud$3e$__["Cloud"], {
-                                            size: 12
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 375,
-                                            columnNumber: 17
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                            children: "Google Docs"
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 376,
-                                            columnNumber: 17
-                                        }, this)
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 374,
-                                    columnNumber: 15
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    type: "text",
-                                    value: title,
-                                    onChange: (e)=>onTitleChange(e.target.value),
-                                    placeholder: "프로젝트 제목",
-                                    className: PROJECT_HEADER_STYLES.titleInput,
-                                    style: {
-                                        width: '200px'
-                                    }
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__["ChevronLeft"], {
+                                    size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 379,
+                                    lineNumber: 376,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: "프로젝트 목록"
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                                    lineNumber: 377,
                                     columnNumber: 13
                                 }, this)
                             ]
@@ -1202,9 +1182,63 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: PROJECT_HEADER_STYLES.headerCenter,
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center gap-2",
+                            children: [
+                                isGoogleDocsProject && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "flex items-center gap-1 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 rounded-md text-xs font-medium",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$cloud$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Cloud$3e$__["Cloud"], {
+                                            size: 12
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                                            lineNumber: 387,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            children: "Google Docs"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                                            lineNumber: 388,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                                    lineNumber: 386,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    type: "text",
+                                    value: title,
+                                    onChange: (e)=>onTitleChange(e.target.value),
+                                    placeholder: "프로젝트 제목",
+                                    className: PROJECT_HEADER_STYLES.titleInput,
+                                    style: {
+                                        width: '200px'
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                                    lineNumber: 391,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                            lineNumber: 383,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                        lineNumber: 382,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: PROJECT_HEADER_STYLES.headerRight,
                         children: [
                             headerActions.map((action, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
                                     className: `${PROJECT_HEADER_STYLES.iconButton} group relative`,
                                     onClick: action.onClick,
                                     children: [
@@ -1212,7 +1246,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 399,
+                                            lineNumber: 412,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1222,7 +1256,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 402,
+                                                    lineNumber: 415,
                                                     columnNumber: 17
                                                 }, this),
                                                 action.shortcut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1230,29 +1264,30 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.shortcut
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 403,
+                                                    lineNumber: 416,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 401,
+                                            lineNumber: 414,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `action-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 394,
+                                    lineNumber: 406,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 409,
+                                lineNumber: 422,
                                 columnNumber: 11
                             }, this),
                             toolbarActions.map((action, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    type: "button",
                                     className: `${action.isActive ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`,
                                     onClick: action.onClick,
                                     children: [
@@ -1260,7 +1295,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 418,
+                                            lineNumber: 432,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1270,7 +1305,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 421,
+                                                    lineNumber: 435,
                                                     columnNumber: 17
                                                 }, this),
                                                 action.shortcut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1278,29 +1313,30 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.shortcut
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 422,
+                                                    lineNumber: 436,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 420,
+                                            lineNumber: 434,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `toolbar-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 413,
+                                    lineNumber: 426,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 428,
+                                lineNumber: 442,
                                 columnNumber: 11
                             }, this),
                             onToggleAISidebar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
                                 className: `${showRightSidebar ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`,
                                 onClick: onToggleAISidebar,
                                 children: [
@@ -1308,7 +1344,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 436,
+                                        lineNumber: 451,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1318,7 +1354,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "창작 파트너"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 439,
+                                                lineNumber: 454,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1326,40 +1362,41 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "함께 써봐요"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 440,
+                                                lineNumber: 455,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 438,
+                                        lineNumber: 453,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 432,
+                                lineNumber: 446,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
                                 className: `${sidebarCollapsed ? PROJECT_HEADER_STYLES.iconButton : PROJECT_HEADER_STYLES.iconButtonActive} group relative`,
                                 onClick: onToggleSidebar,
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$panel$2d$left$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sidebar$3e$__["Sidebar"], {
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 450,
+                                    lineNumber: 466,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 446,
+                                lineNumber: 461,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 391,
+                        lineNumber: 403,
                         columnNumber: 9
                     }, this)
                 ]
@@ -1373,7 +1410,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                 onClick: ()=>setActiveSlideBar(null)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                lineNumber: 457,
+                lineNumber: 473,
                 columnNumber: 9
             }, this)
         ]
@@ -1408,7 +1445,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 const TAB_STYLES = {
     // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar가 절대 최상위 z-index 유지
-    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-[100]',
+    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-[1000]',
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
     tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-gray-200 dark:border-gray-700 cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
     activeTab: 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm',
@@ -1686,6 +1723,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                                 columnNumber: 33
                             }, this),
                             canClose && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                type: "button",
                                 className: TAB_STYLES.closeButton,
                                 onClick: (e)=>handleTabCloseClick(e, tab.id),
                                 title: "탭 닫기",
@@ -1693,7 +1731,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                                     size: 12
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                                    lineNumber: 252,
+                                    lineNumber: 253,
                                     columnNumber: 37
                                 }, this)
                             }, void 0, false, {
@@ -1714,6 +1752,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                type: "button",
                 className: TAB_STYLES.newTabButton,
                 onClick: onNewTab,
                 title: "새 챕터 추가",
@@ -1721,12 +1760,12 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                     size: 16
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                    lineNumber: 265,
+                    lineNumber: 267,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                lineNumber: 260,
+                lineNumber: 261,
                 columnNumber: 13
             }, this),
             contextMenu.isOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1742,7 +1781,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                         children: "다른 탭 모두 닫기"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                        lineNumber: 277,
+                        lineNumber: 279,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1751,7 +1790,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                         children: "오른쪽 탭 모두 닫기"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                        lineNumber: 284,
+                        lineNumber: 286,
                         columnNumber: 21
                     }, this),
                     contextMenu.tabId !== 'main' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1760,7 +1799,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                                 className: TAB_STYLES.contextMenuSeparator
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                                lineNumber: 293,
+                                lineNumber: 295,
                                 columnNumber: 29
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1774,7 +1813,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                                 children: "이 탭 닫기"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                                lineNumber: 294,
+                                lineNumber: 296,
                                 columnNumber: 29
                             }, this)
                         ]
@@ -1782,7 +1821,7 @@ const EditorTabBar = /*#__PURE__*/ _s((0, __TURBOPACK__imported__module__$5b$pro
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/EditorTabBar.tsx",
-                lineNumber: 270,
+                lineNumber: 272,
                 columnNumber: 17
             }, this)
         ]

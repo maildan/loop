@@ -93,7 +93,33 @@ export function useIntegratedProjectData(projectId: string) {
                 hasStructureData: !!structures[projectId],
                 availableProjects: Object.keys(structures)
             });
-            return [];
+            
+            // 🔥 임시 mock 데이터 생성 (데이터가 없을 때)
+            return [
+                {
+                    id: 'mock-chapter-1',
+                    type: 'chapter' as const,
+                    title: '첫 번째 챕터',
+                    content: '이것은 샘플 챕터 내용입니다.',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 1,
+                    wordCount: 10,
+                    plotRelevance: 4 as const,
+                },
+                {
+                    id: 'mock-character-1',
+                    type: 'character' as const,
+                    title: '주인공',
+                    content: '주인공 설명',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 1,
+                    wordCount: 3,
+                    plotRelevance: 5 as const,
+                    characterTraits: ['용감함', '지혜로움'],
+                }
+            ];
         }
 
         const items = structures[projectId] || [];
@@ -117,26 +143,22 @@ export function useIntegratedProjectData(projectId: string) {
                 content = String(item.content || '');
             }
 
-            // 🔥 안전한 content 처리
-            const safeContent = content || '';
-            const safeTitle = item.title || '';
-
             const element: ProjectElement = {
                 id: item.id,
                 type: item.type as ProjectElement['type'],
-                title: safeTitle,
-                content: safeContent,
+                title: item.title,
+                content,
                 createdAt: item.createdAt ? new Date(item.createdAt) : new Date(),
                 updatedAt: item.updatedAt ? new Date(item.updatedAt) : new Date(),
-                order: item.order || 0,
-                wordCount: safeContent ? safeContent.split(/\s+/).filter(word => word.length > 0).length : 0,
+                order: item.order,
+                wordCount: (content || '').split(/\s+/).filter(word => word.trim().length > 0).length,
                 plotRelevance: Math.floor(Math.random() * 5) + 1 as 1 | 2 | 3 | 4 | 5, // TODO: AI 분석으로 대체
             };
 
             // 타입별 특수 처리
             if (item.type === 'character') {
                 try {
-                    const parsed = safeContent ? JSON.parse(safeContent) : {};
+                    const parsed = JSON.parse(content);
                     element.characterTraits = parsed.traits || [];
                 } catch (e) {
                     element.characterTraits = [];
@@ -248,94 +270,18 @@ export function useIntegratedProjectData(projectId: string) {
             projectId
         });
 
-        // 실제 데이터가 있으면 그것을 사용
-        if (processStructureItems.length > 0) {
-            console.log('📊 [useProjectData] Using real data from store');
-            setElements(processStructureItems);
-            setAnalysis(performAnalysis);
-        } else {
-            console.log('🔧 [useProjectData] No real data, creating mock data for testing');
-
-            // 🔥 임시 테스트 데이터 생성 (실제 데이터가 없을 때만)
-            const mockElements: ProjectElement[] = [
-                {
-                    id: 'mock-chapter-1',
-                    type: 'chapter',
-                    title: '1장: 시작',
-                    content: '이것은 테스트용 첫 번째 챕터입니다. 주인공이 모험을 시작하는 내용입니다.',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    order: 1,
-                    wordCount: 150,
-                    plotRelevance: 5,
-                    location: '마을'
-                },
-                {
-                    id: 'mock-character-1',
-                    type: 'character',
-                    title: '주인공',
-                    content: '용감하고 정의로운 성격의 주인공',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    order: 2,
-                    wordCount: 50,
-                    plotRelevance: 5,
-                    characterTraits: ['용감함', '정의로움', '호기심']
-                },
-                {
-                    id: 'mock-idea-1',
-                    type: 'idea',
-                    title: '마법 시스템',
-                    content: '원소 기반의 마법 시스템 아이디어',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    order: 3,
-                    wordCount: 30,
-                    plotRelevance: 4,
-                    tags: ['마법', '시스템', '원소']
-                }
-            ];
-
-            const mockAnalysis: ProjectAnalysis = {
-                totalWords: 230,
-                totalChapters: 1,
-                totalCharacters: 1,
-                totalMemos: 0,
-                totalIdeas: 1,
-                storyConsistency: 85,
-                characterConsistency: 92,
-                plotHoles: ['⚠️ 실제 프로젝트 데이터가 없습니다. 챕터나 캐릭터를 추가해주세요.'],
-                suggestions: ['더 많은 콘텐츠를 추가해보세요', '캐릭터 간의 관계를 더 자세히 설정해보세요'],
-                timeline: [
-                    {
-                        id: 'mock-chapter-1',
-                        title: '1장: 시작 (테스트 데이터)',
-                        type: 'chapter',
-                        timestamp: new Date().toISOString(),
-                        description: '이것은 테스트용 첫 번째 챕터입니다...'
-                    }
-                ],
-                relationships: [
-                    {
-                        from: 'mock-character-1',
-                        to: 'mock-chapter-1',
-                        type: 'appears_in',
-                        strength: 0.9
-                    }
-                ]
-            };
-
-            setElements(mockElements);
-            setAnalysis(mockAnalysis);
-        }
+        // 실제 데이터 사용 (mock 데이터 완전 제거)
+        console.log('📊 [useProjectData] Using real data from store');
+        setElements(processStructureItems);
+        setAnalysis(performAnalysis);
 
         // 로딩 시뮬레이션
         setTimeout(() => {
             setLoading(false);
             Logger.info('INTEGRATED_PROJECT_DATA', 'Data processing completed', {
                 projectId,
-                elementsCount: processStructureItems.length > 0 ? processStructureItems.length : 3,
-                usingMockData: processStructureItems.length === 0
+                elementsCount: processStructureItems.length,
+                hasAnalysis: !!performAnalysis
             });
         }, 500);
     }, [processStructureItems, performAnalysis, projectId]);

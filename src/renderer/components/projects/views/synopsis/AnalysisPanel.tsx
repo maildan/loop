@@ -10,10 +10,10 @@ interface AnalysisPanelProps {
     getRelatedElements: (elementId: string) => ProjectElement[];
 }
 
-export const AnalysisPanel: React.FC<AnalysisPanelProps> = ({ 
-    analysis, 
-    selectedElement, 
-    getRelatedElements 
+export const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
+    analysis,
+    selectedElement,
+    getRelatedElements
 }) => {
     return (
         <div className="w-80 bg-gray-50 dark:bg-gray-800 border-l dark:border-gray-700 flex flex-col">

@@ -50,7 +50,19 @@ export const ProjectEditor = memo(function ProjectEditor({
     // structure store actions
     const addStructureItem = useStructureStore((s) => s.addStructureItem);
     const setCurrentEditor = useStructureStore((s) => s.setCurrentEditor);
+    const loadStructuresFromDB = useStructureStore((s) => s.loadStructuresFromDB); // 🔥 새로 추가
     const { settings, updateSetting } = useSettings();
+
+    // 🔥 프로젝트 변경 시 DB에서 구조 데이터 로드
+    useEffect(() => {
+        if (projectId) {
+            console.log('🔄 [ProjectEditor] Loading structures from DB for project:', projectId);
+            loadStructuresFromDB(projectId).catch(error => {
+                console.error('❌ [ProjectEditor] Failed to load structures from DB:', error);
+                Logger.error('PROJECT_EDITOR', 'Failed to load structures from DB', { projectId, error });
+            });
+        }
+    }, [projectId, loadStructuresFromDB]);
 
     // NOTE: error/loading rendering handled later after hooks are declared
 
@@ -246,7 +258,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                             contentLength: content.length,
                                             contentPreview: content.substring(0, 100) + '...'
                                         });
-                                        
+
                                         if (activeTab) {
                                             // 탭 업데이트
                                             actions.updateTab(activeTab.id, {
@@ -378,154 +390,71 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     return (
         <ProjectEditorLayout.Container className="relative overflow-hidden">
-            {/* 🔥 tabBar 영역 항상 예약 + 조건부 ProjectHeader 표시 (확장된 hover 영역) */}
-            <div className="h-14 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-50">
-                {/* 🔥 확장된 hover 감지 영역 - 상단 추가 */}
-                <div
-                    className="absolute -top-6 left-0 right-0 h-6 z-10"
-                    onMouseEnter={() => setTabBarHovered(true)}
-                    onMouseLeave={() => setTabBarHovered(false)}
-                />
-
-                {!isSidebarCollapsed ? (
-                    <ProjectEditorLayout.Header>
-                        <ProjectHeader
-                            title={projectData?.title || '프로젝트'}
-                            projectId={projectId} // 🔥 올바른 projectId 전달
-                            projectContent={projectData?.content || ''} // 🔥 누락된 projectContent 추가
-                            onTitleChange={(title) => {
-                                projectData?.setTitle(title);
-                                Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
-                            }}
-                            onBack={() => {
-                                Logger.debug('PROJECT_EDITOR', 'Back button clicked');
-                            }}
-                            sidebarCollapsed={state.collapsed}
-                            onToggleSidebar={actions.toggleCollapsed}
-                            showRightSidebar={state.showRightSidebar}
-                            onToggleAISidebar={actions.toggleRightSidebar}
-                            isZenMode={isZenMode}
-                            onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
-                            onSave={async () => {
-                                try {
-                                    // 모든 변경사항 저장
-                                    if (projectData?.saveProject) {
-                                        await projectData.saveProject();
-                                        handleSaveSuccess();
-                                        Logger.info('PROJECT_EDITOR', 'Project saved successfully');
-                                    }
-                                } catch (error) {
-                                    Logger.error('PROJECT_EDITOR', 'Save failed', error);
+            {/* 🔥 ProjectHeader 고정 영역 */}
+            <div className="h-14 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-[900]">
+                <ProjectEditorLayout.Header>
+                    <ProjectHeader
+                        title={projectData?.title || '프로젝트'}
+                        projectId={projectId}
+                        projectContent={projectData?.content || ''}
+                        onTitleChange={(title) => {
+                            projectData?.setTitle(title);
+                            Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
+                        }}
+                        onBack={() => {
+                            Logger.debug('PROJECT_EDITOR', 'Back button clicked');
+                            // /projects로 이동
+                            if (typeof window !== 'undefined') {
+                                window.location.href = '/projects';
+                            }
+                        }}
+                        sidebarCollapsed={state.collapsed}
+                        onToggleSidebar={actions.toggleCollapsed}
+                        showRightSidebar={state.showRightSidebar}
+                        onToggleAISidebar={actions.toggleRightSidebar}
+                        isZenMode={isZenMode}
+                        onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
+                        onSave={async () => {
+                            try {
+                                if (projectData?.saveProject) {
+                                    await projectData.saveProject();
+                                    handleSaveSuccess();
+                                    Logger.info('PROJECT_EDITOR', 'Project saved successfully');
                                 }
-                            }}
-                            onShare={() => {
-                                actions.openShareDialog();
-                                Logger.info('PROJECT_EDITOR', 'Share dialog opened');
-                            }}
-                            onDownload={async () => {
-                                try {
-                                    // 프로젝트를 파일로 다운로드
-                                    const content = JSON.stringify(projectData, null, 2);
-                                    const blob = new Blob([content], { type: 'application/json' });
-                                    const url = URL.createObjectURL(blob);
-                                    const a = document.createElement('a');
-                                    a.href = url;
-                                    a.download = `${projectData?.title || 'project'}.json`;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    document.body.removeChild(a);
-                                    URL.revokeObjectURL(url);
-                                    Logger.info('PROJECT_EDITOR', 'Project downloaded');
-                                } catch (error) {
-                                    Logger.error('PROJECT_EDITOR', 'Download failed', error);
-                                }
-                            }}
-                            onDelete={() => {
-                                actions.openDeleteDialog();
-                                Logger.info('PROJECT_EDITOR', 'Delete dialog opened');
-                            }}
-                        />
-                    </ProjectEditorLayout.Header>
-                ) : (
-                    /* 사이드바 접힘: hover 영역 + 조건부 ProjectHeader */
-                    <div
-                        className="w-full h-full flex items-center justify-center relative"
-                        onMouseEnter={() => setTabBarHovered(true)}
-                        onMouseLeave={() => setTabBarHovered(false)}
-                    >
-                        {/* tabBar 영역 placeholder */}
-                        <div className="text-gray-200 text-sm">
-
-                        </div>
-
-                        {/* hover 시 ProjectHeader 오버레이 - 부드러운 슬라이드 다운 */}
-                        {tabBarHovered && (
-                            <div className={`absolute inset-0 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-all duration-300 z-40 ${tabBarHovered
-                                ? 'opacity-100 transform translate-y-0'
-                                : 'opacity-0 transform -translate-y-2'
-                                }`}>
-                                <ProjectEditorLayout.Header>
-                                    <ProjectHeader
-                                        title={projectData?.title || '프로젝트'}
-                                        projectId={projectId} // 🔥 올바른 projectId 전달
-                                        projectContent={projectData?.content || ''} // 🔥 누락된 projectContent 추가
-                                        onTitleChange={(title) => {
-                                            projectData?.setTitle(title);
-                                            Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
-                                        }}
-                                        onBack={() => {
-                                            Logger.debug('PROJECT_EDITOR', 'Back button clicked');
-                                        }}
-                                        sidebarCollapsed={state.collapsed}
-                                        onToggleSidebar={actions.toggleCollapsed}
-                                        showRightSidebar={state.showRightSidebar}
-                                        onToggleAISidebar={actions.toggleRightSidebar}
-                                        isZenMode={isZenMode}
-                                        onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
-                                        onSave={async () => {
-                                            try {
-                                                if (projectData?.saveProject) {
-                                                    await projectData.saveProject();
-                                                    handleSaveSuccess();
-                                                    Logger.info('PROJECT_EDITOR', 'Project saved successfully');
-                                                }
-                                            } catch (error) {
-                                                Logger.error('PROJECT_EDITOR', 'Save failed', error);
-                                            }
-                                        }}
-                                        onShare={() => {
-                                            Logger.debug('PROJECT_EDITOR', 'Share button clicked');
-                                        }}
-                                        onDownload={() => {
-                                            try {
-                                                const data = JSON.stringify(projectData, null, 2);
-                                                const blob = new Blob([data], { type: 'application/json' });
-                                                const url = URL.createObjectURL(blob);
-                                                const a = document.createElement('a');
-                                                a.href = url;
-                                                a.download = `${projectData?.title || 'project'}.json`;
-                                                document.body.appendChild(a);
-                                                a.click();
-                                                document.body.removeChild(a);
-                                                URL.revokeObjectURL(url);
-                                                Logger.info('PROJECT_EDITOR', 'Project downloaded');
-                                            } catch (error) {
-                                                Logger.error('PROJECT_EDITOR', 'Download failed', error);
-                                            }
-                                        }}
-                                        onDelete={() => {
-                                            actions.openDeleteDialog();
-                                            Logger.info('PROJECT_EDITOR', 'Delete dialog opened');
-                                        }}
-                                    />
-                                </ProjectEditorLayout.Header>
-                            </div>
-                        )}
-                    </div>
-                )}
+                            } catch (error) {
+                                Logger.error('PROJECT_EDITOR', 'Save failed', error);
+                            }
+                        }}
+                        onShare={() => {
+                            actions.openShareDialog();
+                            Logger.info('PROJECT_EDITOR', 'Share dialog opened');
+                        }}
+                        onDownload={async () => {
+                            try {
+                                const content = JSON.stringify(projectData, null, 2);
+                                const blob = new Blob([content], { type: 'application/json' });
+                                const url = URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.href = url;
+                                a.download = `${projectData?.title || 'project'}.json`;
+                                document.body.appendChild(a);
+                                a.click();
+                                document.body.removeChild(a);
+                                URL.revokeObjectURL(url);
+                                Logger.info('PROJECT_EDITOR', 'Project downloaded');
+                            } catch (error) {
+                                Logger.error('PROJECT_EDITOR', 'Download failed', error);
+                            }
+                        }}
+                        onDelete={() => {
+                            actions.openDeleteDialog();
+                            Logger.info('PROJECT_EDITOR', 'Delete dialog opened');
+                        }}
+                    />
+                </ProjectEditorLayout.Header>
             </div>
 
-            {/* 메인 컨텐츠 */}
+            {/* 🔥 메인 컨텐츠 영역 */}
             <ProjectEditorLayout.Main>
                 {/* 🔥 ProjectSidebar hover 영역 - 완전 투명 */}
                 {isSidebarCollapsed && (

@@ -27,7 +27,7 @@ import { Logger } from '../../../../shared/logger';
 
 // 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어
 const PROJECT_HEADER_STYLES = {
-  header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[90] h-12',
+  header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[900] h-12',
   headerLeft: 'flex items-center gap-3',
   headerCenter: 'flex items-center gap-3 max-w-md',
   headerRight: 'flex items-center gap-2 relative',
@@ -366,7 +366,19 @@ export function ProjectHeader({
   return (
     <>
       <div className={PROJECT_HEADER_STYLES.header}>
-        {/* 🔥 프로젝트 제목 (왼쪽) */}
+        {/* 🔥 뒤로가기 버튼 (왼쪽) */}
+        <div className={PROJECT_HEADER_STYLES.headerLeft}>
+          <button
+            type="button"
+            className={PROJECT_HEADER_STYLES.backButton}
+            onClick={onBack}
+          >
+            <ChevronLeft size={16} />
+            <span>프로젝트 목록</span>
+          </button>
+        </div>
+
+        {/* 🔥 프로젝트 제목 (중앙) */}
         <div className={PROJECT_HEADER_STYLES.headerCenter}>
           <div className="flex items-center gap-2">
             {/* 🔥 Google Docs 표시 배지 */}
@@ -393,6 +405,7 @@ export function ProjectHeader({
           {headerActions.map((action, index) => (
             <button
               key={`action-${index}`}
+              type="button"
               className={`${PROJECT_HEADER_STYLES.iconButton} group relative`}
               onClick={action.onClick}
             >
@@ -412,6 +425,7 @@ export function ProjectHeader({
           {toolbarActions.map((action, index) => (
             <button
               key={`toolbar-${index}`}
+              type="button"
               className={`${action.isActive ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`}
               onClick={action.onClick}
             >
@@ -430,6 +444,7 @@ export function ProjectHeader({
           {/* 🔥 AI 창작 파트너 토글 */}
           {onToggleAISidebar && (
             <button
+              type="button"
               className={`${showRightSidebar ? PROJECT_HEADER_STYLES.iconButtonActive : PROJECT_HEADER_STYLES.iconButton} group relative`}
               onClick={onToggleAISidebar}
             >
@@ -444,6 +459,7 @@ export function ProjectHeader({
 
           {/* UI 컨트롤들 */}
           <button
+            type="button"
             className={`${sidebarCollapsed ? PROJECT_HEADER_STYLES.iconButton : PROJECT_HEADER_STYLES.iconButtonActive} group relative`}
             onClick={onToggleSidebar}
           >

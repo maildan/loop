@@ -40,19 +40,19 @@ interface ProjectSidebarProps {
 
 // 🔥 Scrivener Binder + iA Writer 스타일 사이드바
 const SIDEBAR_STYLES = {
-    // 기본 컨테이너 - 작가 친화적 디자인
-    container: 'flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-500 ease-out h-full relative shadow-sm',
+    // 기본 컨테이너 - 작가 친화적 디자인 (애니메이션 개선)
+    container: 'flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-out h-full relative shadow-sm will-change-transform',
     default: 'w-16', // 🔥 기본 상태: 아이콘만 표시 (미니멀)
-    expanded: 'w-72', // 🔥 hover 시: Scrivener Binder 크기로 확장
+    expanded: 'w-80', // 🔥 hover 시: 더 넓은 320px로 확장
     collapsed: 'w-0 overflow-hidden', // 🔥 완전 숨김
 
-    // 🔥 Scrivener Binder 스타일: 부드러운 슬라이드 효과
-    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-72 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-2xl z-40 transform -translate-x-full transition-all duration-500 ease-out backdrop-blur-sm',
+    // 🔥 Scrivener Binder 스타일: 부드러운 슬라이드 효과 (개선된 애니메이션)
+    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-80 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-2xl z-40 transform -translate-x-full transition-all duration-300 ease-out backdrop-blur-sm will-change-transform',
     hoverVisible: 'transform translate-x-0 opacity-100',
     hoverHidden: 'transform -translate-x-full opacity-90',
 
-    // hover 감지 영역 - 더 넓게 설정하여 사용성 향상  
-    hoverTrigger: 'absolute left-0 top-14 w-12 h-[calc(100%-3.5rem)] z-35 hover:w-16 transition-all duration-300',
+    // hover 감지 영역 - 더 넓게 설정하여 사용성 향상 (애니메이션 개선)
+    hoverTrigger: 'absolute left-0 top-14 w-12 h-[calc(100%-3.5rem)] z-35 hover:w-16 transition-all duration-200 ease-out will-change-transform',
 
     // 🔥 Scrivener Binder 스타일 메뉴 섹션
     menuSection: 'p-4 space-y-2 border-b border-gray-200/50 dark:border-gray-700/50',

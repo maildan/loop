@@ -16,6 +16,7 @@ interface StructureStore {
 
     // 🔥 액션들
     setStructures: (projectId: string, structures: ProjectStructure[]) => void;
+    loadStructuresFromDB: (projectId: string) => Promise<void>; // 🔥 새로 추가: DB에서 구조 로드
     addStructureItem: (projectId: string, item: ProjectStructure) => Promise<void>;
     updateStructureItem: (projectId: string, itemId: string, updates: Partial<ProjectStructure>) => Promise<void>;
     deleteStructureItem: (projectId: string, itemId: string) => Promise<void>;
@@ -40,6 +41,44 @@ export const useStructureStore = create<StructureStore>()(
                         [projectId]: structures,
                     },
                 })),
+
+            // 🔥 DB에서 구조 데이터 로드
+            loadStructuresFromDB: async (projectId) => {
+                try {
+                    console.log('🔍 [useStructureStore] loadStructuresFromDB called:', { projectId });
+
+                    if (!window.electronAPI?.projects?.getStructure) {
+                        console.warn('⚠️ [useStructureStore] electronAPI.projects.getStructure not available');
+                        return;
+                    }
+
+                    const result = await window.electronAPI.projects.getStructure(projectId);
+
+                    if (result.success && result.data) {
+                        console.log('📊 [useStructureStore] Loaded structures from DB:', {
+                            projectId,
+                            count: result.data.length,
+                            structures: result.data.map(s => ({ id: s.id, title: s.title, type: s.type }))
+                        });
+
+                        // DB 데이터로 상태 업데이트
+                        set((state) => ({
+                            structures: {
+                                ...state.structures,
+                                [projectId]: result.data || [],
+                            },
+                        }));
+
+                        Logger.info('STRUCTURE_STORE', `✅ Loaded ${result.data.length} structures from DB`, { projectId });
+                    } else {
+                        console.log('📭 [useStructureStore] No structures found in DB or failed to load:', result.error);
+                        Logger.warn('STRUCTURE_STORE', 'Failed to load structures from DB', { projectId, error: result.error });
+                    }
+                } catch (error) {
+                    console.error('❌ [useStructureStore] Error loading structures from DB:', error);
+                    Logger.error('STRUCTURE_STORE', 'Error loading structures from DB', error);
+                }
+            },
 
             // 🔥 구조 아이템 추가 (DB 저장 포함)
             addStructureItem: async (projectId, item) => {

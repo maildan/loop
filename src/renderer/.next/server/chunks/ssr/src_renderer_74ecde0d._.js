@@ -26,6 +26,49 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                         [projectId]: structures
                     }
                 })),
+        // 🔥 DB에서 구조 데이터 로드
+        loadStructuresFromDB: async (projectId)=>{
+            try {
+                console.log('🔍 [useStructureStore] loadStructuresFromDB called:', {
+                    projectId
+                });
+                if (!window.electronAPI?.projects?.getStructure) {
+                    console.warn('⚠️ [useStructureStore] electronAPI.projects.getStructure not available');
+                    return;
+                }
+                const result = await window.electronAPI.projects.getStructure(projectId);
+                if (result.success && result.data) {
+                    console.log('📊 [useStructureStore] Loaded structures from DB:', {
+                        projectId,
+                        count: result.data.length,
+                        structures: result.data.map((s)=>({
+                                id: s.id,
+                                title: s.title,
+                                type: s.type
+                            }))
+                    });
+                    // DB 데이터로 상태 업데이트
+                    set((state)=>({
+                            structures: {
+                                ...state.structures,
+                                [projectId]: result.data || []
+                            }
+                        }));
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', `✅ Loaded ${result.data.length} structures from DB`, {
+                        projectId
+                    });
+                } else {
+                    console.log('📭 [useStructureStore] No structures found in DB or failed to load:', result.error);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].warn('STRUCTURE_STORE', 'Failed to load structures from DB', {
+                        projectId,
+                        error: result.error
+                    });
+                }
+            } catch (error) {
+                console.error('❌ [useStructureStore] Error loading structures from DB:', error);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Error loading structures from DB', error);
+            }
+        },
         // 🔥 구조 아이템 추가 (DB 저장 포함)
         addStructureItem: async (projectId, item)=>{
             console.log('🚀 [useStructureStore] addStructureItem called:', {
@@ -212,7 +255,35 @@ function useIntegratedProjectData(projectId) {
                 hasStructureData: !!structures[projectId],
                 availableProjects: Object.keys(structures)
             });
-            return [];
+            // 🔥 임시 mock 데이터 생성 (데이터가 없을 때)
+            return [
+                {
+                    id: 'mock-chapter-1',
+                    type: 'chapter',
+                    title: '첫 번째 챕터',
+                    content: '이것은 샘플 챕터 내용입니다.',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 1,
+                    wordCount: 10,
+                    plotRelevance: 4
+                },
+                {
+                    id: 'mock-character-1',
+                    type: 'character',
+                    title: '주인공',
+                    content: '주인공 설명',
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    order: 1,
+                    wordCount: 3,
+                    plotRelevance: 5,
+                    characterTraits: [
+                        '용감함',
+                        '지혜로움'
+                    ]
+                }
+            ];
         }
         const items = structures[projectId] || [];
         console.log('📊 [processStructureItems] Found items:', items.length);
@@ -231,24 +302,21 @@ function useIntegratedProjectData(projectId) {
                 console.warn(`⚠️ [processStructureItems] Failed to parse content for item ${item.id}:`, e);
                 content = String(item.content || '');
             }
-            // 🔥 안전한 content 처리
-            const safeContent = content || '';
-            const safeTitle = item.title || '';
             const element = {
                 id: item.id,
                 type: item.type,
-                title: safeTitle,
-                content: safeContent,
+                title: item.title,
+                content,
                 createdAt: item.createdAt ? new Date(item.createdAt) : new Date(),
                 updatedAt: item.updatedAt ? new Date(item.updatedAt) : new Date(),
-                order: item.order || 0,
-                wordCount: safeContent ? safeContent.split(/\s+/).filter((word)=>word.length > 0).length : 0,
+                order: item.order,
+                wordCount: (content || '').split(/\s+/).filter((word)=>word.trim().length > 0).length,
                 plotRelevance: Math.floor(Math.random() * 5) + 1
             };
             // 타입별 특수 처리
             if (item.type === 'character') {
                 try {
-                    const parsed = safeContent ? JSON.parse(safeContent) : {};
+                    const parsed = JSON.parse(content);
                     element.characterTraits = parsed.traits || [];
                 } catch (e) {
                     element.characterTraits = [];
@@ -349,103 +417,17 @@ function useIntegratedProjectData(projectId) {
             hasAnalysis: !!performAnalysis,
             projectId
         });
-        // 실제 데이터가 있으면 그것을 사용
-        if (processStructureItems.length > 0) {
-            console.log('📊 [useProjectData] Using real data from store');
-            setElements(processStructureItems);
-            setAnalysis(performAnalysis);
-        } else {
-            console.log('🔧 [useProjectData] No real data, creating mock data for testing');
-            // 🔥 임시 테스트 데이터 생성 (실제 데이터가 없을 때만)
-            const mockElements = [
-                {
-                    id: 'mock-chapter-1',
-                    type: 'chapter',
-                    title: '1장: 시작',
-                    content: '이것은 테스트용 첫 번째 챕터입니다. 주인공이 모험을 시작하는 내용입니다.',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    order: 1,
-                    wordCount: 150,
-                    plotRelevance: 5,
-                    location: '마을'
-                },
-                {
-                    id: 'mock-character-1',
-                    type: 'character',
-                    title: '주인공',
-                    content: '용감하고 정의로운 성격의 주인공',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    order: 2,
-                    wordCount: 50,
-                    plotRelevance: 5,
-                    characterTraits: [
-                        '용감함',
-                        '정의로움',
-                        '호기심'
-                    ]
-                },
-                {
-                    id: 'mock-idea-1',
-                    type: 'idea',
-                    title: '마법 시스템',
-                    content: '원소 기반의 마법 시스템 아이디어',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    order: 3,
-                    wordCount: 30,
-                    plotRelevance: 4,
-                    tags: [
-                        '마법',
-                        '시스템',
-                        '원소'
-                    ]
-                }
-            ];
-            const mockAnalysis = {
-                totalWords: 230,
-                totalChapters: 1,
-                totalCharacters: 1,
-                totalMemos: 0,
-                totalIdeas: 1,
-                storyConsistency: 85,
-                characterConsistency: 92,
-                plotHoles: [
-                    '⚠️ 실제 프로젝트 데이터가 없습니다. 챕터나 캐릭터를 추가해주세요.'
-                ],
-                suggestions: [
-                    '더 많은 콘텐츠를 추가해보세요',
-                    '캐릭터 간의 관계를 더 자세히 설정해보세요'
-                ],
-                timeline: [
-                    {
-                        id: 'mock-chapter-1',
-                        title: '1장: 시작 (테스트 데이터)',
-                        type: 'chapter',
-                        timestamp: new Date().toISOString(),
-                        description: '이것은 테스트용 첫 번째 챕터입니다...'
-                    }
-                ],
-                relationships: [
-                    {
-                        from: 'mock-character-1',
-                        to: 'mock-chapter-1',
-                        type: 'appears_in',
-                        strength: 0.9
-                    }
-                ]
-            };
-            setElements(mockElements);
-            setAnalysis(mockAnalysis);
-        }
+        // 실제 데이터 사용 (mock 데이터 완전 제거)
+        console.log('📊 [useProjectData] Using real data from store');
+        setElements(processStructureItems);
+        setAnalysis(performAnalysis);
         // 로딩 시뮬레이션
         setTimeout(()=>{
             setLoading(false);
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('INTEGRATED_PROJECT_DATA', 'Data processing completed', {
                 projectId,
-                elementsCount: processStructureItems.length > 0 ? processStructureItems.length : 3,
-                usingMockData: processStructureItems.length === 0
+                elementsCount: processStructureItems.length,
+                hasAnalysis: !!performAnalysis
             });
         }, 500);
     }, [

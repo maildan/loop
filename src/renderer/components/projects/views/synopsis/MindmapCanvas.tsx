@@ -10,15 +10,15 @@ interface MindmapCanvasProps {
     onSelectElement: (elementId: string | null) => void;
 }
 
-export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({ 
-    elements, 
-    analysis, 
-    onSelectElement 
+export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
+    elements,
+    analysis,
+    onSelectElement
 }) => {
     // 캐릭터와 챕터 간의 관계를 시각화하기 위한 계산
     const relationships = useMemo(() => {
-        return analysis.relationships.filter(rel => 
-            elements.find(e => e.id === rel.from) && 
+        return analysis.relationships.filter(rel =>
+            elements.find(e => e.id === rel.from) &&
             elements.find(e => e.id === rel.to)
         );
     }, [elements, analysis.relationships]);
@@ -39,13 +39,13 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                     {relationships.map((rel, index) => {
                         const fromElement = elements.find(e => e.id === rel.from);
                         const toElement = elements.find(e => e.id === rel.to);
-                        
+
                         if (!fromElement || !toElement) return null;
 
                         // 간단한 위치 계산 (실제로는 더 복잡한 레이아웃 알고리즘 필요)
                         const fromIndex = elements.indexOf(fromElement);
                         const toIndex = elements.indexOf(toElement);
-                        
+
                         const x1 = (fromIndex % 4) * 200 + 100;
                         const y1 = Math.floor(fromIndex / 4) * 150 + 75;
                         const x2 = (toIndex % 4) * 200 + 100;
@@ -86,11 +86,11 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                             >
                                 <div className={`
                                     p-3 rounded-lg border-2 shadow-sm
-                                    ${element.type === 'character' 
+                                    ${element.type === 'character'
                                         ? 'bg-blue-100 border-blue-300 dark:bg-blue-900/30 dark:border-blue-700'
                                         : element.type === 'chapter'
-                                        ? 'bg-green-100 border-green-300 dark:bg-green-900/30 dark:border-green-700'
-                                        : 'bg-purple-100 border-purple-300 dark:bg-purple-900/30 dark:border-purple-700'
+                                            ? 'bg-green-100 border-green-300 dark:bg-green-900/30 dark:border-green-700'
+                                            : 'bg-purple-100 border-purple-300 dark:bg-purple-900/30 dark:border-purple-700'
                                     }
                                 `}>
                                     <h3 className="font-medium text-sm mb-1 truncate">{element.title}</h3>
