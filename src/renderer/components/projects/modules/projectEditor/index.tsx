@@ -49,6 +49,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     const { state, actions } = useProjectEditorState();
     // structure store actions
     const addStructureItem = useStructureStore((s) => s.addStructureItem);
+    const updateStructureItem = useStructureStore((s) => s.updateStructureItem);
     const setCurrentEditor = useStructureStore((s) => s.setCurrentEditor);
     const loadStructuresFromDB = useStructureStore((s) => s.loadStructuresFromDB); // 🔥 새로 추가
     const { settings, updateSetting } = useSettings();
@@ -208,6 +209,21 @@ export const ProjectEditor = memo(function ProjectEditor({
         }
     }, [projectData?.content, state.tabs, actions]);
 
+    // 🔥 Settings sidebar collapsed와 local state 동기화
+    useEffect(() => {
+        if (sidebarCollapsed !== state.collapsed) {
+            if (sidebarCollapsed) {
+                if (!state.collapsed) actions.toggleCollapsed();
+            } else {
+                if (state.collapsed) actions.toggleCollapsed();
+            }
+            Logger.debug('PROJECT_EDITOR', 'Sidebar state synced with settings', {
+                settingsCollapsed: sidebarCollapsed,
+                stateCollapsed: state.collapsed
+            });
+        }
+    }, [sidebarCollapsed, state.collapsed, actions]);
+
     // 🔥 로딩 상태 처리
     if (isLoading) {
         return (
@@ -271,6 +287,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                     onChange={(content) => {
                                         console.log('🔥 [ProjectEditor] MarkdownEditor onChange:', {
                                             activeTabId: activeTab?.id,
+                                            activeTabType: activeTab?.type,
                                             contentLength: content.length,
                                             contentPreview: content.substring(0, 100) + '...'
                                         });
@@ -282,9 +299,32 @@ export const ProjectEditor = memo(function ProjectEditor({
                                                 isDirty: true
                                             });
 
-                                            // 🔥 실제 프로젝트 content도 업데이트 (DB 자동저장)
-                                            console.log('🔥 [ProjectEditor] Calling setContent with:', content.length + ' characters');
-                                            projectData.setContent(content);
+                                            // 🔥 탭 타입에 따라 다른 저장 로직
+                                            if (activeTab.type === 'main') {
+                                                // 메인 탭: 프로젝트 메인 content에 저장
+                                                console.log('🔥 [ProjectEditor] Saving to MAIN project content');
+                                                projectData.setContent(content);
+                                            } else if (activeTab.type === 'chapter') {
+                                                // 챕터 탭: 해당 챕터 구조체에 저장
+                                                console.log('🔥 [ProjectEditor] Saving to CHAPTER:', activeTab.title);
+                                                
+                                                // 탭 ID에서 구조체 ID 추출 (탭 ID 형식: 'chapter-{structureId}' 또는 구조체 ID 자체)
+                                                const structureId = activeTab.id.startsWith('chapter-') 
+                                                    ? activeTab.id.replace('chapter-', '') 
+                                                    : activeTab.id;
+                                                
+                                                // 비동기 저장 (Promise로 처리, 에러는 로그로만)
+                                                updateStructureItem(projectId, structureId, {
+                                                    content: content
+                                                }).then(() => {
+                                                    console.log('✅ [ProjectEditor] Chapter saved successfully:', structureId);
+                                                }).catch((error) => {
+                                                    console.error('❌ [ProjectEditor] Failed to save chapter:', error);
+                                                });
+                                            } else {
+                                                // 기타 탭: 탭 자체에만 저장 (임시)
+                                                console.log('🔥 [ProjectEditor] Saving to TAB only:', activeTab.type);
+                                            }
                                         }
                                     }}
                                     isFocusMode={uiState?.isFocusMode || false}
@@ -424,8 +464,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 window.location.href = '/projects';
                             }
                         }}
-                        sidebarCollapsed={state.collapsed}
-                        onToggleSidebar={actions.toggleCollapsed}
+                        sidebarCollapsed={sidebarCollapsed}
+                        onToggleSidebar={toggleSidebar}
                         showRightSidebar={state.showRightSidebar}
                         onToggleAISidebar={actions.toggleRightSidebar}
                         isZenMode={isZenMode}
