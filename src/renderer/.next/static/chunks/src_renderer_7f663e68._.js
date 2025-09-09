@@ -1,0 +1,436 @@
+(globalThis.TURBOPACK = globalThis.TURBOPACK || []).push([typeof document === "object" ? document.currentScript : undefined, {
+
+"[project]/src/renderer/stores/useStructureStore.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+// 🔥 스토리 구조 글로벌 스토어 - Zustand + 지속성
+__turbopack_context__.s({
+    "default": (()=>__TURBOPACK__default__export__),
+    "useStructureStore": (()=>useStructureStore)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/zustand/esm/react.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/zustand/esm/middleware.mjs [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-client] (ecmascript)");
+;
+;
+;
+const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["create"])()((0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["persist"])((set, get)=>({
+        structures: {},
+        currentEditor: null,
+        // 🔥 구조 설정
+        setStructures: (projectId, structures)=>set((state)=>({
+                    structures: {
+                        ...state.structures,
+                        [projectId]: structures
+                    }
+                })),
+        // 🔥 구조 아이템 추가 (DB 저장 포함)
+        addStructureItem: async (projectId, item)=>{
+            // 1. UI에 즉시 반영 (Optimistic Update)
+            set((state)=>({
+                    structures: {
+                        ...state.structures,
+                        [projectId]: [
+                            ...state.structures[projectId] || [],
+                            item
+                        ]
+                    }
+                }));
+            // 2. DB에 저장 요청
+            try {
+                await window.electronAPI.projects.upsertStructure(item);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item saved to DB', {
+                    itemId: item.id
+                });
+            } catch (error) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to save structure item to DB', error);
+            // TODO: 실패 시 UI 롤백 로직 추가
+            }
+        },
+        // 🔥 구조 아이템 업데이트 (DB 저장 포함)
+        updateStructureItem: async (projectId, itemId, updates)=>{
+            let updatedItem = null;
+            // 1. UI에 즉시 반영
+            set((state)=>{
+                const newStructures = (state.structures[projectId] || []).map((item)=>{
+                    if (item.id === itemId) {
+                        updatedItem = {
+                            ...item,
+                            ...updates,
+                            updatedAt: new Date()
+                        };
+                        return updatedItem;
+                    }
+                    return item;
+                });
+                return {
+                    structures: {
+                        ...state.structures,
+                        [projectId]: newStructures
+                    }
+                };
+            });
+            // 2. DB에 저장 요청
+            if (updatedItem) {
+                try {
+                    await window.electronAPI.projects.upsertStructure(updatedItem);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item updated in DB', {
+                        itemId
+                    });
+                } catch (error) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to update structure item in DB', error);
+                // TODO: 실패 시 UI 롤백 로직 추가
+                }
+            }
+        },
+        // 🔥 구조 아이템 삭제 (DB 삭제 포함)
+        deleteStructureItem: async (projectId, itemId)=>{
+            // 1. UI에 즉시 반영
+            set((state)=>({
+                    structures: {
+                        ...state.structures,
+                        [projectId]: (state.structures[projectId] || []).filter((item)=>item.id !== itemId)
+                    }
+                }));
+            // 2. DB에서 삭제 요청
+            try {
+                await window.electronAPI.projects.deleteStructure(itemId);
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('STRUCTURE_STORE', 'Structure item deleted from DB', {
+                    itemId
+                });
+            } catch (error) {
+                __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('STRUCTURE_STORE', 'Failed to delete structure item from DB', error);
+            // TODO: 실패 시 UI 롤백 로직 추가
+            }
+        },
+        // 🔥 구조 순서 변경
+        reorderStructures: (projectId, newOrder)=>set((state)=>({
+                    structures: {
+                        ...state.structures,
+                        [projectId]: newOrder
+                    }
+                })),
+        // 🔥 현재 에디터 설정
+        setCurrentEditor: (editor)=>set({
+                currentEditor: editor
+            }),
+        // 🔥 현재 에디터 초기화
+        clearCurrentEditor: ()=>set({
+                currentEditor: null
+            })
+    }), {
+    name: 'loop-structure-store',
+    storage: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createJSONStorage"])(()=>localStorage),
+    partialize: (state)=>({
+            structures: state.structures,
+            currentEditor: state.currentEditor
+        })
+}));
+const __TURBOPACK__default__export__ = useStructureStore;
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/src/renderer/hooks/useProjectData.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+/**
+ * 🔥 GIGA-CHAD useProjectData Hook
+ * 프로젝트의 모든 요소를 통합하여 에이전트화된 SynopsisView에 제공
+ */ __turbopack_context__.s({
+    "useIntegratedProjectData": (()=>useIntegratedProjectData)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/stores/useStructureStore.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-client] (ecmascript)");
+var _s = __turbopack_context__.k.signature();
+;
+;
+;
+function useIntegratedProjectData(projectId) {
+    _s();
+    const structures = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"])({
+        "useIntegratedProjectData.useStructureStore[structures]": (s)=>s.structures
+    }["useIntegratedProjectData.useStructureStore[structures]"]);
+    const [elements, setElements] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
+    const [analysis, setAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
+    // 프로젝트 요소들을 통합 데이터 형태로 변환
+    const processStructureItems = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "useIntegratedProjectData.useMemo[processStructureItems]": ()=>{
+            if (!projectId || !structures[projectId]) {
+                return [];
+            }
+            const items = structures[projectId] || [];
+            const processedElements = [];
+            items.forEach({
+                "useIntegratedProjectData.useMemo[processStructureItems]": (item)=>{
+                    let content = '';
+                    try {
+                        content = typeof item.content === 'string' ? item.content : JSON.stringify(item.content);
+                    } catch (e) {
+                        content = String(item.content || '');
+                    }
+                    const element = {
+                        id: item.id,
+                        type: item.type,
+                        title: item.title,
+                        content,
+                        createdAt: item.createdAt ? new Date(item.createdAt) : new Date(),
+                        updatedAt: item.updatedAt ? new Date(item.updatedAt) : new Date(),
+                        order: item.order,
+                        wordCount: content.split(/\s+/).length,
+                        plotRelevance: Math.floor(Math.random() * 5) + 1
+                    };
+                    // 타입별 특수 처리
+                    if (item.type === 'character') {
+                        try {
+                            const parsed = JSON.parse(content);
+                            element.characterTraits = parsed.traits || [];
+                        } catch (e) {
+                            element.characterTraits = [];
+                        }
+                    }
+                    if (item.type === 'chapter') {
+                        element.location = '미정'; // TODO: 내용에서 추출
+                    }
+                    if ([
+                        'memo',
+                        'idea'
+                    ].includes(item.type)) {
+                        element.tags = [
+                            'general'
+                        ]; // TODO: 내용에서 태그 추출
+                    }
+                    processedElements.push(element);
+                }
+            }["useIntegratedProjectData.useMemo[processStructureItems]"]);
+            return processedElements.sort({
+                "useIntegratedProjectData.useMemo[processStructureItems]": (a, b)=>(a.order || 0) - (b.order || 0)
+            }["useIntegratedProjectData.useMemo[processStructureItems]"]);
+        }
+    }["useIntegratedProjectData.useMemo[processStructureItems]"], [
+        structures,
+        projectId
+    ]);
+    // AI 분석 수행 (시뮬레이션)
+    const performAnalysis = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "useIntegratedProjectData.useMemo[performAnalysis]": ()=>{
+            if (processStructureItems.length === 0) {
+                return null;
+            }
+            const chapters = processStructureItems.filter({
+                "useIntegratedProjectData.useMemo[performAnalysis].chapters": (e)=>e.type === 'chapter'
+            }["useIntegratedProjectData.useMemo[performAnalysis].chapters"]);
+            const characters = processStructureItems.filter({
+                "useIntegratedProjectData.useMemo[performAnalysis].characters": (e)=>e.type === 'character'
+            }["useIntegratedProjectData.useMemo[performAnalysis].characters"]);
+            const memos = processStructureItems.filter({
+                "useIntegratedProjectData.useMemo[performAnalysis].memos": (e)=>e.type === 'memo'
+            }["useIntegratedProjectData.useMemo[performAnalysis].memos"]);
+            const ideas = processStructureItems.filter({
+                "useIntegratedProjectData.useMemo[performAnalysis].ideas": (e)=>e.type === 'idea'
+            }["useIntegratedProjectData.useMemo[performAnalysis].ideas"]);
+            const totalWords = chapters.reduce({
+                "useIntegratedProjectData.useMemo[performAnalysis].totalWords": (sum, ch)=>sum + (ch.wordCount || 0)
+            }["useIntegratedProjectData.useMemo[performAnalysis].totalWords"], 0);
+            // 타임라인 생성 (시간순 정렬)
+            const timeline = processStructureItems.map({
+                "useIntegratedProjectData.useMemo[performAnalysis].timeline": (element)=>({
+                        id: element.id,
+                        title: element.title,
+                        type: element.type,
+                        timestamp: element.createdAt?.toISOString() || new Date().toISOString(),
+                        description: element.content.slice(0, 100) + '...'
+                    })
+            }["useIntegratedProjectData.useMemo[performAnalysis].timeline"]).sort({
+                "useIntegratedProjectData.useMemo[performAnalysis].timeline": (a, b)=>new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+            }["useIntegratedProjectData.useMemo[performAnalysis].timeline"]);
+            // 관계성 분석 (간단한 시뮬레이션)
+            const relationships = [];
+            for (const character of characters){
+                for (const chapter of chapters){
+                    if (chapter.content.toLowerCase().includes(character.title.toLowerCase())) {
+                        relationships.push({
+                            from: character.id,
+                            to: chapter.id,
+                            type: 'appears_in',
+                            strength: 0.8
+                        });
+                    }
+                }
+            }
+            const analysis = {
+                totalWords,
+                totalChapters: chapters.length,
+                totalCharacters: characters.length,
+                totalMemos: memos.length,
+                totalIdeas: ideas.length,
+                // 임시 AI 분석 결과
+                storyConsistency: Math.floor(Math.random() * 30) + 70,
+                characterConsistency: Math.floor(Math.random() * 40) + 60,
+                plotHoles: [
+                    '3장에서 언급된 마법 시스템이 7장에서 다르게 작동함',
+                    '주인공의 나이가 일관되지 않음',
+                    '2장의 시간 설정과 4장이 모순됨'
+                ].slice(0, Math.floor(Math.random() * 4)),
+                suggestions: [
+                    '캐릭터 간의 대화가 더 자연스러워야 함',
+                    '액션 시퀀스에 더 많은 디테일 필요',
+                    '배경 설명을 점진적으로 공개하는 것이 좋겠음',
+                    '갈등의 해결이 너무 급작스러움'
+                ].slice(0, Math.floor(Math.random() * 5)),
+                timeline,
+                relationships
+            };
+            return analysis;
+        }
+    }["useIntegratedProjectData.useMemo[performAnalysis]"], [
+        processStructureItems
+    ]);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "useIntegratedProjectData.useEffect": ()=>{
+            setLoading(true);
+            setElements(processStructureItems);
+            setAnalysis(performAnalysis);
+            // 로딩 시뮬레이션
+            setTimeout({
+                "useIntegratedProjectData.useEffect": ()=>{
+                    setLoading(false);
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].info('INTEGRATED_PROJECT_DATA', 'Data processing completed', {
+                        projectId,
+                        elementsCount: processStructureItems.length,
+                        hasAnalysis: !!performAnalysis
+                    });
+                }
+            }["useIntegratedProjectData.useEffect"], 500);
+        }
+    }["useIntegratedProjectData.useEffect"], [
+        processStructureItems,
+        performAnalysis,
+        projectId
+    ]);
+    return {
+        elements,
+        analysis,
+        loading,
+        // 유틸리티 함수들
+        getElementsByType: (type)=>elements.filter((e)=>e.type === type),
+        getElementByTitle: (title)=>elements.find((e)=>e.title.toLowerCase().includes(title.toLowerCase())),
+        getRelatedElements: (elementId)=>{
+            if (!analysis) return [];
+            return analysis.relationships.filter((r)=>r.from === elementId || r.to === elementId).map((r)=>r.from === elementId ? r.to : r.from).map((id)=>elements.find((e)=>e.id === id)).filter(Boolean);
+        }
+    };
+}
+_s(useIntegratedProjectData, "or6/PzcYcZoLaf6Y+WaWjojcfjg=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$stores$2f$useStructureStore$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useStructureStore"]
+    ];
+});
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+"[project]/src/renderer/app/projects/[id]/ProjectPageClient.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
+"use strict";
+
+var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
+{
+__turbopack_context__.s({
+    "default": (()=>ProjectPageClient)
+});
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$ProjectEditor$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$module__evaluation$3e$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/ProjectEditor.tsx [app-client] (ecmascript) <module evaluation>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$modules$2f$projectEditor$2f$index$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/modules/projectEditor/index.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$ErrorBoundary$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/ErrorBoundary.tsx [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+'use client';
+;
+;
+;
+;
+function ProjectPageClient() {
+    _s();
+    const params = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"])();
+    const searchParams = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"])();
+    const paramId = Array.isArray(params.id) ? params.id[0] : params.id;
+    const openId = searchParams.get('open') || searchParams.get('id') || undefined;
+    // 🔥 정적 루트(`/projects/new`)에서 쿼리로 열린 경우 처리
+    const projectId = paramId === 'new' && openId ? openId : paramId || openId;
+    // 🔥 파라미터 검증
+    if (!projectId) {
+        __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].error('PROJECT_PAGE', 'Missing project ID in route parameters');
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "min-h-screen flex items-center justify-center",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "text-center",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        className: "text-2xl font-bold text-red-600 mb-4",
+                        children: "오류"
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/app/projects/[id]/ProjectPageClient.tsx",
+                        lineNumber: 25,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-slate-600",
+                        children: "프로젝트 ID가 없습니다."
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/app/projects/[id]/ProjectPageClient.tsx",
+                        lineNumber: 26,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/renderer/app/projects/[id]/ProjectPageClient.tsx",
+                lineNumber: 24,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/renderer/app/projects/[id]/ProjectPageClient.tsx",
+            lineNumber: 23,
+            columnNumber: 7
+        }, this);
+    }
+    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_PAGE', 'Loading project page', {
+        projectId
+    });
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$ErrorBoundary$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ProjectErrorBoundary"], {
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$modules$2f$projectEditor$2f$index$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ProjectEditor"], {
+            projectId: projectId
+        }, void 0, false, {
+            fileName: "[project]/src/renderer/app/projects/[id]/ProjectPageClient.tsx",
+            lineNumber: 36,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/renderer/app/projects/[id]/ProjectPageClient.tsx",
+        lineNumber: 35,
+        columnNumber: 5
+    }, this);
+}
+_s(ProjectPageClient, "VZyy9DvWoLdWC9W+EkySgP6A0yY=", false, function() {
+    return [
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useParams"],
+        __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useSearchParams"]
+    ];
+});
+_c = ProjectPageClient;
+var _c;
+__turbopack_context__.k.register(_c, "ProjectPageClient");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
+}
+}}),
+}]);
+
+//# sourceMappingURL=src_renderer_7f663e68._.js.map
