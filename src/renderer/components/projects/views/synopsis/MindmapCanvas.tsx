@@ -64,19 +64,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                                 <Card className="p-8 text-center">
                                     <Network className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                                     <h3 className="text-lg font-medium text-gray-600 mb-2">마인드맵이 비어있습니다</h3>
-                                    <p className="text-gray-500">아이디어와 연결고리를 추가하여 마인드맵을 구성해보세요.</p>
-                                    <div className="mt-6">
-                                        <Button
-                                            onClick={() => {
-                                                console.log('샘플 마인드맵 데이터 추가');
-                                            }}
-                                            variant="outline"
-                                            className="flex items-center gap-2"
-                                        >
-                                            <Sparkles className="w-4 h-4" />
-                                            샘플 데이터 추가
-                                        </Button>
-                                    </div>
+                                    <p className="text-gray-500">사이드바에서 요소들을 추가하여 마인드맵을 구성해보세요.</p>
                                 </Card>
                             ) : (
                                 <div className="relative w-full h-[800px] bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg overflow-auto shadow-sm">

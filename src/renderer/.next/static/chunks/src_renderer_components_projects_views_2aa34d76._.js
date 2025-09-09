@@ -3526,7 +3526,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$map$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Map$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/map.js [app-client] (ecmascript) <export default as Map>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/brain.js [app-client] (ecmascript) <export default as Brain>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-client] (ecmascript) <export default as Sparkles>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-client] (ecmascript) <export default as User>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/lightbulb.js [app-client] (ecmascript) <export default as Lightbulb>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/file-text.js [app-client] (ecmascript) <export default as FileText>");
@@ -3762,38 +3761,10 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             className: "text-gray-500",
-                                            children: "스토리 요소들을 추가하여 아웃라인을 구성해보세요."
+                                            children: "사이드바에서 챕터, 인물, 아이디어를 추가하여 아웃라인을 구성해보세요."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
                                             lineNumber: 102,
-                                            columnNumber: 37
-                                        }, this),
-                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "mt-6",
-                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                onClick: ()=>{
-                                                    console.log('샘플 아웃라인 데이터 추가');
-                                                },
-                                                variant: "outline",
-                                                className: "flex items-center gap-2",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                                        className: "w-4 h-4"
-                                                    }, void 0, false, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                        lineNumber: 111,
-                                                        columnNumber: 45
-                                                    }, this),
-                                                    "샘플 데이터 추가"
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                lineNumber: 104,
-                                                columnNumber: 41
-                                            }, this)
-                                        }, void 0, false, {
-                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 103,
                                             columnNumber: 37
                                         }, this)
                                     ]
@@ -3812,7 +3783,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 122,
+                                                            lineNumber: 110,
                                                             columnNumber: 49
                                                         }, this),
                                                         "챕터 (",
@@ -3821,7 +3792,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 121,
+                                                    lineNumber: 109,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3830,18 +3801,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-blue-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 127,
+                                                            lineNumber: 115,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 125,
+                                                    lineNumber: 113,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 120,
+                                            lineNumber: 108,
                                             columnNumber: 41
                                         }, this),
                                         categorizedElements.characters.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3853,7 +3824,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 137,
+                                                            lineNumber: 125,
                                                             columnNumber: 49
                                                         }, this),
                                                         "인물 (",
@@ -3862,7 +3833,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 124,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3871,18 +3842,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-green-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 142,
+                                                            lineNumber: 130,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 140,
+                                                    lineNumber: 128,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 135,
+                                            lineNumber: 123,
                                             columnNumber: 41
                                         }, this),
                                         categorizedElements.ideas.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3894,7 +3865,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 152,
+                                                            lineNumber: 140,
                                                             columnNumber: 49
                                                         }, this),
                                                         "아이디어 (",
@@ -3903,7 +3874,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 151,
+                                                    lineNumber: 139,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3912,18 +3883,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-yellow-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 157,
+                                                            lineNumber: 145,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 155,
+                                                    lineNumber: 143,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 138,
                                             columnNumber: 41
                                         }, this),
                                         (categorizedElements.memos.length > 0 || categorizedElements.notes.length > 0) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3935,7 +3906,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 167,
+                                                            lineNumber: 155,
                                                             columnNumber: 49
                                                         }, this),
                                                         "메모 & 노트 (",
@@ -3944,7 +3915,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 166,
+                                                    lineNumber: 154,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3956,18 +3927,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-gray-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 172,
+                                                            lineNumber: 160,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 170,
+                                                    lineNumber: 158,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 165,
+                                            lineNumber: 153,
                                             columnNumber: 41
                                         }, this)
                                     ]
@@ -4005,12 +3976,12 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 185,
+                                lineNumber: 173,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                            lineNumber: 184,
+                            lineNumber: 172,
                             columnNumber: 25
                         }, this)
                     ]
@@ -4051,7 +4022,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$network$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Network$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/network.js [app-client] (ecmascript) <export default as Network>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/brain.js [app-client] (ecmascript) <export default as Brain>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/sparkles.js [app-client] (ecmascript) <export default as Sparkles>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/lightbulb.js [app-client] (ecmascript) <export default as Lightbulb>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$common$2f$AIAnalysisPanel$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/common/AIAnalysisPanel.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/ui/Button.tsx [app-client] (ecmascript)");
@@ -4171,38 +4141,10 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                 className: "text-gray-500",
-                                                children: "아이디어와 연결고리를 추가하여 마인드맵을 구성해보세요."
+                                                children: "사이드바에서 요소들을 추가하여 마인드맵을 구성해보세요."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
                                                 lineNumber: 67,
-                                                columnNumber: 37
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "mt-6",
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Button"], {
-                                                    onClick: ()=>{
-                                                        console.log('샘플 마인드맵 데이터 추가');
-                                                    },
-                                                    variant: "outline",
-                                                    className: "flex items-center gap-2",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$sparkles$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Sparkles$3e$__["Sparkles"], {
-                                                            className: "w-4 h-4"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                            lineNumber: 76,
-                                                            columnNumber: 45
-                                                        }, this),
-                                                        "샘플 데이터 추가"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                    lineNumber: 69,
-                                                    columnNumber: 41
-                                                }, this)
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 68,
                                                 columnNumber: 37
                                             }, this)
                                         ]
@@ -4239,13 +4181,13 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                         className: "dark:stroke-gray-400 transition-all duration-300"
                                                     }, index, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 101,
+                                                        lineNumber: 89,
                                                         columnNumber: 49
                                                     }, this);
                                                 })
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 84,
+                                                lineNumber: 72,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4272,7 +4214,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                     children: element.title
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                    lineNumber: 142,
+                                                                    lineNumber: 130,
                                                                     columnNumber: 57
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4280,7 +4222,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                     children: element.content
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                    lineNumber: 143,
+                                                                    lineNumber: 131,
                                                                     columnNumber: 57
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4291,7 +4233,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                             children: element.type
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                            lineNumber: 147,
+                                                                            lineNumber: 135,
                                                                             columnNumber: 61
                                                                         }, this),
                                                                         element.plotRelevance && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4301,7 +4243,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                                     className: `w-2 h-2 rounded-full ${element.plotRelevance >= 4 ? 'bg-red-500' : element.plotRelevance >= 3 ? 'bg-yellow-500' : 'bg-green-500'}`
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                                    lineNumber: 152,
+                                                                                    lineNumber: 140,
                                                                                     columnNumber: 69
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -4309,36 +4251,36 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                                     children: element.plotRelevance
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                                    lineNumber: 155,
+                                                                                    lineNumber: 143,
                                                                                     columnNumber: 69
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                            lineNumber: 151,
+                                                                            lineNumber: 139,
                                                                             columnNumber: 65
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                    lineNumber: 146,
+                                                                    lineNumber: 134,
                                                                     columnNumber: 57
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                            lineNumber: 133,
+                                                            lineNumber: 121,
                                                             columnNumber: 53
                                                         }, this)
                                                     }, element.id, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 123,
+                                                        lineNumber: 111,
                                                         columnNumber: 49
                                                     }, this);
                                                 })
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 117,
+                                                lineNumber: 105,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4355,25 +4297,25 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                             className: "w-3 h-3"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                            lineNumber: 175,
+                                                            lineNumber: 163,
                                                             columnNumber: 45
                                                         }, this),
                                                         "자동 배치"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                    lineNumber: 167,
+                                                    lineNumber: 155,
                                                     columnNumber: 41
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 166,
+                                                lineNumber: 154,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                        lineNumber: 82,
+                                        lineNumber: 70,
                                         columnNumber: 33
                                     }, this),
                                     elements.length > 0 && relationships.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Card"], {
@@ -4384,7 +4326,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                 children: "연결 통계"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 185,
+                                                lineNumber: 173,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4397,7 +4339,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                 children: elements.length
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 188,
+                                                                lineNumber: 176,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4405,13 +4347,13 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                 children: "총 요소"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 189,
+                                                                lineNumber: 177,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 187,
+                                                        lineNumber: 175,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4421,7 +4363,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                 children: relationships.length
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 192,
+                                                                lineNumber: 180,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4429,13 +4371,13 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                 children: "연결 관계"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 193,
+                                                                lineNumber: 181,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 191,
+                                                        lineNumber: 179,
                                                         columnNumber: 41
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4448,7 +4390,7 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 196,
+                                                                lineNumber: 184,
                                                                 columnNumber: 45
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4456,25 +4398,25 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                                                 children: "평균 강도"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 199,
+                                                                lineNumber: 187,
                                                                 columnNumber: 45
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 195,
+                                                        lineNumber: 183,
                                                         columnNumber: 41
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 186,
+                                                lineNumber: 174,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                        lineNumber: 184,
+                                        lineNumber: 172,
                                         columnNumber: 33
                                     }, this)
                                 ]
@@ -4513,12 +4455,12 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                lineNumber: 210,
+                                lineNumber: 198,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                            lineNumber: 209,
+                            lineNumber: 197,
                             columnNumber: 25
                         }, this)
                     ]
