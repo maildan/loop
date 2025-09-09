@@ -519,32 +519,52 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 ProjectSidebar hover 영역 - 디버깅 강화 */}
+                {/* 🔥 ProjectSidebar hover 영역 - pointer-events 강제 활성화 */}
                 {isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-0 w-20 h-full z-[100] bg-red-500/20 cursor-pointer"
-                        onMouseEnter={() => {
-                            console.log('🚨 HOVER ACTIVATED!!!');
-                            Logger.info('PROJECT_SIDEBAR', 'Hover activated');
+                        className="absolute left-0 top-0 w-20 h-full z-[100] bg-red-500/50 cursor-pointer pointer-events-auto"
+                        style={{ pointerEvents: 'auto' }}
+                        onMouseEnter={(e) => {
+                            console.log('🚨 HOVER ACTIVATED!!! Event:', e);
+                            console.log('🚨 isSidebarCollapsed:', isSidebarCollapsed);
+                            console.log('🚨 Setting sidebarHovered to TRUE');
                             setSidebarHovered(true);
+                            Logger.info('PROJECT_SIDEBAR', 'Hover activated');
                         }}
-                        onMouseLeave={() => {
-                            console.log('🚨 HOVER DEACTIVATED!!!');
-                            Logger.info('PROJECT_SIDEBAR', 'Hover deactivated');
+                        onMouseLeave={(e) => {
+                            console.log('🚨 HOVER DEACTIVATED!!! Event:', e);
+                            console.log('🚨 Setting sidebarHovered to FALSE');
                             setSidebarHovered(false);
+                            Logger.info('PROJECT_SIDEBAR', 'Hover deactivated');
+                        }}
+                        onClick={() => {
+                            console.log('🚨 CLICK DETECTED!!! This area is clickable!');
                         }}
                     >
                         {/* 완전 투명 - 시각적 요소 없음 */}
                     </div>
                 )}
 
-                {/* 🔥 ProjectSidebar 표시 - absolute positioning */}
+                {/* 🔥 ProjectSidebar 표시 - 디버깅 강화 */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-0 w-64 h-full z-60 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-r border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-300 ease-out"
-                        onMouseEnter={() => setSidebarHovered(true)}
-                        onMouseLeave={() => setSidebarHovered(false)}
+                        className="absolute left-0 top-0 w-64 h-full z-[95] bg-blue-500/80 backdrop-blur-md border-r-4 border-blue-600 shadow-2xl transition-all duration-300 ease-out"
+                        onMouseEnter={() => {
+                            console.log('🔥 SIDEBAR AREA ENTERED!!!');
+                            setSidebarHovered(true);
+                        }}
+                        onMouseLeave={() => {
+                            console.log('🔥 SIDEBAR AREA LEFT!!!');
+                            setSidebarHovered(false);
+                        }}
                     >
+                        <div className="p-4 text-white font-bold text-xl">
+                            🎯 SIDEBAR IS VISIBLE!!!
+                            <br />
+                            sidebarHovered: {sidebarHovered.toString()}
+                            <br />
+                            isSidebarCollapsed: {isSidebarCollapsed.toString()}
+                        </div>
                         <ProjectSidebar
                             projectId={projectId}
                             currentView={state.currentView}
