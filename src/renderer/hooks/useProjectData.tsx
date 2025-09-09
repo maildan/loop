@@ -93,7 +93,7 @@ export function useIntegratedProjectData(projectId: string) {
                 hasStructureData: !!structures[projectId],
                 availableProjects: Object.keys(structures)
             });
-            
+
             // 🔥 임시 mock 데이터 생성 (데이터가 없을 때)
             return [
                 {

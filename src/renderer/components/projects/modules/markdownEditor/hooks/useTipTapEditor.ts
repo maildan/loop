@@ -2,7 +2,7 @@
 // 기존 MarkdownEditor.tsx의 복잡한 에디터 설정을 훅으로 추상화
 
 import { useEditor, Editor } from '@tiptap/react';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import Focus from '@tiptap/extension-focus';
@@ -202,6 +202,24 @@ export function useTipTapEditor({
             Logger.debug('TIPTAP_EDITOR', 'Editor destroyed');
         },
     });
+
+    // 🔥 content prop 변경 시 에디터 내용 동기화
+    useEffect(() => {
+        if (editor && content !== undefined && content !== null) {
+            const currentContent = editor.getHTML();
+            // content가 다르고, 빈 문자열이 아닌 경우에만 업데이트
+            if (currentContent !== content && content.trim() !== '') {
+                Logger.info('TIPTAP_EDITOR', 'Updating editor content from prop', {
+                    previousLength: currentContent.length,
+                    newLength: content.length,
+                    contentPreview: content.substring(0, 100) + '...'
+                });
+
+                // 트랜잭션을 사용하여 히스토리에 영향 없이 내용 업데이트
+                editor.commands.setContent(content, false);
+            }
+        }
+    }, [editor, content]);
 
     // 🔥 통계 계산
     const wordCount = editor?.storage.characterCount?.words() || 0;

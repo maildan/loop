@@ -192,6 +192,22 @@ export const ProjectEditor = memo(function ProjectEditor({
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isZenMode, toggleSidebar, enableZenMode, disableZenMode]);
 
+    // 🔥 프로젝트 데이터 로드 시 메인 탭 content 초기화
+    useEffect(() => {
+        if (projectData?.content && state.tabs.length > 0) {
+            const mainTab = state.tabs.find(tab => tab.id === 'main');
+            if (mainTab && mainTab.content === '') {
+                // 메인 탭의 content가 비어있으면 프로젝트 content로 초기화
+                actions.updateTab('main', {
+                    content: projectData.content
+                });
+                Logger.info('PROJECT_EDITOR', 'Main tab content initialized from project data', {
+                    contentLength: projectData.content.length
+                });
+            }
+        }
+    }, [projectData?.content, state.tabs, actions]);
+
     // 🔥 로딩 상태 처리
     if (isLoading) {
         return (
