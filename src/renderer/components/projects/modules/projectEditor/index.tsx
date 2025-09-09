@@ -349,11 +349,15 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 title,
                                 type: 'chapter' as const,
                                 isActive: true,
-                                content: ''
+                                content: chapter?.content || ''  // 🔥 기존 content 사용
                             };
                             actions.addTab(newTab);
                             actions.setCurrentView('write');
-                            Logger.info('PROJECT_EDITOR', 'Chapter tab opened', { chapterId });
+                            Logger.info('PROJECT_EDITOR', 'Chapter tab opened', { 
+                                chapterId, 
+                                hasContent: !!chapter?.content,
+                                contentLength: chapter?.content?.length || 0 
+                            });
                         }}
                         onAddNewChapter={() => {
                             actions.openNewChapterModal();

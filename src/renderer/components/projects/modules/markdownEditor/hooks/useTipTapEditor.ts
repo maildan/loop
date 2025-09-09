@@ -207,15 +207,14 @@ export function useTipTapEditor({
     useEffect(() => {
         if (editor && content !== undefined && content !== null) {
             const currentContent = editor.getHTML();
-            // content가 다르고, 빈 문자열이 아닌 경우에만 업데이트
-            if (currentContent !== content && content.trim() !== '') {
+            // content가 다른 경우 업데이트 (빈 문자열도 포함)
+            if (currentContent !== content) {
                 Logger.info('TIPTAP_EDITOR', 'Updating editor content from prop', {
                     previousLength: currentContent.length,
                     newLength: content.length,
-                    contentPreview: content.substring(0, 100) + '...'
+                    contentPreview: content ? content.substring(0, 100) + '...' : '(empty)',
+                    isEmpty: content === ''
                 });
-
-                // 트랜잭션을 사용하여 히스토리에 영향 없이 내용 업데이트
                 editor.commands.setContent(content, false);
             }
         }

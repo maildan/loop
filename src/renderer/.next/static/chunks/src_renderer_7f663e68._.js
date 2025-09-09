@@ -44,7 +44,9 @@ const useStructureStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$no
                         structures: result.data.map((s)=>({
                                 id: s.id,
                                 title: s.title,
-                                type: s.type
+                                type: s.type,
+                                content: s.content ? `${s.content.substring(0, 50)}...` : 'EMPTY',
+                                contentLength: s.content?.length || 0
                             }))
                     });
                     // DB 데이터로 상태 업데이트
