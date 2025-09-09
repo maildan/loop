@@ -519,15 +519,17 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 메인 컨텐츠 */}
             <ProjectEditorLayout.Main>
-                {/* 🔥 ProjectSidebar hover 영역 - absolute positioning으로 수정 */}
+                {/* 🔥 ProjectSidebar hover 영역 - 디버깅 강화 */}
                 {isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-0 w-16 h-full z-50 opacity-0 cursor-pointer"
+                        className="absolute left-0 top-0 w-20 h-full z-[100] bg-red-500/20 cursor-pointer"
                         onMouseEnter={() => {
+                            console.log('🚨 HOVER ACTIVATED!!!');
                             Logger.info('PROJECT_SIDEBAR', 'Hover activated');
                             setSidebarHovered(true);
                         }}
                         onMouseLeave={() => {
+                            console.log('🚨 HOVER DEACTIVATED!!!');
                             Logger.info('PROJECT_SIDEBAR', 'Hover deactivated');
                             setSidebarHovered(false);
                         }}
