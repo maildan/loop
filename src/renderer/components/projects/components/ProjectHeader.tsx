@@ -25,9 +25,9 @@ import {
 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
 
-// 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어
+// 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어  
 const PROJECT_HEADER_STYLES = {
-  header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[900] h-12',
+  header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[10] h-12', // z-index 낮춤
   headerLeft: 'flex items-center gap-3',
   headerCenter: 'flex items-center gap-3 max-w-md',
   headerRight: 'flex items-center gap-2 relative',
@@ -374,7 +374,7 @@ export function ProjectHeader({
       {/* 🔥 Header hover 영역 - 사이드바가 접힌 상태에서만 표시 */}
       {sidebarCollapsed && (
         <div
-          className="fixed top-0 left-0 right-0 h-4 z-[999] opacity-0 cursor-pointer transition-all duration-200"
+          className="fixed top-0 left-0 right-0 h-4 z-[5] opacity-0 cursor-pointer transition-all duration-200"
           onMouseEnter={() => onHeaderHover?.(true)}
           onMouseLeave={() => onHeaderHover?.(false)}
         />
@@ -382,8 +382,8 @@ export function ProjectHeader({
 
       <div
         className={`${PROJECT_HEADER_STYLES.header} ${sidebarCollapsed ?
-            `transition-transform duration-300 ease-in-out ${headerHovered ? 'transform translate-y-0' : 'transform -translate-y-full'
-            }` : ''
+          `transition-transform duration-300 ease-in-out ${headerHovered ? 'transform translate-y-0' : 'transform -translate-y-full'
+          }` : ''
           }`}
         onMouseEnter={() => sidebarCollapsed && onHeaderHover?.(true)}
         onMouseLeave={() => sidebarCollapsed && onHeaderHover?.(false)}

@@ -121,7 +121,13 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                     notes: notes
                                 }}
                                 onAnalysisComplete={(result) => {
-                                    console.log('타임라인 AI 분석 완료:', result);
+                                    console.log('🔍 타임라인 AI 분석 완료:', result);
+                                    console.log('🔍 전달된 context:', {
+                                        charactersCount: characters?.length || 0,
+                                        charactersPreview: characters?.slice(0, 2),
+                                        contentLength: content?.length || 0,
+                                        notesCount: notes?.length || 0
+                                    });
                                 }}
                             />
                         </div>

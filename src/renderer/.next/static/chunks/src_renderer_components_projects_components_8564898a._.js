@@ -854,9 +854,9 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-// 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어
+// 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어  
 const PROJECT_HEADER_STYLES = {
-    header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[900] h-12',
+    header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[10] h-12',
     headerLeft: 'flex items-center gap-3',
     headerCenter: 'flex items-center gap-3 max-w-md',
     headerRight: 'flex items-center gap-2 relative',
@@ -1148,7 +1148,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
             sidebarCollapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "fixed top-0 left-0 right-0 h-4 z-[999] opacity-0 cursor-pointer transition-all duration-200",
+                className: "fixed top-0 left-0 right-0 h-4 z-[5] opacity-0 cursor-pointer transition-all duration-200",
                 onMouseEnter: ()=>onHeaderHover?.(true),
                 onMouseLeave: ()=>onHeaderHover?.(false)
             }, void 0, false, {
