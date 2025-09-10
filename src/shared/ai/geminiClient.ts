@@ -299,12 +299,13 @@ let geminiClient: GeminiClient | null = null;
 
 export function getGeminiClient(): GeminiClient {
     if (!geminiClient) {
-        const apiKey = process.env.GEMINI_API_KEY;
+        // 🔥 클라이언트와 서버 환경 모두 지원
+        const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
         if (!apiKey) {
             throw new GeminiError('MISSING_API_KEY', 'GEMINI_API_KEY environment variable is required', null, false);
         }
 
-        const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+        const model = process.env.GEMINI_MODEL || process.env.NEXT_PUBLIC_GEMINI_MODEL || 'gemini-1.5-flash';
 
         geminiClient = new GeminiClient({
             apiKey,

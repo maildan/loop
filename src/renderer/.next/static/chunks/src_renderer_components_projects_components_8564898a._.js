@@ -877,7 +877,7 @@ const PROJECT_HEADER_STYLES = {
     slidebarContent: 'p-4 overflow-y-auto h-full',
     slidebarOverlay: 'fixed inset-0 bg-black/50 z-30'
 };
-function ProjectHeader({ title, projectId, projectContent = '', onTitleChange, onBack, sidebarCollapsed, onToggleSidebar, showRightSidebar = false, onToggleAISidebar, isZenMode = false, onToggleZenMode, onSave, onShare, onDownload, onDelete, // 🔥 Google Docs 관련 props
+function ProjectHeader({ title, projectId, projectContent = '', onTitleChange, onBack, sidebarCollapsed, onToggleSidebar, headerHovered = false, onHeaderHover, showRightSidebar = false, onToggleAISidebar, isZenMode = false, onToggleZenMode, onSave, onShare, onDownload, onDelete, // 🔥 Google Docs 관련 props
 isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, onSyncWithGoogle, onOpenGoogleDocs }) {
     _s();
     const [activeSlideBar, setActiveSlideBar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -1147,8 +1147,19 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
     ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
         children: [
+            sidebarCollapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed top-0 left-0 right-0 h-4 z-[999] opacity-0 cursor-pointer transition-all duration-200",
+                onMouseEnter: ()=>onHeaderHover?.(true),
+                onMouseLeave: ()=>onHeaderHover?.(false)
+            }, void 0, false, {
+                fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
+                lineNumber: 376,
+                columnNumber: 9
+            }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: PROJECT_HEADER_STYLES.header,
+                className: `${PROJECT_HEADER_STYLES.header} ${sidebarCollapsed ? `transition-transform duration-300 ease-in-out ${headerHovered ? 'transform translate-y-0' : 'transform -translate-y-full'}` : ''}`,
+                onMouseEnter: ()=>sidebarCollapsed && onHeaderHover?.(true),
+                onMouseLeave: ()=>sidebarCollapsed && onHeaderHover?.(false),
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: PROJECT_HEADER_STYLES.headerLeft,
@@ -1161,25 +1172,25 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                     size: 16
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 376,
+                                    lineNumber: 398,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                     children: "프로젝트 목록"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 377,
+                                    lineNumber: 399,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                            lineNumber: 371,
+                            lineNumber: 393,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 370,
+                        lineNumber: 392,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1194,20 +1205,20 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 12
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 387,
+                                            lineNumber: 409,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "Google Docs"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 388,
+                                            lineNumber: 410,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 386,
+                                    lineNumber: 408,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1221,18 +1232,18 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 391,
+                                    lineNumber: 413,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                            lineNumber: 383,
+                            lineNumber: 405,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 382,
+                        lineNumber: 404,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1247,7 +1258,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 412,
+                                            lineNumber: 434,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1257,7 +1268,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 415,
+                                                    lineNumber: 437,
                                                     columnNumber: 17
                                                 }, this),
                                                 action.shortcut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1265,26 +1276,26 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.shortcut
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 416,
+                                                    lineNumber: 438,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 414,
+                                            lineNumber: 436,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `action-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 406,
+                                    lineNumber: 428,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 422,
+                                lineNumber: 444,
                                 columnNumber: 11
                             }, this),
                             toolbarActions.map((action, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1296,7 +1307,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                             size: 16
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 432,
+                                            lineNumber: 454,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1306,7 +1317,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.label
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 435,
+                                                    lineNumber: 457,
                                                     columnNumber: 17
                                                 }, this),
                                                 action.shortcut && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1314,26 +1325,26 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                     children: action.shortcut
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                    lineNumber: 436,
+                                                    lineNumber: 458,
                                                     columnNumber: 37
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                            lineNumber: 434,
+                                            lineNumber: 456,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, `toolbar-${index}`, true, {
                                     fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                    lineNumber: 426,
+                                    lineNumber: 448,
                                     columnNumber: 13
                                 }, this)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 442,
+                                lineNumber: 464,
                                 columnNumber: 11
                             }, this),
                             onToggleAISidebar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1345,7 +1356,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 451,
+                                        lineNumber: 473,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1355,7 +1366,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "창작 파트너"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 454,
+                                                lineNumber: 476,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1363,19 +1374,19 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                                 children: "함께 써봐요"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                                lineNumber: 455,
+                                                lineNumber: 477,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 453,
+                                        lineNumber: 475,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 446,
+                                lineNumber: 468,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1393,7 +1404,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 472,
+                                        lineNumber: 494,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1401,13 +1412,13 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         children: sidebarCollapsed ? '사이드바 펼치기' : '사이드바 접기'
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 473,
+                                        lineNumber: 495,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 461,
+                                lineNumber: 483,
                                 columnNumber: 11
                             }, this),
                             onToggleZenMode && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1419,13 +1430,13 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 485,
+                                        lineNumber: 507,
                                         columnNumber: 28
                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$maximize$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Maximize2$3e$__["Maximize2"], {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 485,
+                                        lineNumber: 507,
                                         columnNumber: 54
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1433,25 +1444,25 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                                         children: isZenMode ? '집중 모드 끄기' : '집중 모드 켜기'
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                        lineNumber: 486,
+                                        lineNumber: 508,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                                lineNumber: 480,
+                                lineNumber: 502,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                        lineNumber: 403,
+                        lineNumber: 425,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                lineNumber: 368,
+                lineNumber: 383,
                 columnNumber: 7
             }, this),
             activeSlideBar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1459,7 +1470,7 @@ isGoogleDocsProject = false, googleDocMeta = null, isSyncingWithGoogle = false, 
                 onClick: ()=>setActiveSlideBar(null)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/components/ProjectHeader.tsx",
-                lineNumber: 496,
+                lineNumber: 518,
                 columnNumber: 9
             }, this)
         ]

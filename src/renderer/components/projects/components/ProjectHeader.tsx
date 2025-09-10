@@ -75,6 +75,10 @@ interface ProjectHeaderProps {
   sidebarCollapsed: boolean;
   onToggleSidebar: () => void;
 
+  // 🔥 Header hover 상태 (사이드바 접힌 상태에서 hover 효과용)
+  headerHovered?: boolean;
+  onHeaderHover?: (hovered: boolean) => void;
+
   // 🔥 AI 창작 파트너 사이드바 컨트롤
   showRightSidebar?: boolean;
   onToggleAISidebar?: () => void;
@@ -110,6 +114,8 @@ export function ProjectHeader({
   onBack,
   sidebarCollapsed,
   onToggleSidebar,
+  headerHovered = false,
+  onHeaderHover,
   showRightSidebar = false,
   onToggleAISidebar,
   isZenMode = false,
@@ -365,7 +371,23 @@ export function ProjectHeader({
 
   return (
     <>
-      <div className={PROJECT_HEADER_STYLES.header}>
+      {/* 🔥 Header hover 영역 - 사이드바가 접힌 상태에서만 표시 */}
+      {sidebarCollapsed && (
+        <div
+          className="fixed top-0 left-0 right-0 h-4 z-[999] opacity-0 cursor-pointer transition-all duration-200"
+          onMouseEnter={() => onHeaderHover?.(true)}
+          onMouseLeave={() => onHeaderHover?.(false)}
+        />
+      )}
+
+      <div
+        className={`${PROJECT_HEADER_STYLES.header} ${sidebarCollapsed ?
+            `transition-transform duration-300 ease-in-out ${headerHovered ? 'transform translate-y-0' : 'transform -translate-y-full'
+            }` : ''
+          }`}
+        onMouseEnter={() => sidebarCollapsed && onHeaderHover?.(true)}
+        onMouseLeave={() => sidebarCollapsed && onHeaderHover?.(false)}
+      >
         {/* 🔥 뒤로가기 버튼 (왼쪽) */}
         <div className={PROJECT_HEADER_STYLES.headerLeft}>
           <button

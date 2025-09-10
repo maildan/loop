@@ -114,8 +114,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2
       dotenv:
-        specifier: ^17.2.0
-        version: 17.2.1
+        specifier: 16.4.5
+        version: 16.4.5
       electron-store:
         specifier: ^8.1.0
         version: 8.2.0
@@ -3522,12 +3522,12 @@ packages:
     resolution: {integrity: sha512-zIHwmZPRshsCdpMDyVsqGmgyP0yT8GAgXUnkdAoJisxvf33k7yO6OuoKmcTGuXPWSsm8Oh88nZicRLA9Y0rUeA==}
     engines: {node: '>=12'}
 
-  dotenv@16.6.1:
-    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
+  dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
 
-  dotenv@17.2.1:
-    resolution: {integrity: sha512-kQhDYKZecqnM0fCnzI5eIv5L4cAe/iRI+HqMbO/hbRdTAeXDG+M9FjipUxNfbARuEg4iHIbhnhs78BCHNbSxEQ==}
+  dotenv@16.6.1:
+    resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
 
   dunder-proto@1.0.1:
@@ -10002,7 +10002,7 @@ snapshots:
       config-file-ts: 0.2.8-rc1
       debug: 4.4.1
       dmg-builder: 26.0.12(electron-builder-squirrel-windows@26.0.12)
-      dotenv: 16.6.1
+      dotenv: 16.4.5
       dotenv-expand: 11.0.7
       ejs: 3.1.10
       electron-builder-squirrel-windows: 26.0.12(dmg-builder@26.0.12)
@@ -10972,11 +10972,11 @@ snapshots:
 
   dotenv-expand@11.0.7:
     dependencies:
-      dotenv: 16.6.1
+      dotenv: 16.4.5
+
+  dotenv@16.4.5: {}
 
   dotenv@16.6.1: {}
-
-  dotenv@17.2.1: {}
 
   dunder-proto@1.0.1:
     dependencies:

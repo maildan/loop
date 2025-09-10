@@ -2827,7 +2827,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$modules$2f$projectEditor$2f$hooks$2f$useProjectEditorState$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/modules/projectEditor/hooks/useProjectEditorState.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$app$2f$settings$2f$hooks$2f$useSettings$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/app/settings/hooks/useSettings.ts [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$modules$2f$projectEditor$2f$components$2f$ProjectEditorLayout$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/projects/modules/projectEditor/components/ProjectEditorLayout.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$common$2f$EnvTester$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/common/EnvTester.tsx [app-ssr] (ecmascript)"); // 🔥 임시 테스터
 'use client';
+;
 ;
 ;
 ;
@@ -2891,6 +2893,8 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
     const [tabBarHovered, setTabBarHovered] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     // 🔥 ProjectSidebar hover 상태
     const [sidebarHovered, setSidebarHovered] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    // 🔥 ProjectHeader hover 상태
+    const [headerHovered, setHeaderHovered] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     // 🔥 집중모드와 사이드바 접기 분리
     const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
     // 🔥 디버깅: 사이드바 상태 확인
@@ -3061,7 +3065,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                             className: "w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                            lineNumber: 233,
+                            lineNumber: 237,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3069,23 +3073,23 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                             children: "프로젝트를 불러오는 중..."
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                            lineNumber: 234,
+                            lineNumber: 238,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 232,
+                    lineNumber: 236,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 231,
+                lineNumber: 235,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-            lineNumber: 230,
+            lineNumber: 234,
             columnNumber: 13
         }, this);
     }
@@ -3102,7 +3106,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                             children: "오류"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                            lineNumber: 247,
+                            lineNumber: 251,
                             columnNumber: 25
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3110,23 +3114,23 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                             children: error
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                            lineNumber: 248,
+                            lineNumber: 252,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 246,
+                    lineNumber: 250,
                     columnNumber: 21
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 245,
+                lineNumber: 249,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-            lineNumber: 244,
+            lineNumber: 248,
             columnNumber: 13
         }, this);
     }
@@ -3157,7 +3161,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                                lineNumber: 266,
+                                lineNumber: 270,
                                 columnNumber: 29
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3204,23 +3208,23 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                     isFocusMode: uiState?.isFocusMode || false
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                                    lineNumber: 285,
+                                    lineNumber: 289,
                                     columnNumber: 33
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                                lineNumber: 284,
+                                lineNumber: 288,
                                 columnNumber: 29
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 264,
+                        lineNumber: 268,
                         columnNumber: 25
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 263,
+                    lineNumber: 267,
                     columnNumber: 21
                 }, this);
             case 'structure':
@@ -3280,7 +3284,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                     }
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 339,
+                    lineNumber: 343,
                     columnNumber: 21
                 }, this);
             case 'characters':
@@ -3297,7 +3301,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                     }
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 385,
+                    lineNumber: 389,
                     columnNumber: 21
                 }, this);
             case 'notes':
@@ -3318,7 +3322,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                     }
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 399,
+                    lineNumber: 403,
                     columnNumber: 21
                 }, this);
             case 'synopsis':
@@ -3332,7 +3336,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                     }
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 417,
+                    lineNumber: 421,
                     columnNumber: 21
                 }, this);
             case 'idea':
@@ -3344,7 +3348,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                     }
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 429,
+                    lineNumber: 433,
                     columnNumber: 21
                 }, this);
             default:
@@ -3358,12 +3362,12 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 439,
+                        lineNumber: 443,
                         columnNumber: 25
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 438,
+                    lineNumber: 442,
                     columnNumber: 21
                 }, this);
         }
@@ -3398,6 +3402,13 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         },
                         sidebarCollapsed: isSidebarCollapsed,
                         onToggleSidebar: toggleSidebar,
+                        headerHovered: headerHovered,
+                        onHeaderHover: (hovered)=>{
+                            setHeaderHovered(hovered);
+                            __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('PROJECT_EDITOR', 'Header hover state changed', {
+                                hovered
+                            });
+                        },
                         showRightSidebar: state.showRightSidebar,
                         onToggleAISidebar: actions.toggleRightSidebar,
                         isZenMode: isZenMode,
@@ -3444,17 +3455,17 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 456,
+                        lineNumber: 460,
                         columnNumber: 21
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                    lineNumber: 455,
+                    lineNumber: 459,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 454,
+                lineNumber: 458,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$modules$2f$projectEditor$2f$components$2f$ProjectEditorLayout$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].Main, {
@@ -3471,7 +3482,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 521,
+                        lineNumber: 530,
                         columnNumber: 21
                     }, this),
                     sidebarHovered && isSidebarCollapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3517,17 +3528,17 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                                lineNumber: 550,
+                                lineNumber: 559,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                            lineNumber: 549,
+                            lineNumber: 558,
                             columnNumber: 25
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 538,
+                        lineNumber: 547,
                         columnNumber: 21
                     }, this),
                     !isSidebarCollapsed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ProjectSidebar$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ProjectSidebar"], {
@@ -3561,7 +3572,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 586,
+                        lineNumber: 595,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3569,7 +3580,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         children: renderCurrentView()
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 619,
+                        lineNumber: 628,
                         columnNumber: 17
                     }, this),
                     state.showRightSidebar && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$WriterStatsPanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["WriterStatsPanel"], {
@@ -3593,13 +3604,25 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         projectId: projectId
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 625,
+                        lineNumber: 634,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 518,
+                lineNumber: 527,
+                columnNumber: 13
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed bottom-4 right-4 z-50",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$common$2f$EnvTester$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {}, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
+                    lineNumber: 659,
+                    columnNumber: 17
+                }, this)
+            }, void 0, false, {
+                fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
+                lineNumber: 658,
                 columnNumber: 13
             }, this),
             state.showDeleteDialog && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDeleteDialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ConfirmDeleteDialog"], {
@@ -3612,7 +3635,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                 onCancel: actions.closeDeleteDialog
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 650,
+                lineNumber: 664,
                 columnNumber: 17
             }, this),
             state.showShareDialog && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ShareDialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ShareDialog"], {
@@ -3622,7 +3645,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                 projectTitle: projectData?.title || '프로젝트'
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 662,
+                lineNumber: 676,
                 columnNumber: 17
             }, this),
             state.showNewChapterModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -3677,7 +3700,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         }
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                        lineNumber: 674,
+                        lineNumber: 688,
                         columnNumber: 21
                     }, this)
                 ]
@@ -3691,7 +3714,7 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                 }
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 723,
+                lineNumber: 737,
                 columnNumber: 17
             }, this),
             state.showNewNoteModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$NewChapterModal$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["NewChapterModal"], {
@@ -3703,18 +3726,18 @@ const ProjectEditor = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                 }
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 734,
+                lineNumber: 748,
                 columnNumber: 17
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$editor$2f$ShortcutHelp$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ShortcutHelp"], {}, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-                lineNumber: 745,
+                lineNumber: 759,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/modules/projectEditor/index.tsx",
-        lineNumber: 452,
+        lineNumber: 456,
         columnNumber: 9
     }, this);
 });

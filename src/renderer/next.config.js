@@ -1,5 +1,17 @@
 /** @type {import('next').NextConfig} */
+
+// 🔥 환경변수를 명시적으로 로드
+require('dotenv').config({ path: '../../.env' });
+
 const nextConfig = {
+  // 🔥 환경변수 설정 - 더 명시적으로
+  env: {
+    NEXT_PUBLIC_GEMINI_API_KEY: process.env.NEXT_PUBLIC_GEMINI_API_KEY || process.env.GEMINI_API_KEY,
+    NEXT_PUBLIC_GEMINI_MODEL: process.env.NEXT_PUBLIC_GEMINI_MODEL || process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+    GEMINI_MAX_TOKENS: process.env.GEMINI_MAX_TOKENS || '4096',
+    GEMINI_TEMPERATURE: process.env.GEMINI_TEMPERATURE || '0.7',
+  },
+
   // 🔥 SPA 모드 설정 - client-side routing 지원
   ...(process.env.NODE_ENV === 'production' && {
     output: 'export',

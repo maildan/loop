@@ -251,16 +251,17 @@ class GeminiError extends Error {
 let geminiClient = null;
 function getGeminiClient() {
     if (!geminiClient) {
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
-            throw new GeminiError('MISSING_API_KEY', 'GEMINI_API_KEY environment variable is required', null, false);
+        // 🔥 클라이언트와 서버 환경 모두 지원
+        const apiKey = process.env.GEMINI_API_KEY || ("TURBOPACK compile-time value", "AIzaSyBMVJIOQT-WcnpGY31tMPdhOBsUAFhD_7U");
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
         }
-        const model = process.env.GEMINI_MODEL || 'gemini-1.5-flash';
+        const model = process.env.GEMINI_MODEL || ("TURBOPACK compile-time value", "gemini-2.5-flash-lite") || 'gemini-1.5-flash';
         geminiClient = new GeminiClient({
             apiKey,
             model,
-            maxTokens: parseInt(process.env.GEMINI_MAX_TOKENS || '4096'),
-            temperature: parseFloat(process.env.GEMINI_TEMPERATURE || '0.7')
+            maxTokens: parseInt(("TURBOPACK compile-time value", "8192") || '4096'),
+            temperature: parseFloat(("TURBOPACK compile-time value", "0.9") || '0.7')
         });
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('GEMINI_CLIENT', 'Singleton instance created');
     }

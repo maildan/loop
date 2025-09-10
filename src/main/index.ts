@@ -1,8 +1,8 @@
 // 🔥 기가차드 Loop Main - 978줄을 50줄로 축소한 깔끔한 진입점
 
 // 🔥 환경변수 우선 로드
-import * as dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
+
 
 
 import "./core/security"
@@ -20,7 +20,13 @@ const safeEnv = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'set' : 'missing',
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ? 'set' : 'missing',
   GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI || 'not set',
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY ? 'set' : 'missing',
+  NEXT_PUBLIC_GEMINI_API_KEY: process.env.NEXT_PUBLIC_GEMINI_API_KEY ? 'set' : 'missing',
+  GEMINI_MODEL: process.env.GEMINI_MODEL || 'not set',
 };
+
+
+
 Logger.info('ENV', 'Loaded environment variables', safeEnv);
 
 // 🔥 앱 이름 설정 (원래는 'Electron'으로 표시되는 것을 수정)

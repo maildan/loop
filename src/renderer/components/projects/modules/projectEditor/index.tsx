@@ -32,6 +32,7 @@ import { useUIState } from '../../hooks/useUIState';
 import { useProjectEditorState } from './hooks/useProjectEditorState';
 import { useSettings } from '../../../../app/settings/hooks/useSettings';
 import ProjectEditorLayout from './components/ProjectEditorLayout';
+import EnvTester from '../../../common/EnvTester'; // 🔥 임시 테스터
 
 export interface ProjectEditorProps {
     projectId: string;
@@ -77,6 +78,9 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     // 🔥 ProjectSidebar hover 상태
     const [sidebarHovered, setSidebarHovered] = useState(false);
+
+    // 🔥 ProjectHeader hover 상태
+    const [headerHovered, setHeaderHovered] = useState(false);
 
     // 🔥 집중모드와 사이드바 접기 분리
     const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
@@ -470,6 +474,11 @@ export const ProjectEditor = memo(function ProjectEditor({
                         }}
                         sidebarCollapsed={isSidebarCollapsed}
                         onToggleSidebar={toggleSidebar}
+                        headerHovered={headerHovered}
+                        onHeaderHover={(hovered) => {
+                            setHeaderHovered(hovered);
+                            Logger.debug('PROJECT_EDITOR', 'Header hover state changed', { hovered });
+                        }}
                         showRightSidebar={state.showRightSidebar}
                         onToggleAISidebar={actions.toggleRightSidebar}
                         isZenMode={isZenMode}
@@ -644,6 +653,11 @@ export const ProjectEditor = memo(function ProjectEditor({
                     />
                 )}
             </ProjectEditorLayout.Main>
+
+            {/* 🔥 임시 환경변수 테스터 */}
+            <div className="fixed bottom-4 right-4 z-50">
+                <EnvTester />
+            </div>
 
             {/* 모달들 */}
             {state.showDeleteDialog && (
