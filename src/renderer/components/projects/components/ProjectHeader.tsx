@@ -382,9 +382,13 @@ export function ProjectHeader({
 
       <div
         className={`${PROJECT_HEADER_STYLES.header} ${sidebarCollapsed ?
-          `transition-transform duration-300 ease-in-out ${headerHovered ? 'transform translate-y-0' : 'transform -translate-y-full'
+          `transition-transform duration-300 ease-in-out ${headerHovered ? 'transform translate-y-0' : 'transform -translate-y-full opacity-0 pointer-events-none'
           }` : ''
           }`}
+        style={{
+          visibility: sidebarCollapsed && !headerHovered ? 'hidden' : 'visible',
+          display: sidebarCollapsed && !headerHovered ? 'none' : 'flex'
+        }}
         onMouseEnter={() => sidebarCollapsed && onHeaderHover?.(true)}
         onMouseLeave={() => sidebarCollapsed && onHeaderHover?.(false)}
       >
