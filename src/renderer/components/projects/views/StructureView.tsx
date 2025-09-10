@@ -128,12 +128,52 @@ const StructureView = memo(function StructureView({
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // 🔥 삭제 확인 다이얼로그
   const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null); // 🔥 삭제할 아이템 정보
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  // 🔥 폴더 접기/펼치기 상태 관리
+  const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(new Set());
 
   // 🔥 강제 리렌더링을 위한 상태
   const [, forceUpdate] = useState({});
   const triggerUpdate = useCallback(() => {
     forceUpdate({});
   }, []);
+
+  // 🔥 폴더 토글 함수
+  const toggleFolder = useCallback((folderType: string) => {
+    setCollapsedFolders(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(folderType)) {
+        newSet.delete(folderType);
+      } else {
+        newSet.add(folderType);
+      }
+      Logger.debug('STRUCTURE_VIEW', 'Folder toggled', { folderType, collapsed: newSet.has(folderType) });
+      return newSet;
+    });
+  }, []);
+
+  // 🔥 폴더별 데이터 그룹화
+  const groupedStructures = useMemo(() => {
+    const groups = {
+      chapters: structures.filter(item => item.type === 'chapter').sort((a, b) => 
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      ),
+      synopsis: structures.filter(item => item.type === 'synopsis').sort((a, b) => 
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      ),
+      ideas: structures.filter(item => item.type === 'idea').sort((a, b) => 
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      )
+    };
+    
+    Logger.debug('STRUCTURE_VIEW', 'Grouped structures', {
+      chapters: groups.chapters.length,
+      synopsis: groups.synopsis.length,
+      ideas: groups.ideas.length
+    });
+    
+    return groups;
+  }, [structures]);
 
   // 🔥 스토어 동기화 디버깅
   useEffect(() => {

@@ -1,0 +1,565 @@
+# Loop Project Development Rules v2.0
+# 전문가급 개발 가이드라인 - 모든 예외상황 및 대응방안 포함
+
+# ==============================================================================
+# AI 분석 기준 및 품질 보증
+# ==============================================================================
+ai_analysis_standards:
+  # AI 분석 핵심 원칙
+  core_principles:
+    - "실제 제공된 데이터에만 기반하여 분석"
+    - "존재하지 않는 요소나 가정 완전 금지"
+    - "구체적이고 실행 가능한 피드백만 제공"
+    - "일반적인 조언이 아닌 해당 데이터의 특수한 분석"
+
+  # 분석 영역별 상세 기준
+  analysis_areas:
+    coherence:
+      description: "타임라인 이벤트들의 논리적 연결성"
+      criteria:
+        - "이벤트 간 인과관계 명확성 (가중치 30%)"
+        - "시간적 순서 일관성 (가중치 25%)"
+        - "캐릭터 행동 연속성 (가중치 25%)" 
+        - "설정 일관성 유지 (가중치 20%)"
+      scoring_method: "0-100 점수, 각 기준별 세부 점수 합산"
+      validation_rules:
+        - "실제 이벤트 제목 3개 이상 직접 인용 필수"
+        - "존재하지 않는 이벤트 참조시 즉시 재분석"
+      
+    pacing:
+      description: "이벤트 간격과 흐름의 적절성"
+      criteria:
+        - "이벤트 밀도 분석 (이벤트/시간단위)"
+        - "긴장감 조절 패턴 (상승-하강 곡선)"
+        - "휴식 구간 배치 (완급 조절)"
+        - "클라이맥스 빌드업 (점진적 증가)"
+      metrics:
+        optimal_density: "3-5 이벤트/챕터"
+        tension_variance: "20-80% 범위에서 변동"
+        rest_intervals: "고강도 이벤트 후 1-2 완충 이벤트"
+      
+    causality:
+      description: "원인과 결과의 명확성"
+      criteria:
+        - "행동과 결과의 논리적 연결"
+        - "동기의 명확성 및 일관성"
+        - "갈등의 발전 과정 추적"
+        - "해결 과정의 타당성 검증"
+      validation_logic:
+        - "각 이벤트의 선행 조건 명시"
+        - "결과 이벤트와의 직접적 연관성 확인"
+      
+    structure:
+      description: "전체적인 스토리 구조의 균형"
+      criteria:
+        - "시작-전개-절정-결말 균형 (25-50-15-10%)"
+        - "서브플롯 통합도"
+        - "주제 일관성 유지"
+        - "전체적 완성도"
+      balance_metrics:
+        setup: "전체 이벤트의 20-30%"
+        development: "전체 이벤트의 40-60%"
+        climax: "전체 이벤트의 10-20%" 
+        resolution: "전체 이벤트의 5-15%"
+
+  # 절대 금지 사항 (완전 차단)
+  forbidden_elements:
+    chapter_references: 
+      - "1장" | "2장" | "3장" | "4장" | "5장" | "6장" | "7장" | "8장" | "9장" | "10장"
+      - "첫 번째 장" | "두 번째 장" | "세 번째 장" | "마지막 장"
+      - "Chapter 1" | "Chapter 2" | "Chapter 3" | "Episode 1" | "Part 1"
+      - "상편" | "중편" | "하편" | "프롤로그" | "에필로그"
+    
+    generic_story_elements:
+      - "마법 시스템" | "마법사" | "마법 아이템"
+      - "캐릭터 대화" | "대화 장면" | "대사"
+      - "액션 시퀀스" | "전투 장면" | "액션"
+      - "로맨스 라인" | "러브 스토리" | "연애"
+      - "반전 요소" | "반전" | "트위스트"
+      - "케이라의 배신" | "케이라" | "배신"
+      - "데이터 획득" | "해킹" | "사이버"
+      - "주인공의 여정" | "히어로 저니"
+      - "조력자" | "멘토" | "안타고니스트"
+    
+    generic_advice:
+      - "일반적인 스토리텔링 팁"
+      - "베스트셀러 공식"
+      - "독자 몰입 기법" 
+      - "문학적 기교"
+      - "창작 이론"
+      - "장르적 관습"
+
+  # 필수 포함 요소 (품질 보증)
+  required_elements:
+    data_references:
+      - "실제 타임라인 이벤트 제목 최소 3개 직접 인용"
+      - "실제 캐릭터 이름 사용 (존재하는 경우)"
+      - "제공된 데이터의 구체적 수치 활용"
+      - "명확한 개선 위치 지정 (이벤트 번호/제목)"
+    
+    analysis_quality:
+      - "각 점수의 구체적 산출 근거"
+      - "개선방안의 실행 가능성 검증"
+      - "단계별 구현 로드맵 제시"
+      - "예상 효과의 정량적 추정"
+
+# ==============================================================================
+# 예외상황 처리 - 시스템 레벨
+# ==============================================================================
+system_exceptions:
+  memory_management:
+    scenarios:
+      - name: "메모리 누수 감지"
+        trigger: "heap 사용량 > 512MB 또는 증가율 > 10MB/min"
+        response: |
+          ```typescript
+          const memoryMonitor = () => {
+            const usage = process.memoryUsage();
+            if (usage.heapUsed > 512 * 1024 * 1024) {
+              Logger.warn('MEMORY_HIGH', { usage });
+              // 강제 가비지 컬렉션 (개발환경에서만)
+              if (process.env.NODE_ENV === 'development' && global.gc) {
+                global.gc();
+              }
+            }
+          };
+          ```
+        error_code: "ERR_001"
+      
+      - name: "메모리 부족 응급 처리"
+        trigger: "Available memory < 100MB"
+        response: |
+          ```typescript
+          const emergencyCleanup = () => {
+            // 캐시 정리
+            analysisCache.clear();
+            // 대용량 데이터 해제
+            timelineData.splice(1000); 
+            // 사용자 알림
+            showNotification('메모리 부족으로 일부 데이터를 정리했습니다', 'warning');
+          };
+          ```
+        error_code: "ERR_002"
+
+  cpu_performance:
+    scenarios:
+      - name: "CPU 사용량 과다"
+        trigger: "CPU 사용률 > 80% for 10초"
+        response: |
+          ```typescript
+          const throttleOperations = () => {
+            // AI 분석 요청 지연
+            analysisQueue.setDelay(2000);
+            // 렌더링 최적화
+            setRenderMode('performance');
+            // 백그라운드 작업 일시 정지
+            backgroundTasks.pauseAll();
+          };
+          ```
+        error_code: "ERR_003"
+
+  storage_management:
+    scenarios:
+      - name: "디스크 공간 부족"
+        trigger: "Available disk space < 1GB"
+        response: |
+          ```typescript
+          const cleanupStorage = async () => {
+            // 임시 파일 정리
+            await fs.rm('./temp', { recursive: true, force: true });
+            // 로그 파일 압축
+            await compressOldLogs();
+            // 캐시 파일 정리 
+            await clearCache();
+            Logger.info('STORAGE_CLEANUP', 'Emergency cleanup completed');
+          };
+          ```
+        error_code: "ERR_004"
+
+  network_handling:
+    scenarios:
+      - name: "API 서버 연결 실패"
+        trigger: "HTTP timeout > 30초 또는 connection refused"
+        response: |
+          ```typescript
+          const handleApiFailure = async (error: NetworkError) => {
+            // 지수 백오프 재시도
+            const retryWithBackoff = async (attempt: number) => {
+              if (attempt > 3) throw new Error('API_UNAVAILABLE');
+              await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+              return apiCall();
+            };
+            
+            // 오프라인 모드 전환
+            setOfflineMode(true);
+            showNotification('오프라인 모드로 전환되었습니다', 'info');
+          };
+          ```
+        error_code: "ERR_005"
+
+# ==============================================================================
+# 예외상황 처리 - 사용자 경험
+# ==============================================================================
+user_experience_exceptions:
+  input_validation:
+    scenarios:
+      - name: "잘못된 프로젝트 데이터"
+        trigger: "필수 필드 누락 또는 잘못된 형식"
+        validation_rules:
+          project_title: "1-100자, 특수문자 제한"
+          character_name: "1-50자, 영숫자+한글만"
+          timeline_event: "제목 필수, 날짜 형식 검증"
+        response: |
+          ```typescript
+          const validateInput = (input: UserInput): ValidationResult => {
+            const errors: string[] = [];
+            
+            if (!input.title?.trim()) {
+              errors.push('제목을 입력해주세요');
+            } else if (input.title.length > 100) {
+              errors.push('제목은 100자 이내로 입력해주세요');
+            }
+            
+            return { isValid: errors.length === 0, errors };
+          };
+          ```
+        error_code: "ERR_010"
+
+  file_operations:
+    scenarios:
+      - name: "파일 업로드 실패"
+        trigger: "파일 크기 > 10MB 또는 지원하지 않는 형식"
+        supported_formats: [".md", ".txt", ".json", ".csv"]
+        max_file_size: "10MB"
+        response: |
+          ```typescript
+          const validateFileUpload = (file: File): boolean => {
+            const allowedTypes = ['.md', '.txt', '.json', '.csv'];
+            const maxSize = 10 * 1024 * 1024; // 10MB
+            
+            if (file.size > maxSize) {
+              showError('파일 크기는 10MB 이하여야 합니다');
+              return false;
+            }
+            
+            const extension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+            if (!allowedTypes.includes(extension)) {
+              showError('지원하지 않는 파일 형식입니다');
+              return false;
+            }
+            
+            return true;
+          };
+          ```
+        error_code: "ERR_011"
+
+  session_management:
+    scenarios:
+      - name: "세션 만료"
+        trigger: "사용자 비활성 > 2시간 또는 토큰 만료"
+        response: |
+          ```typescript
+          const handleSessionExpiry = () => {
+            // 현재 작업 임시 저장
+            const currentWork = getCurrentWorkingData();
+            localStorage.setItem('unsavedWork', JSON.stringify(currentWork));
+            
+            // 사용자 알림
+            showModal({
+              title: '세션이 만료되었습니다',
+              message: '작업 내용은 임시 저장되었습니다. 다시 로그인해주세요.',
+              actions: ['로그인', '나중에']
+            });
+          };
+          ```
+        error_code: "ERR_012"
+
+  concurrent_editing:
+    scenarios:
+      - name: "동시 편집 충돌"
+        trigger: "같은 문서를 여러 사용자가 동시에 수정"
+        response: |
+          ```typescript
+          const resolveEditConflict = (localChanges: Change[], remoteChanges: Change[]) => {
+            // 3-way merge 시도
+            const mergedChanges = mergeChanges(localChanges, remoteChanges);
+            
+            if (mergedChanges.conflicts.length > 0) {
+              // 충돌 해결 UI 표시
+              showConflictResolver({
+                local: localChanges,
+                remote: remoteChanges,
+                conflicts: mergedChanges.conflicts,
+                onResolve: (resolution) => applyResolution(resolution)
+              });
+            }
+          };
+          ```
+        error_code: "ERR_013"
+
+# ==============================================================================
+# 예외상황 처리 - 개발/배포
+# ==============================================================================
+development_exceptions:
+  build_process:
+    scenarios:
+      - name: "빌드 실패"
+        common_causes: 
+          - "TypeScript 컴파일 에러"
+          - "의존성 버전 충돌"
+          - "메모리 부족"
+          - "디스크 공간 부족"
+        response: |
+          ```bash
+          # 빌드 실패 자동 복구 스크립트
+          #!/bin/bash
+          echo "🔧 빌드 실패 복구 시작..."
+          
+          # 1. 노드 모듈 재설치
+          rm -rf node_modules package-lock.json
+          npm install
+          
+          # 2. 타입스크립트 캐시 정리
+          rm -rf dist .next tsconfig.tsbuildinfo
+          
+          # 3. 메모리 정리
+          echo "메모리 정리 중..."
+          if command -v purge &> /dev/null; then
+            sudo purge
+          fi
+          
+          # 4. 재빌드 시도
+          npm run build:clean
+          ```
+        error_code: "ERR_020"
+
+  dependency_conflicts:
+    scenarios:
+      - name: "패키지 버전 충돌"
+        detection: "npm ls 또는 yarn why 명령어 오류"
+        response: |
+          ```json
+          // package.json 해결 전략
+          {
+            "resolutions": {
+              "**/@types/react": "^18.2.0",
+              "**/typescript": "^5.0.0"
+            },
+            "overrides": {
+              "@types/react": "^18.2.0"
+            }
+          }
+          ```
+        error_code: "ERR_021"
+
+  environment_setup:
+    scenarios:
+      - name: "환경변수 누락"
+        required_variables: 
+          - "DATABASE_URL"
+          - "API_BASE_URL"
+          - "JWT_SECRET"
+          - "NODE_ENV"
+        validation_script: |
+          ```typescript
+          const validateEnvironment = (): void => {
+            const required = ['DATABASE_URL', 'API_BASE_URL', 'JWT_SECRET'];
+            const missing = required.filter(key => !process.env[key]);
+            
+            if (missing.length > 0) {
+              console.error('❌ Missing environment variables:', missing);
+              console.log('📝 Please create .env.local with:');
+              missing.forEach(key => console.log(`${key}=your_value_here`));
+              process.exit(1);
+            }
+            
+            console.log('✅ Environment variables validated');
+          };
+          ```
+        error_code: "ERR_022"
+
+# ==============================================================================
+# 데이터 검증 및 보안
+# ==============================================================================
+security_validation:
+  xss_prevention:
+    dangerous_patterns:
+      - "<script"
+      - "javascript:"
+      - "onload="
+      - "onerror="
+      - "eval("
+    sanitization: |
+      ```typescript
+      const sanitizeHtml = (input: string): string => {
+        return input
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+          .replace(/javascript:/gi, '')
+          .replace(/on\w+="[^"]*"/gi, '')
+          .replace(/eval\s*\(/gi, '');
+      };
+      ```
+    error_code: "ERR_030"
+
+  sql_injection:
+    prevention: |
+      ```typescript
+      // 매개변수화된 쿼리 사용
+      const getProject = async (id: string) => {
+        return await db.query('SELECT * FROM projects WHERE id = $1', [id]);
+      };
+      
+      // 입력값 검증
+      const isValidId = (id: string): boolean => {
+        return /^[a-zA-Z0-9_-]+$/.test(id);
+      };
+      ```
+    error_code: "ERR_031"
+
+# ==============================================================================
+# 성능 최적화 가이드라인
+# ==============================================================================
+performance_standards:
+  metrics:
+    page_load_time: "< 3초"
+    first_contentful_paint: "< 1.5초"
+    time_to_interactive: "< 4초"
+    cumulative_layout_shift: "< 0.1"
+    
+  optimization_techniques:
+    code_splitting: |
+      ```typescript
+      // 라우트별 코드 스플리팅
+      const TimelineView = lazy(() => import('./views/TimelineView'));
+      const CharactersView = lazy(() => import('./views/CharactersView'));
+      
+      // 컴포넌트 레벨 스플리팅
+      const HeavyAnalytics = lazy(() => import('./HeavyAnalytics'));
+      ```
+    
+    virtualization: |
+      ```typescript
+      // 대용량 리스트 가상화
+      import { FixedSizeList as List } from 'react-window';
+      
+      const VirtualizedTimeline = ({ items }: { items: TimelineItem[] }) => (
+        <List
+          height={600}
+          itemCount={items.length}
+          itemSize={80}
+          itemData={items}
+        >
+          {TimelineRow}
+        </List>
+      );
+      ```
+
+# ==============================================================================
+# 로깅 및 모니터링 체계
+# ==============================================================================
+logging_system:
+  log_levels:
+    ERROR: "시스템 오류, 즉시 대응 필요"
+    WARN: "주의 필요, 모니터링 강화"
+    INFO: "정보성 로그, 일반적 동작"
+    DEBUG: "개발시에만, 상세 디버깅"
+
+  log_format: |
+    ```typescript
+    interface LogEntry {
+      timestamp: string;    // ISO 8601 format
+      level: LogLevel;
+      service: string;      // 'UI', 'API', 'DB', 'AI'
+      category: string;     // 'AUTH', 'ANALYSIS', 'DATA'
+      message: string;
+      metadata?: object;
+      error?: Error;
+      userId?: string;
+      sessionId: string;
+      traceId: string;     // 분산 추적용
+    }
+    ```
+
+  error_codes:
+    system_errors:
+      ERR_001: "메모리 사용량 과다"
+      ERR_002: "메모리 부족 응급상황"
+      ERR_003: "CPU 사용량 과다"
+      ERR_004: "디스크 공간 부족"
+      ERR_005: "네트워크 연결 실패"
+    
+    user_errors:
+      ERR_010: "입력값 검증 실패"
+      ERR_011: "파일 업로드 실패"
+      ERR_012: "세션 만료"
+      ERR_013: "동시 편집 충돌"
+    
+    development_errors:
+      ERR_020: "빌드 프로세스 실패"
+      ERR_021: "패키지 의존성 충돌"
+      ERR_022: "환경변수 누락"
+    
+    security_errors:
+      ERR_030: "XSS 공격 시도 감지"
+      ERR_031: "SQL 인젝션 시도 감지"
+      ERR_032: "비정상적 API 호출 패턴"
+
+# ==============================================================================
+# 테스트 전략 및 품질 보증
+# ==============================================================================
+testing_framework:
+  test_categories:
+    unit_tests:
+      coverage_target: "90%"
+      critical_functions:
+        - "AI 분석 로직"
+        - "데이터 검증 함수"
+        - "사용자 입력 처리"
+        - "에러 핸들링"
+    
+    integration_tests:
+      scenarios:
+        - "AI 분석 전체 플로우"
+        - "프로젝트 생성부터 분석까지"
+        - "다중 사용자 동시 사용"
+        - "대용량 데이터 처리"
+    
+    e2e_tests:
+      user_journeys:
+        - "신규 사용자 온보딩"
+        - "프로젝트 생성 및 편집"
+        - "AI 분석 실행 및 결과 확인"
+        - "데이터 내보내기"
+
+  quality_gates:
+    - "모든 테스트 통과"
+    - "코드 커버리지 90% 이상"
+    - "성능 메트릭 기준 충족"
+    - "접근성 테스트 통과"
+    - "보안 스캔 통과"
+
+# ==============================================================================
+# 개발 마일스톤 및 완성도 지표
+# ==============================================================================
+milestones:
+  "60_percent":
+    completed_features:
+      - "기본 프로젝트 관리"
+      - "타임라인 및 캐릭터 관리"
+      - "기본 AI 분석"
+      - "스토리구조 기본 기능"
+    
+  "80_percent":
+    target_features:
+      - "스토리구조 폴더 시스템"
+      - "AI 분석 더미데이터 완전 제거"
+      - "예외상황 처리 완벽 구현"
+      - "성능 최적화 완료"
+      - "사용자 경험 대폭 개선"
+    
+  "100_percent":
+    final_features:
+      - "모든 기능 완전 구현"
+      - "전문가급 품질 보증"
+      - "프로덕션 레디"
+      - "확장성 보장"

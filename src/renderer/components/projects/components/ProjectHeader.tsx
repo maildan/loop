@@ -374,7 +374,7 @@ export function ProjectHeader({
       {/* 🔥 Header hover 영역 - 사이드바가 접힌 상태에서만 표시 */}
       {sidebarCollapsed && (
         <div
-          className="fixed top-0 left-0 right-0 h-4 z-[5] opacity-0 cursor-pointer transition-all duration-200"
+          className="fixed top-0 left-0 right-0 h-8 z-[5] opacity-0 cursor-pointer transition-all duration-200"
           onMouseEnter={() => onHeaderHover?.(true)}
           onMouseLeave={() => onHeaderHover?.(false)}
         />

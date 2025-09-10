@@ -75,9 +75,10 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                                         {item.type}
                                                     </span>
                                                 </div>
-                                                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                                    {item.description}
-                                                </p>
+                                                <div
+                                                    className="text-sm text-gray-600 dark:text-gray-400 mb-2"
+                                                    dangerouslySetInnerHTML={{ __html: item.description }}
+                                                />
                                                 <div className="text-xs text-gray-500">
                                                     {new Date(item.timestamp).toLocaleDateString('ko-KR')}
                                                 </div>

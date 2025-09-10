@@ -145,7 +145,7 @@ export function CharactersView({
     setEditForm(character);
   };
 
-  const handleEditSave = async (): Promise<void> => {
+  const handleEditSubmit = async (): Promise<void> => {
     if (!editingCharacter || !editForm.name?.trim()) return;
 
     try {
@@ -159,14 +159,24 @@ export function CharactersView({
       const result = await window.electronAPI.projects.upsertCharacter(characterToSave);
 
       if (result.success && result.data) {
-        const updatedCharacters = editingCharacter.id === editForm.id
-          ? characters.map(char => char.id === editingCharacter.id ? result.data! : char)
-          : [...characters, result.data];
+        const isNewCharacter = editingCharacter.id === editForm.id && !characters.find(char => char.id === editingCharacter.id);
+        const updatedCharacters = isNewCharacter
+          ? [...characters, result.data]
+          : characters.map(char => char.id === editingCharacter.id ? result.data! : char);
 
+        // 🔥 즉시 상태 업데이트
         onCharactersChange(updatedCharacters);
+
+        // 🔥 편집 상태 초기화
         setEditingCharacter(null);
         setEditForm({});
-        Logger.info('CHARACTERS_VIEW', 'Character saved', { id: result.data.id });
+
+        // 🔥 컴포넌트 강제 리렌더링 유발
+        setTimeout(() => {
+          onCharactersChange([...updatedCharacters]);
+        }, 100);
+
+        Logger.info('CHARACTERS_VIEW', 'Character saved', { id: result.data.id, isNew: isNewCharacter });
       }
     } catch (error) {
       Logger.error('CHARACTERS_VIEW', 'Failed to save character', error);
@@ -631,7 +641,7 @@ export function CharactersView({
                 취소
               </button>
               <button
-                onClick={handleEditSave}
+                onClick={handleEditSubmit}
                 className={`${CHARACTERS_STYLES.button} ${CHARACTERS_STYLES.buttonPrimary}`}
               >
                 저장
