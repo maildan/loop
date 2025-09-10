@@ -3085,7 +3085,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 ;
 ;
 ;
-const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
+const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [], notes = [], content = '' })=>{
     const [showAIAnalysis, setShowAIAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex-1 overflow-hidden flex flex-col",
@@ -3100,14 +3100,14 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                 className: "h-5 w-5 mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                lineNumber: 25,
+                                lineNumber: 34,
                                 columnNumber: 21
                             }, this),
                             "타임라인 뷰"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                        lineNumber: 24,
+                        lineNumber: 33,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3122,25 +3122,25 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                     className: "w-4 h-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                    lineNumber: 35,
+                                    lineNumber: 44,
                                     columnNumber: 25
                                 }, this),
                                 showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                            lineNumber: 29,
+                            lineNumber: 38,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                        lineNumber: 28,
+                        lineNumber: 37,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                lineNumber: 23,
+                lineNumber: 32,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3160,7 +3160,7 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                 className: "w-12 h-12 mx-auto mb-4 text-gray-400"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 48,
+                                                lineNumber: 57,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -3168,7 +3168,7 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                 children: "타임라인이 비어있습니다"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 49,
+                                                lineNumber: 58,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3176,13 +3176,13 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                 children: "프로젝트에 이벤트를 추가하여 타임라인을 구성해보세요."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 50,
+                                                lineNumber: 59,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                        lineNumber: 47,
+                                        lineNumber: 56,
                                         columnNumber: 33
                                     }, this) : analysis.timeline.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex items-start space-x-4",
@@ -3194,20 +3194,20 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                             className: "w-3 h-3 bg-indigo-500 rounded-full"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                            lineNumber: 56,
+                                                            lineNumber: 65,
                                                             columnNumber: 45
                                                         }, this),
                                                         index < analysis.timeline.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "w-0.5 h-16 bg-gray-300 dark:bg-gray-600 mt-2"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                            lineNumber: 58,
+                                                            lineNumber: 67,
                                                             columnNumber: 49
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                    lineNumber: 55,
+                                                    lineNumber: 64,
                                                     columnNumber: 41
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3223,7 +3223,7 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                                         children: item.title
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                        lineNumber: 64,
+                                                                        lineNumber: 73,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3231,13 +3231,13 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                                         children: item.type
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                        lineNumber: 65,
+                                                                        lineNumber: 74,
                                                                         columnNumber: 53
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                lineNumber: 63,
+                                                                lineNumber: 72,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3245,7 +3245,7 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                                 children: item.description
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                lineNumber: 69,
+                                                                lineNumber: 78,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3253,29 +3253,29 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                                 children: new Date(item.timestamp).toLocaleDateString('ko-KR')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                lineNumber: 72,
+                                                                lineNumber: 81,
                                                                 columnNumber: 49
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                        lineNumber: 62,
+                                                        lineNumber: 71,
                                                         columnNumber: 45
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                    lineNumber: 61,
+                                                    lineNumber: 70,
                                                     columnNumber: 41
                                                 }, this)
                                             ]
                                         }, item.id, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                            lineNumber: 54,
+                                            lineNumber: 63,
                                             columnNumber: 37
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                    lineNumber: 45,
+                                    lineNumber: 54,
                                     columnNumber: 25
                                 }, this),
                                 analysis.timeline.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3292,25 +3292,25 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                                 className: "w-4 h-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 93,
+                                                lineNumber: 102,
                                                 columnNumber: 37
                                             }, this),
                                             "샘플 데이터 추가"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                        lineNumber: 85,
+                                        lineNumber: 94,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                    lineNumber: 84,
+                                    lineNumber: 93,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                            lineNumber: 44,
+                            lineNumber: 53,
                             columnNumber: 21
                         }, this),
                         showAIAnalysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3320,37 +3320,40 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo' })=>{
                                 analysisType: "timeline",
                                 data: analysis.timeline,
                                 context: {
-                                    content: analysis.timeline.map((t)=>`${t.title}: ${t.description}`).join('\n'),
-                                    themes: analysis.timeline.map((t)=>t.type).filter((v, i, a)=>a.indexOf(v) === i)
+                                    content: content || analysis.timeline.map((t)=>`${t.title}: ${t.description}`).join('\n'),
+                                    characters: characters,
+                                    plotPoints: analysis.timeline,
+                                    themes: analysis.timeline.map((t)=>t.type).filter((v, i, a)=>a.indexOf(v) === i),
+                                    notes: notes
                                 },
                                 onAnalysisComplete: (result)=>{
                                     console.log('타임라인 AI 분석 완료:', result);
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                lineNumber: 103,
+                                lineNumber: 112,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                            lineNumber: 102,
+                            lineNumber: 111,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                    lineNumber: 42,
+                    lineNumber: 51,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                lineNumber: 41,
+                lineNumber: 50,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-        lineNumber: 21,
+        lineNumber: 30,
         columnNumber: 9
     }, this);
 };
@@ -3380,7 +3383,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 ;
 ;
 ;
-const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
+const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], notes = [], content = '' })=>{
     const [showAIAnalysis, setShowAIAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     // 요소별로 분류
     const categorizedElements = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
@@ -3409,7 +3412,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                         children: icon
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 36,
+                        lineNumber: 42,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3420,7 +3423,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                 children: element.title
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 40,
+                                lineNumber: 46,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3428,7 +3431,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                 children: element.content
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 43,
+                                lineNumber: 49,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3444,7 +3447,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                         children: tag
                                                     }, tag, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                        lineNumber: 51,
+                                                        lineNumber: 57,
                                                         columnNumber: 41
                                                     }, this)),
                                                 element.tags.length > 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3455,18 +3458,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 56,
+                                                    lineNumber: 62,
                                                     columnNumber: 41
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 49,
+                                            lineNumber: 55,
                                             columnNumber: 33
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                        lineNumber: 47,
+                                        lineNumber: 53,
                                         columnNumber: 25
                                     }, this),
                                     element.wordCount && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3477,30 +3480,30 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                        lineNumber: 62,
+                                        lineNumber: 68,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 46,
+                                lineNumber: 52,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 39,
+                        lineNumber: 45,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                lineNumber: 35,
+                lineNumber: 41,
                 columnNumber: 13
             }, this)
         }, element.id, false, {
             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-            lineNumber: 34,
+            lineNumber: 40,
             columnNumber: 9
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3516,14 +3519,14 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                 className: "h-5 w-5 mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 77,
+                                lineNumber: 83,
                                 columnNumber: 21
                             }, this),
                             "아웃라인 뷰"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 76,
+                        lineNumber: 82,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3538,25 +3541,25 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                     className: "w-4 h-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                    lineNumber: 87,
+                                    lineNumber: 93,
                                     columnNumber: 25
                                 }, this),
                                 showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                            lineNumber: 81,
+                            lineNumber: 87,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 80,
+                        lineNumber: 86,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                lineNumber: 75,
+                lineNumber: 81,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3575,7 +3578,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                             className: "w-12 h-12 mx-auto mb-4 text-gray-400"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 100,
+                                            lineNumber: 106,
                                             columnNumber: 37
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -3583,7 +3586,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                             children: "아웃라인이 비어있습니다"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 101,
+                                            lineNumber: 107,
                                             columnNumber: 37
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3591,13 +3594,13 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                             children: "사이드바에서 챕터, 인물, 아이디어를 추가하여 아웃라인을 구성해보세요."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 102,
+                                            lineNumber: 108,
                                             columnNumber: 37
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                    lineNumber: 99,
+                                    lineNumber: 105,
                                     columnNumber: 33
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                     children: [
@@ -3610,7 +3613,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 110,
+                                                            lineNumber: 116,
                                                             columnNumber: 49
                                                         }, this),
                                                         "챕터 (",
@@ -3619,7 +3622,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 109,
+                                                    lineNumber: 115,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3628,18 +3631,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-blue-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 115,
+                                                            lineNumber: 121,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 113,
+                                                    lineNumber: 119,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 108,
+                                            lineNumber: 114,
                                             columnNumber: 41
                                         }, this),
                                         categorizedElements.characters.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3651,7 +3654,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 125,
+                                                            lineNumber: 131,
                                                             columnNumber: 49
                                                         }, this),
                                                         "인물 (",
@@ -3660,7 +3663,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 124,
+                                                    lineNumber: 130,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3669,18 +3672,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-green-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 130,
+                                                            lineNumber: 136,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 128,
+                                                    lineNumber: 134,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 123,
+                                            lineNumber: 129,
                                             columnNumber: 41
                                         }, this),
                                         categorizedElements.ideas.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3692,7 +3695,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 140,
+                                                            lineNumber: 146,
                                                             columnNumber: 49
                                                         }, this),
                                                         "아이디어 (",
@@ -3701,7 +3704,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 139,
+                                                    lineNumber: 145,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3710,18 +3713,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-yellow-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 145,
+                                                            lineNumber: 151,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 143,
+                                                    lineNumber: 149,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 138,
+                                            lineNumber: 144,
                                             columnNumber: 41
                                         }, this),
                                         (categorizedElements.memos.length > 0 || categorizedElements.notes.length > 0) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3733,7 +3736,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 155,
+                                                            lineNumber: 161,
                                                             columnNumber: 49
                                                         }, this),
                                                         "메모 & 노트 (",
@@ -3742,7 +3745,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 154,
+                                                    lineNumber: 160,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3754,30 +3757,30 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                                             className: "w-4 h-4 text-gray-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 160,
+                                                            lineNumber: 166,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 158,
+                                                    lineNumber: 164,
                                                     columnNumber: 45
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 153,
+                                            lineNumber: 159,
                                             columnNumber: 41
                                         }, this)
                                     ]
                                 }, void 0, true)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 97,
+                                lineNumber: 103,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                            lineNumber: 96,
+                            lineNumber: 102,
                             columnNumber: 21
                         }, this),
                         showAIAnalysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3793,39 +3796,43 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo' })=>{
                                     totalElements: elements.length
                                 },
                                 context: {
-                                    content: elements.map((e)=>`${e.title}: ${e.content}`).join('\n'),
+                                    content: content || elements.map((e)=>`${e.title}: ${e.content}`).join('\n'),
                                     themes: elements.map((e)=>e.type).filter((v, i, a)=>a.indexOf(v) === i),
-                                    characters: categorizedElements.characters,
-                                    plotPoints: elements.filter((e)=>e.plotRelevance && e.plotRelevance >= 3)
+                                    characters: [
+                                        ...characters || [],
+                                        ...categorizedElements.characters
+                                    ],
+                                    plotPoints: elements.filter((e)=>e.plotRelevance && e.plotRelevance >= 3),
+                                    notes: notes
                                 },
                                 onAnalysisComplete: (result)=>{
                                     console.log('아웃라인 AI 분석 완료:', result);
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 173,
+                                lineNumber: 179,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                            lineNumber: 172,
+                            lineNumber: 178,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                    lineNumber: 94,
+                    lineNumber: 100,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                lineNumber: 93,
+                lineNumber: 99,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-        lineNumber: 73,
+        lineNumber: 79,
         columnNumber: 9
     }, this);
 };
@@ -4534,7 +4541,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 ;
 ;
 ;
-const SynopsisView = ({ projectId, synopsisId, onBack })=>{
+const SynopsisView = ({ projectId, synopsisId, onBack, characters = [], notes = [], content = '' })=>{
     const { elements, analysis, loading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$hooks$2f$useProjectData$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useIntegratedProjectData"])(projectId);
     const [viewMode, setViewMode] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('timeline');
     const [selectedElement, setSelectedElement] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -4556,7 +4563,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         className: "animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mx-auto"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 46,
+                        lineNumber: 56,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4564,18 +4571,18 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         children: "분석 중..."
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 47,
+                        lineNumber: 57,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 45,
+                lineNumber: 55,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-            lineNumber: 44,
+            lineNumber: 54,
             columnNumber: 13
         }, this);
     }
@@ -4589,7 +4596,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         className: "h-12 w-12 text-gray-400 mx-auto mb-2"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 57,
+                        lineNumber: 67,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4597,7 +4604,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         children: "분석할 데이터가 없습니다."
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 58,
+                        lineNumber: 68,
                         columnNumber: 21
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4605,18 +4612,18 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         children: "챕터나 캐릭터를 추가해주세요."
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 59,
+                        lineNumber: 69,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 56,
+                lineNumber: 66,
                 columnNumber: 17
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-            lineNumber: 55,
+            lineNumber: 65,
             columnNumber: 13
         }, this);
     }
@@ -4651,7 +4658,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                 children: "프로젝트 시놉시스"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 78,
+                                lineNumber: 88,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4664,25 +4671,25 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                                 className: "h-4 w-4 mr-2"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                                lineNumber: 91,
+                                                lineNumber: 101,
                                                 columnNumber: 33
                                             }, this),
                                             name
                                         ]
                                     }, id, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                        lineNumber: 83,
+                                        lineNumber: 93,
                                         columnNumber: 29
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                lineNumber: 81,
+                                lineNumber: 91,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 77,
+                        lineNumber: 87,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4695,43 +4702,51 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     className: "h-4 w-4 mr-2"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 106,
+                                    lineNumber: 116,
                                     columnNumber: 25
                                 }, this),
                                 "분석 패널"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 99,
+                            lineNumber: 109,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 98,
+                        lineNumber: 108,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 76,
+                lineNumber: 86,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex-1 flex overflow-hidden",
                 children: [
                     viewMode === 'timeline' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$synopsis$2f$TimelinePanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TimelinePanel"], {
-                        analysis: analysis
+                        analysis: analysis,
+                        projectId: projectId,
+                        characters: characters,
+                        notes: notes,
+                        content: content
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 115,
-                        columnNumber: 45
+                        lineNumber: 126,
+                        columnNumber: 21
                     }, this),
                     viewMode === 'outline' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$synopsis$2f$OutlinePanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["OutlinePanel"], {
-                        elements: elements
+                        elements: elements,
+                        projectId: projectId,
+                        characters: characters,
+                        notes: notes,
+                        content: content
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 116,
-                        columnNumber: 44
+                        lineNumber: 135,
+                        columnNumber: 21
                     }, this),
                     viewMode === 'mindmap' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$synopsis$2f$MindmapCanvas$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["MindmapCanvas"], {
                         elements: elements,
@@ -4739,7 +4754,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         onSelectElement: setSelectedElement
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 118,
+                        lineNumber: 144,
                         columnNumber: 21
                     }, this),
                     showAnalysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$views$2f$synopsis$2f$AnalysisPanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AnalysisPanel"], {
@@ -4748,13 +4763,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                         getRelatedElements: getRelatedElements
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                        lineNumber: 127,
+                        lineNumber: 153,
                         columnNumber: 21
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 113,
+                lineNumber: 123,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4769,7 +4784,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: analysis.totalWords.toLocaleString()
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 139,
+                                    lineNumber: 165,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4777,13 +4792,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: "총 단어 수"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 142,
+                                    lineNumber: 168,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 138,
+                            lineNumber: 164,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4793,7 +4808,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: analysis.totalChapters
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 145,
+                                    lineNumber: 171,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4801,13 +4816,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: "챕터"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 148,
+                                    lineNumber: 174,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 144,
+                            lineNumber: 170,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4817,7 +4832,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: analysis.totalCharacters
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 151,
+                                    lineNumber: 177,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4825,13 +4840,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: "캐릭터"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 154,
+                                    lineNumber: 180,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 150,
+                            lineNumber: 176,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4844,7 +4859,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 157,
+                                    lineNumber: 183,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4852,13 +4867,13 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: "스토리 일관성"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 160,
+                                    lineNumber: 186,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 156,
+                            lineNumber: 182,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4871,7 +4886,7 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 163,
+                                    lineNumber: 189,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4879,30 +4894,30 @@ const SynopsisView = ({ projectId, synopsisId, onBack })=>{
                                     children: "캐릭터 일관성"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                                    lineNumber: 166,
+                                    lineNumber: 192,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                            lineNumber: 162,
+                            lineNumber: 188,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                    lineNumber: 137,
+                    lineNumber: 163,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-                lineNumber: 136,
+                lineNumber: 162,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/SynopsisView.tsx",
-        lineNumber: 74,
+        lineNumber: 84,
         columnNumber: 9
     }, this);
 };

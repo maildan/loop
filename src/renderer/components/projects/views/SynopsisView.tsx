@@ -14,11 +14,21 @@ interface SynopsisViewProps {
     projectId: string;
     synopsisId?: string; // 🔥 ProjectEditor에서 전달되는 prop
     onBack?: () => void; // 🔥 ProjectEditor에서 전달되는 prop
+    characters?: any[]; // 캐릭터 데이터
+    notes?: any[]; // 노트 데이터
+    content?: string; // 프로젝트 내용
 }
 
 type ViewMode = 'timeline' | 'outline' | 'mindmap';
 
-export const SynopsisView: React.FC<SynopsisViewProps> = ({ projectId, synopsisId, onBack }) => {
+export const SynopsisView: React.FC<SynopsisViewProps> = ({ 
+    projectId, 
+    synopsisId, 
+    onBack,
+    characters = [],
+    notes = [],
+    content = ''
+}) => {
     const { elements, analysis, loading } = useProjectData(projectId);
     const [viewMode, setViewMode] = useState<ViewMode>('timeline');
     const [selectedElement, setSelectedElement] = useState<string | null>(null);
@@ -112,8 +122,24 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({ projectId, synopsisI
             {/* 🔥 메인 콘텐츠 */}
             <div className="flex-1 flex overflow-hidden">
                 {/* 뷰 패널 */}
-                {viewMode === 'timeline' && <TimelinePanel analysis={analysis} />}
-                {viewMode === 'outline' && <OutlinePanel elements={elements} />}
+                {viewMode === 'timeline' && (
+                    <TimelinePanel 
+                        analysis={analysis} 
+                        projectId={projectId}
+                        characters={characters}
+                        notes={notes}
+                        content={content}
+                    />
+                )}
+                {viewMode === 'outline' && (
+                    <OutlinePanel 
+                        elements={elements} 
+                        projectId={projectId}
+                        characters={characters}
+                        notes={notes}
+                        content={content}
+                    />
+                )}
                 {viewMode === 'mindmap' && (
                     <MindmapCanvas
                         elements={elements}

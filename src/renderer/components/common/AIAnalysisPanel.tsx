@@ -40,6 +40,7 @@ export interface AIAnalysisPanelProps {
         themes?: string[];
         genre?: string;
         targetAudience?: string;
+        notes?: any[]; // 노트 데이터 추가
     };
     onAnalysisComplete?: (result: AnalysisResponse) => void;
     className?: string;

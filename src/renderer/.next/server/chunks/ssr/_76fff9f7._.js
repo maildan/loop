@@ -1502,7 +1502,46 @@ ${contextualInfo}
         if (context.genre) prompt += `장르: ${context.genre}\n`;
         if (context.targetAudience) prompt += `타겟 독자: ${context.targetAudience}\n`;
         if (context.themes?.length) prompt += `주요 테마: ${context.themes.join(', ')}\n`;
-        if (context.characters?.length) prompt += `등장인물: ${context.characters.map((c)=>c.name || c.title).join(', ')}\n`;
+        // 🔥 등장인물 상세 정보 포함
+        if (context.characters?.length) {
+            prompt += `\n[등장인물 상세]\n`;
+            context.characters.forEach((char, index)=>{
+                prompt += `${index + 1}. ${char.name || '이름 없음'}: ${char.role || ''}\n`;
+                if (char.description || char.notes) {
+                    prompt += `   - 설명: ${char.description || char.notes || ''}\n`;
+                }
+                if (char.background) {
+                    prompt += `   - 배경: ${char.background}\n`;
+                }
+            });
+        }
+        // 🔥 플롯 포인트 상세 정보 포함
+        if (context.plotPoints?.length) {
+            prompt += `\n[주요 플롯 포인트]\n`;
+            context.plotPoints.forEach((point, index)=>{
+                prompt += `${index + 1}. ${point.title || point.name || ''}\n`;
+                if (point.description || point.content) {
+                    prompt += `   - 내용: ${point.description || point.content || ''}\n`;
+                }
+            });
+        }
+        // 🔥 노트 데이터 포함
+        if (context.notes?.length) {
+            prompt += `\n[작가 노트 및 아이디어]\n`;
+            context.notes.forEach((note, index)=>{
+                prompt += `${index + 1}. ${note.title || '제목 없음'}\n`;
+                if (note.content) {
+                    prompt += `   - 내용: ${note.content.slice(0, 200)}${note.content.length > 200 ? '...' : ''}\n`;
+                }
+                if (note.tags && note.tags.length > 0) {
+                    prompt += `   - 태그: ${note.tags.join(', ')}\n`;
+                }
+            });
+        }
+        // 🔥 작품 내용 일부 포함
+        if (context.content) {
+            prompt += `\n[작품 내용 발췌]\n${context.content.slice(0, 800)}${context.content.length > 800 ? '...' : ''}\n`;
+        }
         return prompt;
     }
     parseTimelineResponse(content) {

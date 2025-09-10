@@ -11,11 +11,17 @@ import { Logger } from '@/shared/logger';
 interface OutlinePanelProps {
     elements: ProjectElement[];
     projectId?: string;
+    characters?: any[]; // 캐릭터 데이터
+    notes?: any[]; // 노트 데이터
+    content?: string; // 프로젝트 내용
 }
 
 export const OutlinePanel: React.FC<OutlinePanelProps> = ({
     elements,
-    projectId = 'outline-demo'
+    projectId = 'outline-demo',
+    characters = [],
+    notes = [],
+    content = ''
 }) => {
     const [showAIAnalysis, setShowAIAnalysis] = useState(false);
 
@@ -181,10 +187,11 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                     totalElements: elements.length
                                 }}
                                 context={{
-                                    content: elements.map(e => `${e.title}: ${e.content}`).join('\n'),
+                                    content: content || elements.map(e => `${e.title}: ${e.content}`).join('\n'),
                                     themes: elements.map(e => e.type).filter((v, i, a) => a.indexOf(v) === i),
-                                    characters: categorizedElements.characters,
-                                    plotPoints: elements.filter(e => e.plotRelevance && e.plotRelevance >= 3)
+                                    characters: [...(characters || []), ...categorizedElements.characters],
+                                    plotPoints: elements.filter(e => e.plotRelevance && e.plotRelevance >= 3),
+                                    notes: notes
                                 }}
                                 onAnalysisComplete={(result) => {
                                     console.log('아웃라인 AI 분석 완료:', result);

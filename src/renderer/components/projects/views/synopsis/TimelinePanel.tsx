@@ -12,9 +12,18 @@ import { GoogleGenAI } from "@google/genai";
 interface TimelinePanelProps {
     analysis: ProjectAnalysis;
     projectId?: string;
+    characters?: any[]; // 캐릭터 데이터
+    notes?: any[]; // 노트 데이터
+    content?: string; // 프로젝트 내용
 }
 
-export const TimelinePanel: React.FC<TimelinePanelProps> = ({ analysis, projectId = 'timeline-demo' }) => {
+export const TimelinePanel: React.FC<TimelinePanelProps> = ({ 
+    analysis, 
+    projectId = 'timeline-demo', 
+    characters = [], 
+    notes = [], 
+    content = '' 
+}) => {
     const [showAIAnalysis, setShowAIAnalysis] = useState(false);
 
     return (
@@ -105,8 +114,11 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({ analysis, projectI
                                 analysisType="timeline"
                                 data={analysis.timeline}
                                 context={{
-                                    content: analysis.timeline.map(t => `${t.title}: ${t.description}`).join('\n'),
-                                    themes: analysis.timeline.map(t => t.type).filter((v, i, a) => a.indexOf(v) === i)
+                                    content: content || analysis.timeline.map(t => `${t.title}: ${t.description}`).join('\n'),
+                                    characters: characters,
+                                    plotPoints: analysis.timeline,
+                                    themes: analysis.timeline.map(t => t.type).filter((v, i, a) => a.indexOf(v) === i),
+                                    notes: notes
                                 }}
                                 onAnalysisComplete={(result) => {
                                     console.log('타임라인 AI 분석 완료:', result);

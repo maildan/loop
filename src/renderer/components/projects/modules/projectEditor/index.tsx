@@ -421,6 +421,9 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <SynopsisView
                         projectId={projectId}
                         synopsisId="default" // 기본 시놉시스 ID
+                        characters={projectData?.characters || []}
+                        notes={projectData?.notes || []}
+                        content={projectData?.content || ''}
                         onBack={() => {
                             Logger.info('PROJECT_EDITOR', 'Synopsis view back - returning to structure view');
                             actions.setCurrentView('structure');
