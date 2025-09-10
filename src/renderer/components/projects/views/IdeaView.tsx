@@ -105,7 +105,7 @@ const IDEA_STYLES = {
     searchIcon: 'absolute left-3 top-2.5 text-gray-400',
 
     // 🔥 메인 컨텐츠
-    content: 'flex-1 min-h-0', // overflow-hidden 제거하여 스크롤 허용
+    content: 'flex-1 min-h-0 overflow-hidden', // 명시적 overflow 설정
     scrollArea: 'h-full overflow-y-auto p-6',
 
     // 🔥 카드 뷰 - 모던하고 세련된 디자인

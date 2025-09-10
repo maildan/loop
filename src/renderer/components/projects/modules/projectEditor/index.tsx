@@ -32,7 +32,6 @@ import { useUIState } from '../../hooks/useUIState';
 import { useProjectEditorState } from './hooks/useProjectEditorState';
 import { useSettings } from '../../../../app/settings/hooks/useSettings';
 import ProjectEditorLayout from './components/ProjectEditorLayout';
-import EnvTester from '../../../common/EnvTester'; // 🔥 임시 테스터
 
 export interface ProjectEditorProps {
     projectId: string;
@@ -656,11 +655,6 @@ export const ProjectEditor = memo(function ProjectEditor({
                     />
                 )}
             </ProjectEditorLayout.Main>
-
-            {/* 🔥 임시 환경변수 테스터 */}
-            <div className="fixed bottom-4 right-4 z-50">
-                <EnvTester />
-            </div>
 
             {/* 모달들 */}
             {state.showDeleteDialog && (

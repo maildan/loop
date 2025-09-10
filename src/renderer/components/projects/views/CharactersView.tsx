@@ -34,7 +34,7 @@ const CHARACTERS_STYLES = {
 
   // 🔥 콘텐츠 영역
   content: 'flex-1 flex flex-col min-h-0',
-  scrollArea: 'flex-1 overflow-y-auto',
+  scrollArea: 'flex-1 overflow-y-auto max-h-full',
   contentPadding: 'p-6',
 
   // 🔥 캐릭터 그리드
@@ -403,8 +403,8 @@ export function CharactersView({
                     <div
                       key={character.id}
                       className={`${CHARACTERS_STYLES.characterCard} ${focusMode && selectedCharacterId !== character.id
-                          ? 'opacity-30 blur-[1px] scale-95 transition-all duration-300'
-                          : 'opacity-100 blur-0 scale-100 transition-all duration-300'
+                        ? 'opacity-30 blur-[1px] scale-95 transition-all duration-300'
+                        : 'opacity-100 blur-0 scale-100 transition-all duration-300'
                         }`}
                       onClick={handleCharacterClick}
                       onDoubleClick={handleCharacterDoubleClick}

@@ -17,12 +17,12 @@ interface TimelinePanelProps {
     content?: string; // 프로젝트 내용
 }
 
-export const TimelinePanel: React.FC<TimelinePanelProps> = ({ 
-    analysis, 
-    projectId = 'timeline-demo', 
-    characters = [], 
-    notes = [], 
-    content = '' 
+export const TimelinePanel: React.FC<TimelinePanelProps> = ({
+    analysis,
+    projectId = 'timeline-demo',
+    characters = [],
+    notes = [],
+    content = ''
 }) => {
     const [showAIAnalysis, setShowAIAnalysis] = useState(false);
 

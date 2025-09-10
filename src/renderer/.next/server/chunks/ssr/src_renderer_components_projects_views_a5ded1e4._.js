@@ -683,7 +683,7 @@ const CHARACTERS_STYLES = {
     statLabel: 'text-xs text-slate-600 dark:text-gray-400',
     // 🔥 콘텐츠 영역
     content: 'flex-1 flex flex-col min-h-0',
-    scrollArea: 'flex-1 overflow-y-auto',
+    scrollArea: 'flex-1 overflow-y-auto max-h-full',
     contentPadding: 'p-6',
     // 🔥 캐릭터 그리드
     characterGrid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
@@ -5038,7 +5038,7 @@ const IDEA_STYLES = {
     searchInput: 'pl-9 pr-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
     searchIcon: 'absolute left-3 top-2.5 text-gray-400',
     // 🔥 메인 컨텐츠
-    content: 'flex-1 min-h-0',
+    content: 'flex-1 min-h-0 overflow-hidden',
     scrollArea: 'h-full overflow-y-auto p-6',
     // 🔥 카드 뷰 - 모던하고 세련된 디자인
     cardsContainer: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6',

@@ -21,9 +21,9 @@ interface SynopsisViewProps {
 
 type ViewMode = 'timeline' | 'outline' | 'mindmap';
 
-export const SynopsisView: React.FC<SynopsisViewProps> = ({ 
-    projectId, 
-    synopsisId, 
+export const SynopsisView: React.FC<SynopsisViewProps> = ({
+    projectId,
+    synopsisId,
     onBack,
     characters = [],
     notes = [],
@@ -94,8 +94,8 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
                                 key={id}
                                 onClick={() => setViewMode(id)}
                                 className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${viewMode === id
-                                        ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300'
-                                        : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
+                                    ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300'
+                                    : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
                                     }`}
                             >
                                 <Icon className="h-4 w-4 mr-2" />
@@ -109,8 +109,8 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
                     <button
                         onClick={() => setShowAnalysis(!showAnalysis)}
                         className={`flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors ${showAnalysis
-                                ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300'
-                                : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
+                            ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-300'
+                            : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200'
                             }`}
                     >
                         <Eye className="h-4 w-4 mr-2" />
@@ -123,8 +123,8 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
             <div className="flex-1 flex overflow-hidden">
                 {/* 뷰 패널 */}
                 {viewMode === 'timeline' && (
-                    <TimelinePanel 
-                        analysis={analysis} 
+                    <TimelinePanel
+                        analysis={analysis}
                         projectId={projectId}
                         characters={characters}
                         notes={notes}
@@ -132,8 +132,8 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
                     />
                 )}
                 {viewMode === 'outline' && (
-                    <OutlinePanel 
-                        elements={elements} 
+                    <OutlinePanel
+                        elements={elements}
                         projectId={projectId}
                         characters={characters}
                         notes={notes}

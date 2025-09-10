@@ -1191,35 +1191,91 @@ class AIAnalysisService {
             const timelineData = this.prepareTimelineData(request.data);
             const contextualInfo = this.buildContextualPrompt(request.context);
             const prompt = `
-전문 서사 구조 분석가로서 다음 타임라인을 종합 분석해주세요:
+당신은 20년 경력의 전문 서사 구조 분석가입니다. 다음 타임라인을 철저히 분석하고, 구체적이고 실행 가능한 개선 방안을 제시해주세요.
 
 [타임라인 데이터]
 ${JSON.stringify(timelineData, null, 2)}
 
 ${contextualInfo}
 
-다음 항목들을 분석하여 JSON 형태로 응답해주세요:
+**분석 요구사항:**
+1. 각 평가에서 점수를 매긴 정확한 이유를 상세히 설명하세요
+2. 문제점을 지적할 때는 구체적인 예시를 들어주세요  
+3. 개선 제안은 단계별로 실행 가능한 방법으로 제시하세요
+4. 각 제안의 우선순위와 예상 효과를 명시하세요
+
+다음 JSON 형식으로 응답해주세요:
 
 {
   "coherence": {
     "score": 0-100,
-    "issues": ["시간적 모순점들"],
-    "suggestions": ["개선 제안들"]
+    "reasoning": "점수를 이렇게 매긴 구체적인 이유 (300자 이상)",
+    "issues": ["구체적인 문제점들 - 어떤 부분에서 왜 문제가 되는지"],
+    "suggestions": [
+      {
+        "title": "개선 방안 제목",
+        "description": "상세한 설명과 구체적 방법",
+        "priority": "high|medium|low",
+        "impact": "어떤 효과를 기대할 수 있는지",
+        "steps": ["1단계", "2단계", "3단계"]
+      }
+    ]
   },
   "pacing": {
     "score": 0-100,
-    "analysis": "페이싱 분석 내용",
-    "improvements": ["페이싱 개선 방안들"]
+    "reasoning": "페이싱 평가 근거 (300자 이상)",
+    "analysis": "페이싱의 장단점 상세 분석",
+    "improvements": [
+      {
+        "title": "개선 방안",
+        "description": "구체적 방법론",
+        "example": "실제 적용 예시",
+        "priority": "high|medium|low"
+      }
+    ]
   },
   "causality": {
     "score": 0-100,
-    "brokenLinks": [{"from": "이벤트A", "to": "이벤트B", "issue": "문제점"}],
-    "suggestions": ["인과관계 개선 방안들"]
+    "reasoning": "인과관계 평가 이유 (300자 이상)",
+    "brokenLinks": [
+      {
+        "from": "이벤트A",
+        "to": "이벤트B", 
+        "issue": "왜 연결이 부자연스러운지 구체적 이유",
+        "solution": "어떻게 개선할 수 있는지"
+      }
+    ],
+    "suggestions": [
+      {
+        "title": "인과관계 강화 방안",
+        "description": "구체적 개선 방법",
+        "examples": ["예시1", "예시2"],
+        "priority": "high|medium|low"
+      }
+    ]
   },
   "structure": {
-    "acts": [{"name": "1막", "start": 0, "end": 25, "quality": 85}],
+    "acts": [
+      {
+        "name": "1막",
+        "start": 0,
+        "end": 25,
+        "quality": 85,
+        "strengths": ["이 막의 장점들"],
+        "weaknesses": ["이 막의 약점들"],
+        "improvements": ["구체적 개선 방안들"]
+      }
+    ],
     "balance": 0-100,
-    "recommendations": ["구조 개선 제안들"]
+    "balanceReasoning": "균형 평가의 근거 (200자 이상)",
+    "recommendations": [
+      {
+        "title": "구조 개선 제안",
+        "description": "왜 필요하고 어떻게 할 것인지",
+        "urgency": "즉시|단기|장기",
+        "difficulty": "쉬움|보통|어려움"
+      }
+    ]
   }
 }
 
@@ -1267,36 +1323,99 @@ ${contextualInfo}
             const outlineData = this.prepareOutlineData(request.data);
             const contextualInfo = this.buildContextualPrompt(request.context);
             const prompt = `
-전문 스토리 구조 컨설턴트로서 다음 아웃라인을 분석해주세요:
+당신은 베스트셀러 작가들의 스토리 구조를 분석해온 20년 경력의 전문 컨설턴트입니다. 
+다음 아웃라인을 체계적으로 분석하고, 구체적이고 실행 가능한 개선 방안을 제시해주세요.
 
 [아웃라인 구조]
 ${JSON.stringify(outlineData, null, 2)}
 
 ${contextualInfo}
 
-다음 형식으로 JSON 응답해주세요:
+**분석 기준:**
+1. 각 평가 점수에 대한 명확한 근거 제시
+2. 문제점은 구체적인 예시와 함께 설명  
+3. 개선안은 단계별 실행 방법 포함
+4. 독자 관점에서의 효과 예측
+
+다음 JSON 형식으로 상세히 응답해주세요:
 
 {
   "structure": {
     "score": 0-100,
-    "balance": "구조 균형성 평가",
-    "missing": ["누락된 요소들"],
-    "redundant": ["중복된 요소들"]
+    "scoreReason": "점수 근거 (200자 이상)",
+    "balance": "구조 균형성에 대한 상세 평가",
+    "missing": [
+      {
+        "element": "누락 요소명",
+        "importance": "왜 중요한지",
+        "suggestion": "어떻게 추가할지",
+        "position": "어디에 위치시킬지"
+      }
+    ],
+    "redundant": [
+      {
+        "element": "중복 요소명", 
+        "reason": "왜 중복인지",
+        "solution": "어떻게 정리할지"
+      }
+    ]
   },
   "flow": {
     "score": 0-100,
-    "transitions": [{"from": "섹션1", "to": "섹션2", "quality": 85, "suggestion": "개선안"}]
+    "scoreReason": "흐름 평가 근거 (200자 이상)",
+    "transitions": [
+      {
+        "from": "섹션1",
+        "to": "섹션2",
+        "quality": 85,
+        "strengths": ["잘된 점들"],
+        "weaknesses": ["부족한 점들"],
+        "suggestion": "구체적 개선안",
+        "example": "개선 예시"
+      }
+    ]
   },
   "content": {
     "depth": 0-100,
+    "depthReason": "깊이 평가 이유",
     "clarity": 0-100,
+    "clarityReason": "명확성 평가 이유",
     "completeness": 0-100,
-    "suggestions": ["내용 개선 제안들"]
+    "completenessReason": "완성도 평가 이유",
+    "suggestions": [
+      {
+        "category": "내용 개선 분야",
+        "description": "구체적 개선 방법",
+        "priority": "high|medium|low",
+        "steps": ["1단계", "2단계", "3단계"],
+        "expectedOutcome": "예상 효과"
+      }
+    ]
   },
   "engagement": {
-    "hooks": ["흥미 유발 요소들"],
-    "payoffs": ["만족도 제공 요소들"],
-    "improvements": ["참여도 개선 방안들"]
+    "hooks": [
+      {
+        "element": "흥미 유발 요소",
+        "effectiveness": "high|medium|low",
+        "reason": "왜 효과적인지/개선이 필요한지",
+        "enhancement": "강화 방안"
+      }
+    ],
+    "payoffs": [
+      {
+        "element": "만족도 제공 요소",
+        "impact": "독자에게 미치는 영향",
+        "improvement": "개선 방안"
+      }
+    ],
+    "improvements": [
+      {
+        "area": "참여도 개선 영역",
+        "method": "구체적 방법론",
+        "example": "실제 적용 예시",
+        "difficulty": "쉬움|보통|어려움"
+      }
+    ]
   }
 }
             `;
