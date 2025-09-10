@@ -1,6 +1,9 @@
 // 🔥 Narrative Context Protocol (NCP) 기반 독자 반응 예측 시스템
 // USC Entertainment Technology Center와 Narrative First 협력으로 개발된 표준
 
+import { DummyDataFilter } from '../services/dummyDataFilter';
+import { Logger } from '../logger';
+
 export interface NCPNarrativeStructure {
     // 🔥 핵심 스토리 요소들
     id: string;

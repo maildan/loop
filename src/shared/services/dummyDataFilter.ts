@@ -144,7 +144,10 @@ export class DummyDataFilter {
                     const pathParts = path.split('.');
                     let target: any = sanitizedResult;
                     for (let i = 0; i < pathParts.length - 1; i++) {
-                        target = target[pathParts[i]];
+                        const key = pathParts[i];
+                        if (key && target && typeof target === 'object') {
+                            target = target[key];
+                        }
                     }
                     const lastKey = pathParts[pathParts.length - 1];
                     if (target && lastKey) {

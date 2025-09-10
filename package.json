@@ -93,6 +93,7 @@
     "@tiptap/suggestion": "^2.25.0",
     "@uiw/codemirror-extensions-basic-setup": "^4.23.14",
     "@uiw/react-codemirror": "^4.23.14",
+    "@xyflow/react": "^12.8.4",
     "active-win": "8.2.1",
     "adm-zip": "^0.5.16",
     "axios": "^1.10.0",

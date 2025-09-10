@@ -2,6 +2,7 @@
 import { NCPStoryAnalyzer, type NCPNarrativeStructure, type ReaderEngagementPrediction, type TimelineAnalysis, type MindmapAnalysis } from './ncpAnalyzer';
 import { getGeminiClient, type GeminiResponse } from '../ai/geminiClient';
 import { Logger } from '../logger';
+import { DummyDataFilter } from '../services/dummyDataFilter';
 
 export interface AIEnhancedAnalysisResult {
     // 기존 NCP 분석 결과
@@ -59,10 +60,11 @@ export interface AIEnhancedAnalysisResult {
 
 export class AIEnhancedNCPAnalyzer extends NCPStoryAnalyzer {
     private geminiClient = getGeminiClient();
+    private dummyFilter = new DummyDataFilter();
 
     constructor(structure: NCPNarrativeStructure) {
         super(structure);
-        Logger.info('AI_NCP_ANALYZER', 'Initialized with AI enhancement');
+        Logger.info('AI_NCP_ANALYZER', 'Initialized with AI enhancement and dummy data filter');
     }
 
     // 🔥 종합 AI 분석 - 모든 분석을 통합하여 수행
@@ -312,74 +314,90 @@ ${plotPoints.map(p => `- ${p.title}: ${p.description || ''}`).join('\n')}
         };
     }
 
-    // 🔥 AI 응답 파싱 유틸리티들
+    // 🔥 AI 응답 파싱 유틸리티들 - 더미데이터 필터 적용
     private parseSynopsisAnalysis(content: string) {
+        // 🔥 먼저 더미데이터 필터 적용
+        const filteredResult = this.dummyFilter.detectDummyContent(content);
+        const filteredContent = filteredResult.cleanedText;
+
         // AI 응답을 파싱하여 구조화된 데이터로 변환
-        const scoreMatch = content.match(/(\d+)점|(\d+)\/100|점수[:\s]*(\d+)/i);
-        const score = scoreMatch ? parseInt((scoreMatch[1] || scoreMatch[2] || scoreMatch[3]) || '75') : 75;
+        const scoreMatch = filteredContent.match(/(\d+)점|(\d+)\/100|점수[:\s]*(\d+)/i);
+        const score = scoreMatch ? parseInt((scoreMatch[1] || scoreMatch[2] || scoreMatch[3]) || '0') : 0;
 
-        const strengthsSection = content.match(/강점[:\s]*\n*((?:.*\n)*?)(?=약점|개선|$)/i);
+        const strengthsSection = filteredContent.match(/강점[:\s]*\n*((?:.*\n)*?)(?=약점|개선|$)/i);
         const strengths = strengthsSection?.[1] ?
-            strengthsSection[1].split('\n').filter(s => s.trim().length > 0).slice(0, 5) :
-            ['구체적인 강점 분석 필요'];
+            strengthsSection[1].split('\n').filter((s: string) => s.trim().length > 0).slice(0, 5).filter((item: string) => !this.dummyFilter.detectDummyContent(item).hasDummyContent) :
+            [];
 
-        const weaknessesSection = content.match(/약점[:\s]*\n*((?:.*\n)*?)(?=제안|개선|$)/i);
+        const weaknessesSection = filteredContent.match(/약점[:\s]*\n*((?:.*\n)*?)(?=제안|개선|$)/i);
         const weaknesses = weaknessesSection?.[1] ?
-            weaknessesSection[1].split('\n').filter(s => s.trim().length > 0).slice(0, 5) :
-            ['구체적인 약점 분석 필요'];
+            weaknessesSection[1].split('\n').filter((s: string) => s.trim().length > 0).slice(0, 5).filter((item: string) => !this.dummyFilter.detectDummyContent(item).hasDummyContent) :
+            [];
 
-        const recommendationsSection = content.match(/제안[:\s]*\n*((?:.*\n)*?)$/i);
+        const recommendationsSection = filteredContent.match(/제안[:\s]*\n*((?:.*\n)*?)$/i);
         const recommendations = recommendationsSection?.[1] ?
-            recommendationsSection[1].split('\n').filter(s => s.trim().length > 0).slice(0, 7) :
-            ['추가 분석이 필요합니다'];
+            recommendationsSection[1].split('\n').filter((s: string) => s.trim().length > 0).slice(0, 7).filter((item: string) => !this.dummyFilter.detectDummyContent(item).hasDummyContent) :
+            [];
 
         return { score, strengths, weaknesses, recommendations };
     }
 
     private parseCharacterAnalysis(content: string) {
-        const arcMatch = content.match(/아크.*?(\d+)점|완성도.*?(\d+)/i);
-        const arcCompleteness = arcMatch ? parseInt((arcMatch[1] || arcMatch[2]) || '70') : 70;
+        // 🔥 더미데이터 필터 적용
+        const filteredResult = this.dummyFilter.detectDummyContent(content);
+        const filteredContent = filteredResult.cleanedText;
 
-        const relationshipMatch = content.match(/관계.*?(\d+)점|깊이.*?(\d+)/i);
-        const relationshipDepth = relationshipMatch ? parseInt((relationshipMatch[1] || relationshipMatch[2]) || '70') : 70;
+        const arcMatch = filteredContent.match(/아크.*?(\d+)점|완성도.*?(\d+)/i);
+        const arcCompleteness = arcMatch ? parseInt((arcMatch[1] || arcMatch[2]) || '0') : 0;
 
-        const suggestionsSection = content.match(/제안[:\s]*\n*((?:.*\n)*?)$/i);
+        const relationshipMatch = filteredContent.match(/관계.*?(\d+)점|깊이.*?(\d+)/i);
+        const relationshipDepth = relationshipMatch ? parseInt((relationshipMatch[1] || relationshipMatch[2]) || '0') : 0;
+
+        const suggestionsSection = filteredContent.match(/제안[:\s]*\n*((?:.*\n)*?)$/i);
         const developmentSuggestions = suggestionsSection?.[1] ?
-            suggestionsSection[1].split('\n').filter(s => s.trim().length > 0).slice(0, 5) :
-            ['캐릭터 발전 제안 분석 중'];
+            suggestionsSection[1].split('\n').filter((s: string) => s.trim().length > 0).slice(0, 5).filter((item: string) => !this.dummyFilter.detectDummyContent(item).hasDummyContent) :
+            [];
 
         return { arcCompleteness, relationshipDepth, developmentSuggestions };
     }
 
     private parsePlotAnalysis(content: string) {
-        const coherenceMatch = content.match(/일관성.*?(\d+)점|논리.*?(\d+)/i);
-        const coherenceScore = coherenceMatch ? parseInt((coherenceMatch[1] || coherenceMatch[2]) || '75') : 75;
+        // 🔥 더미데이터 필터 적용
+        const filteredResult = this.dummyFilter.detectDummyContent(content);
+        const filteredContent = filteredResult.cleanedText;
 
-        const pacingMatch = content.match(/페이싱.*?(\d+)점|리듬.*?(\d+)/i);
-        const pacingScore = pacingMatch ? parseInt((pacingMatch[1] || pacingMatch[2]) || '75') : 75;
+        const coherenceMatch = filteredContent.match(/일관성.*?(\d+)점|논리.*?(\d+)/i);
+        const coherenceScore = coherenceMatch ? parseInt((coherenceMatch[1] || coherenceMatch[2]) || '0') : 0;
 
-        const climaxMatch = content.match(/클라이맥스.*?(\d+)점|효과.*?(\d+)/i);
-        const climaxEffectiveness = climaxMatch ? parseInt((climaxMatch[1] || climaxMatch[2]) || '75') : 75;
+        const pacingMatch = filteredContent.match(/페이싱.*?(\d+)점|리듬.*?(\d+)/i);
+        const pacingScore = pacingMatch ? parseInt((pacingMatch[1] || pacingMatch[2]) || '0') : 0;
 
-        const plotHoles = content.match(/플롯홀|오류|문제/gi) ?
-            ['플롯 일관성 검토 필요', '논리적 연결성 강화'] : [];
+        const climaxMatch = filteredContent.match(/클라이맥스.*?(\d+)점|효과.*?(\d+)/i);
+        const climaxEffectiveness = climaxMatch ? parseInt((climaxMatch[1] || climaxMatch[2]) || '0') : 0;
 
-        const structuralSuggestions = ['구조적 개선 방안 도출 중'];
+        const plotHoles = filteredContent.match(/플롯홀|오류|문제/gi) ?
+            ['실제 플롯 검토가 필요합니다'] : [];
+
+        const structuralSuggestions = ['실제 데이터 기반 구조 분석이 필요합니다'];
 
         return { coherenceScore, pacingScore, climaxEffectiveness, plotHoles, structuralSuggestions };
     }
 
     private parseThemeAnalysis(content: string) {
-        const clarityMatch = content.match(/명확성.*?(\d+)점|테마.*?(\d+)/i);
-        const clarity = clarityMatch ? parseInt((clarityMatch[1] || clarityMatch[2]) || '75') : 75;
+        // 🔥 더미데이터 필터 적용
+        const filteredResult = this.dummyFilter.detectDummyContent(content);
+        const filteredContent = filteredResult.cleanedText;
 
-        const consistencyMatch = content.match(/일관성.*?(\d+)점|표현.*?(\d+)/i);
-        const consistency = consistencyMatch ? parseInt((consistencyMatch[1] || consistencyMatch[2]) || '75') : 75;
+        const clarityMatch = filteredContent.match(/명확성.*?(\d+)점|테마.*?(\d+)/i);
+        const clarity = clarityMatch ? parseInt((clarityMatch[1] || clarityMatch[2]) || '0') : 0;
 
-        const resonanceMatch = content.match(/공명.*?(\d+)점|감정.*?(\d+)/i);
-        const resonance = resonanceMatch ? parseInt((resonanceMatch[1] || resonanceMatch[2]) || '75') : 75;
+        const consistencyMatch = filteredContent.match(/일관성.*?(\d+)점|표현.*?(\d+)/i);
+        const consistency = consistencyMatch ? parseInt((consistencyMatch[1] || consistencyMatch[2]) || '0') : 0;
 
-        const suggestions = ['테마 강화 방안 분석 중'];
+        const resonanceMatch = filteredContent.match(/공명.*?(\d+)점|감정.*?(\d+)/i);
+        const resonance = resonanceMatch ? parseInt((resonanceMatch[1] || resonanceMatch[2]) || '0') : 0;
+
+        const suggestions = ['실제 데이터 기반 테마 분석이 필요합니다'];
 
         return { clarity, consistency, resonance, suggestions };
     }

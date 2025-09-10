@@ -23,6 +23,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-down.js [app-ssr] (ecmascript) <export default as ChevronDown>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-right.js [app-ssr] (ecmascript) <export default as ChevronRight>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$target$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Target$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/target.js [app-ssr] (ecmascript) <export default as Target>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/book-open.js [app-ssr] (ecmascript) <export default as BookOpen>");
 'use client';
 ;
 ;
@@ -80,12 +81,19 @@ const STRUCTURE_STYLES = {
 };
 // 타입별 아이콘 매핑
 const TYPE_ICONS = {
+    main: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"],
     chapter: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$hash$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Hash$3e$__["Hash"],
     synopsis: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"],
     idea: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bookmark$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bookmark$3e$__["Bookmark"]
 };
 // 추가 메뉴 아이템
 const ADD_MENU_ITEMS = [
+    {
+        type: 'main',
+        label: '메인 스토리',
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"],
+        description: '전체 이야기 구조'
+    },
     {
         type: 'chapter',
         label: '새 장',
@@ -123,14 +131,20 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
     const [showDeleteDialog, setShowDeleteDialog] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false); // 🔥 삭제 확인 다이얼로그
     const [itemToDelete, setItemToDelete] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null); // 🔥 삭제할 아이템 정보
     const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    // 🔥 폴더 접기/펼치기 상태 관리
-    const [collapsedFolders, setCollapsedFolders] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(new Set());
+    // 🔥 폴더 접기/펼치기 상태 관리 - localStorage 지원
+    const [collapsedFolders, setCollapsedFolders] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(()=>{
+        // localStorage에서 상태 복원
+        if ("TURBOPACK compile-time falsy", 0) {
+            "TURBOPACK unreachable";
+        }
+        return new Set();
+    });
     // 🔥 강제 리렌더링을 위한 상태
     const [, forceUpdate] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({});
     const triggerUpdate = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
         forceUpdate({});
     }, []);
-    // 🔥 폴더 토글 함수
+    // 🔥 폴더 토글 함수 - localStorage 저장 포함
     const toggleFolder = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((folderType)=>{
         setCollapsedFolders((prev)=>{
             const newSet = new Set(prev);
@@ -139,21 +153,29 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
             } else {
                 newSet.add(folderType);
             }
+            // localStorage에 저장
+            if ("TURBOPACK compile-time falsy", 0) {
+                "TURBOPACK unreachable";
+            }
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_VIEW', 'Folder toggled', {
                 folderType,
                 collapsed: newSet.has(folderType)
             });
             return newSet;
         });
-    }, []);
+    }, [
+        projectId
+    ]);
     // 🔥 폴더별 데이터 그룹화
     const groupedStructures = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         const groups = {
+            main: structures.filter((item)=>item.type === 'main').sort((a, b)=>new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()),
             chapters: structures.filter((item)=>item.type === 'chapter').sort((a, b)=>new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()),
             synopsis: structures.filter((item)=>item.type === 'synopsis').sort((a, b)=>new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()),
             ideas: structures.filter((item)=>item.type === 'idea').sort((a, b)=>new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
         };
         __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].debug('STRUCTURE_VIEW', 'Grouped structures', {
+            main: groups.main.length,
             chapters: groups.chapters.length,
             synopsis: groups.synopsis.length,
             ideas: groups.ideas.length
@@ -203,8 +225,9 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
             setShowAddMenu(false);
             return;
         }
-        // 기존 synopsis, idea 처리 로직
+        // 기존 synopsis, idea, main 처리 로직
         const defaultTitles = {
+            main: '메인 스토리',
             chapter: `새로운 챕터`,
             synopsis: `새로운 시놉시스`,
             idea: `새로운 아이디어`
@@ -224,7 +247,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
             id: `${type}_${Date.now()}`,
             title: itemTitle,
             description: '',
-            type,
+            type: type,
             status: 'planning',
             projectId,
             createdAt: new Date(),
@@ -242,7 +265,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
             // 🔥 에디터 상태 업데이트
             setCurrentEditor({
                 projectId,
-                editorType: type,
+                editorType: type === 'main' ? 'synopsis' : type,
                 itemId: newItem.id,
                 itemTitle: newItem.title
             });
@@ -252,6 +275,8 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                 onNavigateToIdeaEdit?.(newItem.id);
             } else if (type === 'synopsis') {
                 onNavigateToSynopsisEdit?.(newItem.id);
+            } else if (type === 'main') {
+                onNavigateToSynopsisEdit?.(newItem.id); // 메인 스토리도 시놉시스 에디터로
             }
             // 강제 리렌더링
             triggerUpdate();
@@ -277,7 +302,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
         // 🔥 에디터 상태 업데이트
         setCurrentEditor({
             projectId,
-            editorType: item.type,
+            editorType: item.type === 'main' ? 'synopsis' : item.type,
             itemId: item.id,
             itemTitle: item.title
         });
@@ -285,7 +310,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
             onNavigateToChapterEdit?.(item.id);
         } else if (item.type === 'idea') {
             onNavigateToIdeaEdit?.(item.id);
-        } else if (item.type === 'synopsis') {
+        } else if (item.type === 'synopsis' || item.type === 'main') {
             onNavigateToSynopsisEdit?.(item.id);
         }
     }, [
@@ -401,19 +426,19 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                             className: "w-4 h-4 text-gray-500"
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                            lineNumber: 390,
+                            lineNumber: 423,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 389,
+                        lineNumber: 422,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(IconComponent, {
                         className: "w-5 h-5 text-blue-600 dark:text-blue-400"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 392,
+                        lineNumber: 425,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -421,7 +446,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         children: title
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 393,
+                        lineNumber: 426,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -429,18 +454,18 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         children: count
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 394,
+                        lineNumber: 427,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 388,
+                lineNumber: 421,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-            lineNumber: 384,
+            lineNumber: 417,
             columnNumber: 7
         }, this);
     }, [
@@ -458,7 +483,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         children: "스토리 구조"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 406,
+                        lineNumber: 439,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -466,13 +491,13 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                         children: "장, 장면, 메모를 관리하여 이야기의 흐름을 구성하세요"
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                        lineNumber: 407,
+                        lineNumber: 440,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 405,
+                lineNumber: 438,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -485,7 +510,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                             children: "로딩중..."
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                            lineNumber: 416,
+                            lineNumber: 449,
                             columnNumber: 13
                         }, this) : structures.length === 0 ? /* 🔥 빈 상태 */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: STRUCTURE_STYLES.emptyState,
@@ -494,7 +519,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                     className: STRUCTURE_STYLES.emptyIcon
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 420,
+                                    lineNumber: 453,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -502,7 +527,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                     children: "스토리 구조가 비어있습니다"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 421,
+                                    lineNumber: 454,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -510,17 +535,144 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                     children: "새로운 챕터, 시놉시스, 아이디어를 추가하여 스토리 구조를 구성해보세요."
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 422,
+                                    lineNumber: 455,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                            lineNumber: 419,
+                            lineNumber: 452,
                             columnNumber: 13
                         }, this) : /* 🔥 폴더형 구조 목록 */ /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "space-y-4",
                             children: [
+                                groupedStructures.main.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: [
+                                        renderFolderHeader('main', '메인 스토리', __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], groupedStructures.main.length),
+                                        !collapsedFolders.has('main') && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "ml-6 space-y-2",
+                                            children: groupedStructures.main.map((item)=>{
+                                                const isEditing = editingId === item.id;
+                                                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: STRUCTURE_STYLES.structureItem,
+                                                    onClick: ()=>handleItemClick(item),
+                                                    style: {
+                                                        cursor: 'pointer'
+                                                    },
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
+                                                            className: STRUCTURE_STYLES.itemIcon
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                            lineNumber: 478,
+                                                            columnNumber: 29
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: STRUCTURE_STYLES.itemContent,
+                                                            children: isEditing ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                type: "text",
+                                                                value: editTitle,
+                                                                onChange: (e)=>setEditTitle(e.target.value),
+                                                                onKeyDown: (e)=>handleKeyPress(e, item.id),
+                                                                onBlur: ()=>handleEditSave(item.id),
+                                                                className: STRUCTURE_STYLES.editInput,
+                                                                autoFocus: true
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                                lineNumber: 481,
+                                                                columnNumber: 33
+                                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                                children: [
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: STRUCTURE_STYLES.itemTitle,
+                                                                        children: item.title
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                                        lineNumber: 492,
+                                                                        columnNumber: 35
+                                                                    }, this),
+                                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                        className: STRUCTURE_STYLES.itemType,
+                                                                        children: "메인 스토리"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                                        lineNumber: 493,
+                                                                        columnNumber: 35
+                                                                    }, this)
+                                                                ]
+                                                            }, void 0, true)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                            lineNumber: 479,
+                                                            columnNumber: 29
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: STRUCTURE_STYLES.itemActions,
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    onClick: (e)=>{
+                                                                        e.preventDefault();
+                                                                        e.stopPropagation();
+                                                                        handleEditStart(item);
+                                                                    },
+                                                                    className: STRUCTURE_STYLES.actionButton,
+                                                                    title: "편집",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$pen$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Edit2$3e$__["Edit2"], {
+                                                                        className: "w-4 h-4"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                                        lineNumber: 507,
+                                                                        columnNumber: 33
+                                                                    }, this)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                                    lineNumber: 498,
+                                                                    columnNumber: 31
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                                    onClick: (e)=>{
+                                                                        e.preventDefault();
+                                                                        e.stopPropagation();
+                                                                        handleDelete(item.id);
+                                                                    },
+                                                                    className: STRUCTURE_STYLES.actionButton,
+                                                                    title: "삭제",
+                                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
+                                                                        className: "w-4 h-4"
+                                                                    }, void 0, false, {
+                                                                        fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                                        lineNumber: 518,
+                                                                        columnNumber: 33
+                                                                    }, this)
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                                    lineNumber: 509,
+                                                                    columnNumber: 31
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                            lineNumber: 497,
+                                                            columnNumber: 29
+                                                        }, this)
+                                                    ]
+                                                }, item.id, true, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                                    lineNumber: 472,
+                                                    columnNumber: 27
+                                                }, this);
+                                            })
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                            lineNumber: 467,
+                                            columnNumber: 21
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
+                                    lineNumber: 464,
+                                    columnNumber: 17
+                                }, this),
                                 groupedStructures.chapters.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     children: [
                                         renderFolderHeader('chapters', '챕터', __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$hash$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Hash$3e$__["Hash"], groupedStructures.chapters.length),
@@ -536,7 +688,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             className: "absolute left-3 top-12 w-0.5 h-8 bg-blue-300 dark:bg-blue-600 z-10"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 443,
+                                                            lineNumber: 543,
                                                             columnNumber: 31
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -550,7 +702,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                     className: STRUCTURE_STYLES.itemIcon
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                    lineNumber: 451,
+                                                                    lineNumber: 551,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -565,7 +717,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         autoFocus: true
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 454,
+                                                                        lineNumber: 554,
                                                                         columnNumber: 35
                                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                                                         children: [
@@ -574,7 +726,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                                 children: item.title
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                                lineNumber: 465,
+                                                                                lineNumber: 565,
                                                                                 columnNumber: 37
                                                                             }, this),
                                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -582,14 +734,14 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                                 children: "챕터"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                                lineNumber: 466,
+                                                                                lineNumber: 566,
                                                                                 columnNumber: 37
                                                                             }, this)
                                                                         ]
                                                                     }, void 0, true)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                    lineNumber: 452,
+                                                                    lineNumber: 552,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -607,12 +759,12 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                                 className: "w-4 h-4"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                                lineNumber: 480,
+                                                                                lineNumber: 580,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                            lineNumber: 471,
+                                                                            lineNumber: 571,
                                                                             columnNumber: 33
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -627,42 +779,42 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                                 className: "w-4 h-4"
                                                                             }, void 0, false, {
                                                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                                lineNumber: 491,
+                                                                                lineNumber: 591,
                                                                                 columnNumber: 35
                                                                             }, this)
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                            lineNumber: 482,
+                                                                            lineNumber: 582,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                    lineNumber: 470,
+                                                                    lineNumber: 570,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 446,
+                                                            lineNumber: 546,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, item.id, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 440,
+                                                    lineNumber: 540,
                                                     columnNumber: 27
                                                 }, this);
                                             })
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 434,
+                                            lineNumber: 534,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 431,
+                                    lineNumber: 531,
                                     columnNumber: 17
                                 }, this),
                                 groupedStructures.synopsis.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -683,7 +835,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             className: STRUCTURE_STYLES.itemIcon
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 519,
+                                                            lineNumber: 619,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -698,7 +850,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                 autoFocus: true
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                lineNumber: 522,
+                                                                lineNumber: 622,
                                                                 columnNumber: 33
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                                                 children: [
@@ -707,7 +859,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         children: item.title
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 533,
+                                                                        lineNumber: 633,
                                                                         columnNumber: 35
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -715,14 +867,14 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         children: "시놉시스"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 534,
+                                                                        lineNumber: 634,
                                                                         columnNumber: 35
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 520,
+                                                            lineNumber: 620,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -740,12 +892,12 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         className: "w-4 h-4"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 548,
+                                                                        lineNumber: 648,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                    lineNumber: 539,
+                                                                    lineNumber: 639,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -760,36 +912,36 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         className: "w-4 h-4"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 559,
+                                                                        lineNumber: 659,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                    lineNumber: 550,
+                                                                    lineNumber: 650,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 538,
+                                                            lineNumber: 638,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, item.id, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 513,
+                                                    lineNumber: 613,
                                                     columnNumber: 27
                                                 }, this);
                                             })
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 508,
+                                            lineNumber: 608,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 505,
+                                    lineNumber: 605,
                                     columnNumber: 17
                                 }, this),
                                 groupedStructures.ideas.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -810,7 +962,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             className: STRUCTURE_STYLES.itemIcon
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 586,
+                                                            lineNumber: 686,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -825,7 +977,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                 autoFocus: true
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                lineNumber: 589,
+                                                                lineNumber: 689,
                                                                 columnNumber: 33
                                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                                                 children: [
@@ -834,7 +986,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         children: item.title
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 600,
+                                                                        lineNumber: 700,
                                                                         columnNumber: 35
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -842,14 +994,14 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         children: "아이디어"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 601,
+                                                                        lineNumber: 701,
                                                                         columnNumber: 35
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true)
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 587,
+                                                            lineNumber: 687,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -867,12 +1019,12 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         className: "w-4 h-4"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 615,
+                                                                        lineNumber: 715,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                    lineNumber: 606,
+                                                                    lineNumber: 706,
                                                                     columnNumber: 31
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -887,42 +1039,42 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                                         className: "w-4 h-4"
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                        lineNumber: 626,
+                                                                        lineNumber: 726,
                                                                         columnNumber: 33
                                                                     }, this)
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                                    lineNumber: 617,
+                                                                    lineNumber: 717,
                                                                     columnNumber: 31
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 605,
+                                                            lineNumber: 705,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, item.id, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 580,
+                                                    lineNumber: 680,
                                                     columnNumber: 27
                                                 }, this);
                                             })
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 575,
+                                            lineNumber: 675,
                                             columnNumber: 21
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 572,
+                                    lineNumber: 672,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                            lineNumber: 428,
+                            lineNumber: 461,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -940,33 +1092,33 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                             className: "w-5 h-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 649,
+                                            lineNumber: 749,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             children: "새 항목 추가"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 650,
+                                            lineNumber: 750,
                                             columnNumber: 15
                                         }, this),
                                         showAddMenu ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 651,
+                                            lineNumber: 751,
                                             columnNumber: 30
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
                                             className: "w-4 h-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 651,
+                                            lineNumber: 751,
                                             columnNumber: 68
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 641,
+                                    lineNumber: 741,
                                     columnNumber: 13
                                 }, this),
                                 showAddMenu && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -983,7 +1135,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                     className: "w-5 h-5 text-blue-600 dark:text-blue-400"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 666,
+                                                    lineNumber: 766,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -994,7 +1146,7 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             children: label
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 668,
+                                                            lineNumber: 768,
                                                             columnNumber: 23
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1002,41 +1154,41 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                                                             children: description
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                            lineNumber: 671,
+                                                            lineNumber: 771,
                                                             columnNumber: 23
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                                    lineNumber: 667,
+                                                    lineNumber: 767,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, type, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                            lineNumber: 657,
+                                            lineNumber: 757,
                                             columnNumber: 19
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                                    lineNumber: 655,
+                                    lineNumber: 755,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                            lineNumber: 640,
+                            lineNumber: 740,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                    lineNumber: 414,
+                    lineNumber: 447,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 413,
+                lineNumber: 446,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$projects$2f$components$2f$ConfirmDialog$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ConfirmDialog"], {
@@ -1051,13 +1203,13 @@ const StructureView = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$proje
                 onCancel: handleCancelDelete
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-                lineNumber: 684,
+                lineNumber: 784,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/StructureView.tsx",
-        lineNumber: 403,
+        lineNumber: 436,
         columnNumber: 5
     }, this);
 });
@@ -3518,7 +3670,8 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 ;
 ;
 ;
-const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [], notes = [], content = '' })=>{
+const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [], notes = [], content = '', onNavigateToChapter// 🔥 챕터 네비게이션 함수
+ })=>{
     const [showAIAnalysis, setShowAIAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex-1 overflow-hidden flex flex-col",
@@ -3533,14 +3686,14 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                 className: "h-5 w-5 mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                lineNumber: 34,
+                                lineNumber: 36,
                                 columnNumber: 21
                             }, this),
                             "타임라인 뷰"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                        lineNumber: 33,
+                        lineNumber: 35,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3555,25 +3708,25 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                     className: "w-4 h-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                    lineNumber: 44,
+                                    lineNumber: 46,
                                     columnNumber: 25
                                 }, this),
                                 showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                            lineNumber: 38,
+                            lineNumber: 40,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                        lineNumber: 37,
+                        lineNumber: 39,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                lineNumber: 32,
+                lineNumber: 34,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3593,7 +3746,7 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                 className: "w-12 h-12 mx-auto mb-4 text-gray-400"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 57,
+                                                lineNumber: 59,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -3601,7 +3754,7 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                 children: "타임라인이 비어있습니다"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 58,
+                                                lineNumber: 60,
                                                 columnNumber: 37
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3609,13 +3762,13 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                 children: "프로젝트에 이벤트를 추가하여 타임라인을 구성해보세요."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 59,
+                                                lineNumber: 61,
                                                 columnNumber: 37
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                        lineNumber: 56,
+                                        lineNumber: 58,
                                         columnNumber: 33
                                     }, this) : analysis.timeline.map((item, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "flex items-start space-x-4",
@@ -3627,36 +3780,52 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                             className: "w-3 h-3 bg-indigo-500 rounded-full"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                            lineNumber: 65,
+                                                            lineNumber: 67,
                                                             columnNumber: 45
                                                         }, this),
                                                         index < analysis.timeline.length - 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "w-0.5 h-16 bg-gray-300 dark:bg-gray-600 mt-2"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                            lineNumber: 67,
+                                                            lineNumber: 69,
                                                             columnNumber: 49
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                    lineNumber: 64,
+                                                    lineNumber: 66,
                                                     columnNumber: 41
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "flex-1 pb-8",
                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "bg-white dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow",
+                                                        className: `bg-white dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow ${item.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10' : ''}`,
+                                                        onClick: ()=>{
+                                                            // 🔥 챕터 클릭 시 네비게이션
+                                                            if (item.type === 'chapter' && onNavigateToChapter) {
+                                                                onNavigateToChapter(item.id);
+                                                            }
+                                                        },
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: "flex items-center justify-between mb-2",
                                                                 children: [
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                                        className: "font-medium",
-                                                                        children: item.title
-                                                                    }, void 0, false, {
+                                                                        className: `font-medium ${item.type === 'chapter' && onNavigateToChapter ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300' : 'text-gray-900 dark:text-gray-100'}`,
+                                                                        children: [
+                                                                            item.title,
+                                                                            item.type === 'chapter' && onNavigateToChapter && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                                className: "ml-2 text-xs text-gray-500",
+                                                                                children: "(클릭하여 편집)"
+                                                                            }, void 0, false, {
+                                                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
+                                                                                lineNumber: 90,
+                                                                                columnNumber: 61
+                                                                            }, this)
+                                                                        ]
+                                                                    }, void 0, true, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                        lineNumber: 73,
+                                                                        lineNumber: 84,
                                                                         columnNumber: 53
                                                                     }, this),
                                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3664,13 +3833,13 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                                         children: item.type
                                                                     }, void 0, false, {
                                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                        lineNumber: 74,
+                                                                        lineNumber: 93,
                                                                         columnNumber: 53
                                                                     }, this)
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                lineNumber: 72,
+                                                                lineNumber: 83,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3680,7 +3849,7 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                                 }
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                lineNumber: 78,
+                                                                lineNumber: 97,
                                                                 columnNumber: 49
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3688,29 +3857,29 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                                 children: new Date(item.timestamp).toLocaleDateString('ko-KR')
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                                lineNumber: 82,
+                                                                lineNumber: 101,
                                                                 columnNumber: 49
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                        lineNumber: 71,
+                                                        lineNumber: 73,
                                                         columnNumber: 45
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                    lineNumber: 70,
+                                                    lineNumber: 72,
                                                     columnNumber: 41
                                                 }, this)
                                             ]
                                         }, item.id, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                            lineNumber: 63,
+                                            lineNumber: 65,
                                             columnNumber: 37
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                    lineNumber: 54,
+                                    lineNumber: 56,
                                     columnNumber: 25
                                 }, this),
                                 analysis.timeline.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3727,25 +3896,25 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                                 className: "w-4 h-4"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                                lineNumber: 103,
+                                                lineNumber: 122,
                                                 columnNumber: 37
                                             }, this),
                                             "샘플 데이터 추가"
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                        lineNumber: 95,
+                                        lineNumber: 114,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                    lineNumber: 94,
+                                    lineNumber: 113,
                                     columnNumber: 29
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                            lineNumber: 53,
+                            lineNumber: 55,
                             columnNumber: 21
                         }, this),
                         showAIAnalysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3772,29 +3941,29 @@ const TimelinePanel = ({ analysis, projectId = 'timeline-demo', characters = [],
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                                lineNumber: 113,
+                                lineNumber: 132,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                            lineNumber: 112,
+                            lineNumber: 131,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                    lineNumber: 51,
+                    lineNumber: 53,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-                lineNumber: 50,
+                lineNumber: 52,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/synopsis/TimelinePanel.tsx",
-        lineNumber: 30,
+        lineNumber: 32,
         columnNumber: 9
     }, this);
 };
@@ -3817,6 +3986,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$common$2f$AIAnalysisPanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/common/AIAnalysisPanel.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/ui/Button.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/ui/Card.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/shared/logger.ts [app-ssr] (ecmascript)");
 'use client';
 ;
 ;
@@ -3824,8 +3994,79 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 ;
 ;
 ;
-const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], notes = [], content = '' })=>{
+;
+const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], notes = [], content = '', onNavigateToChapter// 🔥 챕터 네비게이션 함수
+ })=>{
     const [showAIAnalysis, setShowAIAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    // 🔥 페이지네이션 상태
+    const [currentPage, setCurrentPage] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
+        chapters: 1,
+        characters: 1,
+        ideas: 1,
+        memos: 1
+    });
+    const ITEMS_PER_PAGE = 6; // 페이지당 아이템 수
+    // 🔥 페이지네이션 헬퍼 함수
+    const getPaginatedItems = (items, type)=>{
+        const startIndex = (currentPage[type] - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        return items.slice(startIndex, endIndex);
+    };
+    const getTotalPages = (itemsCount)=>{
+        return Math.ceil(itemsCount / ITEMS_PER_PAGE);
+    };
+    const handlePageChange = (type, newPage)=>{
+        setCurrentPage((prev)=>({
+                ...prev,
+                [type]: newPage
+            }));
+    };
+    // 🔥 페이지네이션 컴포넌트
+    const renderPagination = (type, totalItems)=>{
+        const totalPages = getTotalPages(totalItems);
+        if (totalPages <= 1) return null;
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "flex items-center justify-center gap-2 mt-4",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                    onClick: ()=>handlePageChange(type, Math.max(1, currentPage[type] - 1)),
+                    disabled: currentPage[type] === 1,
+                    className: "px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800",
+                    children: "이전"
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
+                    lineNumber: 65,
+                    columnNumber: 17
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                    className: "text-sm text-gray-600 dark:text-gray-400",
+                    children: [
+                        currentPage[type],
+                        " / ",
+                        totalPages
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
+                    lineNumber: 72,
+                    columnNumber: 17
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                    onClick: ()=>handlePageChange(type, Math.min(totalPages, currentPage[type] + 1)),
+                    disabled: currentPage[type] === totalPages,
+                    className: "px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800",
+                    children: "다음"
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
+                    lineNumber: 75,
+                    columnNumber: 17
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
+            lineNumber: 64,
+            columnNumber: 13
+        }, this);
+    };
     // 요소별로 분류
     const categorizedElements = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         const chapters = elements.filter((el)=>el.type === 'chapter');
@@ -3844,7 +4085,17 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
         elements
     ]);
     const renderElementCard = (element, icon)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
-            className: "p-4 hover:shadow-md transition-shadow",
+            className: `p-4 hover:shadow-md transition-shadow ${element.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10' : ''}`,
+            onClick: ()=>{
+                // 🔥 챕터 클릭 시 네비게이션
+                if (element.type === 'chapter' && onNavigateToChapter) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Logger"].info('OUTLINE_PANEL', 'Navigating to chapter', {
+                        chapterId: element.id,
+                        title: element.title
+                    });
+                    onNavigateToChapter(element.id);
+                }
+            },
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "flex items-start gap-3",
                 children: [
@@ -3853,18 +4104,28 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                         children: icon
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 42,
+                        lineNumber: 111,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex-1",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                className: "font-medium text-gray-900 dark:text-gray-100 mb-2",
-                                children: element.title
-                            }, void 0, false, {
+                                className: `font-medium mb-2 ${element.type === 'chapter' && onNavigateToChapter ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300' : 'text-gray-900 dark:text-gray-100'}`,
+                                children: [
+                                    element.title,
+                                    element.type === 'chapter' && onNavigateToChapter && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "ml-2 text-xs text-gray-500",
+                                        children: "(클릭하여 편집)"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
+                                        lineNumber: 121,
+                                        columnNumber: 29
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 46,
+                                lineNumber: 115,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3872,7 +4133,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                 children: element.content
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 49,
+                                lineNumber: 124,
                                 columnNumber: 21
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3888,7 +4149,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                         children: tag
                                                     }, tag, false, {
                                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                        lineNumber: 57,
+                                                        lineNumber: 132,
                                                         columnNumber: 41
                                                     }, this)),
                                                 element.tags.length > 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3899,18 +4160,18 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 62,
+                                                    lineNumber: 137,
                                                     columnNumber: 41
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 55,
+                                            lineNumber: 130,
                                             columnNumber: 33
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                        lineNumber: 53,
+                                        lineNumber: 128,
                                         columnNumber: 25
                                     }, this),
                                     element.wordCount && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -3921,30 +4182,30 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                        lineNumber: 68,
+                                        lineNumber: 143,
                                         columnNumber: 29
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 52,
+                                lineNumber: 127,
                                 columnNumber: 21
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 45,
+                        lineNumber: 114,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                lineNumber: 41,
+                lineNumber: 110,
                 columnNumber: 13
             }, this)
         }, element.id, false, {
             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-            lineNumber: 40,
+            lineNumber: 98,
             columnNumber: 9
         }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3960,14 +4221,14 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                 className: "h-5 w-5 mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 83,
+                                lineNumber: 158,
                                 columnNumber: 21
                             }, this),
                             "아웃라인 뷰"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 82,
+                        lineNumber: 157,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3982,25 +4243,25 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                     className: "w-4 h-4"
                                 }, void 0, false, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                    lineNumber: 93,
+                                    lineNumber: 168,
                                     columnNumber: 25
                                 }, this),
                                 showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                            lineNumber: 87,
+                            lineNumber: 162,
                             columnNumber: 21
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                        lineNumber: 86,
+                        lineNumber: 161,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                lineNumber: 81,
+                lineNumber: 156,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4019,7 +4280,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                             className: "w-12 h-12 mx-auto mb-4 text-gray-400"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 106,
+                                            lineNumber: 181,
                                             columnNumber: 37
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -4027,7 +4288,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                             children: "아웃라인이 비어있습니다"
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 107,
+                                            lineNumber: 182,
                                             columnNumber: 37
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4035,13 +4296,13 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                             children: "사이드바에서 챕터, 인물, 아이디어를 추가하여 아웃라인을 구성해보세요."
                                         }, void 0, false, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 108,
+                                            lineNumber: 183,
                                             columnNumber: 37
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                    lineNumber: 105,
+                                    lineNumber: 180,
                                     columnNumber: 33
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                                     children: [
@@ -4054,7 +4315,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 116,
+                                                            lineNumber: 191,
                                                             columnNumber: 49
                                                         }, this),
                                                         "챕터 (",
@@ -4063,27 +4324,28 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 115,
+                                                    lineNumber: 190,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "grid grid-cols-1 md:grid-cols-2 gap-4",
-                                                    children: categorizedElements.chapters.map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                                    children: getPaginatedItems(categorizedElements.chapters, 'chapters').map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
                                                             className: "w-4 h-4 text-blue-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 121,
+                                                            lineNumber: 196,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 119,
+                                                    lineNumber: 194,
                                                     columnNumber: 45
-                                                }, this)
+                                                }, this),
+                                                renderPagination('chapters', categorizedElements.chapters.length)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 114,
+                                            lineNumber: 189,
                                             columnNumber: 41
                                         }, this),
                                         categorizedElements.characters.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4095,7 +4357,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 131,
+                                                            lineNumber: 207,
                                                             columnNumber: 49
                                                         }, this),
                                                         "인물 (",
@@ -4104,27 +4366,28 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 130,
+                                                    lineNumber: 206,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
-                                                    children: categorizedElements.characters.map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
+                                                    children: getPaginatedItems(categorizedElements.characters, 'characters').map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
                                                             className: "w-4 h-4 text-green-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 136,
+                                                            lineNumber: 212,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 134,
+                                                    lineNumber: 210,
                                                     columnNumber: 45
-                                                }, this)
+                                                }, this),
+                                                renderPagination('characters', categorizedElements.characters.length)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 129,
+                                            lineNumber: 205,
                                             columnNumber: 41
                                         }, this),
                                         categorizedElements.ideas.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4136,7 +4399,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 146,
+                                                            lineNumber: 223,
                                                             columnNumber: 49
                                                         }, this),
                                                         "아이디어 (",
@@ -4145,27 +4408,28 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 145,
+                                                    lineNumber: 222,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
-                                                    children: categorizedElements.ideas.map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__["Lightbulb"], {
+                                                    children: getPaginatedItems(categorizedElements.ideas, 'ideas').map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__["Lightbulb"], {
                                                             className: "w-4 h-4 text-yellow-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 151,
+                                                            lineNumber: 228,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 149,
+                                                    lineNumber: 226,
                                                     columnNumber: 45
-                                                }, this)
+                                                }, this),
+                                                renderPagination('ideas', categorizedElements.ideas.length)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 144,
+                                            lineNumber: 221,
                                             columnNumber: 41
                                         }, this),
                                         (categorizedElements.memos.length > 0 || categorizedElements.notes.length > 0) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4177,7 +4441,7 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                             className: "w-5 h-5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 161,
+                                                            lineNumber: 239,
                                                             columnNumber: 49
                                                         }, this),
                                                         "메모 & 노트 (",
@@ -4186,42 +4450,43 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 160,
+                                                    lineNumber: 238,
                                                     columnNumber: 45
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4",
-                                                    children: [
+                                                    children: getPaginatedItems([
                                                         ...categorizedElements.memos,
                                                         ...categorizedElements.notes
-                                                    ].map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                                                    ], 'memos').map((element)=>renderElementCard(element, /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
                                                             className: "w-4 h-4 text-gray-500"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                            lineNumber: 166,
+                                                            lineNumber: 244,
                                                             columnNumber: 80
                                                         }, this)))
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                                    lineNumber: 164,
+                                                    lineNumber: 242,
                                                     columnNumber: 45
-                                                }, this)
+                                                }, this),
+                                                renderPagination('memos', categorizedElements.memos.length + categorizedElements.notes.length)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                            lineNumber: 159,
+                                            lineNumber: 237,
                                             columnNumber: 41
                                         }, this)
                                     ]
                                 }, void 0, true)
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 103,
+                                lineNumber: 178,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                            lineNumber: 102,
+                            lineNumber: 177,
                             columnNumber: 21
                         }, this),
                         showAIAnalysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4251,29 +4516,29 @@ const OutlinePanel = ({ elements, projectId = 'outline-demo', characters = [], n
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                                lineNumber: 179,
+                                lineNumber: 258,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                            lineNumber: 178,
+                            lineNumber: 257,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                    lineNumber: 100,
+                    lineNumber: 175,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-                lineNumber: 99,
+                lineNumber: 174,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/synopsis/OutlinePanel.tsx",
-        lineNumber: 79,
+        lineNumber: 154,
         columnNumber: 9
     }, this);
 };
@@ -4291,6 +4556,13 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$network$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Network$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/network.js [app-ssr] (ecmascript) <export default as Network>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/brain.js [app-ssr] (ecmascript) <export default as Brain>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/lightbulb.js [app-ssr] (ecmascript) <export default as Lightbulb>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/minus.js [app-ssr] (ecmascript) <export default as Minus>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/rotate-ccw.js [app-ssr] (ecmascript) <export default as RotateCcw>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/book-open.js [app-ssr] (ecmascript) <export default as BookOpen>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$hash$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Hash$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/hash.js [app-ssr] (ecmascript) <export default as Hash>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/file-text.js [app-ssr] (ecmascript) <export default as FileText>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/user.js [app-ssr] (ecmascript) <export default as User>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$common$2f$AIAnalysisPanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/common/AIAnalysisPanel.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/ui/Button.tsx [app-ssr] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/renderer/components/ui/Card.tsx [app-ssr] (ecmascript)");
@@ -4301,17 +4573,297 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$component
 ;
 ;
 ;
+// 🔥 Xmind 스타일 커스텀 노드 컴포넌트들
+const CenterNode = ({ data })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "relative",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-6 py-4 rounded-full shadow-lg border-4 border-white dark:border-gray-800 min-w-[160px] text-center",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-center justify-center gap-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$book$2d$open$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__BookOpen$3e$__["BookOpen"], {
+                        className: "w-5 h-5"
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                        lineNumber: 15,
+                        columnNumber: 17
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "font-bold text-lg",
+                        children: data.label
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                        lineNumber: 16,
+                        columnNumber: 17
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                lineNumber: 14,
+                columnNumber: 13
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+            lineNumber: 13,
+            columnNumber: 9
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+        lineNumber: 12,
+        columnNumber: 5
+    }, this);
+const BranchNode = ({ data })=>{
+    const getColor = (category)=>{
+        switch(category){
+            case 'chapters':
+                return 'from-blue-400 to-blue-600';
+            case 'characters':
+                return 'from-green-400 to-green-600';
+            case 'ideas':
+                return 'from-yellow-400 to-yellow-600';
+            case 'synopsis':
+                return 'from-purple-400 to-purple-600';
+            default:
+                return 'from-gray-400 to-gray-600';
+        }
+    };
+    const getIcon = (category)=>{
+        switch(category){
+            case 'chapters':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$hash$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Hash$3e$__["Hash"], {
+                    className: "w-4 h-4"
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                    lineNumber: 35,
+                    columnNumber: 37
+                }, this);
+            case 'characters':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
+                    className: "w-4 h-4"
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                    lineNumber: 36,
+                    columnNumber: 39
+                }, this);
+            case 'ideas':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__["Lightbulb"], {
+                    className: "w-4 h-4"
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                    lineNumber: 37,
+                    columnNumber: 34
+                }, this);
+            case 'synopsis':
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
+                    className: "w-4 h-4"
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                    lineNumber: 38,
+                    columnNumber: 37
+                }, this);
+            default:
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$network$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Network$3e$__["Network"], {
+                    className: "w-4 h-4"
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                    lineNumber: 39,
+                    columnNumber: 29
+                }, this);
+        }
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "relative",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: `bg-gradient-to-br ${getColor(data.category)} text-white px-4 py-3 rounded-lg shadow-md border-2 border-white dark:border-gray-800 min-w-[120px] text-center cursor-pointer hover:scale-105 transition-all duration-200`,
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-center justify-center gap-2",
+                children: [
+                    getIcon(data.category),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "font-medium text-sm",
+                        children: data.label
+                    }, void 0, false, {
+                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                        lineNumber: 48,
+                        columnNumber: 21
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                lineNumber: 46,
+                columnNumber: 17
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+            lineNumber: 45,
+            columnNumber: 13
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+        lineNumber: 44,
+        columnNumber: 9
+    }, this);
+};
+const LeafNode = ({ data })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "relative",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 px-3 py-2 rounded-md shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer min-w-[100px] max-w-[200px]",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "text-sm font-medium text-gray-900 dark:text-gray-100 truncate",
+                    children: data.label
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                    lineNumber: 58,
+                    columnNumber: 13
+                }, this),
+                data.subtitle && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "text-xs text-gray-500 dark:text-gray-400 truncate mt-1",
+                    children: data.subtitle
+                }, void 0, false, {
+                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                    lineNumber: 62,
+                    columnNumber: 17
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+            lineNumber: 57,
+            columnNumber: 9
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+        lineNumber: 56,
+        columnNumber: 5
+    }, this);
 const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindmap-demo' })=>{
     const [showAIAnalysis, setShowAIAnalysis] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    // 캐릭터와 챕터 간의 관계를 시각화하기 위한 계산
-    const relationships = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        return analysis.relationships.filter((rel)=>elements.find((e)=>e.id === rel.from) && elements.find((e)=>e.id === rel.to));
+    const [zoom, setZoom] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(1);
+    const [panOffset, setPanOffset] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({
+        x: 0,
+        y: 0
+    });
+    // 🔥 Xmind 스타일 방사형 레이아웃 계산
+    const mindmapData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
+        // 데이터를 카테고리별로 그룹화
+        const grouped = {
+            chapters: elements.filter((e)=>e.type === 'chapter'),
+            characters: elements.filter((e)=>e.type === 'character'),
+            ideas: elements.filter((e)=>e.type === 'idea'),
+            synopsis: elements.filter((e)=>e.type === 'synopsis')
+        };
+        // 중앙 노드
+        const centerNode = {
+            id: 'center',
+            type: 'centerNode',
+            label: '프로젝트',
+            x: 0,
+            y: 0,
+            level: 0
+        };
+        // 메인 브랜치들 (카테고리)
+        const mainBranches = [];
+        const categories = Object.keys(grouped).filter((key)=>grouped[key].length > 0);
+        const angleStep = 2 * Math.PI / Math.max(categories.length, 1);
+        categories.forEach((category, index)=>{
+            const angle = index * angleStep;
+            const radius = 200;
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            mainBranches.push({
+                id: `branch-${category}`,
+                type: 'branchNode',
+                label: category === 'chapters' ? '챕터' : category === 'characters' ? '인물' : category === 'ideas' ? '아이디어' : '시놉시스',
+                category,
+                x,
+                y,
+                level: 1,
+                angle
+            });
+        });
+        // 서브 브랜치들 (개별 요소들)
+        const subBranches = [];
+        categories.forEach((category, categoryIndex)=>{
+            const items = grouped[category];
+            const parentBranch = mainBranches[categoryIndex];
+            if (!parentBranch || items.length === 0) return;
+            const subAngleStep = Math.PI / 6; // 30도씩
+            const startAngle = parentBranch.angle - (items.length - 1) * subAngleStep / 2;
+            items.forEach((item, itemIndex)=>{
+                const angle = startAngle + itemIndex * subAngleStep;
+                const radius = 120;
+                const x = parentBranch.x + Math.cos(angle) * radius;
+                const y = parentBranch.y + Math.sin(angle) * radius;
+                subBranches.push({
+                    id: item.id,
+                    type: 'leafNode',
+                    label: item.title,
+                    subtitle: item.content?.slice(0, 50) + '...',
+                    category,
+                    x,
+                    y,
+                    level: 2,
+                    data: item
+                });
+            });
+        });
+        // 연결선 데이터
+        const connections = [];
+        // 중앙 → 메인 브랜치
+        mainBranches.forEach((branch)=>{
+            connections.push({
+                from: {
+                    x: centerNode.x,
+                    y: centerNode.y
+                },
+                to: {
+                    x: branch.x,
+                    y: branch.y
+                },
+                type: 'main'
+            });
+        });
+        // 메인 브랜치 → 서브 브랜치
+        subBranches.forEach((sub)=>{
+            const parent = mainBranches.find((b)=>b.category === sub.category);
+            if (parent) {
+                connections.push({
+                    from: {
+                        x: parent.x,
+                        y: parent.y
+                    },
+                    to: {
+                        x: sub.x,
+                        y: sub.y
+                    },
+                    type: 'sub'
+                });
+            }
+        });
+        return {
+            centerNode,
+            mainBranches,
+            subBranches,
+            connections
+        };
     }, [
-        elements,
-        analysis.relationships
+        elements
     ]);
-    const handleElementClick = (elementId)=>{
-        onSelectElement(elementId);
+    const handleNodeClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])((nodeData)=>{
+        if (nodeData.data) {
+            onSelectElement(nodeData.data.id);
+        }
+    }, [
+        onSelectElement
+    ]);
+    const handleZoomIn = ()=>setZoom((prev)=>Math.min(prev * 1.2, 3));
+    const handleZoomOut = ()=>setZoom((prev)=>Math.max(prev / 1.2, 0.3));
+    const handleReset = ()=>{
+        setZoom(1);
+        setPanOffset({
+            x: 0,
+            y: 0
+        });
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex-1 overflow-hidden flex flex-col",
@@ -4326,47 +4878,120 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                                 className: "h-5 w-5 mr-2"
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                lineNumber: 42,
+                                lineNumber: 211,
                                 columnNumber: 21
                             }, this),
                             "마인드맵 뷰"
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                        lineNumber: 41,
+                        lineNumber: 210,
                         columnNumber: 17
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "flex gap-2",
-                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                            onClick: ()=>setShowAIAnalysis(!showAIAnalysis),
-                            variant: showAIAnalysis ? "secondary" : "outline",
-                            size: "sm",
-                            className: "flex items-center gap-2",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__["Brain"], {
-                                    className: "w-4 h-4"
-                                }, void 0, false, {
-                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                    lineNumber: 52,
-                                    columnNumber: 25
-                                }, this),
-                                showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                            lineNumber: 46,
-                            columnNumber: 21
-                        }, this)
-                    }, void 0, false, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center gap-1 mr-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                        onClick: handleZoomOut,
+                                        variant: "outline",
+                                        size: "sm",
+                                        className: "p-2",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$minus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Minus$3e$__["Minus"], {
+                                            className: "w-4 h-4"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                            lineNumber: 223,
+                                            columnNumber: 29
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                        lineNumber: 217,
+                                        columnNumber: 25
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-sm text-gray-600 dark:text-gray-400 min-w-[60px] text-center",
+                                        children: [
+                                            Math.round(zoom * 100),
+                                            "%"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                        lineNumber: 225,
+                                        columnNumber: 25
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                        onClick: handleZoomIn,
+                                        variant: "outline",
+                                        size: "sm",
+                                        className: "p-2",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                            className: "w-4 h-4"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                            lineNumber: 234,
+                                            columnNumber: 29
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                        lineNumber: 228,
+                                        columnNumber: 25
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                        onClick: handleReset,
+                                        variant: "outline",
+                                        size: "sm",
+                                        className: "p-2 ml-1",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$rotate$2d$ccw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RotateCcw$3e$__["RotateCcw"], {
+                                            className: "w-4 h-4"
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                            lineNumber: 242,
+                                            columnNumber: 29
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                        lineNumber: 236,
+                                        columnNumber: 25
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                lineNumber: 216,
+                                columnNumber: 21
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                onClick: ()=>setShowAIAnalysis(!showAIAnalysis),
+                                variant: showAIAnalysis ? "secondary" : "outline",
+                                size: "sm",
+                                className: "flex items-center gap-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__["Brain"], {
+                                        className: "w-4 h-4"
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                        lineNumber: 252,
+                                        columnNumber: 25
+                                    }, this),
+                                    showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                lineNumber: 246,
+                                columnNumber: 21
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                        lineNumber: 45,
+                        lineNumber: 214,
                         columnNumber: 17
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                lineNumber: 40,
+                lineNumber: 209,
                 columnNumber: 13
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4375,317 +5000,150 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                     className: "grid grid-cols-12 gap-6 h-full",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: `${showAIAnalysis ? 'col-span-8' : 'col-span-12'} transition-all duration-300 overflow-y-auto h-full`,
+                            className: `${showAIAnalysis ? 'col-span-8' : 'col-span-12'} transition-all duration-300 overflow-hidden h-full`,
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "pb-6",
-                                children: [
-                                    elements.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+                                className: "w-full h-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-lg relative overflow-auto",
+                                children: elements.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "absolute inset-0 flex items-center justify-center",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
                                         className: "p-8 text-center",
                                         children: [
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$network$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Network$3e$__["Network"], {
                                                 className: "w-12 h-12 mx-auto mb-4 text-gray-400"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 65,
-                                                columnNumber: 37
+                                                lineNumber: 266,
+                                                columnNumber: 41
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                                                 className: "text-lg font-medium text-gray-600 mb-2",
                                                 children: "마인드맵이 비어있습니다"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 66,
-                                                columnNumber: 37
+                                                lineNumber: 267,
+                                                columnNumber: 41
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                 className: "text-gray-500",
                                                 children: "사이드바에서 요소들을 추가하여 마인드맵을 구성해보세요."
                                             }, void 0, false, {
                                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 67,
-                                                columnNumber: 37
+                                                lineNumber: 268,
+                                                columnNumber: 41
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                        lineNumber: 64,
-                                        columnNumber: 33
-                                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "relative w-full h-[800px] bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-lg overflow-auto shadow-sm",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                                width: "100%",
-                                                height: "100%",
-                                                className: "absolute inset-0",
-                                                children: relationships.map((rel, index)=>{
-                                                    const fromElement = elements.find((e)=>e.id === rel.from);
-                                                    const toElement = elements.find((e)=>e.id === rel.to);
-                                                    if (!fromElement || !toElement) return null;
-                                                    // 간단한 위치 계산 (실제로는 더 복잡한 레이아웃 알고리즘 필요)
-                                                    const fromIndex = elements.indexOf(fromElement);
-                                                    const toIndex = elements.indexOf(toElement);
-                                                    const x1 = fromIndex % 4 * 200 + 100;
-                                                    const y1 = Math.floor(fromIndex / 4) * 150 + 75;
-                                                    const x2 = toIndex % 4 * 200 + 100;
-                                                    const y2 = Math.floor(toIndex / 4) * 150 + 75;
-                                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                                        x1: x1,
-                                                        y1: y1,
-                                                        x2: x2,
-                                                        y2: y2,
-                                                        stroke: "#6b7280",
-                                                        strokeWidth: 2 + rel.strength * 2,
-                                                        strokeOpacity: rel.strength,
-                                                        className: "dark:stroke-gray-400 transition-all duration-300"
-                                                    }, index, false, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 89,
-                                                        columnNumber: 49
-                                                    }, this);
-                                                })
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 72,
-                                                columnNumber: 37
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "relative w-full h-full p-4",
-                                                children: elements.slice(0, 12).map((element, index)=>{
-                                                    const x = index % 4 * 200;
-                                                    const y = Math.floor(index / 4) * 150;
-                                                    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        className: "absolute cursor-pointer hover:scale-105 transition-all duration-200 hover:z-10",
-                                                        style: {
-                                                            left: `${x}px`,
-                                                            top: `${y}px`,
-                                                            width: '150px'
-                                                        },
-                                                        onClick: ()=>handleElementClick(element.id),
-                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: `
-                                                p-3 rounded-lg border-2 shadow-sm hover:shadow-md transition-all duration-200
-                                                ${element.type === 'character' ? 'bg-blue-100 border-blue-300 dark:bg-blue-900/30 dark:border-blue-700 hover:bg-blue-200 dark:hover:bg-blue-900/50' : element.type === 'chapter' ? 'bg-green-100 border-green-300 dark:bg-green-900/30 dark:border-green-700 hover:bg-green-200 dark:hover:bg-green-900/50' : 'bg-purple-100 border-purple-300 dark:bg-purple-900/30 dark:border-purple-700 hover:bg-purple-200 dark:hover:bg-purple-900/50'}
-                                            `,
-                                                            children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                                    className: "font-medium text-sm mb-1 truncate",
-                                                                    children: element.title
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                    lineNumber: 130,
-                                                                    columnNumber: 57
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                                    className: "text-xs text-gray-600 dark:text-gray-400 line-clamp-2",
-                                                                    children: element.content
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                    lineNumber: 131,
-                                                                    columnNumber: 57
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                    className: "mt-2 flex items-center justify-between",
-                                                                    children: [
-                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                            className: "px-2 py-1 bg-white/50 dark:bg-black/20 rounded text-xs",
-                                                                            children: element.type
-                                                                        }, void 0, false, {
-                                                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                            lineNumber: 135,
-                                                                            columnNumber: 61
-                                                                        }, this),
-                                                                        element.plotRelevance && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                            className: "flex items-center gap-1",
-                                                                            children: [
-                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                                    className: `w-2 h-2 rounded-full ${element.plotRelevance >= 4 ? 'bg-red-500' : element.plotRelevance >= 3 ? 'bg-yellow-500' : 'bg-green-500'}`
-                                                                                }, void 0, false, {
-                                                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                                    lineNumber: 140,
-                                                                                    columnNumber: 69
-                                                                                }, this),
-                                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                                    className: "text-xs text-gray-500",
-                                                                                    children: element.plotRelevance
-                                                                                }, void 0, false, {
-                                                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                                    lineNumber: 143,
-                                                                                    columnNumber: 69
-                                                                                }, this)
-                                                                            ]
-                                                                        }, void 0, true, {
-                                                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                            lineNumber: 139,
-                                                                            columnNumber: 65
-                                                                        }, this)
-                                                                    ]
-                                                                }, void 0, true, {
-                                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                    lineNumber: 134,
-                                                                    columnNumber: 57
-                                                                }, this)
-                                                            ]
-                                                        }, void 0, true, {
-                                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                            lineNumber: 121,
-                                                            columnNumber: 53
-                                                        }, this)
-                                                    }, element.id, false, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 111,
-                                                        columnNumber: 49
-                                                    }, this);
-                                                })
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 105,
-                                                columnNumber: 37
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "absolute bottom-4 right-4 flex gap-2",
-                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
-                                                    onClick: ()=>{
-                                                        console.log('마인드맵 자동 재배치');
-                                                    },
-                                                    variant: "outline",
-                                                    size: "sm",
-                                                    className: "flex items-center gap-1 text-xs",
-                                                    children: [
-                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$lightbulb$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Lightbulb$3e$__["Lightbulb"], {
-                                                            className: "w-3 h-3"
-                                                        }, void 0, false, {
-                                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                            lineNumber: 163,
-                                                            columnNumber: 45
-                                                        }, this),
-                                                        "자동 배치"
-                                                    ]
-                                                }, void 0, true, {
-                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                    lineNumber: 155,
-                                                    columnNumber: 41
-                                                }, this)
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 154,
-                                                columnNumber: 37
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                        lineNumber: 70,
-                                        columnNumber: 33
-                                    }, this),
-                                    elements.length > 0 && relationships.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$ui$2f$Card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
-                                        className: "p-4",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                                className: "text-sm font-medium mb-2",
-                                                children: "연결 통계"
-                                            }, void 0, false, {
-                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 173,
-                                                columnNumber: 37
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "grid grid-cols-3 gap-4 text-center",
-                                                children: [
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "text-lg font-bold text-blue-600",
-                                                                children: elements.length
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 176,
-                                                                columnNumber: 45
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "text-xs text-gray-600",
-                                                                children: "총 요소"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 177,
-                                                                columnNumber: 45
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 175,
-                                                        columnNumber: 41
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "text-lg font-bold text-green-600",
-                                                                children: relationships.length
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 180,
-                                                                columnNumber: 45
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "text-xs text-gray-600",
-                                                                children: "연결 관계"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 181,
-                                                                columnNumber: 45
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 179,
-                                                        columnNumber: 41
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "text-lg font-bold text-purple-600",
-                                                                children: [
-                                                                    Math.round(relationships.reduce((sum, rel)=>sum + rel.strength, 0) / relationships.length * 100),
-                                                                    "%"
-                                                                ]
-                                                            }, void 0, true, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 184,
-                                                                columnNumber: 45
-                                                            }, this),
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                                className: "text-xs text-gray-600",
-                                                                children: "평균 강도"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                                lineNumber: 187,
-                                                                columnNumber: 45
-                                                            }, this)
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                        lineNumber: 183,
-                                                        columnNumber: 41
-                                                    }, this)
-                                                ]
-                                            }, void 0, true, {
-                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                                lineNumber: 174,
-                                                columnNumber: 37
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                        lineNumber: 172,
-                                        columnNumber: 33
+                                        lineNumber: 265,
+                                        columnNumber: 37
                                     }, this)
-                                ]
-                            }, void 0, true, {
+                                }, void 0, false, {
+                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                    lineNumber: 264,
+                                    columnNumber: 33
+                                }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "absolute inset-0 w-full h-full",
+                                    style: {
+                                        transform: `scale(${zoom}) translate(${panOffset.x}px, ${panOffset.y}px)`,
+                                        transformOrigin: 'center center',
+                                        transition: 'transform 0.2s ease-out'
+                                    },
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                            className: "absolute inset-0 w-full h-full",
+                                            style: {
+                                                minWidth: '1200px',
+                                                minHeight: '800px'
+                                            },
+                                            viewBox: "-600 -400 1200 800",
+                                            children: mindmapData.connections.map((conn, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                    d: `M ${conn.from.x} ${conn.from.y} Q ${(conn.from.x + conn.to.x) / 2} ${(conn.from.y + conn.to.y) / 2 - 30} ${conn.to.x} ${conn.to.y}`,
+                                                    stroke: conn.type === 'main' ? '#6366f1' : '#94a3b8',
+                                                    strokeWidth: conn.type === 'main' ? 4 : 2,
+                                                    fill: "none",
+                                                    className: "transition-all duration-300"
+                                                }, index, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                                    lineNumber: 288,
+                                                    columnNumber: 45
+                                                }, this))
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                            lineNumber: 281,
+                                            columnNumber: 37
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "absolute",
+                                            style: {
+                                                left: '50%',
+                                                top: '50%',
+                                                transform: `translate(-50%, -50%)`
+                                            },
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(CenterNode, {
+                                                data: mindmapData.centerNode
+                                            }, void 0, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                                lineNumber: 308,
+                                                columnNumber: 41
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                            lineNumber: 300,
+                                            columnNumber: 37
+                                        }, this),
+                                        mindmapData.mainBranches.map((branch)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "absolute",
+                                                style: {
+                                                    left: '50%',
+                                                    top: '50%',
+                                                    transform: `translate(calc(-50% + ${branch.x}px), calc(-50% + ${branch.y}px))`
+                                                },
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(BranchNode, {
+                                                    data: branch
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                                    lineNumber: 322,
+                                                    columnNumber: 45
+                                                }, this)
+                                            }, branch.id, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                                lineNumber: 313,
+                                                columnNumber: 41
+                                            }, this)),
+                                        mindmapData.subBranches.map((sub)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: "absolute",
+                                                style: {
+                                                    left: '50%',
+                                                    top: '50%',
+                                                    transform: `translate(calc(-50% + ${sub.x}px), calc(-50% + ${sub.y}px))`
+                                                },
+                                                onClick: ()=>handleNodeClick(sub),
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(LeafNode, {
+                                                    data: sub
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                                    lineNumber: 338,
+                                                    columnNumber: 45
+                                                }, this)
+                                            }, sub.id, false, {
+                                                fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                                lineNumber: 328,
+                                                columnNumber: 41
+                                            }, this))
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
+                                    lineNumber: 272,
+                                    columnNumber: 33
+                                }, this)
+                            }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                lineNumber: 62,
+                                lineNumber: 262,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                            lineNumber: 61,
+                            lineNumber: 261,
                             columnNumber: 21
                         }, this),
                         showAIAnalysis && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -4693,49 +5151,38 @@ const MindmapCanvas = ({ elements, analysis, onSelectElement, projectId = 'mindm
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$renderer$2f$components$2f$common$2f$AIAnalysisPanel$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AIAnalysisPanel"], {
                                 projectId: projectId,
                                 analysisType: "mindmap",
-                                data: {
-                                    elements: elements,
-                                    relationships: relationships,
-                                    stats: {
-                                        totalElements: elements.length,
-                                        totalConnections: relationships.length,
-                                        averageStrength: relationships.length > 0 ? relationships.reduce((sum, rel)=>sum + rel.strength, 0) / relationships.length : 0
-                                    }
-                                },
+                                data: elements,
                                 context: {
-                                    content: elements.map((e)=>`${e.title}: ${e.content}`).join('\n'),
-                                    themes: elements.map((e)=>e.type).filter((v, i, a)=>a.indexOf(v) === i),
-                                    characters: elements.filter((e)=>e.type === 'character'),
-                                    plotPoints: elements.filter((e)=>e.plotRelevance && e.plotRelevance >= 3)
+                                    content: elements.map((e)=>`${e.title}: ${e.content}`).join('\n')
                                 },
                                 onAnalysisComplete: (result)=>{
-                                    console.log('마인드맵 AI 분석 완료:', result);
+                                    console.log('🧠 마인드맵 AI 분석 완료:', result);
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                                lineNumber: 198,
+                                lineNumber: 349,
                                 columnNumber: 29
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                            lineNumber: 197,
+                            lineNumber: 348,
                             columnNumber: 25
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                    lineNumber: 59,
+                    lineNumber: 259,
                     columnNumber: 17
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-                lineNumber: 58,
+                lineNumber: 258,
                 columnNumber: 13
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/renderer/components/projects/views/synopsis/MindmapCanvas.tsx",
-        lineNumber: 38,
+        lineNumber: 207,
         columnNumber: 9
     }, this);
 };

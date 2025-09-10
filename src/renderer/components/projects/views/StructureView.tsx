@@ -19,7 +19,8 @@ import {
   GripVertical,
   Target,
   Clock,
-  BarChart3
+  BarChart3,
+  BookOpen
 } from 'lucide-react';
 
 interface StructureViewProps {
@@ -89,6 +90,7 @@ const STRUCTURE_STYLES = {
 
 // 타입별 아이콘 매핑
 const TYPE_ICONS = {
+  main: BookOpen,
   chapter: Hash,
   synopsis: FileText,
   idea: Bookmark,
@@ -96,6 +98,7 @@ const TYPE_ICONS = {
 
 // 추가 메뉴 아이템
 const ADD_MENU_ITEMS = [
+  { type: 'main', label: '메인 스토리', icon: BookOpen, description: '전체 이야기 구조' },
   { type: 'chapter', label: '새 장', icon: Hash, description: '스토리의 주요 단위' },
   { type: 'synopsis', label: '시놉시스', icon: FileText, description: '이야기 개요' },
   { type: 'idea', label: '아이디어', icon: Bookmark, description: '창작 아이디어' },
@@ -129,8 +132,21 @@ const StructureView = memo(function StructureView({
   const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null); // 🔥 삭제할 아이템 정보
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // 🔥 폴더 접기/펼치기 상태 관리
-  const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(new Set());
+  // 🔥 폴더 접기/펼치기 상태 관리 - localStorage 지원
+  const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(() => {
+    // localStorage에서 상태 복원
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(`structureView_collapsed_${projectId}`);
+        if (saved) {
+          return new Set(JSON.parse(saved));
+        }
+      } catch (error) {
+        Logger.warn('STRUCTURE_VIEW', 'Failed to load collapsed state from localStorage', error);
+      }
+    }
+    return new Set();
+  });
 
   // 🔥 강제 리렌더링을 위한 상태
   const [, forceUpdate] = useState({});
@@ -138,7 +154,7 @@ const StructureView = memo(function StructureView({
     forceUpdate({});
   }, []);
 
-  // 🔥 폴더 토글 함수
+  // 🔥 폴더 토글 함수 - localStorage 저장 포함
   const toggleFolder = useCallback((folderType: string) => {
     setCollapsedFolders(prev => {
       const newSet = new Set(prev);
@@ -147,14 +163,27 @@ const StructureView = memo(function StructureView({
       } else {
         newSet.add(folderType);
       }
+
+      // localStorage에 저장
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem(`structureView_collapsed_${projectId}`, JSON.stringify([...newSet]));
+        } catch (error) {
+          Logger.warn('STRUCTURE_VIEW', 'Failed to save collapsed state to localStorage', error);
+        }
+      }
+
       Logger.debug('STRUCTURE_VIEW', 'Folder toggled', { folderType, collapsed: newSet.has(folderType) });
       return newSet;
     });
-  }, []);
+  }, [projectId]);
 
   // 🔥 폴더별 데이터 그룹화
   const groupedStructures = useMemo(() => {
     const groups = {
+      main: structures.filter(item => (item.type as any) === 'main').sort((a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      ),
       chapters: structures.filter(item => item.type === 'chapter').sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       ),
@@ -167,6 +196,7 @@ const StructureView = memo(function StructureView({
     };
 
     Logger.debug('STRUCTURE_VIEW', 'Grouped structures', {
+      main: groups.main.length,
       chapters: groups.chapters.length,
       synopsis: groups.synopsis.length,
       ideas: groups.ideas.length
@@ -196,7 +226,7 @@ const StructureView = memo(function StructureView({
     return unsubscribe;
   }, [projectId, structures, triggerUpdate]);
 
-  const handleAddItem = useCallback(async (type: 'chapter' | 'synopsis' | 'idea'): Promise<void> => {
+  const handleAddItem = useCallback(async (type: 'main' | 'chapter' | 'synopsis' | 'idea'): Promise<void> => {
     Logger.info('STRUCTURE_VIEW', 'Adding new item', { type, projectId });
 
     // 🔥 NEW: chapter 타입일 때는 모달을 통해 처리
@@ -207,8 +237,9 @@ const StructureView = memo(function StructureView({
       return;
     }
 
-    // 기존 synopsis, idea 처리 로직
+    // 기존 synopsis, idea, main 처리 로직
     const defaultTitles = {
+      main: '메인 스토리',
       chapter: `새로운 챕터`, // 이 부분은 사용되지 않음 (모달 통해 처리)
       synopsis: `새로운 시놉시스`,
       idea: `새로운 아이디어`
@@ -228,7 +259,7 @@ const StructureView = memo(function StructureView({
       id: `${type}_${Date.now()}`,
       title: itemTitle,
       description: '',
-      type,
+      type: type as any, // 🔥 임시 타입 캐스팅
       status: 'planning',
       projectId,
       createdAt: new Date(),
@@ -244,7 +275,7 @@ const StructureView = memo(function StructureView({
       // 🔥 에디터 상태 업데이트
       setCurrentEditor({
         projectId,
-        editorType: type,
+        editorType: (type === 'main' ? 'synopsis' : type) as any, // 🔥 main은 synopsis로 처리
         itemId: newItem.id,
         itemTitle: newItem.title
       });
@@ -256,6 +287,8 @@ const StructureView = memo(function StructureView({
         onNavigateToIdeaEdit?.(newItem.id);
       } else if (type === 'synopsis') {
         onNavigateToSynopsisEdit?.(newItem.id);
+      } else if (type === 'main') {
+        onNavigateToSynopsisEdit?.(newItem.id); // 메인 스토리도 시놉시스 에디터로
       }
 
       // 강제 리렌더링
@@ -271,7 +304,7 @@ const StructureView = memo(function StructureView({
     // 🔥 에디터 상태 업데이트
     setCurrentEditor({
       projectId,
-      editorType: item.type as 'chapter' | 'synopsis' | 'idea',
+      editorType: ((item.type as any) === 'main' ? 'synopsis' : item.type) as any,
       itemId: item.id,
       itemTitle: item.title
     });
@@ -280,7 +313,7 @@ const StructureView = memo(function StructureView({
       onNavigateToChapterEdit?.(item.id);
     } else if (item.type === 'idea') {
       onNavigateToIdeaEdit?.(item.id);
-    } else if (item.type === 'synopsis') {
+    } else if (item.type === 'synopsis' || (item.type as any) === 'main') {
       onNavigateToSynopsisEdit?.(item.id);
     }
   }, [projectId, setCurrentEditor, onNavigateToChapterEdit, onNavigateToIdeaEdit, onNavigateToSynopsisEdit]);
@@ -426,6 +459,73 @@ const StructureView = memo(function StructureView({
           ) : (
             /* 🔥 폴더형 구조 목록 */
             <div className="space-y-4">
+              {/* 🔥 메인 스토리 폴더 */}
+              {groupedStructures.main.length > 0 && (
+                <div>
+                  {renderFolderHeader('main', '메인 스토리', BookOpen, groupedStructures.main.length)}
+                  {!collapsedFolders.has('main') && (
+                    <div className="ml-6 space-y-2">
+                      {groupedStructures.main.map((item) => {
+                        const isEditing = editingId === item.id;
+
+                        return (
+                          <div
+                            key={item.id}
+                            className={STRUCTURE_STYLES.structureItem}
+                            onClick={() => handleItemClick(item)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <BookOpen className={STRUCTURE_STYLES.itemIcon} />
+                            <div className={STRUCTURE_STYLES.itemContent}>
+                              {isEditing ? (
+                                <input
+                                  type="text"
+                                  value={editTitle}
+                                  onChange={(e) => setEditTitle(e.target.value)}
+                                  onKeyDown={(e) => handleKeyPress(e, item.id)}
+                                  onBlur={() => handleEditSave(item.id)}
+                                  className={STRUCTURE_STYLES.editInput}
+                                  autoFocus
+                                />
+                              ) : (
+                                <>
+                                  <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
+                                  <div className={STRUCTURE_STYLES.itemType}>메인 스토리</div>
+                                </>
+                              )}
+                            </div>
+                            <div className={STRUCTURE_STYLES.itemActions}>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleEditStart(item);
+                                }}
+                                className={STRUCTURE_STYLES.actionButton}
+                                title="편집"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleDelete(item.id);
+                                }}
+                                className={STRUCTURE_STYLES.actionButton}
+                                title="삭제"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* 🔥 챕터 폴더 */}
               {groupedStructures.chapters.length > 0 && (
                 <div>

@@ -14,6 +14,7 @@ interface OutlinePanelProps {
     characters?: any[]; // 캐릭터 데이터
     notes?: any[]; // 노트 데이터
     content?: string; // 프로젝트 내용
+    onNavigateToChapter?: (chapterId: string) => void; // 🔥 챕터 네비게이션 추가
 }
 
 export const OutlinePanel: React.FC<OutlinePanelProps> = ({
@@ -21,9 +22,66 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
     projectId = 'outline-demo',
     characters = [],
     notes = [],
-    content = ''
+    content = '',
+    onNavigateToChapter // 🔥 챕터 네비게이션 함수
 }) => {
     const [showAIAnalysis, setShowAIAnalysis] = useState(false);
+
+    // 🔥 페이지네이션 상태
+    const [currentPage, setCurrentPage] = useState({
+        chapters: 1,
+        characters: 1,
+        ideas: 1,
+        memos: 1
+    });
+
+    const ITEMS_PER_PAGE = 6; // 페이지당 아이템 수
+
+    // 🔥 페이지네이션 헬퍼 함수
+    const getPaginatedItems = (items: ProjectElement[], type: keyof typeof currentPage) => {
+        const startIndex = (currentPage[type] - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        return items.slice(startIndex, endIndex);
+    };
+
+    const getTotalPages = (itemsCount: number) => {
+        return Math.ceil(itemsCount / ITEMS_PER_PAGE);
+    };
+
+    const handlePageChange = (type: keyof typeof currentPage, newPage: number) => {
+        setCurrentPage(prev => ({
+            ...prev,
+            [type]: newPage
+        }));
+    };
+
+    // 🔥 페이지네이션 컴포넌트
+    const renderPagination = (type: keyof typeof currentPage, totalItems: number) => {
+        const totalPages = getTotalPages(totalItems);
+        if (totalPages <= 1) return null;
+
+        return (
+            <div className="flex items-center justify-center gap-2 mt-4">
+                <button
+                    onClick={() => handlePageChange(type, Math.max(1, currentPage[type] - 1))}
+                    disabled={currentPage[type] === 1}
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                    이전
+                </button>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {currentPage[type]} / {totalPages}
+                </span>
+                <button
+                    onClick={() => handlePageChange(type, Math.min(totalPages, currentPage[type] + 1))}
+                    disabled={currentPage[type] === totalPages}
+                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                    다음
+                </button>
+            </div>
+        );
+    };
 
     // 요소별로 분류
     const categorizedElements = useMemo(() => {
@@ -37,14 +95,31 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
     }, [elements]);
 
     const renderElementCard = (element: ProjectElement, icon: React.ReactNode) => (
-        <Card key={element.id} className="p-4 hover:shadow-md transition-shadow">
+        <Card
+            key={element.id}
+            className={`p-4 hover:shadow-md transition-shadow ${element.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10' : ''
+                }`}
+            onClick={() => {
+                // 🔥 챕터 클릭 시 네비게이션
+                if (element.type === 'chapter' && onNavigateToChapter) {
+                    Logger.info('OUTLINE_PANEL', 'Navigating to chapter', { chapterId: element.id, title: element.title });
+                    onNavigateToChapter(element.id);
+                }
+            }}
+        >
             <div className="flex items-start gap-3">
                 <div className="flex-shrink-0 mt-1">
                     {icon}
                 </div>
                 <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-2">
+                    <h4 className={`font-medium mb-2 ${element.type === 'chapter' && onNavigateToChapter
+                            ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
+                            : 'text-gray-900 dark:text-gray-100'
+                        }`}>
                         {element.title}
+                        {element.type === 'chapter' && onNavigateToChapter && (
+                            <span className="ml-2 text-xs text-gray-500">(클릭하여 편집)</span>
+                        )}
                     </h4>
                     <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
                         {element.content}
@@ -117,10 +192,11 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                                 챕터 ({categorizedElements.chapters.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {categorizedElements.chapters.map((element) =>
+                                                {getPaginatedItems(categorizedElements.chapters, 'chapters').map((element) =>
                                                     renderElementCard(element, <FileText className="w-4 h-4 text-blue-500" />)
                                                 )}
                                             </div>
+                                            {renderPagination('chapters', categorizedElements.chapters.length)}
                                         </div>
                                     )}
 
@@ -132,10 +208,11 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                                 인물 ({categorizedElements.characters.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {categorizedElements.characters.map((element) =>
+                                                {getPaginatedItems(categorizedElements.characters, 'characters').map((element) =>
                                                     renderElementCard(element, <User className="w-4 h-4 text-green-500" />)
                                                 )}
                                             </div>
+                                            {renderPagination('characters', categorizedElements.characters.length)}
                                         </div>
                                     )}
 
@@ -147,10 +224,11 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                                 아이디어 ({categorizedElements.ideas.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {categorizedElements.ideas.map((element) =>
+                                                {getPaginatedItems(categorizedElements.ideas, 'ideas').map((element) =>
                                                     renderElementCard(element, <Lightbulb className="w-4 h-4 text-yellow-500" />)
                                                 )}
                                             </div>
+                                            {renderPagination('ideas', categorizedElements.ideas.length)}
                                         </div>
                                     )}
 
@@ -162,10 +240,11 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                                 메모 & 노트 ({categorizedElements.memos.length + categorizedElements.notes.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {[...categorizedElements.memos, ...categorizedElements.notes].map((element) =>
+                                                {getPaginatedItems([...categorizedElements.memos, ...categorizedElements.notes], 'memos').map((element) =>
                                                     renderElementCard(element, <FileText className="w-4 h-4 text-gray-500" />)
                                                 )}
                                             </div>
+                                            {renderPagination('memos', categorizedElements.memos.length + categorizedElements.notes.length)}
                                         </div>
                                     )}
                                 </>

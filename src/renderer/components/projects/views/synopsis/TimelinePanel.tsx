@@ -15,6 +15,7 @@ interface TimelinePanelProps {
     characters?: any[]; // 캐릭터 데이터
     notes?: any[]; // 노트 데이터
     content?: string; // 프로젝트 내용
+    onNavigateToChapter?: (chapterId: string) => void; // 🔥 챕터 네비게이션 추가
 }
 
 export const TimelinePanel: React.FC<TimelinePanelProps> = ({
@@ -22,7 +23,8 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
     projectId = 'timeline-demo',
     characters = [],
     notes = [],
-    content = ''
+    content = '',
+    onNavigateToChapter // 🔥 챕터 네비게이션 함수
 }) => {
     const [showAIAnalysis, setShowAIAnalysis] = useState(false);
 
@@ -68,9 +70,26 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                             )}
                                         </div>
                                         <div className="flex-1 pb-8">
-                                            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+                                            <div
+                                                className={`bg-white dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow ${item.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10' : ''
+                                                    }`}
+                                                onClick={() => {
+                                                    // 🔥 챕터 클릭 시 네비게이션
+                                                    if (item.type === 'chapter' && onNavigateToChapter) {
+                                                        onNavigateToChapter(item.id);
+                                                    }
+                                                }}
+                                            >
                                                 <div className="flex items-center justify-between mb-2">
-                                                    <h3 className="font-medium">{item.title}</h3>
+                                                    <h3 className={`font-medium ${item.type === 'chapter' && onNavigateToChapter
+                                                            ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
+                                                            : 'text-gray-900 dark:text-gray-100'
+                                                        }`}>
+                                                        {item.title}
+                                                        {item.type === 'chapter' && onNavigateToChapter && (
+                                                            <span className="ml-2 text-xs text-gray-500">(클릭하여 편집)</span>
+                                                        )}
+                                                    </h3>
                                                     <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
                                                         {item.type}
                                                     </span>

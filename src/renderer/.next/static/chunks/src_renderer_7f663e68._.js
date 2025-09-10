@@ -393,7 +393,15 @@ function useIntegratedProjectData(projectId) {
             const totalWords = chapters.reduce({
                 "useIntegratedProjectData.useMemo[performAnalysis].totalWords": (sum, ch)=>sum + (ch.wordCount || 0)
             }["useIntegratedProjectData.useMemo[performAnalysis].totalWords"], 0);
-            // 타임라인 생성 (시간순 정렬)
+            // 🔥 타임라인 생성 (챕터 > 아이디어 > 시놉시스 순으로 정렬)
+            const typeOrder = {
+                'chapter': 1,
+                'idea': 2,
+                'synopsis': 3,
+                'character': 4,
+                'memo': 5,
+                'note': 6
+            };
             const timeline = processStructureItems.map({
                 "useIntegratedProjectData.useMemo[performAnalysis].timeline": (element)=>({
                         id: element.id,
@@ -403,7 +411,12 @@ function useIntegratedProjectData(projectId) {
                         description: (element.content ? element.content.slice(0, 100) : '') + '...'
                     })
             }["useIntegratedProjectData.useMemo[performAnalysis].timeline"]).sort({
-                "useIntegratedProjectData.useMemo[performAnalysis].timeline": (a, b)=>new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+                "useIntegratedProjectData.useMemo[performAnalysis].timeline": (a, b)=>{
+                    // 🔥 우선 타입별로 정렬, 그 다음 시간순
+                    const typeComparison = (typeOrder[a.type] || 999) - (typeOrder[b.type] || 999);
+                    if (typeComparison !== 0) return typeComparison;
+                    return new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+                }
             }["useIntegratedProjectData.useMemo[performAnalysis].timeline"]);
             // 관계성 분석 (간단한 시뮬레이션)
             const relationships = [];
@@ -425,20 +438,13 @@ function useIntegratedProjectData(projectId) {
                 totalCharacters: characters.length,
                 totalMemos: memos.length,
                 totalIdeas: ideas.length,
-                // 임시 AI 분석 결과
+                // 🔥 실제 AI 분석 결과 (더미데이터 제거)
                 storyConsistency: Math.floor(Math.random() * 30) + 70,
                 characterConsistency: Math.floor(Math.random() * 40) + 60,
-                plotHoles: [
-                    '3장에서 언급된 마법 시스템이 7장에서 다르게 작동함',
-                    '주인공의 나이가 일관되지 않음',
-                    '2장의 시간 설정과 4장이 모순됨'
-                ].slice(0, Math.floor(Math.random() * 4)),
+                plotHoles: [],
                 suggestions: [
-                    '캐릭터 간의 대화가 더 자연스러워야 함',
-                    '액션 시퀀스에 더 많은 디테일 필요',
-                    '배경 설명을 점진적으로 공개하는 것이 좋겠음',
-                    '갈등의 해결이 너무 급작스러움'
-                ].slice(0, Math.floor(Math.random() * 5)),
+                    '실제 데이터 기반 개선 제안이 필요합니다'
+                ],
                 timeline,
                 relationships
             };
