@@ -332,7 +332,12 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                                 <span className="text-sm font-medium text-orange-600">누락 요소:</span>
                                 <ul className="mt-1 ml-4 list-disc">
                                     {result.structure.missing.map((item, index) => (
-                                        <li key={index} className="text-xs text-gray-700">{item}</li>
+                                        <li key={index} className="text-xs text-gray-700">
+                                            {typeof item === 'string' ? item :
+                                                typeof item === 'object' && item !== null ?
+                                                    ((item as any).element || (item as any).name || JSON.stringify(item)) :
+                                                    String(item)}
+                                        </li>
                                     ))}
                                 </ul>
                             </div>
@@ -428,7 +433,12 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                             <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
                                 <span className="text-sm font-medium text-blue-600">{index + 1}</span>
                             </div>
-                            <p className="text-sm leading-relaxed flex-grow">{suggestion}</p>
+                            <p className="text-sm leading-relaxed flex-grow">
+                                {typeof suggestion === 'string' ? suggestion :
+                                    typeof suggestion === 'object' && suggestion !== null ?
+                                        ((suggestion as any).text || (suggestion as any).description || JSON.stringify(suggestion)) :
+                                        String(suggestion)}
+                            </p>
                         </div>
                     </Card>
                 ))}

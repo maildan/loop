@@ -27,7 +27,7 @@ import { Logger } from '../../../../shared/logger';
 
 // 🔥 프리컴파일된 스타일 (기가차드 원칙) - EditorTabBar 아래 레이어  
 const PROJECT_HEADER_STYLES = {
-  header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[10] h-12', // z-index 낮춤
+  header: 'flex items-center justify-between px-4 py-2 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 transition-colors duration-200 w-full animate-slideDown relative z-[5] h-12', // z-index를 5로 낮춤 (TabBar 950보다 훨씬 낮게)
   headerLeft: 'flex items-center gap-3',
   headerCenter: 'flex items-center gap-3 max-w-md',
   headerRight: 'flex items-center gap-2 relative',

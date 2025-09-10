@@ -519,6 +519,13 @@ ${contextualInfo}
     ]
   }
 }
+
+🚨 절대 금지사항:
+- "마법 시스템", "캐릭터 대화", "액션 시퀀스" 같은 존재하지 않는 요소 언급 금지
+- "3장", "7장" 등 존재하지 않는 챕터 번호 언급 금지
+- 일반적인 스토리텔링 조언 대신 위 실제 아웃라인 데이터의 구체적 분석만 제공
+- 데이터에 없는 캐릭터나 설정을 가정하거나 언급 금지
+- 오직 제공된 실제 아웃라인 데이터만을 분석하세요
             `;
 
             const aiResponse = await this.geminiClient.generateText({
@@ -937,7 +944,15 @@ ${contextualInfo}
 
     private parseOutlineResponse(content: string): OutlineAnalysisResult {
         try {
-            return JSON.parse(content);
+            // 🔥 마크다운 JSON 블록 처리 (```json...``` 제거)
+            let cleanedContent = content;
+            if (content.includes('```json')) {
+                cleanedContent = content
+                    .replace(/```json\s*\n?/g, '')  // ```json 제거
+                    .replace(/\n?```\s*$/g, '')     // 끝의 ``` 제거
+                    .trim();
+            }
+            return JSON.parse(cleanedContent);
         } catch (error) {
             Logger.warn('AI_ANALYSIS_SERVICE', 'Failed to parse outline JSON, using fallback');
             return this.createFallbackOutlineResult(content);
@@ -946,7 +961,15 @@ ${contextualInfo}
 
     private parseMindmapResponse(content: string): MindmapAnalysisResult {
         try {
-            return JSON.parse(content);
+            // 🔥 마크다운 JSON 블록 처리 (```json...``` 제거)
+            let cleanedContent = content;
+            if (content.includes('```json')) {
+                cleanedContent = content
+                    .replace(/```json\s*\n?/g, '')  // ```json 제거
+                    .replace(/\n?```\s*$/g, '')     // 끝의 ``` 제거
+                    .trim();
+            }
+            return JSON.parse(cleanedContent);
         } catch (error) {
             Logger.warn('AI_ANALYSIS_SERVICE', 'Failed to parse mindmap JSON, using fallback');
             return this.createFallbackMindmapResult(content);
