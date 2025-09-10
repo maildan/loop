@@ -3,6 +3,7 @@ import { getGeminiClient, type GeminiResponse } from '../ai/geminiClient';
 import { performAIStoryAnalysis, type AIEnhancedAnalysisResult } from '../narrative/aiEnhancedAnalyzer';
 import type { NCPNarrativeStructure } from '../narrative/ncpAnalyzer';
 import { Logger } from '../logger';
+import { aiResponseMiddleware, analysisResultMiddleware, DummyDataFilter } from './dummyDataFilter'; // 🔥 더미데이터 필터링 시스템
 
 // Prisma 타입 (실제로는 @prisma/client에서 import)
 interface AIAnalysisRecord {
@@ -399,14 +400,19 @@ ${JSON.stringify(timelineData, null, 2)}
                 temperature: 0.2
             });
 
-            const analysisResult = this.parseTimelineResponse(aiResponse.content);
+            // 🔥 더미데이터 필터링 적용
+            const filteredContent = aiResponseMiddleware(aiResponse.content);
+            const analysisResult = this.parseTimelineResponse(filteredContent);
+
+            // 🔥 분석 결과 추가 정화
+            const sanitizedResult = analysisResultMiddleware(analysisResult);
 
             const response: AnalysisResponse<TimelineAnalysisResult> = {
                 id: this.generateAnalysisId(),
                 type: 'timeline',
-                result: analysisResult,
+                result: sanitizedResult,
                 confidence: this.calculateConfidence(aiResponse),
-                suggestions: this.extractSuggestions(analysisResult),
+                suggestions: this.extractSuggestions(sanitizedResult),
                 metadata: {
                     processingTime: Date.now() - startTime,
                     tokenUsage: this.convertTokenUsage(aiResponse.usage),
@@ -554,14 +560,19 @@ ${contextualInfo}
                 temperature: 0.3
             });
 
-            const analysisResult = this.parseOutlineResponse(aiResponse.content);
+            // 🔥 더미데이터 필터링 적용
+            const filteredContent = aiResponseMiddleware(aiResponse.content);
+            const analysisResult = this.parseOutlineResponse(filteredContent);
+
+            // 🔥 분석 결과 추가 정화
+            const sanitizedResult = analysisResultMiddleware(analysisResult);
 
             const response: AnalysisResponse<OutlineAnalysisResult> = {
                 id: this.generateAnalysisId(),
                 type: 'outline',
-                result: analysisResult,
+                result: sanitizedResult,
                 confidence: this.calculateConfidence(aiResponse),
-                suggestions: this.extractSuggestions(analysisResult),
+                suggestions: this.extractSuggestions(sanitizedResult),
                 metadata: {
                     processingTime: Date.now() - startTime,
                     tokenUsage: this.convertTokenUsage(aiResponse.usage),
@@ -704,14 +715,19 @@ ${contextualInfo}
                 temperature: 0.4
             });
 
-            const analysisResult = this.parseMindmapResponse(aiResponse.content);
+            // 🔥 더미데이터 필터링 적용
+            const filteredContent = aiResponseMiddleware(aiResponse.content);
+            const analysisResult = this.parseMindmapResponse(filteredContent);
+
+            // 🔥 분석 결과 추가 정화
+            const sanitizedResult = analysisResultMiddleware(analysisResult);
 
             const response: AnalysisResponse<MindmapAnalysisResult> = {
                 id: this.generateAnalysisId(),
                 type: 'mindmap',
-                result: analysisResult,
+                result: sanitizedResult,
                 confidence: this.calculateConfidence(aiResponse),
-                suggestions: this.extractSuggestions(analysisResult),
+                suggestions: this.extractSuggestions(sanitizedResult),
                 metadata: {
                     processingTime: Date.now() - startTime,
                     tokenUsage: this.convertTokenUsage(aiResponse.usage),

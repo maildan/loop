@@ -128,7 +128,7 @@ const StructureView = memo(function StructureView({
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false); // 🔥 삭제 확인 다이얼로그
   const [itemToDelete, setItemToDelete] = useState<{ id: string; title: string } | null>(null); // 🔥 삭제할 아이템 정보
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  
+
   // 🔥 폴더 접기/펼치기 상태 관리
   const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(new Set());
 
@@ -155,23 +155,23 @@ const StructureView = memo(function StructureView({
   // 🔥 폴더별 데이터 그룹화
   const groupedStructures = useMemo(() => {
     const groups = {
-      chapters: structures.filter(item => item.type === 'chapter').sort((a, b) => 
+      chapters: structures.filter(item => item.type === 'chapter').sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       ),
-      synopsis: structures.filter(item => item.type === 'synopsis').sort((a, b) => 
+      synopsis: structures.filter(item => item.type === 'synopsis').sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       ),
-      ideas: structures.filter(item => item.type === 'idea').sort((a, b) => 
+      ideas: structures.filter(item => item.type === 'idea').sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       )
     };
-    
+
     Logger.debug('STRUCTURE_VIEW', 'Grouped structures', {
       chapters: groups.chapters.length,
       synopsis: groups.synopsis.length,
       ideas: groups.ideas.length
     });
-    
+
     return groups;
   }, [structures]);
 
@@ -370,6 +370,35 @@ const StructureView = memo(function StructureView({
     }
   }, [handleEditSave, handleEditCancel]);
 
+  // 🔥 폴더 헤더 렌더링 함수
+  const renderFolderHeader = useCallback((
+    folderType: string,
+    title: string,
+    icon: React.ComponentType<any>,
+    count: number
+  ) => {
+    const isCollapsed = collapsedFolders.has(folderType);
+    const IconComponent = icon;
+
+    return (
+      <div
+        className="flex items-center justify-between p-3 mb-2 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+        onClick={() => toggleFolder(folderType)}
+      >
+        <div className="flex items-center gap-3">
+          <div className={`transform transition-transform ${isCollapsed ? '' : 'rotate-90'}`}>
+            <ChevronRight className="w-4 h-4 text-gray-500" />
+          </div>
+          <IconComponent className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+          <span className="font-medium text-gray-900 dark:text-gray-100">{title}</span>
+          <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full">
+            {count}
+          </span>
+        </div>
+      </div>
+    );
+  }, [collapsedFolders, toggleFolder]);
+
   return (
     <div className={STRUCTURE_STYLES.container}>
       {/* 헤더 */}
@@ -385,67 +414,226 @@ const StructureView = memo(function StructureView({
         <div className={STRUCTURE_STYLES.structureList}>
           {isLoading ? (
             <div className="p-6 text-center text-sm text-gray-500">로딩중...</div>
+          ) : structures.length === 0 ? (
+            /* 🔥 빈 상태 */
+            <div className={STRUCTURE_STYLES.emptyState}>
+              <Target className={STRUCTURE_STYLES.emptyIcon} />
+              <h3 className={STRUCTURE_STYLES.emptyTitle}>스토리 구조가 비어있습니다</h3>
+              <p className={STRUCTURE_STYLES.emptyDescription}>
+                새로운 챕터, 시놉시스, 아이디어를 추가하여 스토리 구조를 구성해보세요.
+              </p>
+            </div>
           ) : (
-            structures.map((item) => {
-              const IconComponent = TYPE_ICONS[item.type as keyof typeof TYPE_ICONS] || FileText;
-              const isEditing = editingId === item.id;
+            /* 🔥 폴더형 구조 목록 */
+            <div className="space-y-4">
+              {/* 🔥 챕터 폴더 */}
+              {groupedStructures.chapters.length > 0 && (
+                <div>
+                  {renderFolderHeader('chapters', '챕터', Hash, groupedStructures.chapters.length)}
+                  {!collapsedFolders.has('chapters') && (
+                    <div className="ml-6 space-y-2">
+                      {groupedStructures.chapters.map((item, index) => {
+                        const isEditing = editingId === item.id;
+                        const isConnected = index < groupedStructures.chapters.length - 1;
 
-              return (
-                <div
-                  key={item.id}
-                  className={STRUCTURE_STYLES.structureItem}
-                  onClick={() => handleItemClick(item)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <IconComponent className={STRUCTURE_STYLES.itemIcon} />
-                  <div className={STRUCTURE_STYLES.itemContent}>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={editTitle}
-                        onChange={(e) => setEditTitle(e.target.value)}
-                        onKeyDown={(e) => handleKeyPress(e, item.id)}
-                        onBlur={() => handleEditSave(item.id)}
-                        className={STRUCTURE_STYLES.editInput}
-                        autoFocus
-                      />
-                    ) : (
-                      <>
-                        <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
-                        <div className={STRUCTURE_STYLES.itemType}>
-                          {item.type === 'chapter' ? '장' :
-                            item.type === 'synopsis' ? '시놉시스' : '아이디어'}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  <div className={STRUCTURE_STYLES.itemActions}>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleEditStart(item);
-                      }}
-                      className={STRUCTURE_STYLES.actionButton}
-                      title="편집"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleDelete(item.id);
-                      }}
-                      className={STRUCTURE_STYLES.actionButton}
-                      title="삭제"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+                        return (
+                          <div key={item.id} className="relative">
+                            {/* 🔥 연결선 표시 */}
+                            {isConnected && (
+                              <div className="absolute left-3 top-12 w-0.5 h-8 bg-blue-300 dark:bg-blue-600 z-10"></div>
+                            )}
+
+                            <div
+                              className={STRUCTURE_STYLES.structureItem}
+                              onClick={() => handleItemClick(item)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <Hash className={STRUCTURE_STYLES.itemIcon} />
+                              <div className={STRUCTURE_STYLES.itemContent}>
+                                {isEditing ? (
+                                  <input
+                                    type="text"
+                                    value={editTitle}
+                                    onChange={(e) => setEditTitle(e.target.value)}
+                                    onKeyDown={(e) => handleKeyPress(e, item.id)}
+                                    onBlur={() => handleEditSave(item.id)}
+                                    className={STRUCTURE_STYLES.editInput}
+                                    autoFocus
+                                  />
+                                ) : (
+                                  <>
+                                    <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
+                                    <div className={STRUCTURE_STYLES.itemType}>챕터</div>
+                                  </>
+                                )}
+                              </div>
+                              <div className={STRUCTURE_STYLES.itemActions}>
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleEditStart(item);
+                                  }}
+                                  className={STRUCTURE_STYLES.actionButton}
+                                  title="편집"
+                                >
+                                  <Edit2 className="w-4 h-4" />
+                                </button>
+                                <button
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    handleDelete(item.id);
+                                  }}
+                                  className={STRUCTURE_STYLES.actionButton}
+                                  title="삭제"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              );
-            })
+              )}
+
+              {/* 🔥 시놉시스 폴더 */}
+              {groupedStructures.synopsis.length > 0 && (
+                <div>
+                  {renderFolderHeader('synopsis', '시놉시스', FileText, groupedStructures.synopsis.length)}
+                  {!collapsedFolders.has('synopsis') && (
+                    <div className="ml-6 space-y-2">
+                      {groupedStructures.synopsis.map((item) => {
+                        const isEditing = editingId === item.id;
+
+                        return (
+                          <div
+                            key={item.id}
+                            className={STRUCTURE_STYLES.structureItem}
+                            onClick={() => handleItemClick(item)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <FileText className={STRUCTURE_STYLES.itemIcon} />
+                            <div className={STRUCTURE_STYLES.itemContent}>
+                              {isEditing ? (
+                                <input
+                                  type="text"
+                                  value={editTitle}
+                                  onChange={(e) => setEditTitle(e.target.value)}
+                                  onKeyDown={(e) => handleKeyPress(e, item.id)}
+                                  onBlur={() => handleEditSave(item.id)}
+                                  className={STRUCTURE_STYLES.editInput}
+                                  autoFocus
+                                />
+                              ) : (
+                                <>
+                                  <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
+                                  <div className={STRUCTURE_STYLES.itemType}>시놉시스</div>
+                                </>
+                              )}
+                            </div>
+                            <div className={STRUCTURE_STYLES.itemActions}>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleEditStart(item);
+                                }}
+                                className={STRUCTURE_STYLES.actionButton}
+                                title="편집"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleDelete(item.id);
+                                }}
+                                className={STRUCTURE_STYLES.actionButton}
+                                title="삭제"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* 🔥 아이디어 폴더 */}
+              {groupedStructures.ideas.length > 0 && (
+                <div>
+                  {renderFolderHeader('ideas', '아이디어', Bookmark, groupedStructures.ideas.length)}
+                  {!collapsedFolders.has('ideas') && (
+                    <div className="ml-6 space-y-2">
+                      {groupedStructures.ideas.map((item) => {
+                        const isEditing = editingId === item.id;
+
+                        return (
+                          <div
+                            key={item.id}
+                            className={STRUCTURE_STYLES.structureItem}
+                            onClick={() => handleItemClick(item)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <Bookmark className={STRUCTURE_STYLES.itemIcon} />
+                            <div className={STRUCTURE_STYLES.itemContent}>
+                              {isEditing ? (
+                                <input
+                                  type="text"
+                                  value={editTitle}
+                                  onChange={(e) => setEditTitle(e.target.value)}
+                                  onKeyDown={(e) => handleKeyPress(e, item.id)}
+                                  onBlur={() => handleEditSave(item.id)}
+                                  className={STRUCTURE_STYLES.editInput}
+                                  autoFocus
+                                />
+                              ) : (
+                                <>
+                                  <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
+                                  <div className={STRUCTURE_STYLES.itemType}>아이디어</div>
+                                </>
+                              )}
+                            </div>
+                            <div className={STRUCTURE_STYLES.itemActions}>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleEditStart(item);
+                                }}
+                                className={STRUCTURE_STYLES.actionButton}
+                                title="편집"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  handleDelete(item.id);
+                                }}
+                                className={STRUCTURE_STYLES.actionButton}
+                                title="삭제"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           )}
 
           {/* 추가 메뉴 */}
