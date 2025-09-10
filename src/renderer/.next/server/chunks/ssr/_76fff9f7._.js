@@ -1448,33 +1448,102 @@ ${contextualInfo}
             const mindmapData = this.prepareMindmapData(request.data);
             const contextualInfo = this.buildContextualPrompt(request.context);
             const prompt = `
-창작 프로세스 전문가로서 다음 마인드맵을 분석해주세요:
+당신은 창의적 사고 패턴과 아이디어 연결성을 전문으로 분석하는 20년 경력의 크리에이티브 컨설턴트입니다.
+다음 마인드맵을 체계적으로 분석하고, 구체적이고 실행 가능한 개선 방안을 제시해주세요.
 
 [마인드맵 데이터]
 ${JSON.stringify(mindmapData, null, 2)}
 
 ${contextualInfo}
 
-다음 JSON 형식으로 응답해주세요:
+**분석 요구사항:**
+1. 각 점수에 대한 구체적이고 상세한 근거 제시 (200자 이상)
+2. 제안사항은 실행 가능한 단계별 방법론으로 설명
+3. 창의성 개선 방안은 구체적인 예시와 함께 제시
+4. 아이디어 간 연결의 논리적 근거 명시
+
+다음 JSON 형식으로 상세히 응답해주세요:
 
 {
   "connections": {
     "score": 0-100,
-    "strongConnections": [{"from": "아이디어1", "to": "아이디어2", "strength": 90, "type": "causal"}],
-    "missingConnections": [{"suggested": "연결 제안", "reason": "이유"}]
+    "scoreReason": "연결성 평가의 구체적 근거 (200자 이상)",
+    "strongConnections": [
+      {
+        "from": "아이디어1",
+        "to": "아이디어2", 
+        "strength": 90,
+        "type": "causal|thematic|structural",
+        "explanation": "연결이 강력한 이유",
+        "potential": "이 연결로 얻을 수 있는 효과"
+      }
+    ],
+    "missingConnections": [
+      {
+        "from": "요소1",
+        "to": "요소2",
+        "reason": "연결이 필요한 구체적 이유",
+        "method": "어떻게 연결할지 방법",
+        "priority": "high|medium|low"
+      }
+    ]
   },
   "themes": {
-    "identified": [{"theme": "테마명", "relevance": 85, "elements": ["관련 요소들"]}],
-    "suggestions": ["테마 발전 제안들"]
+    "identified": [
+      {
+        "theme": "테마명",
+        "relevance": 85,
+        "elements": ["관련 요소들"],
+        "strength": "이 테마가 강력한 이유",
+        "development": "어떻게 더 발전시킬지"
+      }
+    ],
+    "suggestions": [
+      {
+        "newTheme": "새로운 테마 제안",
+        "rationale": "왜 이 테마가 필요한지",
+        "implementation": "구현 방법",
+        "examples": ["구체적 예시들"]
+      }
+    ]
   },
   "development": {
-    "priorities": [{"idea": "아이디어", "priority": 90, "reason": "우선순위 이유"}],
-    "expansions": ["확장 가능한 영역들"]
+    "priorities": [
+      {
+        "idea": "아이디어",
+        "priority": 90,
+        "reason": "높은 우선순위 이유",
+        "nextSteps": ["1단계", "2단계", "3단계"],
+        "resources": "필요한 자료나 연구"
+      }
+    ],
+    "expansions": [
+      {
+        "area": "확장 영역",
+        "potential": "확장 가능성 설명",
+        "approach": "접근 방법",
+        "challenges": "예상되는 어려움과 해결책"
+      }
+    ]
   },
   "creativity": {
     "score": 0-100,
-    "uniqueElements": ["독창적 요소들"],
-    "improvements": ["창의성 개선 방안들"]
+    "scoreReason": "창의성 평가 근거 (200자 이상)",
+    "uniqueElements": [
+      {
+        "element": "독창적 요소",
+        "uniqueness": "왜 독창적인지",
+        "leverage": "어떻게 활용할지"
+      }
+    ],
+    "improvements": [
+      {
+        "area": "개선 영역",
+        "method": "구체적 개선 방법", 
+        "technique": "사용할 창의적 기법",
+        "expectedOutcome": "예상 결과"
+      }
+    ]
   }
 }
             `;

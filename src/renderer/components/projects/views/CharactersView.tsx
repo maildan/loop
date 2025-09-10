@@ -17,7 +17,7 @@ interface CharactersViewProps {
 
 // 🔥 기가차드 캐릭터 스타일 - 카드 기반 레이아웃
 const CHARACTERS_STYLES = {
-  container: 'flex-1 overflow-hidden bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+  container: 'h-full flex flex-col bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
 
   // 🔥 개선된 헤더
   header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
@@ -32,9 +32,9 @@ const CHARACTERS_STYLES = {
   statValue: 'text-lg font-semibold text-gray-900 dark:text-gray-100',
   statLabel: 'text-xs text-slate-600 dark:text-gray-400',
 
-  // 🔥 콘텐츠 영역
-  content: 'flex-1 flex flex-col min-h-0',
-  scrollArea: 'flex-1 overflow-y-auto max-h-full',
+  // 🔥 콘텐츠 영역 - 강제 높이 설정
+  content: 'flex-1 flex flex-col min-h-0 h-full',
+  scrollArea: 'flex-1 overflow-y-auto max-h-full h-0', // h-0 강제로 flex 높이 계산
   contentPadding: 'p-6',
 
   // 🔥 캐릭터 그리드

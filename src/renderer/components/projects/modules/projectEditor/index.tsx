@@ -81,17 +81,15 @@ export const ProjectEditor = memo(function ProjectEditor({
     // 🔥 ProjectHeader hover 상태
     const [headerHovered, setHeaderHovered] = useState(false);
 
-    // 🔥 집중모드와 사이드바 접기 분리
-    const isSidebarCollapsed = sidebarCollapsed || appSidebarCollapsed || state.collapsed;
+    // 🔥 사이드바 상태 단순화 - 메인 토글만 사용
+    const isSidebarCollapsed = state.collapsed;
 
-    // 🔥 디버깅: 사이드바 상태 확인
+    // 🔥 디버깅: 사이드바 상태 확인 
     Logger.debug('PROJECT_EDITOR', 'Sidebar States', {
         isSidebarCollapsed: isSidebarCollapsed,
-        reasons: {
-            sidebarCollapsed,
-            appSidebarCollapsed,
-            'state.collapsed': state.collapsed
-        }
+        mainCollapsed: state.collapsed,
+        settingsCollapsed: sidebarCollapsed,
+        appCollapsed: appSidebarCollapsed
     });    // 🔥 저장 성공 처리
     const handleSaveSuccess = () => {
         actions.markAllTabsAsSaved();

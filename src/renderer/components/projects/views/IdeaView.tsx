@@ -77,7 +77,7 @@ const STAGE_STYLES = {
 
 // 🔥 스타일 정의
 const IDEA_STYLES = {
-    container: 'flex-1 h-full bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+    container: 'h-full flex flex-col bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
 
     // 🔥 헤더
     header: 'sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-gray-700',
@@ -104,8 +104,8 @@ const IDEA_STYLES = {
     searchInput: 'pl-9 pr-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
     searchIcon: 'absolute left-3 top-2.5 text-gray-400',
 
-    // 🔥 메인 컨텐츠
-    content: 'flex-1 min-h-0 overflow-hidden', // 명시적 overflow 설정
+    // 🔥 메인 컨텐츠 - 강제 높이 설정
+    content: 'flex-1 min-h-0 h-full overflow-hidden',
     scrollArea: 'h-full overflow-y-auto p-6',
 
     // 🔥 카드 뷰 - 모던하고 세련된 디자인

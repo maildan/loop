@@ -737,7 +737,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 // 🔥 기가차드 캐릭터 스타일 - 카드 기반 레이아웃
 const CHARACTERS_STYLES = {
-    container: 'flex-1 overflow-hidden bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+    container: 'h-full flex flex-col bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
     // 🔥 개선된 헤더
     header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
     headerTop: 'flex items-center justify-between mb-4',
@@ -749,9 +749,9 @@ const CHARACTERS_STYLES = {
     statIcon: 'w-5 h-5 text-blue-600 dark:text-blue-400 mb-2',
     statValue: 'text-lg font-semibold text-gray-900 dark:text-gray-100',
     statLabel: 'text-xs text-slate-600 dark:text-gray-400',
-    // 🔥 콘텐츠 영역
-    content: 'flex-1 flex flex-col min-h-0',
-    scrollArea: 'flex-1 overflow-y-auto max-h-full',
+    // 🔥 콘텐츠 영역 - 강제 높이 설정
+    content: 'flex-1 flex flex-col min-h-0 h-full',
+    scrollArea: 'flex-1 overflow-y-auto max-h-full h-0',
     contentPadding: 'p-6',
     // 🔥 캐릭터 그리드
     characterGrid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
@@ -5231,7 +5231,7 @@ const STAGE_STYLES = {
 };
 // 🔥 스타일 정의
 const IDEA_STYLES = {
-    container: 'flex-1 h-full bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+    container: 'h-full flex flex-col bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
     // 🔥 헤더
     header: 'sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-gray-700',
     headerTop: 'flex items-center justify-between p-4',
@@ -5254,8 +5254,8 @@ const IDEA_STYLES = {
     searchContainer: 'relative',
     searchInput: 'pl-9 pr-4 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
     searchIcon: 'absolute left-3 top-2.5 text-gray-400',
-    // 🔥 메인 컨텐츠
-    content: 'flex-1 min-h-0 overflow-hidden',
+    // 🔥 메인 컨텐츠 - 강제 높이 설정
+    content: 'flex-1 min-h-0 h-full overflow-hidden',
     scrollArea: 'h-full overflow-y-auto p-6',
     // 🔥 카드 뷰 - 모던하고 세련된 디자인
     cardsContainer: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6',
