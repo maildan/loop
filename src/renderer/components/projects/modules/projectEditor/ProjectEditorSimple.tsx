@@ -46,14 +46,40 @@ export const ProjectEditorSimple = memo(function ProjectEditorSimple({
             case 'structure':
                 return <StructureView projectId={projectId} />;
             case 'characters':
-                return <div className="p-4">Characters View</div>;
+                return (
+                    <CharactersView
+                        projectId={projectId}
+                        characters={projectData?.characters || []}
+                        onCharactersChange={(characters) => {
+                            if (projectData?.setCharacters) {
+                                projectData.setCharacters(characters);
+                                Logger.info('PROJECT_EDITOR', 'Characters updated', { count: characters.length });
+                            }
+                        }}
+                    />
+                );
             case 'notes':
-                return <NotesView projectId={projectId} />;
+                return (
+                    <NotesView
+                        projectId={projectId}
+                        notes={projectData?.notes || []}
+                        onNotesChange={(notes) => {
+                            if (projectData?.setNotes) {
+                                projectData.setNotes(notes);
+                                Logger.info('PROJECT_EDITOR', 'Notes updated', { count: notes.length });
+                            }
+                        }}
+                        onBack={() => actions.setCurrentView('structure')}
+                    />
+                );
             case 'synopsis':
                 return (
                     <SynopsisView
                         projectId={projectId}
                         synopsisId="default"
+                        characters={projectData?.characters || []}
+                        notes={projectData?.notes || []}
+                        content={projectData?.content || ''}
                         onBack={() => actions.setCurrentView('structure')}
                     />
                 );

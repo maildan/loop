@@ -265,8 +265,8 @@ const CommandMenu = forwardRef<CommandMenuRef, CommandMenuProps>(({ items, comma
           <button
             key={index}
             className={`flex items-center gap-3 w-full px-3 py-2 text-left text-sm rounded-md transition-colors ${index === selectedIndex
-                ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100'
-                : 'text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
+              ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-900 dark:text-blue-100'
+              : 'text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700'
               }`}
             onClick={() => selectItem(index)}
           >
@@ -322,6 +322,11 @@ export const slashSuggestion = {
     );
   },
 
+  // 🔥 슬래시 명령어 트리거 조건 개선
+  char: '/',
+  allowSpaces: false,              // 🔥 스페이스로 명령어 중단
+  startOfLine: false,              // 🔥 줄 중간에서도 가능
+
   render: () => {
     let component: ReactRenderer;
     let popup: Instance[] = [];
@@ -345,6 +350,8 @@ export const slashSuggestion = {
           interactive: true,
           trigger: 'manual',
           placement: 'bottom-start',
+          hideOnClick: true,           // 🔥 클릭 시 숨김
+          duration: [200, 150],        // 🔥 애니메이션 시간 단축
         });
       },
 
@@ -364,13 +371,34 @@ export const slashSuggestion = {
       },
 
       onKeyDown(props: { event: KeyboardEvent }) {
+        // 🔥 Escape 키로 메뉴 강제 종료
         if (props.event.key === 'Escape') {
           const instance = Array.isArray(popup) ? popup[0] : undefined;
-          if (instance) instance.hide();
-          return true;
+          if (instance) {
+            instance.hide();
+            return true;
+          }
         }
 
-        return (component.ref as CommandMenuRef)?.onKeyDown({ event: props.event });
+        // 🔥 Space 키로도 메뉴 종료
+        if (props.event.key === ' ' || props.event.key === 'Space') {
+          const instance = Array.isArray(popup) ? popup[0] : undefined;
+          if (instance) {
+            instance.hide();
+            return false; // 스페이스는 일반 입력으로 처리
+          }
+        }
+
+        // 🔥 Enter 키로 명령어 실행 후 메뉴 종료
+        const result = (component.ref as CommandMenuRef)?.onKeyDown({ event: props.event });
+        if (props.event.key === 'Enter' && result) {
+          const instance = Array.isArray(popup) ? popup[0] : undefined;
+          if (instance) {
+            setTimeout(() => instance.hide(), 50); // 약간의 지연 후 숨김
+          }
+        }
+
+        return result;
       },
 
       onExit() {

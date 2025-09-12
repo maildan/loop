@@ -21,13 +21,13 @@ import {
     Lightbulb,
     BarChart3
 } from 'lucide-react';
-import { Logger } from '@/shared/logger';
+import { Logger } from '../../../shared/logger';
 import type {
     AnalysisResponse,
     TimelineAnalysisResult,
     OutlineAnalysisResult,
     MindmapAnalysisResult
-} from '@/shared/services/aiAnalysisService';
+} from '../../../shared/services/aiAnalysisService';
 
 export interface AIAnalysisPanelProps {
     projectId: string;
@@ -81,7 +81,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
             }, 500);
 
             // 동적 import로 서비스 로드
-            const { getAIAnalysisService } = await import('@/shared/services/aiAnalysisService');
+            const { getAIAnalysisService } = await import('../../../shared/services/aiAnalysisService');
             const aiService = getAIAnalysisService();
 
             let result: AnalysisResponse;
@@ -266,7 +266,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                             <span className="font-semibold text-orange-800">시간적 일관성 문제</span>
                         </div>
                         <ul className="list-disc list-inside space-y-1">
-                            {result.coherence.issues.map((issue, index) => (
+                            {result.coherence.issues.map((issue: string, index: number) => (
                                 <li key={index} className="text-sm text-orange-700">{issue}</li>
                             ))}
                         </ul>
@@ -280,7 +280,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                             인과관계 문제점
                         </h4>
                         <div className="space-y-2">
-                            {result.causality.brokenLinks.map((link, index) => (
+                            {result.causality.brokenLinks.map((link: { from: string; to: string; issue: string }, index: number) => (
                                 <div key={index} className="p-2 border border-gray-200 rounded bg-gray-50">
                                     <div className="font-medium text-sm">{link.from} → {link.to}</div>
                                     <div className="text-xs text-gray-600 mt-1">{link.issue}</div>
@@ -296,7 +296,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                         구조 분석
                     </h4>
                     <div className="space-y-2">
-                        {result.structure.acts.map((act, index) => (
+                        {result.structure.acts.map((act: { name: string; start: number; end: number; quality: number }, index: number) => (
                             <div key={index} className="flex items-center justify-between p-2 border rounded">
                                 <span className="font-medium text-sm">{act.name}</span>
                                 <div className="flex items-center gap-2">
@@ -331,12 +331,9 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                             <div>
                                 <span className="text-sm font-medium text-orange-600">누락 요소:</span>
                                 <ul className="mt-1 ml-4 list-disc">
-                                    {result.structure.missing.map((item, index) => (
+                                    {result.structure.missing.map((item: string, index: number) => (
                                         <li key={index} className="text-xs text-gray-700">
-                                            {typeof item === 'string' ? item :
-                                                typeof item === 'object' && item !== null ?
-                                                    ((item as any).element || (item as any).name || JSON.stringify(item)) :
-                                                    String(item)}
+                                            {item}
                                         </li>
                                     ))}
                                 </ul>
@@ -348,7 +345,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                 <Card className="p-4">
                     <h4 className="font-semibold mb-3">흐름 분석</h4>
                     <div className="space-y-2">
-                        {result.flow.transitions.slice(0, 5).map((transition, index) => (
+                        {result.flow.transitions.slice(0, 5).map((transition: { from: string; to: string; quality: number; suggestion?: string }, index: number) => (
                             <div key={index} className="p-2 border rounded">
                                 <div className="flex items-center justify-between">
                                     <span className="text-xs">{transition.from} → {transition.to}</span>
@@ -376,7 +373,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                 <Card className="p-4">
                     <h4 className="font-semibold mb-3">강력한 연결고리</h4>
                     <div className="space-y-2">
-                        {result.connections.strongConnections.slice(0, 5).map((connection, index) => (
+                        {result.connections.strongConnections.slice(0, 5).map((connection: { from: string; to: string; strength: number; type: string }, index: number) => (
                             <div key={index} className="p-2 border rounded bg-green-50">
                                 <div className="flex items-center justify-between">
                                     <span className="text-xs">{connection.from} ↔ {connection.to}</span>
@@ -393,14 +390,14 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                 <Card className="p-4">
                     <h4 className="font-semibold mb-3">식별된 테마</h4>
                     <div className="space-y-2">
-                        {result.themes.identified.slice(0, 3).map((theme, index) => (
+                        {result.themes.identified.slice(0, 3).map((theme: { theme: string; relevance: number; elements: string[] }, index: number) => (
                             <div key={index} className="p-2 border rounded">
                                 <div className="flex items-center justify-between mb-1">
                                     <span className="text-sm font-medium">{theme.theme}</span>
                                     <Badge variant="outline" className="text-xs">{theme.relevance}%</Badge>
                                 </div>
                                 <div className="flex flex-wrap gap-1">
-                                    {theme.elements.slice(0, 3).map((element, elemIndex) => (
+                                    {theme.elements.slice(0, 3).map((element: string, elemIndex: number) => (
                                         <Badge key={elemIndex} variant="outline" className="text-xs">
                                             {element}
                                         </Badge>
@@ -427,17 +424,14 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
 
         return (
             <div className="space-y-3">
-                {analysisResult.suggestions.slice(0, 8).map((suggestion, index) => (
+                {analysisResult.suggestions.slice(0, 8).map((suggestion: string, index: number) => (
                     <Card key={index} className="p-4">
                         <div className="flex items-start gap-3">
                             <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center">
                                 <span className="text-sm font-medium text-blue-600">{index + 1}</span>
                             </div>
                             <p className="text-sm leading-relaxed flex-grow">
-                                {typeof suggestion === 'string' ? suggestion :
-                                    typeof suggestion === 'object' && suggestion !== null ?
-                                        ((suggestion as any).text || (suggestion as any).description || JSON.stringify(suggestion)) :
-                                        String(suggestion)}
+                                {suggestion}
                             </p>
                         </div>
                     </Card>

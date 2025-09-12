@@ -6,13 +6,13 @@ import { ProjectElement } from '../../../../hooks/useProjectData';
 import { AIAnalysisPanel } from '../../../common/AIAnalysisPanel';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
-import { Logger } from '@/shared/logger';
+import { Logger } from '../../../../../shared/logger';
 
 interface OutlinePanelProps {
     elements: ProjectElement[];
     projectId?: string;
-    characters?: any[]; // 캐릭터 데이터
-    notes?: any[]; // 노트 데이터
+    characters?: Array<{ id: string; name: string; role?: string; notes?: string }>; // 캐릭터 데이터
+    notes?: Array<{ id: string; title: string; content: string; tags?: string[] }>; // 노트 데이터
     content?: string; // 프로젝트 내용
     onNavigateToChapter?: (chapterId: string) => void; // 🔥 챕터 네비게이션 추가
 }
@@ -27,8 +27,9 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
 }) => {
     const [showAIAnalysis, setShowAIAnalysis] = useState(false);
 
-    // 🔥 페이지네이션 상태
+    // 🔥 페이지네이션 상태 - main 추가
     const [currentPage, setCurrentPage] = useState({
+        mains: 1,     // 🔥 main 추가
         chapters: 1,
         characters: 1,
         ideas: 1,
@@ -83,15 +84,28 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
         );
     };
 
-    // 요소별로 분류
+    // 요소별로 분류 - main 타입 추가
     const categorizedElements = useMemo(() => {
+        const mains = elements.filter(el => el.type === 'main'); // 🔥 main 타입 추가
         const chapters = elements.filter(el => el.type === 'chapter');
         const characters = elements.filter(el => el.type === 'character');
         const ideas = elements.filter(el => el.type === 'idea');
         const memos = elements.filter(el => el.type === 'memo');
         const notes = elements.filter(el => el.type === 'note');
 
-        return { chapters, characters, ideas, memos, notes };
+        // 🔥 디버그: 아이디어 수 확인
+        Logger.info('OUTLINE_PANEL', '🔍 Elements categorization', {
+            total: elements.length,
+            mains: mains.length,
+            chapters: chapters.length,
+            characters: characters.length,
+            ideas: ideas.length,
+            memos: memos.length,
+            notes: notes.length,
+            ideaData: ideas.map(i => ({ id: i.id, title: i.title, type: i.type }))
+        });
+
+        return { mains, chapters, characters, ideas, memos, notes };
     }, [elements]);
 
     const renderElementCard = (element: ProjectElement, icon: React.ReactNode) => (
@@ -113,17 +127,26 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                 </div>
                 <div className="flex-1">
                     <h4 className={`font-medium mb-2 ${element.type === 'chapter' && onNavigateToChapter
-                            ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
-                            : 'text-gray-900 dark:text-gray-100'
+                        ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
+                        : 'text-gray-900 dark:text-gray-100'
                         }`}>
                         {element.title}
                         {element.type === 'chapter' && onNavigateToChapter && (
                             <span className="ml-2 text-xs text-gray-500">(클릭하여 편집)</span>
                         )}
                     </h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
-                        {element.content}
-                    </p>
+                    <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                        {/* 🔥 마크다운 텍스트를 간단히 정리해서 표시 */}
+                        {element.content
+                            ?.replace(/#{1,6}\s+/g, '') // 헤딩 마크 제거
+                            ?.replace(/\*\*(.*?)\*\*/g, '$1') // 볼드 마크 제거
+                            ?.replace(/\*(.*?)\*/g, '$1') // 이탤릭 마크 제거
+                            ?.replace(/`(.*?)`/g, '$1') // 인라인 코드 마크 제거
+                            ?.replace(/\[(.*?)\]\(.*?\)/g, '$1') // 링크는 텍스트만
+                            ?.replace(/\n+/g, ' ') // 줄바꿈을 스페이스로
+                            ?.trim()
+                        }
+                    </div>
                     <div className="flex items-center justify-between mt-3">
                         <div className="flex items-center gap-2">
                             {element.tags && element.tags.length > 0 && (
@@ -184,7 +207,23 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                 </Card>
                             ) : (
                                 <>
-                                    {/* 📖 챕터 섹션 */}
+                                    {/* � 메인 스토리 섹션 */}
+                                    {categorizedElements.mains.length > 0 && (
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
+                                                <FileText className="w-5 h-5" />
+                                                메인 스토리 ({categorizedElements.mains.length})
+                                            </h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {getPaginatedItems(categorizedElements.mains, 'mains').map((element) =>
+                                                    renderElementCard(element, <FileText className="w-4 h-4 text-purple-500" />)
+                                                )}
+                                            </div>
+                                            {renderPagination('mains', categorizedElements.mains.length)}
+                                        </div>
+                                    )}
+
+                                    {/* �📖 챕터 섹션 */}
                                     {categorizedElements.chapters.length > 0 && (
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
@@ -273,7 +312,7 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                     notes: notes
                                 }}
                                 onAnalysisComplete={(result) => {
-                                    console.log('아웃라인 AI 분석 완료:', result);
+                                    Logger.info('OUTLINE_PANEL', '아웃라인 AI 분석 완료', { result });
                                 }}
                             />
                         </div>

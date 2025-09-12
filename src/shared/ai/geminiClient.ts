@@ -110,7 +110,7 @@ export class GeminiClient {
                 metadata: {
                     model: this.config.model || 'gemini-1.5-flash',
                     timestamp: new Date().toISOString(),
-                    requestId: `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+                    requestId: `req_${Date.now()}_${crypto.randomUUID ? crypto.randomUUID().substring(0, 8) : Date.now().toString(36)}`
                 }
             };
 
@@ -200,8 +200,8 @@ ${storyContent}
     }
 
     async improveDialogue(dialogue: string, characterContext: string): Promise<GeminiResponse> {
-        const systemPrompt = `당신은 대화 개선 전문가입니다. 
-자연스럽고 캐릭터의 성격이 드러나는 대화로 개선해주세요.`;
+        const systemPrompt = `당신은 전문 작가이자 대화 개선 전문가입니다. 
+한국 문학의 깊이와 현대적 감각을 모두 갖춘 자연스럽고 매력적인 대화를 작성해주세요.`;
 
         const dialoguePrompt = `
 캐릭터 컨텍스트: ${characterContext}
@@ -210,19 +210,79 @@ ${storyContent}
 ${dialogue}
 
 다음 관점에서 대화를 개선해주세요:
-1. 자연스러운 말투
-2. 캐릭터 개성 반영
-3. 갈등과 긴장감 조성
-4. 불필요한 설명 제거
-5. 서브텍스트 활용
+1. 자연스러운 한국어 말투 (세대별, 상황별 적절성)
+2. 캐릭터만의 독특한 어조와 개성 부여
+3. 갈등과 긴장감을 높이는 대화 구조
+4. 불필요한 설명 대신 함축적 표현 활용
+5. 서브텍스트와 행간의 의미 강화
+6. 감정의 층위와 복잡성 표현
 
-개선된 대화와 함께 변경 사유를 설명해주세요.
+개선된 대화와 함께 구체적인 변경 사유 및 작가 팁을 제공해주세요.
         `;
 
         return this.generateText({
             prompt: dialoguePrompt,
             systemPrompt,
-            temperature: 0.5
+            temperature: 0.6
+        });
+    }
+
+    // 🔥 작가 전용 기능: 캐릭터 심화 분석
+    async analyzeCharacterDepth(character: any): Promise<GeminiResponse> {
+        const systemPrompt = `당신은 캐릭터 창조 전문가입니다. 
+입체적이고 매력적인 캐릭터 개발을 위한 깊이 있는 분석과 조언을 제공합니다.`;
+
+        const characterPrompt = `
+캐릭터 정보:
+이름: ${character.name || '미정'}
+역할: ${character.role || '미정'}
+설명: ${character.description || '기본 설명 없음'}
+
+다음을 분석하고 개선 방안을 제시해주세요:
+1. 캐릭터의 심리적 동기와 내적 갈등
+2. 성격의 모순과 복합성
+3. 성장 가능성과 변화 궤도
+4. 다른 캐릭터와의 화학적 관계성
+5. 독자 몰입을 높이는 매력 포인트
+6. 스토리 전체에서의 기능과 역할
+
+구체적인 개선 제안과 함께 캐릭터 개발 로드맵을 제공해주세요.
+        `;
+
+        return this.generateText({
+            prompt: characterPrompt,
+            systemPrompt,
+            temperature: 0.7
+        });
+    }
+
+    // 🔥 작가 전용 기능: 플롯 홀 탐지 및 해결
+    async detectPlotHoles(storyContent: string, chapters: any[]): Promise<GeminiResponse> {
+        const systemPrompt = `당신은 스토리 구조 전문가입니다. 
+플롯의 논리적 결함을 찾아내고 창의적인 해결책을 제시합니다.`;
+
+        const analysisPrompt = `
+스토리 내용:
+${storyContent}
+
+챕터 구조:
+${chapters.map((ch, idx) => `${idx + 1}. ${ch.title}: ${ch.content?.substring(0, 200)}...`).join('\n')}
+
+다음을 체크하고 문제점을 지적해주세요:
+1. 시간적 일관성 (타임라인 오류)
+2. 인과관계의 논리성
+3. 캐릭터 동기의 일관성
+4. 설정과 세계관의 모순
+5. 복선과 회수의 완결성
+6. 감정적 흐름의 자연스러움
+
+각 문제점에 대해 구체적인 수정 방안을 제시해주세요.
+        `;
+
+        return this.generateText({
+            prompt: analysisPrompt,
+            systemPrompt,
+            temperature: 0.4
         });
     }
 

@@ -1,365 +1,375 @@
+/**
+ * 🧠 마인드맵 캔버스 - 방사형 레이아웃으로 완전 재설계
+ * 프로젝트 요소들을 아름다운 방사형으로 배치
+ */
+
 'use client';
 
-import React, { useMemo, useState, useCallback } from 'react';
-import { Network, Brain, Sparkles, Lightbulb, Plus, Minus, RotateCcw, BookOpen, Hash, FileText, User } from 'lucide-react';
-import { ProjectElement, ProjectAnalysis } from '../../../../hooks/useProjectData';
-import { AIAnalysisPanel } from '../../../common/AIAnalysisPanel';
-import { Button } from '../../../ui/Button';
+import React, { useMemo, useState, useRef, useCallback } from 'react';
 import { Card } from '../../../ui/Card';
+import { Button } from '../../../ui/Button';
+import { Logger } from '../../../../../shared/logger';
+import {
+    BookOpen,
+    User,
+    Lightbulb,
+    FileText,
+    Target,
+    ZoomIn,
+    ZoomOut,
+    RotateCw,
+    Maximize2
+} from 'lucide-react';
 
-// 🔥 Xmind 스타일 커스텀 노드 컴포넌트들
-const CenterNode = ({ data }: { data: any }) => (
-    <div className="relative">
-        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white px-6 py-4 rounded-full shadow-lg border-4 border-white dark:border-gray-800 min-w-[160px] text-center">
-            <div className="flex items-center justify-center gap-2">
-                <BookOpen className="w-5 h-5" />
-                <span className="font-bold text-lg">{data.label}</span>
-            </div>
-        </div>
-    </div>
-);
-
-const BranchNode = ({ data }: { data: any }) => {
-    const getColor = (category: string) => {
-        switch (category) {
-            case 'chapters': return 'from-blue-400 to-blue-600';
-            case 'characters': return 'from-green-400 to-green-600';
-            case 'ideas': return 'from-yellow-400 to-yellow-600';
-            case 'synopsis': return 'from-purple-400 to-purple-600';
-            default: return 'from-gray-400 to-gray-600';
-        }
-    };
-
-    const getIcon = (category: string) => {
-        switch (category) {
-            case 'chapters': return <Hash className="w-4 h-4" />;
-            case 'characters': return <User className="w-4 h-4" />;
-            case 'ideas': return <Lightbulb className="w-4 h-4" />;
-            case 'synopsis': return <FileText className="w-4 h-4" />;
-            default: return <Network className="w-4 h-4" />;
-        }
-    };
-
-    return (
-        <div className="relative">
-            <div className={`bg-gradient-to-br ${getColor(data.category)} text-white px-4 py-3 rounded-lg shadow-md border-2 border-white dark:border-gray-800 min-w-[120px] text-center cursor-pointer hover:scale-105 transition-all duration-200`}>
-                <div className="flex items-center justify-center gap-2">
-                    {getIcon(data.category)}
-                    <span className="font-medium text-sm">{data.label}</span>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-const LeafNode = ({ data }: { data: any }) => (
-    <div className="relative">
-        <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 px-3 py-2 rounded-md shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer min-w-[100px] max-w-[200px]">
-            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
-                {data.label}
-            </div>
-            {data.subtitle && (
-                <div className="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
-                    {data.subtitle}
-                </div>
-            )}
-        </div>
-    </div>
-);
+interface ProjectElement {
+    id: string;
+    title: string;
+    content?: string;
+    type: 'main' | 'chapter' | 'character' | 'idea' | 'synopsis' | 'memo' | 'note';
+    tags?: string[];
+    wordCount?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+}interface ProjectAnalysis {
+    totalWords: number;
+    totalChapters: number;
+    totalCharacters: number;
+    timeline: any[];
+    relationships: any[];
+}
 
 interface MindmapCanvasProps {
     elements: ProjectElement[];
-    analysis: ProjectAnalysis;
-    onSelectElement: (elementId: string | null) => void;
+    analysis?: ProjectAnalysis;
+    onSelectElement?: (element: ProjectElement) => void;
     projectId?: string;
 }
 
 export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
-    elements,
+    elements = [],
     analysis,
     onSelectElement,
     projectId = 'mindmap-demo'
 }) => {
-    const [showAIAnalysis, setShowAIAnalysis] = useState(false);
     const [zoom, setZoom] = useState(1);
     const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
+    const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+    const svgRef = useRef<SVGSVGElement>(null);
 
-    // 🔥 Xmind 스타일 방사형 레이아웃 계산
+    // 🔥 단순하고 아름다운 방사형 레이아웃
     const mindmapData = useMemo(() => {
-        // 데이터를 카테고리별로 그룹화
-        const grouped = {
-            chapters: elements.filter(e => e.type === 'chapter'),
-            characters: elements.filter(e => e.type === 'character'),
-            ideas: elements.filter(e => e.type === 'idea'),
-            synopsis: elements.filter(e => e.type === 'synopsis'),
-        };
+        console.log('🔍 [MindmapCanvas] Elements received:', elements.length);
 
-        // 중앙 노드
+        // 🔥 1. 중앙 프로젝트 노드
         const centerNode = {
             id: 'center',
-            type: 'centerNode',
+            type: 'center',
             label: '프로젝트',
             x: 0,
             y: 0,
-            level: 0
+            level: 0,
+            radius: 80
         };
 
-        // 메인 브랜치들 (카테고리)
-        const mainBranches: any[] = [];
-        const categories = Object.keys(grouped).filter(key => grouped[key as keyof typeof grouped].length > 0);
-        const angleStep = (2 * Math.PI) / Math.max(categories.length, 1);
+        // 🔥 2. 데이터를 타입별로 분류
+        const categories = [
+            { type: 'main', items: elements.filter(e => e.type === 'main'), label: '메인 스토리', color: '#8b5cf6', icon: '📚' },
+            { type: 'chapter', items: elements.filter(e => e.type === 'chapter'), label: '챕터', color: '#3b82f6', icon: '📖' },
+            { type: 'character', items: elements.filter(e => e.type === 'character'), label: '캐릭터', color: '#10b981', icon: '👤' },
+            { type: 'idea', items: elements.filter(e => e.type === 'idea'), label: '아이디어', color: '#f59e0b', icon: '💡' },
+            { type: 'synopsis', items: elements.filter(e => e.type === 'synopsis'), label: '시놉시스', color: '#ef4444', icon: '📝' }
+        ].filter(cat => cat.items.length > 0); // 빈 카테고리 제외
 
-        categories.forEach((category, index) => {
-            const angle = index * angleStep;
-            const radius = 200;
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
-
-            mainBranches.push({
-                id: `branch-${category}`,
-                type: 'branchNode',
-                label: category === 'chapters' ? '챕터' :
-                    category === 'characters' ? '인물' :
-                        category === 'ideas' ? '아이디어' : '시놉시스',
-                category,
-                x,
-                y,
-                level: 1,
-                angle
-            });
-        });
-
-        // 서브 브랜치들 (개별 요소들)
-        const subBranches: any[] = [];
-        categories.forEach((category, categoryIndex) => {
-            const items = grouped[category as keyof typeof grouped];
-            const parentBranch = mainBranches[categoryIndex];
-            if (!parentBranch || items.length === 0) return;
-
-            const subAngleStep = Math.PI / 6; // 30도씩
-            const startAngle = parentBranch.angle - (items.length - 1) * subAngleStep / 2;
-
-            items.forEach((item, itemIndex) => {
-                const angle = startAngle + itemIndex * subAngleStep;
-                const radius = 120;
-                const x = parentBranch.x + Math.cos(angle) * radius;
-                const y = parentBranch.y + Math.sin(angle) * radius;
-
-                subBranches.push({
-                    id: item.id,
-                    type: 'leafNode',
-                    label: item.title,
-                    subtitle: item.content?.slice(0, 50) + '...',
-                    category,
-                    x,
-                    y,
-                    level: 2,
-                    data: item
-                });
-            });
-        });
-
-        // 연결선 데이터
+        // 🔥 3. 카테고리 노드들을 원형으로 배치
+        const categoryNodes: any[] = [];
+        const itemNodes: any[] = [];
         const connections: any[] = [];
-        // 중앙 → 메인 브랜치
-        mainBranches.forEach(branch => {
+
+        const categoryRadius = 250; // 카테고리 노드들의 거리
+        const itemRadius = 150; // 각 아이템들의 거리
+
+        categories.forEach((category, categoryIndex) => {
+            const categoryAngle = (categoryIndex / categories.length) * 2 * Math.PI;
+            const categoryX = Math.cos(categoryAngle) * categoryRadius;
+            const categoryY = Math.sin(categoryAngle) * categoryRadius;
+
+            // 카테고리 노드 생성
+            const categoryNode = {
+                id: `category-${category.type}`,
+                type: 'category',
+                label: category.label,
+                icon: category.icon,
+                color: category.color,
+                x: categoryX,
+                y: categoryY,
+                level: 1,
+                radius: 60,
+                itemCount: category.items.length
+            };
+
+            categoryNodes.push(categoryNode);
+
+            // 중앙에서 카테고리로 연결선
             connections.push({
-                from: { x: centerNode.x, y: centerNode.y },
-                to: { x: branch.x, y: branch.y },
+                from: 'center',
+                to: categoryNode.id,
                 type: 'main'
             });
-        });
 
-        // 메인 브랜치 → 서브 브랜치
-        subBranches.forEach(sub => {
-            const parent = mainBranches.find(b => b.category === sub.category);
-            if (parent) {
+            // 🔥 4. 각 카테고리의 아이템들을 해당 카테고리 주변에 배치
+            category.items.forEach((item, itemIndex) => {
+                const itemAngle = categoryAngle + (itemIndex - (category.items.length - 1) / 2) * 0.4; // 0.4 라디안씩 간격
+                const itemX = categoryX + Math.cos(itemAngle) * itemRadius;
+                const itemY = categoryY + Math.sin(itemAngle) * itemRadius;
+
+                const itemNode = {
+                    id: item.id,
+                    type: 'item',
+                    label: item.title,
+                    category: category.type,
+                    color: category.color,
+                    x: itemX,
+                    y: itemY,
+                    level: 2,
+                    radius: 40,
+                    data: item
+                };
+
+                itemNodes.push(itemNode);
+
+                // 카테고리에서 아이템으로 연결선
                 connections.push({
-                    from: { x: parent.x, y: parent.y },
-                    to: { x: sub.x, y: sub.y },
+                    from: categoryNode.id,
+                    to: item.id,
                     type: 'sub'
                 });
-            }
+            });
         });
 
         return {
             centerNode,
-            mainBranches,
-            subBranches,
-            connections
+            categoryNodes,
+            itemNodes,
+            connections,
+            totalNodes: 1 + categoryNodes.length + itemNodes.length
         };
     }, [elements]);
 
-    const handleNodeClick = useCallback((nodeData: any) => {
-        if (nodeData.data) {
-            onSelectElement(nodeData.data.id);
+    // 🔥 노드 클릭 핸들러
+    const handleNodeClick = useCallback((node: any) => {
+        setSelectedNodeId(node.id);
+
+        if (node.type === 'item' && node.data && onSelectElement) {
+            onSelectElement(node.data);
+            Logger.info('MINDMAP_CANVAS', 'Element selected', { elementId: node.id, title: node.label });
         }
     }, [onSelectElement]);
 
-    const handleZoomIn = () => setZoom(prev => Math.min(prev * 1.2, 3));
-    const handleZoomOut = () => setZoom(prev => Math.max(prev / 1.2, 0.3));
-    const handleReset = () => {
+    // 🔥 줌 컨트롤
+    const handleZoomIn = () => setZoom(prev => Math.min(prev + 0.2, 3));
+    const handleZoomOut = () => setZoom(prev => Math.max(prev - 0.2, 0.3));
+    const handleResetView = () => {
         setZoom(1);
         setPanOffset({ x: 0, y: 0 });
     };
 
-    return (
-        <div className="flex-1 overflow-hidden flex flex-col">
-            {/* 🎯 헤더 영역 */}
-            <div className="flex items-center justify-between p-6 pb-4 flex-shrink-0">
-                <h2 className="text-xl font-semibold flex items-center">
-                    <Network className="h-5 w-5 mr-2" />
-                    마인드맵 뷰
-                </h2>
-                <div className="flex gap-2">
-                    {/* 🔥 줌 컨트롤 */}
-                    <div className="flex items-center gap-1 mr-2">
-                        <Button
-                            onClick={handleZoomOut}
-                            variant="outline"
-                            size="sm"
-                            className="p-2"
-                        >
-                            <Minus className="w-4 h-4" />
-                        </Button>
-                        <span className="text-sm text-gray-600 dark:text-gray-400 min-w-[60px] text-center">
-                            {Math.round(zoom * 100)}%
-                        </span>
-                        <Button
-                            onClick={handleZoomIn}
-                            variant="outline"
-                            size="sm"
-                            className="p-2"
-                        >
-                            <Plus className="w-4 h-4" />
-                        </Button>
-                        <Button
-                            onClick={handleReset}
-                            variant="outline"
-                            size="sm"
-                            className="p-2 ml-1"
-                        >
-                            <RotateCcw className="w-4 h-4" />
-                        </Button>
-                    </div>
+    // 🔥 SVG 렌더링
+    const renderMindmap = () => {
+        const { centerNode, categoryNodes, itemNodes, connections } = mindmapData;
+        const allNodes = [centerNode, ...categoryNodes, ...itemNodes];
 
-                    <Button
-                        onClick={() => setShowAIAnalysis(!showAIAnalysis)}
-                        variant={showAIAnalysis ? "secondary" : "outline"}
-                        size="sm"
-                        className="flex items-center gap-2"
-                    >
-                        <Brain className="w-4 h-4" />
-                        {showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'}
-                    </Button>
-                </div>
+        return (
+            <svg
+                ref={svgRef}
+                width="100%"
+                height="100%"
+                viewBox="-500 -400 1000 800"
+                className="overflow-visible"
+                style={{ transform: `scale(${zoom}) translate(${panOffset.x}px, ${panOffset.y}px)` }}
+            >
+                {/* 연결선 그리기 */}
+                <g className="connections">
+                    {connections.map((conn, index) => {
+                        const fromNode = allNodes.find(n => n.id === conn.from);
+                        const toNode = allNodes.find(n => n.id === conn.to);
+
+                        if (!fromNode || !toNode) return null;
+
+                        return (
+                            <line
+                                key={index}
+                                x1={fromNode.x}
+                                y1={fromNode.y}
+                                x2={toNode.x}
+                                y2={toNode.y}
+                                stroke={conn.type === 'main' ? '#6b7280' : '#d1d5db'}
+                                strokeWidth={conn.type === 'main' ? 3 : 2}
+                                strokeDasharray={conn.type === 'sub' ? '5,5' : 'none'}
+                                opacity={0.6}
+                            />
+                        );
+                    })}
+                </g>
+
+                {/* 노드 그리기 */}
+                <g className="nodes">
+                    {/* 중앙 노드 */}
+                    <g>
+                        <circle
+                            cx={centerNode.x}
+                            cy={centerNode.y}
+                            r={centerNode.radius}
+                            fill="url(#centerGradient)"
+                            stroke="#4f46e5"
+                            strokeWidth="4"
+                            className="cursor-pointer filter drop-shadow-lg"
+                            onClick={() => handleNodeClick(centerNode)}
+                        />
+                        <text
+                            x={centerNode.x}
+                            y={centerNode.y}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                            className="text-lg font-bold fill-white pointer-events-none"
+                        >
+                            {centerNode.label}
+                        </text>
+                    </g>
+
+                    {/* 카테고리 노드들 */}
+                    {categoryNodes.map((node) => (
+                        <g key={node.id}>
+                            <circle
+                                cx={node.x}
+                                cy={node.y}
+                                r={node.radius}
+                                fill={node.color}
+                                stroke={selectedNodeId === node.id ? '#1f2937' : 'white'}
+                                strokeWidth={selectedNodeId === node.id ? 4 : 2}
+                                className="cursor-pointer filter drop-shadow-md transition-all duration-200 hover:brightness-110"
+                                onClick={() => handleNodeClick(node)}
+                            />
+                            <text
+                                x={node.x}
+                                y={node.y - 5}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                className="text-sm font-semibold fill-white pointer-events-none"
+                            >
+                                {node.icon}
+                            </text>
+                            <text
+                                x={node.x}
+                                y={node.y + 10}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                className="text-xs font-medium fill-white pointer-events-none"
+                            >
+                                {node.label}
+                            </text>
+                            <text
+                                x={node.x}
+                                y={node.y + 25}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                className="text-xs fill-white/80 pointer-events-none"
+                            >
+                                ({node.itemCount})
+                            </text>
+                        </g>
+                    ))}
+
+                    {/* 아이템 노드들 */}
+                    {itemNodes.map((node) => (
+                        <g key={node.id}>
+                            <circle
+                                cx={node.x}
+                                cy={node.y}
+                                r={node.radius}
+                                fill={`${node.color}20`}
+                                stroke={node.color}
+                                strokeWidth={selectedNodeId === node.id ? 3 : 2}
+                                className="cursor-pointer transition-all duration-200 hover:fill-opacity-40"
+                                onClick={() => handleNodeClick(node)}
+                            />
+                            <text
+                                x={node.x}
+                                y={node.y}
+                                textAnchor="middle"
+                                dominantBaseline="middle"
+                                className="text-xs font-medium pointer-events-none"
+                                fill={node.color}
+                            >
+                                {node.label.length > 10 ? `${node.label.slice(0, 10)}...` : node.label}
+                            </text>
+                        </g>
+                    ))}
+                </g>
+
+                {/* 그라데이션 정의 */}
+                <defs>
+                    <radialGradient id="centerGradient" cx="0.5" cy="0.5" r="0.5">
+                        <stop offset="0%" stopColor="#6366f1" />
+                        <stop offset="100%" stopColor="#4f46e5" />
+                    </radialGradient>
+                </defs>
+            </svg>
+        );
+    };
+
+    return (
+        <div className="relative w-full h-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 rounded-lg overflow-hidden">
+            {/* 컨트롤 패널 */}
+            <div className="absolute top-4 right-4 z-10 flex gap-2">
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleZoomIn}
+                    className="bg-white/90 hover:bg-white"
+                >
+                    <ZoomIn className="w-4 h-4" />
+                </Button>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleZoomOut}
+                    className="bg-white/90 hover:bg-white"
+                >
+                    <ZoomOut className="w-4 h-4" />
+                </Button>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleResetView}
+                    className="bg-white/90 hover:bg-white"
+                >
+                    <RotateCw className="w-4 h-4" />
+                </Button>
             </div>
 
-            <div className="flex-1 overflow-hidden px-6">
-                <div className="grid grid-cols-12 gap-6 h-full">
-                    {/* 🗂️ 마인드맵 메인 컨텐츠 */}
-                    <div className={`${showAIAnalysis ? 'col-span-8' : 'col-span-12'} transition-all duration-300 overflow-hidden h-full`}>
-                        <div className="w-full h-full bg-gray-50 dark:bg-gray-900 border dark:border-gray-700 rounded-lg relative overflow-auto">
-                            {elements.length === 0 ? (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <Card className="p-8 text-center">
-                                        <Network className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                                        <h3 className="text-lg font-medium text-gray-600 mb-2">마인드맵이 비어있습니다</h3>
-                                        <p className="text-gray-500">사이드바에서 요소들을 추가하여 마인드맵을 구성해보세요.</p>
-                                    </Card>
-                                </div>
-                            ) : (
-                                <div
-                                    className="absolute inset-0 w-full h-full"
-                                    style={{
-                                        transform: `scale(${zoom}) translate(${panOffset.x}px, ${panOffset.y}px)`,
-                                        transformOrigin: 'center center',
-                                        transition: 'transform 0.2s ease-out'
-                                    }}
-                                >
-                                    {/* 🔥 Xmind 스타일 SVG 캔버스 */}
-                                    <svg
-                                        className="absolute inset-0 w-full h-full"
-                                        style={{ minWidth: '1200px', minHeight: '800px' }}
-                                        viewBox="-600 -400 1200 800"
-                                    >
-                                        {/* 🔗 연결선들 - 부드러운 곡선 */}
-                                        {mindmapData.connections.map((conn, index) => (
-                                            <path
-                                                key={index}
-                                                d={`M ${conn.from.x} ${conn.from.y} Q ${(conn.from.x + conn.to.x) / 2} ${(conn.from.y + conn.to.y) / 2 - 30} ${conn.to.x} ${conn.to.y}`}
-                                                stroke={conn.type === 'main' ? '#6366f1' : '#94a3b8'}
-                                                strokeWidth={conn.type === 'main' ? 4 : 2}
-                                                fill="none"
-                                                className="transition-all duration-300"
-                                            />
-                                        ))}
-                                    </svg>
+            {/* 정보 패널 */}
+            <div className="absolute top-4 left-4 z-10">
+                <Card className="p-3 bg-white/90 backdrop-blur-sm">
+                    <div className="text-sm text-gray-600">
+                        <div>총 노드: {mindmapData.totalNodes}</div>
+                        <div>줌: {Math.round(zoom * 100)}%</div>
+                    </div>
+                </Card>
+            </div>
 
-                                    {/* 🎯 중앙 노드 */}
-                                    <div
-                                        className="absolute"
-                                        style={{
-                                            left: '50%',
-                                            top: '50%',
-                                            transform: `translate(-50%, -50%)`
-                                        }}
-                                    >
-                                        <CenterNode data={mindmapData.centerNode} />
-                                    </div>
-
-                                    {/* 🌿 메인 브랜치 노드들 */}
-                                    {mindmapData.mainBranches.map((branch) => (
-                                        <div
-                                            key={branch.id}
-                                            className="absolute"
-                                            style={{
-                                                left: '50%',
-                                                top: '50%',
-                                                transform: `translate(calc(-50% + ${branch.x}px), calc(-50% + ${branch.y}px))`
-                                            }}
-                                        >
-                                            <BranchNode data={branch} />
-                                        </div>
-                                    ))}
-
-                                    {/* 🍃 서브 브랜치 노드들 */}
-                                    {mindmapData.subBranches.map((sub) => (
-                                        <div
-                                            key={sub.id}
-                                            className="absolute"
-                                            style={{
-                                                left: '50%',
-                                                top: '50%',
-                                                transform: `translate(calc(-50% + ${sub.x}px), calc(-50% + ${sub.y}px))`
-                                            }}
-                                            onClick={() => handleNodeClick(sub)}
-                                        >
-                                            <LeafNode data={sub} />
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+            {/* 마인드맵 캔버스 */}
+            <div className="w-full h-full">
+                {mindmapData.totalNodes > 1 ? (
+                    renderMindmap()
+                ) : (
+                    <div className="flex items-center justify-center h-full">
+                        <div className="text-center text-gray-500">
+                            <Target className="w-16 h-16 mx-auto mb-4 opacity-50" />
+                            <h3 className="text-lg font-medium mb-2">프로젝트 요소가 없습니다</h3>
+                            <p className="text-sm">챕터, 캐릭터, 아이디어를 추가하여 마인드맵을 생성해보세요.</p>
                         </div>
                     </div>
-
-                    {/* 🤖 AI 분석 사이드바 */}
-                    {showAIAnalysis && (
-                        <div className="col-span-4 transition-all duration-300 overflow-y-auto h-full">
-                            <AIAnalysisPanel
-                                projectId={projectId}
-                                analysisType="mindmap"
-                                data={elements}
-                                context={{
-                                    content: elements.map(e => `${e.title}: ${e.content}`).join('\n')
-                                }}
-                                onAnalysisComplete={(result) => {
-                                    console.log('🧠 마인드맵 AI 분석 완료:', result);
-                                }}
-                            />
-                        </div>
-                    )}
-                </div>
+                )}
             </div>
         </div>
     );

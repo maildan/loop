@@ -169,6 +169,7 @@ export function useTipTapEditor({
         onUpdate: ({ editor }) => {
             const newContent = editor.getHTML();
             onChange(newContent);
+
             Logger.debug('TIPTAP_EDITOR', 'Content updated', {
                 wordCount: editor.storage.characterCount?.words() || 0
             });

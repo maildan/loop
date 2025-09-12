@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Clock, Map, Network, Eye, BarChart3 } from 'lucide-react';
 import { useIntegratedProjectData as useProjectData, ProjectElement } from '../../../hooks/useProjectData';
 
@@ -29,10 +29,33 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
     notes = [],
     content = ''
 }) => {
-    const { elements, analysis, loading } = useProjectData(projectId);
+    const { elements: structureElements, analysis, loading } = useProjectData(projectId);
     const [viewMode, setViewMode] = useState<ViewMode>('timeline');
     const [selectedElement, setSelectedElement] = useState<string | null>(null);
     const [showAnalysis, setShowAnalysis] = useState(true);
+
+    // 🔥 main content를 ProjectElement로 변환하여 elements에 추가
+    const elements = useMemo(() => {
+        const allElements = [...structureElements];
+
+        // main content가 있으면 ProjectElement로 변환하여 추가
+        if (content && content.trim()) {
+            const mainElement: ProjectElement = {
+                id: 'main-content',
+                type: 'main',
+                title: '메인 스토리',
+                content: content,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                order: 0, // 최우선 순서
+                wordCount: content.split(/\s+/).filter(word => word.trim().length > 0).length,
+                plotRelevance: 5 as const
+            };
+            allElements.unshift(mainElement); // 맨 앞에 추가
+        }
+
+        return allElements;
+    }, [structureElements, content]);
 
     // 🔥 연관 요소 찾기 함수
     const getRelatedElements = (elementId: string): ProjectElement[] => {
@@ -144,7 +167,7 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
                     <MindmapCanvas
                         elements={elements}
                         analysis={analysis}
-                        onSelectElement={setSelectedElement}
+                        onSelectElement={(element) => setSelectedElement(element.id)}
                     />
                 )}
 

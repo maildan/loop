@@ -82,8 +82,8 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                             >
                                                 <div className="flex items-center justify-between mb-2">
                                                     <h3 className={`font-medium ${item.type === 'chapter' && onNavigateToChapter
-                                                            ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
-                                                            : 'text-gray-900 dark:text-gray-100'
+                                                        ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
+                                                        : 'text-gray-900 dark:text-gray-100'
                                                         }`}>
                                                         {item.title}
                                                         {item.type === 'chapter' && onNavigateToChapter && (
@@ -91,7 +91,12 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                                         )}
                                                     </h3>
                                                     <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
-                                                        {item.type}
+                                                        {item.type === 'main' ? '메인' :
+                                                            item.type === 'chapter' ? '챕터' :
+                                                                item.type === 'character' ? '인물' :
+                                                                    item.type === 'idea' ? '아이디어' :
+                                                                        item.type === 'synopsis' ? '시놉시스' :
+                                                                            item.type === 'memo' ? '메모' : item.type}
                                                     </span>
                                                 </div>
                                                 <div

@@ -171,9 +171,9 @@ const electronAPI: ElectronAPI = {
 
 };
 
-// Attach settings.onDidChange in a type-safe-ignored way
+// Attach settings.onDidChange in a type-safe way
 (electronAPI as any).settings.onDidChange = (listener: (payload: { keyPath: string; value: unknown; reset?: boolean }) => void) => {
-  const wrapped = (_event: any, data: any) => listener(data);
+  const wrapped = (_event: Electron.IpcRendererEvent, data: { keyPath: string; value: unknown; reset?: boolean }) => listener(data);
   ipcRenderer.on('settings:changed', wrapped);
   return () => ipcRenderer.removeListener('settings:changed', wrapped);
 };
@@ -222,7 +222,7 @@ const electronAPI: ElectronAPI = {
 };
 
 // Provide ability to save/delete snapshot via main process keychain handlers
-; (electronAPI as any).loopSnapshot.save = async (payload: any) => {
+; (electronAPI as any).loopSnapshot.save = async (payload: Record<string, unknown>) => {
   try {
     const resp = await ipcRenderer.invoke('keychain:set-snapshot', payload);
     return resp && resp.ok;
@@ -275,7 +275,7 @@ try {
         // ignore
       }
       try {
-        const p: any = process;
+        const p = process as NodeJS.Process & { resourcesPath?: string };
         if (p && p.resourcesPath) return p.resourcesPath;
       } catch (e) {
         // ignore
@@ -293,7 +293,11 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
     try {
       const theme = nativeTheme ? (nativeTheme.shouldUseDarkColors ? 'dark' : 'light') : 'light';
       const online = typeof navigator !== 'undefined' ? navigator.onLine : true;
-      const snapshot: any = { theme, online, platform: process.platform };
+      const snapshot: { theme: string; online: boolean; platform: string; auth?: unknown } = {
+        theme,
+        online,
+        platform: process.platform
+      };
       try {
         // Prefer userData location (production fallback) then fallback to project root (dev)
         let snapPath = path.join(process.cwd(), '.auth_snapshot.json');
@@ -303,7 +307,14 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
 
         if (fs.existsSync(snapPath)) {
           const raw = fs.readFileSync(snapPath, { encoding: 'utf-8' });
-          let auth: any = null;
+          interface AuthData {
+            isAuthenticated?: boolean;
+            userEmail?: string;
+            userName?: string;
+            userPicture?: string;
+          }
+
+          let auth: AuthData | null = null;
           try {
             // If encrypted (base64), attempt to decrypt using env key
             const encKey = process.env.ENCRYPT_SNAPSHOT_KEY;
@@ -316,13 +327,13 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
                 const decipher = crypto.createDecipheriv('aes-256-gcm', Buffer.from(encKey, 'hex'), iv);
                 decipher.setAuthTag(tag);
                 const dec = Buffer.concat([decipher.update(encrypted), decipher.final()]);
-                auth = JSON.parse(dec.toString('utf-8'));
+                auth = JSON.parse(dec.toString('utf-8')) as AuthData;
               } catch (e) {
                 // fallback to plaintext parse
-                try { auth = JSON.parse(raw); } catch (e2) { auth = null; }
+                try { auth = JSON.parse(raw) as AuthData; } catch (e2) { auth = null; }
               }
             } else {
-              auth = JSON.parse(raw);
+              auth = JSON.parse(raw) as AuthData;
             }
           } catch (e) {
             auth = null;

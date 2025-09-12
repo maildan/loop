@@ -8,6 +8,10 @@
   --toolbar-bg: #ffffff;
   --toolbar-border: #e5e7eb;
   --button-hover: #f3f4f6;
+  --heading-border-h1: #e5e7eb;
+  /* 🔥 h1 밑줄 색상 */
+  --heading-border-h2: #f3f4f6;
+  /* 🔥 h2 밑줄 색상 */
 }
 
 :root.dark {
@@ -17,6 +21,10 @@
   --toolbar-bg: #111827;
   --toolbar-border: #374151;
   --button-hover: #374151;
+  --heading-border-h1: #4b5563;
+  /* 🔥 다크 모드 h1 밑줄 */
+  --heading-border-h2: #374151;
+  /* 🔥 다크 모드 h2 밑줄 */
 }
 
 /* 🔥 TipTap 에디터 기본 스타일 - 전체 화면 활용 */
@@ -956,41 +964,57 @@ body.focus-mode::before {
   background: var(--editor-bg);
 }
 
-/* 🔥 Notion 스타일 헤딩 */
+/* 🔥 Notion 스타일 헤딩 - 더 명확한 구분 */
 .ProseMirror h1 {
-  font-size: 2rem;
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 1.5rem 0 0.5rem 0;
+  font-size: 2.25rem;
+  /* 🔥 더 큰 크기 */
+  font-weight: 800;
+  /* 🔥 더 굵게 */
+  line-height: 1.1;
+  margin: 2rem 0 1rem 0;
+  /* 🔥 더 큰 여백 */
   color: var(--editor-text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  /* 🔥 더 촘촘한 자간 */
+  border-bottom: 3px solid var(--heading-border-h1);
+  /* 🔥 CSS 변수 사용 */
+  padding-bottom: 0.5rem;
 }
 
 .ProseMirror h1 strong {
-  font-weight: 700;
+  font-weight: 800;
   /* h1 안에서는 strong(볼드)가 기본과 같게 설정 */
 }
 
 .ProseMirror h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.3;
-  margin: 1.25rem 0 0.5rem 0;
+  font-size: 1.75rem;
+  /* 🔥 중간 크기 */
+  font-weight: 700;
+  /* 🔥 h1보다 얇게 */
+  line-height: 1.2;
+  margin: 1.5rem 0 0.75rem 0;
   color: var(--editor-text);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  border-bottom: 2px solid var(--heading-border-h2);
+  /* 🔥 CSS 변수 사용 */
+  padding-bottom: 0.25rem;
 }
 
 .ProseMirror h2 strong {
-  font-weight: 600;
+  font-weight: 700;
   /* h2 안에서는 strong(볼드)가 기본과 같게 설정 */
 }
 
 .ProseMirror h3 {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
+  /* 🔥 더 큰 h3 */
   font-weight: 600;
-  line-height: 1.4;
-  margin: 1rem 0 0.5rem 0;
+  /* 🔥 h2보다 얇게 */
+  line-height: 1.3;
+  margin: 1.25rem 0 0.5rem 0;
   color: var(--editor-text);
+  letter-spacing: -0.01em;
+  /* 🔥 밑줄 없이 구분 */
 }
 
 .ProseMirror h3 strong {

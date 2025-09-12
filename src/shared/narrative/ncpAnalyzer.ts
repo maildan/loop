@@ -4,6 +4,129 @@
 import { DummyDataFilter } from '../services/dummyDataFilter';
 import { Logger } from '../logger';
 
+// 🔥 기본 타입 정의 (any 타입 제거)
+export interface PlotPoint {
+    id: string;
+    title: string;
+    content: string;
+    position: number;
+    timelineOrder: number;
+    characters: string[];
+    location: string;
+    tags: string[];
+    emotional_weight: number;
+    conflict_level: number;
+    plot_relevance: 1 | 2 | 3 | 4 | 5;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface Character {
+    id: string;
+    name: string;
+    role: 'protagonist' | 'antagonist' | 'supporting' | 'minor';
+    description?: string;
+    motivation: string;
+    arc: CharacterArc;
+    relationships: CharacterRelationship[];
+}
+
+export interface CharacterArc {
+    start: string;
+    middle: string;
+    end: string;
+    growth: number; // 0-10 scale
+    conflicts: string[];
+}
+
+export interface CharacterRelationship {
+    targetCharacterId: string;
+    type: 'ally' | 'enemy' | 'neutral' | 'love' | 'mentor' | 'rival';
+    strength: number; // 0-10 scale
+    description: string;
+}
+
+export interface NarrativeAnalysis {
+    structure: ThreeActStructure;
+    complexity: number;
+    characterCount: number;
+    plotlineCount: number;
+    themes: string[];
+}
+
+export interface ThreeActStructure {
+    act1: { start: number; end: number; description: string };
+    act2: { start: number; end: number; description: string };
+    act3: { start: number; end: number; description: string };
+    incitingIncident: number;
+    midpoint: number;
+    climax: number;
+}
+
+export interface ConflictAnalysis {
+    total: number;
+    averageIntensity: number;
+    types: string[];
+}
+
+export interface ChronologyData {
+    realTime: string;
+    storyTime: string;
+    duration: string;
+    simultaneousEvents: string[];
+}
+
+export interface CharacterTimelines {
+    [characterName: string]: {
+        actions: string[];
+        decisions: string[];
+        revelations: string[];
+        relationships: string[];
+    };
+}
+
+export interface TemporalIssue {
+    type: 'timeline' | 'causality' | 'character' | 'world';
+    description: string;
+    suggestion: string;
+}
+
+export interface TensionPoint {
+    scene: string;
+    tension: number;
+    reason: string;
+}
+
+export interface RelationshipAnalysis {
+    from: string;
+    to: string;
+    relationship: string;
+    strength: number;
+    development: 'strengthening' | 'weakening' | 'stable' | 'complex';
+    keyMoments: string[];
+}
+
+export interface ThemeConnection {
+    theme: string;
+    elements: string[];
+    strength: number;
+    development: string;
+}
+
+export interface PlotConnection {
+    plotA: string;
+    plotB: string;
+    connectionType: 'causal' | 'parallel' | 'contrasting' | 'reinforcing';
+    strength: number;
+}
+
+export interface SymbolismAnalysis {
+    symbol: string;
+    meaning: string;
+    occurrences: string[];
+    significance: number;
+}
+
 export interface NCPNarrativeStructure {
     // 🔥 핵심 스토리 요소들
     id: string;
@@ -158,7 +281,7 @@ export class NCPStoryAnalyzer {
     }
 
     // 🔥 독자 반응 예측 (AutoCrit 알고리즘 기반)
-    predictReaderEngagement(plotPoints: any[]): ReaderEngagementPrediction {
+    predictReaderEngagement(plotPoints: PlotPoint[]): ReaderEngagementPrediction {
         const analysis = this.analyzeNarrativeStructure(plotPoints);
 
         return {
@@ -186,7 +309,7 @@ export class NCPStoryAnalyzer {
     }
 
     // 🔥 시간선 분석 (Plottr 방식 기반)
-    analyzeTimeline(plotPoints: any[]): TimelineAnalysis {
+    analyzeTimeline(plotPoints: PlotPoint[]): TimelineAnalysis {
         return {
             chronology: this.trackChronology(plotPoints),
             characterTimelines: this.mapCharacterTimelines(plotPoints),
@@ -196,7 +319,7 @@ export class NCPStoryAnalyzer {
     }
 
     // 🔥 마인드맵 분석 (관계 및 테마 중심)
-    analyzeMindmap(plotPoints: any[], characters: any[]): MindmapAnalysis {
+    analyzeMindmap(plotPoints: PlotPoint[], characters: Character[]): MindmapAnalysis {
         return {
             characterRelationships: this.analyzeRelationships(characters, plotPoints),
             thematicConnections: this.identifyThemes(plotPoints),
@@ -206,7 +329,7 @@ export class NCPStoryAnalyzer {
     }
 
     // 🔥 내부 분석 메서드들
-    private analyzeNarrativeStructure(plotPoints: any[]): any {
+    private analyzeNarrativeStructure(plotPoints: PlotPoint[]): NarrativeAnalysis {
         // NCP 기반 구조 분석
         const structure = {
             acts: this.identifyActStructure(plotPoints),
@@ -217,10 +340,16 @@ export class NCPStoryAnalyzer {
             complexityScore: this.calculateComplexityScore(plotPoints)
         };
 
-        return structure;
+        return {
+            structure: structure.acts,
+            complexity: structure.complexityScore,
+            characterCount: this.extractUniqueCharacters(plotPoints).length,
+            plotlineCount: this.identifyPlotlines(plotPoints).length,
+            themes: structure.themes
+        };
     }
 
-    private calculateComplexityScore(plotPoints: any[]): number {
+    private calculateComplexityScore(plotPoints: PlotPoint[]): number {
         // 플롯의 복잡성을 0-1 사이로 계산
         const characterCount = this.extractUniqueCharacters(plotPoints).length;
         const plotlineCount = this.identifyPlotlines(plotPoints).length;
@@ -229,7 +358,7 @@ export class NCPStoryAnalyzer {
         return Math.min(1, (characterCount * 0.1 + plotlineCount * 0.2 + themeCount * 0.1) / 2);
     }
 
-    private extractUniqueCharacters(plotPoints: any[]): string[] {
+    private extractUniqueCharacters(plotPoints: PlotPoint[]): string[] {
         const characters = new Set<string>();
         plotPoints.forEach(point => {
             if (point.characters) {
@@ -239,17 +368,19 @@ export class NCPStoryAnalyzer {
         return Array.from(characters);
     }
 
-    private identifyPlotlines(plotPoints: any[]): string[] {
+    private identifyPlotlines(plotPoints: PlotPoint[]): string[] {
         const plotlines = new Set<string>();
         plotPoints.forEach(point => {
-            if (point.plotline) plotlines.add(point.plotline);
+            if (point.tags && point.tags.length > 0) {
+                point.tags.forEach(tag => plotlines.add(tag));
+            }
         });
         return Array.from(plotlines);
     }
 
-    private calculatePredictability(analysis: any): 'predictable' | 'surprising' | 'shocking' | 'foreshadowed' {
+    private calculatePredictability(analysis: NarrativeAnalysis): 'predictable' | 'surprising' | 'shocking' | 'foreshadowed' {
         // NCP의 갈등 방법론과 역학 시스템을 기반으로 예측성 계산
-        const conflictComplexity = analysis.complexityScore || 0.5;
+        const conflictComplexity = analysis.complexity || 0.5;
         const foreshadowingRatio = this.calculateForeshadowingRatio(analysis);
         const themeConsistency = this.evaluateThematicConsistency();
 
@@ -260,15 +391,15 @@ export class NCPStoryAnalyzer {
         return 'surprising';
     }
 
-    private calculateForeshadowingRatio(analysis: any): number {
+    private calculateForeshadowingRatio(analysis: NarrativeAnalysis): number {
         // 복선의 적절성을 0-1로 계산
-        const totalPoints = analysis.totalPoints || 1;
+        const totalPoints = analysis.characterCount + analysis.plotlineCount || 1;
         const foreshadowedEvents = Math.floor(totalPoints * 0.3); // 30% 정도가 복선
 
         return Math.min(1, foreshadowedEvents / totalPoints);
     }
 
-    private calculateEngagementScore(analysis: any): number {
+    private calculateEngagementScore(analysis: NarrativeAnalysis): number {
         // 여러 요소를 종합한 독자 몰입도 점수 (1-100)
         let score = 0;
 
@@ -287,7 +418,7 @@ export class NCPStoryAnalyzer {
         return Math.round(score);
     }
 
-    private generateTensionCurve(plotPoints: any[]): number[] {
+    private generateTensionCurve(plotPoints: PlotPoint[]): number[] {
         return plotPoints.map((plot, index) => {
             // 각 플롯 포인트의 긴장감을 1-10으로 계산
             const baseProgress = (index + 1) / plotPoints.length;
@@ -298,13 +429,13 @@ export class NCPStoryAnalyzer {
         });
     }
 
-    private detectPlotHoles(plotPoints: any[]): string[] {
+    private detectPlotHoles(plotPoints: PlotPoint[]): string[] {
         const holes: string[] = [];
 
         // 인과관계 체크
         for (let i = 1; i < plotPoints.length; i++) {
             if (!this.validateCausality(plotPoints[i - 1], plotPoints[i])) {
-                holes.push(`${plotPoints[i - 1].title}과 ${plotPoints[i].title} 사이의 인과관계가 불분명합니다.`);
+                holes.push(`${plotPoints[i - 1]?.title}과 ${plotPoints[i]?.title} 사이의 인과관계가 불분명합니다.`);
             }
         }
 
@@ -372,18 +503,14 @@ export class NCPStoryAnalyzer {
         return consistency;
     }
 
-    private evaluatePacing(analysis: any): number {
+    private evaluatePacing(analysis: NarrativeAnalysis): number {
         // 페이싱 적절성 평가 (0-1)
-        return 0.8; // 임시 구현
+        return Math.min(1, analysis.complexity * 0.8 + 0.2);
     }
 
-    private calculateConflictIntensity(plot: any): number {
+    private calculateConflictIntensity(plot: PlotPoint): number {
         // 개별 플롯의 갈등 강도 계산 (0-1)
-        if (plot.type === 'climax') return 1;
-        if (plot.type === 'conflict') return 0.8;
-        if (plot.type === 'twist') return 0.9;
-        if (plot.type === 'resolution') return 0.3;
-        return 0.5; // setup
+        return Math.min(1, plot.conflict_level / 10);
     }
 
     private calculateClimaxProximity(index: number, total: number): number {
@@ -395,32 +522,57 @@ export class NCPStoryAnalyzer {
     }
 
     // ... 기타 보조 메서드들은 실제 구현에서 완성
-    private calculateEmotionalResonance(analysis: any): number {
+    private calculateEmotionalResonance(analysis: NarrativeAnalysis): number {
         // 감정적 공명도 계산 (0-100)
-        return Math.round(Math.random() * 40 + 60); // 임시 구현
+        const themeCount = analysis.themes.length;
+        const complexityFactor = analysis.complexity;
+
+        // 테마의 수와 복잡성을 기반으로 감정적 공명도 계산
+        const baseScore = Math.min(80, themeCount * 15 + 40);
+        const complexityBonus = complexityFactor * 20;
+
+        return Math.round(Math.min(100, baseScore + complexityBonus));
     }
 
     private evaluateCharacterArc(): number {
         // 캐릭터 아크 만족도 평가 (0-100)
-        return Math.round(Math.random() * 30 + 70); // 임시 구현
+        const characterData = this.ncpStructure.mainCharacter;
+        let score = 0;
+
+        // 동기의 명확성
+        if (characterData.motivation) score += 25;
+
+        // 방법론의 일관성
+        if (characterData.methodology) score += 25;
+
+        // 평가 기준의 명확성
+        if (characterData.evaluation) score += 25;
+
+        // 목적의 달성도
+        if (characterData.purpose) score += 25;
+
+        return score;
     }
 
     // 🔥 실제 구현된 분석 메서드들
-    private validateCausality(plotA: any, plotB: any): boolean {
+    private validateCausality(plotA: PlotPoint | undefined, plotB: PlotPoint | undefined): boolean {
         // 간단한 인과관계 검증 로직
-        if (!plotA?.type || !plotB?.type) return false;
+        if (!plotA || !plotB) return false;
 
-        // 논리적 순서 검증
-        const logicalOrder = ['setup', 'conflict', 'twist', 'climax', 'resolution'];
-        const indexA = logicalOrder.indexOf(plotA.type);
-        const indexB = logicalOrder.indexOf(plotB.type);
+        // 시간적 순서 검증
+        if (plotA.timelineOrder >= plotB.timelineOrder) return false;
 
-        return indexB >= indexA || (plotA.type === 'conflict' && plotB.type === 'conflict');
+        // 캐릭터 연관성 검증
+        const sharedCharacters = plotA.characters.filter(char =>
+            plotB.characters.includes(char)
+        );
+
+        return sharedCharacters.length > 0;
     }
 
-    private checkCharacterMotivationConsistency(plotPoints: any[]): string[] {
+    private checkCharacterMotivationConsistency(plotPoints: PlotPoint[]): string[] {
         const issues: string[] = [];
-        const characterActions = new Map<string, any[]>();
+        const characterActions = new Map<string, Array<{ point: PlotPoint; index: number }>>();
 
         // 캐릭터별 행동 추적
         plotPoints.forEach((point, index) => {
@@ -447,21 +599,21 @@ export class NCPStoryAnalyzer {
         return issues;
     }
 
-    private detectMotivationChanges(actions: any[]): number {
+    private detectMotivationChanges(actions: Array<{ point: PlotPoint; index: number }>): number {
         // 동기 변화 감지 로직 (단순화)
         let changes = 0;
         for (let i = 1; i < actions.length; i++) {
-            const prev = actions[i - 1].point;
-            const curr = actions[i].point;
+            const prev = actions[i - 1]?.point;
+            const curr = actions[i]?.point;
 
-            if (prev.type !== curr.type && Math.abs(prev.index - curr.index) === 1) {
+            if (prev && curr && prev.conflict_level !== curr.conflict_level) {
                 changes++;
             }
         }
         return changes;
     }
 
-    private checkTemporalConsistency(plotPoints: any[]): string[] {
+    private checkTemporalConsistency(plotPoints: PlotPoint[]): string[] {
         const issues: string[] = [];
 
         // 시간 순서 검증
@@ -469,8 +621,9 @@ export class NCPStoryAnalyzer {
             const prev = plotPoints[i - 1];
             const curr = plotPoints[i];
 
-            if (prev.timestamp && curr.timestamp) {
-                if (new Date(prev.timestamp) > new Date(curr.timestamp)) {
+            if (prev && curr) {
+                // timelineOrder 기반 검증
+                if (prev.timelineOrder > curr.timelineOrder) {
                     issues.push(`시간순서 오류: ${prev.title} 후에 ${curr.title}이 올 수 없습니다`);
                 }
             }
@@ -479,17 +632,17 @@ export class NCPStoryAnalyzer {
         return issues;
     }
 
-    private extractThemes(plotPoints: any[]): string[] {
+    private extractThemes(plotPoints: PlotPoint[]): string[] {
         const themes = new Set<string>();
 
         plotPoints.forEach(point => {
-            if (point.themes) {
-                point.themes.forEach((theme: string) => themes.add(theme));
+            if (point.tags && point.tags.length > 0) {
+                point.tags.forEach((tag: string) => themes.add(tag));
             }
 
             // 내용 기반 테마 추출 (키워드 분석)
-            if (point.description) {
-                const thematicKeywords = this.extractThematicKeywords(point.description);
+            if (point.content) {
+                const thematicKeywords = this.extractThematicKeywords(point.content);
                 thematicKeywords.forEach(keyword => themes.add(keyword));
             }
         });
@@ -511,29 +664,64 @@ export class NCPStoryAnalyzer {
     }
 
     // 🔥 남은 분석 메서드들 구현
-    private identifyActStructure(plotPoints: any[]): any {
+    private identifyActStructure(plotPoints: PlotPoint[]): ThreeActStructure {
         const totalPoints = plotPoints.length;
         const firstAct = Math.floor(totalPoints * 0.25);
         const secondAct = Math.floor(totalPoints * 0.75);
 
         return {
-            setup: plotPoints.slice(0, firstAct),
-            confrontation: plotPoints.slice(firstAct, secondAct),
-            resolution: plotPoints.slice(secondAct)
+            act1: {
+                start: 0,
+                end: firstAct,
+                description: 'Setup - 설정과 캐릭터 소개'
+            },
+            act2: {
+                start: firstAct,
+                end: secondAct,
+                description: 'Confrontation - 갈등과 발전'
+            },
+            act3: {
+                start: secondAct,
+                end: totalPoints,
+                description: 'Resolution - 해결과 결말'
+            },
+            incitingIncident: Math.floor(totalPoints * 0.1),
+            midpoint: Math.floor(totalPoints * 0.5),
+            climax: Math.floor(totalPoints * 0.75)
         };
     }
 
-    private analyzeConflicts(plotPoints: any[]): any {
-        const conflicts = plotPoints.filter(point => point.type === 'conflict');
+    private analyzeConflicts(plotPoints: PlotPoint[]): ConflictAnalysis {
+        const conflicts = plotPoints.filter(point => point.conflict_level > 5);
+        const totalIntensity = conflicts.reduce((sum, c) => sum + c.conflict_level, 0);
+
         return {
             total: conflicts.length,
-            intensity: conflicts.reduce((sum, c) => sum + this.calculateConflictIntensity(c), 0) / conflicts.length,
-            types: [...new Set(conflicts.map(c => c.conflictType || 'internal'))]
+            averageIntensity: conflicts.length > 0 ? totalIntensity / conflicts.length : 0,
+            types: this.identifyConflictTypes(conflicts)
         };
     }
 
-    private trackCharacterArcs(plotPoints: any[]): any {
-        const characterProgress = new Map<string, any[]>();
+    private identifyConflictTypes(conflicts: PlotPoint[]): string[] {
+        const types = new Set<string>();
+
+        conflicts.forEach(conflict => {
+            if (conflict.characters.length > 1) {
+                types.add('interpersonal');
+            }
+            if (conflict.emotional_weight > 7) {
+                types.add('internal');
+            }
+            if (conflict.plot_relevance >= 4) {
+                types.add('central');
+            }
+        });
+
+        return Array.from(types);
+    }
+
+    private trackCharacterArcs(plotPoints: PlotPoint[]): Record<string, PlotPoint[]> {
+        const characterProgress = new Map<string, PlotPoint[]>();
 
         plotPoints.forEach(point => {
             if (point.characters) {
@@ -549,30 +737,28 @@ export class NCPStoryAnalyzer {
         return Object.fromEntries(characterProgress);
     }
 
-    private predictNextEvents(plotPoints: any[]): string[] {
+    private predictNextEvents(plotPoints: PlotPoint[]): string[] {
         const lastPoint = plotPoints[plotPoints.length - 1];
         const predictions: string[] = [];
 
-        switch (lastPoint?.type) {
-            case 'setup':
-                predictions.push('갈등의 시작', '캐릭터 간의 대립');
-                break;
-            case 'conflict':
-                predictions.push('상황 악화', '새로운 장애물 등장');
-                break;
-            case 'twist':
-                predictions.push('진실 공개', '관점의 전환');
-                break;
-            default:
-                predictions.push('다음 단계로의 진행');
+        if (!lastPoint) {
+            return ['스토리 시작'];
+        }
+
+        if (lastPoint.conflict_level < 5) {
+            predictions.push('갈등의 시작', '캐릭터 간의 대립');
+        } else if (lastPoint.conflict_level >= 8) {
+            predictions.push('클라이맥스 접근', '결정적 순간');
+        } else {
+            predictions.push('상황 악화', '새로운 장애물 등장');
         }
 
         return predictions;
     }
 
-    private predictRevealTiming(analysis: any): number {
+    private predictRevealTiming(analysis: NarrativeAnalysis): number {
         // 복잡성에 따른 반전 시점 예측 (0-1)
-        const complexity = analysis.complexityScore || 0.5;
+        const complexity = analysis.complexity || 0.5;
         return 0.6 + complexity * 0.3; // 60-90% 지점
     }
 
@@ -598,15 +784,21 @@ export class NCPStoryAnalyzer {
         return '테마가 더 명확하게 표현될 필요가 있습니다';
     }
 
-    private suggestForeshadowing(analysis: any): string[] {
-        return [
+    private suggestForeshadowing(analysis: NarrativeAnalysis): string[] {
+        const suggestions = [
             '중요한 사건 전에 미묘한 힌트 배치',
             '캐릭터 대사를 통한 암시',
             '상징적 이미지나 소품 활용'
         ];
+
+        if (analysis.complexity > 0.7) {
+            suggestions.push('복잡한 구조에 맞는 다층적 복선');
+        }
+
+        return suggestions;
     }
 
-    private analyzePacing(plotPoints: any[]): string[] {
+    private analyzePacing(plotPoints: PlotPoint[]): string[] {
         const suggestions: string[] = [];
         let tensionLevels = plotPoints.map(p => this.calculateConflictIntensity(p));
 
@@ -641,16 +833,20 @@ export class NCPStoryAnalyzer {
         ];
     }
 
-    private trackChronology(plotPoints: any[]): any {
+    private trackChronology(plotPoints: PlotPoint[]): ChronologyData {
+        const firstPoint = plotPoints[0];
+        const lastPoint = plotPoints[plotPoints.length - 1];
+
         return {
-            linearTime: plotPoints.map(p => p.timestamp || '미정'),
-            storyTime: plotPoints.map(p => p.storyTime || '미정'),
-            duration: `${plotPoints.length}개 장면`
+            realTime: firstPoint ? `${firstPoint.createdAt} ~ ${lastPoint?.updatedAt || firstPoint.createdAt}` : '미정',
+            storyTime: plotPoints.length > 0 ? `Scene ${plotPoints[0]?.timelineOrder} ~ Scene ${plotPoints[plotPoints.length - 1]?.timelineOrder}` : '미정',
+            duration: `${plotPoints.length}개 장면`,
+            simultaneousEvents: []
         };
     }
 
-    private mapCharacterTimelines(plotPoints: any[]): any {
-        const timelines: any = {};
+    private mapCharacterTimelines(plotPoints: PlotPoint[]): CharacterTimelines {
+        const timelines: CharacterTimelines = {};
 
         plotPoints.forEach(point => {
             if (point.characters) {
@@ -659,10 +855,11 @@ export class NCPStoryAnalyzer {
                         timelines[char] = {
                             actions: [],
                             decisions: [],
-                            revelations: []
+                            revelations: [],
+                            relationships: []
                         };
                     }
-                    timelines[char].actions.push(point.title || '액션');
+                    timelines[char]!.actions.push(point.title);
                 });
             }
         });
@@ -670,34 +867,85 @@ export class NCPStoryAnalyzer {
         return timelines;
     }
 
-    private detectTemporalIssues(plotPoints: any[]): any[] {
-        return this.checkTemporalConsistency(plotPoints).map(issue => ({
-            type: 'timeline' as const,
-            description: issue,
-            suggestion: '시간순서를 재검토하세요'
-        }));
+    private detectTemporalIssues(plotPoints: PlotPoint[]): TemporalIssue[] {
+        const issues = this.checkTemporalConsistency(plotPoints);
+
+        return issues.map(issue => {
+            let suggestion = '시간순서를 재검토하세요';
+
+            // 이슈 타입에 따른 구체적인 제안
+            if (issue.includes('시간순서 오류')) {
+                suggestion = '이전 사건과 현재 사건의 시간적 순서를 확인하고 조정하세요';
+            } else if (issue.includes('동시에 일어날 수 없는')) {
+                suggestion = '동시성 문제를 해결하기 위해 사건의 타이밍을 조정하세요';
+            } else if (issue.includes('시간 간격')) {
+                suggestion = '사건 간의 시간 간격이 적절한지 확인하고 필요시 조정하세요';
+            } else if (issue.includes('과거 회상')) {
+                suggestion = '플래시백이 현재 시점과 명확히 구분되도록 표시하세요';
+            } else if (issue.includes('미래 예견')) {
+                suggestion = '예견이나 복선이 논리적으로 연결되도록 검토하세요';
+            }
+
+            return {
+                type: 'timeline' as const,
+                description: issue,
+                suggestion
+            };
+        });
     }
 
-    private generateTensionGraph(plotPoints: any[]): any[] {
+    private generateTensionGraph(plotPoints: PlotPoint[]): TensionPoint[] {
         return plotPoints.map((point, index) => ({
-            scene: point.title || `Scene ${index + 1}`,
-            tension: this.calculateConflictIntensity(point) * 10,
-            reason: `${point.type || 'general'} 장면`
+            scene: point.title,
+            tension: point.emotional_weight,
+            reason: `긴장도 ${point.conflict_level} 장면`
         }));
     }
 
-    private analyzeRelationships(characters: any[], plotPoints: any[]): any[] {
-        const relationships: any[] = [];
+    private analyzeRelationships(characters: Character[], plotPoints: PlotPoint[]): RelationshipAnalysis[] {
+        const relationships: RelationshipAnalysis[] = [];
 
         for (let i = 0; i < characters.length; i++) {
             for (let j = i + 1; j < characters.length; j++) {
+                const char1 = characters[i];
+                const char2 = characters[j];
+
+                if (!char1 || !char2) continue;
+
+                // 실제 관계 데이터 찾기
+                const existingRelation = char1?.relationships?.find(
+                    rel => rel.targetCharacterId === char2?.id
+                );
+
+                // 키 모멘트 추출 - 두 캐릭터가 함께 등장하는 장면들
+                const keyMoments: string[] = [];
+                plotPoints.forEach(point => {
+                    if (point.characters.includes(char1.name) && point.characters.includes(char2.name)) {
+                        keyMoments.push(point.title);
+                    }
+                });
+
+                // 관계 발전도 분석
+                let development: 'strengthening' | 'weakening' | 'stable' | 'complex';
+                if (keyMoments.length === 0) {
+                    development = 'stable';
+                } else if (keyMoments.length >= 3) {
+                    development = 'complex';
+                } else if (existingRelation?.strength && existingRelation.strength > 7) {
+                    development = 'strengthening';
+                } else if (existingRelation?.strength && existingRelation.strength < 3) {
+                    development = 'weakening';
+                } else {
+                    development = 'stable';
+                }
+
                 relationships.push({
-                    from: characters[i].name || `Character ${i}`,
-                    to: characters[j].name || `Character ${j}`,
-                    relationship: '알 수 없음',
-                    strength: Math.random() * 10,
-                    development: 'stable' as const,
-                    keyMoments: ['첫 만남']
+                    from: char1?.name || `Character ${i}`,
+                    to: char2?.name || `Character ${j}`,
+                    relationship: existingRelation?.type || '알 수 없음',
+                    strength: existingRelation?.strength || 5,
+                    development,
+                    keyMoments: keyMoments.length > 0 ? keyMoments : ['관계 시작']
                 });
             }
         }
@@ -705,39 +953,140 @@ export class NCPStoryAnalyzer {
         return relationships;
     }
 
-    private identifyThemes(plotPoints: any[]): any[] {
+    private identifyThemes(plotPoints: PlotPoint[]): ThemeConnection[] {
         const themes = this.extractThemes(plotPoints);
-        return themes.map(theme => ({
-            theme,
-            elements: [`요소 관련 ${theme}`],
-            strength: Math.random() * 10,
-            development: '점진적 발전'
-        }));
+
+        return themes.map(theme => {
+            // 테마 관련 요소들 실제 추출
+            const elements: string[] = [];
+            let themeStrength = 1;
+
+            plotPoints.forEach(point => {
+                if (point.content && point.content.includes(theme)) {
+                    elements.push(point.title);
+                    themeStrength++;
+                }
+
+                if (point.tags && point.tags.includes(theme)) {
+                    themeStrength += 2;
+                }
+            });
+
+            // 개발 상태 판정
+            let development: string;
+            if (themeStrength >= 8) {
+                development = '완전히 발전됨';
+            } else if (themeStrength >= 5) {
+                development = '발전 중';
+            } else if (themeStrength >= 3) {
+                development = '초기 단계';
+            } else {
+                development = '암시만 존재';
+            }
+
+            return {
+                theme,
+                elements: elements.length > 0 ? elements : [`${theme} 관련 요소들`],
+                strength: Math.min(10, themeStrength),
+                development
+            };
+        });
     }
 
-    private mapPlotConnections(plotPoints: any[]): any[] {
-        const connections: any[] = [];
+    private mapPlotConnections(plotPoints: PlotPoint[]): PlotConnection[] {
+        const connections: PlotConnection[] = [];
 
         for (let i = 0; i < plotPoints.length - 1; i++) {
+            const currentPlot = plotPoints[i];
+            const nextPlot = plotPoints[i + 1];
+
+            if (!currentPlot || !nextPlot) continue;
+
+            // 실제 연결 강도 계산
+            let strength = 5; // 기본값
+
+            // 공통 캐릭터가 있으면 연결성 증가
+            const sharedCharacters = currentPlot.characters.filter(char =>
+                nextPlot.characters.includes(char)
+            );
+            strength += sharedCharacters.length * 2;
+
+            // 연속된 시간순서면 연결성 증가
+            if (nextPlot.timelineOrder === currentPlot.timelineOrder + 1) {
+                strength += 2;
+            }
+
+            // 갈등 수준이 비슷하면 연결성 증가
+            const conflictDiff = Math.abs(currentPlot.conflict_level - nextPlot.conflict_level);
+            if (conflictDiff <= 2) {
+                strength += 1;
+            }
+
             connections.push({
-                plotA: plotPoints[i].title || `Plot ${i}`,
-                plotB: plotPoints[i + 1].title || `Plot ${i + 1}`,
+                plotA: currentPlot.title,
+                plotB: nextPlot.title,
                 connectionType: 'causal' as const,
-                strength: Math.random() * 10
+                strength: Math.min(10, Math.max(1, strength))
             });
         }
 
         return connections;
     }
 
-    private extractSymbolism(plotPoints: any[]): any[] {
-        return [
-            {
-                symbol: '빛과 어둠',
-                meaning: '희망과 절망의 대비',
-                occurrences: ['장면 1', '장면 3'],
-                significance: 8
+    private extractSymbolism(plotPoints: PlotPoint[]): SymbolismAnalysis[] {
+        const symbolism: SymbolismAnalysis[] = [];
+        const symbolPatterns = new Map<string, { keywords: string[]; meaning: string }>();
+
+        // 상징 패턴 정의
+        symbolPatterns.set('빛과 어둠', {
+            keywords: ['빛', '어둠', '그림자', '햇살', '밤', '낮', '조명', '어둠침침'],
+            meaning: '희망과 절망, 선과 악의 대비'
+        });
+
+        symbolPatterns.set('물', {
+            keywords: ['물', '바다', '강', '비', '눈물', '홍수', '파도'],
+            meaning: '정화, 재생, 감정의 흐름'
+        });
+
+        symbolPatterns.set('불', {
+            keywords: ['불', '화염', '촛불', '폭발', '타오르는', '불타는'],
+            meaning: '열정, 파괴, 변화'
+        });
+
+        symbolPatterns.set('새', {
+            keywords: ['새', '날개', '비행', '하늘', '자유롭게'],
+            meaning: '자유, 초월, 영혼'
+        });
+
+        symbolPatterns.forEach((pattern, symbolName) => {
+            const occurrences: string[] = [];
+            let totalMentions = 0;
+
+            plotPoints.forEach(point => {
+                let pointMentions = 0;
+                pattern.keywords.forEach(keyword => {
+                    if (point.content && point.content.includes(keyword)) {
+                        pointMentions++;
+                        totalMentions++;
+                    }
+                });
+
+                if (pointMentions > 0) {
+                    occurrences.push(point.title);
+                }
+            });
+
+            if (totalMentions > 0) {
+                symbolism.push({
+                    symbol: symbolName,
+                    meaning: pattern.meaning,
+                    occurrences,
+                    significance: Math.min(10, Math.round((totalMentions * 2) + (occurrences.length * 1.5)))
+                });
             }
-        ];
+        });
+
+        // 상징이 발견되지 않은 경우 빈 배열 반환
+        return symbolism;
     }
 }

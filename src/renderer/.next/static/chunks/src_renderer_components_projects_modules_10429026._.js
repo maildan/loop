@@ -855,6 +855,10 @@ const slashSuggestion = {
     items: ({ query })=>{
         return SLASH_COMMANDS.filter((item)=>item.title.toLowerCase().includes(query.toLowerCase()) || item.description.toLowerCase().includes(query.toLowerCase()));
     },
+    // 🔥 슬래시 명령어 트리거 조건 개선
+    char: '/',
+    allowSpaces: false,
+    startOfLine: false,
     render: ()=>{
         let component;
         let popup = [];
@@ -874,7 +878,12 @@ const slashSuggestion = {
                     showOnCreate: true,
                     interactive: true,
                     trigger: 'manual',
-                    placement: 'bottom-start'
+                    placement: 'bottom-start',
+                    hideOnClick: true,
+                    duration: [
+                        200,
+                        150
+                    ]
                 });
             },
             onUpdate (props) {
@@ -890,14 +899,33 @@ const slashSuggestion = {
                 }
             },
             onKeyDown (props) {
+                // 🔥 Escape 키로 메뉴 강제 종료
                 if (props.event.key === 'Escape') {
                     const instance = Array.isArray(popup) ? popup[0] : undefined;
-                    if (instance) instance.hide();
-                    return true;
+                    if (instance) {
+                        instance.hide();
+                        return true;
+                    }
                 }
-                return component.ref?.onKeyDown({
+                // 🔥 Space 키로도 메뉴 종료
+                if (props.event.key === ' ' || props.event.key === 'Space') {
+                    const instance = Array.isArray(popup) ? popup[0] : undefined;
+                    if (instance) {
+                        instance.hide();
+                        return false; // 스페이스는 일반 입력으로 처리
+                    }
+                }
+                // 🔥 Enter 키로 명령어 실행 후 메뉴 종료
+                const result = component.ref?.onKeyDown({
                     event: props.event
                 });
+                if (props.event.key === 'Enter' && result) {
+                    const instance = Array.isArray(popup) ? popup[0] : undefined;
+                    if (instance) {
+                        setTimeout(()=>instance.hide(), 50); // 약간의 지연 후 숨김
+                    }
+                }
+                return result;
             },
             onExit () {
                 const instance = Array.isArray(popup) ? popup[0] : undefined;
