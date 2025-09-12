@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Calendar, Brain, Sparkles } from 'lucide-react';
-import { ProjectAnalysis } from '../../../../hooks/useProjectData';
+import { Calendar, Brain, Sparkles, BookOpen, Hash, FileText } from 'lucide-react';
+import { ProjectAnalysis, ProjectElement } from '../../../../hooks/useProjectData';
 import { AIAnalysisPanel } from '../../../common/AIAnalysisPanel';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -11,6 +11,7 @@ import { GoogleGenAI } from "@google/genai";
 
 interface TimelinePanelProps {
     analysis: ProjectAnalysis;
+    elements: ProjectElement[]; // 🔥 프로젝트 요소들 (메인 스토리 포함)
     projectId?: string;
     characters?: any[]; // 캐릭터 데이터
     notes?: any[]; // 노트 데이터
@@ -20,6 +21,7 @@ interface TimelinePanelProps {
 
 export const TimelinePanel: React.FC<TimelinePanelProps> = ({
     analysis,
+    elements,
     projectId = 'timeline-demo',
     characters = [],
     notes = [],
@@ -54,18 +56,35 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                     {/* 🗂️ 타임라인 메인 컨텐츠 */}
                     <div className={`${showAIAnalysis ? 'col-span-8' : 'col-span-12'} transition-all duration-300 overflow-y-auto h-full`}>
                         <div className="space-y-4 pb-6">{/* pb-6 for bottom padding */}
-                            {analysis.timeline.length === 0 ? (
+                            {elements.length === 0 ? (
                                 <Card className="p-8 text-center">
                                     <Calendar className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                                     <h3 className="text-lg font-medium text-gray-600 mb-2">타임라인이 비어있습니다</h3>
                                     <p className="text-gray-500">프로젝트에 이벤트를 추가하여 타임라인을 구성해보세요.</p>
                                 </Card>
                             ) : (
-                                analysis.timeline.map((item, index) => (
+                                // 🔥 elements를 생성 순서로 정렬하여 타임라인 구성
+                                elements
+                                    .sort((a, b) => {
+                                        // main이 맨 앞에, 나머지는 order 또는 생성시간 순
+                                        if (a.type === 'main') return -1;
+                                        if (b.type === 'main') return 1;
+                                        if (a.order !== undefined && b.order !== undefined) {
+                                            return a.order - b.order;
+                                        }
+                                        return (a.createdAt?.getTime() || 0) - (b.createdAt?.getTime() || 0);
+                                    })
+                                    .map((item, index) => (
                                     <div key={item.id} className="flex items-start space-x-4">
                                         <div className="flex flex-col items-center">
-                                            <div className="w-3 h-3 bg-indigo-500 rounded-full"></div>
-                                            {index < analysis.timeline.length - 1 && (
+                                            <div className={`w-3 h-3 rounded-full ${
+                                                item.type === 'main' ? 'bg-green-500' :
+                                                item.type === 'chapter' ? 'bg-indigo-500' :
+                                                item.type === 'character' ? 'bg-purple-500' :
+                                                item.type === 'synopsis' ? 'bg-blue-500' :
+                                                'bg-gray-500'
+                                            }`}></div>
+                                            {index < elements.length - 1 && (
                                                 <div className="w-0.5 h-16 bg-gray-300 dark:bg-gray-600 mt-2"></div>
                                             )}
                                         </div>
@@ -81,10 +100,14 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                                 }}
                                             >
                                                 <div className="flex items-center justify-between mb-2">
-                                                    <h3 className={`font-medium ${item.type === 'chapter' && onNavigateToChapter
+                                                    <h3 className={`font-medium flex items-center gap-2 ${item.type === 'chapter' && onNavigateToChapter
                                                         ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
                                                         : 'text-gray-900 dark:text-gray-100'
                                                         }`}>
+                                                        {item.type === 'main' && <BookOpen className="w-4 h-4 text-green-500" />}
+                                                        {item.type === 'chapter' && <Hash className="w-4 h-4 text-indigo-500" />}
+                                                        {item.type === 'synopsis' && <FileText className="w-4 h-4 text-blue-500" />}
+                                                        {!['main', 'chapter', 'synopsis'].includes(item.type) && <Sparkles className="w-4 h-4 text-purple-500" />}
                                                         {item.title}
                                                         {item.type === 'chapter' && onNavigateToChapter && (
                                                             <span className="ml-2 text-xs text-gray-500">(클릭하여 편집)</span>
@@ -99,12 +122,12 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                                                             item.type === 'memo' ? '메모' : item.type}
                                                     </span>
                                                 </div>
-                                                <div
-                                                    className="text-sm text-gray-600 dark:text-gray-400 mb-2"
-                                                    dangerouslySetInnerHTML={{ __html: item.description }}
-                                                />
+                                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                                    {item.content?.substring(0, 150) || '내용 없음'}
+                                                    {(item.content?.length || 0) > 150 && '...'}
+                                                </div>
                                                 <div className="text-xs text-gray-500">
-                                                    {new Date(item.timestamp).toLocaleDateString('ko-KR')}
+                                                    {item.createdAt?.toLocaleDateString('ko-KR') || '날짜 미상'}
                                                 </div>
                                             </div>
                                         </div>

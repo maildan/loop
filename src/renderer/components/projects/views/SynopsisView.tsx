@@ -148,6 +148,7 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
                 {viewMode === 'timeline' && (
                     <TimelinePanel
                         analysis={analysis}
+                        elements={elements}
                         projectId={projectId}
                         characters={characters}
                         notes={notes}
@@ -175,6 +176,7 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
                 {showAnalysis && (
                     <AnalysisPanel
                         analysis={analysis}
+                        elements={elements}
                         selectedElement={selectedElement}
                         getRelatedElements={getRelatedElements}
                     />

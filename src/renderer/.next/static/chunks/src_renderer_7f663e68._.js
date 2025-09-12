@@ -360,47 +360,20 @@ function useIntegratedProjectData(projectId) {
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROCESS_STRUCTURE_ITEMS', 'Starting processing', {
                 projectId
             });
+            const processedElements = [];
             if (!projectId || !structures[projectId]) {
                 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROCESS_STRUCTURE_ITEMS', 'No data found', {
                     hasProjectId: !!projectId,
                     hasStructureData: !!structures[projectId],
                     availableProjects: Object.keys(structures)
                 });
-                // 🔥 임시 mock 데이터 생성 (데이터가 없을 때)
-                return [
-                    {
-                        id: 'mock-chapter-1',
-                        type: 'chapter',
-                        title: '첫 번째 챕터',
-                        content: '이것은 샘플 챕터 내용입니다.',
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        order: 1,
-                        wordCount: 10,
-                        plotRelevance: 4
-                    },
-                    {
-                        id: 'mock-character-1',
-                        type: 'character',
-                        title: '주인공',
-                        content: '주인공 설명',
-                        createdAt: new Date(),
-                        updatedAt: new Date(),
-                        order: 1,
-                        wordCount: 3,
-                        plotRelevance: 5,
-                        characterTraits: [
-                            '용감함',
-                            '지혜로움'
-                        ]
-                    }
-                ];
+                // 🔥 실제 데이터만 반환 (mock 데이터 제거)
+                return processedElements;
             }
             const items = structures[projectId] || [];
             __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROCESS_STRUCTURE_ITEMS', 'Found items', {
                 count: items.length
             });
-            const processedElements = [];
             items.forEach({
                 "useIntegratedProjectData.useMemo[processStructureItems]": (item, index)=>{
                     __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$shared$2f$logger$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Logger"].debug('PROCESS_STRUCTURE_ITEMS', `Processing item ${index + 1}`, {
@@ -583,18 +556,46 @@ function useIntegratedProjectData(projectId) {
                 storyConsistency: totalWords > 500 ? Math.min(95, 60 + Math.floor(totalWords / 100)) : 50,
                 characterConsistency: characters.length > 0 ? Math.min(90, 50 + characters.length * 10) : 30,
                 plotHoles: [],
-                suggestions: processStructureItems.length > 0 ? [
-                    // 🔥 실제 프로젝트 데이터 기반 동적 제안
-                    `${chapters.length > 0 ? '챕터 구조를 더 명확하게 구성해보세요.' : '새로운 챕터를 추가하여 스토리를 발전시켜보세요.'}`,
-                    `${characters.length > 0 ? '캐릭터 간의 관계를 더 깊이 있게 다뤄보세요.' : '주요 캐릭터들을 추가하여 이야기에 생동감을 불어넣어보세요.'}`,
-                    `${ideas.length > 0 ? '아이디어들을 구체적인 장면으로 발전시켜보세요.' : '창의적인 아이디어를 더 추가해보세요.'}`,
-                    '한국어 맞춤법 검사를 통해 글의 완성도를 높여보세요.',
-                    '시놉시스를 통해 전체적인 스토리 흐름을 점검해보세요.'
-                ].slice(0, 3) : [
-                    '프로젝트에 콘텐츠를 추가하여 AI 분석을 시작해보세요.',
-                    '챕터, 캐릭터, 아이디어를 추가하면 더 정확한 분석을 제공합니다.',
-                    '작성을 시작하시면 맞춤형 개선 제안을 받을 수 있습니다.'
-                ],
+                suggestions: ({
+                    "useIntegratedProjectData.useMemo[performAnalysis]": ()=>{
+                        const suggestions = [];
+                        // 🔥 실제 프로젝트 상태 기반 맞춤형 제안
+                        if (processStructureItems.length === 0) {
+                            return [
+                                '메인 스토리부터 작성을 시작해보세요. Write 탭에서 작성할 수 있습니다.',
+                                '캐릭터 탭에서 주인공과 조연의 설정을 먼저 구상해보세요.',
+                                '구조 탭에서 첫 번째 챕터를 추가하여 스토리를 시작하세요.'
+                            ];
+                        }
+                        // 단어 수 기반 제안
+                        if (totalWords < 500) {
+                            suggestions.push('스토리의 분량을 늘려 더 풍성한 내용으로 발전시켜보세요.');
+                        } else if (totalWords > 10000) {
+                            suggestions.push('내용이 풍부합니다. 이제 구조와 흐름을 다듬어보세요.');
+                        }
+                        // 챕터 구조 기반 제안
+                        if (chapters.length === 0) {
+                            suggestions.push('스토리를 챕터별로 나누어 구조화해보세요.');
+                        } else if (chapters.length === 1) {
+                            suggestions.push('추가 챕터를 작성하여 스토리의 전개를 발전시켜보세요.');
+                        } else {
+                            suggestions.push('챕터 간의 연결과 흐름을 점검해보세요.');
+                        }
+                        // 캐릭터 기반 제안
+                        if (characters.length === 0) {
+                            suggestions.push('주인공과 주요 인물들의 설정을 Characters 탭에서 정의해보세요.');
+                        } else if (characters.length < 3) {
+                            suggestions.push('조연이나 갈등을 만들어줄 인물들을 추가해보세요.');
+                        } else {
+                            suggestions.push('캐릭터들 간의 관계와 갈등 구조를 더욱 깊이 있게 설정해보세요.');
+                        }
+                        // 아이디어/노트 기반 제안
+                        if (ideas.length > 0) {
+                            suggestions.push('노트 탭의 아이디어들을 실제 스토리에 반영해보세요.');
+                        }
+                        return suggestions.slice(0, 3);
+                    }
+                })["useIntegratedProjectData.useMemo[performAnalysis]"](),
                 timeline,
                 relationships
             };

@@ -300,10 +300,10 @@ const SidebarContent = memo(function SidebarContent({
                 {/* 🔥 구조 관리 섹션 (확장됨: 챕터, 시놉시스, 메모 포함) */}
                 {currentView === 'structure' && (
                     <div className="p-3 space-y-4">
-                        {/* 챕터 서브섹션 */}
+                        {/* 메인 스토리 및 챕터 섹션 */}
                         <div>
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">챕터</h4>
+                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">스토리</h4>
                                 <button
                                     className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                                     onClick={onAddStructure}
@@ -313,6 +313,14 @@ const SidebarContent = memo(function SidebarContent({
                                 </button>
                             </div>
                             <div className={SIDEBAR_STYLES.structureList}>
+                                {/* 메인 스토리 표시 */}
+                                <div className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
+                                    <div className="flex items-center gap-2 flex-1">
+                                        <BookOpen size={12} className="text-green-500" />
+                                        <span className="truncate font-medium">메인 스토리</span>
+                                    </div>
+                                </div>
+                                {/* 챕터들 표시 */}
                                 {structure.filter(item => item.type === 'chapter' || !item.type).map((item) => (
                                     <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
                                         <div className="flex items-center gap-2 flex-1">
@@ -447,15 +455,19 @@ const SidebarContent = memo(function SidebarContent({
                 <h3 className={SIDEBAR_STYLES.sectionHeader}>프로젝트 통계</h3>
                 <div className={SIDEBAR_STYLES.statItem}>
                     <span className={SIDEBAR_STYLES.statLabel}>단어 수</span>
-                    <span className={SIDEBAR_STYLES.statValue}>{stats.wordCount}</span>
+                    <span className={SIDEBAR_STYLES.statValue}>{stats.wordCount?.toLocaleString() || 0}</span>
                 </div>
                 <div className={SIDEBAR_STYLES.statItem}>
                     <span className={SIDEBAR_STYLES.statLabel}>문자 수</span>
-                    <span className={SIDEBAR_STYLES.statValue}>{stats.charCount}</span>
+                    <span className={SIDEBAR_STYLES.statValue}>{stats.charCount?.toLocaleString() || 0}</span>
                 </div>
                 <div className={SIDEBAR_STYLES.statItem}>
                     <span className={SIDEBAR_STYLES.statLabel}>예상 읽기 시간</span>
-                    <span className={SIDEBAR_STYLES.statValue}>{stats.readingTime}분</span>
+                    <span className={SIDEBAR_STYLES.statValue}>{stats.readingTime || 0}분</span>
+                </div>
+                <div className={SIDEBAR_STYLES.statItem}>
+                    <span className={SIDEBAR_STYLES.statLabel}>진행률</span>
+                    <span className={SIDEBAR_STYLES.statValue}>{stats.progress || 0}%</span>
                 </div>
             </div>
         </>

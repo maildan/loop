@@ -44,7 +44,15 @@ export const ProjectEditorSimple = memo(function ProjectEditorSimple({
             case 'write':
                 return <div className="p-4">Write View</div>;
             case 'structure':
-                return <StructureView projectId={projectId} />;
+                return (
+                    <StructureView 
+                        projectId={projectId}
+                        onNavigateToNotesView={() => {
+                            actions.setCurrentView('notes');
+                            Logger.info('PROJECT_EDITOR', 'Navigating to notes view from structure');
+                        }}
+                    />
+                );
             case 'characters':
                 return (
                     <CharactersView

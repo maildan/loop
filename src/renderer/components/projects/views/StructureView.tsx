@@ -5,6 +5,7 @@
 import React, { useState, useCallback, useEffect, useMemo, memo } from 'react';
 import { ProjectStructure } from '../../../../shared/types';
 import { useStructureStore } from '../../../stores/useStructureStore';
+import { useProjectData } from '../hooks/useProjectData'; // 🔥 프로젝트 데이터 가져오기
 import { Logger } from '../../../../shared/logger'; // 🔥 Logger import 추가
 import { ConfirmDialog } from '../components/ConfirmDialog'; // 🔥 삭제 확인 다이얼로그 추가
 import {
@@ -28,6 +29,7 @@ interface StructureViewProps {
   onNavigateToChapterEdit?: (chapterId: string) => void;
   onNavigateToSynopsisEdit?: (synopsisId: string) => void;
   onNavigateToIdeaEdit?: (ideaId: string) => void;
+  onNavigateToNotesView?: () => void; // 🔥 NEW: 노트 뷰로 이동 핸들러
   onAddNewChapter?: () => void; // 🔥 NEW: 새 장 추가 핸들러
 }
 
@@ -99,7 +101,7 @@ const TYPE_ICONS = {
 const ADD_MENU_ITEMS = [
   { type: 'chapter', label: '새 장', icon: Hash, description: '스토리의 주요 단위' },
   { type: 'synopsis', label: '시놉시스', icon: FileText, description: '이야기 개요' },
-  { type: 'idea', label: '아이디어', icon: Bookmark, description: '창작 아이디어' },
+  { type: 'idea', label: '노트', icon: Bookmark, description: '창작 노트 및 메모' },
 ] as const;
 
 // 🔥 빈 배열 상수 - 참조 안정성 보장
@@ -110,6 +112,7 @@ const StructureView = memo(function StructureView({
   onNavigateToChapterEdit,
   onNavigateToSynopsisEdit,
   onNavigateToIdeaEdit,
+  onNavigateToNotesView,
   onAddNewChapter
 }: StructureViewProps): React.ReactElement {
   // 🔥 Zustand 스토어 사용 - 참조 안정성을 위한 최적화
@@ -117,6 +120,9 @@ const StructureView = memo(function StructureView({
     const projectStructures = state.structures[projectId];
     return projectStructures || EMPTY_STRUCTURES;
   });
+
+  // 🔥 프로젝트 데이터 가져오기 (메인 컨텐츠용)
+  const projectData = useProjectData(projectId);
 
   const addStructureItem = useStructureStore((state) => state.addStructureItem);
   const updateStructureItem = useStructureStore((state) => state.updateStructureItem);
@@ -176,7 +182,7 @@ const StructureView = memo(function StructureView({
     });
   }, [projectId]);
 
-  // 🔥 폴더별 데이터 그룹화 (main 타입 제거)
+  // 🔥 폴더별 데이터 그룹화 (main 타입 제거, idea → note 변경)
   const groupedStructures = useMemo(() => {
     const groups = {
       chapters: structures.filter(item => item.type === 'chapter').sort((a, b) =>
@@ -185,7 +191,7 @@ const StructureView = memo(function StructureView({
       synopsis: structures.filter(item => item.type === 'synopsis').sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       ),
-      ideas: structures.filter(item => item.type === 'idea').sort((a, b) =>
+      notes: structures.filter(item => item.type === 'idea').sort((a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       )
     };
@@ -193,7 +199,7 @@ const StructureView = memo(function StructureView({
     Logger.debug('STRUCTURE_VIEW', 'Grouped structures', {
       chapters: groups.chapters.length,
       synopsis: groups.synopsis.length,
-      ideas: groups.ideas.length
+      notes: groups.notes.length
     });
 
     return groups;
@@ -231,7 +237,7 @@ const StructureView = memo(function StructureView({
       return;
     }
 
-    // 기존 synopsis, idea, main 처리 로직
+    // 기존 synopsis, idea 처리 로직  
     const defaultTitles = {
       chapter: `새로운 챕터`, // 이 부분은 사용되지 않음 (모달 통해 처리)
       synopsis: `새로운 시놉시스`,
@@ -277,7 +283,9 @@ const StructureView = memo(function StructureView({
 
       // 🔥 해당 타입의 에디터로 이동
       if (type === 'idea') {
-        onNavigateToIdeaEdit?.(newItem.id);
+        // 아이디어는 notes 뷰로 이동
+        onNavigateToNotesView?.();
+        Logger.info('STRUCTURE_VIEW', 'Navigating to notes view', { ideaId: newItem.id });
       } else if (type === 'synopsis') {
         onNavigateToSynopsisEdit?.(newItem.id);
       } else if (type === 'chapter') {
@@ -291,7 +299,7 @@ const StructureView = memo(function StructureView({
     } finally {
       setIsLoading(false);
     }
-  }, [projectId, structures, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToSynopsisEdit, triggerUpdate]);
+  }, [projectId, structures, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToNotesView, onNavigateToSynopsisEdit, triggerUpdate]);
 
   const handleItemClick = useCallback((item: ProjectStructure): void => {
     // 🔥 에디터 상태 업데이트
@@ -305,11 +313,13 @@ const StructureView = memo(function StructureView({
     if (item.type === 'chapter') {
       onNavigateToChapterEdit?.(item.id);
     } else if (item.type === 'idea') {
-      onNavigateToIdeaEdit?.(item.id);
+      // 🔥 아이디어는 NotesView로 이동
+      onNavigateToNotesView?.();
+      Logger.info('STRUCTURE_VIEW', 'Navigating to notes view from idea click', { ideaId: item.id });
     } else if (item.type === 'synopsis' || (item.type as any) === 'main') {
       onNavigateToSynopsisEdit?.(item.id);
     }
-  }, [projectId, setCurrentEditor, onNavigateToChapterEdit, onNavigateToIdeaEdit, onNavigateToSynopsisEdit]);
+  }, [projectId, setCurrentEditor, onNavigateToChapterEdit, onNavigateToIdeaEdit, onNavigateToNotesView, onNavigateToSynopsisEdit]);
 
   const handleEditStart = useCallback((item: ProjectStructure): void => {
     setEditingId(item.id);
@@ -452,6 +462,36 @@ const StructureView = memo(function StructureView({
           ) : (
             /* 🔥 폴더형 구조 목록 */
             <div className="space-y-4">
+              {/* 🔥 메인 스토리 섹션 */}
+              <div>
+                {renderFolderHeader('main', '메인 스토리', BookOpen, 1)}
+                {!collapsedFolders.has('main') && (
+                  <div className="ml-6 space-y-2">
+                    <div
+                      className={STRUCTURE_STYLES.structureItem}
+                      onClick={() => {
+                        // 메인 스토리 클릭 시 write 뷰로 이동
+                        Logger.info('STRUCTURE_VIEW', 'Main story clicked');
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <BookOpen className={STRUCTURE_STYLES.itemIcon} />
+                      <div className={STRUCTURE_STYLES.itemContent}>
+                        <div className={STRUCTURE_STYLES.itemTitle}>메인 스토리</div>
+                        <div className={STRUCTURE_STYLES.itemType}>프로젝트 메인 컨텐츠</div>
+                        {projectData?.content && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            {projectData.content.substring(0, 100)}...
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {projectData?.writerStats?.wordCount || 0} 단어
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* 🔥 챕터 폴더 */}
               {groupedStructures.chapters.length > 0 && (
@@ -594,13 +634,13 @@ const StructureView = memo(function StructureView({
                 </div>
               )}
 
-              {/* 🔥 아이디어 폴더 */}
-              {groupedStructures.ideas.length > 0 && (
+              {/* 🔥 노트 폴더 */}
+              {groupedStructures.notes.length > 0 && (
                 <div>
-                  {renderFolderHeader('ideas', '아이디어', Bookmark, groupedStructures.ideas.length)}
-                  {!collapsedFolders.has('ideas') && (
+                  {renderFolderHeader('notes', '노트', Bookmark, groupedStructures.notes.length)}
+                  {!collapsedFolders.has('notes') && (
                     <div className="ml-6 space-y-2">
-                      {groupedStructures.ideas.map((item) => {
+                      {groupedStructures.notes.map((item) => {
                         const isEditing = editingId === item.id;
 
                         return (
@@ -625,7 +665,7 @@ const StructureView = memo(function StructureView({
                               ) : (
                                 <>
                                   <div className={STRUCTURE_STYLES.itemTitle}>{item.title}</div>
-                                  <div className={STRUCTURE_STYLES.itemType}>아이디어</div>
+                                  <div className={STRUCTURE_STYLES.itemType}>노트</div>
                                 </>
                               )}
                             </div>

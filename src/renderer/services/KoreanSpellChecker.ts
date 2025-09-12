@@ -85,7 +85,7 @@ const KOREAN_RULES = {
             suggestions: ['하지 않다'],
             message: '부정 표현에서는 띄어쓰기가 필요합니다.'
         },
-    ],
+    ],  
 
     // 존댓말 제안
     honorifics: {
