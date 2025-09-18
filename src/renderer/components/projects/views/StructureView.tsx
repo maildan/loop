@@ -115,6 +115,14 @@ const StructureView = memo(function StructureView({
   onNavigateToNotesView,
   onAddNewChapter
 }: StructureViewProps): React.ReactElement {
+  // 🔥 프로젝트 데이터 가져오기 (메인 스토리 컨텐츠 포함)
+  const {
+    content: mainContent,
+    title: projectTitle,
+    writerStats,
+    isLoading: projectDataLoading
+  } = useProjectData(projectId);
+
   // 🔥 Zustand 스토어 사용 - 참조 안정성을 위한 최적화
   const structures = useStructureStore((state) => {
     const projectStructures = state.structures[projectId];
@@ -462,33 +470,61 @@ const StructureView = memo(function StructureView({
           ) : (
             /* 🔥 폴더형 구조 목록 */
             <div className="space-y-4">
-              {/* 🔥 메인 스토리 섹션 */}
+              {/* 🔥 메인 스토리 섹션 - 항상 표시 */}
               <div>
                 {renderFolderHeader('main', '메인 스토리', BookOpen, 1)}
                 {!collapsedFolders.has('main') && (
                   <div className="ml-6 space-y-2">
-                    <div
-                      className={STRUCTURE_STYLES.structureItem}
-                      onClick={() => {
-                        // 메인 스토리 클릭 시 write 뷰로 이동
-                        Logger.info('STRUCTURE_VIEW', 'Main story clicked');
-                      }}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <BookOpen className={STRUCTURE_STYLES.itemIcon} />
-                      <div className={STRUCTURE_STYLES.itemContent}>
-                        <div className={STRUCTURE_STYLES.itemTitle}>메인 스토리</div>
-                        <div className={STRUCTURE_STYLES.itemType}>프로젝트 메인 컨텐츠</div>
-                        {projectData?.content && (
-                          <div className="text-xs text-gray-500 mt-1">
-                            {projectData.content.substring(0, 100)}...
+                    {projectDataLoading ? (
+                      <div className={`${STRUCTURE_STYLES.structureItem} opacity-50`}>
+                        <BookOpen className={STRUCTURE_STYLES.itemIcon} />
+                        <div className={STRUCTURE_STYLES.itemContent}>
+                          <div className={STRUCTURE_STYLES.itemTitle}>로딩 중...</div>
+                          <div className={STRUCTURE_STYLES.itemType}>프로젝트 데이터를 불러오는 중</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className={STRUCTURE_STYLES.structureItem}
+                        onClick={() => {
+                          // 메인 스토리 클릭 시 write 뷰로 이동
+                          Logger.info('STRUCTURE_VIEW', 'Main story clicked', {
+                            projectId,
+                            hasContent: !!mainContent,
+                            wordCount: writerStats?.wordCount || 0
+                          });
+                          // TODO: Write 뷰로 네비게이션 추가
+                        }}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <BookOpen className={STRUCTURE_STYLES.itemIcon} />
+                        <div className={STRUCTURE_STYLES.itemContent}>
+                          <div className={STRUCTURE_STYLES.itemTitle}>
+                            {projectTitle || '메인 스토리'}
                           </div>
-                        )}
+                          <div className={STRUCTURE_STYLES.itemType}>프로젝트 메인 컨텐츠</div>
+                          {mainContent && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              {mainContent.substring(0, 100)}
+                              {mainContent.length > 100 && '...'}
+                            </div>
+                          )}
+                          {!mainContent && (
+                            <div className="text-xs text-gray-400 italic mt-1">
+                              Write 탭에서 메인 스토리를 작성해보세요
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-400 flex flex-col items-end">
+                          <span>{writerStats?.wordCount || 0} 단어</span>
+                          {writerStats?.charCount && (
+                            <span className="text-xs text-gray-300">
+                              {writerStats.charCount} 자
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-xs text-gray-400">
-                        {projectData?.writerStats?.wordCount || 0} 단어
-                      </div>
-                    </div>
+                    )}
                   </div>
                 )}
               </div>
