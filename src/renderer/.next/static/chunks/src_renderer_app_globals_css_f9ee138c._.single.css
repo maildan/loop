@@ -462,8 +462,8 @@ body {
   top: 3.5rem;
 }
 
-.top-2\.5 {
-  top: .625rem;
+.top-2 {
+  top: .5rem;
 }
 
 .top-20 {
@@ -694,13 +694,6 @@ body {
   overflow: hidden;
 }
 
-.line-clamp-4 {
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  display: -webkit-box;
-  overflow: hidden;
-}
-
 .block {
   display: block;
 }
@@ -771,6 +764,10 @@ body {
 
 .h-2\.5 {
   height: .625rem;
+}
+
+.h-24 {
+  height: 6rem;
 }
 
 .h-3 {
@@ -891,6 +888,10 @@ body {
 
 .min-h-\[140px\] {
   min-height: 140px;
+}
+
+.min-h-\[200px\] {
+  min-height: 200px;
 }
 
 .min-h-\[260px\] {
@@ -1357,6 +1358,10 @@ body {
   align-items: flex-start;
 }
 
+.items-end {
+  align-items: flex-end;
+}
+
 .items-center {
   align-items: center;
 }
@@ -1738,10 +1743,6 @@ body {
 
 .border-slate-200\/50 {
   border-color: #e2e8f080;
-}
-
-.border-slate-200\/60 {
-  border-color: #e2e8f099;
 }
 
 .border-slate-200\/80 {
@@ -2397,16 +2398,16 @@ body {
   background-clip: text;
 }
 
+.fill-current {
+  fill: currentColor;
+}
+
 .fill-white {
   fill: #fff;
 }
 
 .fill-white\/80 {
   fill: #fffc;
-}
-
-.fill-yellow-400 {
-  fill: #facc15;
 }
 
 .object-cover {
@@ -2577,10 +2578,6 @@ body {
 
 .pl-10 {
   padding-left: 2.5rem;
-}
-
-.pl-9 {
-  padding-left: 2.25rem;
 }
 
 .pr-10 {
@@ -2771,6 +2768,11 @@ body {
   color: rgb(4 120 87 / var(--tw-text-opacity, 1));
 }
 
+.text-gray-300 {
+  --tw-text-opacity: 1;
+  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity, 1));
@@ -2948,11 +2950,6 @@ body {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
-.text-yellow-400 {
-  --tw-text-opacity: 1;
-  color: rgb(250 204 21 / var(--tw-text-opacity, 1));
 }
 
 .text-yellow-500 {
@@ -4374,13 +4371,14 @@ input, textarea, select, button {
   border-color: rgb(147 197 253 / var(--tw-border-opacity, 1));
 }
 
-.hover\:border-blue-300\/60:hover {
-  border-color: #93c5fd99;
-}
-
 .hover\:border-blue-400:hover {
   --tw-border-opacity: 1;
   border-color: rgb(96 165 250 / var(--tw-border-opacity, 1));
+}
+
+.hover\:border-blue-500:hover {
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
 }
 
 .hover\:border-slate-300:hover {
@@ -4686,11 +4684,6 @@ input, textarea, select, button {
   --tw-shadow: 0 20px 25px -5px #0000001a, 0 8px 10px -6px #0000001a;
   --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-}
-
-.hover\:shadow-blue-500\/10:hover {
-  --tw-shadow-color: #3b82f61a;
-  --tw-shadow: var(--tw-shadow-colored);
 }
 
 .hover\:brightness-110:hover {
@@ -5444,6 +5437,11 @@ input, textarea, select, button {
   color: rgb(107 114 128 / var(--tw-text-opacity, 1));
 }
 
+.dark\:text-gray-600:is(.dark *) {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity, 1));
+}
+
 .dark\:text-green-100:is(.dark *) {
   --tw-text-opacity: 1;
   color: rgb(220 252 231 / var(--tw-text-opacity, 1));
@@ -5613,6 +5611,11 @@ input, textarea, select, button {
   color: rgb(148 163 184 / var(--tw-text-opacity, 1));
 }
 
+.dark\:hover\:border-blue-400:hover:is(.dark *) {
+  --tw-border-opacity: 1;
+  border-color: rgb(96 165 250 / var(--tw-border-opacity, 1));
+}
+
 .dark\:hover\:border-blue-500:hover:is(.dark *) {
   --tw-border-opacity: 1;
   border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
@@ -5621,10 +5624,6 @@ input, textarea, select, button {
 .dark\:hover\:border-blue-600:hover:is(.dark *) {
   --tw-border-opacity: 1;
   border-color: rgb(37 99 235 / var(--tw-border-opacity, 1));
-}
-
-.dark\:hover\:border-blue-600\/60:hover:is(.dark *) {
-  border-color: #2563eb99;
 }
 
 .dark\:hover\:border-slate-500:hover:is(.dark *) {
@@ -5680,10 +5679,6 @@ input, textarea, select, button {
 .dark\:hover\:bg-gray-700:hover:is(.dark *) {
   --tw-bg-opacity: 1;
   background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1));
-}
-
-.dark\:hover\:bg-gray-700\/50:hover:is(.dark *) {
-  background-color: #37415180;
 }
 
 .dark\:hover\:bg-gray-800:hover:is(.dark *) {

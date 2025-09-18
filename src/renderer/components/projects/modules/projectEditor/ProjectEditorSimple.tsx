@@ -14,9 +14,9 @@ import { EditorTabBar } from '../../components/EditorTabBar';
 import { WriteView } from '../../views/WriteView';
 import { StructureView } from '../../views/StructureView';
 import { CharactersView } from '../../views/CharactersView';
-import { NotesView } from '../../views/NotesView';
+import { NotesView } from '../../views/notes';
 import { SynopsisView } from '../../views/SynopsisView';
-import { IdeaView } from '../../views/IdeaView';
+import { IdeaView } from '../../views/idea';
 import { Logger } from '../../../../../shared/logger';
 import { useStructureStore } from '../../../../stores/useStructureStore';
 import { useProjectData } from '../../hooks/useProjectData';
@@ -45,7 +45,7 @@ export const ProjectEditorSimple = memo(function ProjectEditorSimple({
                 return <div className="p-4">Write View</div>;
             case 'structure':
                 return (
-                    <StructureView 
+                    <StructureView
                         projectId={projectId}
                         onNavigateToNotesView={() => {
                             actions.setCurrentView('notes');

@@ -17,7 +17,6 @@
   },
   "github.copilot.chat.localeOverride": "ko",
   "github.copilot.chat.welcomeMessage": "disabled",
-  "github.copilot.chat.summarizeAgentConversationHistory.enabled": false,
   "tailwindCSS.includeLanguages": {
     "typescript": "javascript",
     "typescriptreact": "javascript",

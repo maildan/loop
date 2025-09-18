@@ -72,12 +72,12 @@ const StructureView = memo(function StructureView({
         return projectStructures ? Object.values(projectStructures) : EMPTY_STRUCTURES;
     });
 
-    const {
-        addStructureItem,
-        updateStructureItem,
-        deleteStructureItem,
-        setCurrentEditor
-    } = useStructureStore();
+    const addStructureItem = useStructureStore((state) => state.addStructureItem);
+    const updateStructureItem = useStructureStore((state) => state.updateStructureItem);
+    const deleteStructureItem = useStructureStore((state) => state.deleteStructureItem);
+    const setCurrentEditor = useStructureStore((state) => state.setCurrentEditor);
+    const reorderStructures = useStructureStore((state) => state.reorderStructures);
+    const clearCurrentEditor = useStructureStore((state) => state.clearCurrentEditor);
 
     // 🔥 로컬 상태
     const [collapsedFolders, setCollapsedFolders] = useState<Set<string>>(new Set());
@@ -156,37 +156,40 @@ const StructureView = memo(function StructureView({
                 idea: `새로운 아이디어`
             };
 
-            const newItem: Omit<ProjectStructure, 'id'> = {
+            const id = `${type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+            const newItem: ProjectStructure = {
+                id,
                 title: defaultTitles[type],
                 content: '',
                 type,
+                projectId,
+                sortOrder: structures.length,
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
 
-            const addedItem = await addStructureItem(projectId, newItem);
+            await addStructureItem(projectId, newItem);
             Logger.info('STRUCTURE_VIEW', 'Item added successfully', {
                 type,
                 title: newItem.title,
-                itemId: addedItem.id
+                itemId: newItem.id
             });
 
-            triggerUpdate();
             setShowAddMenu(false);
 
             // 해당 타입의 에디터로 이동
             if (type === 'idea') {
                 onNavigateToNotesView?.();
-                Logger.info('STRUCTURE_VIEW', 'Navigating to notes view', { ideaId: addedItem.id });
+                Logger.info('STRUCTURE_VIEW', 'Navigating to notes view', { ideaId: newItem.id });
             } else if (type === 'synopsis') {
-                onNavigateToSynopsisEdit?.(addedItem.id);
+                onNavigateToSynopsisEdit?.(newItem.id);
             } else if (type === 'chapter') {
-                onNavigateToChapterEdit?.(addedItem.id);
+                onNavigateToChapterEdit?.(newItem.id);
             }
         } catch (error) {
             Logger.error('STRUCTURE_VIEW', 'Failed to add item', { type, error });
         }
-    }, [projectId, structures, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToNotesView, onNavigateToSynopsisEdit, triggerUpdate]);
+    }, [projectId, structures, addStructureItem, setCurrentEditor, onAddNewChapter, onNavigateToIdeaEdit, onNavigateToNotesView, onNavigateToSynopsisEdit]);
 
     // 🔥 편집 관련 핸들러
     const handleEditStart = useCallback((item: ProjectStructure) => {
@@ -201,12 +204,11 @@ const StructureView = memo(function StructureView({
             await updateStructureItem(projectId, itemId, { title: editTitle.trim() });
             setEditingId(null);
             setEditTitle('');
-            triggerUpdate();
             Logger.info('STRUCTURE_VIEW', 'Item title updated', { itemId, newTitle: editTitle });
         } catch (error) {
             Logger.error('STRUCTURE_VIEW', 'Failed to update item title', { itemId, error });
         }
-    }, [projectId, editTitle, updateStructureItem, triggerUpdate]);
+    }, [projectId, editTitle, updateStructureItem]);
 
     const handleKeyPress = useCallback((e: React.KeyboardEvent, itemId: string) => {
         if (e.key === 'Enter') {
@@ -228,12 +230,11 @@ const StructureView = memo(function StructureView({
         try {
             await deleteStructureItem(projectId, deleteConfirm.itemId);
             setDeleteConfirm({ isOpen: false, itemId: null });
-            triggerUpdate();
             Logger.info('STRUCTURE_VIEW', 'Item deleted', { itemId: deleteConfirm.itemId });
         } catch (error) {
             Logger.error('STRUCTURE_VIEW', 'Failed to delete item', { itemId: deleteConfirm.itemId, error });
         }
-    }, [deleteConfirm.itemId, projectId, deleteStructureItem, triggerUpdate]);
+    }, [deleteConfirm.itemId, projectId, deleteStructureItem]);
 
     // 🔥 폴더 헤더 렌더링 함수
     const renderFolderHeader = useCallback((
@@ -344,7 +345,7 @@ const StructureView = memo(function StructureView({
             {/* 삭제 확인 다이얼로그 */}
             <ConfirmDialog
                 isOpen={deleteConfirm.isOpen}
-                onClose={() => setDeleteConfirm({ isOpen: false, itemId: null })}
+                onCancel={() => setDeleteConfirm({ isOpen: false, itemId: null })}
                 onConfirm={confirmDelete}
                 title="항목 삭제"
                 message="이 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."
