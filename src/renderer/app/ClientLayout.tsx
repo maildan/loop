@@ -4,7 +4,7 @@ import React, { ReactNode, useState, useLayoutEffect, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { AppSidebar } from '../components/layout/AppSidebar';
 import { AppHeader } from '../components/layout/AppHeader';
-import { MonitoringProvider } from '../contexts/GlobalMonitoringContext';
+// MonitoringProvider 제거됨 - 기획 변경으로 불필요
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../providers/ThemeProvider';
 import { useSettings } from './settings/hooks/useSettings';
@@ -122,11 +122,10 @@ export default function ClientLayout({ children, initialAuth }: ClientLayoutProp
     return (
         <ThemeProvider defaultTheme="system">
             <AuthProvider initialAuth={initialAuth}>
-                <MonitoringProvider>
-                    <ClientLayoutInner>
-                        {children}
-                    </ClientLayoutInner>
-                </MonitoringProvider>
+                {/* MonitoringProvider 제거됨 - 기획 변경으로 불필요 */}
+                <ClientLayoutInner>
+                    {children}
+                </ClientLayoutInner>
             </AuthProvider>
         </ThemeProvider>
     );

@@ -2,11 +2,11 @@
 
 import { Logger } from '../../shared/logger';
 import { getSettingsManager } from '../settings';
-import type { 
-  SettingsChangeEvent, 
-  AppSettingsSchema, 
-  UISettingsSchema, 
-  KeyboardSettingsSchema 
+import type {
+  SettingsChangeEvent,
+  AppSettingsSchema,
+  UISettingsSchema
+  // KeyboardSettingsSchema 제거됨 - 키보드 모니터링 기능 불필요
 } from '../settings/types';
 
 /**
@@ -40,7 +40,7 @@ export class SettingsWatcher {
       this.watchAppSettings();
       this.watchKeyboardSettings();
       this.watchPerformanceSettings();
-      
+
       this.isWatching = true;
       Logger.info('SETTINGS_WATCHER', '✅ All settings watchers started');
     } catch (error) {
@@ -279,7 +279,7 @@ export class SettingsWatcher {
       // 메인 윈도우로 이벤트 전송
       const { BrowserWindow } = require('electron');
       const mainWindow = BrowserWindow.getAllWindows()[0];
-      
+
       if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow.webContents.send('settings-changed', { event, data });
       }
@@ -309,16 +309,8 @@ export class SettingsWatcher {
    */
   private async toggleKeyboardMonitoring(enabled: boolean): Promise<void> {
     try {
-      // 키보드 서비스 import 및 토글
-      const { keyboardService } = await import('../keyboard/keyboardService');
-      
-      if (enabled) {
-        await keyboardService.startMonitoring();
-        Logger.info('SETTINGS_WATCHER', 'Keyboard monitoring started');
-      } else {
-        await keyboardService.stopMonitoring();
-        Logger.info('SETTINGS_WATCHER', 'Keyboard monitoring stopped');
-      }
+      // 키보드 모니터링 비활성화됨 - 모든 요청 무시
+      Logger.info('SETTINGS_WATCHER', `Keyboard monitoring toggle ignored (enabled: ${enabled}) - feature disabled`);
     } catch (error) {
       Logger.error('SETTINGS_WATCHER', 'Keyboard monitoring toggle failed', error);
     }

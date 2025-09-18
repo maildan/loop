@@ -4,13 +4,13 @@
 
 import React, { useState, useMemo, useCallback, memo } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Target, 
-  Clock, 
-  CheckCircle, 
-  FileText, 
-  Cloud, 
-  Play, 
+import {
+  Target,
+  Clock,
+  CheckCircle,
+  FileText,
+  Cloud,
+  Play,
   Pause,
   TrendingUp,
   Calendar,
@@ -19,19 +19,19 @@ import {
   Edit,
   type LucideIcon
 } from 'lucide-react';
-import { 
-  Card, 
-  Button, 
-  Badge, 
-  ProgressBar, 
-  KpiCard 
+import {
+  Card,
+  Button,
+  Badge,
+  ProgressBar,
+  KpiCard
 } from '../ui';
 import { QuickStartCard } from './QuickStartCard';
-import { MonitoringControlPanel } from './MonitoringControlPanel';
+// MonitoringControlPanel 제거됨 - 기획 변경으로 불필요
 import { DashboardSkeleton } from './DashboardSkeleton';
 import { HydrationGuard } from '../ui/HydrationGuard';
 import { Logger } from '../../../shared/logger';
-import { useMonitoring } from '../../contexts/GlobalMonitoringContext';
+// 모니터링 기능 제거됨 - 기획 변경으로 불필요
 
 // 🔥 작가 친화적 스타일 상수 - 미니멀하고 집중할 수 있는 디자인
 const DASHBOARD_STYLES = {
@@ -42,18 +42,12 @@ const DASHBOARD_STYLES = {
   headerSubtitle: 'text-slate-600 dark:text-slate-400 mt-2 text-lg leading-relaxed',
   headerActions: 'flex items-center gap-4',
   content: 'flex-1 overflow-y-auto p-8 max-w-6xl mx-auto w-full space-y-8',
-  
+
   // 🔥 작가 친화적 모니터링 패널 - 차분한 색상
-  monitoringPanel: 'bg-gradient-to-r from-slate-800 to-slate-900 dark:from-slate-900 dark:to-black text-white p-8 rounded-2xl shadow-sm border border-slate-200/20',
-  monitoringHeader: 'flex items-center justify-between mb-6',
-  monitoringStatus: 'flex items-center gap-3',
-  monitoringPulse: 'w-3 h-3 bg-emerald-400 rounded-full animate-pulse shadow-sm',
-  monitoringTitle: 'text-xl font-light tracking-wide',
-  monitoringTime: 'font-mono text-xl font-light tracking-wider',
-  monitoringStats: 'grid grid-cols-3 gap-8 text-center',
+  // 모니터링 관련 CSS 클래스들 제거됨 - 기능 불필요
   statValue: 'text-3xl font-light tracking-tight',
   statLabel: 'text-slate-300 text-sm font-medium tracking-wide mt-1',
-  
+
   // 🔥 작가 친화적 카드 디자인 - 최소한의 장식
   quickActions: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6',
   quickActionCard: 'bg-white dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/50 p-6 rounded-xl hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200 group min-h-[140px] flex flex-col justify-between',
@@ -81,12 +75,7 @@ const DASHBOARD_STYLES = {
   fileStatus: 'text-xs text-green-600 dark:text-green-400',
 } as const;
 
-// 🔥 기가차드 규칙: 명시적 타입 정의
-interface MonitoringData {
-  readonly wpm: number;
-  readonly words: number;
-  readonly time: number;
-}
+// MonitoringData 인터페이스 제거됨 - 모니터링 기능 불필요
 
 interface Project {
   readonly id: string;
@@ -117,20 +106,13 @@ function formatTime(seconds: number): string {
 
 export function DashboardMain(): React.ReactElement {
   const router = useRouter(); // 🔥 Navigation 훅 추가
-  // 🔥 글로벌 모니터링 상태 사용
-  const { state, startMonitoring, stopMonitoring, toggleAI, updateSessionData } = useMonitoring();
-  const { isMonitoring, isAIOpen, sessionData } = state;
-  
-  // 🔥 기가차드 규칙: 실제 데이터 상태 관리 - 더미 데이터 제거
-  const [monitoringData, setMonitoringData] = useState<MonitoringData>({
-    wpm: 0,
-    words: 0,
-    time: 0,
-  });
-  
+  // 모니터링 기능 제거됨 - 기획 변경으로 불필요
+
+  // 모니터링 데이터 상태 제거됨 - 모니터링 기능 불필요
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [recentFiles, setRecentFiles] = useState<RecentFile[]>([]);
-  
+
   // 🔥 로딩 상태 최적화 - 개별 로딩 상태 관리
   const [loadingStates, setLoadingStates] = useState({
     kpi: true,
@@ -161,7 +143,7 @@ export function DashboardMain(): React.ReactElement {
     },
     {
       title: '이번 주',
-      value: '0', 
+      value: '0',
       icon: Calendar,
       color: 'green' as const,
       change: { value: 0, type: 'neutral' as const, period: '세션' },
@@ -257,7 +239,7 @@ export function DashboardMain(): React.ReactElement {
   // 🔥 대시보드 데이터 로딩 - 성능 최적화
   React.useEffect(() => {
     loadDashboardData();
-    
+
     // 🔥 실시간 업데이트 (30초마다로 변경 - 성능 최적화)
     const interval = setInterval(loadDashboardData, 30000);
     return () => clearInterval(interval);
@@ -299,7 +281,7 @@ export function DashboardMain(): React.ReactElement {
           period: '%',
         },
       },
-      { 
+      {
         title: '평균 속도',
         value: `${Math.round(stats?.avgWpm || 0)} WPM`,
         icon: Zap,
@@ -332,37 +314,18 @@ export function DashboardMain(): React.ReactElement {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / (1000 * 60));
-    
+
     if (diffMins < 1) return '방금 전';
     if (diffMins < 60) return `${diffMins}분 전`;
-    
+
     const diffHours = Math.floor(diffMins / 60);
     if (diffHours < 24) return `${diffHours}시간 전`;
-    
+
     const diffDays = Math.floor(diffHours / 24);
     return `${diffDays}일 전`;
   };
 
-  const handleToggleMonitoring = async (): Promise<void> => {
-    try {
-      Logger.info('DASHBOARD', `Monitoring ${!isMonitoring ? 'start' : 'stop'} requested`);
-      
-      if (!isMonitoring) {
-        // 모니터링 시작
-        await startMonitoring();
-      } else {
-        // 모니터링 중지
-        await stopMonitoring();
-      }
-    } catch (error) {
-      Logger.error('DASHBOARD', 'Error toggling monitoring', error);
-    }
-  };
-
-  const handleAIToggle = (): void => {
-    Logger.info('DASHBOARD', `AI Panel ${!isAIOpen ? 'opened' : 'closed'}`);
-    toggleAI();
-  };
+  // 모니터링 및 AI 토글 함수 제거됨 - 기능 불필요
 
   return (
     <div className={DASHBOARD_STYLES.container}>
@@ -374,34 +337,13 @@ export function DashboardMain(): React.ReactElement {
             <p className={DASHBOARD_STYLES.headerSubtitle}>오늘의 창작을 시작하세요</p>
           </div>
 
-          <div className={DASHBOARD_STYLES.headerActions}>
-            <HydrationGuard fallback={
-              <Button
-                variant="outline"
-                className="gap-2"
-              >
-                <Target className="w-4 h-4" />
-                Loop AI
-              </Button>
-            }>
-              <Button
-                onClick={handleAIToggle}
-                variant={isAIOpen ? 'primary' : 'outline'}
-                className="gap-2"
-                aria-pressed={isAIOpen}
-              >
-                <Target className="w-4 h-4" />
-                Loop AI
-              </Button>
-            </HydrationGuard>
-          </div>
+          {/* Header Actions 제거됨 - AI 기능 불필요 */}
         </div>
       </div>
 
       {/* 메인 콘텐츠 */}
       <div className={DASHBOARD_STYLES.content}>
-        {/* 🔥 모니터링 컨트롤 패널 - 항상 표시 */}
-        <MonitoringControlPanel />
+        {/* 모니터링 컨트롤 패널 제거됨 - 기획 변경으로 불필요 */}
 
         {/* KPI 카드 */}
         {loadingStates.kpi ? (
@@ -476,17 +418,16 @@ export function DashboardMain(): React.ReactElement {
                   </div>
                 ) : (
                   projects.map((project) => (
-                    <div 
-                      key={project.id} 
-                      className={`${DASHBOARD_STYLES.projectItem} ${
-                        project.status === 'active' 
-                          ? 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800' 
-                          : ''
-                      }`}
+                    <div
+                      key={project.id}
+                      className={`${DASHBOARD_STYLES.projectItem} ${project.status === 'active'
+                        ? 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800'
+                        : ''
+                        }`}
                     >
                       <div className={DASHBOARD_STYLES.projectHeader}>
                         <h4 className={DASHBOARD_STYLES.projectTitle}>{project.title}</h4>
-                        <Badge 
+                        <Badge
                           variant={project.status === 'active' ? 'primary' : 'default'}
                           size="sm"
                         >
@@ -494,9 +435,9 @@ export function DashboardMain(): React.ReactElement {
                         </Badge>
                       </div>
                       <div className={DASHBOARD_STYLES.projectProgress}>
-                        <ProgressBar 
-                          value={project.progress} 
-                          color={project.status === 'active' ? 'blue' : 'purple'} 
+                        <ProgressBar
+                          value={project.progress}
+                          color={project.status === 'active' ? 'blue' : 'purple'}
                           size="md"
                         />
                       </div>
@@ -534,7 +475,7 @@ export function DashboardMain(): React.ReactElement {
                   </div>
                 ) : (
                   recentFiles.map((file) => (
-                    <div 
+                    <div
                       key={file.id}
                       className={DASHBOARD_STYLES.fileItem}
                       role="button"

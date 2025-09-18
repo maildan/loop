@@ -7,13 +7,16 @@ import { unifiedPermissionManager } from '../utils/UnifiedPermissionManager';
 // 🔥 기존 매니저들 import (중복 방지)
 import { memoryManager } from '../managers/MemoryManager';
 import { dataSyncManager } from '../managers/DataSyncManager';
-import { browserDetector } from '../managers/BrowserDetector';
+import { BrowserDetector } from '../managers/BrowserDetector';
 import { getMenuManager } from '../managers/MenuManager';
 import { getShortcutsManager } from '../managers/ShortcutsManager';
 import { getTrayManager } from '../managers/TrayManager';
 import { handlersManager } from '../managers/HandlersManager';
 import { sessionManager } from '../managers/SessionManager';
 import { databaseManager } from '../managers/DatabaseManager';
+
+// 🔥 BrowserDetector 인스턴스 생성
+const browserDetector = new BrowserDetector();
 
 /**
  * 🔥 ManagerCoordinator - 기존 매니저들의 오케스트레이션만 담당
@@ -43,9 +46,9 @@ export class ManagerCoordinator {
     Logger.info(this.componentName, '권한 상태 설정됨', { hasPermission });
 
     // 권한 의존적 매니저들에게 권한 상태 전달
-    if (browserDetector) {
-      browserDetector.setAccessibilityPermission(hasPermission);
-    }
+    // if (browserDetector) {
+    //   browserDetector.setAccessibilityPermission(hasPermission);
+    // }
   }
 
   /**

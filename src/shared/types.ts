@@ -333,27 +333,34 @@ export interface ProcessedKeyboardEvent {
   readonly processingTime: number; // 🔥 처리 시간 (ms)
 }
 
-// 🔥 기가차드 Uiohook 키보드 이벤트 타입 (native layer) - uiohook-napi 1.5.4 호환
-export interface UiohookKeyboardEvent {
-  type?: number;  // EventType.EVENT_KEY_PRESSED | EventType.EVENT_KEY_RELEASED
-  time?: number;  // timestamp
-  keycode: number;
-  keychar?: number;
-  rawcode?: number;  // macOS 물리적 키코드
-  altKey?: boolean;
-  ctrlKey?: boolean;
-  metaKey?: boolean;
-  shiftKey?: boolean;
-}
+
 
 // 🔥 언어 감지 관련 타입들은 중앙화된 모듈에서 re-export
-export type {
-  SupportedLanguage,
-  DetectionMethod,
-  LanguageDetectionResult,
-  DetectionMetadata,
-  PerformanceStats
-} from '../main/keyboard/detectors/types/CommonTypes';
+// 🔥 언어 감지 관련 타입 정의 (keyboard 모듈에서 이동됨)
+export type SupportedLanguage = 'ko' | 'en';
+
+export type DetectionMethod = 'keycode' | 'character' | 'pattern' | 'ime';
+
+export interface LanguageDetectionResult {
+  language: SupportedLanguage;
+  confidence: number;
+  method: DetectionMethod;
+  metadata?: DetectionMetadata;
+}
+
+export interface DetectionMetadata {
+  keycode?: number;
+  character?: string;
+  pattern?: string;
+  timestamp?: number;
+}
+
+export interface PerformanceStats {
+  totalDetections: number;
+  successfulDetections: number;
+  averageConfidence: number;
+  lastDetectionTime?: number;
+}
 
 // 🔥 키 입력 데이터 인터페이스 (어댑터용)
 export interface KeyInputData {

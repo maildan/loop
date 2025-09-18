@@ -19,7 +19,7 @@ import type {
   SettingsSchema,
   SettingsResult,
   AppSettingsSchema,
-  KeyboardSettingsSchema,
+  // KeyboardSettingsSchema 제거됨 - 키보드 모니터링 기능 불필요
   UISettingsSchema,
   AnalyticsSettingsSchema,
   SecuritySettingsSchema,
@@ -43,19 +43,29 @@ const electronAPI: ElectronAPI = {
     ipcRenderer.removeListener(channel, listener);
   },
   keyboard: {
-    startMonitoring: () => ipcRenderer.invoke(IPC_CHANNELS.KEYBOARD.START_MONITORING),
-    stopMonitoring: () => ipcRenderer.invoke(IPC_CHANNELS.KEYBOARD.STOP_MONITORING),
-    getStatus: () => ipcRenderer.invoke(IPC_CHANNELS.KEYBOARD.GET_STATUS),
-    getRealtimeStats: () => ipcRenderer.invoke('keyboard:get-realtime-stats'),
-    setLanguage: (language: string) => ipcRenderer.invoke('keyboard:set-language', language),
-    forceKorean: () => ipcRenderer.invoke('keyboard:force-korean'),
-    testLanguageDetection: (keycode: number, keychar?: number) => ipcRenderer.invoke('keyboard:test-language-detection', keycode, keychar),
-    // 🔥 새로운 다국어 지원 메서드들 추가
-    detectLanguage: (keycode: number) => ipcRenderer.invoke('keyboard:detect-language', keycode),
-    getSupportedLanguages: () => ipcRenderer.invoke('keyboard:get-supported-languages'),
-    setInputMethod: (method: 'direct' | 'composition') => ipcRenderer.invoke('keyboard:set-input-method', method),
-    resetComposition: () => ipcRenderer.invoke('keyboard:reset-composition'),
-    getCompositionState: () => ipcRenderer.invoke('keyboard:get-composition-state'),
+    // 모든 keyboard API가 더미 구현으로 교체됨 - 모니터링 기능 제거
+    startMonitoring: () => Promise.resolve({ success: false, message: 'Keyboard monitoring disabled', timestamp: new Date(), data: false }),
+    stopMonitoring: () => Promise.resolve({ success: false, message: 'Keyboard monitoring disabled', timestamp: new Date(), data: false }),
+    getStatus: () => Promise.resolve({
+      success: false,
+      message: 'Status unavailable',
+      timestamp: new Date(),
+      data: { isActive: false, sessionDuration: 0, language: 'ko' }
+    }),
+    getRealtimeStats: () => Promise.resolve({
+      success: false,
+      message: 'Stats unavailable',
+      timestamp: new Date(),
+      data: { currentWpm: 0, accuracy: 0, sessionTime: 0, charactersTyped: 0, errorsCount: 0 }
+    }),
+    setLanguage: () => Promise.resolve({ success: false, message: 'Language setting disabled', timestamp: new Date(), data: false }),
+    forceKorean: () => Promise.resolve({ success: false, message: 'Force Korean disabled', timestamp: new Date(), data: false }),
+    testLanguageDetection: () => Promise.resolve({ success: false, message: 'Language detection disabled', timestamp: new Date(), data: 'disabled' }),
+    detectLanguage: () => Promise.resolve({ success: false, message: 'Language detection disabled', timestamp: new Date(), data: 'ko' }),
+    getSupportedLanguages: () => Promise.resolve({ success: false, message: 'Supported languages unavailable', timestamp: new Date(), data: [] }),
+    setInputMethod: () => Promise.resolve({ success: false, message: 'Input method setting disabled', timestamp: new Date(), data: false }),
+    resetComposition: () => Promise.resolve({ success: false, message: 'Composition reset disabled', timestamp: new Date(), data: false }),
+    getCompositionState: () => Promise.resolve({ success: false, message: 'Composition state unavailable', timestamp: new Date(), data: { isComposing: false, composingText: '' } }),
   },
 
   dashboard: {

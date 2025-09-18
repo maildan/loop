@@ -11,7 +11,7 @@ import { unifiedPermissionManager } from '../utils/UnifiedPermissionManager';
 import { registerKeychainHandlers } from '../handlers/keychainIpcHandlers';
 import registerNotificationHandlers from '../handlers/notificationIpcHandlers';
 import { windowManager } from '../core/window';
-import unifiedHandler from '../keyboard/UnifiedHandler';
+// unifiedHandler 제거됨 - 모니터링 기능 불필요
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -296,7 +296,7 @@ export class ApplicationBootstrapper {
       const mainWindow = windowManager.createMainWindow('main');
       // 글로벌 참조 설정 (이벤트 포워딩 등 기존 코드 호환)
       (globalThis as unknown as { mainWindow?: typeof mainWindow }).mainWindow = mainWindow;
-      (globalThis as unknown as { unifiedHandler?: typeof unifiedHandler }).unifiedHandler = unifiedHandler;
+      // unifiedHandler 제거됨 - 모니터링 기능 불필요
 
       // 🔥 URL 로딩 추가 (빈 화면 문제 해결)
       await windowManager.loadUrl('main');

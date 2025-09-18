@@ -1,7 +1,6 @@
 import { BaseManager } from '../common/BaseManager';
 import { Logger } from '../../shared/logger';
 import { HealthCheckResult, HealthStatus, SystemHealth } from '../../shared/types';
-import { uIOhook } from 'uiohook-napi';
 import { app } from 'electron';
 import * as os from 'os';
 import * as fs from 'fs/promises';
@@ -43,10 +42,10 @@ export class HealthCheckManager extends BaseManager {
    */
   protected async doStart(): Promise<void> {
     Logger.info(this.componentName, 'Starting health check monitoring');
-    
+
     // 초기 건강 체크 실행
     await this.performHealthCheck();
-    
+
     // 주기적 건강 체크 시작
     this.healthCheckInterval = setInterval(async () => {
       try {
@@ -66,12 +65,12 @@ export class HealthCheckManager extends BaseManager {
    */
   protected async doStop(): Promise<void> {
     Logger.info(this.componentName, 'Stopping health check monitoring');
-    
+
     if (this.healthCheckInterval) {
       clearInterval(this.healthCheckInterval);
       this.healthCheckInterval = null;
     }
-    
+
     Logger.info(this.componentName, 'Health check monitoring stopped');
   }
 
@@ -131,7 +130,7 @@ export class HealthCheckManager extends BaseManager {
       };
 
       this.lastHealthCheck = health;
-      
+
       const duration = performance.now() - startTime;
       Logger.debug(this.componentName, 'Health check completed', {
         status: overallStatus,
@@ -160,18 +159,18 @@ export class HealthCheckManager extends BaseManager {
     try {
       const memUsage = process.memoryUsage();
       const memUsageMB = memUsage.heapUsed / 1024 / 1024;
-      
+
       // CPU 사용률은 간단한 추정치 사용 (실제로는 더 정교한 측정 필요)
       const cpuUsage = process.cpuUsage();
       const totalCpuTime = cpuUsage.user + cpuUsage.system;
       const estimatedCpuPercent = Math.min((totalCpuTime / 1000000) * 100, 100);
 
       const issues: string[] = [];
-      
+
       if (memUsageMB > this.maxMemoryUsageMB) {
         issues.push(`High memory usage: ${memUsageMB.toFixed(1)}MB`);
       }
-      
+
       if (estimatedCpuPercent > this.maxCpuUsagePercent) {
         issues.push(`High CPU usage: ${estimatedCpuPercent.toFixed(1)}%`);
       }
@@ -205,36 +204,17 @@ export class HealthCheckManager extends BaseManager {
   }
 
   /**
-   * 키보드 훅 상태 체크
+   * 키보드 훅 상태 체크 (더미 구현 - 모니터링 비활성화됨)
    */
   private async checkKeyboardHook(): Promise<HealthCheckResult> {
     try {
-      // 🔥 uIOhook 상태 안전하게 확인
-      let isRegistered = false;
-      
-      try {
-        // uIOhook 모듈이 로드 가능한지 확인
-        isRegistered = Boolean(uIOhook) && typeof uIOhook === 'object';
-      } catch (error) {
-        Logger.warn(this.componentName, 'uIOhook 접근 불가', error);
-        isRegistered = false;
-      }
-      
-      if (!isRegistered) {
-        return {
-          status: HealthStatus.ERROR,
-          message: 'Keyboard hook not registered',
-          details: { hookRegistered: false },
-          issues: ['uIOhook not available'],
-          lastChecked: new Date()
-        };
-      }
-
+      // 🔥 모니터링 기능 비활성화로 항상 건강 상태 반환
       return {
         status: HealthStatus.HEALTHY,
-        message: 'Keyboard hook functioning',
-        details: { 
-          hookRegistered: true,
+        message: 'Keyboard monitoring disabled',
+        details: {
+          hookRegistered: false,
+          monitoringEnabled: false,
           platform: Platform.getCurrentPlatform(),
           arch: os.arch()
         },
@@ -268,7 +248,7 @@ export class HealthCheckManager extends BaseManager {
         // 실제로는 systemPreferences.isTrustedAccessibilityClient() 사용
         const hasAccessibility = true; // 플레이스홀더
         details.accessibilityPermission = hasAccessibility;
-        
+
         if (!hasAccessibility) {
           issues.push('Accessibility permission required on macOS');
         }
@@ -301,11 +281,11 @@ export class HealthCheckManager extends BaseManager {
   private async checkStorage(): Promise<HealthCheckResult> {
     try {
       const userDataPath = app.getPath('userData');
-      
+
       try {
         await fs.access(userDataPath);
         const stats = await fs.stat(userDataPath);
-        
+
         return {
           status: HealthStatus.HEALTHY,
           message: 'Storage accessible',
@@ -360,12 +340,12 @@ export class HealthCheckManager extends BaseManager {
    */
   private getHealthIssues(health: SystemHealth): string[] {
     const allIssues: string[] = [];
-    
+
     if (health.system.issues) allIssues.push(...health.system.issues);
     if (health.keyboard.issues) allIssues.push(...health.keyboard.issues);
     if (health.permissions.issues) allIssues.push(...health.permissions.issues);
     if (health.storage.issues) allIssues.push(...health.storage.issues);
-    
+
     return allIssues;
   }
 }

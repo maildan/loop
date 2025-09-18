@@ -69,7 +69,7 @@ export class ShutdownManager {
 
     } catch (error) {
       Logger.error('SHUTDOWN_MANAGER', '💥 Shutdown error', error);
-      
+
       // 에러가 있어도 강제 종료
       if (this.shutdownTimeout) {
         clearTimeout(this.shutdownTimeout);
@@ -79,15 +79,12 @@ export class ShutdownManager {
   }
 
   /**
-   * 🔥 키보드 모니터링 정지
+   * 🔥 키보드 모니터링 정지 (비활성화됨)
    */
   private async stopKeyboardMonitoring(): Promise<void> {
     try {
-      const { keyboardService } = await import('../keyboard/keyboardService');
-      
-      // isMonitoring 메서드가 없으므로 바로 stopMonitoring 호출
-      await keyboardService.stopMonitoring();
-      Logger.info('SHUTDOWN_MANAGER', '⌨️ Keyboard monitoring stopped');
+      // 키보드 모니터링 비활성화됨 - 정지 요청 무시
+      Logger.info('SHUTDOWN_MANAGER', '⌨️ Keyboard monitoring stop ignored - feature disabled');
     } catch (error) {
       Logger.error('SHUTDOWN_MANAGER', 'Failed to stop keyboard monitoring', error);
     }
@@ -113,7 +110,7 @@ export class ShutdownManager {
     try {
       const { getSettingsManager } = await import('../settings');
       const settingsManager = getSettingsManager();
-      
+
       // 설정이 저장 메서드가 있다면 호출
       if (settingsManager && typeof (settingsManager as any).save === 'function') {
         await (settingsManager as any).save();
@@ -130,7 +127,7 @@ export class ShutdownManager {
   private async cleanupDatabase(): Promise<void> {
     try {
       const { databaseService } = await import('../services/databaseService');
-      
+
       // DatabaseService에 cleanup 메서드가 없으므로 제거
       Logger.info('SHUTDOWN_MANAGER', '🗄️ Database cleaned up');
     } catch (error) {
@@ -145,7 +142,7 @@ export class ShutdownManager {
     try {
       const { BrowserWindow } = await import('electron');
       const windows = BrowserWindow.getAllWindows();
-      
+
       const closePromises = windows.map(window => {
         return new Promise<void>((resolve) => {
           if (window && !window.isDestroyed()) {
@@ -189,11 +186,11 @@ export class ShutdownManager {
    */
   public forceShutdown(): void {
     Logger.warn('SHUTDOWN_MANAGER', '🚨 Force shutdown initiated');
-    
+
     if (this.shutdownTimeout) {
       clearTimeout(this.shutdownTimeout);
     }
-    
+
     app.exit(1);
   }
 
@@ -215,7 +212,7 @@ export class ShutdownManager {
       clearTimeout(this.shutdownTimeout);
       this.shutdownTimeout = null;
     }
-    
+
     this.isShuttingDown = false;
     Logger.debug('SHUTDOWN_MANAGER', 'Shutdown manager cleaned up');
   }

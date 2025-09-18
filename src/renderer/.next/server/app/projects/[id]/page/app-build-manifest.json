@@ -1,13 +1,13 @@
 {
   "pages": {
     "/projects/[id]/page": [
-      "static/chunks/src_fe91748e._.js",
+      "static/chunks/src_2787d39d._.js",
       "static/chunks/node_modules_0b2a873e._.js",
       "static/chunks/[root-of-the-server]__68b7a46e._.css",
       "static/chunks/src_renderer_app_layout_tsx_c0237562._.js",
       "static/chunks/node_modules_next_dist_b758c999._.js",
-      "static/chunks/src_renderer_app_not-found_tsx_e0241e97._.js",
-      "static/chunks/src_shared_services_aiAnalysisService_ts_be6ff243._.js",
+      "static/chunks/src_renderer_app_not-found_tsx_f1c8d85f._.js",
+      "static/chunks/src_shared_services_aiAnalysisService_ts_44151426._.js",
       "static/chunks/src_renderer_components_projects_modules_10429026._.js",
       "static/chunks/src_renderer_components_projects_editor_95c81dcf._.js",
       "static/chunks/src_renderer_components_projects_components_8564898a._.js",
@@ -21,7 +21,7 @@
       "static/chunks/node_modules_lucide-react_dist_esm_icons_2574666f._.js",
       "static/chunks/node_modules_6c334c9b._.js",
       "static/chunks/src_renderer_components_projects_modules_markdownEditor_MarkdownEditor_e12d3650.css",
-      "static/chunks/src_renderer_app_projects_[id]_page_tsx_e0241e97._.js",
+      "static/chunks/src_renderer_app_projects_[id]_page_tsx_f1c8d85f._.js",
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_fd44f5a4._.js",
       "static/chunks/node_modules_next_dist_compiled_2ce9398a._.js",
       "static/chunks/node_modules_next_dist_client_8f19e6fb._.js",

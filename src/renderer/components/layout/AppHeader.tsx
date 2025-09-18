@@ -8,7 +8,6 @@ import { Badge } from '../ui/Badge';
 import { HydrationGuard } from '../ui/HydrationGuard';
 import { useState } from 'react';
 import { Logger } from '../../../shared/logger';
-import { useMonitoring } from '../../contexts/GlobalMonitoringContext';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수 - macOS 스타일
 const HEADER_STYLES = {
@@ -46,8 +45,8 @@ export function AppHeader({
   onUserClick,
 }: AppHeaderProps): React.ReactElement {
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const { state } = useMonitoring();
-  const { isMonitoring } = state;
+  // 모니터링 기능 제거됨 - 기획 변경으로 불필요
+  const isMonitoring = false;
 
   const handleSearch = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();

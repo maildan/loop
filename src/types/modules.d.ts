@@ -31,34 +31,7 @@ declare module 'electron-store' {
   export default Store;
 }
 
-// Active-win 모듈
-declare module 'active-win' {
-  interface ActiveWindow {
-    title: string;
-    id: number;
-    owner: {
-      name: string;
-      processId: number;
-      bundleId?: string;
-      path?: string;
-    };
-    bounds: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-    };
-    memoryUsage: number;
-  }
 
-  interface Options {
-    screenRecordingPermission?: boolean;
-    accessibilityPermission?: boolean;
-  }
-
-  function activeWindow(options?: Options): Promise<ActiveWindow | undefined>;
-  export default activeWindow;
-}
 
 // System Information 모듈
 declare module 'systeminformation' {
@@ -100,4 +73,4 @@ declare module 'winston' {
   }
 }
 
-export {};
+export { };

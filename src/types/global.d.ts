@@ -2,55 +2,6 @@
 // src/types/global.d.ts
 
 import type { ElectronAPI } from '../shared/types';
-import type { AppCategory } from '../main/keyboard/appCategories';
-
-// 🔥 uiohook-napi 타입 정의 (shared/types.ts 기반으로 통합)
-declare module 'uiohook-napi' {
-  // shared/types.ts에서 import
-  import type { UiohookKeyboardEvent } from '../shared/types';
-  
-  // 기본 export
-  export { UiohookKeyboardEvent };
-
-  // 🔥 기가차드 마우스 이벤트 타입
-  export interface UiohookMouseEvent {
-    x: number;
-    y: number;
-    button: number;
-    clicks: number;
-    type: number;
-  }
-
-  // 🔥 기가차드 휠 이벤트 타입
-  export interface UiohookWheelEvent {
-    x: number;
-    y: number;
-    direction: number;
-    rotation: number;
-    type: number;
-  }
-
-  // 🔥 기가차드 uIOhook 인스턴스 (KeyboardEngine + KeyboardService 호환)
-  export interface UiohookInstance {
-    start(): void;
-    stop(): void;
-    on(event: 'keydown' | 'keyup', listener: (event: UiohookKeyboardEvent) => void): this;
-    on(event: 'mousedown' | 'mouseup' | 'mousemove', listener: (event: UiohookMouseEvent) => void): this;
-    on(event: 'wheel', listener: (event: UiohookWheelEvent) => void): this;
-    removeAllListeners(): void;
-    
-    // 🔥 Loop 전용 확장 메서드들 (KeyboardEngine에서 사용)
-    isRunning?(): boolean;
-    getEventCount?(): number;
-    enableLoopMode?(): void;
-    disableLoopMode?(): void;
-    setLanguage?(lang: 'ko' | 'en' | 'ja' | 'zh'): void;
-  }
-
-  // 🔥 기가차드 메인 uIOhook 익스포트 (싱글톤 패턴)
-  export const uIOhook: UiohookInstance;
-  export default uIOhook;
-}
 
 declare global {
   interface Window {
@@ -59,7 +10,7 @@ declare global {
     __LOOP_APP_VERSION__?: string;
     __LOOP_DEBUG_MODE__?: boolean;
   }
-  
+
   namespace NodeJS {
     interface ProcessEnv {
       ELECTRON_IS_DEV?: string;
@@ -98,7 +49,7 @@ export interface KeyMapping {
 }
 
 // 모듈로 만들기 위해 필요
-export {};
+export { };
 
 // 🔥 Window 인터페이스 확장 (Electron API 노출)
 declare global {
@@ -116,28 +67,28 @@ declare global {
         totalKeys: number;
         sessionTime: number;
       };
-      
+
       // 윈도우 관련 메서드  
       getCurrentWindow(): {
         title: string;
         pid: number;
         path: string;
       } | null;
-      
+
       // 모니터링 제어
       pauseMonitoring(): void;
       resumeMonitoring(): void;
-      
+
       // 배터리 최적화
       setBatteryOptimization(enabled: boolean): void;
-      
+
       // 백그라운드 활동 제어
       reduceBackgroundActivity(): void;
-      
+
       // 상태 체크
       isActive(): boolean;
     } | undefined;
-    
+
     var windowTracker: import('../main/keyboard/WindowTracker').WindowTracker | undefined;
     var databaseManager: import('../main/managers/DatabaseManager').DatabaseManager | undefined;
   }
