@@ -4,7 +4,9 @@ export const CSP = {
     "default-src 'self' data:",
     // Allow limited inline scripts and localhost origins used by the packaged static server
     "script-src 'self' 'unsafe-inline' https://accounts.google.com http://localhost:35821",
-    "style-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline' http://localhost:35821",
+    "style-src 'self' 'unsafe-inline' http://localhost:4000",
+    "style-src 'self' 'unsafe-inline' http://localhost:5000",
     "img-src 'self' data: blob: https://ui-avatars.com https://lh3.googleusercontent.com",
     "font-src 'self' data:",
     // Allow connections to local static server, dev endpoints, and AI APIs (Gemini, OpenAI)
@@ -26,7 +28,9 @@ export const CSP = {
 // 안전한 redirect whitelist (localhost only with specific port range)
 export const REDIRECT_WHITELIST = [
   'http://localhost:35821',
-  'http://127.0.0.1:35821'
+  'http://127.0.0.1:35821',
+  'http://127.0.0.1:4000',
+  'http://localhost:4000',
 ];
 
 export function isWhitelistedRedirect(url: string): boolean {

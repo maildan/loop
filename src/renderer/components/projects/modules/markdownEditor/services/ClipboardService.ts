@@ -144,7 +144,8 @@ export class ClipboardService {
             reader.onload = (e) => {
                 const src = e.target?.result as string;
                 if (src) {
-                    editor.chain().focus().setImage({ src }).run();
+                    // use setNode for the image node to satisfy TipTap's chained command types
+                    editor.chain().focus().setNode('image', { src }).run();
                     Logger.info('CLIPBOARD_SERVICE', 'Image added to editor');
                     resolve({ success: true, data: src });
                 } else {

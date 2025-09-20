@@ -42,7 +42,7 @@ export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps): React.React
     };
 
     const handleUnderline = () => {
-        editor.chain().focus().toggleUnderline().run();
+        editor.chain().focus().toggleMark('underline').run();
     };
 
     const handleStrike = () => {

@@ -167,6 +167,15 @@ export function DashboardMain(): React.ReactElement {
   // 🔥 대시보드 데이터 로딩 - 메모화로 성능 최적화
   const loadDashboardData = useCallback(async (): Promise<void> => {
     try {
+      // 🔥 웹 환경에서는 Electron API가 없으므로 기본값 사용
+      if (typeof window !== 'undefined' && !window.electronAPI) {
+        Logger.warn('DASHBOARD', 'Electron API not available, using default data for web environment');
+        setLoadingStates(prev => ({ ...prev, kpi: false, projects: false, recentFiles: false }));
+        setProjects([]);
+        setRecentFiles([]);
+        return;
+      }
+
       // 🔥 기가차드 규칙: 타입 안전한 IPC 통신 - 병렬 처리
       const [dashboardStatsResult, projectsResult, recentSessionsResult] = await Promise.allSettled([
         window.electronAPI.dashboard.getStats(),

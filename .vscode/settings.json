@@ -19,9 +19,11 @@
   "github.copilot.chat.welcomeMessage": "disabled",
   "tailwindCSS.includeLanguages": {
     "typescript": "javascript",
-    "typescriptreact": "javascript",
-    "tailwindCSS.emmetCompletions": "true",
+    "typescriptreact": "javascript"
   },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": "./tailwind.config.mjs",
+  "tailwindCSS.validate": true,
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "less.lint.unknownAtRules": "ignore",

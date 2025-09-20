@@ -113,6 +113,15 @@ export function useSettings(): UseSettingsReturn {
 
       Logger.debug('USE_SETTINGS', 'Loading settings from main process');
 
+      // 🔥 웹 환경에서는 Electron API가 없으므로 fallback 로직 사용
+      if (typeof window !== 'undefined' && !window.electronAPI) {
+        Logger.warn('USE_SETTINGS', 'Electron API not available, using default settings for web environment');
+        setSettings(defaultSettings);
+        setLoading(false);
+        loadingRef.current = false;
+        return;
+      }
+
       const result = await window.electronAPI.settings.getAll();
 
       if (result && result.success && result.data) {
@@ -188,6 +197,17 @@ export function useSettings(): UseSettingsReturn {
       // 🔥 백엔드에 저장 (dot notation 사용)
       const keyPath = `${category}.${String(key)}`;
       Logger.debug('USE_SETTINGS', `Updating setting: ${keyPath}`, { value });
+
+      // 🔥 웹 환경에서는 localStorage에 저장
+      if (typeof window !== 'undefined' && !window.electronAPI) {
+        try {
+          localStorage.setItem(`loop-setting-${keyPath}`, JSON.stringify(value));
+          Logger.debug('USE_SETTINGS', `Setting saved to localStorage: ${keyPath}`, { value });
+        } catch (error) {
+          Logger.warn('USE_SETTINGS', `Failed to save setting to localStorage: ${keyPath}`, error);
+        }
+        return;
+      }
 
       const result = await window.electronAPI.settings.set(keyPath, value);
 

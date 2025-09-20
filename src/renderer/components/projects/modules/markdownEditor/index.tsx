@@ -4,9 +4,9 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { EditorContent } from '@tiptap/react';
+import { EditorContent, useEditor, type Editor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { Logger } from '../../../../../shared/logger';
-import { useTipTapEditor } from './hooks/useTipTapEditor';
 import { DragDropHandler } from './handlers/DragDropHandler';
 import { EditorBubbleMenu } from './components/EditorBubbleMenu';
 
@@ -35,7 +35,38 @@ export function MarkdownEditor({
     const [isReady, setIsReady] = useState(false);
     const dragHandlerRef = useRef<DragDropHandler | null>(null);
 
-    // 🔥 모듈화된 TipTap 에디터 훅 사용
+    const useTipTapEditor = (opts: {
+        content: string;
+        onChange: (content: string) => void;
+        isFocusMode: boolean;
+        onReady?: () => void;
+        onFocus?: () => void;
+        onBlur?: () => void;
+    }) => {
+        const editor = useEditor({
+            extensions: [StarterKit],
+            content: opts.content,
+            onCreate: () => {
+                opts.onReady?.();
+            },
+            onUpdate: ({ editor }) => {
+                opts.onChange(editor.getHTML());
+            },
+            onFocus: () => {
+                opts.onFocus?.();
+            },
+            onBlur: () => {
+                opts.onBlur?.();
+            },
+        }) as Editor | null;
+
+        const text = editor?.getText() ?? '';
+        const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
+        const characterCount = text.length;
+
+        return { editor, wordCount, characterCount };
+    };
+
     const { editor, wordCount, characterCount } = useTipTapEditor({
         content,
         onChange,
@@ -51,6 +82,7 @@ export function MarkdownEditor({
             Logger.debug('MARKDOWN_EDITOR', 'Editor blurred');
         },
     });
+
 
     // 🔥 드래그앤드롭 핸들러 초기화
     useEffect(() => {

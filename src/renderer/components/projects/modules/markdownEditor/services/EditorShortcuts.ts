@@ -44,7 +44,7 @@ export const TEXT_FORMATTING_SHORTCUTS: EditorShortcut[] = [
     key: 'u',
     modifier: true,
     action: (editor: Editor) => {
-      editor.chain().focus().toggleUnderline().run();
+      editor.chain().focus().toggleMark('underline').run();
       Logger.debug('EDITOR_SHORTCUTS', 'Underline toggled');
       return true;
     },

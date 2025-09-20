@@ -1,6 +1,6 @@
 // 🔥 기가차드 윈도우 매니저 - 타입 안전한 윈도우 관리 시스템
 
-import { BrowserWindow, screen } from 'electron';
+import { BrowserWindow, screen, Event } from 'electron';
 import { join } from 'path';
 import { Logger } from '../../shared/logger';
 import { WindowInfo } from '../../shared/types';
@@ -66,10 +66,7 @@ export class WindowManager {
           // enableBlinkFeatures: 'ClipboardApi', // 보안 경고 제거
           allowRunningInsecureContent: false,
           experimentalFeatures: false, // 🔥 실험적 기능 비활성화
-          // 🔥 Content Security Policy 설정
-          additionalArguments: [
-            `--content-security-policy=${process.env.NODE_ENV === 'development' ? CSP.development : CSP.production}`
-          ]
+          // 🔥 CSP는 StaticServer 헤더에서 처리 (Electron 38 호환성)
         },
         icon: iconPath,
         // macOS 전용 설정
@@ -92,6 +89,9 @@ export class WindowManager {
 
       // 보안 설정
       this.setupWindowSecurity(window);
+
+      // CSP 설정 (Electron 38 권장 방식)
+      this.setupCSPHeaders(window);
 
       // 윈도우 이벤트 설정
       this.setupWindowEvents(window, windowId);
@@ -166,6 +166,26 @@ export class WindowManager {
     });
   }
 
+  // 🔥 CSP 헤더 설정 (Electron 38 권장 방식)
+  private setupCSPHeaders(window: BrowserWindow): void {
+    // #DEBUG: Setting up CSP headers
+    Logger.debug('WINDOW', 'Setting up CSP headers using session.webRequest');
+
+    const isDev = process.env.NODE_ENV === 'development';
+    const cspPolicy = isDev ? CSP.development : CSP.production;
+
+    window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+      callback({
+        responseHeaders: {
+          ...details.responseHeaders,
+          'Content-Security-Policy': [cspPolicy]
+        }
+      });
+    });
+
+    Logger.info('WINDOW', 'CSP headers configured via session.webRequest', { cspPolicy });
+  }
+
   // 🔥 윈도우 이벤트 설정
   private setupWindowEvents(window: BrowserWindow, windowId: string): void {
     // #DEBUG: Setting up window events
@@ -177,9 +197,13 @@ export class WindowManager {
       Logger.info('WINDOW', 'Window shown', { windowId });
     });
 
-    // 🔥 렌더러 프로세스 크래시 감지
-    window.webContents.on('crashed', (event, killed) => {
-      Logger.error('WINDOW', `Renderer process crashed: ${killed ? 'killed' : 'not killed'}`, { windowId });
+    // 🔥 렌더러 프로세스 크래시 감지 (Electron 38+에서는 render-process-gone 사용)
+    window.webContents.on('render-process-gone', (event: any, details: any) => {
+      Logger.error('WINDOW', `Renderer process gone: ${details.reason}`, {
+        windowId,
+        exitCode: details.exitCode,
+        reason: details.reason
+      });
       // 여기에 추가적인 크래시 처리 로직 (예: 재시작) 추가 가능
     });
 

@@ -37,19 +37,7 @@ const nextConfig = {
     basePath: '',
   }),
 
-  // 🔥 폰트 파일 복사 설정
-  webpack: (config, { isServer }) => {
-    // 🔥 폰트 파일 처리 규칙 추가
-    config.module.rules.push({
-      test: /\.(otf|ttf|woff|woff2)$/,
-      type: 'asset/resource',
-      generator: {
-        filename: 'static/fonts/[name].[hash][ext]'
-      }
-    });
 
-    return config;
-  },
 
   // 🔥 성능 최적화 - 번들 분할 및 트리쉐이킹 + 기가차드 극한 최적화
   experimental: {
@@ -90,8 +78,28 @@ const nextConfig = {
     ignoreBuildErrors: false, // TypeScript 타입 체크 활성화
   },
 
-  // 🔥 Webpack 설정 - global 에러 해결 + 성능 최적화 + Connection closed 방지
+  // 🔥 Webpack 설정 - global 에러 해결 + 성능 최적화 + Tailwind CSS 처리
   webpack: (config, { isServer, dev }) => {
+    // 🔥 폰트 파일 처리 규칙 추가 - 안전하게 초기화
+    if (!config.module) config.module = {};
+    if (!config.module.rules) config.module.rules = [];
+
+    // 🔥 커스텀 폰트 로더 - 간소화된 안전한 버전
+    config.module.rules.push({
+      test: /\.(otf|ttf)$/,
+      type: 'asset/resource',
+      generator: {
+        filename: 'fonts/[name].[hash][ext]',
+        publicPath: '/'
+      }
+    });
+
+    // 🔥 폰트 파일을 public/font/{dir}/ 경로에서 로드할 수 있도록 설정
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@fonts': require('path').resolve(__dirname, '../../public/fonts')
+    };
+
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
