@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { Logger } from '../../shared/logger';
+import LoginModal from '../components/auth/LoginModal';
 
 export interface AuthState {
     isAuthenticated: boolean;
@@ -170,9 +171,6 @@ export function AuthProvider({ children, initialAuth }: { children: React.ReactN
     }, [loadAuthStatus]);
 
     const ctx = useMemo(() => ({ auth, loadAuthStatus, setAuth, clearAuth, loaded }), [auth, loadAuthStatus, setAuth, clearAuth, loaded]);
-
-    // lazy load LoginModal to avoid SSR issues
-    const LoginModal = require('../components/auth/LoginModal').default;
 
     return (
         <AuthContext.Provider value={ctx as unknown as AuthContextType}>

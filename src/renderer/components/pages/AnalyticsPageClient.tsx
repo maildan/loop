@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import {
   TrendingUp,
   TrendingDown,
@@ -138,7 +138,7 @@ interface ProjectRanking {
 
 // 🔥 분리된 Analytics 페이지 클라이언트 컴포넌트
 export function AnalyticsPageClient(): React.ReactElement {
-  const router = useRouter(); // 🔥 라우터 추가
+  const navigate = useNavigate(); // 🔥 라우터 추가
 
   // 🎯 상태 관리
   const [activeTab, setActiveTab] = useState<TabType>('global');
@@ -270,7 +270,7 @@ export function AnalyticsPageClient(): React.ReactElement {
         className={ANALYTICS_STYLES.emptyAction}
         onClick={() => {
           Logger.info('ANALYTICS_PAGE', 'Redirecting to project creator');
-          router.push('/projects?create=true');
+          navigate('/projects?create=true');
         }}
       >
         글쓰기 시작하기
@@ -479,7 +479,7 @@ export function AnalyticsPageClient(): React.ReactElement {
                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
                     onClick={() => {
                       Logger.info('ANALYTICS_PAGE', 'Navigating to project details', { projectId: project.id });
-                      router.push(`/projects/${project.id}`);
+                      navigate(`/projects/${project.id}`);
                     }}
                   >
                     자세히 보기
@@ -498,7 +498,7 @@ export function AnalyticsPageClient(): React.ReactElement {
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
               onClick={() => {
                 Logger.info('ANALYTICS_PAGE', 'Creating new project from analytics');
-                router.push('/projects?create=true');
+                navigate('/projects?create=true');
               }}
             >
               첫 프로젝트 만들기

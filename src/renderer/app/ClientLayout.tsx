@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, useState, useLayoutEffect, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AppSidebar } from '../components/layout/AppSidebar';
 import { AppHeader } from '../components/layout/AppHeader';
 // MonitoringProvider 제거됨 - 기획 변경으로 불필요
@@ -19,8 +19,9 @@ interface ClientLayoutProps {
 function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactElement {
     const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
     const [isClientMounted, setIsClientMounted] = useState<boolean>(false);
-    const pathname = usePathname();
-    const router = useRouter();
+    const location = useLocation();
+    const navigate = useNavigate();
+    const pathname = location.pathname;
     const { settings } = useSettings();
 
     // Focus 모드 상태
@@ -65,7 +66,7 @@ function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactEl
             if (isRelative || isSameOrigin) {
                 // Use Next.js router for internal navigation (client-side routing)
                 Logger.debug('LAYOUT', 'Client-side navigation', { href });
-                router.push(href);
+                navigate(href);
             } else {
                 // treat as external - open in new tab/window safely
                 Logger.debug('LAYOUT', 'External navigation', { href });

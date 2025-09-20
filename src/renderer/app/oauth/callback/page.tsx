@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Logger } from '../../../../shared/logger';
 
 interface OAuthCallbackPageProps {}
@@ -9,8 +9,8 @@ interface OAuthCallbackPageProps {}
 function OAuthCallbackClient() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
   const [message, setMessage] = useState('인증 처리 중...');
-  const searchParams = useSearchParams();
-  const router = useRouter();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleOAuthCallback = async () => {
@@ -55,7 +55,7 @@ function OAuthCallbackClient() {
           
           // 3초 후 프로젝트 페이지로 이동
           setTimeout(() => {
-            router.push('/projects');
+            navigate('/projects');
           }, 3000);
         } else {
           Logger.error('OAuth Callback', '인증 처리 실패:', result.error);
@@ -71,7 +71,7 @@ function OAuthCallbackClient() {
     };
 
     handleOAuthCallback();
-  }, [searchParams, router]);
+  }, [searchParams, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -120,7 +120,7 @@ function OAuthCallbackClient() {
               </div>
               <p className="text-red-600 font-medium">{message}</p>
               <button 
-                onClick={() => router.push('/projects')}
+                onClick={() => navigate('/projects')}
                 className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 프로젝트로 돌아가기

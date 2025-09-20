@@ -3,7 +3,7 @@
 // 이거 씀
 
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import {
   Target,
   Clock,
@@ -105,7 +105,7 @@ function formatTime(seconds: number): string {
 }
 
 export function DashboardMain(): React.ReactElement {
-  const router = useRouter(); // 🔥 Navigation 훅 추가
+  const navigate = useNavigate(); // 🔥 Navigation 훅 추가
   // 모니터링 기능 제거됨 - 기획 변경으로 불필요
 
   // 모니터링 데이터 상태 제거됨 - 모니터링 기능 불필요
@@ -371,7 +371,7 @@ export function DashboardMain(): React.ReactElement {
             try {
               Logger.info('DASHBOARD', '🚀 Creating new project from dashboard');
               // 🔥 프로젝트 페이지로 이동하여 새 프로젝트 생성 플로우 시작
-              router.push('/projects?create=true');
+              navigate('/projects?create=true');
             } catch (error) {
               Logger.error('DASHBOARD', 'Failed to navigate to project creation', error);
             }

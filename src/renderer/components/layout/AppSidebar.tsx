@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { useRouter, usePathname } from 'next/navigation';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSettings } from '../../app/settings/hooks/useSettings';
 import { Avatar } from '../ui/Avatar';
@@ -117,9 +117,10 @@ export function AppSidebar({
   onToggleCollapse
 }: AppSidebarProps): React.ReactElement {
 
-  // 🔥 Next.js 라우터와 경로 정보 사용
-  const router = useRouter();
-  const pathname = usePathname();
+  // 🔥 React Router 라우터와 경로 정보 사용
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname;
 
   const authCtx = useAuth() as any;
   const { auth: googleUserInfo, loadAuthStatus, loaded: authLoaded } = authCtx;
@@ -397,15 +398,15 @@ export function AppSidebar({
   const handleNavigate = useCallback((item: SidebarItem): void => {
     Logger.info('SIDEBAR', `Navigation to ${item.label}`, { href: item.href });
 
-    // 🔥 직접 Next.js router 사용 (onNavigate prop에 의존하지 않음)
+    // 🔥 직접 React Router navigate 사용 (onNavigate prop에 의존하지 않음)
     try {
-      router.push(item.href);
+      navigate(item.href);
     } catch (error) {
       Logger.error('SIDEBAR', 'Navigation failed', { href: item.href, error });
       // fallback으로 onNavigate prop 사용
       onNavigate?.(item.href);
     }
-  }, [router, onNavigate]);
+  }, [navigate, onNavigate]);
 
   const handleKeyDown = useCallback((event: React.KeyboardEvent, item: SidebarItem): void => {
     if (event.key === 'Enter' || event.key === ' ') {

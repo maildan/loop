@@ -21,9 +21,10 @@ class LoggerService {
   private timers: Map<string, number> = new Map();
 
   constructor() {
-    // 🔥 환경변수 기반 로그 레벨 설정
-    const envLogLevel = process.env.LOG_LEVEL?.toLowerCase();
-    const debugMode = process.env.DEBUG === 'true' || process.env.NODE_ENV === 'development';
+    // 🔥 환경변수 기반 로그 레벨 설정 (렌더러 호환)
+    const safeEnv = (typeof process !== 'undefined' && process.env ? process.env : {}) as Record<string, string | undefined>;
+    const envLogLevel = safeEnv.LOG_LEVEL?.toLowerCase();
+    const debugMode = safeEnv.DEBUG === 'true' || safeEnv.NODE_ENV === 'development';
     
     if (debugMode || envLogLevel === 'debug') {
       this.logLevel = LogLevel.DEBUG;
@@ -38,7 +39,7 @@ class LoggerService {
       this.logLevel = LogLevel.DEBUG;
     }
     
-    console.log(`🔥 [LOGGER] Logger initialized - Level: ${LogLevel[this.logLevel]}, ENV: ${process.env.NODE_ENV}, DEBUG: ${process.env.DEBUG}`);
+    console.log(`🔥 [LOGGER] Logger initialized - Level: ${LogLevel[this.logLevel]}, ENV: ${safeEnv.NODE_ENV}, DEBUG: ${safeEnv.DEBUG}`);
   }
 
   setLogLevel(level: LogLevel): void {
@@ -63,14 +64,15 @@ class LoggerService {
       this.logs.shift();
     }
 
-    // 🔥 콘솔 출력 - 환경변수 기반 + 강제 출력 모드
+    // 🔥 콘솔 출력 - 환경변수 기반 + 강제 출력 모드 (렌더러 호환)
     const timestamp = entry.timestamp.toISOString();
     const levelName = LogLevel[level];
     const prefix = `[${timestamp}] ${levelName} [${component}]`;
-    const verboseMode = process.env.VERBOSE_LOGGING === 'true';
+    const safeEnvLocal = (typeof process !== 'undefined' && process.env ? process.env : {}) as Record<string, string | undefined>;
+    const verboseMode = safeEnvLocal.VERBOSE_LOGGING === 'true';
 
     // 🔥 강제 출력: DEBUG 레벨도 항상 표시
-    const shouldForceOutput = process.env.DEBUG === 'true' || process.env.NODE_ENV === 'development';
+    const shouldForceOutput = safeEnvLocal.DEBUG === 'true' || safeEnvLocal.NODE_ENV === 'development';
 
     if (level >= this.logLevel || shouldForceOutput) {
       switch (level) {

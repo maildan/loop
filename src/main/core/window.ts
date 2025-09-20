@@ -277,9 +277,20 @@ export class WindowManager {
       if (url) {
         targetUrl = url;
       } else if (process.env.NODE_ENV === 'development') {
-        // 개발 환경: Next.js 개발 서버 사용 (pnpm dev)
-        targetUrl = 'http://localhost:4000';
-        Logger.info('WINDOW', '🔧 개발 모드 - Next.js 개발 서버 사용', { url: targetUrl });
+        // 개발 환경: electron-vite 개발 서버 사용 (포트 5173 고정)
+        const rendererUrl = process.env.ELECTRON_RENDERER_URL || process.env.VITE_DEV_SERVER_URL;
+        if (rendererUrl && rendererUrl.startsWith('http')) {
+          targetUrl = rendererUrl;
+        } else if (rendererUrl) {
+          targetUrl = `http://localhost:${rendererUrl}`;
+        } else {
+          targetUrl = 'http://localhost:5173';
+        }
+        Logger.info('WINDOW', '🔧 개발 모드 - electron-vite 개발 서버 사용', { 
+          url: targetUrl,
+          electronRendererUrl: process.env.ELECTRON_RENDERER_URL,
+          viteUrl: process.env.VITE_DEV_SERVER_URL 
+        });
       } else {
         // 프로덕션 환경: 정적 빌드 파일 사용 (pnpm start)
         const staticServer = StaticServer.getInstance();
@@ -293,10 +304,34 @@ export class WindowManager {
         }
       }
 
-      await window.loadURL(targetUrl);
+      try {
+        await window.loadURL(targetUrl);
+        Logger.info('WINDOW', 'URL loaded successfully', { windowId, url: targetUrl });
+      } catch (error) {
+        Logger.error('WINDOW', 'Failed to load URL', { error, targetUrl });
+        
+        // 개발 환경에서 연결 실패 시 개발 서버를 기다림
+        if (process.env.NODE_ENV === 'development') {
+          Logger.info('WINDOW', '개발 서버 연결 대기 중... 5초 후 재시도');
+          setTimeout(async () => {
+            try {
+              await window.loadURL(targetUrl);
+              Logger.info('WINDOW', '재시도 성공', { url: targetUrl });
+            } catch (retryError) {
+              Logger.error('WINDOW', '재시도 실패', { retryError });
+              // 앱 종료하지 않고 빈 페이지 표시
+              await window.loadURL('data:text/html,<h1>개발 서버를 시작하고 새로고침하세요</h1>');
+            }
+          }, 5000);
+        } else {
+          throw error; // 프로덕션에서는 여전히 에러 던지기
+        }
+      }
 
       // 🔥 개발 도구 - 프로덕션에서도 일시적으로 활성화 (디버깅용)
-      window.webContents.openDevTools({ mode: 'detach' });
+      if (process.env.NODE_ENV === 'development') {
+        window.webContents.openDevTools({ mode: 'detach' });
+      }
 
       // 콘솔 메시지 로깅
       window.webContents.on('console-message', (event, level, message, line, sourceId) => {

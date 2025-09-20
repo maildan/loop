@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ProjectGrid } from '../../components/projects/ProjectGrid';
 import { ProjectCreator, type ProjectCreationData } from '../../components/projects/ProjectCreator';
 import { ProjectEditorModal } from '../../components/projects/ProjectEditorModal';
@@ -24,8 +24,8 @@ const DEFAULT_PROJECTS: readonly ProjectData[] = [] as const;
 
 // 🔥 Suspense 래핑된 컴포넌트
 function ProjectsPageContent(): React.ReactElement {
-  const router = useRouter(); // 🔥 Navigation 훅 추가
-  const searchParams = useSearchParams(); // 🔥 URL 쿼리 파라미터 감지
+  const navigate = useNavigate(); // 🔥 Navigation 훅 추가
+  const [searchParams] = useSearchParams(); // 🔥 URL 쿼리 파라미터 감지
   const [projects, setProjects] = useState<readonly ProjectData[]>(DEFAULT_PROJECTS);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -146,7 +146,7 @@ function ProjectsPageContent(): React.ReactElement {
         if (result.success && result.data) {
           Logger.info('PROJECTS_PAGE', '✅ Project imported successfully', { projectId: result.data.id });
           // 생성된 프로젝트 에디터로 즉시 이동 (정적 빌드 호환)
-          router.push(`/projects/new?open=${encodeURIComponent(String(result.data.id))}`);
+          navigate(`/projects/new?open=${encodeURIComponent(String(result.data.id))}`);
           return;
         } else {
           throw new Error(result.error || 'Failed to import project');
@@ -197,7 +197,7 @@ function ProjectsPageContent(): React.ReactElement {
         if (createdId) {
           Logger.info('PROJECTS_PAGE', '🚀 Navigating to new Google Docs project editor', { id: createdId });
           setTimeout(() => {
-            router.push(`/projects/new?open=${encodeURIComponent(String(createdId))}`);
+            navigate(`/projects/new?open=${encodeURIComponent(String(createdId))}`);
           }, 100);
           return;
         }
@@ -231,7 +231,7 @@ function ProjectsPageContent(): React.ReactElement {
       // 🔥 생성된 프로젝트 에디터로 즉시 이동 (Google Docs 스타일)
       if (result.data?.id) {
         Logger.info('PROJECTS_PAGE', '🚀 Navigating to new project editor', { id: result.data.id });
-        router.push(`/projects/new?open=${encodeURIComponent(String(result.data.id))}`);
+        navigate(`/projects/new?open=${encodeURIComponent(String(result.data.id))}`);
         return; // 성공적으로 이동했으므로 여기서 종료
       }
 
@@ -245,7 +245,7 @@ function ProjectsPageContent(): React.ReactElement {
   const handleViewProject = (project: ProjectData): void => {
     Logger.info('PROJECTS_PAGE', `🔍 View project: ${project.id}`, { title: project.title });
     // 🔥 정적 프리렌더 경로 한계 대응: 쿼리로 실제 ID 전달
-    router.push(`/projects/new?open=${encodeURIComponent(project.id)}`);
+    navigate(`/projects/new?open=${encodeURIComponent(project.id)}`);
   };
 
   const handleEditProject = (project: ProjectData): void => {

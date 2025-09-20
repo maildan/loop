@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { ProjectEditor } from '../../../components/projects/ProjectEditor';
-import { ProjectErrorBoundary } from '../../../components/projects/ErrorBoundary';
-import { Logger } from '../../../../shared/logger';
+import { ProjectEditor } from '../../components/projects/ProjectEditor';
+import { ProjectErrorBoundary } from '../../components/projects/ErrorBoundary';
+import { Logger } from '../../../shared/logger';
 
 // 🔥 클라이언트 컴포넌트 - 동적 라우팅 로직
-export default function ProjectPageClient(): React.ReactElement {
+function ProjectDetailContent(): React.ReactElement {
   const params = useParams();
   const [searchParams] = useSearchParams();
   const paramId = Array.isArray(params.id) ? params.id[0] : params.id;
@@ -35,5 +35,13 @@ export default function ProjectPageClient(): React.ReactElement {
     <ProjectErrorBoundary>
       <ProjectEditor projectId={projectId} />
     </ProjectErrorBoundary>
+  );
+}
+
+export default function ProjectDetail(): React.ReactElement {
+  return (
+    <Suspense fallback={<div className="p-8 text-slate-600">프로젝트를 불러오는 중...</div>}>
+      <ProjectDetailContent />
+    </Suspense>
   );
 }
