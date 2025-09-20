@@ -72,18 +72,15 @@ class PrismaService {
       Logger.info('PRISMA_SERVICE', `🔍 현재 작업 디렉토리: ${process.cwd()}`);
       Logger.info('PRISMA_SERVICE', `🔍 __dirname: ${__dirname}`);
 
+      // Prisma v6에서는 env 파일의 DATABASE_URL을 사용하도록 권장
+      process.env.DATABASE_URL = `file:${dbPath}`;
+      
       this.client = new PrismaClient({
-        log: ['error', 'warn'],
-        datasources: {
-          db: {
-            url: `file:${dbPath}`
-          }
-        }
+        log: ['error', 'warn']
       });
 
-      // 연결 테스트
-      await this.client.$connect();
-      Logger.info('PRISMA_SERVICE', '✅ Prisma client connected successfully');
+      // Prisma v6에서는 lazy connection - 첫 쿼리에서 자동 연결
+      Logger.info('PRISMA_SERVICE', '✅ Prisma client created successfully');
 
       return this.client;
     } catch (error) {
@@ -126,14 +123,14 @@ class PrismaService {
   }
 
   /**
-   * 🔥 트랜잭션 실행
+   * 🔥 트랜잭션 실행 - Prisma v6 호환
    */
   public async transaction<T>(
-    fn: (client: PrismaClient) => Promise<T>
+    fn: (client: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>) => Promise<T>
   ): Promise<T> {
     const client = await this.getClient();
     return client.$transaction(async (prisma) => {
-      return fn(prisma as PrismaClient);
+      return fn(prisma);
     });
   }
 
@@ -141,15 +138,14 @@ class PrismaService {
    * 🔥 배치 저장 - 성능 최적화를 위한 여러 작업 일괄 처리
    */
   public async batchWrite<T>(
-    operations: Array<() => Promise<T>>
+    operations: Array<(tx: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>) => Promise<T>>
   ): Promise<T[]> {
     const client = await this.getClient();
 
     return await client.$transaction(async (tx) => {
       const results: T[] = [];
       for (const operation of operations) {
-        // 각 operation은 tx를 사용하도록 수정 필요
-        const result = await operation();
+        const result = await operation(tx);
         results.push(result);
       }
       return results;
@@ -237,6 +233,18 @@ class PrismaService {
     saveFunction: () => Promise<void>,
     delay = 1000 // 1초 딜레이
   ): Promise<void> {
+    if (!projectId || typeof projectId !== 'string') {
+      throw new Error('Valid projectId is required');
+    }
+
+    if (!saveFunction || typeof saveFunction !== 'function') {
+      throw new Error('Valid saveFunction is required');
+    }
+
+    if (delay < 0 || !Number.isInteger(delay)) {
+      throw new Error('Delay must be a non-negative integer');
+    }
+
     // 기존 타이머가 있으면 취소
     const existingTimer = this.saveQueue.get(projectId);
     if (existingTimer) {
@@ -262,6 +270,14 @@ class PrismaService {
    * 🔥 즉시 저장 (debounce 무시)
    */
   public async forceSave(projectId: string, saveFunction: () => Promise<void>): Promise<void> {
+    if (!projectId || typeof projectId !== 'string') {
+      throw new Error('Valid projectId is required');
+    }
+
+    if (!saveFunction || typeof saveFunction !== 'function') {
+      throw new Error('Valid saveFunction is required');
+    }
+
     // 기존 debounced 저장 취소
     const existingTimer = this.saveQueue.get(projectId);
     if (existingTimer) {

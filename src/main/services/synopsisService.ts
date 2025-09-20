@@ -2,68 +2,49 @@
 import type { PlotPoint } from '../../main/types/project';
 import { Logger } from '../../shared/logger';
 import { createSuccess, createError, type Result } from '../../shared/common';
-
-// 🔥 기가차드 Prisma 클라이언트 타입 (동적 로딩)
-interface PrismaClient {
-  $connect(): Promise<void>;
-  $disconnect(): Promise<void>;
-  projectPlotPoint: {
-    create(data: { data: unknown }): Promise<unknown>;
-    findMany(args?: unknown): Promise<unknown[]>;
-    findUnique(args: { where: { id: string } }): Promise<unknown | null>;
-    update(args: { where: { id: string }; data: unknown }): Promise<unknown>;
-    delete(args: { where: { id: string } }): Promise<unknown>;
-  };
-}
-
-let prismaClient: PrismaClient | null = null;
-
-// 🔥 Prisma 클라이언트 초기화
-async function getPrismaClient(): Promise<PrismaClient> {
-  if (!prismaClient) {
-    try {
-      const { PrismaClient } = await import('@prisma/client');
-      prismaClient = new PrismaClient() as unknown as PrismaClient;
-      await prismaClient.$connect();
-      Logger.info('SYNOPSIS_SERVICE', 'Prisma 클라이언트 연결 완료');
-    } catch (error) {
-      Logger.error('SYNOPSIS_SERVICE', 'Prisma 클라이언트 연결 실패', error);
-      throw error;
-    }
-  }
-  return prismaClient;
-}
+import { prismaService } from './PrismaService';
 
 // 🔥 시놉시스 서비스
 export class SynopsisService {
   // 🔥 프로젝트의 모든 플롯 포인트 조회
   static async getPlotPointsByProject(projectId: string): Promise<Result<PlotPoint[]>> {
     try {
-      const client = await getPrismaClient();
-      const plotPoints = await client.projectPlotPoint.findMany({
-        where: { projectId },
+      const client = await prismaService.getClient();
+      const plotNotes = await client.projectNote.findMany({
+        where: { 
+          projectId,
+          type: 'plot'
+        },
         orderBy: [
-          { act: 'asc' },
-          { order: 'asc' },
           { createdAt: 'desc' }
         ]
       });
 
-      const mappedPlots: PlotPoint[] = plotPoints.map((plot: any) => ({
-        id: plot.id,
-        act: plot.act as 1 | 2 | 3,
-        title: plot.title,
-        description: plot.description,
-        type: plot.type as PlotPoint['type'],
-        characters: Array.isArray(plot.characters) ? plot.characters as string[] : [],
-        location: plot.location,
-        notes: plot.notes,
-        order: plot.order,
-        duration: plot.duration,
-        importance: plot.importance as PlotPoint['importance'],
-        createdAt: plot.createdAt,
-        updatedAt: plot.updatedAt
-      }));
+      // ProjectNote를 PlotPoint로 매핑
+      const mappedPlots: PlotPoint[] = plotNotes.map((note) => {
+        const tagsData = (note.tags as any) || {};
+        return {
+          id: note.id,
+          act: tagsData.act || 1,
+          title: note.title,
+          description: note.content || '',
+          type: tagsData.type || 'setup',
+          characters: Array.isArray(tagsData.characters) ? tagsData.characters : [],
+          location: tagsData.location || '',
+          notes: tagsData.notes || '',
+          order: tagsData.order || 0,
+          duration: tagsData.duration || 0,
+          importance: tagsData.importance || 'medium',
+          createdAt: note.createdAt,
+          updatedAt: note.updatedAt
+        };
+      });
+
+      // act와 order로 정렬
+      mappedPlots.sort((a, b) => {
+        if (a.act !== b.act) return a.act - b.act;
+        return a.order - b.order;
+      });
 
       Logger.info('SYNOPSIS_SERVICE', `프로젝트 플롯 포인트 조회 완료: ${mappedPlots.length}개`, { projectId });
       return createSuccess(mappedPlots);
@@ -76,47 +57,39 @@ export class SynopsisService {
   // 🔥 특정 막의 플롯 포인트 조회
   static async getPlotPointsByAct(projectId: string, act: 1 | 2 | 3): Promise<Result<PlotPoint[]>> {
     try {
-      const client = await getPrismaClient();
-      const plotPoints = await client.projectPlotPoint.findMany({
+      const client = await prismaService.getClient();
+      const plotNotes = await client.projectNote.findMany({
         where: {
           projectId,
-          act
+          type: 'plot'
         },
         orderBy: [
-          { order: 'asc' },
           { createdAt: 'desc' }
         ]
       });
 
-      const mappedPlots: PlotPoint[] = (plotPoints as Array<{
-        id: string;
-        act: unknown;
-        title: string;
-        description: string;
-        type: string;
-        characters: unknown;
-        location: string;
-        notes: string;
-        order: number;
-        duration: number;
-        importance: string;
-        createdAt: Date;
-        updatedAt: Date;
-      }>).map((plot) => ({
-        id: plot.id,
-        act: plot.act as 1 | 2 | 3,
-        title: plot.title,
-        description: plot.description,
-        type: plot.type as PlotPoint['type'],
-        characters: Array.isArray(plot.characters) ? plot.characters as string[] : [],
-        location: plot.location,
-        notes: plot.notes,
-        order: plot.order,
-        duration: plot.duration,
-        importance: plot.importance as PlotPoint['importance'],
-        createdAt: plot.createdAt,
-        updatedAt: plot.updatedAt
-      }));
+      // ProjectNote를 PlotPoint로 매핑하고 특정 막만 필터링
+      const mappedPlots: PlotPoint[] = plotNotes
+        .map((note) => {
+          const tagsData = (note.tags as any) || {};
+          return {
+            id: note.id,
+            act: tagsData.act || 1,
+            title: note.title,
+            description: note.content || '',
+            type: tagsData.type || 'setup',
+            characters: Array.isArray(tagsData.characters) ? tagsData.characters : [],
+            location: tagsData.location || '',
+            notes: tagsData.notes || '',
+            order: tagsData.order || 0,
+            duration: tagsData.duration || 0,
+            importance: tagsData.importance || 'medium',
+            createdAt: note.createdAt,
+            updatedAt: note.updatedAt
+          };
+        })
+        .filter((plot) => plot.act === act)
+        .sort((a, b) => a.order - b.order);
 
       Logger.info('SYNOPSIS_SERVICE', `${act}막 플롯 포인트 조회 완료: ${mappedPlots.length}개`, { projectId, act });
       return createSuccess(mappedPlots);
@@ -129,13 +102,16 @@ export class SynopsisService {
   // 🔥 새 플롯 포인트 생성
   static async createPlotPoint(projectId: string, plot: Omit<PlotPoint, 'id' | 'createdAt' | 'updatedAt'>): Promise<Result<PlotPoint>> {
     try {
-      const client = await getPrismaClient();
-      const newPlot = await client.projectPlotPoint.create({
-        data: {
-          projectId,
+      const client = await prismaService.getClient();
+      
+      // PlotPoint를 ProjectNote 모델에 맞게 변환
+      const plotData = {
+        projectId,
+        title: plot.title,
+        content: plot.description,
+        type: 'plot',
+        tags: {
           act: plot.act,
-          title: plot.title,
-          description: plot.description,
           type: plot.type,
           characters: plot.characters,
           location: plot.location,
@@ -144,22 +120,28 @@ export class SynopsisService {
           duration: plot.duration,
           importance: plot.importance
         }
+      };
+
+      const newNote = await client.projectNote.create({
+        data: plotData
       });
 
+      // ProjectNote를 PlotPoint로 매핑
+      const tagsData = (newNote.tags as any) || {};
       const mappedPlot: PlotPoint = {
-        id: (newPlot as any).id,
-        act: (newPlot as any).act as 1 | 2 | 3,
-        title: (newPlot as any).title,
-        description: (newPlot as any).description,
-        type: (newPlot as any).type as PlotPoint['type'],
-        characters: Array.isArray((newPlot as any).characters) ? (newPlot as any).characters as string[] : [],
-        location: (newPlot as any).location,
-        notes: (newPlot as any).notes,
-        order: (newPlot as any).order,
-        duration: (newPlot as any).duration,
-        importance: (newPlot as any).importance as PlotPoint['importance'],
-        createdAt: (newPlot as any).createdAt,
-        updatedAt: (newPlot as any).updatedAt
+        id: newNote.id,
+        act: tagsData.act || 1,
+        title: newNote.title,
+        description: newNote.content || '',
+        type: tagsData.type || 'setup',
+        characters: Array.isArray(tagsData.characters) ? tagsData.characters : [],
+        location: tagsData.location || '',
+        notes: tagsData.notes || '',
+        order: tagsData.order || 0,
+        duration: tagsData.duration || 0,
+        importance: tagsData.importance || 'medium',
+        createdAt: newNote.createdAt,
+        updatedAt: newNote.updatedAt
       };
 
       Logger.info('SYNOPSIS_SERVICE', '플롯 포인트 생성 완료', { id: mappedPlot.id, title: mappedPlot.title });
@@ -173,29 +155,63 @@ export class SynopsisService {
   // 🔥 플롯 포인트 업데이트
   static async updatePlotPoint(id: string, updates: Partial<Omit<PlotPoint, 'id' | 'createdAt'>>): Promise<Result<PlotPoint>> {
     try {
-      const client = await getPrismaClient();
-      const updatedPlot = await client.projectPlotPoint.update({
+      const client = await prismaService.getClient();
+      
+      // 기존 노트 데이터 가져오기
+      const existingNote = await client.projectNote.findUnique({
+        where: { id }
+      });
+      
+      if (!existingNote) {
+        return createError('플롯 포인트를 찾을 수 없습니다.');
+      }
+
+      // 기존 tags 데이터 파싱
+      const existingTags = (existingNote.tags as any) || {};
+      
+      // ProjectNote 모델용 데이터 변환
+      const updateData: any = {
+        type: 'plot',
+        updatedAt: new Date()
+      };
+      
+      if (updates.title) updateData.title = updates.title;
+      if (updates.description) updateData.content = updates.description;
+      
+      // tags 필드에 플롯 관련 메타데이터 저장
+      const updatedTags = { ...existingTags };
+      if (updates.act) updatedTags.act = updates.act;
+      if (updates.type) updatedTags.type = updates.type;
+      if (updates.characters) updatedTags.characters = updates.characters;
+      if (updates.location) updatedTags.location = updates.location;
+      if (updates.notes) updatedTags.notes = updates.notes;
+      if (updates.order !== undefined) updatedTags.order = updates.order;
+      if (updates.duration !== undefined) updatedTags.duration = updates.duration;
+      if (updates.importance) updatedTags.importance = updates.importance;
+      
+      updateData.tags = updatedTags;
+
+      const updatedNote = await client.projectNote.update({
         where: { id },
-        data: {
-          ...updates,
-          updatedAt: new Date()
-        }
+        data: updateData
       });
 
+      // ProjectNote를 PlotPoint로 매핑
+      const tagsData = (updatedNote.tags as any) || {};
       const mappedPlot: PlotPoint = {
-        id: (updatedPlot as any).id,
-        act: (updatedPlot as any).act as 1 | 2 | 3,
-        title: (updatedPlot as any).title,
-        description: (updatedPlot as any).description,
-        type: (updatedPlot as any).type as PlotPoint['type'],
-        characters: Array.isArray((updatedPlot as any).characters) ? (updatedPlot as any).characters as string[] : [],
-        location: (updatedPlot as any).location,
-        notes: (updatedPlot as any).notes,
-        order: (updatedPlot as any).order,
-        duration: (updatedPlot as any).duration,
-        importance: (updatedPlot as any).importance as PlotPoint['importance'],
-        createdAt: (updatedPlot as any).createdAt,
-        updatedAt: (updatedPlot as any).updatedAt
+        id: updatedNote.id,
+        act: tagsData.act || 1,
+        title: updatedNote.title,
+        description: updatedNote.content || '',
+        type: tagsData.type || 'setup',
+        characters: Array.isArray(tagsData.characters) ? tagsData.characters : [],
+        location: tagsData.location || '',
+        notes: tagsData.notes || '',
+        order: tagsData.order || 0,
+        duration: tagsData.duration || 0,
+        importance: tagsData.importance || 'medium',
+        createdAt: updatedNote.createdAt,
+        updatedAt: updatedNote.updatedAt
       };
 
       Logger.info('SYNOPSIS_SERVICE', '플롯 포인트 업데이트 완료', { id });
@@ -209,8 +225,8 @@ export class SynopsisService {
   // 🔥 플롯 포인트 삭제
   static async deletePlotPoint(id: string): Promise<Result<void>> {
     try {
-      const client = await getPrismaClient();
-      await client.projectPlotPoint.delete({
+      const client = await prismaService.getClient();
+      await client.projectNote.delete({
         where: { id }
       });
 

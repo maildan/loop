@@ -5,6 +5,8 @@ import { ipcMain, IpcMainInvokeEvent, shell } from 'electron';
 import { Logger } from '../../shared/logger';
 import { IpcResponse, Project, ProjectCharacter, ProjectStructure, ProjectNote } from '../../shared/types';
 import { prismaService } from '../services/PrismaService';
+import { IdeaService } from '../services/ideaService';
+import { SynopsisService } from '../services/synopsisService';
 
 /**
  * 🔥 프로젝트 IPC 핸들러 설정 - 성능 최적화
@@ -24,7 +26,19 @@ export function setupProjectIpcHandlers(): void {
       });
 
       // Prisma 결과를 Project 타입으로 변환
-      const convertedProjects: Project[] = projects.map(project => ({
+      const convertedProjects: Project[] = projects.map((project: {
+        id: string;
+        title: string;
+        description: string | null;
+        content: string | null;
+        progress: number;
+        wordCount: number;
+        lastModified: Date;
+        createdAt: Date;
+        genre: string;
+        status: string;
+        author: string;
+      }) => ({
         id: project.id,
         title: project.title,
         description: project.description || '',
@@ -162,8 +176,7 @@ export function setupProjectIpcHandlers(): void {
       }
 
       // 🔥 Prisma를 통한 실제 DB 생성
-      const { PrismaClient } = await import('@prisma/client');
-      const prisma = new PrismaClient();
+      const prisma = await prismaService.getClient();
 
       try {
         const now = new Date();
@@ -313,8 +326,7 @@ export function setupProjectIpcHandlers(): void {
     try {
       Logger.debug('PROJECT_IPC', 'Deleting project from DB', { id });
 
-      const { PrismaClient } = await import('@prisma/client');
-      const prisma = new PrismaClient();
+      const prisma = await prismaService.getClient();
 
       try {
         await prisma.project.delete({
@@ -377,8 +389,7 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
       }
 
       // 실제 DB에 저장
-      const { PrismaClient } = await import('@prisma/client');
-      const prisma = new PrismaClient();
+      const prisma = await prismaService.getClient();
 
       try {
         const now = new Date();
@@ -483,8 +494,7 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
       }
 
       // 실제 DB에 저장
-      const { PrismaClient } = await import('@prisma/client');
-      const prisma = new PrismaClient();
+      const prisma = await prismaService.getClient();
 
       try {
         const now = new Date();
@@ -578,7 +588,25 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
       });
 
       // Prisma 결과를 ProjectCharacter 타입으로 변환
-      const convertedCharacters: ProjectCharacter[] = characters.map(char => ({
+      const convertedCharacters: ProjectCharacter[] = characters.map((char: {
+        id: string;
+        name: string;
+        description: string | null;
+        role: string;
+        notes: string | null;
+        appearance: string | null;
+        personality: string | null;
+        background: string | null;
+        goals: string | null;
+        conflicts: string | null;
+        avatar: string | null;
+        color: string;
+        projectId: string;  
+        sortOrder: number;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+      }) => ({
         id: char.id,
         projectId: char.projectId,
         name: char.name,
@@ -735,7 +763,20 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
       });
 
       // Prisma 결과를 ProjectStructure 타입으로 변환
-      const convertedStructure: ProjectStructure[] = structure.map(item => ({
+      const convertedStructure: ProjectStructure[] = structure.map((item: {
+        id: string;
+        projectId: string;
+        type: string;
+        title: string;
+        description: string | null;
+        content: string | null;
+        status: string;
+        wordCount: number;
+        sortOrder: number;
+        parentId: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+      }) => ({
         id: item.id,
         projectId: item.projectId,
         type: item.type as 'chapter' | 'synopsis' | 'idea' | 'act' | 'section',
@@ -746,9 +787,9 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
         wordCount: item.wordCount || 0,
         sortOrder: item.sortOrder || 0,
         parentId: item.parentId || undefined,
-        depth: item.depth || 0,
-        color: item.color || undefined,
-        isActive: item.isActive ?? true,
+        depth: 0, // 기본값으로 설정 (스키마에 없는 필드)
+        color: undefined, // 기본값으로 설정 (스키마에 없는 필드)
+        isActive: true, // 기본값으로 설정 (스키마에 없는 필드)
         createdAt: item.createdAt,
         updatedAt: item.updatedAt,
       }));
@@ -1075,5 +1116,135 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
     }
   });
 
-  Logger.info('PROJECT_IPC', '✅ Project IPC handlers setup complete with Prisma DB integration');
+  // 🔥 아이디어 관리 IPC 핸들러들
+  
+  // 프로젝트 아이디어 조회
+  ipcMain.handle('projects:get-ideas', async (event: IpcMainInvokeEvent, projectId: string): Promise<IpcResponse<any[]>> => {
+    try {
+      Logger.debug('PROJECT_IPC', 'Getting project ideas', { projectId });
+      
+      const result = await IdeaService.getIdeasByProject(projectId);
+      
+      if (result.success) {
+        Logger.info('PROJECT_IPC', `✅ Ideas retrieved successfully`, { count: result.data.length });
+        return {
+          success: true,
+          data: result.data,
+          timestamp: new Date(),
+        };
+      } else {
+        Logger.error('PROJECT_IPC', 'Failed to get ideas', result.error);
+        return {
+          success: false,
+          error: result.error,
+          timestamp: new Date(),
+        };
+      }
+    } catch (error) {
+      Logger.error('PROJECT_IPC', 'Failed to get ideas', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date(),
+      };
+    }
+  });
+
+  // 아이디어 생성
+  ipcMain.handle('projects:create-idea', async (event: IpcMainInvokeEvent, projectId: string, ideaData: any): Promise<IpcResponse<any>> => {
+    try {
+      Logger.debug('PROJECT_IPC', 'Creating new idea', { projectId, title: ideaData.title });
+      
+      const result = await IdeaService.createIdea(projectId, ideaData);
+      
+      if (result.success) {
+        Logger.info('PROJECT_IPC', `✅ Idea created successfully`, { id: result.data.id });
+        return {
+          success: true,
+          data: result.data,
+          timestamp: new Date(),
+        };
+      } else {
+        Logger.error('PROJECT_IPC', 'Failed to create idea', result.error);
+        return {
+          success: false,
+          error: result.error,
+          timestamp: new Date(),
+        };
+      }
+    } catch (error) {
+      Logger.error('PROJECT_IPC', 'Failed to create idea', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date(),
+      };
+    }
+  });
+
+  // 아이디어 업데이트
+  ipcMain.handle('projects:update-idea', async (event: IpcMainInvokeEvent, ideaId: string, updates: any): Promise<IpcResponse<any>> => {
+    try {
+      Logger.debug('PROJECT_IPC', 'Updating idea', { ideaId });
+      
+      const result = await IdeaService.updateIdea(ideaId, updates);
+      
+      if (result.success) {
+        Logger.info('PROJECT_IPC', `✅ Idea updated successfully`, { id: result.data.id });
+        return {
+          success: true,
+          data: result.data,
+          timestamp: new Date(),
+        };
+      } else {
+        Logger.error('PROJECT_IPC', 'Failed to update idea', result.error);
+        return {
+          success: false,
+          error: result.error,
+          timestamp: new Date(),
+        };
+      }
+    } catch (error) {
+      Logger.error('PROJECT_IPC', 'Failed to update idea', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date(),
+      };
+    }
+  });
+
+  // 아이디어 삭제
+  ipcMain.handle('projects:delete-idea', async (event: IpcMainInvokeEvent, ideaId: string): Promise<IpcResponse<void>> => {
+    try {
+      Logger.debug('PROJECT_IPC', 'Deleting idea', { ideaId });
+      
+      const result = await IdeaService.deleteIdea(ideaId);
+      
+      if (result.success) {
+        Logger.info('PROJECT_IPC', `✅ Idea deleted successfully`, { ideaId });
+        return {
+          success: true,
+          data: undefined,
+          timestamp: new Date(),
+        };
+      } else {
+        Logger.error('PROJECT_IPC', 'Failed to delete idea', result.error);
+        return {
+          success: false,
+          error: result.error,
+          timestamp: new Date(),
+        };
+      }
+    } catch (error) {
+      Logger.error('PROJECT_IPC', 'Failed to delete idea', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date(),
+      };
+    }
+  });
+
+  Logger.info('PROJECT_IPC', '✅ Project IPC handlers setup complete with Prisma DB integration and Ideas support');
 }

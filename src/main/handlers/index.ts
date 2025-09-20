@@ -11,6 +11,7 @@ import { setupProjectIpcHandlers } from './projectIpcHandlers';
 import { setupAIIpcHandlers } from './aiIpcHandlers';
 import { registerDynamicFontHandlers } from './dynamicFontHandler';
 import { setupFontIpcHandlers } from './fontIpcHandlers';
+import { setupAppIpcHandlers } from './appIpcHandlers';
 
 // #DEBUG: Handlers index entry point
 Logger.debug('HANDLERS_INDEX', 'Handlers index module loaded');
@@ -105,6 +106,10 @@ export class HandlersManager {
           'projects:delete-character',
           'projects:delete-structure',
           'projects:delete-note',
+          'projects:get-ideas',
+          'projects:create-idea',
+          'projects:update-idea',
+          'projects:delete-idea',
         ]),
         this.setupHandler('ai', () => setupAIIpcHandlers(), [
           'ai:analyze-text',
@@ -125,6 +130,11 @@ export class HandlersManager {
           'font:get-font-family',
           'font:reload',
           'font:get-static-fonts',
+        ]),
+        this.setupHandler('app', () => setupAppIpcHandlers(), [
+          'app:get-user-data-path',
+          'app:get-version',
+          'app:get-name',
         ]),
 
         // this.setupHandler('database', () => setupDatabaseIpcHandlers(), [...]),

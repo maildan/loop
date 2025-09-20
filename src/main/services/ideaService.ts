@@ -2,81 +2,44 @@
 import type { IdeaItem } from '../../main/types/project';
 import { Logger } from '../../shared/logger';
 import { createSuccess, createError, type Result } from '../../shared/common';
-
-// 🔥 기가차드 Prisma 클라이언트 타입 (동적 로딩)
-interface PrismaClient {
-    $connect(): Promise<void>;
-    $disconnect(): Promise<void>;
-    projectIdea: {
-        create(data: { data: unknown }): Promise<unknown>;
-        findMany(args?: unknown): Promise<unknown[]>;
-        findUnique(args: { where: { id: string } }): Promise<unknown | null>;
-        update(args: { where: { id: string }; data: unknown }): Promise<unknown>;
-        delete(args: { where: { id: string } }): Promise<unknown>;
-    };
-}
-
-let prismaClient: PrismaClient | null = null;
-
-// 🔥 Prisma 클라이언트 초기화
-async function getPrismaClient(): Promise<PrismaClient> {
-    if (!prismaClient) {
-        try {
-            const { PrismaClient } = await import('@prisma/client');
-            prismaClient = new PrismaClient() as unknown as PrismaClient;
-            await prismaClient.$connect();
-            Logger.info('IDEA_SERVICE', 'Prisma 클라이언트 연결 완료');
-        } catch (error) {
-            Logger.error('IDEA_SERVICE', 'Prisma 클라이언트 연결 실패', error);
-            throw error;
-        }
-    }
-    return prismaClient;
-}
+import { prismaService } from './PrismaService';
 
 // 🔥 아이디어 서비스
 export class IdeaService {
     // 🔥 프로젝트의 모든 아이디어 조회
     static async getIdeasByProject(projectId: string): Promise<Result<IdeaItem[]>> {
         try {
-            const client = await getPrismaClient();
-            const ideas = await client.projectIdea.findMany({
-                where: { projectId },
+            const client = await prismaService.getClient();
+            const ideas = await client.projectNote.findMany({  
+                where: { 
+                    projectId,
+                    type: 'idea'
+                },
                 orderBy: [
-                    { order: 'asc' },
+                    { sortOrder: 'asc' },
                     { createdAt: 'desc' }
                 ]
             });
 
-            const mappedIdeas: IdeaItem[] = (ideas as Array<{
-                id: string;
-                title: string;
-                content: string;
-                category: string;
-                stage: string;
-                tags: unknown;
-                priority: string;
-                connections: unknown;
-                attachments: unknown;
-                notes: string;
-                createdAt: Date;
-                updatedAt: Date;
-                isFavorite: boolean;
-            }>).map((idea) => ({
-                id: idea.id,
-                title: idea.title,
-                content: idea.content,
-                category: idea.category as IdeaItem['category'],
-                stage: idea.stage as IdeaItem['stage'],
-                tags: Array.isArray(idea.tags) ? idea.tags as string[] : [],
-                priority: idea.priority as IdeaItem['priority'],
-                connections: Array.isArray(idea.connections) ? idea.connections as string[] : [],
-                attachments: Array.isArray(idea.attachments) ? idea.attachments as string[] : [],
-                notes: idea.notes || '',
-                isFavorite: idea.isFavorite,
-                createdAt: idea.createdAt,
-                updatedAt: idea.updatedAt
-            }));
+            // ProjectNote를 IdeaItem으로 매핑
+            const mappedIdeas: IdeaItem[] = ideas.map((note) => {
+                const tagsData = (note.tags as any) || {};
+                return {
+                    id: note.id,
+                    title: note.title,
+                    content: note.content || '',
+                    category: tagsData.category || 'general',
+                    stage: tagsData.stage || 'idea',
+                    tags: Array.isArray(tagsData.tags) ? tagsData.tags : [],
+                    priority: tagsData.priority || 'medium',
+                    connections: Array.isArray(tagsData.connections) ? tagsData.connections : [],
+                    attachments: Array.isArray(tagsData.attachments) ? tagsData.attachments : [],
+                    notes: tagsData.notes || '',
+                    isFavorite: tagsData.isFavorite || false,
+                    createdAt: note.createdAt,
+                    updatedAt: note.updatedAt
+                };
+            });
 
             Logger.info('IDEA_SERVICE', `프로젝트 아이디어 조회 완료: ${mappedIdeas.length}개`, { projectId });
             return createSuccess(mappedIdeas);
@@ -89,12 +52,15 @@ export class IdeaService {
     // 🔥 새 아이디어 생성
     static async createIdea(projectId: string, idea: Omit<IdeaItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<Result<IdeaItem>> {
         try {
-            const client = await getPrismaClient();
-            const newIdea = await client.projectIdea.create({
-                data: {
-                    projectId,
-                    title: idea.title,
-                    content: idea.content,
+            const client = await prismaService.getClient();
+            
+            // IdeaItem을 ProjectNote 모델에 맞게 변환
+            const ideaData = {
+                projectId,
+                title: idea.title,
+                content: idea.content,
+                type: 'idea',
+                tags: {
                     category: idea.category,
                     stage: idea.stage,
                     tags: idea.tags,
@@ -102,25 +68,32 @@ export class IdeaService {
                     connections: idea.connections,
                     attachments: idea.attachments,
                     notes: idea.notes,
-                    isFavorite: idea.isFavorite,
-                    order: 0 // 새 아이디어는 맨 위에
-                }
+                    isFavorite: idea.isFavorite
+                },
+                isPinned: idea.isFavorite,
+                sortOrder: 0
+            };
+
+            const newNote = await client.projectNote.create({
+                data: ideaData
             });
 
+            // ProjectNote를 IdeaItem으로 매핑
+            const tagsData = (newNote.tags as any) || {};
             const mappedIdea: IdeaItem = {
-                id: (newIdea as any).id,
-                title: (newIdea as any).title,
-                content: (newIdea as any).content,
-                category: (newIdea as any).category as IdeaItem['category'],
-                stage: (newIdea as any).stage as IdeaItem['stage'],
-                tags: Array.isArray((newIdea as any).tags) ? (newIdea as any).tags as string[] : [],
-                priority: (newIdea as any).priority as IdeaItem['priority'],
-                connections: Array.isArray((newIdea as any).connections) ? (newIdea as any).connections as string[] : [],
-                attachments: Array.isArray((newIdea as any).attachments) ? (newIdea as any).attachments as string[] : [],
-                notes: (newIdea as any).notes || '',
-                isFavorite: (newIdea as any).isFavorite,
-                createdAt: (newIdea as any).createdAt,
-                updatedAt: (newIdea as any).updatedAt
+                id: newNote.id,
+                title: newNote.title,
+                content: newNote.content || '',
+                category: tagsData.category || 'general',
+                stage: tagsData.stage || 'idea',
+                tags: Array.isArray(tagsData.tags) ? tagsData.tags : [],
+                priority: tagsData.priority || 'medium',
+                connections: Array.isArray(tagsData.connections) ? tagsData.connections : [],
+                attachments: Array.isArray(tagsData.attachments) ? tagsData.attachments : [],
+                notes: tagsData.notes || '',
+                isFavorite: tagsData.isFavorite || false,
+                createdAt: newNote.createdAt,
+                updatedAt: newNote.updatedAt
             };
 
             Logger.info('IDEA_SERVICE', '아이디어 생성 완료', { id: mappedIdea.id, title: mappedIdea.title });
@@ -134,29 +107,63 @@ export class IdeaService {
     // 🔥 아이디어 업데이트
     static async updateIdea(id: string, updates: Partial<Omit<IdeaItem, 'id' | 'createdAt'>>): Promise<Result<IdeaItem>> {
         try {
-            const client = await getPrismaClient();
-            const updatedIdea = await client.projectIdea.update({
+            const client = await prismaService.getClient();
+            
+            // 기존 노트 데이터 가져오기
+            const existingNote = await client.projectNote.findUnique({
+                where: { id }
+            });
+            
+            if (!existingNote) {
+                return createError('아이디어를 찾을 수 없습니다.');
+            }
+
+            // 기존 tags 데이터 파싱
+            const existingTags = (existingNote.tags as any) || {};
+            
+            // ProjectNote 모델용 데이터 변환
+            const updateData: any = {
+                type: 'idea',
+                updatedAt: new Date()
+            };
+            
+            if (updates.title) updateData.title = updates.title;
+            if (updates.content) updateData.content = updates.content;
+            
+            // tags 필드에 모든 아이디어 관련 메타데이터 저장
+            const updatedTags = { ...existingTags };
+            if (updates.category) updatedTags.category = updates.category;
+            if (updates.stage) updatedTags.stage = updates.stage;
+            if (updates.tags) updatedTags.tags = updates.tags;
+            if (updates.priority) updatedTags.priority = updates.priority;
+            if (updates.connections) updatedTags.connections = updates.connections;
+            if (updates.attachments) updatedTags.attachments = updates.attachments;
+            if (updates.notes) updatedTags.notes = updates.notes;
+            if (updates.isFavorite !== undefined) updatedTags.isFavorite = updates.isFavorite;
+            
+            updateData.tags = updatedTags;
+
+            const updatedNote = await client.projectNote.update({
                 where: { id },
-                data: {
-                    ...updates,
-                    updatedAt: new Date()
-                }
+                data: updateData
             });
 
+            // ProjectNote를 IdeaItem으로 매핑
+            const tagsData = (updatedNote.tags as any) || {};
             const mappedIdea: IdeaItem = {
-                id: (updatedIdea as any).id,
-                title: (updatedIdea as any).title,
-                content: (updatedIdea as any).content,
-                category: (updatedIdea as any).category as IdeaItem['category'],
-                stage: (updatedIdea as any).stage as IdeaItem['stage'],
-                tags: Array.isArray((updatedIdea as any).tags) ? (updatedIdea as any).tags as string[] : [],
-                priority: (updatedIdea as any).priority as IdeaItem['priority'],
-                connections: Array.isArray((updatedIdea as any).connections) ? (updatedIdea as any).connections as string[] : [],
-                attachments: Array.isArray((updatedIdea as any).attachments) ? (updatedIdea as any).attachments as string[] : [],
-                notes: (updatedIdea as any).notes || '',
-                isFavorite: (updatedIdea as any).isFavorite,
-                createdAt: (updatedIdea as any).createdAt,
-                updatedAt: (updatedIdea as any).updatedAt
+                id: updatedNote.id,
+                title: updatedNote.title,
+                content: updatedNote.content || '',
+                category: tagsData.category || 'general',
+                stage: tagsData.stage || 'idea',
+                tags: Array.isArray(tagsData.tags) ? tagsData.tags : [],
+                priority: tagsData.priority || 'medium',
+                connections: Array.isArray(tagsData.connections) ? tagsData.connections : [],
+                attachments: Array.isArray(tagsData.attachments) ? tagsData.attachments : [],
+                notes: tagsData.notes || '',
+                isFavorite: tagsData.isFavorite || false,
+                createdAt: updatedNote.createdAt,
+                updatedAt: updatedNote.updatedAt
             };
 
             Logger.info('IDEA_SERVICE', '아이디어 업데이트 완료', { id });
@@ -170,8 +177,8 @@ export class IdeaService {
     // 🔥 아이디어 삭제
     static async deleteIdea(id: string): Promise<Result<void>> {
         try {
-            const client = await getPrismaClient();
-            await client.projectIdea.delete({
+            const client = await prismaService.getClient();
+            await client.projectNote.delete({
                 where: { id }
             });
 
@@ -186,14 +193,17 @@ export class IdeaService {
     // 🔥 즐겨찾기 토글
     static async toggleFavorite(id: string): Promise<Result<IdeaItem>> {
         try {
-            const client = await getPrismaClient();
-            const idea = await client.projectIdea.findUnique({ where: { id } });
-            if (!idea) {
+            const client = await prismaService.getClient();
+            const note = await client.projectNote.findUnique({ where: { id } });
+            if (!note) {
                 Logger.error('IDEA_SERVICE', '아이디어를 찾을 수 없음', { id });
                 return createError('아이디어를 찾을 수 없습니다.');
             }
 
-            return this.updateIdea(id, { isFavorite: !(idea as any).isFavorite });
+            const tagsData = (note.tags as any) || {};
+            const currentFavorite = tagsData.isFavorite || false;
+            
+            return this.updateIdea(id, { isFavorite: !currentFavorite });
         } catch (error) {
             Logger.error('IDEA_SERVICE', '즐겨찾기 토글 실패', error);
             return createError('즐겨찾기를 변경하는데 실패했습니다.');

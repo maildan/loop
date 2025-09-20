@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -12,7 +11,7 @@ datasource db {
 }
 
 // 🎯 사용자 모델 - 기본 사용자 정보
-model User {
+model Users {
   id        String   @id @default(cuid())
   username  String   @unique
   email     String?  @unique
@@ -45,7 +44,7 @@ model Project {
   lastModified DateTime @updatedAt
 
   // Relations
-  user          User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+  user          Users?             @relation(fields: [userId], references: [id], onDelete: SetNull)
   characters    ProjectCharacter[] // 🔥 등장인물 관계
   structure     ProjectStructure[] // 🔥 구조 관계
   notes         ProjectNote[] // 🔥 메모 관계
@@ -158,7 +157,7 @@ model TypingSession {
   updatedAt   DateTime  @updatedAt
 
   // Relations
-  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      Users             @relation(fields: [userId], references: [id], onDelete: Cascade)
   keyEvents KeyEvent[]
   analytics SessionAnalytics?
 
@@ -226,7 +225,7 @@ model UserSettings {
   updatedAt          DateTime @updatedAt
 
   // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_settings")
 }

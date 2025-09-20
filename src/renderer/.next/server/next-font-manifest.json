@@ -1,1 +1,16 @@
-{"pages":{},"app":{"/Users/user/loop/loop/src/renderer/app/not-found":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/layout":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/analytics/page":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/ai/page":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/page":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/dashboard/page":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/oauth/callback/page":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/settings/page":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/projects/page":["static/media/e4af272ccee01ff0-s.p.woff2"],"/Users/user/loop/loop/src/renderer/app/projects/[id]/page":["static/media/e4af272ccee01ff0-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}
+{
+  "app": {
+    "[project]/src/renderer/app/page": [
+      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
+    ],
+    "[project]/src/renderer/app/projects/[id]/page": [
+      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
+    ],
+    "[project]/src/renderer/app/projects/page": [
+      "static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}
