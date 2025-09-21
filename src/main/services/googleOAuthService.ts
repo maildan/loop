@@ -8,6 +8,7 @@ import { tokenStorage } from './tokenStorage';
 import type { OAuthTokens, GoogleUserInfo, OAuthResult, GoogleOAuthConfig } from '../types/oauth';
 import * as crypto from 'crypto';
 import type { OAuth2Client } from 'google-auth-library';
+import { PORTS } from '../constants';
 
 /**
  * 🔥 Google OAuth 서비스 클래스
@@ -23,7 +24,7 @@ export class GoogleOAuthService {
     this.config = {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-      redirectUri: process.env.GOOGLE_REDIRECT_URI || 'http://localhost:35821/oauth/callback',
+      redirectUri: process.env.GOOGLE_REDIRECT_URI || `http://localhost:${PORTS.OAUTH_CALLBACK_PORT}/oauth/callback`,
       scopes: [
         'https://www.googleapis.com/auth/documents',
         'https://www.googleapis.com/auth/drive.file',

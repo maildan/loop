@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'http';
 import { Logger } from '../../../shared/logger';
 import { buildDefaultHeaders } from './headers';
 import { OAuthManager } from './authManager';
+import { PORTS } from '../../constants';
 
 export class OAuthCallbackHandler {
     private manager: OAuthManager;
@@ -12,7 +13,7 @@ export class OAuthCallbackHandler {
 
     public async handleCallback(req: IncomingMessage, res: ServerResponse): Promise<void> {
         try {
-            const hostHeader = (req.headers && (req.headers.host as string)) || `localhost:${(req.socket as any).localPort || 35821}`;
+            const hostHeader = (req.headers && (req.headers.host as string)) || `localhost:${(req.socket as any).localPort || PORTS.STATIC_SERVER}`;
             const url = new URL(req.url || '', `http://${hostHeader}`);
 
             Logger.info('OAUTH_CALLBACK', 'Callback received', { rawUrl: url.toString() });

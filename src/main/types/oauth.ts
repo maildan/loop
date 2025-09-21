@@ -1,5 +1,7 @@
 // 🔥 기가차드 OAuth 타입 정의 - Google Docs/Drive 연동 전용
 
+import { PORTS } from '../constants';
+
 /**
  * 🔥 Google OAuth 설정
  */
@@ -73,7 +75,7 @@ export interface OAuthStatus {
 export const GOOGLE_OAUTH_CONFIG: GoogleOAuthConfig = {
   clientId: process.env.GOOGLE_CLIENT_ID || '',
   clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-  redirectUri: (process.env.GOOGLE_REDIRECT_URI || 'http://localhost:35821/oauth/callback').trim(), // 🔥 콜백 URL
+  redirectUri: (process.env.GOOGLE_REDIRECT_URI || `http://localhost:${PORTS.OAUTH_CALLBACK_PORT}/oauth/callback`).trim(), // 🔥 콜백 URL
   scopes: [
     'https://www.googleapis.com/auth/documents',
     'https://www.googleapis.com/auth/drive.file',

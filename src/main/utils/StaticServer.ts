@@ -2,6 +2,7 @@ import { createServer } from 'http';
 import { join } from 'path';
 import { existsSync } from 'fs';
 import { Logger } from '../../shared/logger';
+import { PORTS } from '../constants';
 
 /**
  * StaticServer — lifecycle-only (<=100 lines)
@@ -11,8 +12,8 @@ export class StaticServer {
   private static instance: StaticServer;
   private server: import('http').Server | null = null;
   private port = 0;
-  private readonly basePort = 35821;
-  private readonly staticPath = join(__dirname, '..', '..', 'renderer', 'out');
+  private readonly basePort = PORTS.STATIC_SERVER;
+  private readonly staticPath = join(__dirname, '..', 'renderer');
 
   private constructor() {
     Logger.debug('STATIC_SERVER', 'StaticServer lifecycle-only instance created', { staticPath: this.staticPath });
@@ -47,13 +48,20 @@ export class StaticServer {
   public async start(): Promise<void> {
     if (this.server) return;
     this.server = createServer((req, res) => {
-      import('./static-server/requestRouter').then(({ RequestRouter }) => {
-        const StaticProvider = require('./static-server/staticProvider').StaticFileProvider;
-        const DynamicRouter = require('./static-server/dynamicRouter').DynamicRouter;
-        const OAuthHandler = require('./static-server/oauthCallback').OAuthCallbackHandler;
-        const staticProvider = new StaticProvider(this.staticPath);
+      Promise.all([
+        import('./static-server/requestRouter'),
+        import('./static-server/staticProvider'),
+        import('./static-server/dynamicRouter'),
+        import('./static-server/oauthCallback')
+      ]).then(([
+        { RequestRouter },
+        { StaticFileProvider },
+        { DynamicRouter },
+        { OAuthCallbackHandler }
+      ]) => {
+        const staticProvider = new StaticFileProvider(this.staticPath);
         const dynamicRouter = new DynamicRouter(this.staticPath);
-        const oauthHandler = new OAuthHandler(this.staticPath);
+        const oauthHandler = new OAuthCallbackHandler(this.staticPath);
         const router = new RequestRouter(staticProvider, dynamicRouter, oauthHandler);
         router.handle(req, res).catch((err: any) => { Logger.error('STATIC_SERVER', 'Router failed', err); try { res.writeHead(500); res.end('Internal Server Error'); } catch (e) {/*ignore*/ } });
       }).catch(err => { Logger.error('STATIC_SERVER', 'Failed to load router', err); try { res.writeHead(500); res.end('Internal Server Error'); } catch (e) {/*ignore*/ } });

@@ -7,6 +7,7 @@ import { Platform } from '../utils/platform';
 import { getSettingsManager } from '../settings';
 import type { SettingsChangeEvent, UISettingsSchema, AppSettingsSchema, KeyboardSettingsSchema, NotificationSettingsSchema } from '../settings/types';
 import path from 'path';
+import { FILE_PATHS } from '../constants';
 
 // Helper: resolve + whitelist + containment checks to avoid path traversal
 function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFilenames?: string[]): string | null {

@@ -8,6 +8,7 @@ import { createHash, randomBytes, createCipheriv } from 'crypto';
 import axios from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import { PORTS } from '../constants';
 import { app as electronApp } from 'electron';
 import { windowManager } from '../core/window';
 
@@ -38,7 +39,7 @@ export class OAuthService extends BaseManager {
   private oauthState: OAuthState = { isAuthenticated: false };
   private codeVerifier: string = '';
   private codeChallenge: string = '';
-  private readonly redirectUri = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:35821/oauth/callback';
+  private readonly redirectUri = process.env.GOOGLE_REDIRECT_URI || `http://localhost:${PORTS.OAUTH_CALLBACK_PORT}/oauth/callback`;
 
   constructor() {
     super({

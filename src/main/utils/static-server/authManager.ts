@@ -3,6 +3,7 @@ import { Logger } from '../../../shared/logger';
 import { isWhitelistedRedirect } from '../../core/security';
 import { buildDefaultHeaders } from './headers';
 import { OAuthSuccessPage } from './oauthSuccessPage';
+import { PORTS } from '../../constants';
 
 export class OAuthManager {
     constructor(private staticPath: string) { }
@@ -52,7 +53,7 @@ export class OAuthManager {
                 // not an absolute URL — if it starts with /, treat as local path
                 if (state.startsWith('/')) {
                     // derive port from socket if available
-                    const port = (req.socket as any).localPort || 35821;
+                    const port = (req.socket as any).localPort || PORTS.STATIC_SERVER;
                     return { redirectTo: `http://localhost:${port}${state}` };
                 }
             }

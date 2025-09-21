@@ -12,6 +12,7 @@ import { Logger } from '../shared/logger';
 import { ApplicationBootstrapper } from './core/ApplicationBootstrapper';
 import { performanceOptimizer } from './core/PerformanceOptimizer';
 import { Platform } from './utils/platform';
+import { APP_IDENTITY } from './constants';
 
 // 🔥 환경 변수는 위에서 이미 로드됨
 // 🔥 환경변수 로깅(민감값 제외)
@@ -31,10 +32,10 @@ Logger.info('ENV', 'Loaded environment variables', safeEnv);
 
 // 🔥 앱 이름 설정 (package.json productName과 일치)
 app.setName('Loop');
-app.setAppUserModelId('com.loop.typing-analytics'); // Windows 작업 표시줄 아이콘 ID (appId와 일치시킴)
+app.setAppUserModelId(APP_IDENTITY.USER_MODEL_ID); // Windows 작업 표시줄 아이콘 ID (constants에서 관리)
 Logger.info('MAIN', '🔄 앱 이름 설정 완료', {
   name: app.getName(),
-  appId: 'com.loop.app', // 직접 값 사용
+  appId: APP_IDENTITY.ID, // constants에서 관리
   appPath: app.getAppPath()
 });
 
@@ -42,9 +43,9 @@ Logger.info('MAIN', '🔄 앱 이름 설정 완료', {
 performanceOptimizer.applyAllOptimizations();
 performanceOptimizer.startPerformanceBenchmark();
 
-// 🔥 플랫폼별 아이콘 설정 (dev/prod 안전 경로)
+// 🔥 플랫폼별 아이콘 설정 (dev/prod 안전 경로) - constants.ts와 일치
 const isDev = process.env.NODE_ENV === 'development';
-const assetsDir = isDev ? join(process.cwd(), 'assets') : join(process.resourcesPath, 'assets');
+const assetsDir = isDev ? join(process.cwd(), 'public/assets') : join(process.resourcesPath, 'public/assets');
 const iconPngPath = join(assetsDir, 'icon.png');
 const iconIcoPath = join(assetsDir, 'icon.ico');
 const iconIcnsPath = join(assetsDir, 'icon.icns');

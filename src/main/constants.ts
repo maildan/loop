@@ -9,10 +9,50 @@ Logger.debug('CONSTANTS', 'Constants module loaded');
 export const APP_METADATA = {
   NAME: 'Loop',
   VERSION: '1.0.0',
-  DESCRIPTION: 'Real-time typing analytics for enhanced productivity',
+  DESCRIPTION: 'loop on desktop for writers',
   AUTHOR: 'Loop Development Team',
   HOMEPAGE: 'https://loop.app',
-  ELECTRON_MIN_VERSION: '24.0.0',
+  ELECTRON_MIN_VERSION: '38.0.0',
+} as const;
+
+// 🔥 기가차드 앱 식별자 (중앙 관리)
+export const APP_IDENTITY = {
+  ID: 'com.loop.app',                    // 앱 ID (모든 파일에서 통일)
+  NAME: 'Loop',                          // 앱 이름
+  USER_MODEL_ID: 'com.loop.app',         // Windows 작업표시줄 ID
+  PROTOCOL: 'com.loop.app',              // 프로토콜 스키마
+} as const;
+
+// 🔥 기가차드 포트 설정 (중앙 관리)
+export const PORTS = {
+  STATIC_SERVER: 35821,                  // 정적 서버 포트
+  RENDERER_DEV: 4000,                    // Next.js 렌더러 개발 서버
+  VITE_DEV: [5000, 5173],               // Vite 개발 서버들
+  OAUTH_CALLBACK_PORT: 35821,            // OAuth 콜백 포트
+} as const;
+
+// 🔥 기가차드 CSP 정책 (중앙 관리 - 포트 기반 동적 생성)
+export const CSP_POLICIES = {
+  DEVELOPMENT: [
+    "default-src 'self' data: blob:",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:* https://localhost:*",
+    "style-src 'self' 'unsafe-inline' http://localhost:* https://localhost:*",
+    "img-src 'self' data: blob: http://localhost:* https://localhost:* https://lh3.googleusercontent.com",
+    "connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
+    "frame-src 'self' http://localhost:* https://localhost:*",
+    "worker-src 'self' blob: http://localhost:*"
+  ].join('; '),
+  
+  PRODUCTION: [
+    "default-src 'self' data:",
+    `script-src 'self' 'unsafe-inline' https://accounts.google.com http://localhost:${PORTS.STATIC_SERVER}`,
+    `style-src 'self' 'unsafe-inline' http://localhost:${PORTS.STATIC_SERVER} http://localhost:${PORTS.RENDERER_DEV} http://localhost:${PORTS.VITE_DEV[0]} http://localhost:${PORTS.VITE_DEV[1]}`,
+    "img-src 'self' data: blob: https://ui-avatars.com https://lh3.googleusercontent.com",
+    "font-src 'self' data:",
+    "connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
+    "frame-src https://accounts.google.com",
+    "worker-src 'self' blob:"
+  ].join('; ')
 } as const;
 
 // 🔥 기가차드 파일 경로 상수
@@ -33,10 +73,12 @@ export const FILE_PATHS = {
     BACKUP: 'loop-backup.db',
   },
   ASSETS: {
-    ICON_ICO: 'assets/icon.ico',
-    ICON_ICNS: 'assets/icon.icns',
-    ICON_PNG: 'assets/icon.png',
-    TRAY_ICON: 'assets/tray.png',
+    ICON_ICO: 'public/assets/icon.ico',
+    ICON_ICNS: 'public/assets/icon.icns',
+    ICON_PNG: 'public/assets/icon.png',
+    TRAY_ICON: 'public/icon/tray.png',
+    APP_ICON: 'public/assets/icon/app.icns',    // macOS 앱 아이콘
+    TRAY_ICO: 'public/icon/tray.ico',           // Windows 트레이 아이콘
   },
 } as const;
 
@@ -162,6 +204,9 @@ export const NETWORK_SETTINGS = {
 // 🔥 기가차드 기본 내보내기
 const CONSTANTS = {
   APP_METADATA,
+  APP_IDENTITY,
+  PORTS,
+  CSP_POLICIES,
   FILE_PATHS,
   WINDOW_SETTINGS,
   KEYBOARD_CONSTANTS,

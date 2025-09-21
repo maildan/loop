@@ -7,6 +7,7 @@ import { EventController } from './EventController';
 import { SettingsWatcher } from './SettingsWatcher';
 import { ShutdownManager } from './ShutdownManager';
 import { unifiedPermissionManager } from '../utils/UnifiedPermissionManager';
+import { APP_IDENTITY, FILE_PATHS } from '../constants';
 // Register keychain IPC handlers
 import { registerKeychainHandlers } from '../handlers/keychainIpcHandlers';
 import registerNotificationHandlers from '../handlers/notificationIpcHandlers';
@@ -149,15 +150,15 @@ export class ApplicationBootstrapper {
         Logger.info('BOOTSTRAPPER', '🔗 Already registered as default protocol handler for loop://');
       }
 
-      // com.loop.app:// 프로토콜도 등록
-      if (!app.isDefaultProtocolClient('com.loop.app')) {
-        const result = app.setAsDefaultProtocolClient('com.loop.app');
+      // APP_IDENTITY.PROTOCOL 프로토콜도 등록
+      if (!app.isDefaultProtocolClient(APP_IDENTITY.PROTOCOL)) {
+        const result = app.setAsDefaultProtocolClient(APP_IDENTITY.PROTOCOL);
         Logger.info('BOOTSTRAPPER', '🔗 Custom protocol handler registration result', {
-          protocol: 'com.loop.app',
+          protocol: APP_IDENTITY.PROTOCOL,
           success: result
         });
       } else {
-        Logger.info('BOOTSTRAPPER', '🔗 Already registered as default protocol handler for com.loop.app://');
+        Logger.info('BOOTSTRAPPER', `🔗 Already registered as default protocol handler for ${APP_IDENTITY.PROTOCOL}://`);
       }
     } catch (error) {
       Logger.error('BOOTSTRAPPER', 'Failed to setup protocol handling', error);
@@ -446,7 +447,7 @@ export class ApplicationBootstrapper {
    */
   private setupAppName(): void {
     app.setName('Loop');
-    app.setAppUserModelId('com.loop.app');
+    app.setAppUserModelId(APP_IDENTITY.USER_MODEL_ID);
     Logger.info('BOOTSTRAPPER', 'App name set to Loop');
   }
 }

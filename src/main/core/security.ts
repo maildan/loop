@@ -26,10 +26,10 @@ export const CSP = {
 
 // 안전한 redirect whitelist (localhost only with specific port range)
 export const REDIRECT_WHITELIST = [
-  'http://localhost:35821',
-  'http://127.0.0.1:35821',
-  'http://127.0.0.1:4000',
-  'http://localhost:4000',
+  `http://localhost:${PORTS.STATIC_SERVER}`,
+  `http://127.0.0.1:${PORTS.STATIC_SERVER}`,
+  `http://127.0.0.1:${PORTS.RENDERER_DEV}`,
+  `http://localhost:${PORTS.RENDERER_DEV}`,
 ];
 
 export function isWhitelistedRedirect(url: string): boolean {
@@ -48,6 +48,7 @@ import { join } from 'path';
 import { promises as fs } from 'fs';
 import { Logger } from '../../shared/logger';
 import { isString, isObject } from '../../shared/common';
+import { PORTS } from '../constants';
 
 // #DEBUG: Security manager entry point
 Logger.debug('SECURITY', 'Security manager module loaded');
@@ -70,11 +71,11 @@ const DEFAULT_SECURITY_CONFIG: SecurityConfig = {
     'http://localhost',
     'https://localhost',
     'http://localhost:3000',
-    'http://localhost:4000',
-    'http://localhost:35821',
+    `http://localhost:${PORTS.RENDERER_DEV}`,
+    `http://localhost:${PORTS.STATIC_SERVER}`,
     'https://localhost:3000',
-    'https://localhost:4000',
-    'https://localhost:35821',
+    `https://localhost:${PORTS.RENDERER_DEV}`,
+    `https://localhost:${PORTS.STATIC_SERVER}`,
     'file://'
   ],
   blockedDomains: [
@@ -157,10 +158,9 @@ export class SecurityManager {
       // #DEBUG: Setting up security policies
       Logger.debug('SECURITY', 'Setting up security policies');
 
-      // CSP 헤더 설정 - 로컬 HTTP 서버 및 동적 chunk 로딩 지원
-      if (this.config.enableCSP) {
-        app.commandLine.appendSwitch('force-csp', "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: filesystem: file: http://localhost:35821; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: file: http://localhost:35821; style-src 'self' 'unsafe-inline' data: file: http://localhost:35821; img-src 'self' data: blob: file: http://localhost:35821; font-src 'self' data: file: http://localhost:35821 http://localhost:4000; connect-src 'self' http://localhost:* ws://localhost:* wss://localhost:* file: data:; worker-src 'self' blob: data: http://localhost:35821; child-src 'self' blob: data: http://localhost:35821;");
-      }
+      // CSP 헤더는 static-server/headers.ts에서 관리
+      // 중복 방지를 위해 commandLine CSP 제거
+      Logger.debug('SECURITY', 'CSP policies managed by static-server headers.ts');
 
       // 외부 링크 차단
       app.on('web-contents-created', (_event: Electron.Event, contents: Electron.WebContents) => {

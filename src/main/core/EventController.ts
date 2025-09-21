@@ -3,6 +3,7 @@
 import { app, BrowserWindow, Event, WebContents, Certificate } from 'electron';
 import { Logger } from '../../shared/logger';
 import { Platform } from '../utils/platform';
+import { APP_IDENTITY } from '../constants';
 
 /**
  * 🔥 이벤트 핸들러 인터페이스
@@ -275,7 +276,7 @@ export class EventController {
       const urlObj = new URL(url);
       const protocol = urlObj.protocol.replace(':', '');
       
-      if (protocol === 'com.loop.app' || protocol === 'loop') {
+      if (protocol === APP_IDENTITY.PROTOCOL || protocol === 'loop') {
         // 메인 윈도우가 있으면 포커스, 없으면 생성
         const windows = BrowserWindow.getAllWindows();
         let mainWindow = windows.find(win => !win.isDestroyed());

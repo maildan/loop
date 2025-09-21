@@ -61,7 +61,7 @@ export class WindowManager {
           nodeIntegration: false,
           contextIsolation: true,
           sandbox: false,
-          preload: join(__dirname, '../../preload/preload.js'),
+          preload: join(__dirname, '../preload/index.js'),
           webSecurity: true,
           // 🔥 보안 강화: enableBlinkFeatures 제거하고 다른 방식으로 클립보드 지원
           // enableBlinkFeatures: 'ClipboardApi', // 보안 경고 제거
