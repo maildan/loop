@@ -9,6 +9,8 @@ import StarterKit from '@tiptap/starter-kit';
 import { Logger } from '../../../../../shared/logger';
 import { DragDropHandler } from './handlers/DragDropHandler';
 import { EditorBubbleMenu } from './components/EditorBubbleMenu';
+import { SlashCommand, slashSuggestion } from './components/SlashCommands';
+import './MarkdownEditor.css';
 
 interface MarkdownEditorProps {
     content: string;
@@ -44,7 +46,12 @@ export function MarkdownEditor({
         onBlur?: () => void;
     }) => {
         const editor = useEditor({
-            extensions: [StarterKit],
+            extensions: [
+                StarterKit,
+                SlashCommand.configure({
+                    suggestion: slashSuggestion,
+                }),
+            ],
             content: opts.content,
             onCreate: () => {
                 opts.onReady?.();

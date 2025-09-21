@@ -249,6 +249,49 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
     }
   };
 
+  // 🔥 파일 가져오기 처리
+  const handleFileImport = async (): Promise<void> => {
+    try {
+      Logger.info('PROJECT_CREATOR', 'File import started');
+      
+      if (!window.electronAPI) {
+        alert('데스크톱 앱에서만 사용 가능합니다');
+        return;
+      }
+
+      const result = await window.electronAPI.projects.importFile();
+      
+      if (result.success && result.data) {
+        // 파일 내용으로 폼 자동 채우기
+        setTitle(result.data.title || '');
+        setDescription(result.data.description || '');
+        
+        Logger.info('PROJECT_CREATOR', '✅ File imported successfully', result.data);
+        alert('파일을 성공적으로 불러왔습니다!');
+        
+        // 파일에서 가져온 경우 바로 프로젝트 생성
+        if (result.data.content) {
+          const projectData: ProjectCreationData = {
+            title: result.data.title || 'Imported Project',
+            description: result.data.description || 'Imported from file',
+            genre: selectedGenre,
+            platform: 'loop',
+            content: result.data.content,
+            targetWords: 10000,
+          };
+          
+          await onCreate(projectData);
+          onClose();
+        }
+      } else {
+        throw new Error(result.error || '파일 가져오기에 실패했습니다.');
+      }
+    } catch (error) {
+      Logger.error('PROJECT_CREATOR', 'File import failed', error);
+      alert(`파일 가져오기 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
+    }
+  };
+
   // 🔥 Google Docs 목록 표시 (강화된 오류 처리 및 인증 재확인)
   const showGoogleDocsList = async () => {
     try {
@@ -403,6 +446,11 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
     // 🔥 Google Docs 선택 시 연동 처리 시작
     if (platformId === 'google-docs') {
       await handleGoogleDocsIntegration();
+    }
+
+    // 🔥 파일 가져오기 선택 시 처리
+    if (platformId === 'import') {
+      await handleFileImport();
     }
   };
 

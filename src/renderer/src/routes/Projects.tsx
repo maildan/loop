@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ProjectGrid } from '../../components/projects/ProjectGrid';
 import { ProjectCreator, type ProjectCreationData } from '../../components/projects/ProjectCreator';
 import { ProjectEditorModal } from '../../components/projects/ProjectEditorModal';
+import { ConfirmDeleteDialog } from '../../components/projects/components/ConfirmDeleteDialog';
 import { type ProjectData } from '../../components/projects/ProjectCard';
 import { Logger } from '../../../shared/logger';
 
@@ -31,6 +32,7 @@ function ProjectsPageContent(): React.ReactElement {
   const [error, setError] = useState<string | null>(null);
   const [showCreator, setShowCreator] = useState<boolean>(false);
   const [editingProject, setEditingProject] = useState<ProjectData | null>(null);
+  const [deletingProject, setDeletingProject] = useState<ProjectData | null>(null);
 
   // 🔥 URL 쿼리 파라미터에서 create=true 감지 시 자동으로 생성 다이얼로그 열기
   useEffect(() => {
@@ -133,6 +135,9 @@ function ProjectsPageContent(): React.ReactElement {
         setProjects(prev => [newProject as ProjectData, ...prev]);
         setShowCreator(false);
         Logger.info('PROJECTS_PAGE', '✅ Project created successfully', { id: newProject.id });
+        
+        // 🔥 생성된 프로젝트로 자동 리다이렉트
+        navigate(`/projects/${newProject.id}`);
       } else {
         throw new Error(result?.error || 'Failed to create project');
       }
@@ -171,28 +176,40 @@ function ProjectsPageContent(): React.ReactElement {
   };
 
   /**
-   * 🔥 프로젝트 삭제 핸들러
+   * 🔥 프로젝트 삭제 요청 핸들러 (모달 띄우기)
    */
-  const handleDeleteProject = async (project: ProjectData): Promise<void> => {
-    try {
-      Logger.info('PROJECTS_PAGE', '🗑️ Deleting project', { id: project.id });
+  const handleDeleteProject = (project: ProjectData): void => {
+    setDeletingProject(project);
+    Logger.info('PROJECTS_PAGE', '🗑️ Delete confirmation requested', { id: project.id, title: project.title });
+  };
 
-      const result = await window.electronAPI?.projects?.delete(project.id);
+  /**
+   * 🔥 프로젝트 삭제 확인 핸들러 (실제 삭제)
+   */
+  const confirmDeleteProject = useCallback(async (): Promise<void> => {
+    if (!deletingProject) return;
+
+    try {
+      Logger.info('PROJECTS_PAGE', '🗑️ Deleting project', { id: deletingProject.id });
+
+      const result = await window.electronAPI?.projects?.delete(deletingProject.id);
 
       if (!result?.success) {
         throw new Error(result?.error || 'Failed to delete project');
       }
 
       // 🔥 목록에서 해당 프로젝트 제거
-      setProjects(prev => prev.filter(p => p.id !== project.id));
+      setProjects(prev => prev.filter(p => p.id !== deletingProject.id));
+      setDeletingProject(null);
 
-      Logger.info('PROJECTS_PAGE', '✅ Project deleted successfully', { id: project.id });
+      Logger.info('PROJECTS_PAGE', '✅ Project deleted successfully', { id: deletingProject.id });
 
     } catch (err) {
       Logger.error('PROJECTS_PAGE', '❌ Failed to delete project', err);
+      setDeletingProject(null);
       throw err;
     }
-  };
+  }, [deletingProject]);
 
   /**
    * 🔥 프로젝트 선택 핸들러 (상세 페이지로 이동)
@@ -201,6 +218,50 @@ function ProjectsPageContent(): React.ReactElement {
     Logger.info('PROJECTS_PAGE', '🎯 Opening project', { id: project.id, title: project.title });
     navigate(`/projects/${project.id}`);
   };
+
+  /**
+   * 🔥 로컬 파일에서 프로젝트 가져오기
+   */
+  const handleImportFromFile = useCallback(async (): Promise<void> => {
+    try {
+      Logger.info('PROJECTS_PAGE', '📁 Starting file import');
+      
+      // 파일 선택 다이얼로그 열기
+      if (typeof window !== 'undefined' && window.electronAPI) {
+        const result = await window.electronAPI.projects.importFile();
+        
+        if (result.success) {
+          Logger.info('PROJECTS_PAGE', '✅ File imported successfully', result.data);
+          // 프로젝트 목록 새로고침
+          loadProjects();
+        } else {
+          Logger.error('PROJECTS_PAGE', '❌ File import failed', result.error);
+          setError(result.error || '파일 가져오기에 실패했습니다.');
+        }
+      }
+    } catch (err) {
+      Logger.error('PROJECTS_PAGE', '❌ File import error', err);
+      setError('파일 가져오기 중 오류가 발생했습니다.');
+    }
+  }, []);
+
+  /**
+   * 🔥 Google Docs에서 프로젝트 가져오기
+   */
+  const handleImportFromGoogleDocs = useCallback(async (): Promise<void> => {
+    try {
+      Logger.info('PROJECTS_PAGE', '📄 Starting Google Docs import');
+      
+      if (typeof window !== 'undefined' && window.electronAPI) {
+        // TODO: Google Docs 가져오기 API 구현 필요
+        setError('Google Docs 가져오기 기능은 아직 구현 중입니다.');
+        Logger.warn('PROJECTS_PAGE', 'Google Docs import not implemented yet');
+      }
+    } catch (err) {
+      Logger.error('PROJECTS_PAGE', '❌ Google Docs import error', err);
+      setError('Google Docs 가져오기 중 오류가 발생했습니다.');
+    }
+  }, []);
 
   // 🔥 로딩 상태
   if (loading) {
@@ -259,11 +320,23 @@ function ProjectsPageContent(): React.ReactElement {
         />
       )}
 
+      {/* 🔥 프로젝트 삭제 확인 다이얼로그 */}
+      {deletingProject && (
+        <ConfirmDeleteDialog
+          isOpen={!!deletingProject}
+          projectTitle={deletingProject.title}
+          onConfirm={confirmDeleteProject}
+          onCancel={() => setDeletingProject(null)}
+        />
+      )}
+
       {/* 🔥 프로젝트 그리드 */}
       <ProjectGrid
         projects={projects}
         onCreateProject={() => setShowCreator(true)}
-        onEditProject={(project) => setEditingProject(project)}
+        onImportFromFile={handleImportFromFile}
+        onImportFromGoogleDocs={handleImportFromGoogleDocs}
+        onEditProject={(project: ProjectData) => setEditingProject(project)}
         onDeleteProject={handleDeleteProject}
         onViewProject={handleSelectProject}
       />

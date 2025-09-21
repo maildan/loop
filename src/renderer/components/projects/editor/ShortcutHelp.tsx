@@ -114,7 +114,7 @@ export function ShortcutHelp({ className = '', isWriterStatsOpen = false }: Shor
           <div className={HELP_STYLES.panel}>
             {/* 🔥 헤더 */}
             <div className={HELP_STYLES.header}>
-              <h2 className={HELP_STYLES.title}>키보드 단축키</h2>
+              <h2 className={HELP_STYLES.title}>  단축키</h2>
               <button
                 className={HELP_STYLES.closeButton}
                 onClick={handleClose}

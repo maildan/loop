@@ -3,7 +3,7 @@
 // 프로젝트 검색 및 관리 컴포넌트}|
 
 import React, { useState, useMemo } from 'react';
-import { Search, Plus, Filter, SortAsc, SortDesc } from 'lucide-react';
+import { Search, Plus, Filter, SortAsc, SortDesc, Upload, FileText } from 'lucide-react';
 import { ProjectCard, type ProjectData } from './ProjectCard';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
@@ -41,6 +41,8 @@ export interface ProjectGridProps {
   readonly projects: readonly ProjectData[];
   readonly loading?: boolean;
   readonly onCreateProject?: () => void;
+  readonly onImportFromFile?: () => void;
+  readonly onImportFromGoogleDocs?: () => void;
   readonly onViewProject?: (project: ProjectData) => void;
   readonly onEditProject?: (project: ProjectData) => void;
   readonly onShareProject?: (project: ProjectData) => void;
@@ -53,6 +55,8 @@ export function ProjectGrid({
   projects,
   loading = false,
   onCreateProject,
+  onImportFromFile,
+  onImportFromGoogleDocs,
   onViewProject,
   onEditProject,
   onShareProject,
@@ -206,17 +210,40 @@ export function ProjectGrid({
             </div>
           </div>
 
-          {/* 새 프로젝트 버튼 */}
+          {/* 프로젝트 액션 버튼들 */}
           {showCreateButton && (
-            <Button
-              variant="primary"
-              onClick={handleCreateProject}
-              className={PROJECT_GRID_STYLES.createButton}
-              aria-label="새 프로젝트 생성"
-            >
-              <Plus className="w-4 h-4" />
-              새 프로젝트
-            </Button>
+            <div className="flex items-center gap-2">
+              {/* 가져오기 버튼들 */}
+              <Button
+                variant="outline"
+                onClick={() => onImportFromFile?.()}
+                className="flex items-center gap-2"
+                aria-label="로컬 파일에서 프로젝트 가져오기"
+              >
+                <Upload className="w-4 h-4" />
+                파일 가져오기
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => onImportFromGoogleDocs?.()}
+                className="flex items-center gap-2"
+                aria-label="Google Docs에서 프로젝트 가져오기"
+              >
+                <FileText className="w-4 h-4" />
+                Google Docs
+              </Button>
+              
+              {/* 새 프로젝트 버튼 */}
+              <Button
+                variant="primary"
+                onClick={handleCreateProject}
+                className={PROJECT_GRID_STYLES.createButton}
+                aria-label="새 프로젝트 생성"
+              >
+                <Plus className="w-4 h-4" />
+                새 프로젝트
+              </Button>
+            </div>
           )}
         </div>
 
