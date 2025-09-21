@@ -167,24 +167,10 @@ export class WindowManager {
     });
   }
 
-  // 🔥 CSP 헤더 설정 (Electron 38 권장 방식)
+  // 🔥 CSP 헤더는 StaticServer에서 처리 (중복 방지)
   private setupCSPHeaders(window: BrowserWindow): void {
-    // #DEBUG: Setting up CSP headers
-    Logger.debug('WINDOW', 'Setting up CSP headers using session.webRequest');
-
-    const isDev = process.env.NODE_ENV === 'development';
-    const cspPolicy = isDev ? CSP.development : CSP.production;
-
-    window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-      callback({
-        responseHeaders: {
-          ...details.responseHeaders,
-          'Content-Security-Policy': [cspPolicy]
-        }
-      });
-    });
-
-    Logger.info('WINDOW', 'CSP headers configured via session.webRequest', { cspPolicy });
+    Logger.debug('WINDOW', 'CSP headers will be handled by StaticServer to avoid duplication');
+    // CSP는 src/main/utils/static-server/headers.ts에서 설정됨
   }
 
   // 🔥 윈도우 이벤트 설정
@@ -439,9 +425,9 @@ export class WindowManager {
         id: focusedWindow.id,
         title: focusedWindow.getTitle(),
         owner: {
-          name: 'Loop Typing Analytics',
+          name: 'Loop',
           processId: process.pid,
-          bundleId: Platform.isMacOS() ? 'com.loop.typing-analytics' : undefined,
+          bundleId: Platform.isMacOS() ? 'com.loop.app' : undefined,
           path: process.execPath,
         },
         bounds: {
@@ -479,7 +465,7 @@ export class WindowManager {
             owner: {
               name: `Loop Window (${windowId})`,
               processId: process.pid,
-              bundleId: Platform.isMacOS() ? 'com.loop.typing-analytics' : undefined,
+              bundleId: Platform.isMacOS() ? 'com.loop.app' : undefined,
               path: process.execPath,
             },
             bounds: {

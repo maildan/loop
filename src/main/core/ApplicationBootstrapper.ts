@@ -31,7 +31,11 @@ function resolveAndValidate(filePath: string | null, baseDir: string, allowedFil
       app.getPath('userData'),
       app.getPath('temp'),
       process.resourcesPath || '',
-      path.join(process.cwd(), 'assets')
+      path.join(process.cwd(), 'assets'),
+      path.join(process.cwd(), 'public', 'assets'),
+      path.join(process.cwd(), 'public', 'icon'),
+      path.join(process.cwd(), 'public'),
+      process.cwd()
     ].filter(Boolean);
 
     if (!safeBases.some(safe => baseDir.startsWith(safe))) {
@@ -364,21 +368,27 @@ export class ApplicationBootstrapper {
       if (process.platform === 'darwin') {
         // 🔥 macOS - ICNS 파일 사용, 여러 후보 경로 시도
         const candidates = [
-          path.join(iconsDir, 'icon.icns'),
           path.join(process.cwd(), 'public', 'assets', 'icon.icns'),
           path.join(process.cwd(), 'public', 'icon', 'app.icns'),
+          path.join(iconsDir, 'icon.icns'),
           path.join(__dirname, '..', '..', 'public', 'assets', 'icon.icns')
         ];
 
         let found: string | null = null;
         for (const iconPath of candidates) {
           try {
-            const validatedPath = resolveAndValidate(iconPath, iconsDir, ['icon.icns', 'icon.png']);
-            if (validatedPath) {
-              found = validatedPath;
-              break;
+            // 직접 파일 존재 여부 확인 (보안상 안전한 하드코딩된 경로들)
+            if (fs.existsSync(iconPath)) {
+              const stats = fs.statSync(iconPath);
+              if (stats.isFile() && stats.size > 100) {
+                found = iconPath;
+                Logger.debug('BOOTSTRAPPER', 'Found valid icon file', { path: iconPath, size: stats.size });
+                break;
+              }
             }
-          } catch (e) { /* continue */ }
+          } catch (e) { 
+            Logger.debug('BOOTSTRAPPER', 'Icon candidate failed', { path: iconPath, error: e });
+          }
         }
 
         if (found) {

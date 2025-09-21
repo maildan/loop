@@ -140,7 +140,7 @@ export class TrayManager extends BaseManager {
 
       // 플랫폼별 아이콘 경로 얻기
       const isDev = process.env.NODE_ENV === 'development';
-      const iconsDir = isDev ? path.join(process.cwd(), 'assets') : path.join(__dirname, '../../../assets');
+      const iconsDir = isDev ? path.join(process.cwd(), 'public', 'icon') : path.join(process.resourcesPath, 'public', 'icon');
       const iconPath = this.getTrayIconPath();
 
       const validatedIconPath = resolveAndValidate(iconPath, iconsDir);
@@ -391,11 +391,11 @@ export class TrayManager extends BaseManager {
 
       let iconsDir: string;
       if (isDev) {
-        // 개발 환경: 프로젝트 루트의 assets 폴더
-        iconsDir = path.join(process.cwd(), 'assets');
+        // 개발 환경: 프로젝트 루트의 public/icon 폴더
+        iconsDir = path.join(process.cwd(), 'public', 'icon');
       } else {
-        // 프로덕션 환경: 패키지된 앱의 assets 폴더
-        iconsDir = path.join(__dirname, '../../../assets');
+        // 프로덕션 환경: 패키지된 앱의 public/icon 폴더
+        iconsDir = path.join(process.resourcesPath, 'public', 'icon');
       }
 
       // 🔥 아이콘 경로 존재 여부 미리 확인
@@ -428,17 +428,21 @@ export class TrayManager extends BaseManager {
           }
         }
 
-        const iconPathCandidate = resolveAndValidate(path.join(iconsDir, 'icon.iconset', 'icon_16x16.png'), iconsDir, ['icon_16x16.png', 'icon_16x16@2x.png', 'icon.png', 'icon.icns']);
-        if (iconPathCandidate) {
-          Logger.info(this.componentName, '🍎 macOS tray icon path resolved', { iconPath: iconPathCandidate });
-          return iconPathCandidate;
-        }
+        // public/icon 폴더에 있는 실제 파일들 사용
+        const candidates = [
+          'trayTemplate.png',    // 메뉴바 템플릿 아이콘 (가장 적합)
+          'trayTemplate16.png',  // 16x16 크기
+          'trayTemplate32.png',  // 32x32 크기  
+          'app.icns',           // 앱 아이콘
+          'appIcon.png'         // PNG 앱 아이콘
+        ];
 
-        // 대체 아이콘 경로
-        const fallbackPathCandidate = resolveAndValidate(path.join(iconsDir, 'icon.png'), iconsDir, ['icon_16x16.png', 'icon_16x16@2x.png', 'icon.png', 'icon.icns']);
-        if (fallbackPathCandidate) {
-          Logger.info(this.componentName, '🍎 macOS using fallback icon', { fallbackPath: fallbackPathCandidate });
-          return fallbackPathCandidate;
+        for (const candidate of candidates) {
+          const iconPath = path.join(iconsDir, candidate);
+          if (require('fs').existsSync(iconPath)) {
+            Logger.info(this.componentName, '🍎 macOS tray icon found', { iconPath });
+            return iconPath;
+          }
         }
 
         Logger.warn(this.componentName, '⚠️ macOS icon not found, using null');
@@ -463,17 +467,19 @@ export class TrayManager extends BaseManager {
           }
         }
 
-        const iconPathCandidateWindows = resolveAndValidate(path.join(iconsDir, 'icon.ico'), iconsDir);
-        if (iconPathCandidateWindows) {
-          Logger.info(this.componentName, '🪟 Windows tray icon path resolved', { iconPath: iconPathCandidateWindows });
-          return iconPathCandidateWindows;
-        }
+        // public/icon 폴더에 있는 실제 Windows ICO 파일들 사용
+        const windowsCandidates = [
+          'tray.ico',      // 전용 트레이 아이콘
+          'app.ico',       // 앱 아이콘
+          'tray.png'       // PNG 백업
+        ];
 
-        // 대체 아이콘 경로
-        const fallbackPathCandidateWindows = resolveAndValidate(path.join(iconsDir, 'icon.png'), iconsDir);
-        if (fallbackPathCandidateWindows) {
-          Logger.info(this.componentName, '🪟 Windows using fallback icon', { fallbackPath: fallbackPathCandidateWindows });
-          return fallbackPathCandidateWindows;
+        for (const candidate of windowsCandidates) {
+          const iconPath = path.join(iconsDir, candidate);
+          if (require('fs').existsSync(iconPath)) {
+            Logger.info(this.componentName, '🪟 Windows tray icon found', { iconPath });
+            return iconPath;
+          }
         }
 
         Logger.warn(this.componentName, '⚠️ Windows icon not found, using null');

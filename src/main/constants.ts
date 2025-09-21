@@ -7,11 +7,11 @@ Logger.debug('CONSTANTS', 'Constants module loaded');
 
 // 🔥 기가차드 앱 메타데이터
 export const APP_METADATA = {
-  NAME: 'Loop Typing Analytics',
+  NAME: 'Loop',
   VERSION: '1.0.0',
   DESCRIPTION: 'Real-time typing analytics for enhanced productivity',
   AUTHOR: 'Loop Development Team',
-  HOMEPAGE: 'https://loop-typing.app',
+  HOMEPAGE: 'https://loop.app',
   ELECTRON_MIN_VERSION: '24.0.0',
 } as const;
 
@@ -128,7 +128,7 @@ export const SECURITY_SETTINGS = {
     POINTER_LOCK: false,
   },
   NAVIGATION: {
-    ALLOWED_ORIGINS: ['https://loop-typing.app'],
+    ALLOWED_ORIGINS: ['https://loop.app'],
     BLOCK_NEW_WINDOW: true,
     BLOCK_EXTERNAL_NAVIGATION: true,
   },

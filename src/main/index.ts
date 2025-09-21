@@ -29,13 +29,12 @@ const safeEnv = {
 
 Logger.info('ENV', 'Loaded environment variables', safeEnv);
 
-// 🔥 앱 이름 설정 (원래는 'Electron'으로 표시되는 것을 수정)
-// Use lowercase 'loop' so Dock shows 'loop' per product requirement
-app.setName('loop');
+// 🔥 앱 이름 설정 (package.json productName과 일치)
+app.setName('Loop');
 app.setAppUserModelId('com.loop.typing-analytics'); // Windows 작업 표시줄 아이콘 ID (appId와 일치시킴)
 Logger.info('MAIN', '🔄 앱 이름 설정 완료', {
   name: app.getName(),
-  appId: 'com.loop.typing-analytics', // 직접 값 사용
+  appId: 'com.loop.app', // 직접 값 사용
   appPath: app.getAppPath()
 });
 

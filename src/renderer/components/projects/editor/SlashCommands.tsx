@@ -4,9 +4,24 @@ import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'rea
 import { Extension } from '@tiptap/core';
 import { ReactRenderer } from '@tiptap/react';
 import Suggestion from '@tiptap/suggestion';
-import tippy from 'tippy.js';
 import type { Range, Editor } from '@tiptap/core';
-import type { Instance } from 'tippy.js';
+
+// 🔥 동적 import로 tippy.js 로드 (production 빌드 호환성)
+let tippy: any = null;
+
+const loadTippy = async () => {
+  if (!tippy) {
+    try {
+      const tippyModule = await import('tippy.js');
+      tippy = tippyModule.default;
+    } catch (error) {
+      console.warn('Failed to load tippy.js:', error);
+      // 폴백: 기본 tooltip 없이 작동
+      tippy = () => ({ destroy: () => {}, setProps: () => {} });
+    }
+  }
+  return tippy;
+};
 import {
   Hash,
   List,
@@ -324,10 +339,10 @@ export const slashSuggestion = {
 
   render: () => {
     let component: ReactRenderer;
-    let popup: Instance[] = [];
+    let popup: any[] = [];
 
     return {
-      onStart: (props: { editor: Editor; clientRect?: () => DOMRect }) => {
+      onStart: async (props: { editor: Editor; clientRect?: () => DOMRect }) => {
         component = new ReactRenderer(CommandMenu, {
           props,
           editor: props.editor,
@@ -337,15 +352,24 @@ export const slashSuggestion = {
           return;
         }
 
-        popup = tippy('body', {
-          getReferenceClientRect: props.clientRect,
-          appendTo: () => document.body,
-          content: component.element,
-          showOnCreate: true,
-          interactive: true,
-          trigger: 'manual',
-          placement: 'bottom-start',
-        });
+        try {
+          const tippyInstance = await loadTippy();
+          popup = tippyInstance('body', {
+            getReferenceClientRect: props.clientRect,
+            appendTo: () => document.body,
+            content: component.element,
+            showOnCreate: true,
+            interactive: true,
+            trigger: 'manual',
+            placement: 'bottom-start',
+          });
+        } catch (error) {
+          console.warn('SlashCommands: Failed to create tippy instance:', error);
+          // 폴백: 기본 위치에 표시
+          if (component.element && document.body) {
+            document.body.appendChild(component.element);
+          }
+        }
       },
 
       onUpdate(props: { editor: Editor; clientRect?: () => DOMRect }) {
@@ -374,9 +398,17 @@ export const slashSuggestion = {
       },
 
       onExit() {
-        const instance = Array.isArray(popup) ? popup[0] : undefined;
-        if (instance) instance.destroy();
-        component.destroy();
+        try {
+          const instance = Array.isArray(popup) ? popup[0] : undefined;
+          if (instance && typeof instance.destroy === 'function') {
+            instance.destroy();
+          }
+          if (component && typeof component.destroy === 'function') {
+            component.destroy();
+          }
+        } catch (error) {
+          console.warn('SlashCommands: Error during cleanup:', error);
+        }
       },
     };
   },
