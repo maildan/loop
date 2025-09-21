@@ -12,7 +12,7 @@ export const APP_METADATA = {
   DESCRIPTION: 'loop on desktop for writers',
   AUTHOR: 'Loop Development Team',
   HOMEPAGE: 'https://loop.app',
-  ELECTRON_MIN_VERSION: '38.0.0',
+  ELECTRON_MIN_VERSION: '38.1.2',
 } as const;
 
 // 🔥 기가차드 앱 식별자 (중앙 관리)

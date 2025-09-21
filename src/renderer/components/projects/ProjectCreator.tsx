@@ -358,22 +358,12 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       webViewLink: doc?.webViewLink
     });
 
-    // 🔥 선택된 Google Docs 문서를 바로 열기
-    if (doc?.webViewLink) {
-      try {
-        Logger.info('PROJECT_CREATOR', 'Google Docs 문서 열기 시도', { url: doc.webViewLink });
-        if (window.electronAPI?.shell?.openExternal) {
-          await window.electronAPI.shell.openExternal(doc.webViewLink);
-          Logger.info('PROJECT_CREATOR', 'Google Docs 문서 열기 성공');
-        } else {
-          // Fallback: 브라우저에서 열기
-          window.open(doc.webViewLink, '_blank', 'noopener,noreferrer');
-          Logger.info('PROJECT_CREATOR', 'Google Docs 문서 브라우저에서 열기');
-        }
-      } catch (error) {
-        Logger.error('PROJECT_CREATOR', 'Google Docs 문서 열기 실패', error);
-      }
-    }
+    // 🔥 Google Docs 문서를 앱 내에서 바로 편집 가능하도록 처리
+    // 더 이상 외부 브라우저로 리다이렉트하지 않고, 앱 내에서 처리
+    Logger.info('PROJECT_CREATOR', 'Google Docs 선택됨 - 앱 내 편집 준비', { 
+      docId: doc.id, 
+      title: docName 
+    });
 
     // 🔥 문서 내용 가져오기 시도
     if (doc?.id && window.electronAPI?.oauth?.importGoogleDoc) {
@@ -385,13 +375,27 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
           Logger.info('PROJECT_CREATOR', 'Google Docs 내용 가져오기 성공', {
             contentLength: result.data.content.length
           });
+          
           // 가져온 내용은 selectedGoogleDoc에 저장하여 나중에 프로젝트 생성 시 사용
           setSelectedGoogleDoc({
             ...doc,
-            content: result.data.content
+            content: result.data.content,
+            title: result.data.title || doc.name || docName
           });
+
+          // 🎉 사용자에게 성공 피드백 제공
+          alert(`✅ Google Docs 문서가 성공적으로 가져와졌습니다!\n\n📄 문서: ${docName}\n📝 내용: ${result.data.content.length}자\n\n이제 "프로젝트 생성" 버튼을 클릭하여 Loop에서 편집을 시작하세요.`);
+          
+          // 제목과 설명을 자동으로 채우기
+          if (result.data.title && !title) {
+            setTitle(result.data.title);
+          }
+          if (!description) {
+            setDescription(`Google Docs에서 가져온 문서: ${docName}`);
+          }
         } else {
           Logger.warn('PROJECT_CREATOR', 'Google Docs 내용 가져오기 실패', result.error);
+          alert(`❌ Google Docs 내용을 가져오는데 실패했습니다.\n\n오류: ${result.error || '알 수 없는 오류'}\n\n문서 정보는 저장되었으니 프로젝트를 생성하면 Google Docs 연동 정보가 포함됩니다.`);
         }
       } catch (error) {
         Logger.error('PROJECT_CREATOR', 'Google Docs 내용 가져오기 중 오류', error);
@@ -547,6 +551,37 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                 })}
               </div>
             </div>
+
+            {/* 🔥 Google Docs 연동 상태 표시 */}
+            {selectedPlatform === 'google-docs' && selectedGoogleDoc && (
+              <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0">
+                    <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                      <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="text-sm font-semibold text-green-800 dark:text-green-200">
+                      📄 Google Docs 문서 연결됨
+                    </h4>
+                    <p className="mt-1 text-sm text-green-700 dark:text-green-300">
+                      <strong>{selectedGoogleDoc.title || selectedGoogleDoc.name}</strong>
+                    </p>
+                    {selectedGoogleDoc.content && (
+                      <p className="mt-1 text-xs text-green-600 dark:text-green-400">
+                        ✅ 내용 가져오기 완료 ({selectedGoogleDoc.content.length}자)
+                      </p>
+                    )}
+                    <p className="mt-2 text-xs text-green-600 dark:text-green-400">
+                      💡 프로젝트 생성 후 Loop에서 바로 편집할 수 있습니다
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* 프로젝트 정보 */}
             <div className={PROJECT_CREATOR_STYLES.formSection}>

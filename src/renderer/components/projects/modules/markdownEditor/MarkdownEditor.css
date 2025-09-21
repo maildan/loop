@@ -1,33 +1,67 @@
-/* 🔥 노션 스타일 마크다운 에디터 CSS */
+/* 🔥 작가 몰입 환경을 위한 에디터 CSS - OmmWriter + iA Writer 영감 */
 
-/* 🔥 CSS 변수 정의 (라이트/다크 모드) */
+/* 🔥 CSS 변수 정의 - 작가 친화적 색상 팔레트 */
 :root {
-  --editor-bg: #ffffff;
-  --editor-text: #374151;
-  --editor-border: #e5e7eb;
-  --toolbar-bg: #ffffff;
-  --toolbar-border: #e5e7eb;
-  --button-hover: #f3f4f6;
-  --heading-border-h1: #e5e7eb;
-  /* 🔥 h1 밑줄 색상 */
-  --heading-border-h2: #f3f4f6;
-  /* 🔥 h2 밑줄 색상 */
+  /* 🌿 자연스러운 배경색 - 종이 질감 */
+  --editor-bg: #fefefe;
+  --editor-bg-secondary: #faf9f7;
+  
+  /* 📖 읽기 친화적 타이포그래피 색상 */
+  --editor-text: #2d2d2d;
+  --editor-text-muted: #666666;
+  --editor-text-light: #999999;
+  
+  /* 🎨 미니멀 인터페이스 */
+  --editor-border: #eeeeee;
+  --editor-accent: #4f46e5;
+  --editor-accent-light: #e0e7ff;
+  
+  /* 🛠 툴바 & 컨트롤 */
+  --toolbar-bg: rgba(255, 255, 255, 0.95);
+  --toolbar-border: rgba(0, 0, 0, 0.05);
+  --button-hover: rgba(79, 70, 229, 0.1);
+  --button-active: rgba(79, 70, 229, 0.2);
+  
+  /* 📝 헤딩 구분선 */
+  --heading-border-h1: rgba(79, 70, 229, 0.2);
+  --heading-border-h2: rgba(79, 70, 229, 0.1);
+  
+  /* 🌅 포커스 모드 오버레이 */
+  --focus-overlay: rgba(255, 255, 255, 0.8);
+  --focus-text-shadow: 0 0 8px rgba(79, 70, 229, 0.1);
 }
 
 :root.dark {
-  --editor-bg: #1f2937;
-  --editor-text: #f9fafb;
-  --editor-border: #374151;
-  --toolbar-bg: #111827;
-  --toolbar-border: #374151;
-  --button-hover: #374151;
-  --heading-border-h1: #4b5563;
-  /* 🔥 다크 모드 h1 밑줄 */
-  --heading-border-h2: #374151;
-  /* 🔥 다크 모드 h2 밑줄 */
+  /* 🌙 다크 모드 - 따뜻한 어둠 */
+  --editor-bg: #1a1a1a;
+  --editor-bg-secondary: #212121;
+  
+  /* 📖 다크 모드 타이포그래피 */
+  --editor-text: #e8e8e8;
+  --editor-text-muted: #a8a8a8;
+  --editor-text-light: #888888;
+  
+  /* 🎨 다크 모드 인터페이스 */
+  --editor-border: #333333;
+  --editor-accent: #6366f1;
+  --editor-accent-light: rgba(99, 102, 241, 0.1);
+  
+  /* 🛠 다크 모드 툴바 */
+  --toolbar-bg: rgba(26, 26, 26, 0.95);
+  --toolbar-border: rgba(255, 255, 255, 0.05);
+  --button-hover: rgba(99, 102, 241, 0.15);
+  --button-active: rgba(99, 102, 241, 0.25);
+  
+  /* � 다크 모드 헤딩 */
+  --heading-border-h1: rgba(99, 102, 241, 0.3);
+  --heading-border-h2: rgba(99, 102, 241, 0.15);
+  
+  /* 🌙 다크 포커스 모드 */
+  --focus-overlay: rgba(26, 26, 26, 0.85);
+  --focus-text-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
 }
 
-/* 🔥 TipTap 에디터 기본 스타일 - 전체 화면 활용 */
+/* 🔥 TipTap 에디터 - 작가 몰입 환경 */
 .ProseMirror {
   background: var(--editor-bg) !important;
   color: var(--editor-text) !important;
@@ -35,23 +69,38 @@
   border-radius: 0 !important;
   box-shadow: none !important;
   outline: none !important;
-  padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  line-height: 1.6;
-  min-height: 100vh;
-  height: 100%;
+  
+  /* 📏 최적의 읽기 경험을 위한 타이포그래피 */
+  padding: 4rem 2rem;
+  font-family: 'Charter', 'Georgia', 'Times New Roman', serif;
+  font-size: 18px;
+  line-height: 1.75;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+  
+  /* 📐 최적 읽기 너비 - iA Writer 스타일 */
+  max-width: 680px;
+  margin: 0 auto;
+  
+  /* 🌊 부드러운 스크롤링 */
+  min-height: calc(100vh - 8rem);
+  height: auto;
   width: 100%;
-  overflow-y: auto;
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  
+  /* 🎯 포커스 시 미묘한 그림자 효과 */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* 🔥 EditorContent 컨테이너도 테두리 제거 */
+/* 🎯 포커스 상태 - 미니멀하게 */
 .ProseMirror-focused {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
 }
 
-/* 🔥 모든 가능한 테두리 제거 */
+/* 🔥 모든 테두리 제거 - 완전한 몰입 환경 */
 .tiptap,
 .editor-content,
 div[data-type="editor"] {
@@ -60,32 +109,94 @@ div[data-type="editor"] {
   box-shadow: none !important;
 }
 
-/* 🔥 라이트 모드 명시적 텍스트 색상 */
-:root .ProseMirror {
-  color: #1f2937 !important;
-  /* gray-800 */
+/* 🌟 타이핑 사운드 효과를 위한 준비 */
+.ProseMirror::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--editor-bg);
+  z-index: -1;
+  opacity: 0.95;
 }
 
-/* 🔥 다크 모드 명시적 텍스트 색상 */
-:root.dark .ProseMirror {
-  color: #f9fafb !important;
-  /* gray-50 */
+/* 🎯 포커스 모드 - OmmWriter 영감의 몰입 환경 */
+.editor-focus-mode {
+  position: relative;
 }
 
-/* 🔥 이미지 스타일 */
+.editor-focus-mode .ProseMirror p:not(.is-editor-empty) {
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+}
+
+.editor-focus-mode .ProseMirror p.has-focus,
+.editor-focus-mode .ProseMirror p:hover {
+  opacity: 1;
+  text-shadow: var(--focus-text-shadow);
+}
+
+/* ✍️ 타이프라이터 모드 - 현재 문장만 보이기 */
+.editor-typewriter-mode .ProseMirror p:not(:last-child) {
+  opacity: 0.2;
+  filter: blur(0.5px);
+  transition: all 0.4s ease;
+}
+
+.editor-typewriter-mode .ProseMirror p:last-child {
+  opacity: 1;
+  filter: none;
+  transform: translateY(-10px);
+  animation: typewriter-focus 0.6s ease-out;
+}
+
+@keyframes typewriter-focus {
+  0% {
+    opacity: 0.5;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+
+/* 🏞 산만함 없는 모드 - 완전한 몰입 */
+.editor-distraction-free {
+  background: var(--editor-bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.editor-distraction-free .ProseMirror {
+  padding: 8rem 4rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 🔥 이미지 스타일 - 작가 친화적 */
 .ProseMirror img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
-  margin: 1rem 0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  border-radius: 12px;
+  margin: 2rem 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .ProseMirror img:hover {
-  transform: scale(1.02);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.12);
 }
 
 /* 🔥 선택된 이미지 스타일 */
@@ -262,68 +373,271 @@ mark[data-highlight][data-color="red"] {
   color: #dc2626;
 }
 
-/* 🔥 제목 스타일 개선 */
+/* � 작가를 위한 타이포그래피 - 읽기 친화적 헤딩 */
 .ProseMirror h1 {
-  font-size: 2rem;
+  font-family: 'Charter', 'Georgia', serif;
+  font-size: 2.25rem;
   font-weight: 700;
-  line-height: 1.2;
-  margin: 1.5rem 0 1rem 0;
+  line-height: 1.25;
+  margin: 3rem 0 1.5rem 0;
   color: var(--editor-text);
+  letter-spacing: -0.025em;
+  
+  /* ✨ 우아한 하단 구분선 */
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--heading-border-h1);
+  
+  /* 🎯 포커스 시 미묘한 효과 */
+  transition: all 0.3s ease;
+  cursor: text;
+}
+
+.ProseMirror h1:hover {
+  color: var(--editor-accent);
+  border-bottom-color: var(--editor-accent);
 }
 
 .ProseMirror h2 {
-  font-size: 1.5rem;
+  font-family: 'Charter', 'Georgia', serif;
+  font-size: 1.75rem;
   font-weight: 600;
-  line-height: 1.3;
-  margin: 1.25rem 0 0.75rem 0;
+  line-height: 1.35;
+  margin: 2.5rem 0 1rem 0;
   color: var(--editor-text);
+  letter-spacing: -0.02em;
+  
+  /* 🌸 섬세한 하단 구분선 */
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--heading-border-h2);
+  
+  transition: all 0.3s ease;
+  cursor: text;
+}
+
+.ProseMirror h2:hover {
+  color: var(--editor-accent);
 }
 
 .ProseMirror h3 {
-  font-size: 1.25rem;
+  font-family: 'Charter', 'Georgia', serif;
+  font-size: 1.375rem;
   font-weight: 600;
   line-height: 1.4;
-  margin: 1rem 0 0.5rem 0;
+  margin: 2rem 0 0.75rem 0;
+  color: var(--editor-text);
+  letter-spacing: -0.015em;
+  
+  transition: color 0.3s ease;
+  cursor: text;
+}
+
+.ProseMirror h3:hover {
+  color: var(--editor-accent);
+}
+
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  color: var(--editor-text);
+  margin: 1.5rem 0 0.5rem 0;
+  transition: color 0.3s ease;
+  cursor: text;
+}
+
+.ProseMirror h4 {
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.ProseMirror h5 {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.ProseMirror h6 {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--editor-text-muted);
+}
+
+/* � 단락 및 기본 텍스트 - 작가를 위한 완벽한 읽기 경험 */
+.ProseMirror p {
+  margin: 1.5rem 0;
+  line-height: 1.75;
+  font-size: 18px;
+  color: var(--editor-text);
+  font-family: 'Charter', 'Georgia', serif;
+  
+  /* 🎯 부드러운 전환 효과 */
+  transition: all 0.3s ease;
+  
+  /* 📖 단락 들여쓰기 옵션 (소설 작가를 위한) */
+  text-indent: 0;
+}
+
+.ProseMirror p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  color: var(--editor-text-light);
+  font-style: italic;
+  pointer-events: none;
+  position: absolute;
+}
+
+.ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror p:last-child {
+  margin-bottom: 4rem; /* 📚 마지막 단락 아래 여백 */
+}
+
+/* ✍️ 강조 텍스트 */
+.ProseMirror strong {
+  font-weight: 700;
   color: var(--editor-text);
 }
 
-/* 🔥 리스트 스타일 개선 */
+.ProseMirror em {
+  font-style: italic;
+  color: var(--editor-text);
+}
+
+/* 🔗 링크 스타일 */
+.ProseMirror a {
+  color: var(--editor-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.ProseMirror a:hover {
+  border-bottom-color: var(--editor-accent);
+  background: var(--editor-accent-light);
+  padding: 0 2px;
+  margin: 0 -2px;
+  border-radius: 3px;
+}
+
+/* 📝 리스트 스타일 - 우아하고 읽기 쉬운 */
 .ProseMirror ul,
 .ProseMirror ol {
-  margin: 1rem 0;
-  padding-left: 1.5rem;
+  margin: 1.5rem 0;
+  padding-left: 2rem;
+  font-family: 'Charter', 'Georgia', serif;
+  line-height: 1.75;
+}
+
+.ProseMirror ul li,
+.ProseMirror ol li {
+  margin: 0.75rem 0;
+  color: var(--editor-text);
 }
 
 .ProseMirror ul li {
-  list-style-type: disc;
-  margin: 0.25rem 0;
+  list-style-type: none;
+  position: relative;
+}
+
+.ProseMirror ul li::before {
+  content: '•';
+  color: var(--editor-accent);
+  font-weight: bold;
+  position: absolute;
+  left: -1.5rem;
+  font-size: 1.2em;
 }
 
 .ProseMirror ol li {
   list-style-type: decimal;
-  margin: 0.25rem 0;
+  color: var(--editor-text);
 }
 
-/* 🔥 인용구 스타일 개선 */
+.ProseMirror ol li::marker {
+  color: var(--editor-accent);
+  font-weight: 600;
+}
+
+/* � 인용구 - 작가를 위한 우아한 스타일 */
 .ProseMirror blockquote {
-  border-left: 4px solid #e2e8f0;
-  padding-left: 1rem;
-  margin: 1rem 0;
+  position: relative;
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, var(--editor-bg-secondary) 0%, var(--editor-bg) 100%);
+  border-left: 4px solid var(--editor-accent);
+  border-radius: 0 12px 12px 0;
+  font-family: 'Charter', 'Georgia', serif;
   font-style: italic;
-  color: #6b7280;
-  background: #f8fafc;
-  padding: 1rem;
-  border-radius: 0 6px 6px 0;
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: var(--editor-text-muted);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* 🔥 코드 스타일 개선 */
+.ProseMirror blockquote::before {
+  content: '"';
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--editor-accent);
+  opacity: 0.3;
+  font-family: serif;
+}
+
+.ProseMirror blockquote p {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* 💻 코드 스타일 - 개발자와 작가를 위한 */
 .ProseMirror code {
-  background: #f1f5f9;
-  padding: 0.125rem 0.25rem;
-  border-radius: 3px;
-  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
-  font-size: 0.875rem;
-  color: #e11d48;
+  background: var(--editor-accent-light);
+  color: var(--editor-accent);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
+  font-size: 0.9em;
+  font-weight: 500;
+  border: 1px solid rgba(79, 70, 229, 0.1);
+  transition: all 0.2s ease;
+}
+
+.ProseMirror code:hover {
+  background: var(--editor-accent);
+  color: white;
+}
+
+.ProseMirror pre {
+  background: var(--editor-bg-secondary);
+  border: 1px solid var(--editor-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.ProseMirror pre code {
+  background: none;
+  color: var(--editor-text);
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  font-weight: 400;
+}
+
+.ProseMirror pre code:hover {
+  background: none;
+  color: var(--editor-text);
 }
 
 .ProseMirror pre {

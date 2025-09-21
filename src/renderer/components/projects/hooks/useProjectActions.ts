@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
+import { useNavigate } from 'react-router-dom';
 import { Logger } from '../../../../shared/logger';
 
 interface UseKeyboardShortcutsProps {
@@ -81,14 +81,14 @@ export function useProjectActions({
   title,
   content
 }: UseProjectActionsProps) {
-  const router = useRouter();
+  const navigate = useNavigate();
   
   const handleBack = useCallback((): void => {
     Logger.info('PROJECT_ACTIONS', 'Navigating back to projects');
     saveProject().then(() => {
-      router.push('/projects');
+      navigate('/projects');
     });
-  }, [router, saveProject]);
+  }, [navigate, saveProject]);
   
   const handleShare = useCallback((): void => {
     Logger.info('PROJECT_ACTIONS', 'Share project requested');

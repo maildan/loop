@@ -6,18 +6,12 @@ if (typeof global === 'undefined') {
   (globalThis as any).global = globalThis;
 }
 import React from 'react';
-import Script from 'next/script';
 import ClientLayout from './ClientLayout';
-import { Inter } from 'next/font/google';
 import type { ReactNode } from 'react';
 import './globals.css';
 
-// 🔥 기가차드 규칙: Inter 폰트 최적화
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true
-});
+// 🔥 Vite 마이그레이션: Next.js 폰트 대신 CSS import 사용
+// Inter 폰트는 globals.css에서 로드됨
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const LAYOUT_STYLES = {
@@ -50,7 +44,7 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactEl
   }
 
   return (
-    <html lang="ko" className={`${inter.className} ${LAYOUT_STYLES.html}`} suppressHydrationWarning>
+    <html lang="ko" className={LAYOUT_STYLES.html} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -58,10 +52,7 @@ export default function RootLayout({ children }: RootLayoutProps): React.ReactEl
         <title>Loop</title>
       </head>
       <body className={`${LAYOUT_STYLES.body} overflow-x-hidden`}>
-        <Script
-          src="/theme-init.js"
-          strategy="beforeInteractive"
-        />
+        <script src="/theme-init.js"></script>
         <div className={LAYOUT_STYLES.container}>
           <ClientLayout initialAuth={initialAuth}>
             {children}

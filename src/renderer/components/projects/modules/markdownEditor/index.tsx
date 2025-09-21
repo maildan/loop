@@ -136,8 +136,17 @@ export function MarkdownEditor({
         isFocusMode
     });
 
+    // 🎨 동적 CSS 클래스 생성
+    const editorClasses = [
+        EDITOR_STYLES.container,
+        isDragOver && 'drag-over',
+        isFocusMode && 'editor-focus-mode',
+        typewriterMode && 'editor-typewriter-mode',
+        distractionFree && 'editor-distraction-free'
+    ].filter(Boolean).join(' ');
+
     return (
-        <div className={`${EDITOR_STYLES.container} ${isDragOver ? 'drag-over' : ''}`}>
+        <div className={editorClasses}>
             {/* 🔥 드래그 오버 상태 피드백 */}
             {isDragOver && (
                 <div className={EDITOR_STYLES.dragOverlay}>
@@ -147,16 +156,28 @@ export function MarkdownEditor({
                 </div>
             )}
 
-            {/* 🔥 모듈화된 Bubble Menu */}
-            <EditorBubbleMenu editor={editor} />
+            {/* 🔥 몰입 모드가 아닐 때만 Bubble Menu 표시 */}
+            {!distractionFree && <EditorBubbleMenu editor={editor} />}
 
             {/* 🔥 메인 에디터 */}
             <EditorContent editor={editor} />
 
-            {/* 🔥 개발용 디버그 정보 (프로덕션에서는 제거) */}
-            {process.env.NODE_ENV === 'development' && (
-                <div className="absolute bottom-4 right-4 text-xs text-gray-500 bg-white dark:bg-gray-800 px-2 py-1 rounded shadow">
-                    Words: {wordCount} | Chars: {characterCount}
+            {/* 🌊 타이핑 사운드 피드백 (향후 구현을 위한 준비) */}
+            {typewriterMode && (
+                <div className="typing-sound-indicator opacity-0 pointer-events-none">
+                    ✍️
+                </div>
+            )}
+
+            {/* 🔥 작가를 위한 상태 표시 - 우아하게 */}
+            {!distractionFree && process.env.NODE_ENV === 'development' && (
+                <div className="fixed bottom-6 right-6 text-xs text-slate-400 bg-slate-50/80 dark:bg-slate-800/80 backdrop-blur-sm px-3 py-2 rounded-full border border-slate-200/50 dark:border-slate-700/50 shadow-lg">
+                    <div className="flex items-center gap-2">
+                        <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                        <span>{wordCount} words</span>
+                        <span className="text-slate-300 dark:text-slate-600">•</span>
+                        <span>{characterCount} chars</span>
+                    </div>
                 </div>
             )}
         </div>
