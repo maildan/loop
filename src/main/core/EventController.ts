@@ -164,6 +164,7 @@ export class EventController {
       app.on('open-url', (event: Event, url: string) => {
         event.preventDefault();
         Logger.info(this.componentName, '🔗 URL open requested', { url });
+        this.handleProtocolUrl(url);
       });
     }
 
@@ -261,6 +262,48 @@ export class EventController {
    */
   public isEventsSetup(): boolean {
     return this.isSetup;
+  }
+
+  /**
+   * 🔥 프로토콜 URL 처리
+   */
+  private handleProtocolUrl(url: string): void {
+    try {
+      Logger.info(this.componentName, '🔗 Processing protocol URL', { url });
+      
+      // URL 파싱
+      const urlObj = new URL(url);
+      const protocol = urlObj.protocol.replace(':', '');
+      
+      if (protocol === 'com.loop.app' || protocol === 'loop') {
+        // 메인 윈도우가 있으면 포커스, 없으면 생성
+        const windows = BrowserWindow.getAllWindows();
+        let mainWindow = windows.find(win => !win.isDestroyed());
+        
+        if (mainWindow) {
+          if (mainWindow.isMinimized()) mainWindow.restore();
+          mainWindow.focus();
+          
+          // 웹 콘텐츠로 URL 정보 전달
+          mainWindow.webContents.send('protocol-url', {
+            url,
+            protocol,
+            pathname: urlObj.pathname,
+            searchParams: Object.fromEntries(urlObj.searchParams)
+          });
+        } else {
+          // 새 윈도우 생성 요청 (WindowManager를 통해)
+          Logger.info(this.componentName, '🪟 Creating new window for protocol URL');
+          // TODO: WindowManager 인스턴스에 접근해서 새 윈도우 생성
+        }
+        
+        Logger.info(this.componentName, '✅ Protocol URL processed successfully', { protocol });
+      } else {
+        Logger.warn(this.componentName, '⚠️ Unknown protocol', { protocol, url });
+      }
+    } catch (error) {
+      Logger.error(this.componentName, '❌ Failed to process protocol URL', { url, error });
+    }
   }
 
   /**

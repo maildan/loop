@@ -343,9 +343,9 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
     }
   };
 
-  // 🔥 Google Docs 선택 핸들러 (방어적 코딩 + 문서 정보 저장 + 내용 가져오기)
+  // 🔥 Google Docs 선택 핸들러 (방어적 코딩 + 문서 정보 저장 + 내용 가져오기 + 직접 열기)
   const handleGoogleDocSelect = async (doc: any): Promise<void> => {
-    const docName = doc?.name || doc?.title || '제목 없음';
+    const docName = doc?.name || doc?.title || doc?.webViewLink?.split('/').pop() || '제목 없음';
     setTitle(docName);
     setDescription(`Google Docs에서 가져온 문서: ${docName}`);
     setSelectedPlatform('google-docs');
@@ -357,6 +357,23 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       name: docName,
       webViewLink: doc?.webViewLink
     });
+
+    // 🔥 선택된 Google Docs 문서를 바로 열기
+    if (doc?.webViewLink) {
+      try {
+        Logger.info('PROJECT_CREATOR', 'Google Docs 문서 열기 시도', { url: doc.webViewLink });
+        if (window.electronAPI?.shell?.openExternal) {
+          await window.electronAPI.shell.openExternal(doc.webViewLink);
+          Logger.info('PROJECT_CREATOR', 'Google Docs 문서 열기 성공');
+        } else {
+          // Fallback: 브라우저에서 열기
+          window.open(doc.webViewLink, '_blank', 'noopener,noreferrer');
+          Logger.info('PROJECT_CREATOR', 'Google Docs 문서 브라우저에서 열기');
+        }
+      } catch (error) {
+        Logger.error('PROJECT_CREATOR', 'Google Docs 문서 열기 실패', error);
+      }
+    }
 
     // 🔥 문서 내용 가져오기 시도
     if (doc?.id && window.electronAPI?.oauth?.importGoogleDoc) {
@@ -707,7 +724,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                       <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <h4 className="font-medium text-slate-900 dark:text-slate-100 truncate">
-                          {doc.name}
+                          {doc.name || doc.title || doc.webViewLink?.split('/').pop() || `문서 ${index + 1}`}
                         </h4>
                         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                           수정됨: {new Date(doc.modifiedTime).toLocaleDateString('ko-KR')}

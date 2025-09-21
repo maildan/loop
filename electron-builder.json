@@ -1,6 +1,15 @@
 {
   "productName": "Loop",
-  "appId": "com.loop.typing-analytics",
+  "appId": "com.loop.app",
+  "protocols": [
+    {
+      "name": "Loop App",
+      "schemes": [
+        "com.loop.app",
+        "loop"
+      ]
+    }
+  ],
   "directories": {
     "output": "release"
   },
@@ -43,9 +52,9 @@
   "extraFiles": [],
   "mac": {
     "category": "public.app-category.productivity",
-    "icon": "assets/icon.icns",
-    "entitlements": "assets/entitlements.mac.plist",
-    "entitlementsInherit": "assets/entitlements.mac.plist",
+    "icon": "public/assets/icon.icns",
+    "entitlements": "public/assets/entitlements.mac.plist",
+    "entitlementsInherit": "public/assets/entitlements.mac.plist",
     "gatekeeperAssess": false,
     "hardenedRuntime": true,
     "asar": true,
@@ -60,7 +69,7 @@
     ]
   },
   "win": {
-    "icon": "assets/icon.ico",
+    "icon": "public/assets/icon.png",
     "target": [
       {
         "target": "nsis",
@@ -72,7 +81,7 @@
     ]
   },
   "linux": {
-    "icon": "assets/icon.png",
+    "icon": "public/assets/icon.png",
     "category": "Utility",
     "target": [
       {

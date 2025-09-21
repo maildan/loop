@@ -6,9 +6,9 @@ import { getShortcutHelp } from '../modules/markdownEditor/services/EditorShortc
 
 // 🔥 단축키 도움말 스타일
 const HELP_STYLES = {
-  trigger: 'fixed bottom-4 right-4 z-50 w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors cursor-pointer',
+  trigger: 'fixed bottom-4 right-4 z-[9999] w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full flex items-center justify-center shadow-lg transition-colors cursor-pointer',
   hidden: 'hidden',
-  modal: 'fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50',
+  modal: 'fixed inset-0 z-[10000] flex items-center justify-center bg-black bg-opacity-50',
   panel: 'bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-lg w-full mx-4 max-h-[80vh] overflow-hidden',
   header: 'flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700',
   title: 'text-xl font-bold text-slate-900 dark:text-slate-100',

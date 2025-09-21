@@ -3,6 +3,7 @@
 import { BaseManager } from '../common/BaseManager';
 import { Logger } from '../../shared/logger';
 import { Platform } from '../utils/platform';
+import { DEV_TOOLS } from '../constants';
 import { app, Menu, MenuItem, BrowserWindow, MenuItemConstructorOptions } from 'electron';
 
 // #DEBUG: Menu manager entry point
@@ -148,8 +149,8 @@ export class MenuManager extends BaseManager {
       action: () => this.handleAbout()
     });
 
-    // 개발 환경에서만 개발자 도구 허용
-    if (process.env.NODE_ENV === 'development') {
+    // 개발 환경에서만 개발자 도구 허용 (DEV_TOOLS 상수 활용)
+    if (process.env.NODE_ENV === 'development' && DEV_TOOLS.ALLOWED_IN_PRODUCTION === false) {
       this.registerMenuAction({
         id: 'dev.toggle-devtools',
         label: '개발자 도구',
@@ -215,8 +216,8 @@ export class MenuManager extends BaseManager {
       }
     ];
 
-    // 개발 환경에서만 개발자 도구 추가
-    if (process.env.NODE_ENV === 'development') {
+    // 개발 환경에서만 개발자 도구 추가 (DEV_TOOLS 상수 활용)
+    if (process.env.NODE_ENV === 'development' && !DEV_TOOLS.ALLOWED_IN_PRODUCTION) {
       template.push(
         { type: 'separator' },
         { 

@@ -110,86 +110,52 @@ const SLASH_COMMANDS: SlashCommand[] = [
   },
   {
     title: '체크리스트',
-    description: '할 일 목록',
+    description: '- [ ] 할 일 목록',
     icon: CheckSquare,
     command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).toggleList('taskList', 'taskItem').run();
-    },
-  },
-  {
-    title: '콜아웃 - 정보',
-    description: '💡 정보 강조',
-    icon: Lightbulb,
-    command: ({ editor, range }) => {
       editor.chain()
         .focus()
         .deleteRange(range)
-        .insertContent({
-          type: 'callout',
-          attrs: { type: 'info', icon: '💡' },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '정보를 입력하세요...' }] }],
-        })
+        .insertContent('- [ ] 할 일 항목\n- [ ] 또 다른 할 일')
         .run();
     },
   },
   {
-    title: '콜아웃 - 경고',
-    description: '⚠️ 경고 메시지',
-    icon: AlertTriangle,
+    title: '볼드 텍스트',
+    description: '**굵은 글씨**',
+    icon: Type,
     command: ({ editor, range }) => {
       editor.chain()
         .focus()
         .deleteRange(range)
-        .insertContent({
-          type: 'callout',
-          attrs: { type: 'warning', icon: '⚠️' },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '경고 내용을 입력하세요...' }] }],
-        })
+        .insertContent('굵은 텍스트')
+        .setMark('bold')
         .run();
     },
   },
   {
-    title: '콜아웃 - 에러',
-    description: '❌ 에러 메시지',
-    icon: X,
+    title: '이탤릭 텍스트',
+    description: '*기울어진 글씨*',
+    icon: Type,
     command: ({ editor, range }) => {
       editor.chain()
         .focus()
         .deleteRange(range)
-        .insertContent({
-          type: 'callout',
-          attrs: { type: 'error', icon: '❌' },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '에러 내용을 입력하세요...' }] }],
-        })
+        .insertContent('기울어진 텍스트')
+        .setMark('italic')
         .run();
     },
   },
   {
-    title: '토글',
-    description: '▼ 접을 수 있는 섹션',
-    icon: ChevronDown,
+    title: '인라인 코드',
+    description: '`코드 텍스트`',
+    icon: Code,
     command: ({ editor, range }) => {
       editor.chain()
         .focus()
         .deleteRange(range)
-        .insertContent({
-          type: 'toggle',
-          attrs: { open: false, summary: '토글 제목' },
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: '토글 내용을 입력하세요...' }] }],
-        })
-        .run();
-    },
-  },
-  {
-    title: '하이라이트',
-    description: '🖍️ 텍스트 강조',
-    icon: Highlighter,
-    command: ({ editor, range }) => {
-      editor.chain()
-        .focus()
-        .deleteRange(range)
-        .insertContent('하이라이트할 텍스트')
-        .setMark('highlight', { color: 'yellow' })
+        .insertContent('코드 텍스트')
+        .setMark('code')
         .run();
     },
   },

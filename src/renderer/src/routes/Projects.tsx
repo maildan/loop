@@ -146,7 +146,7 @@ function ProjectsPageContent(): React.ReactElement {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [navigate]);
 
   /**
    * 🔥 프로젝트 수정 핸들러

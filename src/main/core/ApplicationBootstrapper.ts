@@ -144,6 +144,17 @@ export class ApplicationBootstrapper {
       } else {
         Logger.info('BOOTSTRAPPER', '🔗 Already registered as default protocol handler for loop://');
       }
+
+      // com.loop.app:// 프로토콜도 등록
+      if (!app.isDefaultProtocolClient('com.loop.app')) {
+        const result = app.setAsDefaultProtocolClient('com.loop.app');
+        Logger.info('BOOTSTRAPPER', '🔗 Custom protocol handler registration result', {
+          protocol: 'com.loop.app',
+          success: result
+        });
+      } else {
+        Logger.info('BOOTSTRAPPER', '🔗 Already registered as default protocol handler for com.loop.app://');
+      }
     } catch (error) {
       Logger.error('BOOTSTRAPPER', 'Failed to setup protocol handling', error);
     }
@@ -345,17 +356,18 @@ export class ApplicationBootstrapper {
 
       let iconsDir: string;
       if (isDev) {
-        iconsDir = path.join(process.cwd(), 'assets');
+        iconsDir = path.join(process.cwd(), 'public', 'assets');
       } else {
-        iconsDir = path.join(process.resourcesPath, 'assets');
+        iconsDir = path.join(process.resourcesPath, 'public', 'assets');
       }
 
       if (process.platform === 'darwin') {
         // 🔥 macOS - ICNS 파일 사용, 여러 후보 경로 시도
         const candidates = [
           path.join(iconsDir, 'icon.icns'),
-          path.join(process.cwd(), 'assets', 'icon.icns'),
-          path.join(__dirname, '..', '..', 'assets', 'icon.icns')
+          path.join(process.cwd(), 'public', 'assets', 'icon.icns'),
+          path.join(process.cwd(), 'public', 'icon', 'app.icns'),
+          path.join(__dirname, '..', '..', 'public', 'assets', 'icon.icns')
         ];
 
         let found: string | null = null;

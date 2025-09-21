@@ -3,6 +3,7 @@
 import { BaseManager } from '../common/BaseManager';
 import { Logger } from '../../shared/logger';
 import { Platform } from '../utils/platform';
+import { DEV_TOOLS } from '../constants';
 import { getSettingsManager } from '../settings';
 import { globalShortcut, BrowserWindow } from 'electron';
 
@@ -185,7 +186,7 @@ export class ShortcutsManager extends BaseManager {
         accelerator: Platform.isMacOS() ? 'Cmd+Alt+I' : 'F12',
         description: '개발자 도구',
         action: () => this.toggleDevTools(),
-        enabled: process.env.NODE_ENV === 'development'
+        enabled: process.env.NODE_ENV === 'development' && !DEV_TOOLS.ALLOWED_IN_PRODUCTION
       }
     };
 
