@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import type { Editor } from '@tiptap/react';
 import { 
   ArrowLeft, 
@@ -26,6 +26,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
+import { useSettings } from '../../../app/settings/hooks/useSettings';
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
@@ -39,38 +40,21 @@ const TOOLBAR_STYLES = {
   colorButton: 'h-8 w-8 rounded text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center justify-center relative',
 } as const;
 
-// 🎨 폰트 패밀리 옵션들
-const FONT_FAMILIES = [
-  { value: 'Inter', label: 'Inter' },
-  { value: '강원교육모두체', label: '강원교육모두체' },
-  { value: 'Noto Sans KR', label: 'Noto Sans KR' },
-  { value: 'Pretendard', label: 'Pretendard' },
-  { value: 'Apple SD Gothic Neo', label: 'Apple SD Gothic Neo' },
-] as const;
+// 🎨 사용자 정의 폰트 크기 입력 범위
+const FONT_SIZE_RANGE = {
+  min: 8,
+  max: 72,
+  step: 0.1,
+  default: 16
+} as const;
 
-// 🎨 폰트 크기 옵션들
-const FONT_SIZES = [
-  { value: 12, label: '12' },
-  { value: 14, label: '14' },
-  { value: 16, label: '16' },
-  { value: 18, label: '18' },
-  { value: 20, label: '20' },
-  { value: 24, label: '24' },
-  { value: 28, label: '28' },
-  { value: 32, label: '32' },
-] as const;
-
-// 🎨 줄간격 옵션들
-const LINE_HEIGHTS = [
-  { value: 1.0, label: '1.0' },
-  { value: 1.2, label: '1.2' },
-  { value: 1.4, label: '1.4' },
-  { value: 1.5, label: '1.5' },
-  { value: 1.6, label: '1.6' },
-  { value: 1.8, label: '1.8' },
-  { value: 2.0, label: '2.0' },
-  { value: 2.5, label: '2.5' },
-] as const;
+// 🎨 사용자 정의 줄간격 입력 범위  
+const LINE_HEIGHT_RANGE = {
+  min: 0.0,
+  max: 5.0,
+  step: 0.1,
+  default: 1.5
+} as const;
 
 interface ProjectHeaderProps {
   title: string;
@@ -93,6 +77,69 @@ export function ProjectHeader({
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [showLineHeightDropdown, setShowLineHeightDropdown] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
+  
+  // 🔥 커스텀 폰트 크기 및 줄간격 입력
+  const [customFontSize, setCustomFontSize] = useState<number>(FONT_SIZE_RANGE.default);
+  const [customLineHeight, setCustomLineHeight] = useState<number>(LINE_HEIGHT_RANGE.default);
+
+  // 🔥 폰트 시스템 연동 (safe)
+  const [availableFonts, setAvailableFonts] = useState<any[]>([]);
+  const [currentFont, setCurrentFont] = useState<string>('Pretendard');
+  
+  // 🔥 설정 시스템 연동 (optional)
+  const settingsResult = useSettings();
+  const settings = settingsResult?.settings;
+
+  // 🔥 폰트 목록 로딩 (실제 .otf 파일들)
+  useEffect(() => {
+    const loadFonts = async () => {
+      try {
+        Logger.debug('ProjectHeader', 'Starting font loading process');
+        
+        // IPC를 통해 실제 폰트 목록 가져오기
+        if (window.electronAPI?.font?.getAvailableFonts) {
+          Logger.debug('ProjectHeader', 'IPC font API available, loading fonts');
+          const fonts = await window.electronAPI.font.getAvailableFonts();
+          Logger.info('ProjectHeader', 'Fonts loaded from IPC', { 
+            count: fonts?.length || 0,
+            fonts: fonts?.map(f => f.label) || []
+          });
+          
+          if (fonts && fonts.length > 0) {
+            setAvailableFonts(fonts);
+            Logger.info('ProjectHeader', 'Set available fonts from IPC', { count: fonts.length });
+            return;
+          }
+        } else {
+          Logger.warn('ProjectHeader', 'IPC font API not available');
+        }
+        
+        // Fallback: 기본 폰트 목록 설정
+        Logger.info('ProjectHeader', 'Using fallback fonts');
+        const defaultFonts = [
+          { id: 'gangwon', name: '강원교육모두체', cssFamily: '강원교육모두체, Gangwon' },
+          { id: 'pretendard', name: 'Pretendard', cssFamily: 'Pretendard' },
+          { id: 'noto-sans-kr', name: 'Noto Sans KR', cssFamily: 'Noto Sans KR' },
+          { id: 'malgun-gothic', name: '맑은 고딕', cssFamily: 'Malgun Gothic' },
+          { id: 'nanumgothic', name: '나눔고딕', cssFamily: 'NanumGothic' },
+          { id: 'sf-pro-display', name: 'SF Pro Display', cssFamily: 'SF Pro Display' },
+        ];
+        setAvailableFonts(defaultFonts);
+        Logger.info('ProjectHeader', 'Set fallback fonts', { count: defaultFonts.length });
+      } catch (error) {
+        Logger.error('ProjectHeader', 'Failed to load fonts', error);
+        // 에러 시 최소한의 기본 폰트
+        const errorFallbackFonts = [
+          { id: 'gangwon', name: '강원교육모두체', cssFamily: '강원교육모두체' },
+          { id: 'pretendard', name: 'Pretendard', cssFamily: 'Pretendard' }
+        ];
+        setAvailableFonts(errorFallbackFonts);
+        Logger.info('ProjectHeader', 'Set error fallback fonts', { count: errorFallbackFonts.length });
+      }
+    };
+
+    loadFonts();
+  }, []);
 
   // 🔥 현재 에디터 상태 확인
   const editorState = useMemo(() => {
@@ -203,19 +250,55 @@ export function ProjectHeader({
   }, [editor]);
 
   const handleFontFamily = useCallback((fontFamily: string) => {
-    editor?.chain().focus().setMark('textStyle', { fontFamily }).run();
-    Logger.debug('WYSIWYG_TOOLBAR', 'Font family changed', { fontFamily });
+    if (editor) {
+      // 🔥 선택된 텍스트에 폰트 패밀리 적용
+      editor.chain().focus().setMark('textStyle', { fontFamily }).run();
+      
+      // 🔥 에디터 전체에도 CSS 변수로 적용 (fallback)
+      const editorElement = editor.view.dom as HTMLElement;
+      if (editorElement) {
+        editorElement.style.fontFamily = fontFamily;
+      }
+      
+      Logger.debug('WYSIWYG_TOOLBAR', 'Font family changed', { fontFamily });
+    }
   }, [editor]);
 
   const handleFontSize = useCallback((fontSize: number) => {
-    editor?.chain().focus().setMark('textStyle', { fontSize: `${fontSize}px` }).run();
-    Logger.debug('WYSIWYG_TOOLBAR', 'Font size changed', { fontSize });
+    if (editor) {
+      // 🔥 선택된 텍스트에 폰트 크기 적용
+      editor.chain().focus().setMark('textStyle', { fontSize: `${fontSize}px` }).run();
+      
+      // 🔥 에디터 전체에도 CSS로 적용 (fallback)
+      const editorElement = editor.view.dom as HTMLElement;
+      if (editorElement) {
+        editorElement.style.fontSize = `${fontSize}px`;
+      }
+      
+      Logger.debug('WYSIWYG_TOOLBAR', 'Font size changed', { fontSize });
+    }
   }, [editor]);
 
   const handleLineHeight = useCallback((lineHeight: number) => {
-    editor?.chain().focus().setMark('textStyle', { lineHeight: lineHeight.toString() }).run();
-    Logger.debug('WYSIWYG_TOOLBAR', 'Line height changed', { lineHeight });
+    if (editor) {
+      // 🔥 선택된 텍스트에 줄간격 적용
+      editor.chain().focus().setMark('textStyle', { lineHeight: lineHeight.toString() }).run();
+      
+      // 🔥 에디터 전체에도 CSS로 적용 (fallback)
+      const editorElement = editor.view.dom as HTMLElement;
+      if (editorElement) {
+        editorElement.style.lineHeight = lineHeight.toString();
+      }
+      
+      Logger.debug('WYSIWYG_TOOLBAR', 'Line height changed', { lineHeight });
+    }
   }, [editor]);
+
+  // 🔥 폰트 설정 함수 (핸들러 함수들 뒤에 정의)
+  const setFont = useCallback((fontFamily: string) => {
+    setCurrentFont(fontFamily);
+    handleFontFamily(fontFamily);
+  }, [handleFontFamily]);
 
   Logger.debug('WYSIWYG_TOOLBAR', 'Rendering toolbar', {
     hasEditor: !!editor,
@@ -272,18 +355,18 @@ export function ProjectHeader({
             className={TOOLBAR_STYLES.dropdown}
             title="폰트 선택"
           >
-            <span>강원교육모두체</span>
+            <span>{currentFont || 'Pretendard'}</span>
             <ChevronDown size={14} />
           </button>
           {showFontDropdown && (
             <div className="absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-              {FONT_FAMILIES.map((font) => (
+              {availableFonts.map((font) => (
                 <button
                   key={font.value}
                   type="button"
                   onClick={() => {
                     setShowFontDropdown(false);
-                    handleFontFamily(font.value);
+                    setFont(font.value);
                   }}
                   className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
                   style={{ fontFamily: font.value }}
@@ -305,24 +388,47 @@ export function ProjectHeader({
             className={TOOLBAR_STYLES.dropdown}
             title="폰트 크기"
           >
-            <span>16</span>
+            <span>{customFontSize}</span>
             <ChevronDown size={14} />
           </button>
           {showSizeDropdown && (
-            <div className="absolute top-full left-0 mt-1 w-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-              {FONT_SIZES.map((size) => (
-                <button
-                  key={size.value}
-                  type="button"
-                  onClick={() => {
-                    setShowSizeDropdown(false);
-                    handleFontSize(size.value);
+            <div className="absolute top-full left-0 mt-1 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 p-3">
+              <div className="mb-2">
+                <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">
+                  크기 ({FONT_SIZE_RANGE.min}-{FONT_SIZE_RANGE.max}px)
+                </label>
+                <input
+                  type="number"
+                  min={FONT_SIZE_RANGE.min}
+                  max={FONT_SIZE_RANGE.max}
+                  step={FONT_SIZE_RANGE.step}
+                  value={customFontSize}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                      setCustomFontSize(value);
+                      handleFontSize(value);
+                    }
                   }}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
-                >
-                  {size.label}
-                </button>
-              ))}
+                  className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                {[12, 14, 16, 18, 20, 24].map((size) => (
+                  <button
+                    key={size}
+                    type="button"
+                    onClick={() => {
+                      setCustomFontSize(size);
+                      handleFontSize(size);
+                      setShowSizeDropdown(false);
+                    }}
+                    className="px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -337,24 +443,47 @@ export function ProjectHeader({
             className={TOOLBAR_STYLES.dropdown}
             title="줄간격"
           >
-            <span>1.5</span>
+            <span>{customLineHeight}</span>
             <ChevronDown size={14} />
           </button>
           {showLineHeightDropdown && (
-            <div className="absolute top-full left-0 mt-1 w-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
-              {LINE_HEIGHTS.map((lineHeight) => (
-                <button
-                  key={lineHeight.value}
-                  type="button"
-                  onClick={() => {
-                    setShowLineHeightDropdown(false);
-                    handleLineHeight(lineHeight.value);
+            <div className="absolute top-full left-0 mt-1 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50 p-3">
+              <div className="mb-2">
+                <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">
+                  줄간격 ({LINE_HEIGHT_RANGE.min}-{LINE_HEIGHT_RANGE.max})
+                </label>
+                <input
+                  type="number"
+                  min={LINE_HEIGHT_RANGE.min}
+                  max={LINE_HEIGHT_RANGE.max}
+                  step={LINE_HEIGHT_RANGE.step}
+                  value={customLineHeight}
+                  onChange={(e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                      setCustomLineHeight(value);
+                      handleLineHeight(value);
+                    }
                   }}
-                  className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
-                >
-                  {lineHeight.label}
-                </button>
-              ))}
+                  className="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                {[1.0, 1.2, 1.5, 1.8, 2.0, 2.5].map((height) => (
+                  <button
+                    key={height}
+                    type="button"
+                    onClick={() => {
+                      setCustomLineHeight(height);
+                      handleLineHeight(height);
+                      setShowLineHeightDropdown(false);
+                    }}
+                    className="px-2 py-1 text-xs hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                  >
+                    {height}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>
@@ -546,7 +675,11 @@ export function ProjectHeader({
               type="button"
               onClick={onToggleSidebar}
               className={TOOLBAR_STYLES.button}
-              title={sidebarCollapsed ? '사이드바 펼치기' : '사이드바 접기'}
+              title={
+                settings?.ui.sidebarCollapsed || sidebarCollapsed 
+                  ? '사이드바 펼치기' 
+                  : '사이드바 접기'
+              }
             >
               <div className="flex flex-col gap-0.5">
                 <div className="w-3 h-0.5 bg-current"></div>
