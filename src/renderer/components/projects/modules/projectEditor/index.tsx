@@ -267,24 +267,6 @@ export const ProjectEditor = memo(function ProjectEditor({
                 return (
                     <EditorProvider>
                         <div className="flex flex-col h-full">
-                            {/* 탭 바 */}
-                            <EditorTabBar
-                                tabs={state.tabs}
-                                activeTabId={state.activeTabId}
-                                onTabClick={actions.setActiveTab}
-                                onTabClose={actions.removeTab}
-                                onNewTab={() => {
-                                    const newTab = {
-                                        id: `tab-${Date.now()}`,
-                                        title: `새 탭 ${state.tabs.length}`,
-                                        type: 'chapter' as const,
-                                        isActive: true,
-                                        content: ''
-                                    };
-                                    actions.addTab(newTab);
-                                }}
-                            />
-
                             {/* 에디터 - 전체 화면 활용 */}
                             <div className="flex-1 min-h-0">
                                 <MarkdownEditor
@@ -484,6 +466,28 @@ export const ProjectEditor = memo(function ProjectEditor({
                     />
                 </ProjectEditorLayout.Header>
             </div>
+
+            {/* 🔥 EditorTabBar - ProjectHeader와 동일한 레벨에서 렌더링 */}
+            {state.currentView === 'write' && (
+                <div className="h-12 relative bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 z-[1000]">
+                    <EditorTabBar
+                        tabs={state.tabs}
+                        activeTabId={state.activeTabId}
+                        onTabClick={actions.setActiveTab}
+                        onTabClose={actions.removeTab}
+                        onNewTab={() => {
+                            const newTab = {
+                                id: `tab-${Date.now()}`,
+                                title: `새 탭 ${state.tabs.length}`,
+                                type: 'chapter' as const,
+                                isActive: true,
+                                content: ''
+                            };
+                            actions.addTab(newTab);
+                        }}
+                    />
+                </div>
+            )}
 
             {/* 🔥 메인 컨텐츠 영역 */}
             <ProjectEditorLayout.Main>

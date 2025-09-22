@@ -60,6 +60,18 @@ const FONT_SIZES = [
   { value: 32, label: '32' },
 ] as const;
 
+// 🎨 줄간격 옵션들
+const LINE_HEIGHTS = [
+  { value: 1.0, label: '1.0' },
+  { value: 1.2, label: '1.2' },
+  { value: 1.4, label: '1.4' },
+  { value: 1.5, label: '1.5' },
+  { value: 1.6, label: '1.6' },
+  { value: 1.8, label: '1.8' },
+  { value: 2.0, label: '2.0' },
+  { value: 2.5, label: '2.5' },
+] as const;
+
 interface ProjectHeaderProps {
   title: string;
   onTitleChange: (title: string) => void;
@@ -79,6 +91,7 @@ export function ProjectHeader({
 }: ProjectHeaderProps): React.ReactElement {
   const [showFontDropdown, setShowFontDropdown] = useState(false);
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
+  const [showLineHeightDropdown, setShowLineHeightDropdown] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
 
   // 🔥 현재 에디터 상태 확인
@@ -189,6 +202,21 @@ export function ProjectHeader({
     Logger.debug('WYSIWYG_TOOLBAR', 'Text color changed', { color });
   }, [editor]);
 
+  const handleFontFamily = useCallback((fontFamily: string) => {
+    editor?.chain().focus().setMark('textStyle', { fontFamily }).run();
+    Logger.debug('WYSIWYG_TOOLBAR', 'Font family changed', { fontFamily });
+  }, [editor]);
+
+  const handleFontSize = useCallback((fontSize: number) => {
+    editor?.chain().focus().setMark('textStyle', { fontSize: `${fontSize}px` }).run();
+    Logger.debug('WYSIWYG_TOOLBAR', 'Font size changed', { fontSize });
+  }, [editor]);
+
+  const handleLineHeight = useCallback((lineHeight: number) => {
+    editor?.chain().focus().setMark('textStyle', { lineHeight: lineHeight.toString() }).run();
+    Logger.debug('WYSIWYG_TOOLBAR', 'Line height changed', { lineHeight });
+  }, [editor]);
+
   Logger.debug('WYSIWYG_TOOLBAR', 'Rendering toolbar', {
     hasEditor: !!editor,
     editorState,
@@ -242,6 +270,7 @@ export function ProjectHeader({
             type="button"
             onClick={() => setShowFontDropdown(!showFontDropdown)}
             className={TOOLBAR_STYLES.dropdown}
+            title="폰트 선택"
           >
             <span>강원교육모두체</span>
             <ChevronDown size={14} />
@@ -254,7 +283,7 @@ export function ProjectHeader({
                   type="button"
                   onClick={() => {
                     setShowFontDropdown(false);
-                    Logger.debug('WYSIWYG_TOOLBAR', 'Font family changed', { fontFamily: font.value });
+                    handleFontFamily(font.value);
                   }}
                   className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
                   style={{ fontFamily: font.value }}
@@ -274,6 +303,7 @@ export function ProjectHeader({
             type="button"
             onClick={() => setShowSizeDropdown(!showSizeDropdown)}
             className={TOOLBAR_STYLES.dropdown}
+            title="폰트 크기"
           >
             <span>16</span>
             <ChevronDown size={14} />
@@ -286,11 +316,43 @@ export function ProjectHeader({
                   type="button"
                   onClick={() => {
                     setShowSizeDropdown(false);
-                    Logger.debug('WYSIWYG_TOOLBAR', 'Font size changed', { fontSize: size.value });
+                    handleFontSize(size.value);
                   }}
                   className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
                 >
                   {size.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* 🔥 중앙 영역 - 줄간격 */}
+      <div className={TOOLBAR_STYLES.section}>
+        <div className="relative">
+          <button
+            type="button"
+            onClick={() => setShowLineHeightDropdown(!showLineHeightDropdown)}
+            className={TOOLBAR_STYLES.dropdown}
+            title="줄간격"
+          >
+            <span>1.5</span>
+            <ChevronDown size={14} />
+          </button>
+          {showLineHeightDropdown && (
+            <div className="absolute top-full left-0 mt-1 w-20 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+              {LINE_HEIGHTS.map((lineHeight) => (
+                <button
+                  key={lineHeight.value}
+                  type="button"
+                  onClick={() => {
+                    setShowLineHeightDropdown(false);
+                    handleLineHeight(lineHeight.value);
+                  }}
+                  className="w-full px-3 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-700 text-sm"
+                >
+                  {lineHeight.label}
                 </button>
               ))}
             </div>
