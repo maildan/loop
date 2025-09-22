@@ -263,7 +263,11 @@ export function ProjectHeader({
       console.log('🔍 Available commands:', Object.keys(editor.commands));
       console.log('🔍 FontFamily command available:', !!editor.commands.setFontFamily);
       
-      // 🎨 TipTap 공식 setFontFamily 명령어 사용
+      // 🎨 1. 전역 CSS 변수 업데이트 (즉시 적용)
+      document.documentElement.style.setProperty('--app-font-family', fontFamily);
+      Logger.info('ProjectHeader', 'CSS 변수 업데이트 완료', { fontFamily });
+      
+      // 🎨 2. TipTap setFontFamily 명령어도 실행 (선택된 텍스트용)
       Logger.debug('ProjectHeader', 'Applying fontFamily via TipTap setFontFamily command', { fontFamily });
       
       if (editor.commands.setFontFamily) {

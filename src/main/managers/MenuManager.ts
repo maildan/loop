@@ -149,15 +149,13 @@ export class MenuManager extends BaseManager {
       action: () => this.handleAbout()
     });
 
-    // 개발 환경에서만 개발자 도구 허용 (DEV_TOOLS 상수 활용)
-    if (process.env.NODE_ENV === 'development' && DEV_TOOLS.ALLOWED_IN_PRODUCTION === false) {
-      this.registerMenuAction({
-        id: 'dev.toggle-devtools',
-        label: '개발자 도구',
-        accelerator: Platform.isMacOS() ? 'Cmd+Alt+I' : 'F12',
-        action: () => this.handleToggleDevTools()
-      });
-    }
+    // 개발자 도구는 항상 사용 가능하도록 설정
+    this.registerMenuAction({
+      id: 'dev.toggle-devtools',
+      label: '개발자 도구',
+      accelerator: Platform.isMacOS() ? 'Cmd+Option+I' : 'F12', // Option으로 변경
+      action: () => this.handleToggleDevTools()
+    });
 
     Logger.debug(this.componentName, 'Minimal menu actions registered');
   }
@@ -216,16 +214,15 @@ export class MenuManager extends BaseManager {
       }
     ];
 
-    // 개발 환경에서만 개발자 도구 추가 (DEV_TOOLS 상수 활용)
-    if (process.env.NODE_ENV === 'development' && !DEV_TOOLS.ALLOWED_IN_PRODUCTION) {
-      template.push(
-        { type: 'separator' },
-        { 
-          label: '개발자 도구',
-          click: () => this.handleToggleDevTools()
-        }
-      );
-    }
+    // 개발자 도구는 항상 사용 가능하도록 설정
+    template.push(
+      { type: 'separator' },
+      { 
+        label: '개발자 도구',
+        accelerator: Platform.isMacOS() ? 'Cmd+Option+I' : 'F12', // Option으로 변경
+        click: () => this.handleToggleDevTools()
+      }
+    );
 
     this.contextMenu = Menu.buildFromTemplate(template);
     Logger.info(this.componentName, 'Minimal context menu created');
@@ -262,14 +259,31 @@ export class MenuManager extends BaseManager {
    */
   private async handleToggleDevTools(): Promise<void> {
     try {
+      Logger.info(this.componentName, '🚀 DevTools toggle requested via menu');
+      
       const mainWindow = this.getMainWindow();
+      Logger.info(this.componentName, 'Main window status', { 
+        hasWindow: !!mainWindow, 
+        isDestroyed: mainWindow?.isDestroyed(),
+        windowCount: BrowserWindow.getAllWindows().length 
+      });
+      
       if (mainWindow) {
-        if (mainWindow.webContents.isDevToolsOpened()) {
+        const isDevToolsOpened = mainWindow.webContents.isDevToolsOpened();
+        Logger.info(this.componentName, 'DevTools current state', { isDevToolsOpened });
+        
+        if (isDevToolsOpened) {
+          Logger.info(this.componentName, 'Closing DevTools...');
           mainWindow.webContents.closeDevTools();
         } else {
-          mainWindow.webContents.openDevTools({ mode: 'detach' }); // 새 창으로 열기
+          Logger.info(this.componentName, 'Opening DevTools in detached mode...');
+          mainWindow.webContents.openDevTools({ mode: 'detach' });
+          Logger.info(this.componentName, '✅ DevTools openDevTools() call completed');
         }
+      } else {
+        Logger.error(this.componentName, '❌ No main window found for DevTools toggle');
       }
+      
       Logger.info(this.componentName, 'Toggle dev tools action triggered');
     } catch (error) {
       Logger.error(this.componentName, 'Failed to toggle dev tools', error);

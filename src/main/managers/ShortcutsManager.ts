@@ -180,13 +180,15 @@ export class ShortcutsManager extends BaseManager {
         accelerator: Platform.getModifierKey() + '+R',
         description: '앱 새로고침',
         action: () => this.reloadApp(),
-        enabled: process.env.NODE_ENV === 'development'
+        enabled: true, // 항상 활성화
+        global: true // 🔥 글로벌 단축키로 설정!
       },
       'dev.devtools': {
-        accelerator: Platform.isMacOS() ? 'Cmd+Alt+I' : 'F12',
+        accelerator: Platform.isMacOS() ? 'Cmd+Option+I' : 'F12', // Option으로 변경
         description: '개발자 도구',
         action: () => this.toggleDevTools(),
-        enabled: process.env.NODE_ENV === 'development' && !DEV_TOOLS.ALLOWED_IN_PRODUCTION
+        enabled: true, // 항상 활성화
+        global: true // 🔥 글로벌 단축키로 설정!
       }
     };
 
@@ -194,6 +196,9 @@ export class ShortcutsManager extends BaseManager {
     for (const [key, shortcut] of Object.entries(shortcuts)) {
       if (shortcut.enabled !== false) {
         this.registerShortcut(key, shortcut);
+        Logger.info(this.componentName, `✅ Shortcut registered: ${key} (${shortcut.accelerator})`);
+      } else {
+        Logger.warn(this.componentName, `❌ Shortcut disabled: ${key} (${shortcut.accelerator})`);
       }
     }
 
@@ -368,14 +373,31 @@ export class ShortcutsManager extends BaseManager {
 
   private async toggleDevTools(): Promise<void> {
     try {
+      Logger.info(this.componentName, '🚀 DevTools toggle requested via shortcut');
+      
       const mainWindow = this.getMainWindow();
+      Logger.info(this.componentName, 'Main window status', { 
+        hasWindow: !!mainWindow, 
+        isDestroyed: mainWindow?.isDestroyed(),
+        windowCount: BrowserWindow.getAllWindows().length 
+      });
+      
       if (mainWindow) {
-        if (mainWindow.webContents.isDevToolsOpened()) {
+        const isDevToolsOpened = mainWindow.webContents.isDevToolsOpened();
+        Logger.info(this.componentName, 'DevTools current state', { isDevToolsOpened });
+        
+        if (isDevToolsOpened) {
+          Logger.info(this.componentName, 'Closing DevTools...');
           mainWindow.webContents.closeDevTools();
         } else {
-          mainWindow.webContents.openDevTools({ mode: 'detach' }); // 새 창으로 열기
+          Logger.info(this.componentName, 'Opening DevTools in detached mode...');
+          mainWindow.webContents.openDevTools({ mode: 'detach' });
+          Logger.info(this.componentName, '✅ DevTools openDevTools() call completed');
         }
+      } else {
+        Logger.error(this.componentName, '❌ No main window found for DevTools toggle');
       }
+      
       Logger.info(this.componentName, 'Toggle dev tools shortcut triggered');
     } catch (error) {
       Logger.error(this.componentName, 'Failed to toggle dev tools', error);

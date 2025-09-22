@@ -18,7 +18,7 @@ div[class*="w-full h-full flex flex-col relative"] {
 .ProseMirror {
   @apply outline-none min-h-full p-8 leading-7 text-base;
   
-  /* 🔥 폰트 시스템 연동 */
+  /* 🔥 폰트 시스템 연동 - 기본 폰트 설정 */
   font-family: var(--app-font-family);
   font-size: var(--app-font-size);
   color: var(--editor-text);
@@ -67,4 +67,24 @@ div[class*="w-full h-full flex flex-col relative"] {
 
 .ProseMirror li p {
   @apply mt-1 mb-0;
+}
+
+/* 🔥 TipTap 폰트 적용을 위한 CSS 변수 우선순위 조정 */
+.ProseMirror {
+  /* 기본 폰트 설정은 CSS 변수 사용 */
+  font-family: var(--app-font-family, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  font-size: var(--app-font-size, 16px);
+}
+
+/* TipTap 인라인 스타일 텍스트 적용 우선순위 높임 */
+.ProseMirror span[style*="font-family"],
+.ProseMirror span[data-font-family] {
+  /* 인라인 스타일이 적용되도록 CSS 변수보다 우선순위 높임 */
+  font-family: inherit;
+}
+
+.ProseMirror span[style*="font-size"],
+.ProseMirror span[data-font-size] {
+  /* 인라인 스타일이 적용되도록 CSS 변수보다 우선순위 높임 */
+  font-size: inherit;
 }
