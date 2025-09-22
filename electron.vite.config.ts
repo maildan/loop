@@ -23,6 +23,11 @@ export default defineConfig({
   renderer: {
     root: 'src/renderer',
     plugins: [react()],
+    optimizeDeps: {
+      include: ['react', 'react-dom'],
+      // exclude: ['@tailwindcss/vite'], // 제거 - TailwindCSS 처리 방해
+      force: true
+    },
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src/renderer'),
@@ -33,9 +38,7 @@ export default defineConfig({
         '@styles': resolve(__dirname, 'src/renderer/styles')
       }
     },
-    css: {
-      postcss: './postcss.config.cjs',
-    },
+
     define: {
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -46,7 +49,16 @@ export default defineConfig({
     },
     server: {
       port: parseInt(process.env.RENDERER_PORT || '4000'),
-      host: true
+      host: true,
+      middlewareMode: false,
+      fs: {
+        allow: ['..']
+      },
+      watch: {
+        usePolling: true,
+        interval: 1000,
+        ignored: ['!**/src/**/*.{js,ts,jsx,tsx}']
+      }
     },
     build: {
       // 프로덕션 빌드 최적화

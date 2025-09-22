@@ -11,7 +11,7 @@ import Settings from './routes/Settings';
 import AI from './routes/AI';
 import OAuthCallback from './routes/OAuthCallback';
 import NotFound from './routes/NotFound';
-import '../app/globals.css';
+import '../app/global.css';
 
 // 🔥 기가차드 규칙: 폰트 클래스 (Next.js font 제거)
 const fontClass = 'font-sans';

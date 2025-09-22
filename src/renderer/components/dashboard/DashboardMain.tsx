@@ -38,8 +38,8 @@ const DASHBOARD_STYLES = {
   container: 'flex-1 flex flex-col min-h-screen',
   header: 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-slate-700/50 p-8',
   headerContent: 'max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6',
-  headerTitle: 'text-3xl font-light text-slate-900 dark:text-slate-100 tracking-tight',
-  headerSubtitle: 'text-slate-600 dark:text-slate-400 mt-2 text-lg leading-relaxed',
+  headerTitle: 'text-3xl font-light text-slate-900 dark:text-slate-100 tracking-tight p-4 m-2',
+  headerSubtitle: 'text-slate-600 dark:text-slate-400 mt-2 text-lg leading-relaxed p-2 m-1',
   headerActions: 'flex items-center gap-4',
   content: 'flex-1 overflow-y-auto p-8 max-w-6xl mx-auto w-full space-y-8',
 

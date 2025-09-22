@@ -12,7 +12,6 @@
     "build": "electron-vite build",
     "preview": "electron-vite preview",
     "dev:db": "prisma studio",
-
     "build:clean": "rimraf out",
     "build:optimize": "pnpm build:strip-debug && pnpm build:cleanup",
     "build:strip-debug": "cross-env NODE_ENV=production node scripts/optimize-bundle.js || true",
@@ -51,9 +50,7 @@
     "postinstall": "electron-builder install-app-deps && pnpm db:generate",
     "fonts:convert": "node scripts/convert-fonts.js",
     "debug:main": "cross-env NODE_ENV=development electron --inspect=5858 .",
-
     "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand",
-
     "clear": "clear;clear",
     "push": "git push origin main"
   },
@@ -119,7 +116,6 @@
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@eslint/eslintrc": "^2.1.4",
-    "@tailwindcss/vite": "^4.1.13",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/adm-zip": "^0.5.7",
@@ -152,7 +148,7 @@
     "react-router-dom": "^7.9.1",
     "rimraf": "^6.0.1",
     "spectron": "^19.0.0",
-    "tailwindcss": "3.4.17",
+    "tailwindcss": "^3.4.17",
     "ts-jest": "^29.4.3",
     "ts-node": "^10.9.2",
     "ts-prune": "^0.10.3",

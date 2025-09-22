@@ -1,4 +1,4 @@
-/* 🔥 Tailwind CSS v3 Base Imports */
+/* 🔥 Tailwind CSS v3 - 안정적인 버전 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -676,11 +676,13 @@ body[data-theme="dark"] {
   --color-neutral-900: #fafafa;
 }
 
-/* 🔥 기본 요소 스타일 리셋 */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* 🔥 TailwindCSS v4 Base Layer - CSS Reset */
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 html {

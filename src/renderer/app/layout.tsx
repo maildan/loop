@@ -8,10 +8,10 @@ if (typeof global === 'undefined') {
 import React from 'react';
 import ClientLayout from './ClientLayout';
 import type { ReactNode } from 'react';
-import './globals.css';
+import './global.css';
 
 // 🔥 Vite 마이그레이션: Next.js 폰트 대신 CSS import 사용
-// Inter 폰트는 globals.css에서 로드됨
+// Inter 폰트는 global.css에서 로드됨
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const LAYOUT_STYLES = {
