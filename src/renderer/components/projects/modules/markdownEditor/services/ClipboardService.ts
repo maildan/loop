@@ -144,10 +144,23 @@ export class ClipboardService {
             reader.onload = (e) => {
                 const src = e.target?.result as string;
                 if (src) {
-                    // use setNode for the image node to satisfy TipTap's chained command types
-                    editor.chain().focus().setNode('image', { src }).run();
-                    Logger.info('CLIPBOARD_SERVICE', 'Image added to editor');
-                    resolve({ success: true, data: src });
+                    try {
+                        // 🔥 React DOM 에러 방지를 위한 안전한 처리
+                        setTimeout(() => {
+                            if (editor && !editor.isDestroyed) {
+                                // insertContent 방식으로 변경하여 DOM 조작 안전성 확보
+                                const imageHtml = `<img src="${src}" alt="Uploaded image" />`;
+                                editor.chain().focus().insertContent(imageHtml).run();
+                                Logger.info('CLIPBOARD_SERVICE', 'Image added to editor safely');
+                                resolve({ success: true, data: src });
+                            } else {
+                                resolve({ success: false, error: 'Editor is destroyed' });
+                            }
+                        }, 0);
+                    } catch (error) {
+                        Logger.error('CLIPBOARD_SERVICE', 'Failed to insert image', error);
+                        resolve({ success: false, error: String(error) });
+                    }
                 } else {
                     resolve({ success: false, error: 'Failed to read image file' });
                 }

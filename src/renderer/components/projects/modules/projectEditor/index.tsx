@@ -4,6 +4,7 @@
 'use client';
 
 import React, { memo, useEffect, useCallback, useRef, useState } from 'react';
+import type { Editor } from '@tiptap/react';
 import { MarkdownEditor } from '../../editor/MarkdownEditor';
 import { EditorProvider } from '../../editor/EditorProvider';
 import { ShortcutHelp } from '../../editor/ShortcutHelp';
@@ -80,6 +81,9 @@ export const ProjectEditor = memo(function ProjectEditor({
 
     // 🔥 ProjectHeader hover 상태
     const [headerHovered, setHeaderHovered] = useState(false);
+
+    // 🔥 에디터 인스턴스 상태
+    const [editorInstance, setEditorInstance] = useState<Editor | null>(null);
 
     // 🔥 사이드바 상태 단순화 - 메인 토글만 사용
     const isSidebarCollapsed = state.collapsed;
@@ -329,6 +333,10 @@ export const ProjectEditor = memo(function ProjectEditor({
                                         }
                                     }}
                                     isFocusMode={uiState?.isFocusMode || false}
+                                    onEditorReady={(editor) => {
+                                        setEditorInstance(editor);
+                                        Logger.debug('PROJECT_EDITOR', 'Editor instance received', { hasEditor: !!editor });
+                                    }}
                                 />
                             </div>
                         </div>
@@ -459,8 +467,6 @@ export const ProjectEditor = memo(function ProjectEditor({
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
-                        projectId={projectId}
-                        projectContent={projectData?.content || ''}
                         onTitleChange={(title) => {
                             projectData?.setTitle(title);
                             Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
@@ -472,53 +478,9 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 window.location.href = '/projects';
                             }
                         }}
+                        editor={editorInstance}
                         sidebarCollapsed={isSidebarCollapsed}
                         onToggleSidebar={toggleSidebar}
-                        headerHovered={headerHovered}
-                        onHeaderHover={(hovered) => {
-                            setHeaderHovered(hovered);
-                            Logger.debug('PROJECT_EDITOR', 'Header hover state changed', { hovered });
-                        }}
-                        showRightSidebar={state.showRightSidebar}
-                        onToggleAISidebar={actions.toggleRightSidebar}
-                        isZenMode={isZenMode}
-                        onToggleZenMode={isZenMode ? disableZenMode : enableZenMode}
-                        onSave={async () => {
-                            try {
-                                if (projectData?.saveProject) {
-                                    await projectData.saveProject();
-                                    handleSaveSuccess();
-                                    Logger.info('PROJECT_EDITOR', 'Project saved successfully');
-                                }
-                            } catch (error) {
-                                Logger.error('PROJECT_EDITOR', 'Save failed', error);
-                            }
-                        }}
-                        onShare={() => {
-                            actions.openShareDialog();
-                            Logger.info('PROJECT_EDITOR', 'Share dialog opened');
-                        }}
-                        onDownload={async () => {
-                            try {
-                                const content = JSON.stringify(projectData, null, 2);
-                                const blob = new Blob([content], { type: 'application/json' });
-                                const url = URL.createObjectURL(blob);
-                                const a = document.createElement('a');
-                                a.href = url;
-                                a.download = `${projectData?.title || 'project'}.json`;
-                                document.body.appendChild(a);
-                                a.click();
-                                document.body.removeChild(a);
-                                URL.revokeObjectURL(url);
-                                Logger.info('PROJECT_EDITOR', 'Project downloaded');
-                            } catch (error) {
-                                Logger.error('PROJECT_EDITOR', 'Download failed', error);
-                            }
-                        }}
-                        onDelete={() => {
-                            actions.openDeleteDialog();
-                            Logger.info('PROJECT_EDITOR', 'Delete dialog opened');
-                        }}
                     />
                 </ProjectEditorLayout.Header>
             </div>

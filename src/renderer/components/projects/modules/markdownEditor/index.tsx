@@ -6,6 +6,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { EditorContent, useEditor, type Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import TextAlign from '@tiptap/extension-text-align';
+import Highlight from '@tiptap/extension-highlight';
+import Link from '@tiptap/extension-link';
+import Color from '@tiptap/extension-color';
+import TextStyle from '@tiptap/extension-text-style';
 import { Logger } from '../../../../../shared/logger';
 import { DragDropHandler } from './handlers/DragDropHandler';
 import { EditorBubbleMenu } from './components/EditorBubbleMenu';
@@ -18,6 +24,7 @@ interface MarkdownEditorProps {
     isFocusMode: boolean;
     typewriterMode?: boolean;
     distractionFree?: boolean;
+    onEditorReady?: (editor: Editor) => void;
 }
 
 const EDITOR_STYLES = {
@@ -31,7 +38,8 @@ export function MarkdownEditor({
     onChange,
     isFocusMode,
     typewriterMode = false,
-    distractionFree = false
+    distractionFree = false,
+    onEditorReady
 }: MarkdownEditorProps): React.ReactElement {
     const [isDragOver, setIsDragOver] = useState(false);
     const [isReady, setIsReady] = useState(false);
@@ -48,6 +56,16 @@ export function MarkdownEditor({
         const editor = useEditor({
             extensions: [
                 StarterKit,
+                Underline,
+                TextAlign.configure({
+                    types: ['heading', 'paragraph'],
+                }),
+                Highlight,
+                Link.configure({
+                    openOnClick: false,
+                }),
+                Color,
+                TextStyle,
                 SlashCommand.configure({
                     suggestion: slashSuggestion,
                 }),
@@ -89,6 +107,13 @@ export function MarkdownEditor({
             Logger.debug('MARKDOWN_EDITOR', 'Editor blurred');
         },
     });
+
+    // 🔥 에디터가 준비되면 부모에게 전달
+    useEffect(() => {
+        if (editor && isReady && onEditorReady) {
+            onEditorReady(editor);
+        }
+    }, [editor, isReady, onEditorReady]);
 
 
     // 🔥 드래그앤드롭 핸들러 초기화
@@ -138,6 +163,7 @@ export function MarkdownEditor({
 
     // 🎨 동적 CSS 클래스 생성
     const editorClasses = [
+        'markdown-editor', // 🔥 CSS와 매칭되는 클래스 추가
         EDITOR_STYLES.container,
         isDragOver && 'drag-over',
         isFocusMode && 'editor-focus-mode',

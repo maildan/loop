@@ -58,18 +58,22 @@
   color: var(--editor-text-muted);
 }
 
-/* 🔥 단락 스타일 */
+/* 🔥 단락 스타일 - 줄간격 최적화 */
 .ProseMirror p {
-  @apply my-6 leading-7 transition-all duration-300 ease-in-out;
+  @apply my-2 leading-6 transition-all duration-300 ease-in-out;
   font-size: var(--app-font-size);
   color: var(--editor-text);
   font-family: var(--app-font-family);
   text-indent: 0;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+  margin-top: 0.75rem;
 }
 
-/* ✍️ 강조 텍스트 */
-.ProseMirror strong {
-  @apply font-bold;
+/* ✍️ 강조 텍스트 - 굵기 강화 */
+.ProseMirror strong,
+.ProseMirror b {
+  font-weight: 700 !important;
   color: var(--editor-text);
 }
 

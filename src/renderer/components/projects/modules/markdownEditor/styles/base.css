@@ -1,12 +1,12 @@
 /* 🔥 MarkdownEditor Base Styles - TipTap 기본 설정 */
 
 /* TipTap 에디터 컨테이너 */
-.markdown-editor {
+.markdown-editor,
+div[class*="w-full h-full flex flex-col relative"] {
   @apply h-full w-full relative;
   /* 🔥 FIXED: 터치패드 스크롤 최적화 */
-  overflow-y: auto;
-  overflow-x: hidden;
-  @apply scroll-smooth;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
   
   /* macOS 터치패드 최적화 */
   -webkit-overflow-scrolling: touch;
@@ -60,11 +60,11 @@
   background: transparent;
 }
 
-/* 🔥 기본 마진 리셋 */
+/* 🔥 기본 마진 리셋 - 간격 축소 */
 .ProseMirror > * + * {
-  @apply mt-3;
+  @apply mt-1;
 }
 
 .ProseMirror li p {
-  @apply mt-2 mb-0;
+  @apply mt-1 mb-0;
 }
