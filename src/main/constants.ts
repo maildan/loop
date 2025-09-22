@@ -120,7 +120,7 @@ export const KEYBOARD_CONSTANTS = {
     MAX_KEY_LENGTH: 50,
   },
   LANGUAGES: {
-    DEFAULT: 'en',
+    DEFAULT: 'ko',
     SUPPORTED: ['ko', 'ja', 'zh', 'en'] as const,
     COMPOSITION_LANGUAGES: ['ko', 'ja', 'zh'] as const,
   },

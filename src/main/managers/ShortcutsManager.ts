@@ -373,7 +373,7 @@ export class ShortcutsManager extends BaseManager {
         if (mainWindow.webContents.isDevToolsOpened()) {
           mainWindow.webContents.closeDevTools();
         } else {
-          mainWindow.webContents.openDevTools();
+          mainWindow.webContents.openDevTools({ mode: 'detach' }); // 새 창으로 열기
         }
       }
       Logger.info(this.componentName, 'Toggle dev tools shortcut triggered');

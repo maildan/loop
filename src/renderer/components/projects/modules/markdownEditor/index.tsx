@@ -12,6 +12,8 @@ import Highlight from '@tiptap/extension-highlight';
 import Link from '@tiptap/extension-link';
 import Color from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
+import { FontFamily } from './extensions/FontFamily';
+import { FontSize } from './extensions/FontSize';
 import { Logger } from '../../../../../shared/logger';
 import { DragDropHandler } from './handlers/DragDropHandler';
 import { EditorBubbleMenu } from './components/EditorBubbleMenu';
@@ -66,6 +68,12 @@ export function MarkdownEditor({
                 }),
                 Color,
                 TextStyle,
+                FontFamily.configure({
+                    types: ['textStyle'],
+                }),
+                FontSize.configure({
+                    types: ['textStyle'],
+                }),
                 SlashCommand.configure({
                     suggestion: slashSuggestion,
                 }),

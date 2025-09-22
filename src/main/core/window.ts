@@ -315,11 +315,9 @@ export class WindowManager {
         }
       }
 
-      // 🔥 개발 도구 - 개발 환경에서만 자동 열기 (DEV_TOOLS 상수 활용)
-      if (process.env.NODE_ENV === 'development' && DEV_TOOLS.AUTO_OPEN) {
-        window.webContents.openDevTools({ mode: 'detach' });
-        Logger.debug('WINDOW', 'DevTools opened automatically in development mode');
-      }
+      // 🔥 개발 도구 - DevTools 자동 열기 완전 비활성화
+      // DevTools는 수동으로만 열도록 설정 (사용자 경험 개선)
+      Logger.debug('WINDOW', 'DevTools auto-open disabled for better UX');
 
       // 콘솔 메시지 로깅
       window.webContents.on('console-message', (event, level, message, line, sourceId) => {
