@@ -1,0 +1,1541 @@
+/* 🔥 MarkdownEditor - 모듈화된 CSS 구조로 완전 리팩토링 */
+/* 한국 웹소설 작가를 위한 최적화된 에디터 스타일 */
+
+@import './styles/index.css';
+:root {
+  /* 🌿 자연스러운 배경색 - 종이 질감 */
+  --editor-bg: #fefefe;
+  --editor-bg-secondary: #faf9f7;
+  
+  /* 📖 읽기 친화적 타이포그래피 색상 */
+  --editor-text: #2d2d2d;
+  --editor-text-muted: #666666;
+  --editor-text-light: #999999;
+  
+  /* 🎨 미니멀 인터페이스 */
+  --editor-border: #eeeeee;
+  --editor-accent: #4f46e5;
+  --editor-accent-light: #e0e7ff;
+  
+  /* 🛠 툴바 & 컨트롤 */
+  --toolbar-bg: rgba(255, 255, 255, 0.95);
+  --toolbar-border: rgba(0, 0, 0, 0.05);
+  --button-hover: rgba(79, 70, 229, 0.1);
+  --button-active: rgba(79, 70, 229, 0.2);
+  
+  /* 📝 헤딩 구분선 */
+  --heading-border-h1: rgba(79, 70, 229, 0.2);
+  --heading-border-h2: rgba(79, 70, 229, 0.1);
+  
+  /* 🌅 포커스 모드 오버레이 */
+  --focus-overlay: rgba(255, 255, 255, 0.8);
+  --focus-text-shadow: 0 0 8px rgba(79, 70, 229, 0.1);
+}
+
+:root.dark {
+  /* 🌙 다크 모드 - 따뜻한 어둠 */
+  --editor-bg: #1a1a1a;
+  --editor-bg-secondary: #212121;
+  
+  /* 📖 다크 모드 타이포그래피 */
+  --editor-text: #e8e8e8;
+  --editor-text-muted: #a8a8a8;
+  --editor-text-light: #888888;
+  
+  /* 🎨 다크 모드 인터페이스 */
+  --editor-border: #333333;
+  --editor-accent: #6366f1;
+  --editor-accent-light: rgba(99, 102, 241, 0.1);
+  
+  /* 🛠 다크 모드 툴바 */
+  --toolbar-bg: rgba(26, 26, 26, 0.95);
+  --toolbar-border: rgba(255, 255, 255, 0.05);
+  --button-hover: rgba(99, 102, 241, 0.15);
+  --button-active: rgba(99, 102, 241, 0.25);
+  
+  /* � 다크 모드 헤딩 */
+  --heading-border-h1: rgba(99, 102, 241, 0.3);
+  --heading-border-h2: rgba(99, 102, 241, 0.15);
+  
+  /* 🌙 다크 포커스 모드 */
+  --focus-overlay: rgba(26, 26, 26, 0.85);
+  --focus-text-shadow: 0 0 12px rgba(99, 102, 241, 0.2);
+}
+
+/* 🔥 TipTap 에디터 - 작가 몰입 환경 (TailwindCSS + 설정 연동) */
+.ProseMirror {
+  /* 🎨 배경 및 기본 스타일 - TailwindCSS 호환 */
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+  @apply border-0 rounded-none shadow-none outline-none;
+  
+  /* 📏 최적의 읽기 경험을 위한 타이포그래피 - 설정 시스템 연동 */
+  @apply px-8 py-16;
+  font-family: var(--app-font-family) !important;
+  font-size: var(--app-font-size) !important;
+  @apply leading-7 font-normal;
+  letter-spacing: -0.011em;
+  
+  /* 📐 최적 읽기 너비 - iA Writer 스타일 */
+  @apply max-w-3xl mx-auto;
+  
+  /* 🌊 부드러운 스크롤링 - 스크롤 문제 해결 */
+  min-height: calc(100vh - 8rem);
+  @apply h-auto w-full;
+  overflow-y: auto !important; /* 🔥 스크롤 문제 해결 */
+  @apply scroll-smooth;
+  
+  /* 🎯 포커스 시 미묘한 그림자 효과 */
+  @apply transition-all duration-300 ease-out;
+}
+
+/* 🎯 포커스 상태 - 미니멀하게 (TailwindCSS) */
+.ProseMirror-focused {
+  @apply border-0 outline-none shadow-none;
+}
+
+/* 🔥 모든 테두리 제거 - 완전한 몰입 환경 (TailwindCSS) */
+.tiptap,
+.editor-content,
+div[data-type="editor"] {
+  @apply border-0 outline-none shadow-none;
+}
+
+/* 🌟 타이핑 사운드 효과를 위한 준비 */
+.ProseMirror::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--editor-bg);
+  z-index: -1;
+  opacity: 0.95;
+}
+
+/* 🎯 포커스 모드 - OmmWriter 영감의 몰입 환경 (TailwindCSS) */
+.editor-focus-mode {
+  @apply relative;
+}
+
+.editor-focus-mode .ProseMirror p:not(.is-editor-empty) {
+  @apply opacity-30 transition-opacity duration-300 ease-in-out;
+}
+
+.editor-focus-mode .ProseMirror p.has-focus,
+.editor-focus-mode .ProseMirror p:hover {
+  @apply opacity-100;
+  text-shadow: var(--focus-text-shadow);
+}
+
+/* ✍️ 타이프라이터 모드 - 현재 문장만 보이기 (TailwindCSS) */
+.editor-typewriter-mode .ProseMirror p:not(:last-child) {
+  @apply opacity-20 transition-all duration-300 ease-in-out;
+  filter: blur(0.5px);
+}
+
+.editor-typewriter-mode .ProseMirror p:last-child {
+  @apply opacity-100;
+  filter: none;
+  transform: translateY(-10px);
+  animation: typewriter-focus 0.6s ease-out;
+}
+
+@keyframes typewriter-focus {
+  0% {
+    @apply opacity-50;
+    transform: translateY(5px);
+  }
+  100% {
+    @apply opacity-100;
+    transform: translateY(-10px);
+  }
+}
+
+/* 🏞 산만함 없는 모드 - 완전한 몰입 (TailwindCSS) */
+.editor-distraction-free {
+  @apply bg-white dark:bg-gray-900 fixed inset-0 z-[1000] overflow-y-auto;
+}
+
+.editor-distraction-free .ProseMirror {
+  @apply py-32 px-16 min-h-screen flex flex-col justify-center;
+}
+
+/* 🔥 이미지 스타일 - 작가 친화적 (TailwindCSS) */
+.ProseMirror img {
+  @apply max-w-full h-auto rounded-xl my-8 transition-all duration-300 ease-out cursor-pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.ProseMirror img:hover {
+  @apply -translate-y-0.5;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.12);
+}
+
+/* 🔥 선택된 이미지 스타일 (TailwindCSS) */
+.ProseMirror img.ProseMirror-selectednode {
+  @apply outline-2 outline-blue-500 outline-offset-2;
+}
+
+/* 🔥 드래그 앤 드롭 영역 스타일 (TailwindCSS) */
+.ProseMirror.drag-over {
+  @apply border-blue-500 bg-blue-500/5 border-dashed !important;
+}
+
+.ProseMirror:focus {
+  @apply border-0 outline-none shadow-none !important;
+}
+
+/* 🔥 체크박스 스타일 (TailwindCSS) */
+ul[data-type="taskList"] {
+  @apply list-none p-0 my-4;
+}
+
+li[data-type="taskItem"] {
+  @apply flex;
+  align-items: flex-start;
+  margin: 0.25rem 0;
+  position: relative;
+}
+
+li[data-type="taskItem"]::before {
+  content: "";
+  width: 1rem;
+  height: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  margin-right: 0.5rem;
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: white;
+}
+
+li[data-type="taskItem"][data-checked="true"]::before {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7.5 7.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 10.293l7.146-7.147a.5.5 0 0 1 .708.708z'/%3e%3c/svg%3e");
+}
+
+li[data-type="taskItem"][data-checked="true"] {
+  opacity: 0.6;
+}
+
+li[data-type="taskItem"][data-checked="true"] p {
+  text-decoration: line-through;
+  color: #6b7280;
+}
+
+/* 🔥 콜아웃 스타일 */
+div[data-callout] {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+  position: relative;
+  border-left: 4px solid #3b82f6;
+}
+
+div[data-callout][data-type="info"] {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  border-left-color: #3b82f6;
+}
+
+div[data-callout][data-type="warning"] {
+  background: #fefce8;
+  border-color: #eab308;
+  border-left-color: #eab308;
+}
+
+div[data-callout][data-type="error"] {
+  background: #fef2f2;
+  border-color: #ef4444;
+  border-left-color: #ef4444;
+}
+
+div[data-callout]::before {
+  content: attr(data-icon);
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  font-size: 1.25rem;
+}
+
+div[data-callout]>* {
+  margin-left: 2rem;
+}
+
+div[data-callout] p:first-child {
+  margin-top: 0;
+}
+
+div[data-callout] p:last-child {
+  margin-bottom: 0;
+}
+
+/* 🔥 토글 스타일 */
+details[data-toggle] {
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  background: var(--editor-bg);
+}
+
+details[data-toggle] summary {
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  user-select: none;
+  color: var(--editor-text);
+  border-radius: 4px;
+}
+
+details[data-toggle] summary:hover {
+  background: var(--button-hover);
+}
+
+details[data-toggle][open] summary {
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 0.5rem;
+}
+
+details[data-toggle] .toggle-content {
+  padding: 0.5rem;
+}
+
+/* 🔥 하이라이트 스타일 */
+mark[data-highlight] {
+  background: #fef08a;
+  padding: 0.125rem 0.25rem;
+  border-radius: 3px;
+  color: #92400e;
+}
+
+mark[data-highlight][data-color="pink"] {
+  background: #fce7f3;
+  color: #be185d;
+}
+
+mark[data-highlight][data-color="blue"] {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+mark[data-highlight][data-color="green"] {
+  background: #dcfce7;
+  color: #166534;
+}
+
+mark[data-highlight][data-color="purple"] {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+mark[data-highlight][data-color="red"] {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* � 작가를 위한 타이포그래피 - 읽기 친화적 헤딩 */
+.ProseMirror h1 {
+  @apply text-4xl font-bold leading-tight my-12 mb-6 cursor-text pb-3 transition-all duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+  letter-spacing: -0.025em;
+  border-bottom: 2px solid var(--heading-border-h1);
+}
+
+.ProseMirror h1:hover {
+  color: var(--editor-accent);
+  border-bottom-color: var(--editor-accent);
+}
+
+.ProseMirror h2 {
+  @apply text-3xl font-semibold leading-snug my-10 mb-4 cursor-text pb-2 transition-all duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--heading-border-h2);
+}
+
+.ProseMirror h2:hover {
+  color: var(--editor-accent);
+}
+
+.ProseMirror h3 {
+  @apply text-xl font-semibold leading-relaxed my-8 mb-3 cursor-text transition-colors duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+  letter-spacing: -0.015em;
+}
+
+.ProseMirror h3:hover {
+  color: var(--editor-accent);
+}
+
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  @apply font-semibold my-6 mb-2 cursor-text transition-colors duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+}
+
+.ProseMirror h4 {
+  @apply text-lg leading-normal;
+}
+
+.ProseMirror h5 {
+  @apply text-base leading-normal;
+}
+
+.ProseMirror h6 {
+  @apply text-sm leading-normal uppercase tracking-wider;
+  color: var(--editor-text-muted);
+}
+
+/* 🔥 단락 및 기본 텍스트 - 작가를 위한 완벽한 읽기 경험 (TailwindCSS) */
+.ProseMirror p {
+  @apply my-6 leading-7 transition-all duration-300 ease-in-out;
+  font-size: var(--app-font-size);
+  color: var(--editor-text);
+  font-family: var(--app-font-family);
+  text-indent: 0;
+}
+
+.ProseMirror p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  color: var(--editor-text-light);
+  font-style: italic;
+  pointer-events: none;
+  position: absolute;
+}
+
+.ProseMirror p:first-child {
+  margin-top: 0;
+}
+
+.ProseMirror p:last-child {
+  margin-bottom: 4rem; /* 📚 마지막 단락 아래 여백 */
+}
+
+/* ✍️ 강조 텍스트 */
+.ProseMirror strong {
+  font-weight: 700;
+  color: var(--editor-text);
+}
+
+.ProseMirror em {
+  font-style: italic;
+  color: var(--editor-text);
+}
+
+/* 🔗 링크 스타일 */
+.ProseMirror a {
+  color: var(--editor-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.ProseMirror a:hover {
+  border-bottom-color: var(--editor-accent);
+  background: var(--editor-accent-light);
+  padding: 0 2px;
+  margin: 0 -2px;
+  border-radius: 3px;
+}
+
+/* 📝 리스트 스타일 - 우아하고 읽기 쉬운 (TailwindCSS) */
+.ProseMirror ul,
+.ProseMirror ol {
+  @apply my-6 pl-8 leading-7;
+  font-family: var(--app-font-family);
+}
+
+.ProseMirror ul li,
+.ProseMirror ol li {
+  @apply my-3 relative;
+  color: var(--editor-text);
+}
+
+.ProseMirror ul li {
+  @apply list-none;
+}
+
+.ProseMirror ul li::before {
+  content: '•';
+  color: var(--editor-accent);
+  font-weight: bold;
+  position: absolute;
+  left: -1.5rem;
+  font-size: 1.2em;
+}
+
+.ProseMirror ol li {
+  @apply list-decimal;
+  color: var(--editor-text);
+}
+
+.ProseMirror ol li::marker {
+  color: var(--editor-accent);
+  font-weight: 600;
+}
+
+/* � 인용구 - 작가를 위한 우아한 스타일 */
+.ProseMirror blockquote {
+  @apply relative my-8 p-6 pr-8 italic text-lg leading-relaxed rounded-r-xl;
+  background: linear-gradient(135deg, var(--editor-bg-secondary) 0%, var(--editor-bg) 100%);
+  border-left: 4px solid var(--editor-accent);
+  font-family: var(--app-font-family);
+  color: var(--editor-text-muted);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ProseMirror blockquote::before {
+  @apply absolute top-2 left-2 text-5xl leading-none opacity-30;
+  content: '"';
+  color: var(--editor-accent);
+  font-family: serif;
+}
+
+.ProseMirror blockquote p {
+  @apply m-0 relative z-[1];
+}
+
+/* 💻 코드 스타일 - 개발자와 작가를 위한 (TailwindCSS) */
+.ProseMirror code {
+  @apply px-1.5 py-1 rounded-md text-sm font-medium transition-all duration-200 ease-in-out;
+  background: var(--editor-accent-light);
+  color: var(--editor-accent);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
+  border: 1px solid rgba(79, 70, 229, 0.1);
+}
+
+.ProseMirror code:hover {
+  background: var(--editor-accent);
+  color: white;
+}
+
+.ProseMirror pre {
+  @apply my-8 p-6 rounded-xl overflow-x-auto text-sm leading-relaxed;
+  background: var(--editor-bg-secondary);
+  border: 1px solid var(--editor-border);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.ProseMirror pre code {
+  @apply bg-transparent p-0 border-0 rounded-none font-normal;
+  color: var(--editor-text);
+}
+
+.ProseMirror pre code:hover {
+  @apply bg-transparent;
+  color: var(--editor-text);
+}
+
+/* 🔥 테이블 스타일 개선 */
+.ProseMirror table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  border: 1px solid var(--editor-border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid var(--editor-border);
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.ProseMirror th {
+  background: var(--button-hover);
+  font-weight: 600;
+  color: var(--editor-text);
+}
+
+.ProseMirror tr:nth-child(even) {
+  background: var(--button-hover);
+}
+
+/* 🔥 구분선 스타일 */
+.ProseMirror hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+  margin: 2rem 0;
+}
+
+/* 🔥 플레이스홀더 스타일 */
+.ProseMirror .placeholder {
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.ProseMirror .placeholder::before {
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+}
+
+/* 🔥 포커스 모드 스타일 */
+.ProseMirror.has-focus {
+  outline: none;
+}
+
+.ProseMirror.focused {
+  background: var(--editor-bg);
+  border-color: #3b82f6;
+}
+
+/* 🔥 다크 모드 조정 */
+:root.dark .ProseMirror {
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  border-color: var(--editor-border) !important;
+}
+
+:root.dark div[data-callout] {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+:root.dark div[data-callout][data-type="info"] {
+  background: #1e3a8a;
+  border-color: #3b82f6;
+}
+
+:root.dark div[data-callout][data-type="warning"] {
+  background: #92400e;
+  border-color: #eab308;
+}
+
+:root.dark div[data-callout][data-type="error"] {
+  background: #991b1b;
+  border-color: #ef4444;
+}
+
+:root.dark .ProseMirror blockquote {
+  background: #374151;
+  border-left-color: #4b5563;
+  color: #d1d5db;
+}
+
+:root.dark .ProseMirror code {
+  background: #374151;
+  color: #f472b6;
+}
+
+:root.dark .ProseMirror pre {
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* 🔥 슬래시 명령어 드롭다운 스타일 */
+.slash-command-dropdown {
+  background: var(--editor-bg);
+  border: 1px solid var(--editor-border);
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 0.5rem 0;
+  z-index: 1000;
+}
+
+.slash-command-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.15s ease;
+}
+
+.slash-command-item:hover,
+.slash-command-item.selected {
+  background: var(--button-hover);
+}
+
+.slash-command-icon {
+  margin-right: 0.75rem;
+  font-size: 1.125rem;
+}
+
+.slash-command-content {
+  flex: 1;
+}
+
+.slash-command-title {
+  font-weight: 500;
+  color: var(--editor-text);
+  margin-bottom: 0.125rem;
+}
+
+
+/* 🔥 집중모드 스타일 */
+body.focus-mode {
+  overflow: hidden;
+}
+
+body.focus-mode .project-header,
+body.focus-mode .sidebar,
+body.focus-mode .project-sidebar,
+body.focus-mode .dashboard-sidebar,
+body.focus-mode .navigation,
+body.focus-mode [data-sidebar],
+body.focus-mode [data-header] {
+  display: none !important;
+}
+
+body.focus-mode .project-editor,
+body.focus-mode .editor-container,
+body.focus-mode .markdown-editor {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: var(--editor-bg) !important;
+  padding: 2rem !important;
+  overflow-y: auto !important;
+}
+
+body.focus-mode .ProseMirror {
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  min-height: calc(100vh - 4rem) !important;
+  border: none !important;
+  background: transparent !important;
+  font-size: 1.125rem !important;
+  line-height: 1.8 !important;
+}
+
+/* 🔥 집중모드 ESC 키 안내 */
+body.focus-mode::before {
+  content: "ESC 키를 눌러 집중모드를 종료하세요";
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  z-index: 10000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+  }
+}
+
+.slash-command-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.CodeMirror-selected {
+  background: rgba(59, 130, 246, 0.1) !important;
+}
+
+.editor-toolbar {
+  display: none !important;
+  /* 기본 툴바 숨기기 */
+}
+
+/* 🔥 기가차드 추가: 포커스 모드 스타일링 */
+.focus-mode-editor {
+  padding: 3rem 4rem !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  background: white !important;
+}
+
+.focus-mode-editor .CodeMirror {
+  font-size: 18px !important;
+  line-height: 1.8 !important;
+  padding: 2rem !important;
+}
+
+.normal-mode-editor {
+  padding: 1rem !important;
+}
+
+.normal-mode-editor .CodeMirror {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  padding: 1rem !important;
+}
+
+/* 🔥 마크다운 구문 스타일링 개선 (# 문자 볼드 처리 방지) */
+.ProseMirror h1::before,
+.ProseMirror h2::before,
+.ProseMirror h3::before,
+.ProseMirror h4::before,
+.ProseMirror h5::before,
+.ProseMirror h6::before,
+.ProseMirror strong::before,
+.ProseMirror strong::after,
+.ProseMirror em::before,
+.ProseMirror em::after,
+.ProseMirror a::before,
+.ProseMirror a::after,
+.ProseMirror ul li::before,
+.ProseMirror ol li::before,
+.ProseMirror blockquote::before,
+.ProseMirror code::before,
+.ProseMirror code::after,
+.ProseMirror pre::before,
+.ProseMirror pre::after,
+
+.CodeMirror .cm-formatting,
+.CodeMirror .cm-formatting-header,
+.CodeMirror .cm-formatting-header-1,
+.CodeMirror .cm-formatting-header-2,
+.CodeMirror .cm-formatting-header-3,
+.CodeMirror .cm-formatting-header-4,
+.CodeMirror .cm-formatting-header-5,
+.CodeMirror .cm-formatting-header-6,
+.CodeMirror .cm-formatting-strong,
+.CodeMirror .cm-formatting-em,
+.CodeMirror .cm-formatting-link,
+.CodeMirror .cm-formatting-link-string,
+.CodeMirror .cm-formatting-list,
+.CodeMirror .cm-formatting-quote,
+.CodeMirror .cm-formatting-code,
+.CodeMirror .cm-formatting-code-block,
+.CodeMirror .cm-formatting-image,
+.CodeMirror .cm-formatting-task,
+.CodeMirror .cm-formatting-escape,
+.CodeMirror .cm-formatting-reference,
+.CodeMirror span[class*="cm-formatting"] {
+  /* 🔥 Ultimate 숨김 기법 - 모든 방법 동시 적용 */
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  font-size: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  position: fixed !important;
+  /* absolute 대신 fixed 사용 */
+  left: -99999px !important;
+  top: -99999px !important;
+  z-index: -9999 !important;
+  /* 🔥 추가: z-index 최하위 */
+  pointer-events: none !important;
+  color: transparent !important;
+  background: transparent !important;
+  text-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  /* 🔥 추가: 아웃라인 제거 */
+  box-shadow: none !important;
+  /* 🔥 추가: 그림자 제거 */
+  transform: scale(0) !important;
+  /* 🔥 추가: 크기를 0으로 */
+  overflow: hidden !important;
+  /* 🔥 추가: 넘침 숨김 */
+  clip: rect(0, 0, 0, 0) !important;
+  /* 🔥 추가: 클리핑 */
+  white-space: nowrap !important;
+  text-indent: -9999px !important;
+  /* 🔥 추가: 텍스트 들여쓰기 */
+  user-select: none !important;
+  /* 🔥 추가: 선택 불가 */
+  content: "" !important;
+  /* 🔥 추가: 내용 제거 */
+}
+
+/* 🔥 CodeMirror 헤딩 색상 문제 해결 */
+.CodeMirror .cm-header,
+.CodeMirror .cm-header-1,
+.CodeMirror .cm-header-2,
+.CodeMirror .cm-header-3,
+.CodeMirror .cm-header-4,
+.CodeMirror .cm-header-5,
+.CodeMirror .cm-header-6 {
+  color: inherit !important;
+  /* 🔥 기본 텍스트 색상 사용 */
+  background: transparent !important;
+}
+
+/* 🔥 마크다운 토큰 색상 완전 제거 */
+.CodeMirror .cm-strong,
+.CodeMirror .cm-em,
+.CodeMirror .cm-link,
+.CodeMirror .cm-url,
+.CodeMirror .cm-quote {
+  color: inherit !important;
+  /* 🔥 모든 마크다운 요소를 기본 색상으로 */
+  background: transparent !important;
+}
+
+/* 🔥 헤딩 포매팅 스페이스 완전 제거 (통합) */
+.CodeMirror .cm-formatting-header+.cm-formatting-space,
+.CodeMirror .cm-formatting-strong+.cm-space,
+.CodeMirror .cm-formatting-em+.cm-space,
+.CodeMirror span[class*="cm-formatting"]+.cm-space {
+  /* 🔥 포매팅 다음의 모든 공백 완전 제거 */
+  position: fixed !important;
+  left: -99999px !important;
+  top: -99999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  z-index: -9999 !important;
+}
+
+/* 🔥 마크다운 포매팅 중복 제거 - 위에서 이미 처리됨 */
+
+/* 🔥 헤딩 스타일 (노션 스타일) */
+.CodeMirror .cm-header-1 {
+  font-size: 2em !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+  line-height: 1.2 !important;
+}
+
+.CodeMirror .cm-header-2 {
+  font-size: 1.5em !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  line-height: 1.3 !important;
+}
+
+.CodeMirror .cm-header-3 {
+  font-size: 1.25em !important;
+  font-weight: 600 !important;
+  color: #4b5563 !important;
+  line-height: 1.4 !important;
+}
+
+/* 🔥 텍스트 포매팅 스타일 */
+.CodeMirror .cm-strong {
+  font-weight: 700 !important;
+  color: #111827 !important;
+}
+
+.CodeMirror .cm-em {
+  font-style: italic !important;
+  color: #374151 !important;
+}
+
+/* 🔥 리스트 스타일 개선 */
+.CodeMirror .cm-variable-2 {
+  color: #6b7280 !important;
+}
+
+/* 🔥 인용구 스타일 */
+.CodeMirror .cm-quote {
+  color: #6b7280 !important;
+  font-style: italic !important;
+  border-left: 4px solid #e5e7eb !important;
+  padding-left: 12px !important;
+  margin-left: 4px !important;
+}
+
+/* 🔥 코드 블록 스타일 */
+.CodeMirror .cm-comment {
+  background-color: #f9fafb !important;
+  color: #ef4444 !important;
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace !important;
+  font-size: 0.9em !important;
+  padding: 2px 4px !important;
+  border-radius: 4px !important;
+}
+
+/* 🔥 추가 마크다운 포매팅 중복 제거 - 위에서 이미 처리됨 */
+
+/* 🔥 에디터 전체 스타일링 */
+.CodeMirror {
+  border: none !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  color: #1f2937 !important;
+  background: white !important;
+  padding: 20px !important;
+}
+
+.CodeMirror-focused .CodeMirror-cursor {
+  border-left: 2px solid #3b82f6 !important;
+}
+
+.CodeMirror-lines {
+  padding: 0 !important;
+}
+
+.CodeMirror-line {
+  padding: 4px 0 !important;
+}
+
+/* 🔥 선택 영역 스타일 */
+.CodeMirror-selected {
+  background: #dbeafe !important;
+}
+
+/* 🔥 플레이스홀더 스타일 */
+.CodeMirror-placeholder {
+  color: #9ca3af !important;
+  font-style: italic !important;
+}
+
+/* 🔥 스크롤바 스타일링 (macOS 스타일) */
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+  background-color: transparent !important;
+}
+
+.CodeMirror-vscrollbar,
+.CodeMirror-hscrollbar {
+  outline: none !important;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar,
+.CodeMirror-hscrollbar::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-track,
+.CodeMirror-hscrollbar::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb,
+.CodeMirror-hscrollbar::-webkit-scrollbar-thumb {
+  background: #d1d5db !important;
+  border-radius: 4px !important;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover,
+.CodeMirror-hscrollbar::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af !important;
+}
+
+/* 🔥 교차검증: 절대 위치로 화면 밖으로 이동 (백업 방법) */
+.CodeMirror .cm-formatting::before,
+.CodeMirror .cm-formatting-header::before,
+.CodeMirror .cm-formatting-header-1::before,
+.CodeMirror .cm-formatting-header-2::before,
+.CodeMirror .cm-formatting-header-3::before {
+  content: '';
+  position: absolute;
+  left: -9999px !important;
+  top: -9999px !important;
+}
+
+/* 🔥 한글 입력 최적화 */
+.CodeMirror-composing {
+  border-bottom: 2px solid #3b82f6 !important;
+  background-color: #eff6ff !important;
+}
+
+/* 🔥 미리보기 모드 스타일링 */
+.editor-preview,
+.editor-preview-side {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  color: #1f2937 !important;
+  background: white !important;
+  padding: 20px !important;
+}
+
+.editor-preview h1,
+.editor-preview-side h1 {
+  font-size: 2em !important;
+  font-weight: 700 !important;
+  color: #1f2937 !important;
+  margin-bottom: 16px !important;
+}
+
+.editor-preview h2,
+.editor-preview-side h2 {
+  font-size: 1.5em !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  margin-bottom: 12px !important;
+}
+
+.editor-preview h3,
+.editor-preview-side h3 {
+  font-size: 1.25em !important;
+  font-weight: 600 !important;
+  color: #4b5563 !important;
+  margin-bottom: 8px !important;
+}
+
+.editor-preview p,
+.editor-preview-side p {
+  margin-bottom: 16px !important;
+}
+
+.editor-preview ul,
+.editor-preview ol,
+.editor-preview-side ul,
+.editor-preview-side ol {
+  margin-bottom: 16px !important;
+  padding-left: 24px !important;
+}
+
+.editor-preview blockquote,
+.editor-preview-side blockquote {
+  border-left: 4px solid #e5e7eb !important;
+  padding-left: 16px !important;
+  margin: 16px 0 !important;
+  color: #6b7280 !important;
+  font-style: italic !important;
+}
+
+.editor-preview code,
+.editor-preview-side code {
+  background-color: #f3f4f6 !important;
+  color: #ef4444 !important;
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace !important;
+  font-size: 0.9em !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+
+.editor-preview pre,
+.editor-preview-side pre {
+  background-color: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  margin: 16px 0 !important;
+  overflow-x: auto !important;
+}
+
+.editor-preview pre code,
+.editor-preview-side pre code {
+  background: none !important;
+  color: #1f2937 !important;
+  padding: 0 !important;
+}
+
+/* 🔥 TipTap 에디터 전용 스타일 (Notion 스타일) */
+
+/* 에디터 기본 스타일 */
+.ProseMirror {
+  outline: none;
+  padding: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--editor-text);
+  background: var(--editor-bg);
+}
+
+/* 🔥 Notion 스타일 헤딩 - 더 명확한 구분 */
+.ProseMirror h1 {
+  font-size: 2.25rem;
+  /* 🔥 더 큰 크기 */
+  font-weight: 800;
+  /* 🔥 더 굵게 */
+  line-height: 1.1;
+  margin: 2rem 0 1rem 0;
+  /* 🔥 더 큰 여백 */
+  color: var(--editor-text);
+  letter-spacing: -0.03em;
+  /* 🔥 더 촘촘한 자간 */
+  border-bottom: 3px solid var(--heading-border-h1);
+  /* 🔥 CSS 변수 사용 */
+  padding-bottom: 0.5rem;
+}
+
+.ProseMirror h1 strong {
+  font-weight: 800;
+  /* h1 안에서는 strong(볼드)가 기본과 같게 설정 */
+}
+
+.ProseMirror h2 {
+  font-size: 1.75rem;
+  /* 🔥 중간 크기 */
+  font-weight: 700;
+  /* 🔥 h1보다 얇게 */
+  line-height: 1.2;
+  margin: 1.5rem 0 0.75rem 0;
+  color: var(--editor-text);
+  letter-spacing: -0.02em;
+  border-bottom: 2px solid var(--heading-border-h2);
+  /* 🔥 CSS 변수 사용 */
+  padding-bottom: 0.25rem;
+}
+
+.ProseMirror h2 strong {
+  font-weight: 700;
+  /* h2 안에서는 strong(볼드)가 기본과 같게 설정 */
+}
+
+.ProseMirror h3 {
+  font-size: 1.375rem;
+  /* 🔥 더 큰 h3 */
+  font-weight: 600;
+  /* 🔥 h2보다 얇게 */
+  line-height: 1.3;
+  margin: 1.25rem 0 0.5rem 0;
+  color: var(--editor-text);
+  letter-spacing: -0.01em;
+  /* 🔥 밑줄 없이 구분 */
+}
+
+.ProseMirror h3 strong {
+  font-weight: 600;
+  /* h3 안에서는 strong(볼드)가 기본과 같게 설정 */
+}
+
+.ProseMirror h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0.75rem 0 0.5rem 0;
+  color: var(--editor-text);
+}
+
+/* 🔥 리스트 스타일 */
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+}
+
+.ProseMirror li[data-type="taskItem"] {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0.25rem 0;
+}
+
+.ProseMirror li[data-type="taskItem"]>label {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.ProseMirror li[data-type="taskItem"]>div {
+  flex: 1;
+}
+
+/* 불릿 리스트 */
+.ProseMirror ul:not([data-type="taskList"]) {
+  padding-left: 1.5rem;
+}
+
+.ProseMirror ul:not([data-type="taskList"]) li {
+  margin: 0.25rem 0;
+}
+
+/* 번호 리스트 */
+.ProseMirror ol {
+  padding-left: 1.5rem;
+}
+
+.ProseMirror ol li {
+  margin: 0.25rem 0;
+}
+
+/* 인용구 */
+.ProseMirror blockquote {
+  border-left: 4px solid #e5e7eb;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: #6b7280;
+  background: #f9fafb;
+  border-radius: 0 0.375rem 0.375rem 0;
+}
+
+:root.dark .ProseMirror blockquote {
+  border-left-color: #374151;
+  background: #1f2937;
+  color: #9ca3af;
+}
+
+/* 코드 블록 */
+.ProseMirror pre {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+:root.dark .ProseMirror pre {
+  background: #1f2937;
+  border-color: #374151;
+  color: #f9fafb;
+}
+
+/* 인라인 코드 */
+.ProseMirror code {
+  background: #f3f4f6;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.875rem;
+}
+
+:root.dark .ProseMirror code {
+  background: #374151;
+  color: #f9fafb;
+}
+
+/* 구분선 */
+.ProseMirror hr {
+  border: none;
+  height: 1px;
+  background: #e5e7eb;
+  margin: 2rem 0;
+}
+
+:root.dark .ProseMirror hr {
+  background: #374151;
+}
+
+/* 🔥 Placeholder 스타일 */
+.ProseMirror .is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: #9ca3af;
+  pointer-events: none;
+  height: 0;
+}
+
+/* 🔥 포커스 모드 스타일 */
+.ProseMirror.focused {
+  font-size: 18px;
+  line-height: 1.8;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+/* 🔥 선택된 텍스트 스타일 */
+.ProseMirror ::selection {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+/* 🔥 포커스된 요소 스타일 */
+.ProseMirror .has-focus {
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* 🔥 집중모드 스타일 */
+body.focus-mode {
+  overflow: hidden;
+}
+
+body.focus-mode .project-header,
+body.focus-mode .sidebar,
+body.focus-mode .project-sidebar,
+body.focus-mode .dashboard-sidebar,
+body.focus-mode .navigation,
+body.focus-mode [data-sidebar],
+body.focus-mode [data-header] {
+  display: none !important;
+}
+
+body.focus-mode .editor-container {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  background: var(--editor-bg) !important;
+  padding: 2rem !important;
+}
+
+body.focus-mode .ProseMirror {
+  border: none !important;
+  background: transparent !important;
+  padding: 2rem !important;
+  font-size: 1.125rem !important;
+  line-height: 1.8 !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  min-height: calc(100vh - 4rem) !important;
+}
+
+/* 🔥 집중모드 ESC 힌트 */
+body.focus-mode::after {
+  content: "ESC 키를 눌러 집중모드를 해제하세요";
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  z-index: 10000;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+@keyframes fadeInOut {
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+  }
+}
+
+/* 🔥 기가차드 업데이트: 헤더 스타일링 개선 (# 문자 표시 방지) */
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4 {
+  font-weight: bold;
+  line-height: 1.3;
+  position: relative;
+}
+
+.ProseMirror h1 {
+  font-size: 1.8rem;
+  margin-top: 2.2rem;
+  margin-bottom: 1.4rem;
+  color: var(--editor-text);
+}
+
+.ProseMirror h2 {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 1.2rem;
+}
+
+.ProseMirror h3 {
+  font-size: 1.3rem;
+  margin-top: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.ProseMirror h4 {
+  font-size: 1.15rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.8rem;
+}
+
+/* 🔥 툴바 버튼 사이즈 및 정렬 개선 */
+.tippy-content>div {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  gap: 2px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  overflow-x: auto !important;
+  max-width: 90vw !important;
+}
+
+/* 🔥 드래그 앤 드롭 피드백 스타일 */
+.ProseMirror.drag-over {
+  border-color: #3b82f6 !important;
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border-style: dashed !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* 🔥 드래그 오버 애니메이션 */
+.ProseMirror.drag-over::after {
+  content: '📁 파일을 여기에 놓으세요';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  z-index: 1000;
+  pointer-events: none;
+  animation: dragFeedback 0.3s ease-in-out;
+}
+
+@keyframes dragFeedback {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 🔥 복사 기능 향상 */
+.ProseMirror {
+  /* 텍스트 선택 허용 */
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+/* 🔥 선택된 텍스트 스타일 */
+.ProseMirror ::selection {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: inherit !important;
+}
+
+.ProseMirror ::-moz-selection {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: inherit !important;
+}
+
+/* 🔥 이미지 복사 지원 */
+.ProseMirror img {
+  -webkit-user-select: all !important;
+  -moz-user-select: all !important;
+  -ms-user-select: all !important;
+  user-select: all !important;
+  cursor: pointer !important;
+}
+
+.ProseMirror img:hover {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}

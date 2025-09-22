@@ -1,0 +1,207 @@
+/* 🧩 MarkdownEditor UI Components - 체크박스, 콜아웃, 테이블 등 */
+
+/* 🔥 체크박스 스타일 (Task Lists) */
+ul[data-type="taskList"] {
+  @apply list-none p-0 my-4;
+}
+
+li[data-type="taskItem"] {
+  @apply flex items-start my-1 relative;
+}
+
+li[data-type="taskItem"]::before {
+  content: "";
+  @apply w-4 h-4 border border-gray-300 rounded mr-2 mt-0.5 flex-shrink-0 cursor-pointer bg-white;
+}
+
+li[data-type="taskItem"][data-checked="true"]::before {
+  @apply bg-blue-500 border-blue-500;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7.5 7.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 10.293l7.146-7.147a.5.5 0 0 1 .708.708z'/%3e%3c/svg%3e");
+}
+
+li[data-type="taskItem"][data-checked="true"] {
+  @apply opacity-60;
+}
+
+li[data-type="taskItem"][data-checked="true"] p {
+  @apply line-through text-gray-600;
+}
+
+/* 🔥 콜아웃 스타일 */
+div[data-callout] {
+  @apply bg-gray-50 border border-gray-200 rounded-lg p-4 my-4 relative;
+  border-left: 4px solid #3b82f6;
+}
+
+div[data-callout][data-type="info"] {
+  @apply bg-blue-50 border-blue-200;
+  border-left-color: #3b82f6;
+}
+
+div[data-callout][data-type="warning"] {
+  @apply bg-yellow-50 border-yellow-200;
+  border-left-color: #eab308;
+}
+
+div[data-callout][data-type="error"] {
+  @apply bg-red-50 border-red-200;
+  border-left-color: #ef4444;
+}
+
+div[data-callout][data-type="success"] {
+  @apply bg-green-50 border-green-200;
+  border-left-color: #10b981;
+}
+
+div[data-callout]::before {
+  content: attr(data-icon);
+  @apply absolute top-4 left-4 text-xl;
+}
+
+div[data-callout] > * {
+  @apply ml-8;
+}
+
+div[data-callout] p:first-child {
+  @apply mt-0;
+}
+
+div[data-callout] p:last-child {
+  @apply mb-0;
+}
+
+/* 🔥 토글/Collapsible 스타일 */
+details[data-toggle] {
+  @apply border border-gray-200 rounded-lg p-2 my-2;
+  background: var(--editor-bg);
+}
+
+details[data-toggle] summary {
+  @apply cursor-pointer font-medium py-1 px-2 select-none rounded;
+  color: var(--editor-text);
+}
+
+details[data-toggle] summary:hover {
+  background: var(--button-hover);
+}
+
+details[data-toggle][open] summary {
+  @apply border-b border-gray-200 mb-2;
+}
+
+/* 🔥 하이라이트 스타일 */
+mark[data-highlight] {
+  @apply rounded px-1 py-0.5;
+}
+
+mark[data-highlight][data-color="yellow"] {
+  @apply bg-yellow-200 text-yellow-900;
+}
+
+mark[data-highlight][data-color="green"] {
+  @apply bg-green-200 text-green-900;
+}
+
+mark[data-highlight][data-color="blue"] {
+  @apply bg-blue-200 text-blue-900;
+}
+
+mark[data-highlight][data-color="purple"] {
+  @apply bg-purple-200 text-purple-900;
+}
+
+mark[data-highlight][data-color="red"] {
+  @apply bg-red-200 text-red-900;
+}
+
+/* 📊 테이블 스타일 */
+.ProseMirror table {
+  @apply border-collapse my-8 w-full rounded-lg overflow-hidden;
+  border: 1px solid var(--editor-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  @apply border border-gray-200 px-4 py-3 text-left;
+  font-family: var(--app-font-family);
+}
+
+.ProseMirror th {
+  @apply bg-gray-50 font-semibold text-gray-900;
+  background: var(--editor-bg-secondary);
+  color: var(--editor-text);
+}
+
+.ProseMirror td {
+  color: var(--editor-text);
+  background: var(--editor-bg);
+}
+
+.ProseMirror tr:hover td {
+  @apply bg-gray-50;
+  background: var(--editor-bg-secondary);
+}
+
+/* 📝 테이블 헤더 정렬 */
+.ProseMirror th.centered,
+.ProseMirror td.centered {
+  @apply text-center;
+}
+
+.ProseMirror th.align-right,
+.ProseMirror td.align-right {
+  text-align: right;
+}
+
+/* 🔢 수식 렌더링 */
+.ProseMirror .math-inline {
+  @apply inline-block px-1 py-0.5 bg-gray-100 rounded text-sm;
+  font-family: 'KaTeX_Main', 'Times New Roman', serif;
+}
+
+.ProseMirror .math-block {
+  @apply block my-4 p-4 bg-gray-50 rounded-lg text-center;
+  font-family: 'KaTeX_Main', 'Times New Roman', serif;
+}
+
+/* 🏷️ 태그/라벨 */
+.ProseMirror .tag {
+  @apply inline-block px-2 py-1 bg-gray-200 text-gray-800 text-xs rounded-full mr-1;
+}
+
+.ProseMirror .tag.tag-blue {
+  @apply bg-blue-200 text-blue-800;
+}
+
+.ProseMirror .tag.tag-green {
+  @apply bg-green-200 text-green-800;
+}
+
+.ProseMirror .tag.tag-red {
+  @apply bg-red-200 text-red-800;
+}
+
+/* 📋 인용 블록 변형 */
+.ProseMirror .quote-tweet {
+  @apply border border-gray-200 rounded-lg p-4 my-4 bg-gray-50;
+}
+
+.ProseMirror .quote-tweet .quote-author {
+  @apply font-semibold text-sm text-gray-600 mb-2;
+}
+
+.ProseMirror .quote-tweet .quote-content {
+  @apply text-gray-800;
+}
+
+/* 🎯 주석/어노테이션 */
+.ProseMirror .annotation {
+  @apply relative cursor-help;
+  border-bottom: 2px dotted var(--editor-accent);
+}
+
+.ProseMirror .annotation:hover::after {
+  content: attr(data-annotation);
+  @apply absolute bottom-full left-0 bg-black text-white text-xs px-2 py-1 rounded whitespace-nowrap z-10;
+}

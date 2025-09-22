@@ -1,0 +1,479 @@
+/**
+ * Extensions
+ * 확장 기능 스타일 (코멘트, 하이라이트, 협업, AI 기능 등)
+ */
+
+/* Comments */
+.ProseMirror .comment {
+  position: relative;
+  background: rgba(255, 235, 59, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 2px 4px;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.ProseMirror .comment:hover {
+  background: rgba(255, 235, 59, 0.3);
+}
+
+.ProseMirror .comment.active {
+  background: rgba(255, 235, 59, 0.4);
+  box-shadow: 0 0 0 2px rgba(255, 235, 59, 0.6);
+}
+
+.ProseMirror .comment-thread {
+  position: absolute;
+  right: -300px;
+  top: 0;
+  width: 280px;
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.ProseMirror .comment-item {
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ProseMirror .comment-item:last-child {
+  border-bottom: none;
+}
+
+.ProseMirror .comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
+}
+
+.ProseMirror .comment-author {
+  font-weight: 600;
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+}
+
+.ProseMirror .comment-time {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.ProseMirror .comment-content {
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+/* Highlights */
+.ProseMirror .highlight {
+  background: rgba(255, 255, 0, 0.3);
+  border-radius: var(--radius-xs);
+  padding: 1px 2px;
+}
+
+.ProseMirror .highlight.yellow {
+  background: rgba(255, 255, 0, 0.3);
+}
+
+.ProseMirror .highlight.green {
+  background: rgba(76, 175, 80, 0.3);
+}
+
+.ProseMirror .highlight.blue {
+  background: rgba(33, 150, 243, 0.3);
+}
+
+.ProseMirror .highlight.pink {
+  background: rgba(233, 30, 99, 0.3);
+}
+
+.ProseMirror .highlight.orange {
+  background: rgba(255, 152, 0, 0.3);
+}
+
+/* Suggestions */
+.ProseMirror .suggestion {
+  position: relative;
+  background: rgba(76, 175, 80, 0.1);
+  border-left: 3px solid var(--color-success);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin: var(--spacing-sm) 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+.ProseMirror .suggestion .suggestion-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-success);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-xs);
+}
+
+.ProseMirror .suggestion .suggestion-content {
+  color: var(--color-text);
+  font-style: italic;
+}
+
+.ProseMirror .suggestion.ai-suggestion {
+  border-left-color: var(--color-primary);
+}
+
+.ProseMirror .suggestion.ai-suggestion .suggestion-label {
+  color: var(--color-primary);
+}
+
+/* Track Changes */
+.ProseMirror .insertion {
+  background: rgba(76, 175, 80, 0.2);
+  text-decoration: underline;
+  text-decoration-color: var(--color-success);
+  text-decoration-style: solid;
+}
+
+.ProseMirror .deletion {
+  background: rgba(244, 67, 54, 0.2);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-destructive);
+  opacity: 0.7;
+}
+
+.ProseMirror .modification {
+  background: rgba(255, 152, 0, 0.2);
+  text-decoration: underline;
+  text-decoration-color: var(--color-warning);
+  text-decoration-style: wavy;
+}
+
+/* AI Features */
+.ProseMirror .ai-writing-assistant {
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: var(--spacing-lg);
+  width: 320px;
+  z-index: 1000;
+}
+
+.ProseMirror .ai-assistant-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.ProseMirror .ai-assistant-icon {
+  width: 24px;
+  height: 24px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-foreground);
+  margin-right: var(--spacing-sm);
+}
+
+.ProseMirror .ai-assistant-title {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.ProseMirror .ai-suggestion-item {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.ProseMirror .ai-suggestion-item:hover {
+  background: var(--color-hover);
+  border-color: var(--color-accent);
+}
+
+.ProseMirror .ai-suggestion-item .suggestion-text {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.ProseMirror .ai-suggestion-item .suggestion-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Collaboration Cursors */
+.ProseMirror .collaboration-cursor {
+  position: relative;
+  border-left: 2px solid;
+  margin-left: -1px;
+  margin-right: -1px;
+  pointer-events: none;
+}
+
+.ProseMirror .collaboration-cursor.user-1 {
+  border-color: #ff4444;
+}
+
+.ProseMirror .collaboration-cursor.user-2 {
+  border-color: #44ff44;
+}
+
+.ProseMirror .collaboration-cursor.user-3 {
+  border-color: #4444ff;
+}
+
+.ProseMirror .collaboration-cursor.user-4 {
+  border-color: #ffff44;
+}
+
+.ProseMirror .collaboration-cursor-label {
+  position: absolute;
+  top: -24px;
+  left: -4px;
+  background: inherit;
+  color: white;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+
+.ProseMirror .collaboration-cursor:hover .collaboration-cursor-label {
+  opacity: 1;
+}
+
+/* Selection Ranges */
+.ProseMirror .collaboration-selection {
+  background: rgba(255, 68, 68, 0.2);
+  border-radius: var(--radius-xs);
+}
+
+.ProseMirror .collaboration-selection.user-1 {
+  background: rgba(255, 68, 68, 0.2);
+}
+
+.ProseMirror .collaboration-selection.user-2 {
+  background: rgba(68, 255, 68, 0.2);
+}
+
+.ProseMirror .collaboration-selection.user-3 {
+  background: rgba(68, 68, 255, 0.2);
+}
+
+.ProseMirror .collaboration-selection.user-4 {
+  background: rgba(255, 255, 68, 0.2);
+}
+
+/* Slash Commands */
+.ProseMirror .slash-command-menu {
+  position: absolute;
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  min-width: 200px;
+}
+
+.ProseMirror .slash-command-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+
+.ProseMirror .slash-command-item:hover,
+.ProseMirror .slash-command-item.selected {
+  background: var(--color-hover);
+}
+
+.ProseMirror .slash-command-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-muted);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}
+
+.ProseMirror .slash-command-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ProseMirror .slash-command-title {
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.ProseMirror .slash-command-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.ProseMirror .slash-command-shortcut {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  background: var(--color-background-secondary);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  margin-left: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+/* Mention Suggestions */
+.ProseMirror .mention {
+  background: var(--color-primary-muted);
+  color: var(--color-primary-foreground);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ProseMirror .mention:hover {
+  background: var(--color-primary);
+}
+
+.ProseMirror .mention-suggestions {
+  position: absolute;
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  min-width: 200px;
+}
+
+.ProseMirror .mention-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+
+.ProseMirror .mention-item:hover,
+.ProseMirror .mention-item.selected {
+  background: var(--color-hover);
+}
+
+.ProseMirror .mention-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-foreground);
+  font-weight: 600;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.ProseMirror .mention-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ProseMirror .mention-name {
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 2px;
+}
+
+.ProseMirror .mention-role {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* Grammar Check */
+.ProseMirror .grammar-error {
+  text-decoration: underline;
+  text-decoration-color: var(--color-destructive);
+  text-decoration-style: wavy;
+  cursor: pointer;
+}
+
+.ProseMirror .grammar-suggestion {
+  position: absolute;
+  background: var(--color-background-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: var(--spacing-md);
+  z-index: 1000;
+  max-width: 300px;
+}
+
+.ProseMirror .grammar-suggestion .error-text {
+  font-weight: 600;
+  color: var(--color-destructive);
+  margin-bottom: var(--spacing-sm);
+}
+
+.ProseMirror .grammar-suggestion .suggestion-text {
+  color: var(--color-success);
+  margin-bottom: var(--spacing-sm);
+}
+
+.ProseMirror .grammar-suggestion .suggestion-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.ProseMirror .grammar-suggestion button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-background);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: all var(--duration-fast);
+}
+
+.ProseMirror .grammar-suggestion button:hover {
+  background: var(--color-hover);
+  border-color: var(--color-accent);
+}
+
+.ProseMirror .grammar-suggestion button.primary {
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-color: var(--color-primary);
+}
+
+.ProseMirror .grammar-suggestion button.primary:hover {
+  background: var(--color-primary-hover);
+}

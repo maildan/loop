@@ -1,0 +1,213 @@
+/* 🚀 MarkdownEditor Extensions - 고급 기능 및 플러그인 */
+
+/* 🔥 FIXED: Slash Commands UI 개선 */
+.slash-menu {
+  @apply bg-white shadow-lg rounded-lg border border-gray-200 py-2 z-50 max-h-64 overflow-y-auto;
+}
+
+.slash-menu-item {
+  @apply px-4 py-2 cursor-pointer transition-colors duration-150 flex items-center;
+}
+
+.slash-menu-item:hover,
+.slash-menu-item.selected {
+  /* 🔥 FIXED: 보라색 대신 중성적인 회색 사용 */
+  @apply bg-gray-100 text-gray-900;
+}
+
+.slash-menu-item-icon {
+  @apply w-5 h-5 mr-3 text-gray-600;
+}
+
+.slash-menu-item-title {
+  @apply font-medium text-sm;
+}
+
+.slash-menu-item-description {
+  @apply text-xs text-gray-500 ml-auto;
+}
+
+/* 🔥 FIXED: 이탤릭 텍스트 자동 표시 제거 */
+.ProseMirror .placeholder-text {
+  /* 이탤릭 텍스트 플레이스홀더 비활성화 */
+  display: none !important;
+}
+
+/* 🔍 검색 및 바꾸기 */
+.search-replace-panel {
+  @apply fixed top-4 right-4 bg-white shadow-lg rounded-lg border border-gray-200 p-4 z-50;
+}
+
+.search-input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded mb-2 text-sm;
+}
+
+.search-results {
+  @apply text-xs text-gray-600 mb-2;
+}
+
+.search-buttons {
+  @apply flex gap-2;
+}
+
+.search-button {
+  @apply px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 transition-colors;
+}
+
+/* 📝 자동 완성 */
+.autocomplete-menu {
+  @apply bg-white shadow-lg rounded border border-gray-200 py-1 z-50 max-h-48 overflow-y-auto;
+}
+
+.autocomplete-item {
+  @apply px-3 py-2 cursor-pointer text-sm transition-colors duration-150;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item.selected {
+  @apply bg-gray-100;
+}
+
+/* 🎨 색상 피커 */
+.color-picker {
+  @apply grid grid-cols-6 gap-1 p-2 bg-white shadow-lg rounded border border-gray-200;
+}
+
+.color-option {
+  @apply w-6 h-6 rounded cursor-pointer border-2 border-gray-300 hover:border-gray-500 transition-colors;
+}
+
+.color-option.selected {
+  @apply border-blue-500;
+}
+
+/* 📊 차트 및 그래프 */
+.chart-container {
+  @apply my-8 p-4 bg-gray-50 rounded-lg;
+}
+
+.chart-title {
+  @apply text-lg font-semibold mb-4 text-gray-900;
+}
+
+.chart-canvas {
+  @apply w-full h-64;
+}
+
+/* 🔗 링크 미리보기 */
+.link-preview {
+  @apply border border-gray-200 rounded-lg p-4 my-4 bg-gray-50 flex;
+}
+
+.link-preview-image {
+  @apply w-16 h-16 rounded object-cover mr-4 flex-shrink-0;
+}
+
+.link-preview-content {
+  @apply flex-1;
+}
+
+.link-preview-title {
+  @apply font-semibold text-gray-900 text-sm mb-1;
+}
+
+.link-preview-description {
+  @apply text-gray-600 text-xs line-clamp-2;
+}
+
+.link-preview-url {
+  @apply text-blue-500 text-xs mt-2;
+}
+
+/* ⌨️ 키보드 단축키 표시 */
+.keyboard-shortcut {
+  @apply inline-flex items-center px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded;
+}
+
+.keyboard-shortcut .key {
+  @apply bg-white border border-gray-300 rounded px-1 mx-0.5 min-w-[1.5rem] text-center;
+}
+
+/* 📱 모바일 툴바 */
+@media (max-width: 768px) {
+  .mobile-toolbar {
+    @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-2 flex justify-around;
+  }
+  
+  .mobile-toolbar-button {
+    @apply p-2 rounded text-gray-600 hover:bg-gray-100 transition-colors;
+  }
+}
+
+/* 🔧 개발자 도구 */
+.debug-panel {
+  @apply fixed bottom-4 left-4 bg-black text-white text-xs p-3 rounded opacity-75 pointer-events-none;
+}
+
+.debug-info {
+  @apply mb-1;
+}
+
+/* 💾 자동 저장 표시 */
+.autosave-status {
+  @apply fixed top-4 left-4 text-xs text-gray-500 transition-opacity duration-300;
+}
+
+.autosave-status.saving {
+  @apply text-blue-500;
+}
+
+.autosave-status.saved {
+  @apply text-green-500;
+}
+
+.autosave-status.error {
+  @apply text-red-500;
+}
+
+/* 🎭 테마 전환 애니메이션 */
+.theme-transition {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+/* 📐 레이아웃 그리드 */
+.layout-grid {
+  @apply grid gap-4;
+}
+
+.layout-grid.two-column {
+  @apply grid-cols-2;
+}
+
+.layout-grid.three-column {
+  @apply grid-cols-3;
+}
+
+.layout-grid-item {
+  @apply p-4 border border-gray-200 rounded-lg;
+}
+
+/* 🎪 애니메이션 효과 */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}

@@ -1,0 +1,70 @@
+/* 🔥 MarkdownEditor Base Styles - TipTap 기본 설정 */
+
+/* TipTap 에디터 컨테이너 */
+.markdown-editor {
+  @apply h-full w-full relative;
+  /* 🔥 FIXED: 터치패드 스크롤 최적화 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  @apply scroll-smooth;
+  
+  /* macOS 터치패드 최적화 */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* 🔥 ProseMirror 에디터 기본 스타일 */
+.ProseMirror {
+  @apply outline-none min-h-full p-8 leading-7 text-base;
+  
+  /* 🔥 폰트 시스템 연동 */
+  font-family: var(--app-font-family);
+  font-size: var(--app-font-size);
+  color: var(--editor-text);
+  background: var(--editor-bg);
+  
+  /* 🔥 스크롤 최적화 - 에디터 자체는 스크롤하지 않음 */
+  overflow: visible;
+  
+  /* 터치패드 제스처 최적화 */
+  touch-action: pan-y pinch-zoom;
+}
+
+/* 🎯 포커스 상태 - 미니멀하게 */
+.ProseMirror:focus {
+  @apply outline-none;
+  /* 🔥 FIXED: 테두리 완전 제거 */
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* 🔥 빈 에디터 플레이스홀더 */
+.ProseMirror p.is-editor-empty::before {
+  content: attr(data-placeholder);
+  @apply text-gray-400 italic pointer-events-none float-left h-0;
+}
+
+/* 🔥 selection 스타일 개선 */
+.ProseMirror ::selection {
+  background: var(--editor-accent-light);
+  color: var(--editor-text);
+}
+
+/* 🔥 드래그 상태 개선 */
+.ProseMirror.ProseMirror-hideselection *::selection {
+  background: transparent;
+}
+
+.ProseMirror.ProseMirror-hideselection *::-moz-selection {
+  background: transparent;
+}
+
+/* 🔥 기본 마진 리셋 */
+.ProseMirror > * + * {
+  @apply mt-3;
+}
+
+.ProseMirror li p {
+  @apply mt-2 mb-0;
+}

@@ -1,0 +1,120 @@
+/* ✨ MarkdownEditor Interactive Features - 몰입 환경 */
+
+/* 🌟 타이핑 사운드 효과를 위한 준비 */
+.ProseMirror::before {
+  content: '';
+  @apply fixed inset-0 bg-opacity-95 -z-10;
+  background: var(--editor-bg);
+}
+
+/* 🎯 포커스 모드 - OmmWriter 영감의 몰입 환경 */
+.editor-focus-mode {
+  @apply relative;
+}
+
+.editor-focus-mode .ProseMirror p:not(.is-editor-empty) {
+  @apply opacity-30 transition-opacity duration-300 ease-in-out;
+}
+
+.editor-focus-mode .ProseMirror p.has-focus,
+.editor-focus-mode .ProseMirror p:hover {
+  @apply opacity-100;
+  text-shadow: var(--focus-text-shadow);
+}
+
+/* ✍️ 타이프라이터 모드 - 현재 문장만 보이기 */
+.editor-typewriter-mode .ProseMirror p:not(:last-child) {
+  @apply opacity-20 transition-all duration-300 ease-in-out;
+  filter: blur(0.5px);
+}
+
+.editor-typewriter-mode .ProseMirror p:last-child {
+  @apply opacity-100;
+  filter: none;
+  transform: translateY(-10px);
+  animation: typewriter-focus 0.6s ease-out;
+}
+
+@keyframes typewriter-focus {
+  0% {
+    @apply opacity-50;
+    transform: translateY(5px);
+  }
+  100% {
+    @apply opacity-100;
+    transform: translateY(-10px);
+  }
+}
+
+/* 🏞 산만함 없는 모드 - 완전한 몰입 */
+.editor-distraction-free {
+  @apply bg-white dark:bg-gray-900 fixed inset-0 z-[1000] overflow-y-auto;
+}
+
+.editor-distraction-free .ProseMirror {
+  @apply py-32 px-16 min-h-screen flex flex-col justify-center;
+}
+
+/* 🔥 드래그 앤 드롭 영역 스타일 */
+.ProseMirror.drag-over {
+  @apply border-blue-500 bg-blue-500/5 border-dashed !important;
+}
+
+/* 🎨 텍스트 선택 강화 */
+.ProseMirror .ProseMirror-selectednode {
+  @apply outline-2 outline-blue-500 outline-offset-2;
+}
+
+/* 📝 에디터 상태 표시 */
+.ProseMirror[data-empty="true"]::before {
+  content: "여기에 글을 작성해보세요...";
+  @apply absolute top-8 left-8 text-gray-400 italic pointer-events-none;
+  font-family: var(--app-font-family);
+}
+
+/* 🔍 검색 하이라이트 */
+.ProseMirror .search-result {
+  @apply bg-yellow-200 dark:bg-yellow-900 rounded px-1;
+}
+
+.ProseMirror .search-result.current {
+  @apply bg-orange-300 dark:bg-orange-800;
+}
+
+/* ⌨️ 키보드 단축키 힌트 */
+.editor-hints {
+  @apply fixed bottom-4 right-4 bg-black bg-opacity-75 text-white text-sm px-3 py-2 rounded pointer-events-none opacity-0 transition-opacity duration-300;
+}
+
+.editor-hints.show {
+  @apply opacity-100;
+}
+
+/* 🎯 커서 및 캐럿 스타일링 */
+.ProseMirror .ProseMirror-cursor {
+  border-left: 2px solid var(--editor-accent);
+  animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 📊 실시간 통계 표시 */
+.editor-stats {
+  @apply fixed bottom-4 left-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg px-4 py-2 text-sm;
+  border: 1px solid var(--editor-border);
+}
+
+.editor-stats .stat-item {
+  @apply inline-block mr-4;
+}
+
+.editor-stats .stat-label {
+  @apply text-gray-600 dark:text-gray-400;
+}
+
+.editor-stats .stat-value {
+  @apply font-semibold text-gray-900 dark:text-white;
+}

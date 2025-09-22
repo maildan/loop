@@ -1,0 +1,141 @@
+/* 🖼️ MarkdownEditor Media Styles - 이미지, 비디오, 첨부파일 */
+
+/* 🔥 이미지 스타일 - 작가 친화적 */
+.ProseMirror img {
+  @apply max-w-full h-auto rounded-xl my-8 transition-all duration-300 ease-out cursor-pointer;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.ProseMirror img:hover {
+  @apply -translate-y-0.5;
+  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.12);
+}
+
+/* 🔥 선택된 이미지 스타일 */
+.ProseMirror img.ProseMirror-selectednode {
+  @apply outline-2 outline-blue-500 outline-offset-2;
+}
+
+/* 🖼️ 이미지 캡션 */
+.ProseMirror .image-wrapper {
+  @apply text-center my-8;
+}
+
+.ProseMirror .image-caption {
+  @apply text-sm text-gray-600 dark:text-gray-400 mt-2 italic;
+  font-family: var(--app-font-family);
+}
+
+/* 🎬 비디오 스타일 */
+.ProseMirror video {
+  @apply max-w-full h-auto rounded-xl my-8;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.ProseMirror .video-wrapper {
+  @apply relative my-8 rounded-xl overflow-hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.ProseMirror .video-overlay {
+  @apply absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 cursor-pointer transition-opacity duration-300;
+}
+
+.ProseMirror .video-overlay:hover {
+  @apply bg-opacity-30;
+}
+
+.ProseMirror .video-play-button {
+  @apply w-16 h-16 bg-white bg-opacity-90 rounded-full flex items-center justify-center text-black text-2xl;
+}
+
+/* 📎 첨부파일 스타일 */
+.ProseMirror .attachment {
+  @apply inline-flex items-center px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg my-2 transition-colors duration-200;
+  border: 1px solid var(--editor-border);
+}
+
+.ProseMirror .attachment:hover {
+  @apply bg-gray-200 dark:bg-gray-700;
+}
+
+.ProseMirror .attachment-icon {
+  @apply w-5 h-5 mr-2 text-gray-600 dark:text-gray-400;
+}
+
+.ProseMirror .attachment-name {
+  @apply text-sm font-medium text-gray-900 dark:text-white;
+}
+
+.ProseMirror .attachment-size {
+  @apply text-xs text-gray-500 dark:text-gray-400 ml-2;
+}
+
+/* 🖱️ 드래그 앤 드롭 상태 */
+.ProseMirror .media-dropzone {
+  @apply border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-xl p-8 text-center my-8 transition-colors duration-300;
+}
+
+.ProseMirror .media-dropzone.active {
+  @apply border-blue-500 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20;
+}
+
+.ProseMirror .media-dropzone-text {
+  @apply text-gray-600 dark:text-gray-400 text-sm;
+}
+
+.ProseMirror .media-dropzone-icon {
+  @apply w-12 h-12 mx-auto mb-4 text-gray-400;
+}
+
+/* 📱 반응형 미디어 */
+@media (max-width: 768px) {
+  .ProseMirror img,
+  .ProseMirror video {
+    @apply rounded-lg my-6;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+  
+  .ProseMirror .image-wrapper,
+  .ProseMirror .video-wrapper {
+    @apply my-6;
+  }
+}
+
+/* 🔍 이미지 확대/축소 */
+.ProseMirror .image-resizer {
+  @apply absolute bottom-0 right-0 w-4 h-4 bg-blue-500 cursor-se-resize opacity-0 transition-opacity duration-200;
+}
+
+.ProseMirror img:hover + .image-resizer,
+.ProseMirror .image-resizer:hover {
+  @apply opacity-100;
+}
+
+/* 📐 이미지 정렬 */
+.ProseMirror .image-align-left {
+  @apply float-left mr-4 mb-4;
+  max-width: 50%;
+}
+
+.ProseMirror .image-align-right {
+  @apply float-right ml-4 mb-4;
+  max-width: 50%;
+}
+
+.ProseMirror .image-align-center {
+  @apply block mx-auto;
+}
+
+/* 🎨 이미지 필터 */
+.ProseMirror .image-filter-grayscale {
+  filter: grayscale(100%);
+}
+
+.ProseMirror .image-filter-sepia {
+  filter: sepia(100%);
+}
+
+.ProseMirror .image-filter-blur {
+  filter: blur(2px);
+}

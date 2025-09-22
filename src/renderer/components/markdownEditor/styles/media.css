@@ -1,0 +1,383 @@
+/**
+ * Media Elements
+ * 이미지, 비디오, 임베드 등 미디어 요소 스타일
+ */
+
+/* Images */
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.ProseMirror img:hover {
+  box-shadow: var(--shadow-md);
+  transform: scale(1.02);
+}
+
+.ProseMirror img.selected {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.ProseMirror img.loading {
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+/* Image Captions */
+.ProseMirror .image-caption {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-top: var(--spacing-xs);
+  font-style: italic;
+}
+
+.ProseMirror .image-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  margin: var(--spacing-md) 0;
+}
+
+.ProseMirror .image-wrapper .image-toolbar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs);
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+
+.ProseMirror .image-wrapper:hover .image-toolbar {
+  opacity: 1;
+}
+
+.ProseMirror .image-toolbar button {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: var(--spacing-xs);
+  margin: 0 2px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: background var(--duration-fast);
+}
+
+.ProseMirror .image-toolbar button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Video */
+.ProseMirror video {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.ProseMirror .video-wrapper {
+  position: relative;
+  display: block;
+  margin: var(--spacing-md) 0;
+  background: var(--color-background-secondary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ProseMirror .video-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background: var(--color-muted);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+}
+
+.ProseMirror .video-placeholder .icon {
+  margin-right: var(--spacing-sm);
+  font-size: 24px;
+}
+
+/* Audio */
+.ProseMirror audio {
+  width: 100%;
+  margin: var(--spacing-md) 0;
+}
+
+.ProseMirror .audio-wrapper {
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+}
+
+.ProseMirror .audio-title {
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-text);
+}
+
+/* Embed Content */
+.ProseMirror .embed {
+  position: relative;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+  overflow: hidden;
+}
+
+.ProseMirror .embed iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.ProseMirror .embed.youtube {
+  aspect-ratio: 16 / 9;
+}
+
+.ProseMirror .embed.twitter {
+  min-height: 200px;
+}
+
+.ProseMirror .embed.spotify {
+  height: 152px;
+}
+
+.ProseMirror .embed-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.ProseMirror .embed-placeholder .icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.ProseMirror .embed-placeholder .title {
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.ProseMirror .embed-placeholder .description {
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
+}
+
+/* File Attachments */
+.ProseMirror .file-attachment {
+  display: flex;
+  align-items: center;
+  background: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  transition: all var(--duration-fast);
+  cursor: pointer;
+}
+
+.ProseMirror .file-attachment:hover {
+  background: var(--color-hover);
+  border-color: var(--color-accent);
+}
+
+.ProseMirror .file-attachment .file-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-foreground);
+  font-weight: bold;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.ProseMirror .file-attachment .file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ProseMirror .file-attachment .file-name {
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ProseMirror .file-attachment .file-meta {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.ProseMirror .file-attachment .file-size {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-left: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+/* Galleries */
+.ProseMirror .gallery {
+  display: grid;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.ProseMirror .gallery.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ProseMirror .gallery.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ProseMirror .gallery.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.ProseMirror .gallery img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform var(--duration-fast);
+}
+
+.ProseMirror .gallery img:hover {
+  transform: scale(1.05);
+}
+
+/* Responsive Media */
+@media (max-width: 768px) {
+  .ProseMirror .gallery.grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .ProseMirror .gallery.grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .ProseMirror .embed.youtube {
+    aspect-ratio: 16 / 10;
+  }
+  
+  .ProseMirror .file-attachment {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .ProseMirror .file-attachment .file-icon {
+    margin-right: 0;
+    margin-bottom: var(--spacing-sm);
+  }
+}
+
+/* Media Loading States */
+.ProseMirror .media-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: var(--color-muted);
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+}
+
+.ProseMirror .media-loading .spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border);
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: var(--spacing-md);
+}
+
+/* Media Error States */
+.ProseMirror .media-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: var(--color-destructive-muted);
+  border: 1px solid var(--color-destructive);
+  border-radius: var(--radius-md);
+  color: var(--color-destructive-foreground);
+  text-align: center;
+  padding: var(--spacing-lg);
+}
+
+.ProseMirror .media-error .icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.7;
+}
+
+.ProseMirror .media-error .title {
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.ProseMirror .media-error .description {
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+/* Drag & Drop for Media */
+.ProseMirror .media-drop-zone {
+  border: 2px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  color: var(--color-text-muted);
+  background: var(--color-background-secondary);
+  transition: all var(--duration-fast);
+  margin: var(--spacing-md) 0;
+}
+
+.ProseMirror .media-drop-zone.active {
+  border-color: var(--color-primary);
+  background: var(--color-primary-muted);
+  color: var(--color-primary-foreground);
+}
+
+.ProseMirror .media-drop-zone .icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.5;
+}
+
+.ProseMirror .media-drop-zone .title {
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+}
+
+.ProseMirror .media-drop-zone .description {
+  font-size: var(--font-size-sm);
+  opacity: 0.7;
+}

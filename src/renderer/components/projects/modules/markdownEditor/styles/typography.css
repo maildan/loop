@@ -1,0 +1,193 @@
+/* 📝 MarkdownEditor Typography - 한국 웹소설 작가 최적화 */
+
+/* 🔥 헤딩 스타일 */
+.ProseMirror h1 {
+  @apply text-4xl font-bold leading-tight my-12 mb-6 cursor-text pb-3 transition-all duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+  letter-spacing: -0.025em;
+  border-bottom: 2px solid var(--heading-border-h1);
+}
+
+.ProseMirror h1:hover {
+  color: var(--editor-accent);
+  border-bottom-color: var(--editor-accent);
+}
+
+.ProseMirror h2 {
+  @apply text-3xl font-semibold leading-snug my-10 mb-4 cursor-text pb-2 transition-all duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+  letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--heading-border-h2);
+}
+
+.ProseMirror h2:hover {
+  color: var(--editor-accent);
+}
+
+.ProseMirror h3 {
+  @apply text-xl font-semibold leading-relaxed my-8 mb-3 cursor-text transition-colors duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+  letter-spacing: -0.015em;
+}
+
+.ProseMirror h3:hover {
+  color: var(--editor-accent);
+}
+
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  @apply font-semibold my-6 mb-2 cursor-text transition-colors duration-300 ease-in-out;
+  font-family: var(--app-font-family);
+  color: var(--editor-text);
+}
+
+.ProseMirror h4 {
+  @apply text-lg leading-normal;
+}
+
+.ProseMirror h5 {
+  @apply text-base leading-normal;
+}
+
+.ProseMirror h6 {
+  @apply text-sm leading-normal uppercase tracking-wider;
+  color: var(--editor-text-muted);
+}
+
+/* 🔥 단락 스타일 */
+.ProseMirror p {
+  @apply my-6 leading-7 transition-all duration-300 ease-in-out;
+  font-size: var(--app-font-size);
+  color: var(--editor-text);
+  font-family: var(--app-font-family);
+  text-indent: 0;
+}
+
+/* ✍️ 강조 텍스트 */
+.ProseMirror strong {
+  @apply font-bold;
+  color: var(--editor-text);
+}
+
+.ProseMirror em {
+  @apply italic;
+  color: var(--editor-text-muted);
+  font-style: italic;
+}
+
+.ProseMirror u {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ProseMirror s {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+/* 🔗 링크 스타일 */
+.ProseMirror a {
+  color: var(--editor-accent);
+  text-decoration: none;
+  @apply transition-colors duration-200 ease-in-out cursor-pointer;
+  border-bottom: 1px solid transparent;
+}
+
+.ProseMirror a:hover {
+  border-bottom-color: var(--editor-accent);
+  opacity: 0.8;
+}
+
+/* 📝 리스트 스타일 */
+.ProseMirror ul,
+.ProseMirror ol {
+  @apply my-6 pl-8 leading-7;
+  font-family: var(--app-font-family);
+}
+
+.ProseMirror ul li,
+.ProseMirror ol li {
+  @apply my-3 relative;
+  color: var(--editor-text);
+}
+
+.ProseMirror ul li {
+  @apply list-none;
+}
+
+.ProseMirror ul li::before {
+  content: '•';
+  color: var(--editor-accent);
+  font-weight: bold;
+  position: absolute;
+  left: -1.5rem;
+  font-size: 1.2em;
+}
+
+.ProseMirror ol li {
+  @apply list-decimal;
+  color: var(--editor-text);
+}
+
+.ProseMirror ol li::marker {
+  color: var(--editor-accent);
+  font-weight: 600;
+}
+
+/* 🔥 인용구 스타일 */
+.ProseMirror blockquote {
+  @apply relative my-8 p-6 pr-8 italic text-lg leading-relaxed rounded-r-xl;
+  background: linear-gradient(135deg, var(--editor-bg-secondary) 0%, var(--editor-bg) 100%);
+  border-left: 4px solid var(--editor-accent);
+  font-family: var(--app-font-family);
+  color: var(--editor-text-muted);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.ProseMirror blockquote::before {
+  @apply absolute top-2 left-2 text-5xl leading-none opacity-30;
+  content: '"';
+  color: var(--editor-accent);
+  font-family: serif;
+}
+
+.ProseMirror blockquote p {
+  @apply m-0 relative z-[1];
+}
+
+/* 💻 인라인 코드 스타일 */
+.ProseMirror code {
+  @apply px-1.5 py-1 rounded-md text-sm font-medium transition-all duration-200 ease-in-out;
+  background: var(--editor-accent-light);
+  color: var(--editor-accent);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
+  border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.ProseMirror code:hover {
+  background: var(--editor-accent);
+  color: white;
+}
+
+/* 💻 코드 블록 스타일 */
+.ProseMirror pre {
+  @apply my-8 p-6 rounded-xl overflow-x-auto text-sm leading-relaxed;
+  background: var(--editor-bg-secondary);
+  border: 1px solid var(--editor-border);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.ProseMirror pre code {
+  @apply bg-transparent p-0 border-0 rounded-none font-normal;
+  color: var(--editor-text);
+}
+
+.ProseMirror pre code:hover {
+  @apply bg-transparent;
+  color: var(--editor-text);
+}
