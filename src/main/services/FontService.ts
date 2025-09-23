@@ -334,8 +334,9 @@ class FontService {
                 const format = finalPath.endsWith('.woff2') ? 'woff2' :
                     finalPath.endsWith('.woff') ? 'woff' : 'truetype';
 
-                // 상대경로 사용 (file:// 프로토콜과 호환)
-                const fontUrl = `./fonts/${finalPath}`;
+                // 🔥 Electron 앱에서는 파일 절대경로 사용 (HTTP 대신 file:// 프로토콜)
+                const absoluteFontPath = path.join(this.fontsPath, finalPath);
+                const fontUrl = `file://${absoluteFontPath.replace(/\\/g, '/')}`;
 
                 Logger.debug('FONT_SERVICE', '🔗 Font URL mapping', {
                     originalPath: font.filePath,

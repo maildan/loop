@@ -388,7 +388,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   /**
-   * 🔥 CSS 변수 즉시 적용 - 안정적인 CSS 기반 폰트 시스템 (FontFace API 제거)
+   * 🔥 CSS 변수 기반 폰트 적용 - 단순화된 안정적인 시스템
    */
   const applyCSSVariables = useCallback((fontFamily: string, size: number) => {
     try {
@@ -404,25 +404,12 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // 🔥 1. CSS 변수를 통한 최우선 적용 (모든 CSS 충돌 해결)
+      // 🔥 CSS 변수만 설정 (인라인 스타일 제거로 충돌 방지)
       root.style.setProperty('--app-font-family', fontFamily);
       root.style.setProperty('--dynamic-font-family', fontFamily);
       root.style.setProperty('--app-font-size', `${size}px`);
 
-      // 🔥 2. HTML과 body에 직접 적용 (Tailwind 충돌 해결)
-      root.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
-      document.body.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
-      document.body.style.fontSize = `${size}px`;
-
-      // 🔥 3. 모든 기존 요소에 즉시 적용 (깜빡임 방지)
-      const allElements = document.querySelectorAll('*');
-      allElements.forEach((element) => {
-        if (element instanceof HTMLElement) {
-          element.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
-        }
-      });
-
-      // 🔥 4. 강화된 CSS 스타일 주입 (우선순위 보장)
+      // 🔥 글로벌 CSS 스타일 주입 (!important로 우선순위 보장)
       let globalFontStyle = document.getElementById('global-font-style');
       if (!globalFontStyle) {
         globalFontStyle = document.createElement('style');
@@ -431,12 +418,18 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       }
 
       globalFontStyle.textContent = `
-        /* 🔥 최우선 폰트 적용 - 모든 CSS 프레임워크 충돌 완전 해결 */
-        html, body, * {
-          font-family: ${fontFamily}, system-ui, sans-serif !important;
+        /* 🔥 CSS 변수 기반 폰트 적용 - 테마 변경 시에도 유지됨 */
+        html, body {
+          font-family: var(--app-font-family, system-ui, sans-serif) !important;
+          font-size: var(--app-font-size, 14px) !important;
         }
         
-        /* 🔥 CSS 변수 폴백 */
+        /* 🔥 모든 요소에 적용 */
+        * {
+          font-family: inherit !important;
+        }
+        
+        /* 🔥 CSS 변수 정의 */
         :root {
           --app-font-family: ${fontFamily}, system-ui, sans-serif;
           --dynamic-font-family: ${fontFamily}, system-ui, sans-serif;
@@ -445,7 +438,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         
         /* 🔥 Tailwind 및 기타 프레임워크 충돌 해결 */
         .font-sans, .font-serif, .font-mono, [class*="font-"] {
-          font-family: ${fontFamily}, system-ui, sans-serif !important;
+          font-family: var(--app-font-family, system-ui, sans-serif) !important;
         }
       `;
 
@@ -497,12 +490,11 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         Logger.warn('FONT_PROVIDER', 'Failed to save font to storage', e);
       }
 
-      Logger.debug('FONT_PROVIDER', '🔥 안정적인 CSS 기반 폰트 적용 완료', {
+      Logger.debug('FONT_PROVIDER', '🔥 CSS 변수 기반 폰트 적용 완료', {
         fontFamily,
         fontSize: size,
-        appliedToElements: allElements.length,
         globalStyleInjected: true,
-        method: 'CSS-only (FontFace API 제거됨)'
+        method: 'CSS-variables-only (인라인 스타일 제거됨)'
       });
 
       // Force a reflow to ensure browsers apply new font metrics
