@@ -45,8 +45,18 @@
         monospace;
 }
 
-/* 전역 폰트 설정 */
-* {
+/* 🔥 강력한 전역 폰트 설정 - 모든 인라인 스타일 무력화 */
+*,
+*::before,
+*::after,
+html,
+body,
+div,
+span,
+p,
+h1, h2, h3, h4, h5, h6 {
+    /* 🔥 CSS 변수 우선 적용 - 블랙리스트된 폰트 자동 제외 */
+    font-family: var(--app-font-family, var(--font-family-base)) !important;
     /* 폰트 렌더링 최적화 */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

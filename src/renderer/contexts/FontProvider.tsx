@@ -47,9 +47,26 @@ interface FontErrorPattern {
 // 🔥 폰트 오류 패턴 정의 (확장 가능)
 const FONT_ERROR_PATTERNS: FontErrorPattern[] = [
   {
+    // Renderer 콘솔 로그 형식: "Failed to decode downloaded font: http://localhost:35821/fonts/Gangwon_mac/gaw.otf"
+    pattern: /Failed to decode downloaded font:\s*https?:\/\/[^\/]+\/fonts\/[^\/]+\/([^\/\s]+\.(otf|ttf|woff2?))/i,
+    reason: 'decode_error',
+    extractFontName: (match) => match[1] ? decodeURIComponent(match[1]) : 'unknown'
+  },
+  {
+    // 기존 패턴 유지
     pattern: /Failed to decode downloaded font.*\/([^\/]+\.(otf|ttf|woff2?))$/i,
     reason: 'decode_error',
     extractFontName: (match) => match[1] ? decodeURIComponent(match[1]) : 'unknown'
+  },
+  {
+    // CFF 파싱 에러 (강원 폰트 문제)
+    pattern: /OTS parsing error: CFF.*Failed to parse Name INDEX data/i,
+    reason: 'cff_error'
+  },
+  {
+    // TSI3 에러 (나눔고딕 문제)
+    pattern: /OTS parsing error: TSI3.*zero-length table/i,
+    reason: 'ots_error'
   },
   {
     pattern: /OTS parsing error: CFF.*table/i,
@@ -146,21 +163,51 @@ class FontBlacklistManager {
     return this.getBlacklist().map(entry => entry.fontName);
   }
 
-  // 🔥 콘솔 오류 메시지에서 폰트 이름 추출
+  // 🔥 콘솔 오류 메시지에서 폰트 이름 추출 (강화된 버전)
   static extractFontFromError(errorMessage: string): string | null {
+    // 패턴 매칭 우선 시도
     for (const pattern of FONT_ERROR_PATTERNS) {
       const match = errorMessage.match(pattern.pattern);
       if (match) {
         if (pattern.extractFontName) {
-          return pattern.extractFontName(match);
-        }
-        // URL에서 폰트 이름 추출 시도
-        const urlMatch = errorMessage.match(/\/([^\/]*\.(otf|ttf|woff2?))$/i);
-        if (urlMatch && urlMatch[1]) {
-          return decodeURIComponent(urlMatch[1]);
+          const fontName = pattern.extractFontName(match);
+          if (fontName && fontName !== 'unknown') {
+            return fontName;
+          }
         }
       }
     }
+
+    // 백업 추출 방법들
+    const extractionMethods = [
+      // Renderer 콘솔 URL 형식: "http://localhost:35821/fonts/Gangwon_mac/gaw.otf"
+      /https?:\/\/[^\/]+\/fonts\/[^\/]+\/([^\/\s]+\.(otf|ttf|woff2?))/i,
+      // 일반 URL 패턴
+      /\/([^\/]*\.(otf|ttf|woff2?))(?:\s|$)/i,
+      // 파일명만 추출
+      /([a-zA-Z0-9_-]+\.(otf|ttf|woff2?))/i
+    ];
+
+    for (const regex of extractionMethods) {
+      const match = errorMessage.match(regex);
+      if (match && match[1]) {
+        return decodeURIComponent(match[1]);
+      }
+    }
+
+    // 알려진 문제 폰트들 매칭
+    const knownProblematicFonts = [
+      'gaw.otf', 'gaw_Bold.otf', // 강원 폰트
+      'NanumGothicBold.otf', 'NanumGothic.otf', // 나눔고딕
+      'Gangwon', 'NanumGothic' // 폰트 패밀리명
+    ];
+
+    for (const font of knownProblematicFonts) {
+      if (errorMessage.toLowerCase().includes(font.toLowerCase())) {
+        return font;
+      }
+    }
+
     return null;
   }
 }
@@ -243,28 +290,42 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('focus', scheduleCheck);
     };
   }, []);  /**
-   * 🔥 콘솔 오류 감지 및 자동 블랙리스트 추가
+   * 🔥 콘솔 오류 감지 및 자동 블랙리스트 추가 (강화된 버전)
    */
   useEffect(() => {
     const originalConsoleError = console.error;
     const originalConsoleWarn = console.warn;
+    const originalConsoleInfo = console.info;
 
-    const handleConsoleMessage = (message: string, type: 'error' | 'warn') => {
-      // 폰트 관련 오류 감지
-      const fontName = FontBlacklistManager.extractFontFromError(message);
-      if (fontName) {
-        const reason = message.includes('CFF') ? 'cff_error' :
-          message.includes('decode') ? 'decode_error' : 'ots_error';
-        FontBlacklistManager.addToBlacklist(fontName, reason, message);
+    const handleConsoleMessage = (message: string, type: 'error' | 'warn' | 'info') => {
+      // 폰트 관련 오류 감지 (더 포괄적)
+      const isFont관련 = message.includes('font') || 
+                      message.includes('Font') || 
+                      message.includes('OTS') || 
+                      message.includes('decode') ||
+                      message.includes('.otf') ||
+                      message.includes('.ttf') ||
+                      message.includes('.woff');
 
-        // 현재 CSS에서 해당 폰트 제거
-        setTimeout(() => {
-          removeProblematicFontFromCSS(fontName);
-        }, 100);
+      if (isFont관련) {
+        const fontName = FontBlacklistManager.extractFontFromError(message);
+        if (fontName) {
+          const reason = message.includes('CFF') ? 'cff_error' :
+            message.includes('TSI3') ? 'ots_error' :
+            message.includes('decode') ? 'decode_error' : 'ots_error';
+          
+          FontBlacklistManager.addToBlacklist(fontName, reason, message);
+          Logger.warn('FONT_PROVIDER', `🚫 문제 폰트 블랙리스트 추가: ${fontName}`, { reason, message: message.substring(0, 200) });
+
+          // 현재 CSS에서 해당 폰트 제거
+          setTimeout(() => {
+            removeProblematicFontFromCSS(fontName);
+          }, 100);
+        }
       }
     };
 
-    // 콘솔 메서드 오버라이드
+    // 콘솔 메서드 오버라이드 (info도 포함)
     console.error = (...args: any[]) => {
       const message = args.join(' ');
       handleConsoleMessage(message, 'error');
@@ -277,10 +338,30 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       originalConsoleWarn.apply(console, args);
     };
 
+    console.info = (...args: any[]) => {
+      const message = args.join(' ');
+      handleConsoleMessage(message, 'info');
+      originalConsoleInfo.apply(console, args);
+    };
+
+    // 🔥 미리 알려진 문제 폰트들 블랙리스트에 추가
+    const knownProblematicFonts = [
+      { name: 'gaw.otf', reason: 'cff_error' as const },
+      { name: 'gaw_Bold.otf', reason: 'cff_error' as const },
+      { name: 'NanumGothicBold.otf', reason: 'ots_error' as const }
+    ];
+
+    knownProblematicFonts.forEach(({ name, reason }) => {
+      if (!FontBlacklistManager.isBlacklisted(name)) {
+        FontBlacklistManager.addToBlacklist(name, reason, 'Pre-emptive blacklist based on known issues');
+      }
+    });
+
     // 정리
     return () => {
       console.error = originalConsoleError;
       console.warn = originalConsoleWarn;
+      console.info = originalConsoleInfo;
     };
   }, []);
 

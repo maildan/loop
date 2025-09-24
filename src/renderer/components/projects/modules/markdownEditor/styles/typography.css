@@ -3,18 +3,34 @@
 /* 🔥 전역 폰트 강제 적용 - 모든 인라인 스타일보다 우선순위 높음 */
 .ProseMirror,
 .ProseMirror *,
+.ProseMirror span,
+.ProseMirror p,
+.ProseMirror div,
 .ProseMirror span[style*="font-family"],
 .ProseMirror span[data-font-family] {
   font-family: var(--app-font-family) !important;
   font-size: var(--app-font-size) !important;
 }
 
-/* 🔥 TipTap 인라인 스타일 무력화 */
+/* 🔥 TipTap 인라인 스타일 무력화 - 매우 구체적인 셀렉터로 우선순위 확보 */
 .ProseMirror [style*="font-family"] {
   font-family: var(--app-font-family) !important;
 }
 
 .ProseMirror [style*="font-size"] {
+  font-size: var(--app-font-size) !important;
+}
+
+/* 🔥 특별히 문제가 되는 인라인 스타일 대상 */
+.ProseMirror span[style*="font-family: \"Noto Sans\""],
+.ProseMirror span[style*="font-family: \"MS Gothic\""],
+.ProseMirror span[style*="Noto Sans"],
+.ProseMirror span[style*="MS Gothic"] {
+  font-family: var(--app-font-family) !important;
+}
+
+/* 🔥 폰트 크기 23px 같은 특정 크기도 오버라이드 */
+.ProseMirror span[style*="font-size: 23px"] {
   font-size: var(--app-font-size) !important;
 }
 

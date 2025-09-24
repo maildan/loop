@@ -368,6 +368,21 @@ class FontService {
     }
 
     /**
+     * 🔥 블랙리스트된 폰트 체크 (알려진 문제 폰트들)
+     */
+    private isBlacklistedFont(filePath: string): boolean {
+        const fileName = path.basename(filePath).toLowerCase();
+        const problematicFonts = [
+            'gaw.otf',
+            'gaw_bold.otf', 
+            'nanumgothicbold.otf',
+            'nanumgothic.otf'
+        ];
+        
+        return problematicFonts.some(problematic => fileName.includes(problematic));
+    }
+
+    /**
      * 🔥 @font-face CSS 생성
      */
     public generateFontFaceCSS(): string {
@@ -403,6 +418,16 @@ class FontService {
                     family: font.family,
                     format
                 });
+
+                // 🔥 블랙리스트된 폰트 제외 (OTS 에러 방지)
+                const isBlacklisted = this.isBlacklistedFont(font.filePath);
+                if (isBlacklisted) {
+                    Logger.warn('FONT_SERVICE', `⚠️ 블랙리스트된 폰트 스킵: ${font.family}`, { 
+                        filePath: font.filePath,
+                        fileName: path.basename(font.filePath)
+                    });
+                    continue;
+                }
 
                 css.push(`
 @font-face {
