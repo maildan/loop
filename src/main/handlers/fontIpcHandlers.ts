@@ -129,6 +129,21 @@ export function setupFontIpcHandlers(): void {
             }
         );
 
+        // 🔥 폰트 캐시 클리어 (개발 모드 전용)
+        ipcMain.handle(
+            'font:clear-cache',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'Font cache clear requested');
+                    fontService.clearCache();
+                    return { success: true };
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'Font cache clear failed', error);
+                    return { success: false, error: String(error) };
+                }
+            }
+        );
+
         Logger.info('FONT_IPC', 'Dynamic font IPC handlers setup completed');
     } catch (error) {
         Logger.error('FONT_IPC', 'Font IPC handlers setup failed', error);

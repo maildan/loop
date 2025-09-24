@@ -158,6 +158,7 @@
     "tsx": "^4.20.3",
     "ttf2woff2": "^8.0.0",
     "typescript": "^5",
+    "vite-plugin-static-copy": "^3.1.2",
     "wait-on": "^8.0.3"
   },
   "packageManager": "pnpm@10.17.1",

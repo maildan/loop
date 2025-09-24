@@ -1,5 +1,23 @@
 /* 📝 MarkdownEditor Typography - 한국 웹소설 작가 최적화 */
 
+/* 🔥 전역 폰트 강제 적용 - 모든 인라인 스타일보다 우선순위 높음 */
+.ProseMirror,
+.ProseMirror *,
+.ProseMirror span[style*="font-family"],
+.ProseMirror span[data-font-family] {
+  font-family: var(--app-font-family) !important;
+  font-size: var(--app-font-size) !important;
+}
+
+/* 🔥 TipTap 인라인 스타일 무력화 */
+.ProseMirror [style*="font-family"] {
+  font-family: var(--app-font-family) !important;
+}
+
+.ProseMirror [style*="font-size"] {
+  font-size: var(--app-font-size) !important;
+}
+
 /* 🔥 헤딩 스타일 */
 .ProseMirror h1 {
   @apply text-4xl font-bold leading-tight my-12 mb-6 cursor-text pb-3 transition-all duration-300 ease-in-out;

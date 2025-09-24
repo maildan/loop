@@ -172,29 +172,12 @@ const FontContext = createContext<FontContextType | null>(null);
  */
 export function FontProvider({ children }: { children: React.ReactNode }) {
   const [currentFont, setCurrentFont] = useState<string>(() => {
-    // 🔥 초기 렌더시 localStorage에서 즉시 폰트 복원
-    if (typeof window !== 'undefined') {
-      const savedFont = localStorage.getItem('loop-font-family');
-      if (savedFont) {
-        // 즉시 CSS 변수 설정 (React 렌더링 전)
-        document.documentElement.style.setProperty('--app-font-family', savedFont);
-        document.documentElement.style.setProperty('--dynamic-font-family', savedFont);
-        return savedFont;
-      }
-    }
+    // 🔥 기본값으로 시작 (비동기 로딩은 useEffect에서 처리)
     return 'system-ui, sans-serif';
   });
 
   const [fontSize, setFontSizeState] = useState<number>(() => {
-    // 🔥 초기 렌더시 localStorage에서 즉시 폰트 크기 복원
-    if (typeof window !== 'undefined') {
-      const savedSize = localStorage.getItem('loop-font-size');
-      if (savedSize) {
-        const size = parseInt(savedSize, 10);
-        document.documentElement.style.setProperty('--app-font-size', `${size}px`);
-        return size;
-      }
-    }
+    // 🔥 기본값으로 시작 (비동기 로딩은 useEffect에서 처리)  
     return 14;
   });
 
@@ -524,13 +507,17 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       applyCSSVariables(fontFamily, fontSize);
       setCurrentFont(fontFamily);
 
-      // 2. Electron API로 백그라운드 저장
+      // 2. 🔥 단일 저장소: Electron Settings만 사용
       if (window.electronAPI?.settings?.set) {
         const result = await window.electronAPI.settings.set('app.fontFamily', fontFamily);
         if (!result.success) {
           throw new Error(result.error || 'Failed to save font setting');
         }
         Logger.debug('FONT_PROVIDER', 'Font saved to Electron settings', { fontFamily });
+      } else {
+        // 🔥 웹 환경에서만 localStorage 사용 (fallback)
+        localStorage.setItem('loop-font-family', fontFamily);
+        Logger.debug('FONT_PROVIDER', 'Font saved to localStorage (fallback)', { fontFamily });
       }
 
     } catch (error) {
@@ -556,13 +543,17 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       applyCSSVariables(currentFont, size);
       setFontSizeState(size);
 
-      // 2. Electron API로 백그라운드 저장
+      // 2. 🔥 단일 저장소: Electron Settings만 사용
       if (window.electronAPI?.settings?.set) {
         const result = await window.electronAPI.settings.set('app.fontSize', size);
         if (!result.success) {
           throw new Error(result.error || 'Failed to save font size setting');
         }
         Logger.debug('FONT_PROVIDER', 'Font size saved to Electron settings', { size });
+      } else {
+        // 🔥 웹 환경에서만 localStorage 사용 (fallback)
+        localStorage.setItem('loop-font-size', size.toString());
+        Logger.debug('FONT_PROVIDER', 'Font size saved to localStorage (fallback)', { size });
       }
 
     } catch (error) {
@@ -632,11 +623,37 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         Logger.debug('FONT_PROVIDER', 'EFFECT 1: 데이터 로딩 및 상태 설정 시작');
         setIsLoading(true);
 
-        // 1. localStorage에서 값 복원 (DOM 조작은 하지 않음)
-        const savedFont = localStorage.getItem('loop-font-family') || undefined;
-        const savedSizeRaw = localStorage.getItem('loop-font-size');
-        const savedSize = savedSizeRaw ? parseInt(savedSizeRaw, 10) : undefined;
+        // 1. 🔥 Electron Settings에서 먼저 로드 시도
+        let savedFont: string | undefined;
+        let savedSize: number | undefined;
 
+        if (window.electronAPI?.settings?.get) {
+          try {
+            const fontResult = await window.electronAPI.settings.get('app.fontFamily');
+            const sizeResult = await window.electronAPI.settings.get('app.fontSize');
+            
+            if (fontResult.success && fontResult.data) {
+              savedFont = fontResult.data as string;
+            }
+            if (sizeResult.success && sizeResult.data) {
+              savedSize = sizeResult.data as number;
+            }
+            Logger.debug('FONT_PROVIDER', 'Settings loaded from Electron', { savedFont, savedSize });
+          } catch (electronError) {
+            Logger.warn('FONT_PROVIDER', 'Failed to load from Electron settings, trying localStorage', electronError);
+          }
+        }
+
+        // 2. 🔥 Electron 로드 실패 시 localStorage에서 fallback
+        if (!savedFont) {
+          savedFont = localStorage.getItem('loop-font-family') || undefined;
+        }
+        if (!savedSize) {
+          const savedSizeRaw = localStorage.getItem('loop-font-size');
+          savedSize = savedSizeRaw ? parseInt(savedSizeRaw, 10) : undefined;
+        }
+
+        // 3. 상태 업데이트
         if (savedFont) {
           setCurrentFont(savedFont);
         }

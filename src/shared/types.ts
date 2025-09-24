@@ -303,6 +303,7 @@ export interface ElectronAPI {
     getFontFamily: (familyName: string) => Promise<{ name: string; displayName: string; category: string; variants: any[]; cssFamily: string } | null>;
     reload: () => Promise<{ success: boolean; error?: string }>;
     getStaticFonts: () => Promise<Array<{ value: string; label: string; category: string }>>;
+    clearCache: () => Promise<{ success: boolean; error?: string }>;
   };
 }
 

@@ -1,6 +1,23 @@
 /**
  * 🔥 동적 폰트 서비스 - public/fonts 폴더 기반 폰트 관리
- * TTF 파일을 스캔하고 CSS @font-face 동적 생성
+ * TTF 파                          Logger.info('FONT_SERVICE', '🔄 폰트 서비스 초기화 시작', {
+                fontsPath: this.fontsPath,
+                exists: existsSync(this.fontsPath),
+                NODE_ENV: process.env.NODE_ENV
+            });  Logger.info('FONT_SERVICE', '🔄 폰트 서비스 초기화 시작', {
+                fontsPath: this.fontsPath,
+                exists: existsSync(this.fontsPath),
+                NODE_ENV: process.env.NODE_ENV
+            });  Logger.info('FONT_SERVICE', '🔄 폰트 서비스 초기화 시작', {
+                fontsPath: this.fontsPath,
+                exists: existsSync(this.fontsPath),
+                NODE_ENV: process.env.NODE_ENV
+            });{
+            Logger.info('FONT_SERVICE', '🔄 폰트 서비스 초기화 시작', {
+                fontsPath: this.fontsPath,
+                exists: existsSync(this.fontsPath),
+                NODE_ENV: process.env.NODE_ENV
+            }); CSS @font-face 동적 생성
  */
 
 import path from 'path';
@@ -47,10 +64,18 @@ class FontService {
      * 🔥 폰트 폴더 스캔 및 초기화
      */
     public async initialize(): Promise<void> {
-        if (this.isInitialized) return;
+        // 🔥 이미 초기화된 경우 스킵 (개발 모드에서는 캐시 클리어 가능)
+        if (this.isInitialized) {
+            Logger.debug('FONT_SERVICE', '폰트 서비스가 이미 초기화되었습니다');
+            return;
+        }
 
         try {
-            Logger.info('FONT_SERVICE', '🔍 폰트 폴더 스캔 시작', { fontsPath: this.fontsPath });
+            Logger.info('FONT_SERVICE', '� 폰트 서비스 초기화 시작', {
+                fontsPath: this.fontsPath,
+                exists: existsSync(this.fontsPath),
+                NODE_ENV: process.env.NODE_ENV
+            });
 
             await this.scanFontsDirectory();
             this.isInitialized = true;
@@ -147,10 +172,11 @@ class FontService {
     }
 
     /**
-     * 🔥 폰트 파일(TTF/OTF) 스캔
+     * 🔥 폰트 파일(TTF/OTF) 스캔 - Mac에서는 OTF 우선
      */
     private async scanForFontFiles(dirPath: string, familyName: string): Promise<FontInfo[]> {
         const fonts: FontInfo[] = [];
+        const fontFiles: { path: string; type: 'TTF' | 'OTF' }[] = [];
 
         async function scanRecursive(currentPath: string): Promise<void> {
             try {
@@ -163,14 +189,7 @@ class FontService {
                         await scanRecursive(itemPath);
                     } else if (item.name.toLowerCase().endsWith('.ttf') || item.name.toLowerCase().endsWith('.otf')) {
                         const fontType = item.name.toLowerCase().endsWith('.ttf') ? 'TTF' : 'OTF';
-                        Logger.debug('FONT_SERVICE', `🔍 ${fontType} 파일 발견: ${item.name}`, { itemPath });
-                        const fontInfo = FontService.parseFont(itemPath, familyName);
-                        if (fontInfo) {
-                            fonts.push(fontInfo);
-                            Logger.debug('FONT_SERVICE', `✅ 폰트 정보 파싱 성공: ${item.name}`, fontInfo);
-                        } else {
-                            Logger.warn('FONT_SERVICE', `❌ 폰트 정보 파싱 실패: ${item.name}`, { itemPath });
-                        }
+                        fontFiles.push({ path: itemPath, type: fontType });
                     }
                 }
             } catch (error) {
@@ -179,6 +198,40 @@ class FontService {
         }
 
         await scanRecursive(dirPath);
+
+        // 🔥 Mac에서는 OTF 우선, Windows에서는 TTF 우선
+        const isMac = process.platform === 'darwin';
+        const sortedFontFiles = fontFiles.sort((a, b) => {
+            if (isMac) {
+                // Mac: OTF 우선
+                if (a.type === 'OTF' && b.type === 'TTF') return -1;
+                if (a.type === 'TTF' && b.type === 'OTF') return 1;
+            } else {
+                // Windows: TTF 우선  
+                if (a.type === 'TTF' && b.type === 'OTF') return -1;
+                if (a.type === 'OTF' && b.type === 'TTF') return 1;
+            }
+            return 0;
+        });
+
+        // 같은 스타일의 중복 제거 (OTF 우선)
+        const processedStyles = new Set<string>();
+        
+        for (const fontFile of sortedFontFiles) {
+            const fontInfo = FontService.parseFont(fontFile.path, familyName);
+            if (fontInfo) {
+                const styleKey = `${fontInfo.weight}-${fontInfo.style}`;
+                
+                if (!processedStyles.has(styleKey)) {
+                    fonts.push(fontInfo);
+                    processedStyles.add(styleKey);
+                    Logger.debug('FONT_SERVICE', `✅ ${fontFile.type} 폰트 선택: ${path.basename(fontFile.path)}`, fontInfo);
+                } else {
+                    Logger.debug('FONT_SERVICE', `⏭️ ${fontFile.type} 폰트 스킵 (중복): ${path.basename(fontFile.path)}`);
+                }
+            }
+        }
+
         return fonts;
     }
 
@@ -334,18 +387,14 @@ class FontService {
                 const format = finalPath.endsWith('.woff2') ? 'woff2' :
                     finalPath.endsWith('.woff') ? 'woff' : 'truetype';
 
-                // 🔥 개발/프로덕션 모드별 URL 생성
-                const isDev = process.env.NODE_ENV === 'development';
-                let fontUrl: string;
+                // 🔥 통일된 URL 생성 - vite-plugin-static-copy로 폰트 파일이 복사되므로 동일한 경로 사용
+                const fontUrl = `/fonts/${finalPath}`;
                 
-                if (isDev) {
-                    // 개발 모드: Vite dev server를 통한 상대경로
-                    fontUrl = `/fonts/${finalPath}`;
-                } else {
-                    // 프로덕션 모드: 절대경로 + file:// 프로토콜
-                    const absoluteFontPath = path.join(this.fontsPath, finalPath);
-                    fontUrl = `file://${absoluteFontPath.replace(/\\/g, '/')}`;
-                }
+                Logger.debug('FONT_SERVICE', '� 폰트 URL 생성', { 
+                    fontUrl, 
+                    finalPath,
+                    family: font.family 
+                });
 
                 Logger.debug('FONT_SERVICE', '🔗 Font URL mapping', {
                     originalPath: font.filePath,
@@ -405,9 +454,20 @@ class FontService {
      * 🔥 폰트 서비스 리로드
      */
     public async reload(): Promise<void> {
+        Logger.info('FONT_SERVICE', '🔄 폰트 서비스 리로드 시작');
         this.fontsCache.clear();
         this.isInitialized = false;
         await this.initialize();
+        Logger.info('FONT_SERVICE', '✅ 폰트 서비스 리로드 완료');
+    }
+
+    /**
+     * 🔥 캐시 클리어 (개발 모드 전용)
+     */
+    public clearCache(): void {
+        Logger.info('FONT_SERVICE', '🗑️ 폰트 캐시 클리어');
+        this.fontsCache.clear();
+        this.isInitialized = false;
     }
 }
 

@@ -58,6 +58,21 @@
     font-size-adjust: var(--font-size-adjust-hangul);
 }
 
+/* 🔥 동적 폰트 전역 적용 - 최우선순위 */
+html,
+body,
+* {
+    font-family: var(--app-font-family, var(--font-family-sans)) !important;
+    font-size: var(--app-font-size, 14px) !important;
+}
+
+/* 🔥 인라인 스타일 무력화 */
+[style*="font-family"],
+[style*="font-size"] {
+    font-family: var(--app-font-family, var(--font-family-sans)) !important;
+    font-size: var(--app-font-size, 14px) !important;
+}
+
 /* 영문만 포함된 요소에 대한 최적화 */
 [lang="en"],
 .lang-en {

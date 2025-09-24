@@ -1,6 +1,7 @@
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 
 export default defineConfig({
   main: {
@@ -22,7 +23,18 @@ export default defineConfig({
   },
   renderer: {
     root: 'src/renderer',
-    plugins: [react()],
+    plugins: [
+      react(),
+      // 🔥 폰트 파일을 out/renderer/assets/fonts로 복사
+      viteStaticCopy({
+        targets: [
+          {
+            src: resolve(__dirname, 'public/fonts/**/*'),
+            dest: 'fonts'
+          }
+        ]
+      })
+    ],
     // 🔥 Electron 환경에 맞는 base path 설정
     base: process.env.NODE_ENV === 'development' ? '/' : './',
     // 🔥 폰트 파일을 asset으로 인식하도록 설정
@@ -68,6 +80,8 @@ export default defineConfig({
         'Access-Control-Allow-Origin': '*',
       }
     },
+    // 🔥 정적 파일 디렉토리 설정 (개발 모드용)
+    publicDir: resolve(__dirname, 'public'),
     build: {
       // 프로덕션 빌드 최적화
       rollupOptions: {
