@@ -334,9 +334,18 @@ class FontService {
                 const format = finalPath.endsWith('.woff2') ? 'woff2' :
                     finalPath.endsWith('.woff') ? 'woff' : 'truetype';
 
-                // 🔥 Electron 앱에서는 파일 절대경로 사용 (HTTP 대신 file:// 프로토콜)
-                const absoluteFontPath = path.join(this.fontsPath, finalPath);
-                const fontUrl = `file://${absoluteFontPath.replace(/\\/g, '/')}`;
+                // 🔥 개발/프로덕션 모드별 URL 생성
+                const isDev = process.env.NODE_ENV === 'development';
+                let fontUrl: string;
+                
+                if (isDev) {
+                    // 개발 모드: Vite dev server를 통한 상대경로
+                    fontUrl = `/fonts/${finalPath}`;
+                } else {
+                    // 프로덕션 모드: 절대경로 + file:// 프로토콜
+                    const absoluteFontPath = path.join(this.fontsPath, finalPath);
+                    fontUrl = `file://${absoluteFontPath.replace(/\\/g, '/')}`;
+                }
 
                 Logger.debug('FONT_SERVICE', '🔗 Font URL mapping', {
                     originalPath: font.filePath,

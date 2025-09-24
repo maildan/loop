@@ -388,7 +388,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   /**
-   * 🔥 CSS 변수 기반 폰트 적용 - 단순화된 안정적인 시스템
+   * 🔥 하이브리드 폰트 적용 - CSS 변수 + 직접 적용 병행으로 안정성 확보
    */
   const applyCSSVariables = useCallback((fontFamily: string, size: number) => {
     try {
@@ -404,12 +404,17 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         }
       }
 
-      // 🔥 CSS 변수만 설정 (인라인 스타일 제거로 충돌 방지)
+      // 🔥 1. CSS 변수 설정 (테마 변경 시에도 유지)
       root.style.setProperty('--app-font-family', fontFamily);
       root.style.setProperty('--dynamic-font-family', fontFamily);
       root.style.setProperty('--app-font-size', `${size}px`);
 
-      // 🔥 글로벌 CSS 스타일 주입 (!important로 우선순위 보장)
+      // 🔥 2. 직접 적용 (즉시 효과 보장)
+      root.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+      document.body.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+      document.body.style.fontSize = `${size}px`;
+
+      // 🔥 3. 글로벌 CSS 스타일 주입 (프레임워크 충돌 해결)
       let globalFontStyle = document.getElementById('global-font-style');
       if (!globalFontStyle) {
         globalFontStyle = document.createElement('style');
@@ -418,15 +423,10 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       }
 
       globalFontStyle.textContent = `
-        /* 🔥 CSS 변수 기반 폰트 적용 - 테마 변경 시에도 유지됨 */
+        /* 🔥 하이브리드 폰트 적용 - CSS 변수와 직접 적용 병행 */
         html, body {
-          font-family: var(--app-font-family, system-ui, sans-serif) !important;
-          font-size: var(--app-font-size, 14px) !important;
-        }
-        
-        /* 🔥 모든 요소에 적용 */
-        * {
-          font-family: inherit !important;
+          font-family: ${fontFamily}, var(--app-font-family, system-ui, sans-serif) !important;
+          font-size: var(--app-font-size, ${size}px) !important;
         }
         
         /* 🔥 CSS 변수 정의 */
@@ -438,7 +438,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         
         /* 🔥 Tailwind 및 기타 프레임워크 충돌 해결 */
         .font-sans, .font-serif, .font-mono, [class*="font-"] {
-          font-family: var(--app-font-family, system-ui, sans-serif) !important;
+          font-family: ${fontFamily}, var(--app-font-family, system-ui, sans-serif) !important;
         }
       `;
 
@@ -490,11 +490,11 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         Logger.warn('FONT_PROVIDER', 'Failed to save font to storage', e);
       }
 
-      Logger.debug('FONT_PROVIDER', '🔥 CSS 변수 기반 폰트 적용 완료', {
+      Logger.debug('FONT_PROVIDER', '🔥 하이브리드 폰트 적용 완료', {
         fontFamily,
         fontSize: size,
         globalStyleInjected: true,
-        method: 'CSS-variables-only (인라인 스타일 제거됨)'
+        method: 'CSS-variables + direct-apply (하이브리드 방식)'
       });
 
       // Force a reflow to ensure browsers apply new font metrics

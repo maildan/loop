@@ -23,6 +23,10 @@ export default defineConfig({
   renderer: {
     root: 'src/renderer',
     plugins: [react()],
+    // 🔥 Electron 환경에 맞는 base path 설정
+    base: process.env.NODE_ENV === 'development' ? '/' : './',
+    // 🔥 폰트 파일을 asset으로 인식하도록 설정
+    assetsInclude: ['**/*.ttf', '**/*.otf', '**/*.woff', '**/*.woff2'],
     optimizeDeps: {
       include: ['react', 'react-dom'],
       // exclude: ['@tailwindcss/vite'], // 제거 - TailwindCSS 처리 방해
@@ -58,6 +62,10 @@ export default defineConfig({
         usePolling: true,
         interval: 1000,
         ignored: ['!**/src/**/*.{js,ts,jsx,tsx}']
+      },
+      // 🔥 폰트 파일 MIME 타입 설정
+      headers: {
+        'Access-Control-Allow-Origin': '*',
       }
     },
     build: {

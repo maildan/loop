@@ -22,9 +22,14 @@
 
 /dist
 *loop-1.0.0.tgz
+*.github
+/.github
 
 # testing
 /coverage
+**.playwright-mcp
+/.playwright-mcp
+
 
 # next.js
 /.next/
