@@ -6,8 +6,7 @@ import { IpcResponse } from '../../shared/types';
 import { OAuthService } from '../services/OAuthService';
 import { z } from 'zod';
 
-// #DEBUG: OAuth IPC handlers entry point
-Logger.debug('OAUTH_IPC', 'OAuth IPC handlers module loaded');
+
 
 // 🔥 OAuth 서비스 인스턴스
 let oauthService: OAuthService | null = null;
@@ -32,15 +31,12 @@ export async function initializeOAuthService(): Promise<void> {
  * 🔥 OAuth IPC 핸들러 설정
  */
 export function setupOAuthIpcHandlers(): void {
-  Logger.info('OAUTH_IPC', 'Setting up OAuth IPC handlers');
 
   // 🔥 Google OAuth 인증 시작
   const loginHintSchema = z.string().min(3).max(254).optional();
 
   ipcMain.handle('oauth:start-google-auth', async (_event: IpcMainInvokeEvent, loginHint?: unknown): Promise<IpcResponse<{ authUrl: string }>> => {
     try {
-      Logger.debug('OAUTH_IPC', 'OAuth start-google-auth request received');
-
       if (!oauthService) {
         await initializeOAuthService();
       }
@@ -78,8 +74,6 @@ export function setupOAuthIpcHandlers(): void {
 
   ipcMain.handle('oauth:handle-callback', async (_event: IpcMainInvokeEvent, code: unknown): Promise<IpcResponse<{ accessToken: string; refreshToken: string }>> => {
     try {
-      Logger.debug('OAUTH_IPC', 'OAuth handle-callback request received');
-
       if (!oauthService) {
         await initializeOAuthService();
       }
@@ -91,7 +85,6 @@ export function setupOAuthIpcHandlers(): void {
       }
 
       const result = await oauthService!.handleCallback(parsed.data);
-      Logger.debug('OAUTH_IPC', 'OAuth handle-callback completed', { success: result.success });
       return result;
     } catch (error) {
       Logger.error('OAUTH_IPC', 'OAuth handle-callback failed', error);
@@ -106,17 +99,11 @@ export function setupOAuthIpcHandlers(): void {
   // 🔥 Google 문서 목록 가져오기
   ipcMain.handle('oauth:get-google-documents', async (_event: IpcMainInvokeEvent): Promise<IpcResponse<Array<{ id: string; title: string; modifiedTime: string }>>> => {
     try {
-      Logger.debug('OAUTH_IPC', 'OAuth get-google-documents request received');
-
       if (!oauthService) {
         await initializeOAuthService();
       }
 
       const result = await oauthService!.getGoogleDocuments();
-      Logger.debug('OAUTH_IPC', 'OAuth get-google-documents completed', {
-        success: result.success,
-        documentCount: result.data?.length || 0
-      });
       return result;
     } catch (error) {
       Logger.error('OAUTH_IPC', 'OAuth get-google-documents failed', error);
@@ -133,7 +120,6 @@ export function setupOAuthIpcHandlers(): void {
 
   ipcMain.handle('oauth:import-google-doc', async (_event: IpcMainInvokeEvent, documentId: unknown): Promise<IpcResponse<{ title: string; content: string }>> => {
     try {
-      Logger.debug('OAUTH_IPC', 'OAuth import-google-doc request received', { documentId });
 
       const parsed = documentIdSchema.safeParse(documentId);
       if (!parsed.success) {
@@ -146,10 +132,6 @@ export function setupOAuthIpcHandlers(): void {
       }
 
       const result = await oauthService!.importGoogleDoc(parsed.data);
-      Logger.debug('OAUTH_IPC', 'OAuth import-google-doc completed', {
-        success: result.success,
-        contentLength: result.data?.content?.length || 0
-      });
       return result;
     } catch (error) {
       Logger.error('OAUTH_IPC', 'OAuth import-google-doc failed', error);
@@ -164,17 +146,11 @@ export function setupOAuthIpcHandlers(): void {
   // 🔥 인증 상태 확인
   ipcMain.handle('oauth:get-auth-status', async (_event: IpcMainInvokeEvent): Promise<IpcResponse<{ isAuthenticated: boolean; userEmail?: string }>> => {
     try {
-      Logger.debug('OAUTH_IPC', 'OAuth get-auth-status request received');
-
       if (!oauthService) {
         await initializeOAuthService();
       }
 
       const result = await oauthService!.getAuthStatus();
-      Logger.debug('OAUTH_IPC', 'OAuth get-auth-status completed', {
-        success: result.success,
-        isAuthenticated: result.data?.isAuthenticated || false
-      });
       return result;
     } catch (error) {
       Logger.error('OAUTH_IPC', 'OAuth get-auth-status failed', error);
@@ -189,14 +165,11 @@ export function setupOAuthIpcHandlers(): void {
   // 🔥 인증 취소
   ipcMain.handle('oauth:revoke-auth', async (_event: IpcMainInvokeEvent): Promise<IpcResponse<boolean>> => {
     try {
-      Logger.debug('OAUTH_IPC', 'OAuth revoke-auth request received');
-
       if (!oauthService) {
         await initializeOAuthService();
       }
 
       const result = await oauthService!.revokeAuth();
-      Logger.debug('OAUTH_IPC', 'OAuth revoke-auth completed', { success: result.success });
       return result;
     } catch (error) {
       Logger.error('OAUTH_IPC', 'OAuth revoke-auth failed', error);
@@ -223,7 +196,7 @@ export function setupOAuthIpcHandlers(): void {
     }
   });
 
-  Logger.info('OAUTH_IPC', 'OAuth IPC handlers setup completed');
+
 }
 
 /**
@@ -248,7 +221,6 @@ export async function handleCallbackDirect(code: string, state?: string | null):
  * 🔥 OAuth IPC 핸들러 정리
  */
 export function cleanupOAuthIpcHandlers(): void {
-  Logger.info('OAUTH_IPC', 'Cleaning up OAuth IPC handlers');
 
   const handlersToClean = [
     'oauth:start-google-auth',
@@ -269,5 +241,5 @@ export function cleanupOAuthIpcHandlers(): void {
     oauthService = null;
   }
 
-  Logger.info('OAUTH_IPC', 'OAuth IPC handlers cleanup completed');
+
 }

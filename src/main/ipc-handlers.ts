@@ -11,8 +11,7 @@ import { setupProjectIpcHandlers } from './handlers/projectIpcHandlers';
 import { setupOAuthIpcHandlers } from './handlers/oauthIpcHandlers';
 import { setupAIIpcHandlers } from './handlers/aiIpcHandlers';
 
-// #DEBUG: IPC handlers entry point
-Logger.debug('IPC_HANDLERS', 'IPC handlers module loaded');
+
 
 // 🔥 렌더러 프로세스에서 발생하는 예외를 로깅
 ipcMain.on('renderer:unhandledRejection', (event: IpcMainEvent, reason: unknown): void => {
@@ -198,8 +197,7 @@ export async function setupAllIpcHandlers(): Promise<void> {
 
 
 
-// #DEBUG: IPC handlers exit point
-Logger.debug('IPC_HANDLERS', 'IPC handlers module setup complete');
+
 
 export default {
   setupAllIpcHandlers,

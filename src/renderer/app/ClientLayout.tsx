@@ -7,6 +7,7 @@ import { AppHeader } from '../components/layout/AppHeader';
 // MonitoringProvider 제거됨 - 기획 변경으로 불필요
 import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../providers/ThemeProvider';
+import { FontProvider } from '../contexts/FontProvider';
 import { useSettings } from './settings/hooks/useSettings';
 import { Logger } from '../../shared/logger';
 import './global.css';
@@ -122,12 +123,14 @@ function ClientLayoutInner({ children }: { children: ReactNode }): React.ReactEl
 export default function ClientLayout({ children, initialAuth }: ClientLayoutProps): React.ReactElement {
     return (
         <ThemeProvider defaultTheme="system">
-            <AuthProvider initialAuth={initialAuth}>
-                {/* MonitoringProvider 제거됨 - 기획 변경으로 불필요 */}
-                <ClientLayoutInner>
-                    {children}
-                </ClientLayoutInner>
-            </AuthProvider>
+            <FontProvider>
+                <AuthProvider initialAuth={initialAuth}>
+                    {/* MonitoringProvider 제거됨 - 기획 변경으로 불필요 */}
+                    <ClientLayoutInner>
+                        {children}
+                    </ClientLayoutInner>
+                </AuthProvider>
+            </FontProvider>
         </ThemeProvider>
     );
 }

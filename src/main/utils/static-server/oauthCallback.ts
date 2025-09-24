@@ -16,7 +16,7 @@ export class OAuthCallbackHandler {
             const hostHeader = (req.headers && (req.headers.host as string)) || `localhost:${(req.socket as any).localPort || PORTS.STATIC_SERVER}`;
             const url = new URL(req.url || '', `http://${hostHeader}`);
 
-            Logger.info('OAUTH_CALLBACK', 'Callback received', { rawUrl: url.toString() });
+
 
             const result = await this.manager.processCallback(url, req);
 
@@ -32,13 +32,13 @@ export class OAuthCallbackHandler {
             res.writeHead(200, headers);
             res.end(html);
         } catch (error) {
-            Logger.error('OAUTH_CALLBACK', 'Callback handling failed', error);
+            
             try {
                 const headers = buildDefaultHeaders('text/plain');
                 res.writeHead(500, headers);
                 res.end('OAuth callback failed');
             } catch (e) {
-                Logger.error('OAUTH_CALLBACK', 'Failed to send 500', e);
+            
             }
         }
     }

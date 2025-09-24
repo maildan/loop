@@ -55,7 +55,7 @@ export class OAuthService extends BaseManager {
    * BaseManager 추상 메서드 구현 - 초기화
    */
   protected async doInitialize(): Promise<void> {
-    Logger.info(this.componentName, 'OAuth service initialized');
+    Logger.debug(this.componentName, 'OAuth service initialized');
     // 환경변수에서 토큰 부트스트랩
     await this.bootstrapFromEnv();
     // 저장된 토큰 로드 시도
@@ -66,21 +66,21 @@ export class OAuthService extends BaseManager {
    * BaseManager 추상 메서드 구현 - 시작
    */
   protected async doStart(): Promise<void> {
-    Logger.info(this.componentName, 'OAuth service started');
+    Logger.debug(this.componentName, 'OAuth service started');
   }
 
   /**
    * BaseManager 추상 메서드 구현 - 중지
    */
   protected async doStop(): Promise<void> {
-    Logger.info(this.componentName, 'OAuth service stopped');
+    Logger.debug(this.componentName, 'OAuth service stopped');
   }
 
   /**
    * BaseManager 추상 메서드 구현 - 정리
    */
   protected async doCleanup(): Promise<void> {
-    Logger.info(this.componentName, 'OAuth service cleaned up');
+    Logger.debug(this.componentName, 'OAuth service cleaned up');
     // 토큰 정리는 명시적 revokeAuth 호출에서만 수행
   }
 
@@ -89,7 +89,7 @@ export class OAuthService extends BaseManager {
    */
   public async startGoogleAuth(): Promise<IpcResponse<{ authUrl: string }>> {
     try {
-      Logger.info(this.componentName, 'Starting Google OAuth authentication');
+      Logger.debug(this.componentName, 'Starting Google OAuth authentication');
 
       // 환경변수 검증
       if (!GOOGLE_OAUTH_CONFIG.clientId) {
@@ -117,14 +117,14 @@ export class OAuthService extends BaseManager {
       // OAuth URL 생성
       const authUrl = this.buildAuthUrl();
 
-      Logger.info(this.componentName, 'OAuth URL generated', { url: authUrl });
+      
 
       // 🔥 외부 기본 브라우저에서 OAuth 열기 (Google 권장 방식)
       try {
         await shell.openExternal(authUrl);
-        Logger.info(this.componentName, 'OAuth URL opened in default browser');
+        Logger.debug(this.componentName, 'OAuth URL opened in default browser');
       } catch (browserError) {
-        Logger.error(this.componentName, 'Failed to open browser', browserError);
+        
       }
 
       return {
@@ -133,7 +133,7 @@ export class OAuthService extends BaseManager {
         timestamp: new Date(),
       };
     } catch (error) {
-      Logger.error(this.componentName, 'Failed to start Google auth', error);
+      
       return {
         success: false,
         error: 'OAuth 인증을 시작할 수 없습니다',
@@ -147,7 +147,7 @@ export class OAuthService extends BaseManager {
    */
   public async handleCallback(code: string): Promise<IpcResponse<{ accessToken: string; refreshToken: string }>> {
     try {
-      Logger.info(this.componentName, 'Handling OAuth callback');
+      Logger.debug(this.componentName, 'Handling OAuth callback');
 
       const tokenResponse = await this.exchangeCodeForTokens(code);
 
@@ -171,9 +171,7 @@ export class OAuthService extends BaseManager {
       // 토큰 저장
       await this.saveTokens();
 
-      Logger.info(this.componentName, 'OAuth authentication successful', {
-        email: userInfo.email
-      });
+      Logger.debug(this.componentName, 'OAuth authentication successful');
 
       return {
         success: true,
@@ -234,7 +232,7 @@ export class OAuthService extends BaseManager {
         webViewLink: file.webViewLink,
       }));
 
-      Logger.info(this.componentName, 'Google documents retrieved', {
+      Logger.debug(this.componentName, 'Google documents retrieved', {
         count: documents.length
       });
 
@@ -293,9 +291,8 @@ export class OAuthService extends BaseManager {
       // Google Docs API 응답에서 텍스트 추출
       const content = this.extractTextFromGoogleDoc(contentResponse.data);
 
-      Logger.info(this.componentName, 'Google document imported', {
+      Logger.debug(this.componentName, 'Google document imported', {
         documentId,
-        title: metaResponse.data.name,
         contentLength: content.length
       });
 
@@ -396,9 +393,7 @@ export class OAuthService extends BaseManager {
 
           const retryUserInfo = retryResponse.data;
 
-          Logger.info(this.componentName, 'Auth status verified after token refresh', {
-            userEmail: retryUserInfo.email
-          });
+          Logger.debug(this.componentName, 'Auth status verified after token refresh');
 
           return {
             success: true,

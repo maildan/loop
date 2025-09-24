@@ -1,38 +1,50 @@
 /* 📝 MarkdownEditor Typography - 한국 웹소설 작가 최적화 */
 
-/* 🔥 전역 폰트 강제 적용 - 모든 인라인 스타일보다 우선순위 높음 */
-.ProseMirror,
-.ProseMirror *,
-.ProseMirror span,
-.ProseMirror p,
-.ProseMirror div,
-.ProseMirror span[style*="font-family"],
-.ProseMirror span[data-font-family] {
-  font-family: var(--app-font-family) !important;
-  font-size: var(--app-font-size) !important;
+/* 🔥 통합된 폰트 전략 - 전역 + 개별 설정 균형 */
+.ProseMirror {
+  /* 기본 폰트는 전역 CSS 변수 사용 */
+  font-family: var(--app-font-family, -apple-system, BlinkMacSystemFont, system-ui, sans-serif);
+  font-size: var(--app-font-size, 16px);
 }
 
-/* 🔥 TipTap 인라인 스타일 무력화 - 매우 구체적인 셀렉터로 우선순위 확보 */
+/* 🎯 개별 폰트 설정이 없는 요소들에만 전역 폰트 적용 */
+.ProseMirror *:not([style*="font-family"]):not([data-font-family]) {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* 🎨 개별 폰트 설정이 있는 요소는 해당 설정 우선 적용 - FIXED */
+/* 
 .ProseMirror [style*="font-family"] {
-  font-family: var(--app-font-family) !important;
+  🔥 CRITICAL FIX: 인라인 스타일의 폰트 설정을 실제로 적용하도록 변경
+  font-family: inherit; ← 이것이 문제였음! 인라인 스타일을 무시함
+  인라인 스타일이 자동으로 적용되도록 이 규칙을 완전히 제거함
+}
+*/
+
+.ProseMirror [data-font-family] {
+  /* 데이터 속성으로 설정된 폰트가 있으면 우선 적용 */
+  font-family: attr(data-font-family);
 }
 
-.ProseMirror [style*="font-size"] {
-  font-size: var(--app-font-size) !important;
-}
-
-/* 🔥 특별히 문제가 되는 인라인 스타일 대상 */
+/* 🔥 문제가 되는 강제 오버라이드 제거 - TipTap 개별 폰트 설정 허용 */
+/* 
+REMOVED: 이 규칙들이 TipTap의 개별 폰트 설정을 방해했음
 .ProseMirror span[style*="font-family: \"Noto Sans\""],
 .ProseMirror span[style*="font-family: \"MS Gothic\""],
 .ProseMirror span[style*="Noto Sans"],
 .ProseMirror span[style*="MS Gothic"] {
   font-family: var(--app-font-family) !important;
 }
+*/
 
-/* 🔥 폰트 크기 23px 같은 특정 크기도 오버라이드 */
+/* 🔥 개별 폰트 크기 설정도 허용하도록 수정 */
+/* 
+REMOVED: 개별 폰트 크기 설정을 방해하는 규칙 제거
 .ProseMirror span[style*="font-size: 23px"] {
   font-size: var(--app-font-size) !important;
 }
+*/
 
 /* 🔥 헤딩 스타일 */
 .ProseMirror h1 {

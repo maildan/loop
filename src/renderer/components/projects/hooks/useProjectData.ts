@@ -313,9 +313,9 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
 
         // 🔥 프로젝트가 삭제되었거나 존재하지 않는 경우 프로젝트 목록으로 리다이렉트
         if (errorMsg.includes('찾을 수 없습니다') || errorMsg.includes('not found')) {
-          Logger.info('PROJECT_DATA', 'Project does not exist, redirecting to projects page');
-          // 브라우저 히스토리를 통해 프로젝트 목록으로 이동
-          window.location.href = '/projects';
+          Logger.info('PROJECT_DATA', 'Project does not exist, setting error to trigger redirect');
+          // React Router로 적절히 처리되도록 에러 상태 설정
+          setError(`PROJECT_NOT_FOUND: ${errorMsg}`);
           return;
         }
 

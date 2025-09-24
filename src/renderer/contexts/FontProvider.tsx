@@ -3,6 +3,17 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { Logger } from '../../shared/logger';
+import persistentFontManager from '../utils/persistentFontManager';
+
+// 🔥 폰트 설정 상수들
+const FONT_CONFIG = {
+  DEFAULT_FALLBACK: 'system-ui, sans-serif',
+  DEFAULT_FONT_SIZE: 14,
+  BLACKLIST_DURATION: 7 * 24 * 60 * 60 * 1000, // 7일
+  MAX_ERROR_COUNT: 3,
+  FONT_SERVER_PORT: 35821, // 동적으로 가져올 수 있도록 나중에 개선
+  STORAGE_KEY: 'loop-font-blacklist'
+} as const;
 
 interface FontContextType {
   currentFont: string;
@@ -44,10 +55,16 @@ interface FontErrorPattern {
   extractFontName?: (match: RegExpMatchArray) => string;
 }
 
-// 🔥 폰트 오류 패턴 정의 (확장 가능)
-const FONT_ERROR_PATTERNS: FontErrorPattern[] = [
+// 🔥 폰트 오류 패턴 정의 (확장 가능) - 동적 서버 URL 지원
+const createFontErrorPatterns = (fontServerPort: number = FONT_CONFIG.FONT_SERVER_PORT): FontErrorPattern[] => [
   {
-    // Renderer 콘솔 로그 형식: "Failed to decode downloaded font: http://localhost:35821/fonts/Gangwon_mac/gaw.otf"
+    // Renderer 콘솔 로그 형식: 동적 포트 지원
+    pattern: new RegExp(`Failed to decode downloaded font:\\s*https?:\\/\\/[^\\/]+:${fontServerPort}\\/fonts\\/[^\\/]+\\/([^\\/\\s]+\\.(otf|ttf|woff2?))`, 'i'),
+    reason: 'decode_error',
+    extractFontName: (match) => match[1] ? decodeURIComponent(match[1]) : 'unknown'
+  },
+  {
+    // 일반적인 decode 에러 패턴
     pattern: /Failed to decode downloaded font:\s*https?:\/\/[^\/]+\/fonts\/[^\/]+\/([^\/\s]+\.(otf|ttf|woff2?))/i,
     reason: 'decode_error',
     extractFontName: (match) => match[1] ? decodeURIComponent(match[1]) : 'unknown'
@@ -82,13 +99,16 @@ const FONT_ERROR_PATTERNS: FontErrorPattern[] = [
   }
 ];
 
+// 🔥 전역 폰트 에러 패턴 인스턴스 (기본 포트로 초기화)
+const FONT_ERROR_PATTERNS = createFontErrorPatterns();
+
 /**
  * 🔥 동적 블랙리스트 매니저
  */
 class FontBlacklistManager {
-  private static readonly STORAGE_KEY = 'loop-font-blacklist';
-  private static readonly MAX_ERROR_COUNT = 3;
-  private static readonly BLACKLIST_DURATION = 7 * 24 * 60 * 60 * 1000; // 7일
+  private static readonly STORAGE_KEY = FONT_CONFIG.STORAGE_KEY;
+  private static readonly MAX_ERROR_COUNT = FONT_CONFIG.MAX_ERROR_COUNT;
+  private static readonly BLACKLIST_DURATION = FONT_CONFIG.BLACKLIST_DURATION;
 
   static getBlacklist(): FontBlacklistEntry[] {
     try {
@@ -121,26 +141,41 @@ class FontBlacklistManager {
     }
   }
 
+  private static isProcessing = false;
+
   static addToBlacklist(fontName: string, reason: FontBlacklistEntry['reason'], error?: string): void {
-    const entries = this.getBlacklist();
-    const existing = entries.find(entry => entry.fontName === fontName);
-
-    if (existing) {
-      existing.errorCount++;
-      existing.timestamp = Date.now();
-      existing.lastError = error;
-    } else {
-      entries.push({
-        fontName,
-        reason,
-        timestamp: Date.now(),
-        errorCount: 1,
-        lastError: error
-      });
+    // 순환 호출 방지
+    if (this.isProcessing) {
+      return;
     }
+    
+    this.isProcessing = true;
+    
+    try {
+      const entries = this.getBlacklist();
+      const existing = entries.find(entry => entry.fontName === fontName);
 
-    this.saveBlacklist(entries);
-    Logger.warn('FONT_BLACKLIST', `폰트 블랙리스트 추가: ${fontName}`, { reason, error });
+      if (existing) {
+        existing.errorCount++;
+        existing.timestamp = Date.now();
+        existing.lastError = error;
+      } else {
+        entries.push({
+          fontName,
+          reason,
+          timestamp: Date.now(),
+          errorCount: 1,
+          lastError: error
+        });
+      }
+
+      this.saveBlacklist(entries);
+      
+      // Logger 대신 직접 console 호출로 순환 방지
+      console.log(`[FONT_BLACKLIST] 폰트 블랙리스트 추가: ${fontName}`, { reason, error: error?.substring(0, 100) });
+    } finally {
+      this.isProcessing = false;
+    }
   }
 
   static isBlacklisted(fontName: string): boolean {
@@ -220,12 +255,12 @@ const FontContext = createContext<FontContextType | null>(null);
 export function FontProvider({ children }: { children: React.ReactNode }) {
   const [currentFont, setCurrentFont] = useState<string>(() => {
     // 🔥 기본값으로 시작 (비동기 로딩은 useEffect에서 처리)
-    return 'system-ui, sans-serif';
+    return FONT_CONFIG.DEFAULT_FALLBACK;
   });
 
   const [fontSize, setFontSizeState] = useState<number>(() => {
     // 🔥 기본값으로 시작 (비동기 로딩은 useEffect에서 처리)  
-    return 14;
+    return FONT_CONFIG.DEFAULT_FONT_SIZE;
   });
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -297,31 +332,50 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
     const originalConsoleWarn = console.warn;
     const originalConsoleInfo = console.info;
 
+    let isHandlingConsoleMessage = false;
+
     const handleConsoleMessage = (message: string, type: 'error' | 'warn' | 'info') => {
-      // 폰트 관련 오류 감지 (더 포괄적)
-      const isFont관련 = message.includes('font') || 
-                      message.includes('Font') || 
-                      message.includes('OTS') || 
-                      message.includes('decode') ||
-                      message.includes('.otf') ||
-                      message.includes('.ttf') ||
-                      message.includes('.woff');
+      // 순환 호출 방지
+      if (isHandlingConsoleMessage) {
+        return;
+      }
+      
+      // 자기 자신이 생성한 메시지 무시
+      if (message.includes('[FONT_BLACKLIST]') || message.includes('FONT_PROVIDER')) {
+        return;
+      }
 
-      if (isFont관련) {
-        const fontName = FontBlacklistManager.extractFontFromError(message);
-        if (fontName) {
-          const reason = message.includes('CFF') ? 'cff_error' :
-            message.includes('TSI3') ? 'ots_error' :
-            message.includes('decode') ? 'decode_error' : 'ots_error';
-          
-          FontBlacklistManager.addToBlacklist(fontName, reason, message);
-          Logger.warn('FONT_PROVIDER', `🚫 문제 폰트 블랙리스트 추가: ${fontName}`, { reason, message: message.substring(0, 200) });
+      isHandlingConsoleMessage = true;
+      
+      try {
+        // 폰트 관련 오류 감지 (더 포괄적)
+        const isFont관련 = message.includes('font') || 
+                        message.includes('Font') || 
+                        message.includes('OTS') || 
+                        message.includes('decode') ||
+                        message.includes('.otf') ||
+                        message.includes('.ttf') ||
+                        message.includes('.woff');
 
-          // 현재 CSS에서 해당 폰트 제거
-          setTimeout(() => {
-            removeProblematicFontFromCSS(fontName);
-          }, 100);
+        if (isFont관련) {
+          const fontName = FontBlacklistManager.extractFontFromError(message);
+          if (fontName) {
+            const reason = message.includes('CFF') ? 'cff_error' :
+              message.includes('TSI3') ? 'ots_error' :
+              message.includes('decode') ? 'decode_error' : 'ots_error';
+            
+            FontBlacklistManager.addToBlacklist(fontName, reason, message);
+            // Logger 대신 직접 console.log 사용
+            console.log(`[FONT_PROVIDER] 🚫 문제 폰트 블랙리스트 추가: ${fontName}`, { reason, message: message.substring(0, 200) });
+
+            // 현재 CSS에서 해당 폰트 제거
+            setTimeout(() => {
+              removeProblematicFontFromCSS(fontName);
+            }, 100);
+          }
         }
+      } finally {
+        isHandlingConsoleMessage = false;
       }
     };
 
@@ -460,7 +514,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
 
       // Defensive normalization: ensure a valid font-family string
       if (!fontFamily || typeof fontFamily !== 'string' || fontFamily.trim().length === 0) {
-        fontFamily = 'system-ui, sans-serif';
+        fontFamily = FONT_CONFIG.DEFAULT_FALLBACK;
       } else {
         const parts = fontFamily.split(',').map(p => p.trim()).filter(Boolean);
         if (parts.length > 0) {
@@ -474,8 +528,8 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       root.style.setProperty('--app-font-size', `${size}px`);
 
       // 🔥 2. 직접 적용 (즉시 효과 보장)
-      root.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
-      document.body.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+      root.style.fontFamily = `${fontFamily}, ${FONT_CONFIG.DEFAULT_FALLBACK}`;
+      document.body.style.fontFamily = `${fontFamily}, ${FONT_CONFIG.DEFAULT_FALLBACK}`;
       document.body.style.fontSize = `${size}px`;
 
       // 🔥 3. 글로벌 CSS 스타일 주입 (프레임워크 충돌 해결)
@@ -489,20 +543,20 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       globalFontStyle.textContent = `
         /* 🔥 하이브리드 폰트 적용 - CSS 변수와 직접 적용 병행 */
         html, body {
-          font-family: ${fontFamily}, var(--app-font-family, system-ui, sans-serif) !important;
+          font-family: ${fontFamily}, var(--app-font-family, ${FONT_CONFIG.DEFAULT_FALLBACK}) !important;
           font-size: var(--app-font-size, ${size}px) !important;
         }
         
         /* 🔥 CSS 변수 정의 */
         :root {
-          --app-font-family: ${fontFamily}, system-ui, sans-serif;
-          --dynamic-font-family: ${fontFamily}, system-ui, sans-serif;
+          --app-font-family: ${fontFamily}, ${FONT_CONFIG.DEFAULT_FALLBACK};
+          --dynamic-font-family: ${fontFamily}, ${FONT_CONFIG.DEFAULT_FALLBACK};
           --app-font-size: ${size}px;
         }
         
         /* 🔥 Tailwind 및 기타 프레임워크 충돌 해결 */
         .font-sans, .font-serif, .font-mono, [class*="font-"] {
-          font-family: ${fontFamily}, var(--app-font-family, system-ui, sans-serif) !important;
+          font-family: ${fontFamily}, var(--app-font-family, ${FONT_CONFIG.DEFAULT_FALLBACK}) !important;
         }
       `;
 
@@ -512,13 +566,13 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
           mutation.addedNodes.forEach((node) => {
             if (node instanceof HTMLElement) {
               // 즉시 폰트 적용
-              node.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+              node.style.fontFamily = `${fontFamily}, ${FONT_CONFIG.DEFAULT_FALLBACK}`;
 
               // 자식 요소들도 강제 적용
               const children = node.querySelectorAll('*');
               children.forEach((child) => {
                 if (child instanceof HTMLElement) {
-                  child.style.fontFamily = `${fontFamily}, system-ui, sans-serif`;
+                  child.style.fontFamily = `${fontFamily}, ${FONT_CONFIG.DEFAULT_FALLBACK}`;
                 }
               });
             }
@@ -584,22 +638,26 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
     try {
       Logger.info('FONT_PROVIDER', 'Changing font', { fontFamily });
 
-      // 1. 즉시 CSS 적용 (사용자 경험 개선)
-      applyCSSVariables(fontFamily, fontSize);
+      // 1. 🎯 PersistentFontManager를 통한 즉시 적용 및 지속성 보장
+      persistentFontManager.updateFontFamily(fontFamily);
+      
+      // 2. React state 업데이트 (UI 동기화)
       setCurrentFont(fontFamily);
 
-      // 2. 🔥 단일 저장소: Electron Settings만 사용
+      // 3. 🔥 Electron Settings 저장 (외부 동기화)
       if (window.electronAPI?.settings?.set) {
         const result = await window.electronAPI.settings.set('app.fontFamily', fontFamily);
         if (!result.success) {
           throw new Error(result.error || 'Failed to save font setting');
         }
         Logger.debug('FONT_PROVIDER', 'Font saved to Electron settings', { fontFamily });
-      } else {
-        // 🔥 웹 환경에서만 localStorage 사용 (fallback)
-        localStorage.setItem('loop-font-family', fontFamily);
-        Logger.debug('FONT_PROVIDER', 'Font saved to localStorage (fallback)', { fontFamily });
       }
+
+      Logger.info('FONT_PROVIDER', 'Font applied with persistence', { 
+        fontFamily,
+        persistentApplied: true,
+        reactStateUpdated: true 
+      });
 
     } catch (error) {
       Logger.error('FONT_PROVIDER', 'Failed to set font', error);
@@ -620,22 +678,26 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
     try {
       Logger.info('FONT_PROVIDER', 'Changing font size', { size });
 
-      // 1. 즉시 CSS 적용
-      applyCSSVariables(currentFont, size);
+      // 1. 🎯 PersistentFontManager를 통한 즉시 적용 및 지속성 보장
+      persistentFontManager.updateFontSize(size);
+      
+      // 2. React state 업데이트 (UI 동기화)
       setFontSizeState(size);
 
-      // 2. 🔥 단일 저장소: Electron Settings만 사용
+      // 3. 🔥 Electron Settings 저장 (외부 동기화)
       if (window.electronAPI?.settings?.set) {
         const result = await window.electronAPI.settings.set('app.fontSize', size);
         if (!result.success) {
           throw new Error(result.error || 'Failed to save font size setting');
         }
         Logger.debug('FONT_PROVIDER', 'Font size saved to Electron settings', { size });
-      } else {
-        // 🔥 웹 환경에서만 localStorage 사용 (fallback)
-        localStorage.setItem('loop-font-size', size.toString());
-        Logger.debug('FONT_PROVIDER', 'Font size saved to localStorage (fallback)', { size });
       }
+
+      Logger.info('FONT_PROVIDER', 'Font size applied with persistence', { 
+        size,
+        persistentApplied: true,
+        reactStateUpdated: true 
+      });
 
     } catch (error) {
       Logger.error('FONT_PROVIDER', 'Failed to set font size', error);
@@ -704,6 +766,11 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         Logger.debug('FONT_PROVIDER', 'EFFECT 1: 데이터 로딩 및 상태 설정 시작');
         setIsLoading(true);
 
+        // 🔥 0. Initialize PersistentFontManager first
+        persistentFontManager.initialize();
+        const persistentSettings = persistentFontManager.getCurrentSettings();
+        Logger.debug('FONT_PROVIDER', 'Persistent font manager initialized', persistentSettings);
+
         // 1. 🔥 Electron Settings에서 먼저 로드 시도
         let savedFont: string | undefined;
         let savedSize: number | undefined;
@@ -725,22 +792,33 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
           }
         }
 
-        // 2. 🔥 Electron 로드 실패 시 localStorage에서 fallback
+        // 2. 🔥 Electron 로드 실패 시 PersistentFontManager에서 fallback
         if (!savedFont) {
-          savedFont = localStorage.getItem('loop-font-family') || undefined;
+          savedFont = persistentSettings.fontFamily !== FONT_CONFIG.DEFAULT_FALLBACK 
+            ? persistentSettings.fontFamily 
+            : localStorage.getItem('loop-font-family') || undefined;
         }
         if (!savedSize) {
-          const savedSizeRaw = localStorage.getItem('loop-font-size');
-          savedSize = savedSizeRaw ? parseInt(savedSizeRaw, 10) : undefined;
+          savedSize = persistentSettings.fontSize !== 16 
+            ? persistentSettings.fontSize 
+            : (() => {
+                const savedSizeRaw = localStorage.getItem('loop-font-size');
+                return savedSizeRaw ? parseInt(savedSizeRaw, 10) : undefined;
+              })();
         }
 
-        // 3. 상태 업데이트
+        // 3. 상태 업데이트 및 PersistentFontManager 동기화
         if (savedFont) {
           setCurrentFont(savedFont);
         }
         if (savedSize) {
           setFontSizeState(savedSize);
         }
+
+        // 4. Apply settings to PersistentFontManager for immediate DOM application
+        const finalFont = savedFont || persistentSettings.fontFamily;
+        const finalSize = savedSize || persistentSettings.fontSize;
+        persistentFontManager.applyFontSettings(finalFont, finalSize);
 
         // 2. Initialize font service and obtain dynamic CSS, but do not touch DOM here
         try {
@@ -810,7 +888,7 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
               safeCss = removeFontFromCss(safeCss, fontName);
             });
 
-            const normalizedCSS = safeCss + `\n:root { --dynamic-font-family: var(--app-font-family, system-ui, sans-serif); }`;
+            const normalizedCSS = safeCss + `\n:root { --dynamic-font-family: var(--app-font-family, ${FONT_CONFIG.DEFAULT_FALLBACK}); }`;
             // store for later DOM injection
             pendingDynamicCssRef.current = normalizedCSS;
             Logger.info('FONT_PROVIDER', '🔥 안전한 폰트 CSS 준비됨 (DOM 주입 보류)', { originalLength: css.length, safeLength: safeCss.length, removedFonts: allBlacklistedFonts.length });
@@ -915,10 +993,10 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
           mutations.forEach((mutation) => {
             mutation.addedNodes.forEach((node) => {
               if (node instanceof HTMLElement) {
-                node.style.fontFamily = `${currentFont}, system-ui, sans-serif`;
+                node.style.fontFamily = `${currentFont}, ${FONT_CONFIG.DEFAULT_FALLBACK}`;
                 const children = node.querySelectorAll('*');
                 children.forEach((child) => {
-                  if (child instanceof HTMLElement) child.style.fontFamily = `${currentFont}, system-ui, sans-serif`;
+                  if (child instanceof HTMLElement) child.style.fontFamily = `${currentFont}, ${FONT_CONFIG.DEFAULT_FALLBACK}`;
                 });
               }
             });

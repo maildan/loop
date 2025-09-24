@@ -2,7 +2,7 @@
 
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { Logger } from '../../shared/logger';
-import { fontService } from '../services/FontService';
+import { fontServiceIntegration as fontService } from '../services/FontService.integration';
 
 // #DEBUG: Font IPC handlers entry point
 Logger.debug('FONT_IPC', 'Dynamic font IPC handlers module loaded');
@@ -34,10 +34,8 @@ export function setupFontIpcHandlers(): void {
                 try {
                     Logger.debug('FONT_IPC', 'Available fonts requested');
 
-                    // 폰트 서비스가 초기화되지 않았다면 초기화
-                    if (!(fontService as any).isInitialized) {
-                        await fontService.initialize();
-                    }
+                    // 폰트 서비스 초기화 (Integration 레이어에서 자동 관리)
+                    await fontService.initialize();
 
                     const fonts = fontService.getAvailableFonts();
                     Logger.info('FONT_IPC', 'Available fonts retrieved', { count: fonts.length });
@@ -56,9 +54,7 @@ export function setupFontIpcHandlers(): void {
                 try {
                     Logger.debug('FONT_IPC', 'Font CSS generation requested');
 
-                    if (!(fontService as any).isInitialized) {
-                        await fontService.initialize();
-                    }
+                    await fontService.initialize();
 
                     const css = fontService.generateFontFaceCSS();
                     Logger.info('FONT_IPC', 'Font CSS generated', { cssLength: css.length });
@@ -77,9 +73,7 @@ export function setupFontIpcHandlers(): void {
                 try {
                     Logger.debug('FONT_IPC', 'Font family info requested', { familyName });
 
-                    if (!(fontService as any).isInitialized) {
-                        await fontService.initialize();
-                    }
+                    await fontService.initialize();
 
                     const family = fontService.getFontFamily(familyName);
                     return family;

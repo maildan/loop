@@ -44,15 +44,13 @@ export const FontFamily = Extension.create<FontFamilyOptions>({
                 return {};
               }
 
-              // 🔥 CSS 변수 우선 적용 - 전역 폰트 설정과 일관성 유지
-              const globalFontFamily = getComputedStyle(document.documentElement).getPropertyValue('--app-font-family').trim();
-              
-              // 전역 설정이 있으면 우선 적용, 없으면 개별 설정 사용
-              const effectiveFontFamily = globalFontFamily || attributes.fontFamily;
-
+              // 🎯 개별 폰트 설정 우선 전략 - 사용자 선택 존중
+              // 개별 폰트가 명시적으로 설정된 경우 그것을 사용하고,
+              // 전역 폰트는 fallback으로만 사용
               return {
-                style: `font-family: ${effectiveFontFamily}`,
-                'data-font-source': globalFontFamily ? 'global' : 'local'
+                style: `font-family: ${attributes.fontFamily}`,
+                'data-font-family': attributes.fontFamily,
+                'data-font-source': 'local'
               };
             },
           },

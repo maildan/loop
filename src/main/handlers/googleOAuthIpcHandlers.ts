@@ -20,12 +20,9 @@ export function setupGoogleOAuthIpcHandlers(): void {
       'google-oauth:start-auth',
       createSafeAsyncIpcHandler(
         async () => {
-          Logger.info(componentName, '🔐 Google OAuth 인증 시작 요청');
           const result = await googleOAuthService.startAuthentication();
 
-          if (result.success) {
-            Logger.info(componentName, '✅ Google OAuth 인증 URL 생성 완료');
-          } else {
+          if (!result.success) {
             Logger.error(componentName, '❌ Google OAuth 인증 시작 실패', result.error);
           }
 
@@ -45,7 +42,7 @@ export function setupGoogleOAuthIpcHandlers(): void {
       createSafeAsyncIpcHandler(
         async (...args: unknown[]) => {
           const [, code, state] = args;
-          Logger.info(componentName, '🔄 Google OAuth 콜백 처리 중...');
+
 
           const parsed = codeSchema.safeParse(code);
           if (!parsed.success) {
@@ -58,9 +55,7 @@ export function setupGoogleOAuthIpcHandlers(): void {
           const stateValue: string = parsedState.success && parsedState.data ? parsedState.data : '';
           const result = await googleOAuthService.handleCallback(parsed.data, stateValue);
 
-          if (result.success) {
-            Logger.info(componentName, '✅ Google OAuth 인증 완료');
-          } else {
+          if (!result.success) {
             Logger.error(componentName, '❌ Google OAuth 콜백 처리 실패', result.error);
           }
 
@@ -76,7 +71,7 @@ export function setupGoogleOAuthIpcHandlers(): void {
       'google-oauth:check-connection',
       createSafeAsyncIpcHandler(
         async () => {
-          Logger.debug(componentName, '🔍 Google OAuth 연결 상태 확인');
+
           const result = await googleOAuthService.getConnectionStatus();
           return result;
         },
@@ -90,7 +85,7 @@ export function setupGoogleOAuthIpcHandlers(): void {
       'google-oauth:get-user-info',
       createSafeAsyncIpcHandler(
         async () => {
-          Logger.info(componentName, '👤 Google 사용자 정보 조회 (임시 비활성화)');
+
           return {
             success: false,
             error: '아직 구현되지 않음'
@@ -107,7 +102,7 @@ export function setupGoogleOAuthIpcHandlers(): void {
       createSafeAsyncIpcHandler(
         async (...args: unknown[]) => {
           const [, title, content] = args;
-          Logger.info(componentName, `📝 Google Docs 문서 생성: ${title} (임시 비활성화)`);
+
           return {
             success: false,
             error: '아직 구현되지 않음'
@@ -124,7 +119,7 @@ export function setupGoogleOAuthIpcHandlers(): void {
       createSafeAsyncIpcHandler(
         async (...args: unknown[]) => {
           const [, documentId, content] = args;
-          Logger.info(componentName, `📝 Google Docs 문서 업데이트: ${documentId} (임시 비활성화)`);
+
           return {
             success: false,
             error: '아직 구현되지 않음'
@@ -140,7 +135,7 @@ export function setupGoogleOAuthIpcHandlers(): void {
       'google-docs:list-documents',
       createSafeAsyncIpcHandler(
         async () => {
-          Logger.info(componentName, '📚 Google Docs 문서 목록 조회');
+
           const result = await googleOAuthService.listDocuments();
           return result;
         },
@@ -154,12 +149,9 @@ export function setupGoogleOAuthIpcHandlers(): void {
       'google-oauth:disconnect',
       createSafeAsyncIpcHandler(
         async () => {
-          Logger.info(componentName, '🔌 Google OAuth 연결 해제');
           const result = await googleOAuthService.disconnect();
 
-          if (result.success) {
-            Logger.info(componentName, '✅ Google OAuth 연결 해제 완료');
-          } else {
+          if (!result.success) {
             Logger.error(componentName, '❌ Google OAuth 연결 해제 실패', result.error);
           }
 

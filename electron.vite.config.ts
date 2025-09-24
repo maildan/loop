@@ -25,7 +25,7 @@ export default defineConfig({
     root: 'src/renderer',
     plugins: [
       react(),
-      // 🔥 폰트 파일을 out/renderer/assets/fonts로 복사
+      // 🔥 폰트 파일을 out/renderer/fonts로 복사 (Modern Font Service 호환)
       viteStaticCopy({
         targets: [
           {

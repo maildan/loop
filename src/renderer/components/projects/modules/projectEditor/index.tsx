@@ -42,7 +42,7 @@ export interface ProjectEditorProps {
 export const ProjectEditor = memo(function ProjectEditor({
     projectId
 }: ProjectEditorProps): React.ReactElement {
-    Logger.info('PROJECT_EDITOR', 'ProjectEditor render started', { projectId });
+    // Logger.info('PROJECT_EDITOR', 'ProjectEditor render started', { projectId }); // ❌ 매 렌더링 로그 제거
 
     // 🔥 모듈화된 상태 관리
     const { isLoading, error, ...projectData } = useProjectData(projectId);
@@ -88,13 +88,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     // 🔥 사이드바 상태 단순화 - 메인 토글만 사용
     const isSidebarCollapsed = state.collapsed;
 
-    // 🔥 디버깅: 사이드바 상태 확인 
-    Logger.debug('PROJECT_EDITOR', 'Sidebar States', {
-        isSidebarCollapsed: isSidebarCollapsed,
-        mainCollapsed: state.collapsed,
-        settingsCollapsed: sidebarCollapsed,
-        appCollapsed: appSidebarCollapsed
-    });    // 🔥 저장 성공 처리
+    // Logger.debug 제거 - 매 렌더링 로그 방지    // 🔥 저장 성공 처리
     const handleSaveSuccess = () => {
         actions.markAllTabsAsSaved();
         Logger.info('PROJECT_EDITOR', 'All tabs marked as saved');
@@ -214,20 +208,17 @@ export const ProjectEditor = memo(function ProjectEditor({
         }
     }, [projectData?.content, state.tabs, actions]);
 
-    // 🔥 Settings sidebar collapsed와 local state 동기화
+    // 🔥 Settings sidebar collapsed와 local state 동기화 - 단방향으로만 동기화
     useEffect(() => {
         if (sidebarCollapsed !== state.collapsed) {
-            if (sidebarCollapsed) {
-                if (!state.collapsed) actions.toggleCollapsed();
-            } else {
-                if (state.collapsed) actions.toggleCollapsed();
+            // settings의 값으로만 동기화 (무한 루프 방지)
+            if (sidebarCollapsed && !state.collapsed) {
+                actions.toggleCollapsed();
+            } else if (!sidebarCollapsed && state.collapsed) {
+                actions.toggleCollapsed();
             }
-            Logger.debug('PROJECT_EDITOR', 'Sidebar state synced with settings', {
-                settingsCollapsed: sidebarCollapsed,
-                stateCollapsed: state.collapsed
-            });
         }
-    }, [sidebarCollapsed, state.collapsed, actions]);
+    }, [sidebarCollapsed]); // state.collapsed와 actions 의존성 제거로 무한 루프 방지
 
     // 🔥 로딩 상태 처리
     if (isLoading) {
@@ -243,8 +234,32 @@ export const ProjectEditor = memo(function ProjectEditor({
         );
     }
 
-    // 🔥 에러 상태 처리
+    // 🔥 에러 상태 처리 - PROJECT_NOT_FOUND 감지 시 네비게이션
     if (error) {
+        // PROJECT_NOT_FOUND 에러인 경우 React Router로 프로젝트 목록으로 이동
+        if (error.startsWith('PROJECT_NOT_FOUND:')) {
+            Logger.info('PROJECT_EDITOR', 'Project not found, redirecting to projects page', { projectId, error });
+            // useNavigate를 사용할 수 없으므로 window.location으로 안전하게 이동
+            setTimeout(() => {
+                if (typeof window !== 'undefined') {
+                    window.location.href = '/projects';
+                }
+            }, 1000); // 1초 후 리다이렉트하여 사용자가 에러 메시지를 볼 수 있도록 함
+            
+            return (
+                <ProjectEditorLayout.Container>
+                    <div className="flex items-center justify-center h-full">
+                        <div className="text-center">
+                            <h1 className="text-2xl font-bold text-red-600 mb-4">프로젝트를 찾을 수 없습니다</h1>
+                            <p className="text-slate-600 mb-4">프로젝트가 삭제되었거나 존재하지 않습니다.</p>
+                            <p className="text-slate-500">잠시 후 프로젝트 목록으로 이동합니다...</p>
+                        </div>
+                    </div>
+                </ProjectEditorLayout.Container>
+            );
+        }
+        
+        // 일반 에러 처리
         return (
             <ProjectEditorLayout.Container>
                 <div className="flex items-center justify-center h-full">

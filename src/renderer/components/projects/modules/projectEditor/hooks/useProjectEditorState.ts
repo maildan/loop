@@ -19,10 +19,10 @@ export function useProjectEditorState(): UseProjectEditorStateReturn {
         projectEditorStateService.createInitialState()
     );
 
-    // 🔥 상태 액션들 생성 - useMemo로 메모이제이션하여 무한 렌더링 방지
+    // 🔥 상태 액션들 생성 - 의존성 없음으로 무한 렌더링 완전 방지
     const actions = useMemo(() =>
         projectEditorStateService.createStateActions(state, setState),
-        [state] // state가 변경될 때만 actions 재생성
+        [] // 의존성 없음 - 한 번만 생성하여 무한 렌더링 방지
     );
 
     return {

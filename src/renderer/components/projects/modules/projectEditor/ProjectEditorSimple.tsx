@@ -110,6 +110,26 @@ export const ProjectEditorSimple = memo(function ProjectEditorSimple({
     }
 
     if (error) {
+        // PROJECT_NOT_FOUND 에러인 경우 React Router로 프로젝트 목록으로 이동
+        if (error.startsWith('PROJECT_NOT_FOUND:')) {
+            Logger.info('PROJECT_EDITOR_SIMPLE', 'Project not found, redirecting to projects page', { projectId, error });
+            setTimeout(() => {
+                if (typeof window !== 'undefined') {
+                    window.location.href = '/projects';
+                }
+            }, 1000);
+            
+            return (
+                <div className="h-screen flex items-center justify-center">
+                    <div className="text-center">
+                        <h1 className="text-2xl font-bold text-red-600 mb-4">프로젝트를 찾을 수 없습니다</h1>
+                        <p className="text-slate-600 mb-4">프로젝트가 삭제되었거나 존재하지 않습니다.</p>
+                        <p className="text-slate-500">잠시 후 프로젝트 목록으로 이동합니다...</p>
+                    </div>
+                </div>
+            );
+        }
+        
         return (
             <div className="h-screen flex items-center justify-center">
                 <div className="text-center">
@@ -177,7 +197,6 @@ export const ProjectEditorSimple = memo(function ProjectEditorSimple({
                     }}
                 />
             </div>
-
             {/* 🔥 메인 컨텐츠 영역 */}
             <div className="flex flex-1 overflow-hidden">
                 {/* 🔥 ProjectSidebar */}

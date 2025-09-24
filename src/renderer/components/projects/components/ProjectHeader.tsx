@@ -263,39 +263,56 @@ export function ProjectHeader({
       console.log('🔍 Available commands:', Object.keys(editor.commands));
       console.log('🔍 FontFamily command available:', !!editor.commands.setFontFamily);
       
-      // 🎨 1. 전역 CSS 변수 업데이트 (즉시 적용)
+      // � 통합된 폰트 적용 전략 - 전역 + 개별 설정 조화
+      
+      // 1. 전역 CSS 변수 업데이트 (모든 새로운 텍스트에 적용)
       document.documentElement.style.setProperty('--app-font-family', fontFamily);
-      Logger.info('ProjectHeader', 'CSS 변수 업데이트 완료', { fontFamily });
+      Logger.info('ProjectHeader', 'Global font CSS variable updated', { fontFamily });
       
-      // 🎨 2. TipTap setFontFamily 명령어도 실행 (선택된 텍스트용)
-      Logger.debug('ProjectHeader', 'Applying fontFamily via TipTap setFontFamily command', { fontFamily });
-      
+      // 2. 현재 선택된 텍스트에 개별 폰트 적용 (사용자 의도 존중)
       if (editor.commands.setFontFamily) {
-        const success = editor.commands.setFontFamily(fontFamily);
-        console.log('🎨 setFontFamily result:', success);
+        const hasSelection = !editor.state.selection.empty;
         
-        if (success) {
-          Logger.info('ProjectHeader', 'Font family applied successfully via TipTap command', { fontFamily });
-          
-          // 🧹 빈 TextStyle span 정리 (TipTap 공식 명령어)
-          editor.commands.removeEmptyTextStyle();
-          
-          // 💾 현재 폰트 상태 저장 (간소화된 이름으로)
-          setCurrentFont(getSimplifiedFontName(fontFamily));
-          
-          // 🔍 디버깅: HTML 결과 확인
-          setTimeout(() => {
-            console.log('🔍 Editor HTML after font change:', editor.getHTML());
-          }, 100);
-          
-          Logger.info('ProjectHeader', 'Font family change completed', { 
-            fontFamily,
-            simplifiedName: getSimplifiedFontName(fontFamily),
-            success: true 
+        if (hasSelection) {
+          // 텍스트가 선택된 경우: 선택된 부분에만 개별 폰트 적용
+          const success = editor.commands.setFontFamily(fontFamily);
+          Logger.info('ProjectHeader', 'Applied font to selected text', { 
+            fontFamily, 
+            success,
+            selectionFrom: editor.state.selection.from,
+            selectionTo: editor.state.selection.to
           });
+          
+          if (success) {
+            // 빈 TextStyle span 정리
+            editor.commands.removeEmptyTextStyle();
+          }
         } else {
-          Logger.warn('ProjectHeader', 'TipTap setFontFamily command failed', { fontFamily });
+          // 선택된 텍스트가 없는 경우: 전역 설정으로 모든 기본 텍스트 적용
+          // TipTap의 모든 텍스트 스타일 제거하여 전역 CSS 변수가 적용되도록 함
+          editor.commands.selectAll();
+          editor.commands.unsetFontFamily();
+          editor.commands.removeEmptyTextStyle();
+          // 커서를 원래 위치로 복원  
+          editor.commands.setTextSelection(editor.state.selection.from);
+          
+          Logger.info('ProjectHeader', 'Cleared individual fonts to apply global setting', { fontFamily });
         }
+        
+        // 현재 폰트 상태 저장
+        setCurrentFont(getSimplifiedFontName(fontFamily));
+        
+        // 디버깅: HTML 결과 확인
+        setTimeout(() => {
+          console.log('🔍 Editor HTML after font change:', editor.getHTML());
+        }, 100);
+        
+        Logger.info('ProjectHeader', 'Font family change completed', { 
+          fontFamily,
+          simplifiedName: getSimplifiedFontName(fontFamily),
+          hasSelection,
+          strategy: hasSelection ? 'individual' : 'global'
+        });
       } else {
         Logger.error('ProjectHeader', 'setFontFamily command not available - FontFamily extension may not be loaded');
         console.error('❌ FontFamily extension not properly loaded!');

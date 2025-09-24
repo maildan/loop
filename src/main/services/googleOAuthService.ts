@@ -65,7 +65,7 @@ export class GoogleOAuthService {
       // 외부 브라우저에서 OAuth URL 열기
       await shell.openExternal(authUrl);
 
-      Logger.info(this.componentName, '✅ OAuth 인증 시작됨', { authUrl });
+      Logger.debug(this.componentName, '✅ OAuth 인증 시작됨');
       return createSuccess(authUrl);
 
     } catch (error) {
@@ -89,19 +89,19 @@ export class GoogleOAuthService {
       // 인증 코드로 토큰 교환 (with code_verifier)
       const tokens = await this.exchangeCodeForTokens(code, codeVerifier);
       if (!tokens) {
-        throw new Error('Failed to exchange code for tokens');
+        throw new Error('');
       }
 
       // 사용자 정보 가져오기
       const userInfo = await this.getUserInfo(tokens.access_token);
       if (!userInfo) {
-        throw new Error('Failed to get user info');
+        throw new Error('');
       }
 
       // 토큰 안전하게 저장
       const saveResult = await tokenStorage.saveTokens('google', tokens);
       if (!saveResult) {
-        throw new Error('Failed to save tokens');
+        throw new Error('');
       }
 
       // cleanup pending PKCE state to avoid reuse
@@ -113,15 +113,12 @@ export class GoogleOAuthService {
         userInfo
       };
 
-      Logger.info(this.componentName, '✅ OAuth 인증 완료', {
-        userEmail: userInfo.email,
-        scopes: tokens.scope
-      });
+      Logger.debug(this.componentName, '✅ OAuth 인증 완료');
 
       return createSuccess(result);
 
     } catch (error) {
-      Logger.error(this.componentName, '❌ OAuth 콜백 처리 실패', error);
+      
       return createError(error instanceof Error ? error.message : 'Callback handling failed');
     }
   }
@@ -136,7 +133,7 @@ export class GoogleOAuthService {
       const envRefresh = process.env.GOOGLE_REFRESH_TOKEN;
       // Only allow bootstrapping from env in development to avoid accidental token leaks in production
       if (process.env.NODE_ENV === 'development' && envAccess) {
-        Logger.warn(this.componentName, 'Bootstrapping OAuth tokens from environment variables (development only)');
+        
         await tokenStorage.saveTokens('google', {
           access_token: envAccess,
           refresh_token: envRefresh,
@@ -144,7 +141,7 @@ export class GoogleOAuthService {
           scope: this.config.scopes.join(' '),
         });
       } else if (envAccess) {
-        Logger.warn(this.componentName, 'GOOGLE_ACCESS_TOKEN present in environment but ignored in non-development mode');
+        
       }
 
       const tokens = await tokenStorage.getTokens('google');
@@ -158,7 +155,7 @@ export class GoogleOAuthService {
       return createSuccess(isValid);
 
     } catch (error) {
-      Logger.error(this.componentName, '❌ 연결 상태 확인 실패', error);
+      
       return createSuccess(false);
     }
   }
@@ -201,10 +198,7 @@ export class GoogleOAuthService {
         });
       }
 
-      Logger.info(this.componentName, '✅ Google Docs 문서 생성됨 (GCP SDK)', {
-        documentId: document.data.documentId,
-        title
-      });
+      Logger.debug(this.componentName, '✅ Google Docs 문서 생성됨 (GCP SDK)');
 
       return createSuccess({
         documentId: document.data.documentId!,
@@ -246,7 +240,7 @@ export class GoogleOAuthService {
         webViewLink: file.webViewLink || undefined,
       }));
 
-      Logger.info(this.componentName, '✅ Google Docs 목록 조회 완료 (GCP SDK)', { count: files.length });
+      Logger.debug(this.componentName, '✅ Google Docs 목록 조회 완료 (GCP SDK)', { count: files.length });
       return createSuccess(files);
 
     } catch (error) {
@@ -291,7 +285,7 @@ export class GoogleOAuthService {
         // ignore if keytar not available
       }
 
-      Logger.info(this.componentName, '✅ Google 연결 해제됨');
+      Logger.debug(this.componentName, '✅ Google 연결 해제됨');
       return createSuccess(deleteResult);
 
     } catch (error) {
