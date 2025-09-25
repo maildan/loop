@@ -95,18 +95,22 @@ jest.mock('electron', () => ({
   }
 }));
 
-// 🔧 uiohook-napi 모킹
-jest.mock('uiohook-napi', () => ({
-  UiohookKey: {},
-  UiohookMouseButton: {},
-  UiohookWheelDirection: {},
-  uIOhook: {
-    start: jest.fn(() => Promise.resolve()),
-    stop: jest.fn(() => Promise.resolve()),
-    on: jest.fn(),
-    removeAllListeners: jest.fn()
-  }
-}));
+// 🔧 uiohook-napi 모킹 (프로젝트에 설치되지 않았으므로 조건부 모킹)
+try {
+  jest.mock('uiohook-napi', () => ({
+    UiohookKey: {},
+    UiohookMouseButton: {},
+    UiohookWheelDirection: {},
+    uIOhook: {
+      start: jest.fn(() => Promise.resolve()),
+      stop: jest.fn(() => Promise.resolve()),
+      on: jest.fn(),
+      removeAllListeners: jest.fn()
+    }
+  }));
+} catch (error) {
+  // uiohook-napi가 설치되지 않은 경우 무시
+}
 
 // 🔧 파일 시스템 모킹
 jest.mock('fs', () => ({

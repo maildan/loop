@@ -140,28 +140,34 @@ export function useDynamicFont(): UseDynamicFontResult {
                 vertical-align: baseline !important;
             `;
 
-            // 🔥 모든 요소에 즉시 적용 (깜빡임 없는 전환 + 정규화)
-            const allElements = document.querySelectorAll('*');
-            allElements.forEach((element) => {
-                if (element instanceof HTMLElement) {
-                    element.style.fontFamily = family;
-                    // 텍스트 입력 요소들에는 정규화 적용
-                    if (element.tagName === 'TEXTAREA' ||
-                        element.tagName === 'INPUT' ||
-                        element.classList.contains('text-editor') ||
-                        element.classList.contains('idea-content') ||
-                        element.classList.contains('synopsis-content')) {
+            // ✅ CSS variables로 대체 (성능 최적화: DOM 순회 제거)
+            document.documentElement.style.setProperty('--dynamic-font-family', family);
+            
+            // 특정 텍스트 입력 요소들만 직접 적용 (성능 최적화)
+            const targetSelectors = [
+                'textarea',
+                'input[type="text"]',
+                '.text-editor',
+                '.idea-content',
+                '.synopsis-content'
+            ];
+            
+            targetSelectors.forEach(selector => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach((element) => {
+                    if (element instanceof HTMLElement) {
+                        element.style.fontFamily = family;
                         element.style.fontSizeAdjust = '0.5';
                         element.style.lineHeight = '1.6';
                         element.style.verticalAlign = 'baseline';
                     }
-                }
+                });
             });
 
             setCurrentFont(family);
-            Logger.info('DYNAMIC_FONT', '🔥 기가차드 정규화 폰트 적용 완료', {
+            Logger.info('DYNAMIC_FONT', '✅ CSS 변수 기반 폰트 적용 완료 (성능 최적화)', {
                 family,
-                appliedToElements: allElements.length
+                method: 'CSS-variables + targeted-elements'
             });
         } catch (e) {
             Logger.error('DYNAMIC_FONT', '폰트 적용 실패', e);
