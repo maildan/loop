@@ -115,7 +115,7 @@ export function setupFontIpcHandlers(): void {
             }
         );
 
-        // 🔥 폰트 CSS 생성 (generateCSS)
+        // 🔥 폰트 CSS 생성 (generateCSS) - fonts/{dir} 구조 지원
         ipcMain.handle(
             'font:generate-css',
             async (event: IpcMainInvokeEvent) => {
@@ -124,18 +124,62 @@ export function setupFontIpcHandlers(): void {
                     const fontService = FontService.getInstance();
                     const fonts = await fontService.getAvailableFonts();
                     
-                    // 기본 CSS 생성 로직 (향후 FontService에 추가 예정)
-                    const css = fonts.map(font => 
-                        `@font-face {
-                            font-family: '${font.name}';
-                            src: url('${font.path}') format('truetype');
-                        }`
-                    ).join('\n');
+                    const css = fonts.map(font => {
+                        // 🔥 파일 확장자에 따른 올바른 포맷 결정
+                        const ext = font.name.toLowerCase().split('.').pop();
+                        let format = 'truetype';
+                        switch (ext) {
+                            case 'otf':
+                                format = 'opentype';
+                                break;
+                            case 'woff':
+                                format = 'woff';
+                                break;
+                            case 'woff2':
+                                format = 'woff2';
+                                break;
+                            case 'ttf':
+                            default:
+                                format = 'truetype';
+                                break;
+                        }
+
+                        // 🔥 HTTP 서버에서 접근 가능한 상대 경로로 변환
+                        const relativePath = font.path.replace(fontService.getFontsPath(), '').replace(/\\/g, '/');
+                        const fontUrl = `/fonts${relativePath}`;
+                        
+                        // 🔥 폰트 패밀리명 추출 (확장자 제거)
+                        const fontFamily = font.name.replace(/\.[^/.]+$/, '');
+                        
+                        return `@font-face {
+    font-family: '${fontFamily}';
+    src: url('${fontUrl}') format('${format}');
+    font-display: swap;
+}`;
+                    }).join('\n');
                     
                     Logger.info('FONT_IPC', 'CSS generated', { fontsCount: fonts.length });
                     return { success: true, data: css };
                 } catch (error) {
                     Logger.error('FONT_IPC', 'CSS generation failed', error);
+                    return { success: false, error: String(error) };
+                }
+            }
+        );
+
+        // 🔥 폰트 패밀리 목록 조회 (fonts/{dir} 구조 지원)
+        ipcMain.handle(
+            'font:get-font-families',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'Font families requested');
+                    const fontService = FontService.getInstance();
+                    const families = await fontService.getFontFamilies();
+                    
+                    Logger.info('FONT_IPC', 'Font families retrieved', { count: families.length });
+                    return { success: true, data: families };
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'Get font families failed', error);
                     return { success: false, error: String(error) };
                 }
             }
@@ -226,6 +270,7 @@ export function cleanupFontIpcHandlers(): void {
             'font:initialize',
             'font:get-available-fonts',
             'font:get-fonts-by-category',
+            'font:get-font-families',
             'font:get-font-info',
             'font:get-static-fonts',
             'font:generate-css',

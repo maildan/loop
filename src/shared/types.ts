@@ -7,6 +7,21 @@ export interface Result<TData = unknown> {
   error?: string;
 }
 
+// 🎨 폰트 시스템 타입 정의
+export interface FontFile {
+  name: string;
+  path: string;
+  size: number;
+  type: 'ttf' | 'otf' | 'woff' | 'woff2';
+}
+
+export interface FontFamily {
+  name: string;
+  displayName: string;
+  category: string;
+  fonts: FontFile[];
+}
+
 // 📚 프로젝트 구조 데이터 - Main ↔ Renderer 공통
 export interface ProjectStructure {
   id: string;
@@ -299,6 +314,7 @@ export interface ElectronAPI {
   font: {
     initialize: () => Promise<{ success: boolean; error?: string }>;
     getAvailableFonts: () => Promise<Array<{ value: string; label: string; category: string }>>;
+    getFontFamilies: () => Promise<{ success: boolean; data: Array<{ name: string; displayName: string; category: string; fonts: any[] }> }>;
     generateCSS: () => Promise<string>;
     getFontFamily: (familyName: string) => Promise<{ name: string; displayName: string; category: string; variants: any[]; cssFamily: string } | null>;
     reload: () => Promise<{ success: boolean; error?: string }>;

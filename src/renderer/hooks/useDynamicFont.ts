@@ -77,15 +77,29 @@ export function useDynamicFont(): UseDynamicFontResult {
             // 폰트 서비스 초기화
             await (window as any).electronAPI?.font?.initialize?.();
 
-            // 동적 폰트 + 정적 폰트 조합
-            const [dynamicFontsResponse, staticFontsResponse] = await Promise.all([
-                (window as any).electronAPI?.font?.getAvailableFonts?.() || [],
+            // 🔥 폰트 패밀리 기반 조합 (fonts/{dir} 구조)
+            const [fontFamiliesResponse, staticFontsResponse] = await Promise.all([
+                (window as any).electronAPI?.font?.getFontFamilies?.() || { success: false, data: [] },
                 (window as any).electronAPI?.font?.getStaticFonts?.() || {}
             ]);
             
-            // 🔥 IPC 응답 형식 처리: { success: boolean, data: fonts[] }
-            const dynamicFonts = Array.isArray(dynamicFontsResponse) ? dynamicFontsResponse : (dynamicFontsResponse?.data || []);
+            // 🔥 IPC 응답 형식 처리: { success: boolean, data: FontFamily[] }
+            const fontFamilies = fontFamiliesResponse?.success ? fontFamiliesResponse.data : [];
             const staticFonts = Array.isArray(staticFontsResponse) ? staticFontsResponse : (staticFontsResponse?.data || []);
+
+            // 🔥 FontFamily를 UI 옵션으로 변환 (안전한 변환)
+            const dynamicFonts = fontFamilies.flatMap((family: any) => {
+                if (!family || !Array.isArray(family.fonts)) {
+                    Logger.warn('DYNAMIC_FONT', 'Invalid family or fonts', { family });
+                    return [];
+                }
+                
+                return family.fonts.map((font: any) => ({
+                    value: font?.name || 'unknown',
+                    label: `${family?.displayName || family?.name || 'Unknown'} (${font?.style || 'Regular'} ${font?.weight || '400'})`,
+                    category: family?.category || 'other'
+                }));
+            });
 
             const allFonts = [
                 ...staticFonts,
@@ -98,6 +112,7 @@ export function useDynamicFont(): UseDynamicFontResult {
             await injectFontCSS();
 
             Logger.info('DYNAMIC_FONT', '폰트 목록 로드 완료', {
+                fontFamiliesCount: fontFamilies.length,
                 dynamicCount: dynamicFonts.length,
                 staticCount: staticFonts.length,
                 totalCount: allFonts.length

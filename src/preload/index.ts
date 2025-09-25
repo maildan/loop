@@ -172,6 +172,7 @@ const electronAPI: ElectronAPI = {
   font: {
     initialize: () => ipcRenderer.invoke('font:initialize'),
     getAvailableFonts: () => ipcRenderer.invoke('font:get-available-fonts'),
+    getFontFamilies: () => ipcRenderer.invoke('font:get-font-families'),
     generateCSS: () => ipcRenderer.invoke('font:generate-css'),
     getFontFamily: (familyName: string) => ipcRenderer.invoke('font:get-font-family', familyName),
     reload: () => ipcRenderer.invoke('font:reload'),
@@ -199,36 +200,41 @@ const electronAPI: ElectronAPI = {
   readFileAsDataUrl: (filePath: string) => ipcRenderer.invoke('settings:read-file', filePath),
 };
 
+// Helper function to read snapshot from file (extracted for modularity)
+async function readSnapshotFromFile(): Promise<Record<string, unknown> | null> {
+  try {
+    let userDataPath: string;
+    try {
+      userDataPath = await ipcRenderer.invoke('app:get-user-data-path') || process.cwd();
+    } catch {
+      userDataPath = process.cwd();
+    }
+    const filePath = path.join(userDataPath, '.auth_snapshot.json');
+    if (fs.existsSync(filePath)) {
+      const raw = fs.readFileSync(filePath, { encoding: 'utf-8' });
+      return JSON.parse(raw);
+    }
+  } catch {
+    // Ignore errors silently as per original logic
+  }
+  return null;
+}
+
 // Attach async loopSnapshot API dynamically to avoid typing issues
-; (electronAPI as any).loopSnapshot = {
-  getAsync: async () => {
+(electronAPI as any).loopSnapshot = {
+  getAsync: async (): Promise<Record<string, unknown> | null> => {
+    // Try keychain first
     try {
-      // Delegate to main process keychain handler first
       const resp = await ipcRenderer.invoke('keychain:get-snapshot');
-      if (resp && resp.ok && resp.data) return resp.data;
-    } catch (e) {
-      // ignore keychain errors and fallback to file
+      if (resp && resp.ok && resp.data) {
+        return resp.data;
+      }
+    } catch {
+      // Ignore and fallback
     }
 
-    // fallback to file (userData then cwd)
-    try {
-      // Try to get userData path via IPC first
-      let userDataPath: string;
-      try {
-        userDataPath = await ipcRenderer.invoke('app:get-user-data-path') || process.cwd();
-      } catch (e) {
-        userDataPath = process.cwd();
-      }
-      const filePath = path.join(userDataPath, '.auth_snapshot.json');
-      if (fs.existsSync(filePath)) {
-        const raw = fs.readFileSync(filePath, { encoding: 'utf-8' });
-        return JSON.parse(raw);
-      }
-    } catch (e) {
-      // ignore
-    }
-
-    return null;
+    // Fallback to file
+    return await readSnapshotFromFile();
   }
 };
 

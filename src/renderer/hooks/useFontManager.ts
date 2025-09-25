@@ -19,13 +19,13 @@ export interface FontVariant {
     style: 'normal' | 'italic';
 }
 
-// 🔥 폰트 패밀리 정보
-export interface FontFamily {
-    name: string;
-    displayName: string;
-    category: string;
-    variants: FontVariant[];
-    cssFamily: string;
+// 🔥 폰트 패밀리 정보 (shared types에서 가져옴)
+import { FontFamily as SharedFontFamily } from '../../shared/types';
+
+// 🔥 폰트 패밀리 정보 (확장)
+export interface FontFamily extends SharedFontFamily {
+    variants?: FontVariant[];
+    cssFamily?: string;
 }
 
 // 🔥 폰트 매니저 훅
@@ -91,8 +91,8 @@ export function useFontManager() {
             Logger.debug('FONT_HOOKS', 'Loading static fonts');
 
             const response = await window.electronAPI.font.getStaticFonts();
-            // 🔥 IPC 응답 형식 처리: { success: boolean, data: fonts[] } 
-            const fonts = response?.data || response || [];
+            // 🔥 IPC 응답 형식 처리: 직접 fonts[] 배열 반환
+            const fonts = response || [];
             setStaticFonts(fonts);
 
             Logger.info('FONT_HOOKS', 'Static fonts loaded', {
@@ -156,19 +156,54 @@ export function useFontManager() {
         }
     }, [loadAvailableFonts, injectFontCSS]);
 
-    // 🔥 폰트 패밀리 정보 가져오기
+    // 🔥 모든 폰트 패밀리 정보 가져오기 (fonts/{dir} 구조용)
+    const getFontFamilies = useCallback(async (): Promise<FontFamily[]> => {
+        try {
+            Logger.debug('FONT_HOOKS', 'Getting all font families');
+
+            const result = await window.electronAPI.font.getFontFamilies();
+            
+            if (result.success && result.data) {
+                Logger.info('FONT_HOOKS', 'Font families retrieved', { count: result.data.length });
+                return result.data;
+            } else {
+                Logger.warn('FONT_HOOKS', 'No font families found');
+                return [];
+            }
+
+        } catch (err) {
+            Logger.error('FONT_HOOKS', 'Failed to get font families', err);
+            return [];
+        }
+    }, []);
+
+    // 🔥 폰트 패밀리 정보 가져오기 (개별)
     const getFontFamily = useCallback(async (familyName: string): Promise<FontFamily | null> => {
         try {
             Logger.debug('FONT_HOOKS', 'Getting font family', { familyName });
 
             const fontFamily = await window.electronAPI.font.getFontFamily(familyName);
 
-            Logger.info('FONT_HOOKS', 'Font family retrieved', {
-                familyName,
-                fontFamily
-            });
+            if (fontFamily) {
+                // SharedFontFamily 타입으로 변환
+                const result: FontFamily = {
+                    name: fontFamily.name,
+                    displayName: fontFamily.displayName,
+                    category: fontFamily.category,
+                    fonts: [], // FontFamily에서 빈 배열로 초기화
+                    variants: fontFamily.variants,
+                    cssFamily: fontFamily.cssFamily
+                };
 
-            return fontFamily;
+                Logger.info('FONT_HOOKS', 'Font family retrieved', {
+                    familyName,
+                    fontFamily: result
+                });
+
+                return result;
+            } else {
+                return null;
+            }
 
         } catch (err) {
             Logger.error('FONT_HOOKS', 'Failed to get font family', { familyName, error: err });
@@ -216,6 +251,7 @@ export function useFontManager() {
 
         // 유틸리티
         getFontFamily,
+        getFontFamilies,
         isFontAvailable,
         allFonts,
     };
@@ -284,7 +320,7 @@ export function useCurrentFont() {
                 setCurrentFontFamily(fontFamily.displayName);
 
                 // CSS 변수 업데이트 (전역 폰트 적용)
-                document.documentElement.style.setProperty('--font-family', fontFamily.cssFamily);
+                document.documentElement.style.setProperty('--font-family', fontFamily.cssFamily || fontFamily.displayName);
 
                 Logger.info('FONT_HOOKS', '✅ Dynamic font applied successfully', {
                     fontValue,

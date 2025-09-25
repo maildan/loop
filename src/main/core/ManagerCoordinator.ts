@@ -3,6 +3,7 @@
 import { Logger } from '../../shared/logger';
 import { Platform } from '../utils/platform';
 import { unifiedPermissionManager } from '../utils/UnifiedPermissionManager';
+import { getSettingsManager } from '../settings';
 
 // 🔥 기존 매니저들 import (중복 방지)
 import { memoryManager } from '../managers/MemoryManager';
@@ -253,7 +254,6 @@ export class ManagerCoordinator {
    */
   private async initializeSettings(): Promise<void> {
     try {
-      const { getSettingsManager } = await import('../settings');
       const settingsManager = getSettingsManager();
       // ElectronStoreSettingsManager는 initialize 메서드가 없으므로 제거
 

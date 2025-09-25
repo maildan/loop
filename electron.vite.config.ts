@@ -2,6 +2,40 @@ import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+import fs from 'fs'
+
+// 🚀 동적 폰트 디렉토리 스캔 함수 (fonts/{dir} 구조 유지)
+function generateFontCopyTargets() {
+  const fontsDir = resolve(__dirname, 'public/fonts')
+  const targets: Array<{src: string, dest: string}> = []
+  
+  if (!fs.existsSync(fontsDir)) {
+    console.warn('⚠️  폰트 디렉토리가 존재하지 않습니다:', fontsDir)
+    return targets
+  }
+
+  // 첫 번째 레벨 디렉토리들을 스캔 (폰트 패밀리 디렉토리)
+  const fontFamilies = fs.readdirSync(fontsDir, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory() && !dirent.name.startsWith('.'))
+    .map(dirent => dirent.name)
+
+  for (const familyName of fontFamilies) {
+    const familyPath = resolve(fontsDir, familyName)
+    
+    // 각 폰트 패밀리 디렉토리 전체를 복사 (구조 유지)
+    targets.push({
+      src: `${familyPath}/**/*`,
+      dest: `fonts/${familyName}`
+    })
+  }
+  
+  console.log(`✅ 동적 폰트 스캔 완료: ${fontFamilies.length}개 폰트 패밀리 발견`)
+  console.log(`   폰트 패밀리: ${fontFamilies.join(', ')}`)
+  return targets
+}
+
+// 동적으로 생성된 폰트 복사 타겟
+const fontCopyTargets = generateFontCopyTargets()
 
 export default defineConfig({
   main: {
@@ -9,7 +43,11 @@ export default defineConfig({
     build: {
       rollupOptions: {
         // 외부 의존성 최적화
-        external: ['electron']
+        external: ['electron'],
+        output: {
+          // 🔧 named exports 경고 해결
+          exports: 'named'
+        }
       }
     }
   },
@@ -23,16 +61,13 @@ export default defineConfig({
   },
   renderer: {
     root: 'src/renderer',
+    // 🚫 public 폴더 자동 복사 비활성화 (동적 스캔으로 대체)
+    publicDir: false,
     plugins: [
       react(),
-      // 🔥 폰트 파일을 out/renderer/assets/fonts로 복사
+      // � 동적으로 스캔된 폰트 파일들을 평면화하여 복사
       viteStaticCopy({
-        targets: [
-          {
-            src: resolve(__dirname, 'public/fonts/**/*'),
-            dest: 'fonts'
-          }
-        ]
+        targets: fontCopyTargets
       })
     ],
     // 🔥 Electron 환경에 맞는 base path 설정
@@ -80,8 +115,6 @@ export default defineConfig({
         'Access-Control-Allow-Origin': '*',
       }
     },
-    // 🔥 정적 파일 디렉토리 설정 (개발 모드용)
-    publicDir: resolve(__dirname, 'public'),
     build: {
       // 프로덕션 빌드 최적화
       rollupOptions: {
