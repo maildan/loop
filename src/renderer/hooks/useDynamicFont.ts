@@ -78,10 +78,14 @@ export function useDynamicFont(): UseDynamicFontResult {
             await (window as any).electronAPI?.font?.initialize?.();
 
             // 동적 폰트 + 정적 폰트 조합
-            const [dynamicFonts, staticFonts] = await Promise.all([
+            const [dynamicFontsResponse, staticFontsResponse] = await Promise.all([
                 (window as any).electronAPI?.font?.getAvailableFonts?.() || [],
-                (window as any).electronAPI?.font?.getStaticFonts?.() || []
+                (window as any).electronAPI?.font?.getStaticFonts?.() || {}
             ]);
+            
+            // 🔥 IPC 응답 형식 처리: { success: boolean, data: fonts[] }
+            const dynamicFonts = Array.isArray(dynamicFontsResponse) ? dynamicFontsResponse : (dynamicFontsResponse?.data || []);
+            const staticFonts = Array.isArray(staticFontsResponse) ? staticFontsResponse : (staticFontsResponse?.data || []);
 
             const allFonts = [
                 ...staticFonts,

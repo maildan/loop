@@ -28,8 +28,24 @@ export class FontService {
   private readonly maxPathDepth = 3; // 최대 하위 폴더 깊이 제한
   
   private constructor() {
-    // 🔥 안전한 경로 구성 - Path traversal 방지
-    this.fontsPath = resolve(process.cwd(), 'public', 'fonts');
+    // 🔥 안전한 경로 구성 - Path traversal 방지 및 Jest 환경 대응
+    let fontsPath: string;
+    
+    try {
+      fontsPath = resolve(process.cwd(), 'public', 'fonts');
+      if (!fontsPath) {
+        throw new Error('resolve returned undefined');
+      }
+    } catch (error) {
+      // Jest 환경에서 fallback 경로 사용
+      fontsPath = join(process.cwd(), 'public', 'fonts');
+      if (!fontsPath) {
+        // 최후의 수단
+        fontsPath = `${process.cwd()}/public/fonts`;
+      }
+    }
+    
+    this.fontsPath = fontsPath;
     Logger.info('FONT_SERVICE', '폰트 서비스 초기화', {
       fontsPath: this.fontsPath,
       exists: existsSync(this.fontsPath)
@@ -44,30 +60,20 @@ export class FontService {
   }
 
   /**
-   * 🔥 안전한 파일 경로 검증 - Path traversal 공격 방지
+   * 🔥 디렉토리 안전성 검증 - 확장자 검증 제외
    */
-  private isPathSafe(filePath: string): boolean {
+  private isDirectorySafe(dirPath: string): boolean {
     try {
       // 절대 경로로 해결
-      const absolutePath = resolve(filePath);
+      const absolutePath = resolve(dirPath);
       const normalizedFontsPath = resolve(this.fontsPath);
       
       // 폰트 디렉토리 내부에 있는지 확인
       if (!absolutePath.startsWith(normalizedFontsPath)) {
-        Logger.warn('FONT_SERVICE', '위험한 파일 경로 차단', { 
-          attempted: filePath,
+        Logger.warn('FONT_SERVICE', '위험한 디렉토리 경로 차단', { 
+          attempted: dirPath,
           resolved: absolutePath,
           allowed: normalizedFontsPath 
-        });
-        return false;
-      }
-
-      // 파일 확장자 검증
-      const ext = extname(absolutePath).toLowerCase();
-      if (!this.allowedExtensions.includes(ext)) {
-        Logger.warn('FONT_SERVICE', '허용되지 않은 파일 확장자', { 
-          file: basename(absolutePath),
-          extension: ext 
         });
         return false;
       }
@@ -80,6 +86,33 @@ export class FontService {
           path: relativePath,
           depth: pathDepth,
           maxDepth: this.maxPathDepth 
+        });
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      Logger.error('FONT_SERVICE', '디렉토리 경로 검증 실패', error);
+      return false;
+    }
+  }
+
+  /**
+   * 🔥 안전한 파일 경로 검증 - Path traversal 공격 방지
+   */
+  private isPathSafe(filePath: string): boolean {
+    try {
+      // 먼저 디렉토리 안전성 검사
+      if (!this.isDirectorySafe(filePath)) {
+        return false;
+      }
+
+      // 파일 확장자 검증
+      const ext = extname(filePath).toLowerCase();
+      if (!this.allowedExtensions.includes(ext)) {
+        Logger.warn('FONT_SERVICE', '허용되지 않은 파일 확장자', { 
+          file: basename(filePath),
+          extension: ext 
         });
         return false;
       }
@@ -140,8 +173,8 @@ export class FontService {
       for (const item of items) {
         const itemPath = join(dirPath, item);
         
-        // 안전성 검증
-        if (!this.isPathSafe(itemPath)) {
+        // 기본 경로 안전성 검증 (확장자 검증 제외)
+        if (!this.isDirectorySafe(itemPath)) {
           continue;
         }
 
@@ -151,6 +184,11 @@ export class FontService {
           // 하위 디렉토리 재귀 스캔
           await this.scanFontsRecursively(itemPath, fonts, depth + 1);
         } else if (stats.isFile()) {
+          // 파일인 경우 확장자 검증 포함한 완전한 안전성 검사
+          if (!this.isPathSafe(itemPath)) {
+            continue;
+          }
+          
           // 폰트 파일 처리
           const font = this.createFontFile(itemPath, stats);
           if (font) {

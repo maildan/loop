@@ -2,6 +2,36 @@
 
 import '@testing-library/jest-dom';
 
+// 🔧 Node.js fs 모듈 모킹 (Jest 환경 호환성)
+jest.mock('fs', () => {
+  const actualFs = jest.requireActual('fs');
+  return {
+    ...actualFs,
+    existsSync: jest.fn().mockImplementation((path: string) => {
+      // 실제 파일 시스템 확인
+      try {
+        return actualFs.existsSync(path);
+      } catch {
+        return false;
+      }
+    }),
+    statSync: jest.fn().mockImplementation((path: string) => {
+      try {
+        return actualFs.statSync(path);
+      } catch {
+        return { isDirectory: () => false, isFile: () => false };
+      }
+    }),
+    readdirSync: jest.fn().mockImplementation((path: string) => {
+      try {
+        return actualFs.readdirSync(path);
+      } catch {
+        return [];
+      }
+    })
+  };
+});
+
 // 🔧 Electron 모킹
 Object.defineProperty(global, 'process', {
   value: {
@@ -13,6 +43,70 @@ Object.defineProperty(global, 'process', {
     }
   }
 });
+
+// 🌐 완전히 새로운 Mock 전략 - 직접 window에 할당
+const mockStorage = new Map<string, any>();
+
+// 🔥 완전히 새로운 Mock 전략
+const electronAPIMock = {
+  settings: {
+    get: async (key: string) => {
+      console.log(`🔧 NEW Mock GET called: ${key}`);
+      const value = mockStorage.get(key);
+      const result = { 
+        success: true, 
+        data: value !== undefined ? value : (key === 'app.fontBlacklist' ? [] : null)
+      };
+      console.log(`🔧 NEW Mock GET result:`, result);
+      return result;
+    },
+    set: async (key: string, value: any) => {
+      console.log(`🔧 NEW Mock SET called: ${key} =`, value);
+      mockStorage.set(key, value);
+      const result = { success: true };
+      console.log(`🔧 NEW Mock SET result:`, result);
+      return result;
+    },
+    getAll: async () => {
+      console.log('🔧 NEW Mock GETALL called');
+      const result = Array.from(mockStorage.entries()).reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      }, {} as Record<string, any>);
+      return { success: true, data: result };
+    },
+    reset: async () => {
+      console.log('🔧 NEW Mock RESET called');
+      mockStorage.clear();
+      return { success: true };
+    },
+    onDidChange: (listener: (payload: { keyPath: string; value: unknown; reset?: boolean }) => void) => {
+      console.log('🔧 NEW Mock onDidChange called');
+      return () => {}; // unsubscribe function
+    }
+  },
+  font: {
+    initialize: async () => ({ success: true, data: true }),
+    getAvailableFonts: async () => ({ success: true, data: [] }),
+    generateCSS: async () => ({ success: true, data: '' }),
+    getFontFamily: async (familyName: string) => ({ success: true, data: null }),
+    reload: async () => ({ success: true, data: true }),
+    getStaticFonts: async () => ({ success: true, data: [] }),
+    clearCache: async () => ({ success: true, data: true })
+  }
+};
+
+// 🔥 Window에 직접 할당 (defineProperty 대신)
+(window as any).electronAPI = electronAPIMock;
+
+// 전역 함수로 Mock 저장소 리셋
+(global as any).__resetMockStorage = () => {
+  console.log('🔧 Global Mock Storage Reset called');
+  mockStorage.clear();
+};
+
+// 테스트 간 Mock 저장소 초기화를 위한 글로벌 함수 추출
+// 전역 리셋 함수 제거 (이미 위에서 정의됨)
 
 // 🔧 Logger 모킹 (테스트 중 로그 출력 방지)
 jest.mock('../src/shared/logger', () => ({

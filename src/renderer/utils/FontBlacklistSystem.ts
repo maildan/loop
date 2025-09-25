@@ -65,13 +65,22 @@ export class FontBlacklistSystem {
 
   static async getBlacklist(): Promise<FontBlacklistEntry[]> {
     try {
+      console.log('🔥 FontBlacklistSystem.getBlacklist: Starting...');
+      console.log('🔥 window.electronAPI exists:', !!window.electronAPI);
+      console.log('🔥 window.electronAPI.settings exists:', !!(window.electronAPI?.settings));
+      console.log('🔥 window.electronAPI.settings.get exists:', !!(window.electronAPI?.settings?.get));
+      
       // ✅ Electron Store 사용 (단일 저장소)
       if (window.electronAPI?.settings?.get) {
+        console.log('🔥 Calling window.electronAPI.settings.get with key: app.fontBlacklist');
         const result = await window.electronAPI.settings.get('app.fontBlacklist');
-        if (result.success && result.data) {
+        console.log('🔥 Result from electronAPI.settings.get:', result);
+        
+        if (result.success && Array.isArray(result.data)) {
           const entries = result.data as FontBlacklistEntry[];
-          // 만료된 항목 제거
           const now = Date.now();
+          
+          // 만료된 항목 정리
           const validEntries = entries.filter(entry =>
             now - entry.timestamp < this.BLACKLIST_DURATION
           );
@@ -80,12 +89,15 @@ export class FontBlacklistSystem {
             await this.saveBlacklist(validEntries);
           }
 
+          console.log('🔥 Returning validEntries:', validEntries);
           return validEntries;
         }
       }
 
+      console.log('🔥 Returning empty array');
       return [];
     } catch (e) {
+      console.log('🔥 Exception in getBlacklist:', e);
       Logger.warn('FONT_BLACKLIST', 'Failed to load blacklist from Electron Store', e);
       return [];
     }
@@ -93,14 +105,21 @@ export class FontBlacklistSystem {
 
   static async saveBlacklist(entries: FontBlacklistEntry[]): Promise<void> {
     try {
+      console.log('🔥 FontBlacklistSystem.saveBlacklist: Starting with entries:', entries);
+      console.log('🔥 window.electronAPI.settings.set exists:', !!(window.electronAPI?.settings?.set));
+      
       // ✅ Electron Store 사용 (단일 저장소)
       if (window.electronAPI?.settings?.set) {
+        console.log('🔥 Calling window.electronAPI.settings.set with key: app.fontBlacklist');
         const result = await window.electronAPI.settings.set('app.fontBlacklist', entries);
+        console.log('🔥 Result from electronAPI.settings.set:', result);
+        
         if (!result.success) {
           Logger.warn('FONT_BLACKLIST', 'Failed to save blacklist to Electron Store', result.error);
         }
       }
     } catch (e) {
+      console.log('🔥 Exception in saveBlacklist:', e);
       Logger.warn('FONT_BLACKLIST', 'Failed to save blacklist', e);
     }
   }

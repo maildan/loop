@@ -90,7 +90,9 @@ export function useFontManager() {
         try {
             Logger.debug('FONT_HOOKS', 'Loading static fonts');
 
-            const fonts = await window.electronAPI.font.getStaticFonts();
+            const response = await window.electronAPI.font.getStaticFonts();
+            // 🔥 IPC 응답 형식 처리: { success: boolean, data: fonts[] } 
+            const fonts = response?.data || response || [];
             setStaticFonts(fonts);
 
             Logger.info('FONT_HOOKS', 'Static fonts loaded', {
