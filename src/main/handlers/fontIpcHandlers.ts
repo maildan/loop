@@ -98,147 +98,6 @@ export function setupFontIpcHandlers(): void {
             }
         );
 
-        // 🔥 정적 폰트 목록 조회 (getStaticFonts)
-        ipcMain.handle(
-            'font:get-static-fonts',
-            async (event: IpcMainInvokeEvent) => {
-                try {
-                    Logger.debug('FONT_IPC', 'Static fonts requested');
-                    const fontService = FontService.getInstance();
-                    const fonts = await fontService.getAvailableFonts();
-                    Logger.info('FONT_IPC', 'Static fonts retrieved', { count: fonts.length });
-                    return { success: true, data: fonts };
-                } catch (error) {
-                    Logger.error('FONT_IPC', 'Get static fonts failed', error);
-                    return { success: false, error: String(error) };
-                }
-            }
-        );
-
-        // 🔥 폰트 CSS 생성 (generateCSS) - fonts/{dir} 구조 지원
-        ipcMain.handle(
-            'font:generate-css',
-            async (event: IpcMainInvokeEvent) => {
-                try {
-                    Logger.debug('FONT_IPC', 'CSS generation requested');
-                    const fontService = FontService.getInstance();
-                    const fonts = await fontService.getAvailableFonts();
-                    
-                    const css = fonts.map(font => {
-                        // 🔥 파일 확장자에 따른 올바른 포맷 결정
-                        const ext = font.name.toLowerCase().split('.').pop();
-                        let format = 'truetype';
-                        switch (ext) {
-                            case 'otf':
-                                format = 'opentype';
-                                break;
-                            case 'woff':
-                                format = 'woff';
-                                break;
-                            case 'woff2':
-                                format = 'woff2';
-                                break;
-                            case 'ttf':
-                            default:
-                                format = 'truetype';
-                                break;
-                        }
-
-                        // 🔥 HTTP 서버에서 접근 가능한 상대 경로로 변환
-                        const relativePath = font.path.replace(fontService.getFontsPath(), '').replace(/\\/g, '/');
-                        const fontUrl = `/fonts${relativePath}`;
-                        
-                        // 🔥 폰트 패밀리명 추출 (확장자 제거)
-                        const fontFamily = font.name.replace(/\.[^/.]+$/, '');
-                        
-                        return `@font-face {
-    font-family: '${fontFamily}';
-    src: url('${fontUrl}') format('${format}');
-    font-display: swap;
-}`;
-                    }).join('\n');
-                    
-                    Logger.info('FONT_IPC', 'CSS generated', { fontsCount: fonts.length });
-                    return { success: true, data: css };
-                } catch (error) {
-                    Logger.error('FONT_IPC', 'CSS generation failed', error);
-                    return { success: false, error: String(error) };
-                }
-            }
-        );
-
-        // 🔥 폰트 패밀리 목록 조회 (fonts/{dir} 구조 지원)
-        ipcMain.handle(
-            'font:get-font-families',
-            async (event: IpcMainInvokeEvent) => {
-                try {
-                    Logger.debug('FONT_IPC', 'Font families requested');
-                    const fontService = FontService.getInstance();
-                    const families = await fontService.getFontFamilies();
-                    
-                    Logger.info('FONT_IPC', 'Font families retrieved', { count: families.length });
-                    return { success: true, data: families };
-                } catch (error) {
-                    Logger.error('FONT_IPC', 'Get font families failed', error);
-                    return { success: false, error: String(error) };
-                }
-            }
-        );
-
-        // 🔥 폰트 패밀리 조회 (getFontFamily)
-        ipcMain.handle(
-            'font:get-font-family',
-            async (event: IpcMainInvokeEvent, familyName: string) => {
-                try {
-                    Logger.debug('FONT_IPC', 'Font family requested', { familyName });
-                    const fontService = FontService.getInstance();
-                    const fontInfo = await fontService.getFontInfo(familyName);
-                    
-                    if (fontInfo) {
-                        Logger.info('FONT_IPC', 'Font family found', { familyName, font: fontInfo });
-                        return { success: true, data: fontInfo };
-                    } else {
-                        Logger.warn('FONT_IPC', 'Font family not found', { familyName });
-                        return { success: false, error: `Font family '${familyName}' not found` };
-                    }
-                } catch (error) {
-                    Logger.error('FONT_IPC', 'Get font family failed', error);
-                    return { success: false, error: String(error) };
-                }
-            }
-        );
-
-        // 🔥 폰트 서비스 재로드 (reload)  
-        ipcMain.handle(
-            'font:reload',
-            async (event: IpcMainInvokeEvent) => {
-                try {
-                    Logger.debug('FONT_IPC', 'Font service reload requested');
-                    const fontService = FontService.getInstance();
-                    
-                    // 폰트 목록 다시 스캔하여 캐시 갱신
-                    const fonts = await fontService.getAvailableFonts();
-                    const status = fontService.getServiceStatus();
-                    
-                    Logger.info('FONT_IPC', 'Font service reloaded', { 
-                        fontsCount: fonts.length,
-                        status 
-                    });
-                    return { 
-                        success: true, 
-                        data: { 
-                            fonts, 
-                            status,
-                            reloadedAt: new Date().toISOString()
-                        } 
-                    };
-                } catch (error) {
-                    Logger.error('FONT_IPC', 'Font service reload failed', error);
-                    return { success: false, error: String(error) };
-                }
-            }
-        );
-
         // 🔥 폰트 서비스 상태 정보
         ipcMain.handle(
             'font:get-service-status',
@@ -250,6 +109,121 @@ export function setupFontIpcHandlers(): void {
                     return { success: true, data: status };
                 } catch (error) {
                     Logger.error('FONT_IPC', 'Get service status failed', error);
+                    return { success: false, error: String(error) };
+                }
+            }
+        );
+
+        // 🔥 CSS 생성 및 주입
+        ipcMain.handle(
+            'font:generate-css',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'CSS generation requested');
+                    const fontService = FontService.getInstance();
+                    const css = await fontService.generateCSS();
+                    
+                    if (css) {
+                        Logger.info('FONT_IPC', 'CSS generated', { fontsCount: (css.match(/@font-face/g) || []).length });
+                        return css;
+                    } else {
+                        Logger.warn('FONT_IPC', 'CSS generation returned empty string');
+                        return '';
+                    }
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'CSS generation failed', error);
+                    return '';
+                }
+            }
+        );
+
+        // 🔥 폰트 패밀리 목록 가져오기 (preload에서 요구)
+        ipcMain.handle(
+            'font:get-font-families',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'Font families requested');
+                    const fontService = FontService.getInstance();
+                    const families = await fontService.getFontFamilies();
+                    Logger.info('FONT_IPC', 'Font families retrieved', { count: families.length });
+                    return families;
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'Get font families failed', error);
+                    return [];
+                }
+            }
+        );
+
+        // 🔥 정적 폰트 목록 가져오기 (preload에서 요구)
+        ipcMain.handle(
+            'font:get-static-fonts',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'Static fonts requested');
+                    const fontService = FontService.getInstance();
+                    const fonts = await fontService.getAvailableFonts();
+                    Logger.info('FONT_IPC', 'Static fonts retrieved', { count: fonts.length });
+                    return fonts;
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'Get static fonts failed', error);
+                    return [];
+                }
+            }
+        );
+
+        // 🔥 특정 폰트 패밀리 가져오기 (preload에서 요구)
+        ipcMain.handle(
+            'font:get-font-family',
+            async (event: IpcMainInvokeEvent, familyName: string) => {
+                try {
+                    Logger.debug('FONT_IPC', 'Font family requested', { familyName });
+                    const fontService = FontService.getInstance();
+                    const families = await fontService.getFontFamilies();
+                    const family = families.find(f => f.name === familyName);
+                    
+                    if (family) {
+                        Logger.info('FONT_IPC', 'Font family found', { familyName, fontCount: family.fonts.length });
+                        return { success: true, data: family };
+                    } else {
+                        Logger.warn('FONT_IPC', 'Font family not found', { familyName });
+                        return { success: false, error: 'Font family not found' };
+                    }
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'Get font family failed', error);
+                    return { success: false, error: String(error) };
+                }
+            }
+        );
+
+        // 🔥 폰트 재로드 (preload에서 요구)
+        ipcMain.handle(
+            'font:reload',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'Font reload requested');
+                    const fontService = FontService.getInstance();
+                    // FontService는 매번 파일시스템을 스캔하므로 별도 재로드 불필요
+                    const fonts = await fontService.getAvailableFonts();
+                    Logger.info('FONT_IPC', 'Font reload completed', { count: fonts.length });
+                    return { success: true, count: fonts.length };
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'Font reload failed', error);
+                    return { success: false, error: String(error) };
+                }
+            }
+        );
+
+        // 🔥 폰트 캐시 클리어 (preload에서 요구)
+        ipcMain.handle(
+            'font:clear-cache',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'Font cache clear requested');
+                    // FontService는 현재 인메모리 캐시를 사용하지 않으므로 성공 반환
+                    Logger.info('FONT_IPC', 'Font cache cleared');
+                    return { success: true };
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'Font cache clear failed', error);
                     return { success: false, error: String(error) };
                 }
             }
@@ -270,13 +244,14 @@ export function cleanupFontIpcHandlers(): void {
             'font:initialize',
             'font:get-available-fonts',
             'font:get-fonts-by-category',
-            'font:get-font-families',
             'font:get-font-info',
-            'font:get-static-fonts',
+            'font:get-service-status',
             'font:generate-css',
+            'font:get-font-families',
+            'font:get-static-fonts',
             'font:get-font-family',
             'font:reload',
-            'font:get-service-status'
+            'font:clear-cache'
         ];
 
         handlers.forEach(handler => {

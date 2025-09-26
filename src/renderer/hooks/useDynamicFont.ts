@@ -87,18 +87,27 @@ export function useDynamicFont(): UseDynamicFontResult {
             const fontFamilies = fontFamiliesResponse?.success ? fontFamiliesResponse.data : [];
             const staticFonts = Array.isArray(staticFontsResponse) ? staticFontsResponse : (staticFontsResponse?.data || []);
 
-            // 🔥 FontFamily를 UI 옵션으로 변환 (안전한 변환)
-            const dynamicFonts = fontFamilies.flatMap((family: any) => {
+            // 🔥 FontFamily를 UI 옵션으로 변환 (안전한 변환 + 고유 키 생성)
+            const dynamicFonts = fontFamilies.flatMap((family: any, familyIndex: number) => {
                 if (!family || !Array.isArray(family.fonts)) {
                     Logger.warn('DYNAMIC_FONT', 'Invalid family or fonts', { family });
                     return [];
                 }
                 
-                return family.fonts.map((font: any) => ({
-                    value: font?.name || 'unknown',
-                    label: `${family?.displayName || family?.name || 'Unknown'} (${font?.style || 'Regular'} ${font?.weight || '400'})`,
-                    category: family?.category || 'other'
-                }));
+                return family.fonts.map((font: any, fontIndex: number) => {
+                    // 🔥 실제 폰트명 우선 사용, 없으면 고유한 value 생성
+                    const familyName = family?.name || family?.displayName || 'unknown';
+                    const style = font?.style || 'Regular';
+                    const weight = font?.weight || '400';
+                    const actualFontName = font?.actualName;
+                    const uniqueValue = actualFontName || font?.name || `${familyName}-${style}-${weight}-${familyIndex}-${fontIndex}`;
+                    
+                    return {
+                        value: uniqueValue,
+                        label: `${actualFontName || family?.displayName || family?.name || 'Unknown'} (${style} ${weight})`,
+                        category: family?.category || 'other'
+                    };
+                });
             });
 
             const allFonts = [

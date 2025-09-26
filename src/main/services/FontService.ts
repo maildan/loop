@@ -10,6 +10,7 @@ import { Logger } from '../../shared/logger';
 
 export interface FontFile {
   name: string;
+  actualName?: string; // 🔥 실제 폰트명 (파일명에서 변환된)
   path: string;
   category: string;
   size: number;
@@ -45,18 +46,22 @@ export class FontService {
     let fontsPath: string;
     
     try {
-      // 먼저 빌드된 폰트 경로 확인 (개발 서버 테스트용)
       const builtFontsPath = resolve(process.cwd(), 'out', 'renderer', 'fonts');
       const publicFontsPath = resolve(process.cwd(), 'public', 'fonts');
       
-      if (existsSync(builtFontsPath)) {
-        // 빌드된 폰트 경로가 있으면 우선 사용
+      // 개발 환경 감지: NODE_ENV 또는 개발 서버 실행 여부 확인
+      const isDevelopment = process.env.NODE_ENV === 'development' || 
+                           process.env.VITE_DEV_SERVER_URL || 
+                           !app.isPackaged;
+      
+      if (isDevelopment && existsSync(publicFontsPath)) {
+        // 개발 환경에서는 public 폰트 경로를 우선 사용
+        fontsPath = publicFontsPath;
+        console.log('🔥 Development: Using public fonts path:', publicFontsPath);
+      } else if (existsSync(builtFontsPath)) {
+        // 빌드된 폰트 경로 사용
         fontsPath = builtFontsPath;
         console.log('Using built fonts path:', builtFontsPath);
-      } else if (existsSync(publicFontsPath)) {
-        // 개발 환경에서 public 폰트 경로 사용
-        fontsPath = publicFontsPath;
-        console.log('Using public fonts path:', publicFontsPath);
       } else {
         // 프로덕션 패키지 경로
         fontsPath = resolve(process.resourcesPath, 'app', 'out', 'renderer', 'fonts');
@@ -67,13 +72,20 @@ export class FontService {
         throw new Error('resolve returned undefined');
       }
     } catch (error) {
-      // Fallback 경로 사용
-      fontsPath = join(process.cwd(), 'public', 'fonts');
+      // Fallback 경로 사용 - 개발 환경에서는 public 우선
+      const isDevelopment = process.env.NODE_ENV === 'development' || 
+                           process.env.VITE_DEV_SERVER_URL || 
+                           !app.isPackaged;
+      
+      fontsPath = isDevelopment ? 
+        join(process.cwd(), 'public', 'fonts') : 
+        join(process.cwd(), 'out', 'renderer', 'fonts');
       
       if (!fontsPath) {
         // 최후의 수단
         fontsPath = `${process.cwd()}/public/fonts`;
       }
+      console.log('🚨 Fallback fonts path:', fontsPath);
     }
     
     this.fontsPath = fontsPath;
@@ -263,10 +275,11 @@ export class FontService {
       const category = pathParts.length > 1 ? pathParts[0] : 'default';
 
       // 🔥 파일명에서 weight와 style 추출 시도
-      const { weight, style } = this.extractFontProperties(fileName);
+      const { weight, style, actualFontName } = this.extractFontProperties(fileName);
 
       return {
         name: fileName,
+        actualName: actualFontName,  // 🔥 실제 폰트명 추가
         path: filePath,
         size: stats.size,
         category: this.sanitizeCategory(category || 'default'),
@@ -284,9 +297,9 @@ export class FontService {
   }
 
   /**
-   * 🔥 폰트 파일명에서 weight와 style 추출
+   * 🔥 폰트 파일명에서 weight, style, 실제 폰트명 추출
    */
-  private extractFontProperties(fileName: string): { weight: string; style: string } {
+  private extractFontProperties(fileName: string): { weight: string; style: string; actualFontName: string } {
     const name = fileName.toLowerCase().replace(/\.(ttf|otf|woff|woff2)$/i, '');
     
     // Weight 패턴 매칭
@@ -334,7 +347,20 @@ export class FontService {
       }
     }
 
-    return { weight, style };
+    // 🔥 스마트 폰트명 생성 (카멜케이스 분리 + 포맷팅)
+    const baseName = fileName.replace(/\.(ttf|otf|woff|woff2)$/i, '');
+    const actualFontName = baseName
+      .replace(/_/g, ' ')  // 언더스코어를 공백으로
+      .replace(/-/g, ' ')  // 하이픈을 공백으로
+      // 🔥 카멜케이스 분리: NanumGothicBold → Nanum Gothic Bold
+      .replace(/([a-z])([A-Z])/g, '$1 $2')
+      // 🔥 연속된 대문자 처리: HTMLParser → HTML Parser  
+      .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')
+      .replace(/\b\w/g, (l: string) => l.toUpperCase())  // 각 단어의 첫 글자 대문자화
+      .replace(/\s+/g, ' ')  // 연속 공백 제거
+      .trim();
+
+    return { weight, style, actualFontName };
   }
 
   /**
@@ -529,5 +555,87 @@ export class FontService {
       fontsPathExists: existsSync(this.fontsPath),
       allowedExtensions: [...this.allowedExtensions]
     };
+  }
+
+  /**
+   * 모든 폰트에 대한 @font-face CSS 규칙을 생성합니다
+   * @returns 생성된 CSS 문자열
+   */
+  public async generateCSS(): Promise<string> {
+    try {
+      const fonts = await this.getAvailableFonts();
+      
+      if (!fonts || fonts.length === 0) {
+        Logger.warn('FONT_SERVICE', 'No fonts found for CSS generation');
+        return '';
+      }
+
+      const cssRules: string[] = [];
+      
+      for (const font of fonts) {
+        // 상대 경로 생성 (fonts 폴더 기준)
+        const fontPath = font.path;
+        const fontsPath = this.fontsPath;
+        
+        // fontsPath에서 상대 경로 계산
+        let relativePath = '';
+        if (fontPath.startsWith(fontsPath)) {
+          relativePath = 'fonts/' + fontPath.substring(fontsPath.length + 1);
+        } else {
+          // Fallback: 파일명만 사용
+          relativePath = 'fonts/' + basename(fontPath);
+        }
+        
+        // Windows 경로 구분자 정규화
+        relativePath = relativePath.replace(/\\/g, '/');
+
+        // 폰트 format 결정
+        const extension = extname(font.path).toLowerCase();
+        let format = '';
+        switch (extension) {
+          case '.otf':
+            format = 'opentype';
+            break;
+          case '.ttf':
+            format = 'truetype';
+            break;
+          case '.woff':
+            format = 'woff';
+            break;
+          case '.woff2':
+            format = 'woff2';
+            break;
+          default:
+            format = 'opentype';
+        }
+
+        // actualName 또는 fallback 사용
+        const fontFamily = font.actualName || font.name.replace(/\.[^/.]+$/, '');
+        
+        // @font-face 규칙 생성
+        const fontFace = `@font-face {
+  font-family: '${fontFamily}';
+  src: url('./${relativePath}') format('${format}');
+  font-weight: ${font.weight || 400};
+  font-style: ${font.style || 'normal'};
+  font-display: swap;
+}`;
+
+        cssRules.push(fontFace);
+      }
+
+      const generatedCSS = cssRules.join('\n\n');
+      
+      Logger.info('FONT_SERVICE', 'CSS generation completed', {
+        totalFonts: fonts.length,
+        cssLength: generatedCSS.length
+      });
+
+      return generatedCSS;
+
+    } catch (error) {
+      Logger.error('FONT_SERVICE', 'CSS generation failed', error);
+      return '';
+    }
   }
 }

@@ -251,8 +251,8 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
 
                     return (
                       <optgroup key={category} label={categoryLabels[category] || category}>
-                        {categoryFonts.map(font => (
-                          <option key={font.value} value={font.value}>
+                        {categoryFonts.map((font, fontIndex) => (
+                          <option key={`${category}-${font.value}-${fontIndex}`} value={font.value}>
                             {font.label}
                           </option>
                         ))}
