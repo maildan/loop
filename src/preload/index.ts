@@ -174,6 +174,7 @@ const electronAPI: ElectronAPI = {
     getAvailableFonts: () => ipcRenderer.invoke('font:get-available-fonts'),
     getFontFamilies: () => ipcRenderer.invoke('font:get-font-families'),
     generateCSS: () => ipcRenderer.invoke('font:generate-css'),
+    injectCSS: () => ipcRenderer.invoke('font:inject-css'),
     getFontFamily: (familyName: string) => ipcRenderer.invoke('font:get-font-family', familyName),
     reload: () => ipcRenderer.invoke('font:reload'),
     getStaticFonts: () => ipcRenderer.invoke('font:get-static-fonts'),

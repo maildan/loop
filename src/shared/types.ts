@@ -316,6 +316,7 @@ export interface ElectronAPI {
     getAvailableFonts: () => Promise<Array<{ value: string; label: string; category: string }>>;
     getFontFamilies: () => Promise<{ success: boolean; data: Array<{ name: string; displayName: string; category: string; fonts: any[] }> }>;
     generateCSS: () => Promise<string>;
+    injectCSS: () => Promise<{ success: boolean; cssKey?: string; error?: string }>;
     getFontFamily: (familyName: string) => Promise<{ name: string; displayName: string; category: string; variants: any[]; cssFamily: string } | null>;
     reload: () => Promise<{ success: boolean; error?: string }>;
     getStaticFonts: () => Promise<Array<{ value: string; label: string; category: string }>>;

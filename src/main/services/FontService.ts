@@ -638,4 +638,35 @@ export class FontService {
       return '';
     }
   }
+
+  /**
+   * CSS를 생성하고 지정된 webContents에 주입합니다
+   * @param webContents 주입할 webContents 인스턴스
+   * @returns 주입된 CSS key (제거 시 사용)
+   */
+  public async generateAndInjectCSS(webContents: Electron.WebContents): Promise<string | null> {
+    try {
+      const css = await this.generateCSS();
+      
+      if (!css) {
+        Logger.warn('FONT_SERVICE', 'No CSS to inject - empty CSS generated');
+        return null;
+      }
+
+      // webContents에 CSS 주입
+      const cssKey = await webContents.insertCSS(css, { cssOrigin: 'author' });
+      
+      Logger.info('FONT_SERVICE', 'CSS injected successfully', {
+        cssKey,
+        cssLength: css.length,
+        fontsCount: (css.match(/@font-face/g) || []).length
+      });
+
+      return cssKey;
+
+    } catch (error) {
+      Logger.error('FONT_SERVICE', 'CSS injection failed', error);
+      return null;
+    }
+  }
 }

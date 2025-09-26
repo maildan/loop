@@ -17,9 +17,25 @@ export function useDynamicFont(): UseDynamicFontResult {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    // 🔥 폰트 CSS 주입
+    // 🔥 폰트 CSS 주입 - webContents 우선, DOM 폴백
     const injectFontCSS = useCallback(async () => {
         try {
+            // 🔥 1차 시도: webContents.insertCSS 사용
+            const result = await (window as any).electronAPI?.font?.injectCSS?.();
+            
+            if (result?.success) {
+                Logger.info('DYNAMIC_FONT', '✅ webContents를 통한 폰트 CSS 주입 성공', {
+                    cssKey: result.cssKey,
+                    method: 'webContents-injection'
+                });
+                return;
+            }
+
+            // 🔥 2차 시도: 폴백 DOM 방식
+            Logger.warn('DYNAMIC_FONT', '⚠️ webContents 주입 실패, DOM 폴백 시도', {
+                error: result?.error
+            });
+
             const css = await (window as any).electronAPI?.font?.generateCSS?.();
             if (css) {
                 // 기존 동적 폰트 스타일 제거
@@ -61,10 +77,13 @@ export function useDynamicFont(): UseDynamicFontResult {
                 style.textContent = normalizedCSS;
                 document.head.appendChild(style);
 
-                Logger.info('DYNAMIC_FONT', '정규화된 폰트 CSS 주입 완료', { cssLength: normalizedCSS.length });
+                Logger.info('DYNAMIC_FONT', '✅ DOM 폴백을 통한 폰트 CSS 주입 완료', { 
+                    cssLength: normalizedCSS.length,
+                    method: 'DOM-fallback'
+                });
             }
         } catch (e) {
-            Logger.warn('DYNAMIC_FONT', '폰트 CSS 주입 실패', e);
+            Logger.error('DYNAMIC_FONT', '❌ 모든 폰트 CSS 주입 방식 실패', e);
         }
     }, []);
 
@@ -87,12 +106,37 @@ export function useDynamicFont(): UseDynamicFontResult {
             const fontFamilies = fontFamiliesResponse?.success ? fontFamiliesResponse.data : [];
             const staticFonts = Array.isArray(staticFontsResponse) ? staticFontsResponse : (staticFontsResponse?.data || []);
 
+            // 🔥 디버깅: 전체 응답 데이터 구조 로깅
+            Logger.debug('DYNAMIC_FONT', 'IPC 응답 데이터 분석', {
+                fontFamiliesResponse: {
+                    success: fontFamiliesResponse?.success,
+                    dataType: Array.isArray(fontFamiliesResponse?.data) ? 'array' : typeof fontFamiliesResponse?.data,
+                    dataLength: fontFamiliesResponse?.data?.length,
+                    sampleData: fontFamiliesResponse?.data?.[0]
+                },
+                staticFontsResponse: {
+                    type: Array.isArray(staticFontsResponse) ? 'array' : typeof staticFontsResponse,
+                    length: Array.isArray(staticFontsResponse) ? staticFontsResponse.length : staticFontsResponse?.data?.length,
+                    sampleStatic: Array.isArray(staticFontsResponse) ? staticFontsResponse[0] : staticFontsResponse?.data?.[0]
+                }
+            });
+
             // 🔥 FontFamily를 UI 옵션으로 변환 (안전한 변환 + 고유 키 생성)
             const dynamicFonts = fontFamilies.flatMap((family: any, familyIndex: number) => {
                 if (!family || !Array.isArray(family.fonts)) {
                     Logger.warn('DYNAMIC_FONT', 'Invalid family or fonts', { family });
                     return [];
                 }
+                
+                // 🔥 디버깅: 실제 family 데이터 구조 로깅
+                Logger.debug('DYNAMIC_FONT', 'FontFamily 구조 분석', {
+                    familyIndex,
+                    name: family?.name,
+                    displayName: family?.displayName,
+                    category: family?.category,
+                    fontsCount: family?.fonts?.length,
+                    sampleFont: family?.fonts?.[0]
+                });
                 
                 return family.fonts.map((font: any, fontIndex: number) => {
                     // 🔥 실제 폰트명 우선 사용, 없으면 고유한 value 생성
@@ -101,6 +145,21 @@ export function useDynamicFont(): UseDynamicFontResult {
                     const weight = font?.weight || '400';
                     const actualFontName = font?.actualName;
                     const uniqueValue = actualFontName || font?.name || `${familyName}-${style}-${weight}-${familyIndex}-${fontIndex}`;
+                    
+                    // 🔥 디버깅: 개별 font 데이터 구조 로깅
+                    Logger.debug('DYNAMIC_FONT', 'Font 구조 분석', {
+                        familyIndex,
+                        fontIndex,
+                        font: {
+                            name: font?.name,
+                            actualName: font?.actualName,
+                            style: font?.style,
+                            weight: font?.weight,
+                            path: font?.path
+                        },
+                        generatedValue: uniqueValue,
+                        displayLabel: `${actualFontName || family?.displayName || family?.name || 'Unknown'} (${style} ${weight})`
+                    });
                     
                     return {
                         value: uniqueValue,
@@ -154,53 +213,71 @@ export function useDynamicFont(): UseDynamicFontResult {
         })();
     }, [loadAvailableFonts]);
 
-    // 🔥 폰트 적용 - 기가차드 강화버전 + 사이즈 정규화
-    const setFont = useCallback((family: string) => {
+    // 🔥 폴백 DOM 폰트 주입 방식 (기존 방식)
+    const fallbackDOMFontInjection = useCallback(async () => {
         try {
-            // 🔥 CSS 변수와 body 동시 적용으로 깜빡임 방지
+            // 기존 CSS 재생성 및 주입
+            const css = await (window as any).electronAPI?.font?.generateCSS?.();
+            if (css) {
+                // 기존 동적 폰트 스타일 제거
+                const existingStyle = document.getElementById('dynamic-fonts');
+                if (existingStyle) {
+                    existingStyle.remove();
+                }
+
+                // 새 폰트 스타일 추가
+                const style = document.createElement('style');
+                style.id = 'dynamic-fonts';
+                style.textContent = css;
+                document.head.appendChild(style);
+
+                Logger.info('DYNAMIC_FONT', '폴백 DOM CSS 주입 완료', { cssLength: css.length });
+            }
+        } catch (error) {
+            Logger.error('DYNAMIC_FONT', '폴백 DOM CSS 주입 실패', error);
+        }
+    }, []);
+
+    // 🔥 폰트 적용 - webContents CSS 주입 방식
+    const setFont = useCallback(async (family: string) => {
+        try {
+            // 🔥 1. CSS 변수 즉시 적용 (UI 반응성)
             document.documentElement.style.setProperty('--app-font-family', family);
             document.body.style.fontFamily = family;
 
-            // 🔥 폰트 정규화 스타일 적용
-            const normalizeStyle = `
-                font-size-adjust: 0.5 !important;
-                line-height: 1.6 !important;
-                vertical-align: baseline !important;
-            `;
-
-            // ✅ CSS variables로 대체 (성능 최적화: DOM 순회 제거)
-            document.documentElement.style.setProperty('--dynamic-font-family', family);
-            
-            // 특정 텍스트 입력 요소들만 직접 적용 (성능 최적화)
-            const targetSelectors = [
-                'textarea',
-                'input[type="text"]',
-                '.text-editor',
-                '.idea-content',
-                '.synopsis-content'
-            ];
-            
-            targetSelectors.forEach(selector => {
-                const elements = document.querySelectorAll(selector);
-                elements.forEach((element) => {
-                    if (element instanceof HTMLElement) {
-                        element.style.fontFamily = family;
-                        element.style.fontSizeAdjust = '0.5';
-                        element.style.lineHeight = '1.6';
-                        element.style.verticalAlign = 'baseline';
-                    }
-                });
-            });
+            // 🔥 2. webContents를 통한 CSS 주입으로 전체 폰트 정의 새로고침
+            try {
+                const result = await (window as any).electronAPI?.font?.injectCSS?.();
+                
+                if (result?.success) {
+                    Logger.info('DYNAMIC_FONT', '✅ webContents CSS 주입 성공', {
+                        family,
+                        cssKey: result.cssKey,
+                        method: 'webContents-injection'
+                    });
+                } else {
+                    Logger.warn('DYNAMIC_FONT', '⚠️ webContents CSS 주입 실패, 폴백 처리', {
+                        family,
+                        error: result?.error
+                    });
+                    // 폴백: 기존 DOM 방식
+                    await fallbackDOMFontInjection();
+                }
+            } catch (injectionError) {
+                Logger.error('DYNAMIC_FONT', '❌ CSS 주입 API 호출 실패, 폴백 처리', injectionError);
+                // 폴백: 기존 DOM 방식
+                await fallbackDOMFontInjection();
+            }
 
             setCurrentFont(family);
             Logger.info('DYNAMIC_FONT', '✅ CSS 변수 기반 폰트 적용 완료 (성능 최적화)', {
                 family,
-                method: 'CSS-variables + targeted-elements'
+                method: 'webContents-injection + CSS-variables'
             });
         } catch (e) {
             Logger.error('DYNAMIC_FONT', '폰트 적용 실패', e);
         }
-    }, []);
+    }, [fallbackDOMFontInjection]);
 
     // 🔥 폰트 리로드
     const reload = useCallback(async () => {

@@ -137,6 +137,31 @@ export function setupFontIpcHandlers(): void {
             }
         );
 
+        // 🔥 CSS 생성 및 DOM 주입 (웹컨텐츠에 직접 주입)
+        ipcMain.handle(
+            'font:inject-css',
+            async (event: IpcMainInvokeEvent) => {
+                try {
+                    Logger.debug('FONT_IPC', 'CSS injection requested');
+                    const fontService = FontService.getInstance();
+                    const webContents = event.sender;
+                    
+                    const cssKey = await fontService.generateAndInjectCSS(webContents);
+                    
+                    if (cssKey) {
+                        Logger.info('FONT_IPC', 'CSS injected successfully', { cssKey });
+                        return { success: true, cssKey };
+                    } else {
+                        Logger.warn('FONT_IPC', 'CSS injection failed - no CSS key returned');
+                        return { success: false, error: 'CSS injection failed' };
+                    }
+                } catch (error) {
+                    Logger.error('FONT_IPC', 'CSS injection failed', error);
+                    return { success: false, error: String(error) };
+                }
+            }
+        );
+
         // 🔥 폰트 패밀리 목록 가져오기 (preload에서 요구)
         ipcMain.handle(
             'font:get-font-families',
@@ -247,6 +272,7 @@ export function cleanupFontIpcHandlers(): void {
             'font:get-font-info',
             'font:get-service-status',
             'font:generate-css',
+            'font:inject-css',
             'font:get-font-families',
             'font:get-static-fonts',
             'font:get-font-family',

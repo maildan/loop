@@ -104,26 +104,22 @@ export function useFontManager() {
         }
     }, []);
 
-    // 🔥 폰트 CSS 생성 및 주입
+    // 🔥 폰트 CSS 생성 및 주입 (webContents 직접 주입 사용)
     const injectFontCSS = useCallback(async () => {
         try {
-            Logger.debug('FONT_HOOKS', 'Injecting font CSS');
+            Logger.debug('FONT_HOOKS', 'Injecting font CSS via webContents');
 
-            const css = await window.electronAPI.font.generateCSS();
+            const result = await window.electronAPI.font.injectCSS();
 
-            // 기존 동적 폰트 스타일 제거
-            const existingStyle = document.getElementById('dynamic-fonts');
-            if (existingStyle) {
-                existingStyle.remove();
+            if (result.success) {
+                Logger.info('FONT_HOOKS', 'Font CSS injected successfully via webContents', {
+                    cssKey: result.cssKey
+                });
+            } else {
+                Logger.error('FONT_HOOKS', 'Font CSS injection failed', {
+                    error: result.error
+                });
             }
-
-            // 새로운 스타일 추가
-            const style = document.createElement('style');
-            style.id = 'dynamic-fonts';
-            style.textContent = css;
-            document.head.appendChild(style);
-
-            Logger.info('FONT_HOOKS', 'Font CSS injected successfully');
 
         } catch (err) {
             Logger.error('FONT_HOOKS', 'Failed to inject font CSS', err);
@@ -291,25 +287,21 @@ export function useCurrentFont() {
             // 🔥 동적 폰트인 경우 - CSS 재생성 후 적용
             Logger.debug('FONT_HOOKS', '🔄 Regenerating CSS for dynamic font', { fontValue });
 
-            // 1. CSS 재생성 및 주입
+            // 1. CSS 재생성 및 주입 (webContents 직접 주입 사용)
             try {
-                const css = await window.electronAPI.font.generateCSS();
+                const result = await window.electronAPI.font.injectCSS();
 
-                // 기존 동적 폰트 스타일 제거
-                const existingStyle = document.getElementById('dynamic-fonts');
-                if (existingStyle) {
-                    existingStyle.remove();
+                if (result.success) {
+                    Logger.info('FONT_HOOKS', '✅ Dynamic CSS injected via webContents', {
+                        cssKey: result.cssKey
+                    });
+                } else {
+                    Logger.error('FONT_HOOKS', '❌ Dynamic CSS injection failed', {
+                        error: result.error
+                    });
                 }
-
-                // 새로운 스타일 추가
-                const style = document.createElement('style');
-                style.id = 'dynamic-fonts';
-                style.textContent = css;
-                document.head.appendChild(style);
-
-                Logger.info('FONT_HOOKS', '✅ Dynamic CSS regenerated and injected');
             } catch (cssError) {
-                Logger.error('FONT_HOOKS', '❌ Failed to regenerate CSS', cssError);
+                Logger.error('FONT_HOOKS', '❌ Failed to inject CSS via webContents', cssError);
             }
 
             // 2. 폰트 패밀리 정보 가져오기
