@@ -308,6 +308,33 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // 🔥 폰트명 추출: CSS family 문자열에서 첫 번째 폰트명만 추출
     const extractedFontName = normalizedFontId ? normalizedFontId.split(',')[0]?.trim().replace(/['"]/g, '') || normalizedFontId : '';
     
+    // 🔥 시스템 폰트 체크: FontLoader로 보내지 않고 즉시 성공 반환
+    const systemFonts = [
+      'SF Pro Display', 'SF Pro Text', 'SFPRODISPLAY', 'SFPROTEXT',
+      'SF Compact Display', 'SF Compact Text', 'SF Compact Rounded',
+      'Helvetica Neue', 'Apple SD Gothic Neo', 'Apple Color Emoji',
+      'Segoe UI', 'Segoe Print', 'Segoe Script', 'Times New Roman',
+      '-apple-system', 'BlinkMacSystemFont', 'system-ui',
+      'Arial', 'Helvetica', 'Calibri', 'Verdana', 'Georgia', 'Times',
+      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'sans-serif', 'serif', 'monospace', 'cursive', 'fantasy'
+    ];
+    
+    const isSystemFont = systemFonts.some(sysFont => 
+      extractedFontName.toLowerCase() === sysFont.toLowerCase() ||
+      fontId.toLowerCase().includes(sysFont.toLowerCase()) ||
+      sysFont.toLowerCase().includes(extractedFontName.toLowerCase())
+    );
+    
+    if (isSystemFont) {
+      Logger.info('FONT_PROVIDER', `시스템 폰트 감지됨, FontLoader 건너뜀: ${extractedFontName}`, {
+        originalId: fontId,
+        normalized: normalizedFontId
+      });
+      // 시스템 폰트는 CSS fallback으로만 처리하고 즉시 성공 반환
+      return true;
+    }
+    
     // 🔥 유연한 폰트 검색: ID, 이름으로 검색 (family 속성 제거)
     let fontMetadata = availableFonts.find(f => 
       f.id === extractedFontName || 

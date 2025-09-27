@@ -119,19 +119,33 @@ export class FontObserver {
   }
 
   /**
-   * 폰트 사전 로딩 (성능 최적화) - URL 생성 수정
+   * 웹 폰트 사전 로딩 (성능 최적화) - 시스템 폰트는 제외
    */
   static preloadFont(fontFamily: string): void {
-    // FontFace API를 사용한 사전 로딩
+    // 시스템 폰트는 사전로딩하지 않음 (CSS fallback으로 처리)
+    const systemFonts = [
+      'SF Pro Display', 'SF Pro Text', 'SFPRODISPLAY', 'SFPROTEXT',
+      '-apple-system', 'BlinkMacSystemFont', 'system-ui',
+      'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
+      'Arial', 'Helvetica', 'sans-serif', 'serif', 'monospace'
+    ];
+    
+    if (systemFonts.includes(fontFamily)) {
+      // 시스템 폰트는 즉시 로드됨으로 표시
+      this.loadedFonts.add(fontFamily);
+      return;
+    }
+
+    // 웹 폰트만 FontFace API로 실제 로딩
     if ('fonts' in document) {
-      // 폰트 이름을 안전한 파일 경로로 변환
       const safeFontName = fontFamily.replace(/[^a-zA-Z0-9-_]/g, '');
       const fontFace = new FontFace(fontFamily, `url('/fonts/${safeFontName}/${safeFontName}.woff2')`);
       fontFace.load().then(() => {
         document.fonts.add(fontFace);
         this.loadedFonts.add(fontFamily);
       }).catch(() => {
-        // 실패해도 무시 (선택적 최적화)
+        // 웹 폰트 로딩 실패 시에도 무시 (fallback으로 처리)
+        console.warn(`Failed to preload font: ${fontFamily}`);
       });
     }
   }

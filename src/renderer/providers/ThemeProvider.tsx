@@ -135,70 +135,21 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     }
   }, []);
 
-  // 🔥 Helper: DOM에 테마 속성 적용 (완전한 전파 보장)
+  // 🔥 Helper: DOM에 클래스 기반 테마 적용 (shadcn/ui 표준 - 최소화)
   const applyThemeToDOM = useCallback((resolved: Exclude<Theme, 'system'>) => {
     const root = document.documentElement;
-    const body = document.body;
-    const allThemes = ['light', 'dark', 'system', 'sepia', 'high-contrast', 'warm', 'cool', 'forest', 'midnight'];
+    const allThemes = ['light', 'dark', 'sepia', 'high-contrast', 'warm', 'cool', 'forest', 'midnight'];
     const baseScheme = AUTHOR_THEMES[resolved as keyof typeof AUTHOR_THEMES]?.baseScheme || resolved;
     
-    // 🔥 HTML 요소에 테마 적용 (최우선)
-    root.setAttribute('data-theme', resolved);
-    root.setAttribute('data-color-scheme', baseScheme);
-    root.style.setProperty('color-scheme', baseScheme);
+    // 🔥 shadcn/ui 표준: HTML root만 class 적용 (Body, #root 중복 제거)
     root.classList.remove(...allThemes);
     root.classList.add(resolved);
-
-    // 🔥 Body 요소에도 동일하게 적용 (이중 보장)
-    if (body) {
-      body.setAttribute('data-theme', resolved);
-      body.setAttribute('data-color-scheme', baseScheme);
-      body.style.setProperty('color-scheme', baseScheme);
-      body.classList.remove(...allThemes);
-      body.classList.add(resolved);
-    }
+    root.style.colorScheme = baseScheme; // setProperty 대신 직접 할당으로 성능 개선
     
-    // 🔥 #root 요소가 있다면 추가 적용 (React 앱 루트)
-    const appRoot = document.getElementById('root');
-    if (appRoot) {
-      appRoot.setAttribute('data-theme', resolved);
-      appRoot.setAttribute('data-color-scheme', baseScheme);
-      appRoot.classList.remove(...allThemes);
-      appRoot.classList.add(resolved);
-    }
-    
-    // 🔥 모든 주요 컨테이너에 테마 강제 적용
-    const containers = [
-      '.app-container',
-      '.main-content',
-      '.sidebar',
-      '.content-area',
-      '.prose',
-      '.editor-content',
-      'main',
-      'article',
-      'section'
-    ];
-    
-    containers.forEach(selector => {
-      const elements = document.querySelectorAll(selector);
-      elements.forEach(element => {
-        element.setAttribute('data-theme', resolved);
-        element.classList.remove(...allThemes);
-        element.classList.add(resolved);
-      });
-    });
-    
-    // 🔥 CSS 변수 강제 재적용 (중요!)
-    root.style.setProperty('--current-theme', resolved);
-    
-    Logger.debug('THEME_PROVIDER', 'Theme applied to DOM elements', {
+    Logger.debug('THEME_PROVIDER', 'Optimized theme applied to DOM', {
       resolved,
       baseScheme,
-      rootClasses: root.className,
-      bodyClasses: body?.className,
-      appRootExists: !!appRoot,
-      containersUpdated: containers.length
+      rootClasses: root.className
     });
   }, []);  // 🔥 Helper: 폰트 CSS 재적용
   const reapplyFontCSS = useCallback(async (theme: Theme, resolved: Exclude<Theme, 'system'>) => {

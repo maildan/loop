@@ -1,1160 +1,154 @@
 /**
- * 🔥 Variables Module - CSS 변수 시스템
- * Tailwind v3 호환 색상 시스템 + 작가 친화적 테마
+ * 🎨 CSS Variables - shadcn/ui 표준 기반 테마 시스템
+ * 
+ * 공식 문서 기반 OKLCH 색상 시스템
+ * 참고: https://ui.shadcn.com/docs/theming
  */
 
-/* 🔥 라이트 테마 - 기가차드 컬러 시스템 */
+/* ============================================
+ * 🔥 shadcn/ui 공식 기본 테마 (OKLCH)
+ * ============================================ */
+
 :root {
-  /* Tailwind 호환 shadcn/ui 색상 시스템 (대비 강화) */
-  --background: 0 0% 100%; /* 순수한 흰색 */
-  --foreground: 0 0% 0%; /* 순수한 검정색 */
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 0%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 0%;
-  --primary: 220 100% 50%; /* 밝고 선명한 블루 */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 95%;
-  --secondary-foreground: 0 0% 10%;
-  --muted: 210 40% 95%;
-  --muted-foreground: 215.4 16.3% 40%;
-  --accent: 210 40% 95%;
-  --accent-foreground: 0 0% 10%;
-  --destructive: 0 100% 50%; /* 선명한 빨강 */
-  --destructive-foreground: 0 0% 100%;
-  --border: 214.3 31.8% 85%;
-  --input: 214.3 31.8% 85%;
-  --ring: 220 100% 50%;
-  --radius: 0.5rem;
-
-  /* Chart Colors */
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
-
-  /* Sidebar Colors */
-  --sidebar-background: 0 0% 98%;
-  --sidebar-foreground: 240 5.3% 26.1%;
-  --sidebar-primary: 240 5.9% 10%;
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 240 4.8% 95.9%;
-  --sidebar-accent-foreground: 240 5.9% 10%;
-  --sidebar-border: 220 13% 91%;
-  --sidebar-ring: 217.2 91.2% 59.8%;
-
-  /* 🔥 작가 친화적 색상 시스템 - 라이트 모드 (가시성 최적화) */
-  --bg-primary: #ffffff; /* 순수한 흰색으로 명확한 대비 */
-  --bg-secondary: #f8fafc; /* 약간의 회색빛 */
-  --bg-elevated: #ffffff;
-  --bg-card: #ffffff;
-  --bg-hover: #f1f5f9;
-
-  /* 텍스트 - 극대화된 대비로 가시성 향상 */
-  --text-primary: #000000; /* 순수한 검정색 */
-  --text-secondary: #1e293b; /* 매우 진한 회색 */
-  --text-muted: #475569; /* 중간 회색 */
-  --text-inverse: #ffffff;
-
-  /* 강조색 - 차분한 블루 */
-  --accent-primary: #2563eb;
-  --accent-hover: #1d4ed8;
-  --accent-light: #dbeafe;
-  --accent-dark: #1e40af;
-
-  /* 경계선 - 부드러운 회색 */
-  --border-light: #e5e7eb;
-  --border-medium: #d1d5db;
-  --border-dark: #9ca3af;
-
-  /* 상태 색상 - 자연스러운 톤 */
-  --success: #059669;
-  --success-light: #d1fae5;
-  --warning: #d97706;
-  --warning-light: #fed7aa;
-  --error: #dc2626;
-  --error-light: #fee2e2;
-
-  /* 그림자 - 작가 친화적 depth */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  /* 기본 레이아웃 */
+  --radius: 0.625rem;
   
-  /* 🔥 작가 친화적 spacing 시스템 */
-  --space-0: 0;
-  --space-px: 1px;
-  --space-0-5: 0.125rem; /* 2px */
-  --space-1: 0.25rem;    /* 4px */
-  --space-1-5: 0.375rem; /* 6px */
-  --space-2: 0.5rem;     /* 8px */
-  --space-2-5: 0.625rem; /* 10px */
-  --space-3: 0.75rem;    /* 12px */
-  --space-3-5: 0.875rem; /* 14px */
-  --space-4: 1rem;       /* 16px */
-  --space-5: 1.25rem;    /* 20px */
-  --space-6: 1.5rem;     /* 24px */
-  --space-7: 1.75rem;    /* 28px */
-  --space-8: 2rem;       /* 32px */
-  --space-9: 2.25rem;    /* 36px */
-  --space-10: 2.5rem;    /* 40px */
-  --space-11: 2.75rem;   /* 44px */
-  --space-12: 3rem;      /* 48px */
-  --space-14: 3.5rem;    /* 56px */
-  --space-16: 4rem;      /* 64px */
-  --space-20: 5rem;      /* 80px */
-  --space-24: 6rem;      /* 96px */
-  --space-28: 7rem;      /* 112px */
-  --space-32: 8rem;      /* 128px */
+  /* 라이트 모드 색상 (shadcn/ui 공식) */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
   
-  /* 🔥 작가 친화적 크기 시스템 */
-  --size-xs: 20rem;      /* 320px */
-  --size-sm: 24rem;      /* 384px */
-  --size-md: 28rem;      /* 448px */
-  --size-lg: 32rem;      /* 512px */
-  --size-xl: 36rem;      /* 576px */
-  --size-2xl: 42rem;     /* 672px */
-  --size-3xl: 48rem;     /* 768px */
-  --size-4xl: 56rem;     /* 896px */
-  --size-5xl: 64rem;     /* 1024px */
-  --size-6xl: 72rem;     /* 1152px */
-  --size-7xl: 80rem;     /* 1280px */
+  /* 차트 색상 */
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
   
-  /* 🔥 Focus mode 관련 변수 */
-  --bg-focus: #fffef7;   /* 더 따뜻한 focus 배경 */
-  --focus-width: 65ch;   /* 이상적인 읽기 너비 */
-  --focus-line-height: 1.7; /* 편안한 줄간격 */
-  
-  /* 🔥 사이드바 크기 */
-  --sidebar-width: 280px;
-  --sidebar-width-collapsed: 64px;
-  --sidebar-transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  
-  /* 🔥 Interactive 요소 크기 */
-  --touch-target-min: 44px; /* WCAG 권장 최소 터치 영역 */
-  --button-height-sm: 32px;
-  --button-height-md: 40px;
-  --button-height-lg: 48px;
-  --button-height-xl: 56px;
-  
-  /* 🔥 Border radius 시스템 */
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
-  --radius-2xl: 16px;
-  --radius-3xl: 24px;
-  --radius-full: 9999px;
-  
-  /* 🔥 Typography 시스템 */
-    /* 🔥 동적 폰트 CSS 변수들 (FontProvider에서 설정) - 단일 변수로 통합 */
-  --writer-font-family: 'iA Writer Quattro', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-  --korean-font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
-  --latin-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  
-  /* Font sizes */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-  
-  /* Line heights */
-  --leading-none: 1;
-  --leading-tight: 1.25;
-  --leading-snug: 1.375;
-  --leading-normal: 1.5;
-  --leading-relaxed: 1.625;
-  --leading-loose: 2;
-  
-  /* 🔥 Slider 컴포넌트 변수 */
-  --slider-track: #e2e8f0;
-  --slider-thumb: #3b82f6;
-  --slider-thumb-hover: #2563eb;
-}
-
-/* 🔥 다크 테마 - 단순화된 선택자 (CSS specificity 최적화) */
-[data-theme="dark"] {
-  --background: 0 0% 0%; /* 순수한 검정색 */
-  --foreground: 0 0% 100%; /* 순수한 흰색 */
-  --card: 0 0% 5%;
-  --card-foreground: 0 0% 100%;
-  --popover: 0 0% 5%;
-  --popover-foreground: 0 0% 100%;
-  --primary: 220 100% 60%; /* 밝고 선명한 블루 */
-  --primary-foreground: 0 0% 0%;
-  --secondary: 217.2 32.6% 15%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 217.2 32.6% 15%;
-  --muted-foreground: 215 20.2% 70%;
-  --accent: 217.2 32.6% 15%;
-  --accent-foreground: 0 0% 100%;
-  --destructive: 0 100% 60%; /* 선명한 빨강 */
-  --destructive-foreground: 0 0% 100%;
-  --border: 217.2 32.6% 20%;
-  --input: 217.2 32.6% 20%;
-  --ring: 220 100% 60%;
-
-  /* Sidebar Dark Colors */
-  --sidebar-background: 240 5.9% 10%;
-  --sidebar-foreground: 240 4.8% 95.9%;
-  --sidebar-primary: 224.3 76.3% 94.1%;
-  --sidebar-primary-foreground: 240 5.9% 10%;
-  --sidebar-accent: 240 3.7% 15.9%;
-  --sidebar-accent-foreground: 240 4.8% 95.9%;
-  --sidebar-border: 240 3.7% 15.9%;
-  --sidebar-ring: 217.2 91.2% 59.8%;
-
-  /* 🔥 작가 친화적 다크 테마 색상 (가시성 최적화) */
-  --bg-primary: #000000; /* 순수한 검정색으로 명확한 대비 */
-  --bg-secondary: #0f172a; /* 매우 진한 회색 */
-  --bg-elevated: #1e293b;
-  --bg-card: #0f172a;
-  --bg-hover: #334155;
-
-  --text-primary: #ffffff; /* 순수한 흰색 */
-  --text-secondary: #f1f5f9; /* 매우 밝은 회색 */
-  --text-muted: #cbd5e1; /* 중간 밝기 회색 */
-  --text-inverse: #000000;
-
-  --accent-primary: #3b82f6;
-  --accent-hover: #2563eb;
-  --accent-light: #1e3a8a;
-  --accent-dark: #1d4ed8;
-
-  --border-light: #404040;
-  --border-medium: #525252;
-  --border-dark: #737373;
-
-  /* 다크 상태 색상 */
-  --success: #10b981;
-  --success-light: #064e3b;
-  --warning: #f59e0b;
-  --warning-light: #78350f;
-  --error: #ef4444;
-  --error-light: #7f1d1d;
-
-  /* 다크 그림자 */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-
-  /* 🔥 동일한 폰트 크기 변수들 */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
-
-  /* 🔥 다크 모드 폰트 설정 - 동적 변수 유지 */
-  --app-font-family: var(--dynamic-font-family, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif);
-  --app-font-size: var(--dynamic-font-size, 16px);
-  
-  /* 🔥 다크 모드 슬라이더 색상 */
-  --slider-track: #374151;
-  --slider-thumb: #60a5fa;
-  --slider-thumb-hover: #3b82f6;
-  
-  /* 🔥 다크 모드 색상 스킴 설정 */
-  color-scheme: dark;
-}
-
-/* 🔥 미디어 쿼리 지원 - 시스템 테마 자동 감지 (단순화된 선택자) */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    /* Tailwind 호환 다크 모드 색상 */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    
-    /* 작가 친화적 다크 색상 */
-    --bg-primary: #0f0f0f;
-    --bg-secondary: #1a1a1a;
-    --text-primary: #f5f5f5;
-    --text-secondary: #d4d4d4;
-    
-    /* 다크 모드 슬라이더 */
-    --slider-track: #374151;
-    --slider-thumb: #60a5fa;
-    --slider-thumb-hover: #3b82f6;
-    
-    color-scheme: dark;
-  }
-}
-
-/* 🔥 작가 전용 테마들 */
-
-/* Sepia Theme - 고전 양피지 ✨ */
-:root[data-theme='sepia'],
-html[data-theme='sepia'],
-body[data-theme='sepia'],
-[data-theme='sepia'] {
-  --background: 47 30% 90%;
-  --foreground: 30 8% 15%;
-  --bg-primary: #f4f0e6; /* 오래된 원고지 색 */
-  --bg-secondary: #ede4d3; /* 진한 양피지 */
-  --bg-elevated: #faf7f0; /* 밝은 양피지 */
-  --bg-card: #f8f4e8; /* 카드용 원고지 */
-  --bg-hover: #e8dcc7; /* 호버시 진한 원고지 */
-
-  --text-primary: #3d2f1e; /* 다크 브라운 (잉크색) */
-  --text-secondary: #5c4433; /* 미디움 브라운 */
-  --text-muted: #8b6f47; /* 연한 브라운 */
-  --text-inverse: #f4f0e6;
-  --text-accent: #b8860b; /* 다크 골든로드 (강조) */
-  --text-accent-hover: #cd853f; /* 페루 (호버) */
-
-  --accent-primary: #a0522d; /* 시에나 브라운 */
-  --accent-hover: #8b4513; /* 새들 브라운 */
-  --accent-light: #deb887; /* 버라이우드 */
-  --accent-dark: #654321; /* 다크 브라운 */
-
-  --border-primary: #c8b99c; /* 진한 원고지 테두리 */
-  --border-light: #ddd4c0;
-  --border-medium: #b8a082;
-  --border-dark: #9d8668;
-
-  /* 🔥 동일한 폰트 크기 변수들 */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
+  /* 사이드바 색상 */
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
 
   color-scheme: light;
 }
 
-/* High-contrast Theme - 검정/흰색 명료함 ⚫⚪ */
-:root[data-theme='high-contrast'],
-html[data-theme='high-contrast'],
-body[data-theme='high-contrast'],
-[data-theme='high-contrast'] {
-  --background: 0 0% 100%;
-  --foreground: 0 0% 0%;
-  --bg-primary: #ffffff; /* 순백색 */
-  --bg-secondary: #f8f8f8; /* 매우 연한 회색 */
-  --bg-elevated: #ffffff; /* 순백색 */
-  --bg-card: #ffffff; /* 순백색 */
-  --bg-hover: #f0f0f0; /* 호버시 연회색 */
-
-  --text-primary: #000000; /* 순흑색 */
-  --text-secondary: #1a1a1a; /* 거의 흑색 */
-  --text-muted: #404040; /* 진한 회색 */
-  --text-inverse: #ffffff; /* 흰색 */
-  --text-accent: #0066cc; /* 접근성 파란색 */
-  --text-accent-hover: #0052a3; /* 진한 파란색 */
-
-  --accent-primary: #0066cc; /* 고대비 파란색 */
-  --accent-hover: #0052a3; /* 더 진한 파란색 */
-  --accent-light: #3399ff; /* 밝은 파란색 */
-  --accent-dark: #003d7a; /* 매우 진한 파란색 */
-
-  --border-primary: #000000; /* 검은 테두리 */
-  --border-light: #333333; /* 진한 회색 테두리 */
-  --border-medium: #1a1a1a; /* 거의 검은 테두리 */
-  --border-dark: #000000; /* 검은 테두리 */
-
-  /* 🔥 동일한 폰트 크기 변수들 */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-
-  color-scheme: light;
-}
-
-/* Warm Theme - 붉은 벽돌 아늑함 🧱❤️ */
-:root[data-theme='warm'],
-html[data-theme='warm'],
-body[data-theme='warm'],
-[data-theme='warm'] {
-  --background: 25 20% 95%;
-  --foreground: 25 20% 10%;
-  --bg-primary: #fff0e6; /* 노을 하늘 */
-  --bg-secondary: #ffe0cc; /* 연한 오렌지 */
-  --bg-elevated: #fff8f0; /* 밝은 노을 */
-  --bg-card: #fff4e6; /* 카드용 노을색 */  
-  --bg-hover: #ffcc99; /* 호버시 진한 노을 */
-
-  --text-primary: #8b2500; /* 진한 적갈색 (석양) */
-  --text-secondary: #cc3300; /* 붉은색 */
-  --text-muted: #ff6633; /* 오렌지 */
-  --text-inverse: #fff0e6;
-  --text-accent: #ff4500; /* 오렌지 레드 (강조) */
-  --text-accent-hover: #ff6600; /* 밝은 오렌지 */
-
-  --accent-primary: #ff6600; /* 순수 오렌지 */
-  --accent-hover: #ff4500; /* 오렌지 레드 */
-  --accent-light: #ff9966; /* 라이트 오렌지 */
-  --accent-dark: #cc3300; /* 다크 레드 */
-
-  --border-primary: #ffcc99; /* 노을 테두리 */
-  --border-light: #ffe0cc;
-  --border-medium: #ffb366;
-  --border-dark: #ff9900;
-
-  /* 🔥 동일한 폰트 크기 변수들 */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-
-  color-scheme: light;
-}
-
-/* Cool Theme - 얼음 바다 차가움 🧊💙 */
-:root[data-theme='cool'],
-html[data-theme='cool'],
-body[data-theme='cool'],
-[data-theme='cool'] {
-  --background: 210 20% 95%;
-  --foreground: 210 20% 10%;
-  --bg-primary: #e6f7ff; /* 북극 바다 */
-  --bg-secondary: #ccf2ff; /* 연한 아이스 블루 */
-  --bg-elevated: #f0faff; /* 밝은 빙하 */
-  --bg-card: #ffffff; /* 순백 얼음 */
-  --bg-hover: #b3e5ff; /* 호버시 진한 아이스 */
-
-  --text-primary: #003d7a; /* 깊은 바다 색 */
-  --text-secondary: #0066cc; /* 오션 블루 */
-  --text-muted: #3399ff; /* 스카이 블루 */
-  --text-inverse: #e6f7ff;
-  --text-accent: #0099ff; /* 시안 블루 (강조) */
-  --text-accent-hover: #0066cc; /* 딥 블루 */
-
-  --accent-primary: #0099ff; /* 순수 시안 */
-  --accent-hover: #0066cc; /* 오션 블루 */
-  --accent-light: #66ccff; /* 라이트 시안 */
-  --accent-dark: #003d7a; /* 네이비 */
-
-  --border-primary: #99ddff; /* 아이스 블루 테두리 */
-  --border-light: #ccf2ff;
-  --border-medium: #66ccff;
-  --border-dark: #3399ff;
-
-  /* 🔥 동일한 폰트 크기 변수들 */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-
-  color-scheme: light;
-}
-
-/* Forest Theme - 깊은 정글 신비로움 🌲💚 */
-:root[data-theme='forest'],
-html[data-theme='forest'],
-body[data-theme='forest'],
-[data-theme='forest'] {
-  --background: 120 10% 95%;
-  --foreground: 120 20% 15%;
-  --bg-primary: #e8f5e8; /* 정글 안개 */
-  --bg-secondary: #d9f2d9; /* 연한 이끼 */
-  --bg-elevated: #f0f8f0; /* 밝은 잎사귀 */
-  --bg-card: #ffffff; /* 순백 햇살 */
-  --bg-hover: #cceecc; /* 호버시 진한 이끼 */
-
-  --text-primary: #1b4d1b; /* 깊은 숲 그림자 */
-  --text-secondary: #2d6b2d; /* 숲속 그린 */
-  --text-muted: #4d8f4d; /* 밝은 잎새 */
-  --text-inverse: #e8f5e8;
-  --text-accent: #2e7d32; /* 포레스트 그린 (강조) */
-  --text-accent-hover: #1b5e20; /* 다크 포레스트 */
-
-  --accent-primary: #2e7d32; /* 순수 포레스트 */
-  --accent-hover: #1b5e20; /* 다크 포레스트 */
-  --accent-light: #66bb6a; /* 라이트 그린 */
-  --accent-dark: #0d4f0d; /* 진한 숲 */
-
-  --border-primary: #81c784; /* 자연 그린 테두리 */
-  --border-light: #c8e6c8;
-  --border-medium: #66bb6a;
-  --border-dark: #4caf50;
-
-  /* 🔥 동일한 폰트 크기 변수들 */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-
-  color-scheme: light;
-}
-
-/* Midnight Theme - 우주/심연 🌌⭐ */
-:root[data-theme='midnight'],
-html[data-theme='midnight'],
-body[data-theme='midnight'],
-[data-theme='midnight'] {
-  --background: 220 20% 5%;
-  --foreground: 220 20% 95%;
-  --bg-primary: #0a0a15; /* 깊은 우주 */
-  --bg-secondary: #15152a; /* 어두운 성운 */
-  --bg-elevated: #1a1a30; /* 밝은 우주 */
-  --bg-card: #0f0f20; /* 카드용 우주색 */
-  --bg-hover: #25253f; /* 호버시 성운 */
-
-  --text-primary: #e6e6ff; /* 별빛 */
-  --text-secondary: #ccccf0; /* 달빛 */
-  --text-muted: #9999cc; /* 성운빛 */
-  --text-inverse: #0a0a15;
-  --text-accent: #9d4edd; /* 우주 보라 (강조) */
-  --text-accent-hover: #7209b7; /* 진한 우주 보라 */
-
-  --accent-primary: #9d4edd; /* 순수 우주 보라 */
-  --accent-hover: #7209b7; /* 다크 보라 */
-  --accent-light: #c77dff; /* 라이트 보라 */
-  --accent-dark: #5a189a; /* 매우 진한 보라 */
-
-  --border-primary: #6a4c93; /* 우주 보라 테두리 */
-  --border-light: #483d8b; /* 슬레이트 블루 */
-  --border-medium: #5a4fcf; /* 미디움 보라 */
-  --border-dark: #4c2a8a; /* 다크 보라 */
-
-  /* 🔥 동일한 폰트 크기 변수들 */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
+.dark {
+  /* 다크 모드 색상 (shadcn/ui 공식) */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.269 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.371 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  
+  /* 차트 색상 - 다크 모드 */
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  
+  /* 사이드바 색상 - 다크 모드 */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.439 0 0);
 
   color-scheme: dark;
 }
 
-/* 🔥 깜빡임 방지: 테마 전환이 즉시 적용되도록 설정 */
-html {
-  /* 🔥 중요: color-scheme 설정으로 브라우저 기본 동작 제어 */
-  color-scheme: light dark;
-  
-  /* 🔥 부드러운 테마 전환 */
-  transition: color-scheme 0.1s ease-in-out;
-}
-
-/* 🔥 기본 폰트 및 테마 적용 - 부드러운 방식 */
-html {
-  font-family: var(--dynamic-font-family, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif);
-  font-size: var(--dynamic-font-size, 16px);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  /* 🔥 모든 테마에서 부드러운 전환 */
-  transition: background-color 0.2s ease, color 0.2s ease, font-family 0.1s ease;
-}
-
-body {
-  font-family: var(--dynamic-font-family, inherit);
-  font-size: var(--dynamic-font-size, inherit);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  /* 🔥 body에서도 CSS 변수 직접 사용 */
-  transition: background-color 0.2s ease, color 0.2s ease, font-family 0.1s ease;
-}
-
-/* 🔥 폰트 변수 적용 - 단일 변수로 통합 */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--dynamic-font-family, inherit);
-  transition: font-family 0.1s ease;
-}
-
-/* 🔥 TipTap 에디터 폰트 적용 */
-.ProseMirror {
-  font-family: var(--dynamic-font-family, inherit) !important;
-  font-size: var(--dynamic-font-size, inherit) !important;
-  transition: font-family 0.1s ease, font-size 0.1s ease;
-}
-
-/* 🔥 모든 입력 요소에 폰트 적용 */
-input, textarea, select, button {
-  font-family: var(--dynamic-font-family, inherit);
-  transition: font-family 0.1s ease;
-}
-
 /* ============================================
-   🎯 SELECTIVE: 컨텐츠 영역 테마 적용 시스템
-   ============================================ */
-
-/* 🎯 컨텐츠 영역만 선택적으로 테마 적용 (UI 컴포넌트 보호) */
-.prose,
-.editor-content,
-.content-area,
-article,
-.ProseMirror,
-main:not(.sidebar):not(.nav):not(.header) {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--app-font-family, var(--dynamic-font-family, 'Pretendard', system-ui, -apple-system, sans-serif));
-  font-size: var(--app-font-size, var(--dynamic-font-size, 16px));
-}
-
-/* 🎯 텍스트 요소들 (컨텐츠 영역 내에서만) */
-.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6,
-.editor-content h1, .editor-content h2, .editor-content h3, .editor-content h4, .editor-content h5, .editor-content h6,
-.content-area h1, .content-area h2, .content-area h3, .content-area h4, .content-area h5, .content-area h6,
-article h1, article h2, article h3, article h4, article h5, article h6 {
-  color: var(--text-primary);
-  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
-}
-
-.prose p, .prose span, .prose strong, .prose em,
-.editor-content p, .editor-content span, .editor-content strong, .editor-content em,
-.content-area p, .content-area span, .content-area strong, .content-area em,
-article p, article span, article strong, article em {
-  color: var(--text-primary);
-  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
-}
-
-/* 🎯 컨텐츠 영역 내 특정 요소들만 테마 적용 */
-.prose [class*="card"],
-.editor-content [class*="dialog"],
-.content-area [class*="popover"],
-article [class*="modal"] {
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
-  border-color: var(--border-primary);
-}
-
-/* 🎯 컨텐츠 영역 내 링크만 테마 적용 */
-.prose a,
-.editor-content a,
-.content-area a,
-article a {
-  color: var(--text-accent);
-}
-
-.prose a:hover,
-.editor-content a:hover,
-.content-area a:hover,
-article a:hover {
-  color: var(--text-accent-hover);
-}
-
-/* 🎯 컨텐츠 영역 내 입력 요소들 */
-.prose input, .prose textarea, .prose select,
-.editor-content input, .editor-content textarea, .editor-content select,
-.content-area input, .content-area textarea, .content-area select,
-article input, article textarea, article select {
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
-  border-color: var(--border-primary);
-}
-
-/* 🎯 TipTap 에디터 선택적 테마 적용 */
-.ProseMirror {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--app-font-family, var(--dynamic-font-family, 'Pretendard'));
-  font-size: var(--app-font-size, var(--dynamic-font-size, 16px));
-}
-
-.ProseMirror p,
-.ProseMirror h1, .ProseMirror h2, .ProseMirror h3, .ProseMirror h4, .ProseMirror h5, .ProseMirror h6,
-.ProseMirror span, .ProseMirror strong, .ProseMirror em {
-  color: var(--text-primary);
-  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
-}
-
-/* 🎯 컨텐츠 영역 내 테이블만 테마 적용 */
-.prose table, .prose tr, .prose td, .prose th,
-.editor-content table, .editor-content tr, .editor-content td, .editor-content th,
-.content-area table, .content-area tr, .content-area td, .content-area th,
-article table, article tr, article td, article th {
-  background-color: var(--bg-elevated);
-  color: var(--text-primary);
-  border-color: var(--border-primary);
-}
-
-/* 🎯 컨텐츠 영역 내에서만 TailwindCSS 클래스 조정 */
-.prose .text-gray-900, .prose .text-gray-800, .prose .text-gray-700,
-.editor-content .text-gray-900, .editor-content .text-gray-800, .editor-content .text-gray-700,
-.content-area .text-gray-900, .content-area .text-gray-800, .content-area .text-gray-700,
-article .text-gray-900, article .text-gray-800, article .text-gray-700 {
-  color: var(--text-primary);
-}
-
-.prose .bg-white, .prose .bg-gray-50, .prose .bg-gray-100,
-.editor-content .bg-white, .editor-content .bg-gray-50, .editor-content .bg-gray-100,
-.content-area .bg-white, .content-area .bg-gray-50, .content-area .bg-gray-100,
-article .bg-white, article .bg-gray-50, article .bg-gray-100 {
-  background-color: var(--bg-primary);
-}
-
-/* ============================================
- * 🔥 화면 크기 안정성 보장 (Start)
+ * 🔥 shadcn/ui v4 @theme inline 지시어
  * ============================================ */
 
-/* 🔥 안정적인 viewport 처리 */
-html,
-body,
-#root {
-  height: -webkit-fill-available;
-}
-
-/* 🔥 안정적인 최소 높이 설정 (100vh 대신 안전한 방법) */
-.min-h-screen-safe {
-  min-height: calc(100vh - (env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
-  min-height: -webkit-fill-available;
-}
-
-.h-screen-safe {
-  height: calc(100vh - (env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
-  height: -webkit-fill-available;
-}
-
-/* 🔥 기존 min-h-screen을 안전한 버전으로 대체 */
-.min-h-screen {
-  min-height: calc(100vh - (env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
-  min-height: -webkit-fill-available;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 }
 
 /* ============================================
- * 🔥 화면 크기 안정성 보장 (End)
+ * 🔥 기본 스타일 적용
  * ============================================ */
 
-/* ============================================
- * 🔥 Tailwind Base Layer - CSS 변수 강제 적용
- * ============================================ */
 @layer base {
-  /* HTML/Body 기본 스타일 - CSS 변수 확실한 적용 */
-  html {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: var(--latin-font-family);
+  * {
+    border-color: oklch(var(--border));
   }
-  
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: var(--latin-font-family);
-    line-height: var(--leading-normal);
-    font-size: var(--text-base);
+    background-color: oklch(var(--background));
+    color: oklch(var(--foreground));
   }
-  
-  /* 🔥 모든 요소에 대한 강력한 테마 상속 보장 */
-  *,
-  *::before,
-  *::after {
-    border-color: hsl(var(--border));
-  }
-  
-  /* 🔥 모든 컨테이너 요소들에 테마 강제 적용 */
-  #root,
-  .app-container,
-  .main-content,
-  .sidebar,
-  .content-area,
-  .prose,
-  .editor-content,
-  main,
-  article,
-  section,
-  div,
-  header,
-  footer,
-  nav,
-  aside {
-    background-color: inherit;
-    color: inherit;
-  }
-  
-  /* 입력 요소들 기본 스타일 */
-  input, textarea, select {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    border-color: hsl(var(--border));
-  }
-  
-  /* 버튼 요소 기본 스타일 */
-  button {
-    color: hsl(var(--foreground));
-    border-color: hsl(var(--border));
-  }
-  
-  /* 🔥 텍스트 요소들 색상 상속 강제 */
-  p, span, h1, h2, h3, h4, h5, h6, label, a {
-    color: inherit;
-  }
-}
-
-/* ============================================
- * 🔥 작가 테마들 - 완전한 정의
- * ============================================ */
-
-/* 🔥 세피아 테마 - 따뜻하고 부드러운 종이 느낌 (가시성 강화) */
-[data-theme="sepia"] {
-  /* Tailwind 호환 색상 */
-  --background: 40 30% 92%; /* 더 진한 세피아 배경 */
-  --foreground: 25 25% 8%; /* 매우 진한 세피아 텍스트 */
-  --card: 35 25% 97%;
-  --card-foreground: 25 20% 15%;
-  --popover: 35 25% 97%;
-  --popover-foreground: 25 20% 15%;
-  --primary: 25 60% 35%;
-  --primary-foreground: 35 25% 95%;
-  --secondary: 35 20% 85%;
-  --secondary-foreground: 25 20% 15%;
-  --muted: 35 20% 85%;
-  --muted-foreground: 25 15% 45%;
-  --accent: 35 20% 85%;
-  --accent-foreground: 25 20% 15%;
-  --destructive: 0 60% 45%;
-  --destructive-foreground: 35 25% 95%;
-  --border: 35 15% 80%;
-  --input: 35 15% 80%;
-  --ring: 25 60% 35%;
-
-  /* 작가 친화적 색상 (가시성 강화) */
-  --bg-primary: #f0e6d2; /* 더 진한 세피아 크림 */
-  --bg-secondary: #e6d7bf;
-  --bg-elevated: #f5ebdc;
-  --bg-card: #f5ebdc;
-  --bg-hover: #dbc9a8;
-
-  --text-primary: #2d1808; /* 매우 진한 브라운 */
-  --text-secondary: #4a2e18;
-  --text-muted: #6b4423;
-  --text-inverse: #f0e6d2;
-
-  --accent-primary: #8b4513; /* 새들브라운 */
-  --accent-hover: #a0522d;
-  --accent-light: #deb887;
-  --accent-dark: #654321;
-
-  --border-light: #d2c5b0;
-  --border-medium: #b8a082;
-  --border-dark: #8b7355;
-
-  color-scheme: light;
-}
-
-/* 🔥 고대비 테마 - 접근성 최적화 */
-[data-theme="high-contrast"] {
-  /* Tailwind 호환 색상 - 최대 대비 */
-  --background: 0 0% 100%; /* 순수 흰색 */
-  --foreground: 0 0% 0%; /* 순수 검정 */
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 0%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 0%;
-  --primary: 240 100% 25%; /* 진한 파랑 */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 95%;
-  --secondary-foreground: 0 0% 0%;
-  --muted: 0 0% 95%;
-  --muted-foreground: 0 0% 20%;
-  --accent: 0 0% 95%;
-  --accent-foreground: 0 0% 0%;
-  --destructive: 0 100% 40%; /* 진한 빨강 */
-  --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 70%;
-  --input: 0 0% 70%;
-  --ring: 240 100% 25%;
-
-  /* 작가 친화적 색상 - 극대 대비 */
-  --bg-primary: #ffffff; /* 순수 흰색 */
-  --bg-secondary: #f0f0f0;
-  --bg-elevated: #ffffff;
-  --bg-card: #ffffff;
-  --bg-hover: #e0e0e0;
-
-  --text-primary: #000000; /* 순수 검정 */
-  --text-secondary: #000000;
-  --text-muted: #333333;
-  --text-inverse: #ffffff;
-
-  --accent-primary: #0000cc; /* 진한 파랑 */
-  --accent-hover: #000099;
-  --accent-light: #6666ff;
-  --accent-dark: #000066;
-
-  --border-light: #000000;
-  --border-medium: #000000;
-  --border-dark: #000000;
-
-  color-scheme: light;
-}
-
-/* 🔥 따뜻한 테마 - 편안한 따뜻한 색조 */
-[data-theme="warm"] {
-  /* Tailwind 호환 색상 */
-  --background: 25 30% 96%;
-  --foreground: 25 25% 12%;
-  --card: 25 30% 98%;
-  --card-foreground: 25 25% 12%;
-  --popover: 25 30% 98%;
-  --popover-foreground: 25 25% 12%;
-  --primary: 15 70% 45%;
-  --primary-foreground: 25 30% 96%;
-  --secondary: 25 20% 88%;
-  --secondary-foreground: 25 25% 12%;
-  --muted: 25 20% 88%;
-  --muted-foreground: 25 15% 40%;
-  --accent: 25 20% 88%;
-  --accent-foreground: 25 25% 12%;
-  --destructive: 0 70% 50%;
-  --destructive-foreground: 25 30% 96%;
-  --border: 25 15% 82%;
-  --input: 25 15% 82%;
-  --ring: 15 70% 45%;
-
-  /* 작가 친화적 색상 */
-  --bg-primary: #faf7f2; /* 따뜻한 크림 */
-  --bg-secondary: #f4f0e8;
-  --bg-elevated: #fdfbf7;
-  --bg-card: #fdfbf7;
-  --bg-hover: #ede7d9;
-
-  --text-primary: #2d1810; /* 따뜻한 브라운 */
-  --text-secondary: #4a2c18;
-  --text-muted: #6b4423;
-  --text-inverse: #faf7f2;
-
-  --accent-primary: #c97435; /* 따뜻한 오렌지 */
-  --accent-hover: #b85c2a;
-  --accent-light: #e5a572;
-  --accent-dark: #a0522d;
-
-  --border-light: #e0d5c7;
-  --border-medium: #d1c2a8;
-  --border-dark: #b8a082;
-
-  color-scheme: light;
-}
-
-/* 🔥 시원한 테마 - 집중력 향상을 위한 차가운 색조 */
-[data-theme="cool"] {
-  /* Tailwind 호환 색상 */
-  --background: 210 25% 96%;
-  --foreground: 210 30% 12%;
-  --card: 210 25% 98%;
-  --card-foreground: 210 30% 12%;
-  --popover: 210 25% 98%;
-  --popover-foreground: 210 30% 12%;
-  --primary: 200 80% 45%;
-  --primary-foreground: 210 25% 96%;
-  --secondary: 210 20% 88%;
-  --secondary-foreground: 210 30% 12%;
-  --muted: 210 20% 88%;
-  --muted-foreground: 210 15% 40%;
-  --accent: 210 20% 88%;
-  --accent-foreground: 210 30% 12%;
-  --destructive: 0 70% 50%;
-  --destructive-foreground: 210 25% 96%;
-  --border: 210 15% 82%;
-  --input: 210 15% 82%;
-  --ring: 200 80% 45%;
-
-  /* 작가 친화적 색상 */
-  --bg-primary: #f7f9fb; /* 시원한 흰색 */
-  --bg-secondary: #f0f4f8;
-  --bg-elevated: #fafcfd;
-  --bg-card: #fafcfd;
-  --bg-hover: #e2e8f0;
-
-  --text-primary: #0f172a; /* 시원한 네이비 */
-  --text-secondary: #1e293b;
-  --text-muted: #475569;
-  --text-inverse: #f7f9fb;
-
-  --accent-primary: #0ea5e9; /* 시원한 블루 */
-  --accent-hover: #0284c7;
-  --accent-light: #7dd3fc;
-  --accent-dark: #0369a1;
-
-  --border-light: #cbd5e1;
-  --border-medium: #94a3b8;
-  --border-dark: #64748b;
-
-  color-scheme: light;
-}
-
-/* 🔥 숲 테마 - 자연스러운 녹색 */
-[data-theme="forest"] {
-  /* Tailwind 호환 색상 */
-  --background: 145 25% 95%;
-  --foreground: 145 30% 12%;
-  --card: 145 25% 97%;
-  --card-foreground: 145 30% 12%;
-  --popover: 145 25% 97%;
-  --popover-foreground: 145 30% 12%;
-  --primary: 145 60% 35%;
-  --primary-foreground: 145 25% 95%;
-  --secondary: 145 20% 85%;
-  --secondary-foreground: 145 30% 12%;
-  --muted: 145 20% 85%;
-  --muted-foreground: 145 15% 40%;
-  --accent: 145 20% 85%;
-  --accent-foreground: 145 30% 12%;
-  --destructive: 0 70% 50%;
-  --destructive-foreground: 145 25% 95%;
-  --border: 145 15% 80%;
-  --input: 145 15% 80%;
-  --ring: 145 60% 35%;
-
-  /* 작가 친화적 색상 */
-  --bg-primary: #f7faf8; /* 연한 민트 */
-  --bg-secondary: #f0f6f2;
-  --bg-elevated: #fafcfb;
-  --bg-card: #fafcfb;
-  --bg-hover: #e8f2eb;
-
-  --text-primary: #14291a; /* 짙은 초록 */
-  --text-secondary: #1e4027;
-  --text-muted: #2d5237;
-  --text-inverse: #f7faf8;
-
-  --accent-primary: #22c55e; /* 자연 녹색 */
-  --accent-hover: #16a34a;
-  --accent-light: #86efac;
-  --accent-dark: #15803d;
-
-  --border-light: #d1e7dd;
-  --border-medium: #a7d1b8;
-  --border-dark: #7fb893;
-
-  color-scheme: light;
-}
-
-/* 🔥 자정 테마 - 극 다크 모드 (가시성 강화) */
-[data-theme="midnight"] {
-  /* Tailwind 호환 색상 */
-  --background: 240 15% 3%; /* 더욱 어두운 파랑 */
-  --foreground: 0 0% 98%; /* 더 밝은 텍스트 */
-  --card: 240 12% 8%;
-  --card-foreground: 0 0% 95%;
-  --popover: 240 12% 8%;
-  --popover-foreground: 0 0% 95%;
-  --primary: 220 80% 60%;
-  --primary-foreground: 240 12% 6%;
-  --secondary: 240 8% 15%;
-  --secondary-foreground: 0 0% 95%;
-  --muted: 240 8% 15%;
-  --muted-foreground: 0 0% 70%;
-  --accent: 240 8% 15%;
-  --accent-foreground: 0 0% 95%;
-  --destructive: 0 70% 55%;
-  --destructive-foreground: 0 0% 95%;
-  --border: 240 8% 20%;
-  --input: 240 8% 20%;
-  --ring: 220 80% 60%;
-
-  /* 작가 친화적 색상 (가시성 강화) */
-  --bg-primary: #040608; /* 더욱 어두운 자정 블루 */
-  --bg-secondary: #080b0f;
-  --bg-elevated: #0f1419;
-  --bg-card: #0f1419;
-  --bg-hover: #1a202c;
-
-  --text-primary: #ffffff; /* 순수 흰색 */
-  --text-secondary: #f7fafc;
-  --text-muted: #e2e8f0;
-  --text-inverse: #040608;
-
-  --accent-primary: #60a5fa; /* 밝은 블루 */
-  --accent-hover: #3b82f6;
-  --accent-light: #93c5fd;
-  --accent-dark: #2563eb;
-
-  --border-light: #374151;
-  --border-medium: #4b5563;
-  --border-dark: #6b7280;
-
-  color-scheme: dark;
-}
-
-/* ============================================
- * 🔥 테마 강제 적용 - Tailwind 오버라이드
- * ============================================ */
-
-/* 🔥 모든 테마에서 배경색 강제 적용 (Tailwind 오버라이드) */
-[data-theme] .bg-white,
-[data-theme] .bg-gray-50,
-[data-theme] .bg-gray-100,
-[data-theme] .bg-gray-200 {
-  background-color: hsl(var(--background)) !important;
-}
-
-[data-theme] .bg-gray-900,
-[data-theme] .bg-gray-800,
-[data-theme] .bg-gray-700 {
-  background-color: hsl(var(--card)) !important;
-}
-
-/* 🔥 모든 테마에서 텍스트 색상 강제 적용 (Tailwind 오버라이드) */
-[data-theme] .text-gray-900,
-[data-theme] .text-gray-800,
-[data-theme] .text-gray-700 {
-  color: hsl(var(--foreground)) !important;
-}
-
-[data-theme] .text-gray-600,
-[data-theme] .text-gray-500,
-[data-theme] .text-gray-400 {
-  color: hsl(var(--muted-foreground)) !important;
-}
-
-[data-theme] .text-white {
-  color: hsl(var(--background)) !important;
-}
-
-/* 🔥 테두리 색상 강제 적용 */
-[data-theme] .border-gray-200,
-[data-theme] .border-gray-300,
-[data-theme] .border-gray-400 {
-  border-color: hsl(var(--border)) !important;
-}
-
-/* 🔥 버튼 스타일 강제 적용 */
-[data-theme] .btn,
-[data-theme] button {
-  background-color: hsl(var(--primary)) !important;
-  color: hsl(var(--primary-foreground)) !important;
-  border-color: hsl(var(--border)) !important;
-}
-
-[data-theme] .btn-secondary,
-[data-theme] .btn-outline {
-  background-color: hsl(var(--secondary)) !important;
-  color: hsl(var(--secondary-foreground)) !important;
-  border-color: hsl(var(--border)) !important;
-}
-
-/* 🔥 카드 스타일 강제 적용 */
-[data-theme] .card,
-[data-theme] .panel,
-[data-theme] .modal {
-  background-color: hsl(var(--card)) !important;
-  color: hsl(var(--card-foreground)) !important;
-  border-color: hsl(var(--border)) !important;
 }
