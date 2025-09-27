@@ -147,19 +147,44 @@
   --radius-2xl: 16px;
   --radius-3xl: 24px;
   --radius-full: 9999px;
-
-  /* 🔥 폰트 설정 변수 - Light 모드 통일 */
-  --app-font-size: 14px !important;
-  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-
-  /* 🔥 Discord 스타일 컴포넌트 변수 */
+  
+  /* 🔥 Typography 시스템 */
+  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --app-font-size: 16px;
+  --writer-font-family: 'iA Writer Quattro', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  --korean-font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --latin-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  /* Font sizes */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  
+  /* Line heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+  
+  /* 🔥 Slider 컴포넌트 변수 */
   --slider-track: #e2e8f0;
   --slider-thumb: #3b82f6;
   --slider-thumb-hover: #2563eb;
 }
 
-/* 🔥 다크 테마 */
-.dark {
+/* 🔥 다크 테마 - 완전한 선택자 커버리지 */
+.dark,
+:root[data-theme="dark"],
+html[data-theme="dark"],
+body[data-theme="dark"],
+[data-theme="dark"] {
   --background: 222.2 84% 4.9%;
   --foreground: 210 40% 98%;
   --card: 222.2 84% 4.9%;
@@ -225,18 +250,52 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
 
-  /* 🔥 다크 폰트 설정 */
-  --app-font-size: 14px !important;
-  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  /* 🔥 다크 모드 폰트 설정 - 동적 변수 유지 */
+  --app-font-family: var(--dynamic-font-family, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif);
+  --app-font-size: var(--dynamic-font-size, 16px);
+  
+  /* 🔥 다크 모드 슬라이더 색상 */
+  --slider-track: #374151;
+  --slider-thumb: #60a5fa;
+  --slider-thumb-hover: #3b82f6;
+  
+  /* 🔥 다크 모드 색상 스킴 설정 */
+  color-scheme: dark;
 }
 
-/* 🔥 시스템 테마 감지 */
-:root[data-theme="dark"] {
-  color-scheme: dark;
+/* 🔥 미디어 쿼리 지원 - 시스템 테마 자동 감지 (완전한 변수 적용) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]),
+  html:not([data-theme="light"]),
+  body:not([data-theme="light"]) {
+    /* Tailwind 호환 다크 모드 색상 */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    /* 작가 친화적 다크 색상 */
+    --bg-primary: #0f0f0f;
+    --bg-secondary: #1a1a1a;
+    --text-primary: #f5f5f5;
+    --text-secondary: #d4d4d4;
+    
+    /* 다크 모드 슬라이더 */
+    --slider-track: #374151;
+    --slider-thumb: #60a5fa;
+    --slider-thumb-hover: #3b82f6;
+    
+    color-scheme: dark;
+  }
 }
 
 /* 🔥 깜빡임 방지: 테마 전환이 즉시 적용되도록 설정 */
 html {
   /* 🔥 중요: color-scheme 설정으로 브라우저 기본 동작 제어 */
   color-scheme: light dark;
+  
+  /* 🔥 부드러운 테마 전환 */
+  transition: color-scheme 0.1s ease-in-out;
 }

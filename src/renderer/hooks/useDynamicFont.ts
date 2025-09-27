@@ -341,9 +341,8 @@ export function useDynamicFont(): UseDynamicFontResult {
                 mappedCSSFamily: cssFamily
             });
 
-            // 🔥 1. CSS 변수 즉시 적용 (UI 반응성) - 변환된 CSS 값 사용
+            // 🔥 1. CSS 변수 설정으로 모든 요소에 폰트 적용
             document.documentElement.style.setProperty('--app-font-family', cssFamily);
-            document.body.style.fontFamily = cssFamily;
 
             // 🔥 2. webContents를 통한 CSS 주입으로 전체 폰트 정의 새로고침
             try {

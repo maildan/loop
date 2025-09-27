@@ -211,24 +211,24 @@
   height: 0;
 }
 
-/* Toggle switch track - made larger */
+/* Toggle switch track - made even larger per user request */
 .writer-toggle-track {
   position: relative;
-  width: 60px;  /* Increased from typical 44px */
-  height: 32px; /* Increased from typical 24px */
+  width: 80px;  /* Increased from 60px (+20px as requested) */
+  height: 52px; /* Increased from 32px (+20px as requested) */
   background: var(--border-medium);
-  border-radius: 16px;
+  border-radius: 26px; /* Adjusted border radius proportionally */
   transition: all var(--duration-fast) var(--ease-out-expo);
   border: 2px solid transparent;
 }
 
-/* Toggle switch thumb - larger and more tactile */
+/* Toggle switch thumb - proportionally larger */
 .writer-toggle-thumb {
   position: absolute;
   top: 2px;
   left: 2px;
-  width: 28px;  /* Increased from typical 20px */
-  height: 28px; /* Increased from typical 20px */
+  width: 48px;  /* Increased from 28px to maintain proportion */
+  height: 48px; /* Increased from 28px to maintain proportion */
   background: white;
   border-radius: 50%;
   transition: all var(--duration-fast) var(--ease-out-expo);
@@ -241,7 +241,7 @@
 }
 
 .writer-toggle input:checked + .writer-toggle-track .writer-toggle-thumb {
-  transform: translateX(28px); /* Adjusted for larger size */
+  transform: translateX(28px); /* Adjusted for 80px track width (80-48-4=28px) */
   background: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -280,7 +280,25 @@
   cursor: pointer;
 }
 
-/* Compact toggle variant */
+/* Large toggle variant - Extra user-friendly */
+.writer-toggle-large .writer-toggle-track {
+  width: 96px;   /* Even larger for better accessibility */
+  height: 60px;  /* Even taller for easier interaction */
+  border-radius: 30px;
+}
+
+.writer-toggle-large .writer-toggle-thumb {
+  width: 56px;
+  height: 56px;
+  top: 2px;
+  left: 2px;
+}
+
+.writer-toggle-large input:checked + .writer-toggle-track .writer-toggle-thumb {
+  transform: translateX(36px); /* 96-56-4=36px */
+}
+
+/* Compact toggle variant - Original small size */
 .writer-toggle-compact .writer-toggle-track {
   width: 48px;
   height: 26px;

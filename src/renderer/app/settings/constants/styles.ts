@@ -8,9 +8,8 @@
  * - 조건부 스타일링 방지로 리렌더링 감소
  */
 export const SETTINGS_PAGE_STYLES = {
-  // 메인 컨테이너
-  // Use full width with a max-width to avoid flex overflow inside the app layout
-  container: 'w-full max-w-4xl mx-auto px-4 py-6 space-y-6 min-w-0',
+  // 메인 컨테이너 - UI 축소 문제 해결
+  container: 'w-full max-w-4xl mx-auto px-6 py-8 space-y-8 min-w-[600px]',
   pageTitle: 'text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6',
 
   // 네비게이션
@@ -19,17 +18,17 @@ export const SETTINGS_PAGE_STYLES = {
   navButtonActive: 'bg-blue-600 text-white shadow-md',
   navButtonInactive: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700',
 
-  // 섹션
-  section: 'space-y-6',
-  sectionCard: 'bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6',
+  // 섹션 - 더 넉넉한 공간으로 UI 축소 방지
+  section: 'space-y-8',
+  sectionCard: 'bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 min-h-[120px]',
   sectionHeader: 'flex items-center gap-3 mb-4 pb-3 border-b border-slate-200 dark:border-slate-700',
   sectionIcon: 'w-6 h-6 text-blue-600 flex-shrink-0',
   sectionTitle: 'text-xl font-semibold text-slate-900 dark:text-slate-100',
   sectionDescription: 'text-sm text-slate-600 dark:text-slate-400 mt-1',
 
-  // 설정 항목
-  settingItem: 'space-y-4',
-  settingRow: 'flex items-center justify-between py-3 border-b border-slate-200 dark:border-slate-700 last:border-b-0 min-h-[60px]',
+  // 설정 항목 - 더 넉넉한 공간으로 축소 방지
+  settingItem: 'space-y-6',
+  settingRow: 'flex items-center justify-between py-4 border-b border-slate-200 dark:border-slate-700 last:border-b-0 min-h-[80px]',
   settingLabel: 'flex-1 pr-4',
   settingTitle: 'font-medium text-slate-900 dark:text-slate-100 text-base',
   settingDescription: 'text-sm text-slate-600 dark:text-slate-400 mt-1 max-w-md',

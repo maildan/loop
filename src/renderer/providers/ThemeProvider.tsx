@@ -74,6 +74,15 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
       const resolved = calculateResolvedTheme(newTheme);
       setResolvedTheme(resolved);
 
+      // 🔥 로컬 스토리지에 즉시 저장 (우선순위)
+      try {
+        localStorage.setItem('loop-theme', newTheme);
+        localStorage.setItem('loop-theme-resolved', resolved);
+        Logger.debug('THEME_PROVIDER', 'Theme saved to localStorage', { newTheme, resolved });
+      } catch (storageError) {
+        Logger.warn('THEME_PROVIDER', 'Failed to save theme to localStorage', storageError);
+      }
+
       // 🔥 백엔드에 테마 저장
       try {
         const result = await window.electronAPI.settings.set('theme', newTheme);
@@ -86,15 +95,23 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
         Logger.error('THEME_PROVIDER', 'Error saving theme to backend', error);
       }
 
-      // 🔥 HTML/Body 속성 및 클래스 업데이트 (즉시)
+      // 🔥 HTML/Body 속성 업데이트 (data-theme 방식으로 통일)
       const root = document.documentElement;
       const body = document.body;
-      root.classList.remove('light', 'dark');
-      root.classList.add(resolved);
+      
+      // 🔥 데이터 속성 우선으로 테마 설정
       root.setAttribute('data-theme', resolved);
+      root.setAttribute('data-color-scheme', resolved);
       (root.style as CSSStyleDeclaration).colorScheme = resolved;
+      
+      // 🔥 CSS 클래스도 유지 (하위 호환성)
+      root.classList.remove('light', 'dark', 'system');
+      root.classList.add(resolved);
+      
       if (body) {
         body.setAttribute('data-theme', resolved);
+        body.classList.remove('light', 'dark', 'system');
+        body.classList.add(resolved);
         (body.style as CSSStyleDeclaration).colorScheme = resolved;
       }
 
@@ -119,8 +136,7 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
         Logger.warn('THEME_PROVIDER', '테마 변경 시 폰트 CSS 재적용 에러', fontError);
       }
 
-      // 🔥 로컬 스토리지에도 저장 (백업)
-      localStorage.setItem('loop-theme', newTheme);
+      // 🔥 로컬 스토리지 중복 저장 제거 (이미 위에서 처리됨)
 
       Logger.info('THEME_PROVIDER', 'Theme applied successfully', {
         theme: newTheme,

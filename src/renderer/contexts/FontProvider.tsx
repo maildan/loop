@@ -7,6 +7,7 @@ import { FontBlacklistSystem } from '../utils/FontBlacklistSystem';
 import { CSSVariableManager } from '../utils/CSSVariableManager';
 import { FontLoader } from '../utils/FontLoader';
 import { FontAccessibilityManager } from '../utils/FontAccessibilityManager';
+import { getFontDisplayName, generateCSSFontFamily, determineFontCategory } from '../../shared/utils/fontUtils';
 
 interface FontContextType {
   currentFont: string;
@@ -25,6 +26,10 @@ interface FontContextType {
   clearBlacklist: () => Promise<void>;
   // 접근성 & 안전성
   generateAccessibilityReport: () => Promise<any>;
+  // 🔥 스마트 매핑 기능들
+  getSmartFontRecommendations: (currentFont: string) => FontMetadata[];
+  searchFontsByName: (query: string) => FontMetadata[];
+  getFontsByCategory: (category: string) => FontMetadata[];
 }
 
 interface FontMetadata {
@@ -67,10 +72,16 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setIsLoading(true);
 
-      // 1. 알려진 문제 폰트들 사전 블랙리스트
-      await FontBlacklistSystem.initializeKnownProblematicFonts();
+      // 🔥 1. 블랙리스트 완전 초기화 - 모든 폰트 서빙 허용
+      try {
+        await FontBlacklistSystem.clearBlacklist();
+        Logger.info('FONT_PROVIDER', '블랙리스트 완전 초기화 - 모든 폰트 서빙 가능');
+      } catch (blacklistError) {
+        Logger.warn('FONT_PROVIDER', '블랙리스트 초기화 실패', blacklistError);
+        // 실패해도 계속 진행
+      }
 
-      // 2. 콘솔 오류 감지 설정
+      // 2. 콘솔 오류 감지 설정 (동적 블랙리스트 관리)
       setupConsoleErrorListener();
 
       // 3. 사용 가능한 폰트 목록 로드
@@ -117,7 +128,7 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   /**
-   * 🔥 폰트 설정 (CSS 변수 적용)
+   * 🔥 폰트 설정 (스마트 매핑 + CSS 변수 적용)
    */
   const setFont = useCallback(async (fontFamily: string) => {
     try {
@@ -133,22 +144,33 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // CSS 변수로 폰트 적용
+      // 🔥 스마트 매핑 적용: 폰트명을 정규화하고 CSS font-family 생성
+      const displayName = getFontDisplayName(fontFamily);
+      const smartCSSFamily = generateCSSFontFamily(fontFamily);
+      
+      Logger.info('FONT_PROVIDER', '스마트 폰트 매핑 적용', {
+        original: fontFamily,
+        displayName: displayName,
+        cssFamily: smartCSSFamily
+      });
+
+      // CSS 변수로 폰트 적용 (스마트 매핑된 CSS 사용)
       CSSVariableManager.applyFontVariables({
-        family: fontFamily,
+        family: smartCSSFamily, // fallback 체인 포함된 스마트 CSS
         size: fontSize
       });
 
-      // TipTap 에디터에 강제 적용
-      CSSVariableManager.forceFontOnTipTap(fontFamily);
+      // 상태 업데이트 (표시명 사용)
+      setCurrentFont(displayName);
 
-      // 상태 업데이트
-      setCurrentFont(fontFamily);
-
-      // 설정 저장
+      // 설정 저장 (원본명 저장)
       await saveSettings(fontFamily, fontSize);
 
-      Logger.info('FONT_PROVIDER', `폰트 변경 완료: ${fontFamily}`, { fontSize });
+      Logger.info('FONT_PROVIDER', `폰트 변경 완료: ${displayName}`, { 
+        originalName: fontFamily,
+        cssFamily: smartCSSFamily,
+        fontSize 
+      });
 
     } catch (fontError) {
       const errorMessage = fontError instanceof Error ? fontError.message : String(fontError);
@@ -191,7 +213,7 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [currentFont]);
 
   /**
-   * 🔥 폰트 로딩 (FontLoader 위임)
+   * 🔥 폰트 로딩 (스마트 매핑 + FontLoader 위임)
    */
   const loadFont = useCallback(async (fontId: string): Promise<boolean> => {
     const fontMetadata = availableFonts.find(f => f.id === fontId);
@@ -200,34 +222,67 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return false;
     }
 
+    // 🔥 스마트 매핑으로 더 정확한 로딩 정보 생성
+    const displayName = getFontDisplayName(fontId);
+    const smartCSSFamily = generateCSSFontFamily(fontId);
+
     const result = await FontLoader.loadFontWithBlacklistCheck({
-      name: fontMetadata.name,
-      family: fontMetadata.cssFamily,
+      name: displayName, // 표시명 사용
+      family: smartCSSFamily, // fallback 포함 CSS
       style: 'normal',
       weight: 'normal',
-      url: `/fonts/${fontMetadata.name}`
+      url: `/fonts/${fontId}` // 원본 ID로 URL 생성
     });
+
+    if (result.success) {
+      Logger.info('FONT_PROVIDER', `폰트 로딩 성공: ${displayName}`, {
+        originalId: fontId,
+        cssFamily: smartCSSFamily
+      });
+    }
 
     return result.success;
   }, [availableFonts]);
 
   /**
-   * 🔥 사용 가능한 폰트 목록 새로고침
+   * 🔥 사용 가능한 폰트 목록 새로고침 (스마트 매핑 적용)
    */
   const refreshFonts = useCallback(async () => {
     try {
       // Electron API로 폰트 목록 조회
       if (window.electronAPI?.font?.getAvailableFonts) {
         const fontList = await window.electronAPI.font.getAvailableFonts();
-        const mappedFonts: FontMetadata[] = fontList.map((font, index) => ({
-          id: font.value,
-          name: font.value,
-          cssFamily: font.value,
-          category: font.category,
-          isLocal: true
-        }));
+        const mappedFonts: FontMetadata[] = fontList.map((font, index) => {
+          // 🔥 스마트 매핑 적용
+          const displayName = getFontDisplayName(font.value);
+          const cssFontFamily = generateCSSFontFamily(font.value);
+          const category = determineFontCategory(font.value);
+          
+          return {
+            id: font.value,
+            name: displayName, // 사용자 친화적 이름
+            cssFamily: cssFontFamily, // fallback 포함된 CSS
+            category: category, // 자동 분류
+            isLocal: true
+          };
+        });
+        
+        // 카테고리별로 정렬 (한글 > 영문 > 일본어 > 모노스페이스 > 시스템)
+        const categoryOrder = { korean: 0, english: 1, japanese: 2, monospace: 3, system: 4 };
+        mappedFonts.sort((a, b) => {
+          const orderA = categoryOrder[a.category as keyof typeof categoryOrder] ?? 5;
+          const orderB = categoryOrder[b.category as keyof typeof categoryOrder] ?? 5;
+          if (orderA !== orderB) return orderA - orderB;
+          return a.name.localeCompare(b.name);
+        });
+        
         setAvailableFonts(mappedFonts);
-        Logger.info('FONT_PROVIDER', `사용 가능한 폰트 로드: ${mappedFonts.length}개`);
+        Logger.info('FONT_PROVIDER', `사용 가능한 폰트 로드 (스마트 매핑 적용): ${mappedFonts.length}개`, {
+          categories: mappedFonts.reduce((acc, font) => {
+            acc[font.category] = (acc[font.category] || 0) + 1;
+            return acc;
+          }, {} as Record<string, number>)
+        });
       }
     } catch (refreshError) {
       Logger.error('FONT_PROVIDER', '폰트 목록 새로고침 실패', refreshError);
@@ -295,6 +350,28 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return await FontAccessibilityManager.generateAccessibilityReport();
   }, []);
 
+  /**
+   * 🔥 추가 스마트 매핑 유틸리티 함수들
+   */
+  const getSmartFontRecommendations = useCallback((currentFont: string): FontMetadata[] => {
+    const category = determineFontCategory(currentFont);
+    return availableFonts
+      .filter(font => font.category === category && font.id !== currentFont)
+      .slice(0, 5); // 상위 5개 추천
+  }, [availableFonts]);
+
+  const searchFontsByName = useCallback((query: string): FontMetadata[] => {
+    const lowerQuery = query.toLowerCase();
+    return availableFonts.filter(font => 
+      font.name.toLowerCase().includes(lowerQuery) ||
+      font.id.toLowerCase().includes(lowerQuery)
+    );
+  }, [availableFonts]);
+
+  const getFontsByCategory = useCallback((category: string): FontMetadata[] => {
+    return availableFonts.filter(font => font.category === category);
+  }, [availableFonts]);
+
   // 🔥 초기화 실행
   useEffect(() => {
     initializeFontSystem();
@@ -322,7 +399,11 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     addToBlacklist,
     removeFromBlacklist,
     clearBlacklist,
-    generateAccessibilityReport
+    generateAccessibilityReport,
+    // 🔥 스마트 매핑 기능들
+    getSmartFontRecommendations,
+    searchFontsByName,
+    getFontsByCategory
   }), [
     currentFont,
     fontSize, 
@@ -337,7 +418,10 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     addToBlacklist,
     removeFromBlacklist,
     clearBlacklist,
-    generateAccessibilityReport
+    generateAccessibilityReport,
+    getSmartFontRecommendations,
+    searchFontsByName,
+    getFontsByCategory
   ]);
 
   return (

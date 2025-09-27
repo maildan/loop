@@ -70,6 +70,32 @@ const FONT_DISPLAY_NAMES: Record<string, string> = {
 };
 
 /**
+ * 🔥 파일 확장자 제거 함수
+ */
+function removeFileExtension(filename: string): string {
+  // 폰트 파일 확장자 제거: .ttf, .otf, .woff, .woff2, .eot
+  return filename.replace(/\.(ttf|otf|woff2?|eot)$/i, '');
+}
+
+/**
+ * 🔥 일반적인 폰트명 매핑 (확장자 제거 후)
+ */
+const FONT_FILE_MAPPINGS: Record<string, string> = {
+  'times': 'Times New Roman',
+  'arial': 'Arial',
+  'helvetica': 'Helvetica',
+  'verdana': 'Verdana',
+  'calibri': 'Calibri',
+  'georgia': 'Georgia',
+  'tahoma': 'Tahoma',
+  'trebuchet': 'Trebuchet MS',
+  'impact': 'Impact',
+  'comic': 'Comic Sans MS',
+  'courier': 'Courier New',
+  'lucida': 'Lucida Console'
+};
+
+/**
  * 🔥 기술적 폰트명을 사용자 친화적 표시명으로 변환
  */
 export function getFontDisplayName(technicalName: string): string {
@@ -77,13 +103,28 @@ export function getFontDisplayName(technicalName: string): string {
     return 'Unknown Font';
   }
 
-  // 1. 직접 매핑 확인
+  // 🔥 NEW: 파일 확장자 제거
+  const cleanName = removeFileExtension(technicalName);
+  
+  // 1. 직접 매핑 확인 (원본)
   const directMatch = FONT_DISPLAY_NAMES[technicalName];
   if (directMatch) {
     return directMatch;
   }
 
-  // 2. 대소문자 무시하고 매핑 확인
+  // 2. 직접 매핑 확인 (확장자 제거된 이름)
+  const cleanDirectMatch = FONT_DISPLAY_NAMES[cleanName];
+  if (cleanDirectMatch) {
+    return cleanDirectMatch;
+  }
+
+  // 3. 파일명 기반 매핑 확인
+  const fileMapping = FONT_FILE_MAPPINGS[cleanName.toLowerCase()];
+  if (fileMapping) {
+    return fileMapping;
+  }
+
+  // 4. 대소문자 무시하고 매핑 확인 (원본)
   const lowerKey = Object.keys(FONT_DISPLAY_NAMES).find(
     key => key.toLowerCase() === technicalName.toLowerCase()
   );
@@ -91,8 +132,16 @@ export function getFontDisplayName(technicalName: string): string {
     return FONT_DISPLAY_NAMES[lowerKey];
   }
 
-  // 3. 자동 정규화 패턴 적용
-  return normalizeFontName(technicalName);
+  // 5. 대소문자 무시하고 매핑 확인 (확장자 제거된 이름)
+  const cleanLowerKey = Object.keys(FONT_DISPLAY_NAMES).find(
+    key => key.toLowerCase() === cleanName.toLowerCase()
+  );
+  if (cleanLowerKey && FONT_DISPLAY_NAMES[cleanLowerKey]) {
+    return FONT_DISPLAY_NAMES[cleanLowerKey];
+  }
+
+  // 6. 자동 정규화 패턴 적용 (확장자 제거된 이름 사용)
+  return normalizeFontName(cleanName);
 }
 
 /**

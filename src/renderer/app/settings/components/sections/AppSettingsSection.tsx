@@ -7,7 +7,7 @@ import { SETTINGS_PAGE_STYLES } from '../../constants/styles';
 import { SettingItem } from '../controls/SettingItem';
 import { Toggle } from '../controls/Toggle';
 import { useTheme } from '../../../../providers/ThemeProvider';
-import { useDynamicFont } from '../../../../hooks/useDynamicFont';
+import { useFont } from '../../../../contexts/FontProvider';
 import { Logger } from '../../../../../shared/logger';
 import GoogleAccountActions from '../GoogleAccountActions';
 import type { SettingsData, UpdateSettingFunction } from '../../types';
@@ -30,7 +30,15 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
   setTheme
 }) => {
   const { theme: currentTheme } = useTheme();
-  const { availableFonts, loading: fontsLoading, error: fontsError, setFont } = useDynamicFont();
+  const { 
+    availableFonts, 
+    isLoading: fontsLoading, 
+    error: fontsError, 
+    setFont,
+    setFontSize,
+    currentFont,
+    fontSize
+  } = useFont();
 
   // 🔥 로컬 테마 상태 (설정 UI 표시용)
   const [displayTheme, setDisplayTheme] = useState<'light' | 'dark' | 'system'>(settings.theme);
@@ -78,47 +86,51 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
     updateSetting('app', 'language', event.target.value);
   }, [updateSetting]);
 
-  // 🔥 글꼴 크기 변경 핸들러 - 기가차드 강화버전
-  const handleFontSizeChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  // 🔥 글꼴 크기 변경 핸들러 - FontProvider 통합
+  const handleFontSizeChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const size = parseInt(event.target.value, 10);
     if (size >= 10 && size <= 24) {
       try {
-        // 🔥 즉시 CSS 변수 적용
-        document.documentElement.style.setProperty('--app-font-size', `${size}px`);
-        document.body.style.fontSize = `${size}px`;
+        // 🔥 1. 설정 저장
+        await updateSetting('app', 'fontSize', size);
+        
+        // 🔥 2. FontProvider를 통한 폰트 크기 적용
+        if (setFontSize) {
+          await setFontSize(size);
+        }
 
-        // 🔥 설정 저장
-        updateSetting('app', 'fontSize', size);
-
-        Logger.info('APP_SETTINGS', '🔥 기가차드 폰트 크기 변경 완료', {
+        Logger.info('APP_SETTINGS', '폰트 크기 설정 완료', {
           newSize: size,
           timestamp: Date.now()
         });
       } catch (error) {
-        Logger.error('APP_SETTINGS', '폰트 크기 변경 실패', error);
+        Logger.error('APP_SETTINGS', '폰트 크기 설정 실패', error);
       }
     }
-  }, [updateSetting]);
+  }, [updateSetting, setFontSize]);
 
-  // 🔥 글꼴 패밀리 변경 핸들러 - 기가차드 강화버전
-  const handleFontFamilyChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+  // 🔥 글꼴 패밀리 변경 핸들러 - FontProvider 통합
+  const handleFontFamilyChange = useCallback(async (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedFont = event.target.value;
 
     try {
-      // 🔥 즉시 폰트 적용 (useDynamicFont의 setFont 사용)
-      setFont(selectedFont);
+      // 1. 설정 저장
+      await updateSetting('app', 'fontFamily', selectedFont);
 
-      // 🔥 설정 저장
-      updateSetting('app', 'fontFamily', selectedFont);
+      // 2. FontProvider를 통한 폰트 적용
+      if (setFont) {
+        await setFont(selectedFont);
+      }
 
-      Logger.info('APP_SETTINGS', '🔥 기가차드 폰트 변경 완료', {
+      Logger.info('APP_SETTINGS', 'FontProvider 통합 폰트 설정 완료', {
         newFont: selectedFont,
+        currentFont,
         timestamp: Date.now()
       });
     } catch (error) {
-      Logger.error('APP_SETTINGS', '폰트 변경 실패', error);
+      Logger.error('APP_SETTINGS', 'FontProvider 통합 폰트 설정 실패', error);
     }
-  }, [updateSetting, setFont]);
+  }, [updateSetting, setFont, currentFont]);
 
   // 🔥 토글 핸들러들
   const handleAutoSaveToggle = useCallback((checked: boolean) => {
@@ -252,8 +264,8 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
                     return (
                       <optgroup key={category} label={categoryLabels[category] || category}>
                         {categoryFonts.map((font, fontIndex) => (
-                          <option key={`${category}-${font.value}-${fontIndex}`} value={font.value}>
-                            {font.label}
+                          <option key={`${category}-${font.id}-${fontIndex}`} value={font.cssFamily}>
+                            {font.name}
                           </option>
                         ))}
                       </optgroup>

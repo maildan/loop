@@ -157,16 +157,17 @@ export class CSSVariableManager {
   }
 
   /**
-   * 🔥 폰트 패밀리 문자열 정제 (보안 + 안정성)
+   * 🔥 폰트 패밀리 문자열 정제 (보안 + 안정성 + 확장자 제거)
    */
   private static sanitizeFontFamily(fontFamily: string): string {
     if (!fontFamily || typeof fontFamily !== 'string') {
       return '"Pretendard", system-ui, sans-serif';
     }
 
-    // 위험한 문자 제거
+    // 🔥 NEW: 파일 확장자 제거 (.ttf, .otf, .woff, etc.)
     let sanitized = fontFamily
-      .replace(/[<>'"\\]/g, '')
+      .replace(/\.(ttf|otf|woff2?|eot)$/i, '') // 폰트 파일 확장자 제거
+      .replace(/[<>'"\\]/g, '') // 위험한 문자 제거
       .replace(/javascript:/gi, '')
       .replace(/expression\(/gi, '')
       .trim();
@@ -174,6 +175,25 @@ export class CSSVariableManager {
     // 빈 문자열 체크
     if (!sanitized) {
       return '"Pretendard", system-ui, sans-serif';
+    }
+
+    // 🔥 NEW: 일반적인 폰트명 정규화 (파일명 → 실제 폰트 이름)
+    const fontNameMappings: Record<string, string> = {
+      'times': 'Times New Roman',
+      'arial': 'Arial',
+      'helvetica': 'Helvetica',
+      'verdana': 'Verdana',
+      'calibri': 'Calibri',
+      'georgia': 'Georgia',
+      'tahoma': 'Tahoma',
+      'courier': 'Courier New'
+    };
+
+    // 소문자로 매핑 확인
+    const lowerSanitized = sanitized.toLowerCase();
+    const mappedFont = fontNameMappings[lowerSanitized];
+    if (mappedFont) {
+      sanitized = mappedFont;
     }
 
     // 적절한 fallback 추가

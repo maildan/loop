@@ -558,3 +558,61 @@
 .dark .dark\\:border-light {
   border-color: var(--border-light);
 }
+
+/* ========================================
+   ⚙️ Settings Page Layout Fixes
+   ======================================== */
+
+/* 설정 페이지 UI 축소 방지 */
+.settings-page {
+  min-width: 600px;
+  min-height: 400px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.settings-section {
+  min-height: 120px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.settings-row {
+  min-height: 80px;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-control {
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.settings-description {
+  max-width: 60ch;
+  flex: 1;
+  margin-right: 2rem;
+}
+
+/* 설정 페이지 반응형 */
+@media (max-width: 768px) {
+  .settings-page {
+    min-width: 320px;
+    padding: 1rem;
+  }
+  
+  .settings-row {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: auto;
+    gap: 1rem;
+  }
+  
+  .settings-description {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+}
