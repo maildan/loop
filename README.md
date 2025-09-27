@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Author Wordprocessor App
+
+A desktop wordprocessor application built with **Electron 38 LTS**, designed for professional authors to focus solely on writing, enhancing quality and minimizing distractions. This app emphasizes stability, type safety, and reproducibility through strict TypeScript and modular architecture.
+
+## Tech Stack
+
+- **Electron**: 38 LTS for the main process (startup, IPC, system integration).
+- **VITE**: renderer (UI, App Router).
+- **TailwindCSS**: v3 for utility-first styling.
+- **TypeScript**: Strict mode enforced.
+- **Package Manager**: pnpm (workspace-aware, lockfile required).
+- **Testing**: Vitest for unit/integration, Playwright for E2E.
+- **Tooling**: ESLint, Prettier, GitHub Actions for CI/CD.
+
+## Project Structure
+
+```
+/main       → Electron main process (startup, windows, IPC)
+/renderer   → VITE app (UI, routes, TailwindCSS)
+/shared     → Cross-cutting types, DTOs, utilities
+/tests      → Unit, integration, and E2E tests
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js LTS (20.x recommended, install via [nvm](https://github.com/nvm-sh/nvm) or fnm).
+- pnpm: Install globally with `npm install -g pnpm`.
+
+### Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run the app in development mode:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev
+```
+
+This starts the Electron app with hot-reloading for both main and renderer processes.
+
+### Building
+
+Build for production:
+
+```bash
+pnpm build
+```
+
+### Testing
+
+Run all tests:
+
+```bash
+pnpm test
+```
+
+Run linting:
+
+```bash
+pnpm lint
+```
+
+## Development Principles
+
+- **Type Safety**: Strict TypeScript, no `any`.
+- **IPC Security**: Typed channels via `/shared`, using `contextBridge`.
+- **Modularity**: Single responsibility per module, singleton patterns for state.
+- **Stability**: Incremental changes, no side effects.
+- **Contributions**: Follow [CONTRIBUTING.instructions.md](./.github/instructions/CONTRIBUTING.instructions.md) for workflow, branching, and commits.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Electron Documentation](https://www.electronjs.org/docs) - Core framework details.
+- [VITE Guide](https://vitejs.dev/guide/) - Build tool for renderer.
+- [TailwindCSS Docs](https://tailwindcss.com/docs) - Styling utilities.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+See [CONTRIBUTING.instructions.md](./.github/instructions/CONTRIBUTING.instructions.md) for guidelines. All PRs must pass CI, include tests, and follow conventional commits.
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[Add license here if applicable]

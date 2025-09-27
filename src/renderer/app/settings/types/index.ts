@@ -1,6 +1,7 @@
 'use client';
 
 // 🔥 기가차드 Settings 타입 정의 - Electron-Store 완벽 호환!
+import type { Theme } from '../../../providers/ThemeProvider';
 
 /**
  * 🎯 Settings 섹션 타입 (main/settings와 완벽 호환)
@@ -13,7 +14,7 @@ export type SettingSection = 'app' | 'keyboard' | 'ui' | 'performance';
  */
 export interface SettingsData {
   readonly app: {
-    theme: 'light' | 'dark' | 'system';
+    theme: Theme;
     language: string;
     autoSave: boolean;
     startMinimized: boolean;

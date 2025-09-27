@@ -303,29 +303,32 @@ body[data-theme="dark"],
 
 /* 🔥 작가 전용 테마들 */
 
-/* Sepia Theme - 따뜻한 종이 느낌 */
+/* Sepia Theme - 빈티지 원고지 🟤📜 */
 [data-theme='sepia'] {
   --background: 47 30% 90%;
   --foreground: 30 8% 15%;
-  --bg-primary: #f4f1e8;
-  --bg-secondary: #ede9de;
-  --bg-elevated: #faf8f3;
-  --bg-card: #fefefc;
-  --bg-hover: #eae6db;
+  --bg-primary: #f4f0e6; /* 오래된 원고지 색 */
+  --bg-secondary: #ede4d3; /* 진한 양피지 */
+  --bg-elevated: #faf7f0; /* 밝은 양피지 */
+  --bg-card: #f8f4e8; /* 카드용 원고지 */
+  --bg-hover: #e8dcc7; /* 호버시 진한 원고지 */
 
-  --text-primary: #3c2f1f;
-  --text-secondary: #5d4e3a;
-  --text-muted: #8b7355;
-  --text-inverse: #f4f1e8;
+  --text-primary: #3d2f1e; /* 다크 브라운 (잉크색) */
+  --text-secondary: #5c4433; /* 미디움 브라운 */
+  --text-muted: #8b6f47; /* 연한 브라운 */
+  --text-inverse: #f4f0e6;
+  --text-accent: #b8860b; /* 다크 골든로드 (강조) */
+  --text-accent-hover: #cd853f; /* 페루 (호버) */
 
-  --accent-primary: #a0522d;
-  --accent-hover: #8b4513;
-  --accent-light: #deb887;
-  --accent-dark: #654321;
+  --accent-primary: #a0522d; /* 시에나 브라운 */
+  --accent-hover: #8b4513; /* 새들 브라운 */
+  --accent-light: #deb887; /* 버라이우드 */
+  --accent-dark: #654321; /* 다크 브라운 */
 
-  --border-light: #d3c7b8;
-  --border-medium: #c8b99c;
-  --border-dark: #a0916f;
+  --border-primary: #c8b99c; /* 진한 원고지 테두리 */
+  --border-light: #ddd4c0;
+  --border-medium: #b8a082;
+  --border-dark: #9d8668;
 
   /* 🔥 동일한 폰트 크기 변수들 */
   --text-xs: 0.75rem;    /* 12px */
@@ -340,29 +343,32 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* High Contrast Theme - 접근성 최적화 */
+/* High Contrast Theme - 접근성 최적화 ⚫⚪ */
 [data-theme='high-contrast'] {
   --background: 0 0% 100%;
   --foreground: 0 0% 0%;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f0f0f0;
-  --bg-elevated: #ffffff;
-  --bg-card: #ffffff;
-  --bg-hover: #e0e0e0;
+  --bg-primary: #ffffff; /* 순백색 */
+  --bg-secondary: #f8f8f8; /* 매우 연한 회색 */
+  --bg-elevated: #ffffff; /* 순백색 */
+  --bg-card: #ffffff; /* 순백색 */
+  --bg-hover: #f0f0f0; /* 호버시 연회색 */
 
-  --text-primary: #000000;
-  --text-secondary: #000000;
-  --text-muted: #333333;
-  --text-inverse: #ffffff;
+  --text-primary: #000000; /* 순흑색 */
+  --text-secondary: #1a1a1a; /* 거의 흑색 */
+  --text-muted: #404040; /* 진한 회색 */
+  --text-inverse: #ffffff; /* 흰색 */
+  --text-accent: #0066cc; /* 접근성 파란색 */
+  --text-accent-hover: #0052a3; /* 진한 파란색 */
 
-  --accent-primary: #0000ff;
-  --accent-hover: #0000cc;
-  --accent-light: #6666ff;
-  --accent-dark: #000080;
+  --accent-primary: #0066cc; /* 고대비 파란색 */
+  --accent-hover: #0052a3; /* 더 진한 파란색 */
+  --accent-light: #3399ff; /* 밝은 파란색 */
+  --accent-dark: #003d7a; /* 매우 진한 파란색 */
 
-  --border-light: #000000;
-  --border-medium: #000000;
-  --border-dark: #000000;
+  --border-primary: #000000; /* 검은 테두리 */
+  --border-light: #333333; /* 진한 회색 테두리 */
+  --border-medium: #1a1a1a; /* 거의 검은 테두리 */
+  --border-dark: #000000; /* 검은 테두리 */
 
   /* 🔥 동일한 폰트 크기 변수들 */
   --text-xs: 0.75rem;    /* 12px */
@@ -377,29 +383,32 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* Warm Theme - 따뜻한 색온도 */
+/* Warm Theme - 노을/일몰 🌅🔥 */
 [data-theme='warm'] {
   --background: 25 20% 95%;
   --foreground: 25 20% 10%;
-  --bg-primary: #fdf8f3;
-  --bg-secondary: #f7efea;
-  --bg-elevated: #fffcf9;
-  --bg-card: #fffefa;
-  --bg-hover: #f1e6dd;
+  --bg-primary: #fff0e6; /* 노을 하늘 */
+  --bg-secondary: #ffe0cc; /* 연한 오렌지 */
+  --bg-elevated: #fff8f0; /* 밝은 노을 */
+  --bg-card: #fff4e6; /* 카드용 노을색 */  
+  --bg-hover: #ffcc99; /* 호버시 진한 노을 */
 
-  --text-primary: #2d1810;
-  --text-secondary: #4a2f1f;
-  --text-muted: #6b4423;
-  --text-inverse: #fdf8f3;
+  --text-primary: #8b2500; /* 진한 적갈색 (석양) */
+  --text-secondary: #cc3300; /* 붉은색 */
+  --text-muted: #ff6633; /* 오렌지 */
+  --text-inverse: #fff0e6;
+  --text-accent: #ff4500; /* 오렌지 레드 (강조) */
+  --text-accent-hover: #ff6600; /* 밝은 오렌지 */
 
-  --accent-primary: #d97706;
-  --accent-hover: #b45309;
-  --accent-light: #fed7aa;
-  --accent-dark: #92400e;
+  --accent-primary: #ff6600; /* 순수 오렌지 */
+  --accent-hover: #ff4500; /* 오렌지 레드 */
+  --accent-light: #ff9966; /* 라이트 오렌지 */
+  --accent-dark: #cc3300; /* 다크 레드 */
 
-  --border-light: #e7d3c8;
-  --border-medium: #d4b5a0;
-  --border-dark: #a78366;
+  --border-primary: #ffcc99; /* 노을 테두리 */
+  --border-light: #ffe0cc;
+  --border-medium: #ffb366;
+  --border-dark: #ff9900;
 
   /* 🔥 동일한 폰트 크기 변수들 */
   --text-xs: 0.75rem;    /* 12px */
@@ -414,29 +423,32 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* Cool Theme - 차가운 색온도 */
+/* Cool Theme - 바다/북극 ❄️🌊 */
 [data-theme='cool'] {
   --background: 210 20% 95%;
   --foreground: 210 20% 10%;
-  --bg-primary: #f1f5f9;
-  --bg-secondary: #e2e8f0;
-  --bg-elevated: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-hover: #cbd5e1;
+  --bg-primary: #e6f7ff; /* 북극 바다 */
+  --bg-secondary: #ccf2ff; /* 연한 아이스 블루 */
+  --bg-elevated: #f0faff; /* 밝은 빙하 */
+  --bg-card: #ffffff; /* 순백 얼음 */
+  --bg-hover: #b3e5ff; /* 호버시 진한 아이스 */
 
-  --text-primary: #0f172a;
-  --text-secondary: #1e293b;
-  --text-muted: #475569;
-  --text-inverse: #f1f5f9;
+  --text-primary: #003d7a; /* 깊은 바다 색 */
+  --text-secondary: #0066cc; /* 오션 블루 */
+  --text-muted: #3399ff; /* 스카이 블루 */
+  --text-inverse: #e6f7ff;
+  --text-accent: #0099ff; /* 시안 블루 (강조) */
+  --text-accent-hover: #0066cc; /* 딥 블루 */
 
-  --accent-primary: #0284c7;
-  --accent-hover: #0369a1;
-  --accent-light: #7dd3fc;
-  --accent-dark: #075985;
+  --accent-primary: #0099ff; /* 순수 시안 */
+  --accent-hover: #0066cc; /* 오션 블루 */
+  --accent-light: #66ccff; /* 라이트 시안 */
+  --accent-dark: #003d7a; /* 네이비 */
 
-  --border-light: #cbd5e1;
-  --border-medium: #94a3b8;
-  --border-dark: #64748b;
+  --border-primary: #99ddff; /* 아이스 블루 테두리 */
+  --border-light: #ccf2ff;
+  --border-medium: #66ccff;
+  --border-dark: #3399ff;
 
   /* 🔥 동일한 폰트 크기 변수들 */
   --text-xs: 0.75rem;    /* 12px */
@@ -451,29 +463,32 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* Forest Theme - 자연스러운 녹색 */
+/* Forest Theme - 깊은 정글 🌲🌿 */
 [data-theme='forest'] {
   --background: 120 10% 95%;
   --foreground: 120 20% 15%;
-  --bg-primary: #f0f4f0;
-  --bg-secondary: #e8ede8;
-  --bg-elevated: #f5f8f5;
-  --bg-card: #fafcfa;
-  --bg-hover: #dde4dd;
+  --bg-primary: #e8f5e8; /* 정글 안개 */
+  --bg-secondary: #d9f2d9; /* 연한 이끼 */
+  --bg-elevated: #f0f8f0; /* 밝은 잎사귀 */
+  --bg-card: #ffffff; /* 순백 햇살 */
+  --bg-hover: #cceecc; /* 호버시 진한 이끼 */
 
-  --text-primary: #1a2e1a;
-  --text-secondary: #2d4a2d;
-  --text-muted: #4a654a;
-  --text-inverse: #f0f4f0;
+  --text-primary: #1b4d1b; /* 깊은 숲 그림자 */
+  --text-secondary: #2d6b2d; /* 숲속 그린 */
+  --text-muted: #4d8f4d; /* 밝은 잎새 */
+  --text-inverse: #e8f5e8;
+  --text-accent: #2e7d32; /* 포레스트 그린 (강조) */
+  --text-accent-hover: #1b5e20; /* 다크 포레스트 */
 
-  --accent-primary: #059669;
-  --accent-hover: #047857;
-  --accent-light: #a7f3d0;
-  --accent-dark: #065f46;
+  --accent-primary: #2e7d32; /* 순수 포레스트 */
+  --accent-hover: #1b5e20; /* 다크 포레스트 */
+  --accent-light: #66bb6a; /* 라이트 그린 */
+  --accent-dark: #0d4f0d; /* 진한 숲 */
 
-  --border-light: #d1d5db;
-  --border-medium: #9ca3af;
-  --border-dark: #6b7280;
+  --border-primary: #81c784; /* 자연 그린 테두리 */
+  --border-light: #c8e6c8;
+  --border-medium: #66bb6a;
+  --border-dark: #4caf50;
 
   /* 🔥 동일한 폰트 크기 변수들 */
   --text-xs: 0.75rem;    /* 12px */
@@ -488,29 +503,32 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* Midnight Theme - 극도로 어두운 몰입 */
+/* Midnight Theme - 우주/심연 🌌⭐ */
 [data-theme='midnight'] {
   --background: 220 20% 5%;
   --foreground: 220 20% 95%;
-  --bg-primary: #0a0b0f;
-  --bg-secondary: #0f1115;
-  --bg-elevated: #12141a;
-  --bg-card: #0d0e13;
-  --bg-hover: #1a1d24;
+  --bg-primary: #0a0a15; /* 깊은 우주 */
+  --bg-secondary: #15152a; /* 어두운 성운 */
+  --bg-elevated: #1a1a30; /* 밝은 우주 */
+  --bg-card: #0f0f20; /* 카드용 우주색 */
+  --bg-hover: #25253f; /* 호버시 성운 */
 
-  --text-primary: #f1f3f7;
-  --text-secondary: #d1d5db;
-  --text-muted: #9ca3af;
-  --text-inverse: #0a0b0f;
+  --text-primary: #e6e6ff; /* 별빛 */
+  --text-secondary: #ccccf0; /* 달빛 */
+  --text-muted: #9999cc; /* 성운빛 */
+  --text-inverse: #0a0a15;
+  --text-accent: #9d4edd; /* 우주 보라 (강조) */
+  --text-accent-hover: #7209b7; /* 진한 우주 보라 */
 
-  --accent-primary: #4f46e5;
-  --accent-hover: #4338ca;
-  --accent-light: #312e81;
-  --accent-dark: #3730a3;
+  --accent-primary: #9d4edd; /* 순수 우주 보라 */
+  --accent-hover: #7209b7; /* 다크 보라 */
+  --accent-light: #c77dff; /* 라이트 보라 */
+  --accent-dark: #5a189a; /* 매우 진한 보라 */
 
-  --border-light: #1f2937;
-  --border-medium: #374151;
-  --border-dark: #4b5563;
+  --border-primary: #6a4c93; /* 우주 보라 테두리 */
+  --border-light: #483d8b; /* 슬레이트 블루 */
+  --border-medium: #5a4fcf; /* 미디움 보라 */
+  --border-dark: #4c2a8a; /* 다크 보라 */
 
   /* 🔥 동일한 폰트 크기 변수들 */
   --text-xs: 0.75rem;    /* 12px */
@@ -570,4 +588,113 @@ h1, h2, h3, h4, h5, h6 {
 input, textarea, select, button {
   font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
   transition: font-family 0.1s ease;
+}
+
+/* ============================================
+   🎯 SELECTIVE: 컨텐츠 영역 테마 적용 시스템
+   ============================================ */
+
+/* 🎯 컨텐츠 영역만 선택적으로 테마 적용 (UI 컴포넌트 보호) */
+.prose,
+.editor-content,
+.content-area,
+article,
+.ProseMirror,
+main:not(.sidebar):not(.nav):not(.header) {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--app-font-family, var(--dynamic-font-family, 'Pretendard', system-ui, -apple-system, sans-serif));
+  font-size: var(--app-font-size, var(--dynamic-font-size, 16px));
+}
+
+/* 🎯 텍스트 요소들 (컨텐츠 영역 내에서만) */
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6,
+.editor-content h1, .editor-content h2, .editor-content h3, .editor-content h4, .editor-content h5, .editor-content h6,
+.content-area h1, .content-area h2, .content-area h3, .content-area h4, .content-area h5, .content-area h6,
+article h1, article h2, article h3, article h4, article h5, article h6 {
+  color: var(--text-primary);
+  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
+}
+
+.prose p, .prose span, .prose strong, .prose em,
+.editor-content p, .editor-content span, .editor-content strong, .editor-content em,
+.content-area p, .content-area span, .content-area strong, .content-area em,
+article p, article span, article strong, article em {
+  color: var(--text-primary);
+  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
+}
+
+/* 🎯 컨텐츠 영역 내 특정 요소들만 테마 적용 */
+.prose [class*="card"],
+.editor-content [class*="dialog"],
+.content-area [class*="popover"],
+article [class*="modal"] {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+}
+
+/* 🎯 컨텐츠 영역 내 링크만 테마 적용 */
+.prose a,
+.editor-content a,
+.content-area a,
+article a {
+  color: var(--text-accent);
+}
+
+.prose a:hover,
+.editor-content a:hover,
+.content-area a:hover,
+article a:hover {
+  color: var(--text-accent-hover);
+}
+
+/* 🎯 컨텐츠 영역 내 입력 요소들 */
+.prose input, .prose textarea, .prose select,
+.editor-content input, .editor-content textarea, .editor-content select,
+.content-area input, .content-area textarea, .content-area select,
+article input, article textarea, article select {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+}
+
+/* 🎯 TipTap 에디터 선택적 테마 적용 */
+.ProseMirror {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--app-font-family, var(--dynamic-font-family, 'Pretendard'));
+  font-size: var(--app-font-size, var(--dynamic-font-size, 16px));
+}
+
+.ProseMirror p,
+.ProseMirror h1, .ProseMirror h2, .ProseMirror h3, .ProseMirror h4, .ProseMirror h5, .ProseMirror h6,
+.ProseMirror span, .ProseMirror strong, .ProseMirror em {
+  color: var(--text-primary);
+  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
+}
+
+/* 🎯 컨텐츠 영역 내 테이블만 테마 적용 */
+.prose table, .prose tr, .prose td, .prose th,
+.editor-content table, .editor-content tr, .editor-content td, .editor-content th,
+.content-area table, .content-area tr, .content-area td, .content-area th,
+article table, article tr, article td, article th {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  border-color: var(--border-primary);
+}
+
+/* 🎯 컨텐츠 영역 내에서만 TailwindCSS 클래스 조정 */
+.prose .text-gray-900, .prose .text-gray-800, .prose .text-gray-700,
+.editor-content .text-gray-900, .editor-content .text-gray-800, .editor-content .text-gray-700,
+.content-area .text-gray-900, .content-area .text-gray-800, .content-area .text-gray-700,
+article .text-gray-900, article .text-gray-800, article .text-gray-700 {
+  color: var(--text-primary);
+}
+
+.prose .bg-white, .prose .bg-gray-50, .prose .bg-gray-100,
+.editor-content .bg-white, .editor-content .bg-gray-50, .editor-content .bg-gray-100,
+.content-area .bg-white, .content-area .bg-gray-50, .content-area .bg-gray-100,
+article .bg-white, article .bg-gray-50, article .bg-gray-100 {
+  background-color: var(--bg-primary);
 }

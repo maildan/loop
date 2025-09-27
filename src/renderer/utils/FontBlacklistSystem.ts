@@ -318,14 +318,26 @@ export class FontBlacklistSystem {
         }
       }
 
-      // Remove url(...) occurrences that reference the fontName (안전한 정적 패턴으로 수정)
-      const escapedFontName = fontName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      // 🔒 ReDoS 공격 방지: 입력 검증 및 길이 제한
+      if (!fontName || typeof fontName !== 'string') {
+        Logger.warn('FONT_BLACKLIST', '유효하지 않은 폰트명');
+        return css;
+      }
       
-      // 입력 검증: 폰트명이 너무 길거나 위험한 문자 포함 시 처리 중단
-      if (escapedFontName.length > 200 || /[<>{}\\]/.test(fontName)) {
+      // 길이 제한 (ReDoS 방지)
+      if (fontName.length > 100) {
+        Logger.warn('FONT_BLACKLIST', `폰트명이 너무 긺: ${fontName.substring(0, 50)}...`);
+        return css;
+      }
+      
+      // 위험한 문자 패턴 감지 (ReDoS 가능성 있는 문자들)
+      if (/[<>{}\\|*?[\]"'`]/.test(fontName)) {
         Logger.warn('FONT_BLACKLIST', `잠재적으로 위험한 폰트명 감지: ${fontName}`);
         return css;
       }
+      
+      // 안전한 이스케이프 처리 (길이 제한된 입력에만 적용)
+      const escapedFontName = fontName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       
       // 안전한 정적 패턴 구성
       const urlPattern = `url\\([^)]*${escapedFontName}[^)]*\\)`;

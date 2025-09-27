@@ -3,6 +3,11 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 import fs from 'fs'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 // 🚀 동적 폰트 디렉토리 스캔 함수 (fonts/{dir} 구조 유지)
 function generateFontCopyTargets() {
@@ -19,9 +24,14 @@ function generateFontCopyTargets() {
     .filter(dirent => dirent.isDirectory() && !dirent.name.startsWith('.'))
     .map(dirent => dirent.name)
     .filter(name => {
-      // 🔒 보안: 위험한 디렉토리명 필터링
-      const sanitizedName = name.replace(/[^a-zA-Z0-9_-]/g, '');
-      return sanitizedName === name && !name.includes('..') && name.length < 100;
+      // 🔒 보안: Path Traversal 공격 방지 - 강화된 검증
+      if (!name || typeof name !== 'string') return false;
+      if (name.includes('..') || name.includes('/') || name.includes('\\')) return false;
+      if (name.includes('%') || name.includes('~') || name.startsWith('-')) return false;
+      
+      // 허용된 문자만 (영문, 숫자, 하이픈, 언더스코어, 공백)
+      const sanitizedName = name.replace(/[^a-zA-Z0-9_\-\s]/g, '');
+      return sanitizedName === name && name.length > 0 && name.length < 100;
     })
 
   for (const familyName of fontFamilies) {

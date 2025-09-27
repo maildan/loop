@@ -148,26 +148,33 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // 🔥 스마트 매핑 적용: 폰트명을 정규화하고 CSS font-family 생성
+      // 🔥 1단계: 실제 폰트 파일 로딩 시도
+      const fontLoaded = await loadFont(fontFamily);
+      if (!fontLoaded) {
+        Logger.warn('FONT_PROVIDER', `폰트 파일 로딩 실패, CSS 변수만 적용: ${fontFamily}`);
+      }
+
+      // 🔥 2단계: 스마트 매핑 적용: 폰트명을 정규화하고 CSS font-family 생성
       const displayName = getFontDisplayName(fontFamily);
       const smartCSSFamily = generateCSSFontFamily(fontFamily);
       
       Logger.info('FONT_PROVIDER', '스마트 폰트 매핑 적용', {
         original: fontFamily,
         displayName: displayName,
-        cssFamily: smartCSSFamily
+        cssFamily: smartCSSFamily,
+        fileLoaded: fontLoaded
       });
 
-      // CSS 변수로 폰트 적용 (스마트 매핑된 CSS 사용)
+      // 🔥 3단계: CSS 변수로 폰트 적용 (스마트 매핑된 CSS 사용)
       CSSVariableManager.applyFontVariables({
         family: smartCSSFamily, // fallback 체인 포함된 스마트 CSS
         size: fontSize
       });
 
-      // 상태 업데이트 (표시명 사용)
+      // 🔥 4단계: 상태 업데이트 (표시명 사용)
       setCurrentFont(displayName);
 
-      // 설정 저장 (원본명 저장)
+      // 🔥 5단계: 설정 저장 (원본명 저장)
       await saveSettings(fontFamily, fontSize);
 
       Logger.info('FONT_PROVIDER', `폰트 변경 완료: ${displayName}`, { 
@@ -183,7 +190,7 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } finally {
       setIsLoading(false);
     }
-  }, [fontSize]);
+  }, [fontSize, availableFonts]);
 
   /**
    * 🔥 폰트 크기 설정
@@ -220,11 +227,35 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * 🔥 폰트 로딩 (스마트 매핑 + FontLoader 위임)
    */
   const loadFont = useCallback(async (fontId: string): Promise<boolean> => {
-    const fontMetadata = availableFonts.find(f => f.id === fontId);
+    // 🔥 폰트명 추출: CSS family 문자열에서 첫 번째 폰트명만 추출
+    const extractedFontName = fontId ? fontId.split(',')[0]?.trim().replace(/['"]/g, '') || fontId : '';
+    
+    // 🔥 유연한 폰트 검색: ID, 이름으로 검색 (family 속성 제거)
+    let fontMetadata = availableFonts.find(f => 
+      f.id === extractedFontName || 
+      f.name === extractedFontName ||
+      f.id.toLowerCase() === extractedFontName.toLowerCase() ||
+      f.name.toLowerCase() === extractedFontName.toLowerCase()
+    );
+    
     if (!fontMetadata) {
-      Logger.warn('FONT_PROVIDER', `폰트 메타데이터를 찾을 수 없음: ${fontId}`);
+      // 🔥 부분 매칭 시도
+      fontMetadata = availableFonts.find(f => 
+        f.id.toLowerCase().includes(extractedFontName.toLowerCase()) ||
+        f.name.toLowerCase().includes(extractedFontName.toLowerCase()) ||
+        extractedFontName.toLowerCase().includes(f.id.toLowerCase())
+      );
+    }
+    
+    if (!fontMetadata) {
+      Logger.warn('FONT_PROVIDER', `폰트 메타데이터를 찾을 수 없음: ${extractedFontName} (원본: ${fontId})`);
       return false;
     }
+    
+    Logger.info('FONT_PROVIDER', `폰트 메타데이터 발견: ${fontMetadata.name}`, {
+      searchTerm: extractedFontName,
+      found: fontMetadata
+    });
 
     // 🔥 스마트 매핑으로 더 정확한 로딩 정보 생성
     const displayName = getFontDisplayName(fontId);

@@ -178,7 +178,12 @@ export class CSSVariableManager {
       return '"Pretendard", system-ui, sans-serif';
     }
 
-    // 🔥 NEW: 파일 확장자 제거 (.ttf, .otf, .woff, etc.)
+    // 🔥 이미 완전한 CSS family 문자열인 경우 그대로 반환 (fallback 체인 보존)
+    if (fontFamily.includes('system-ui') || fontFamily.includes('sans-serif') || fontFamily.includes('-apple-system')) {
+      return fontFamily; // 이미 처리된 fallback 체인이므로 그대로 사용
+    }
+
+    // 🔥 단일 폰트명 처리: 파일 확장자 제거 및 정규화
     let sanitized = fontFamily
       .replace(/\.(ttf|otf|woff2?|eot)$/i, '') // 폰트 파일 확장자 제거
       .replace(/[<>'"\\]/g, '') // 위험한 문자 제거
