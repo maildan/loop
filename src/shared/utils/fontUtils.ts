@@ -96,7 +96,30 @@ const FONT_FILE_MAPPINGS: Record<string, string> = {
 };
 
 /**
- * 🔥 기술적 폰트명을 사용자 친화적 표시명으로 변환
+ * 🔥 폰트 스타일 접미사 제거 함수 (Bold, Regular, Light 등)
+ */
+function removeFontStyleSuffix(fontName: string): string {
+  // 일반적인 폰트 스타일 접미사들
+  const styleSuffixes = [
+    /\s*-?\s*(Bold|Regular|Light|Medium|Thin|Black|Heavy|ExtraLight|SemiBold|ExtraBold|UltraLight|DemiBold)$/i,
+    /\s*-?\s*(Italic|Oblique)$/i,
+    /\s*-?\s*(Condensed|Extended|Expanded|Compressed|Narrow|Wide)$/i,
+    /\s*-?\s*\d{3,4}$/,  // 숫자 weight (400, 500, 700 등)
+    /\s*-?\s*(MT|MS|UI|Pro|Variable|VF)$/i,  // 기술적 접미사
+  ];
+
+  let cleanName = fontName;
+  
+  // 각 패턴을 순서대로 적용
+  for (const pattern of styleSuffixes) {
+    cleanName = cleanName.replace(pattern, '');
+  }
+  
+  return cleanName.trim();
+}
+
+/**
+ * 🔥 기술적 폰트명을 사용자 친화적 표시명으로 변환 (스마트 통합)
  */
 export function getFontDisplayName(technicalName: string): string {
   if (!technicalName || typeof technicalName !== 'string') {
@@ -104,7 +127,10 @@ export function getFontDisplayName(technicalName: string): string {
   }
 
   // 🔥 NEW: 파일 확장자 제거
-  const cleanName = removeFileExtension(technicalName);
+  let cleanName = removeFileExtension(technicalName);
+  
+  // 🔥 NEW: 폰트 스타일 접미사 제거 (Bold, Regular 등)
+  cleanName = removeFontStyleSuffix(cleanName);
   
   // 1. 직접 매핑 확인 (원본)
   const directMatch = FONT_DISPLAY_NAMES[technicalName];
@@ -112,7 +138,7 @@ export function getFontDisplayName(technicalName: string): string {
     return directMatch;
   }
 
-  // 2. 직접 매핑 확인 (확장자 제거된 이름)
+  // 2. 직접 매핑 확인 (정제된 이름)
   const cleanDirectMatch = FONT_DISPLAY_NAMES[cleanName];
   if (cleanDirectMatch) {
     return cleanDirectMatch;
@@ -132,7 +158,7 @@ export function getFontDisplayName(technicalName: string): string {
     return FONT_DISPLAY_NAMES[lowerKey];
   }
 
-  // 5. 대소문자 무시하고 매핑 확인 (확장자 제거된 이름)
+  // 5. 대소문자 무시하고 매핑 확인 (정제된 이름)
   const cleanLowerKey = Object.keys(FONT_DISPLAY_NAMES).find(
     key => key.toLowerCase() === cleanName.toLowerCase()
   );
@@ -140,7 +166,7 @@ export function getFontDisplayName(technicalName: string): string {
     return FONT_DISPLAY_NAMES[cleanLowerKey];
   }
 
-  // 6. 자동 정규화 패턴 적용 (확장자 제거된 이름 사용)
+  // 6. 자동 정규화 패턴 적용 (정제된 이름 사용)
   return normalizeFontName(cleanName);
 }
 

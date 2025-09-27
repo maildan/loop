@@ -35,17 +35,31 @@ export class CSSVariableManager {
 
       // 폰트 패밀리 (가장 중요)
       if (fontSettings.family) {
+        const sanitizedFamily = this.sanitizeFontFamily(fontSettings.family);
         variables.push({
           name: `${this.CSS_VAR_PREFIX}font-family`,
-          value: this.sanitizeFontFamily(fontSettings.family)
+          value: sanitizedFamily
+        });
+        
+        // 🔥 NEW: variables.css에서 참조하는 동적 변수들 설정
+        variables.push({
+          name: '--dynamic-font-family',
+          value: sanitizedFamily
         });
       }
 
       // 폰트 크기
       if (fontSettings.size !== undefined) {
+        const fontSize = `${Math.max(8, Math.min(72, fontSettings.size))}px`;
         variables.push({
           name: `${this.CSS_VAR_PREFIX}font-size`,
-          value: `${Math.max(8, Math.min(72, fontSettings.size))}px`
+          value: fontSize
+        });
+        
+        // 🔥 NEW: variables.css에서 참조하는 동적 변수들 설정
+        variables.push({
+          name: '--dynamic-font-size',
+          value: fontSize
         });
       }
 

@@ -30,6 +30,10 @@ interface FontContextType {
   getSmartFontRecommendations: (currentFont: string) => FontMetadata[];
   searchFontsByName: (query: string) => FontMetadata[];
   getFontsByCategory: (category: string) => FontMetadata[];
+  // 🔥 작가 전용 기능들
+  getWriterFriendlyFonts: () => FontMetadata[];
+  getReadabilityScore: (fontName: string) => number;
+  getFontForWritingPurpose: (purpose: 'draft' | 'editing' | 'publishing') => FontMetadata[];
 }
 
 interface FontMetadata {
@@ -245,49 +249,111 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [availableFonts]);
 
   /**
-   * 🔥 사용 가능한 폰트 목록 새로고침 (스마트 매핑 적용)
+   * 🔥 폰트 가족별 그룹핑 및 중복 제거 함수
+   */
+  const groupFontsByFamily = useCallback((fontList: any[]): FontMetadata[] => {
+    const fontGroups = new Map<string, any[]>();
+    
+    // 1단계: 폰트들을 가족별로 그룹핑
+    fontList.forEach(font => {
+      const displayName = getFontDisplayName(font.value);
+      const familyKey = displayName.toLowerCase().trim();
+      
+      if (!fontGroups.has(familyKey)) {
+        fontGroups.set(familyKey, []);
+      }
+      fontGroups.get(familyKey)?.push({
+        ...font,
+        displayName,
+        originalValue: font.value
+      });
+    });
+
+    // 2단계: 각 그룹에서 대표 폰트 선택
+    const representativeFonts: FontMetadata[] = [];
+    
+    fontGroups.forEach((fonts, familyKey) => {
+      // 선호도 순서: Regular > Normal > Medium > Bold > 기타
+      const preferenceOrder = ['regular', 'normal', '', 'medium', 'light', 'semibold', 'bold'];
+      
+      let selectedFont = fonts[0]; // 기본값
+      
+      // 가장 선호하는 스타일 찾기
+      for (const preference of preferenceOrder) {
+        const found = fonts.find(font => {
+          const lowerValue = font.originalValue.toLowerCase();
+          if (preference === '') {
+            // 스타일이 명시되지 않은 폰트 (일반적으로 Regular)
+            return !lowerValue.includes('bold') && 
+                   !lowerValue.includes('light') && 
+                   !lowerValue.includes('medium') &&
+                   !lowerValue.includes('thin') &&
+                   !lowerValue.includes('black');
+          }
+          return lowerValue.includes(preference);
+        });
+        
+        if (found) {
+          selectedFont = found;
+          break;
+        }
+      }
+
+      // 스마트 매핑 적용
+      const cssFontFamily = generateCSSFontFamily(selectedFont.originalValue);
+      const category = determineFontCategory(selectedFont.originalValue);
+      
+      representativeFonts.push({
+        id: selectedFont.originalValue,
+        name: selectedFont.displayName,
+        cssFamily: cssFontFamily,
+        category: category,
+        isLocal: true
+      });
+    });
+
+    return representativeFonts;
+  }, []);
+
+  /**
+   * 🔥 사용 가능한 폰트 목록 새로고침 (중복 제거 + 스마트 매핑)
    */
   const refreshFonts = useCallback(async () => {
     try {
       // Electron API로 폰트 목록 조회
       if (window.electronAPI?.font?.getAvailableFonts) {
         const fontList = await window.electronAPI.font.getAvailableFonts();
-        const mappedFonts: FontMetadata[] = fontList.map((font, index) => {
-          // 🔥 스마트 매핑 적용
-          const displayName = getFontDisplayName(font.value);
-          const cssFontFamily = generateCSSFontFamily(font.value);
-          const category = determineFontCategory(font.value);
-          
-          return {
-            id: font.value,
-            name: displayName, // 사용자 친화적 이름
-            cssFamily: cssFontFamily, // fallback 포함된 CSS
-            category: category, // 자동 분류
-            isLocal: true
-          };
-        });
+        
+        Logger.info('FONT_PROVIDER', `원본 폰트 목록: ${fontList.length}개`);
+        
+        // 🔥 폰트 가족별 그룹핑 및 중복 제거
+        const groupedFonts = groupFontsByFamily(fontList);
         
         // 카테고리별로 정렬 (한글 > 영문 > 일본어 > 모노스페이스 > 시스템)
         const categoryOrder = { korean: 0, english: 1, japanese: 2, monospace: 3, system: 4 };
-        mappedFonts.sort((a, b) => {
+        groupedFonts.sort((a, b) => {
           const orderA = categoryOrder[a.category as keyof typeof categoryOrder] ?? 5;
           const orderB = categoryOrder[b.category as keyof typeof categoryOrder] ?? 5;
           if (orderA !== orderB) return orderA - orderB;
-          return a.name.localeCompare(b.name);
+          return a.name.localeCompare(b.name, 'ko');
         });
         
-        setAvailableFonts(mappedFonts);
-        Logger.info('FONT_PROVIDER', `사용 가능한 폰트 로드 (스마트 매핑 적용): ${mappedFonts.length}개`, {
-          categories: mappedFonts.reduce((acc, font) => {
-            acc[font.category] = (acc[font.category] || 0) + 1;
-            return acc;
-          }, {} as Record<string, number>)
+        setAvailableFonts(groupedFonts);
+        
+        const categoryStats = groupedFonts.reduce((acc, font) => {
+          acc[font.category] = (acc[font.category] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+        
+        Logger.info('FONT_PROVIDER', `폰트 중복 제거 완료: ${fontList.length}개 → ${groupedFonts.length}개`, {
+          categories: categoryStats,
+          reductionRate: `${(((fontList.length - groupedFonts.length) / fontList.length) * 100).toFixed(1)}% 감소`
         });
       }
     } catch (refreshError) {
       Logger.error('FONT_PROVIDER', '폰트 목록 새로고침 실패', refreshError);
     }
-  }, []);
+  }, [groupFontsByFamily]);
 
   /**
    * 🔥 설정 저장
@@ -368,9 +434,120 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   }, [availableFonts]);
 
-  const getFontsByCategory = useCallback((category: string): FontMetadata[] => {
-    return availableFonts.filter(font => font.category === category);
+    const getFontsByCategory = useCallback((category: string): FontMetadata[] => {
+    return availableFonts.filter(font => font.category.toLowerCase().includes(category.toLowerCase()));
   }, [availableFonts]);
+
+  // 🔥 작가 친화적 폰트 추천 시스템
+  const getWriterFriendlyFonts = useCallback((): FontMetadata[] => {
+    // 작가에게 적합한 폰트 특성:
+    // 1. 높은 가독성 (serif, sans-serif 중 읽기 좋은 것들)
+    // 2. 긴 글에 적합한 character spacing
+    // 3. 눈의 피로를 줄이는 디자인
+    const writerFriendlyPatterns = [
+      // Serif 폰트 (긴 글 읽기에 좋음)
+      'Times', 'Georgia', 'Palatino', 'Book Antiqua', 'Minion', 'Crimson', 'Lora', 'PT Serif',
+      // Sans-serif (화면 읽기에 좋음)
+      'Helvetica', 'Arial', 'Verdana', 'Trebuchet', 'Open Sans', 'Source Sans', 'Lato', 'Roboto',
+      // 한글 폰트
+      'Pretendard', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', 'NanumGothic', 'NanumMyeongjo',
+      // 모노스페이스 (코드 작성용)
+      'Monaco', 'SF Mono', 'Cascadia Code', 'JetBrains Mono', 'Fira Code', 'Consolas'
+    ];
+
+    return availableFonts.filter(font => 
+      writerFriendlyPatterns.some(pattern => 
+        font.name.toLowerCase().includes(pattern.toLowerCase())
+      )
+    ).map(font => ({
+      ...font,
+      category: font.category || determineFontCategory(font.name)
+    }));
+  }, [availableFonts]);
+
+  const getReadabilityScore = useCallback((fontName: string): number => {
+    // 폰트별 가독성 점수 (0-100)
+    const readabilityScores: Record<string, number> = {
+      // Serif 폰트 (긴 글에 좋음)
+      'Times New Roman': 85,
+      'Georgia': 90,
+      'Palatino': 88,
+      'Book Antiqua': 82,
+      'PT Serif': 87,
+      'Lora': 89,
+      'Crimson Text': 86,
+      
+      // Sans-serif 폰트 (화면에 좋음)
+      'Helvetica': 88,
+      'Arial': 85,
+      'Verdana': 92,
+      'Trebuchet MS': 84,
+      'Open Sans': 91,
+      'Source Sans Pro': 90,
+      'Lato': 89,
+      'Roboto': 87,
+      
+      // 한글 폰트
+      'Pretendard': 93,
+      'Noto Sans KR': 91,
+      'Malgun Gothic': 85,
+      'Apple SD Gothic Neo': 88,
+      'NanumGothic': 84,
+      'NanumMyeongjo': 87,
+      
+      // 모노스페이스
+      'Monaco': 78,
+      'SF Mono': 81,
+      'Cascadia Code': 83,
+      'JetBrains Mono': 85,
+      'Fira Code': 84,
+      'Consolas': 79
+    };
+
+    // 폰트명에서 패턴 매칭으로 점수 계산
+    for (const [pattern, score] of Object.entries(readabilityScores)) {
+      if (fontName.toLowerCase().includes(pattern.toLowerCase())) {
+        return score;
+      }
+    }
+
+    // 기본 점수 (카테고리별)
+    const lowerName = fontName.toLowerCase();
+    if (lowerName.includes('serif') && !lowerName.includes('sans')) return 80; // serif
+    if (lowerName.includes('sans')) return 82; // sans-serif
+    if (lowerName.includes('mono')) return 75; // monospace
+    
+    return 70; // 기본값
+  }, []);
+
+  const getFontForWritingPurpose = useCallback((purpose: 'draft' | 'editing' | 'publishing'): FontMetadata[] => {
+    const writerFonts = getWriterFriendlyFonts();
+    
+    switch (purpose) {
+      case 'draft':
+        // 초안 작성: 편안하고 빠른 타이핑에 좋은 폰트
+        return writerFonts.filter(font => 
+          ['sans-serif', 'monospace'].includes(font.category) &&
+          getReadabilityScore(font.name) >= 85
+        );
+        
+      case 'editing':
+        // 편집: 세세한 부분까지 잘 보이는 폰트
+        return writerFonts.filter(font => 
+          getReadabilityScore(font.name) >= 88
+        );
+        
+      case 'publishing':
+        // 출간: 전문적이고 읽기 좋은 폰트
+        return writerFonts.filter(font => 
+          font.category === 'serif' && 
+          getReadabilityScore(font.name) >= 87
+        );
+        
+      default:
+        return writerFonts;
+    }
+  }, [getWriterFriendlyFonts, getReadabilityScore]);
 
   // 🔥 초기화 실행
   useEffect(() => {
@@ -403,7 +580,11 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // 🔥 스마트 매핑 기능들
     getSmartFontRecommendations,
     searchFontsByName,
-    getFontsByCategory
+    getFontsByCategory,
+    // 🔥 작가 전용 기능들
+    getWriterFriendlyFonts,
+    getReadabilityScore,
+    getFontForWritingPurpose
   }), [
     currentFont,
     fontSize, 
@@ -421,7 +602,10 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
     generateAccessibilityReport,
     getSmartFontRecommendations,
     searchFontsByName,
-    getFontsByCategory
+    getFontsByCategory,
+    getWriterFriendlyFonts,
+    getReadabilityScore,
+    getFontForWritingPurpose
   ]);
 
   return (

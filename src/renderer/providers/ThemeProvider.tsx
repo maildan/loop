@@ -3,12 +3,52 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { Logger } from '../../shared/logger';
 
-// 🔥 테마 타입 정의
-export type Theme = 'light' | 'dark' | 'system';
+// 🔥 테마 타입 정의 - 작가 전용 테마들 추가
+export type Theme = 'light' | 'dark' | 'system' | 'sepia' | 'high-contrast' | 'warm' | 'cool' | 'forest' | 'midnight';
+
+// 작가 전용 테마 메타데이터
+export const AUTHOR_THEMES = {
+  sepia: {
+    name: '세피아',
+    description: '따뜻한 종이 느낌으로 눈의 피로를 줄입니다',
+    category: 'comfortable',
+    baseScheme: 'light'
+  },
+  'high-contrast': {
+    name: '고대비',
+    description: '접근성을 위한 최대 대비 모드',
+    category: 'accessibility',
+    baseScheme: 'light'
+  },
+  warm: {
+    name: '따뜻함',
+    description: '따뜻한 색온도로 편안한 작업 환경',
+    category: 'comfortable',
+    baseScheme: 'light'
+  },
+  cool: {
+    name: '시원함',
+    description: '차가운 색온도로 집중력 향상',
+    category: 'focus',
+    baseScheme: 'light'
+  },
+  forest: {
+    name: '숲',
+    description: '자연스러운 녹색으로 안정감 제공',
+    category: 'comfortable',
+    baseScheme: 'light'
+  },
+  midnight: {
+    name: '자정',
+    description: '극도로 어두운 환경에서 최적화된 테마',
+    category: 'dark',
+    baseScheme: 'dark'
+  }
+} as const;
 
 interface ThemeContextType {
   theme: Theme;
-  resolvedTheme: 'light' | 'dark'; // 실제 적용된 테마 (system 해결됨)
+  resolvedTheme: Exclude<Theme, 'system'>; // 실제 적용된 테마 (system 제외)
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
@@ -36,14 +76,19 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
   // 초기값으로 사용하여 hydration mismatch를 방지합니다.
   // 초기값은 서버가 삽입한 HTML 속성(data-theme/class)을 우선 사용합니다.
   // 시스템 프리퍼런스(matchMedia)는 클라이언트 마운트 이후에만 적용합니다.
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
+  const [resolvedTheme, setResolvedTheme] = useState<Exclude<Theme, 'system'>>(() => {
     if (typeof window === 'undefined') return 'light';
     try {
       const html = document.documentElement;
-      const dataTheme = html.getAttribute('data-theme');
-      if (dataTheme === 'dark' || dataTheme === 'light') return dataTheme as 'light' | 'dark';
+      const dataTheme = html.getAttribute('data-theme') as Exclude<Theme, 'system'>;
+      const validThemes: Exclude<Theme, 'system'>[] = ['light', 'dark', 'sepia', 'high-contrast', 'warm', 'cool', 'forest', 'midnight'];
+      
+      if (dataTheme && validThemes.includes(dataTheme)) return dataTheme;
+      
+      // 클래스 기반 감지 (레거시)
       if (html.classList.contains('dark')) return 'dark';
       if (html.classList.contains('light')) return 'light';
+      
       // 아무 설정이 없으면 서버 기본과 동일하게 'light'로 시작
       return 'light';
     } catch (e) {
@@ -58,11 +103,11 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
   }, []);
 
   // 🔥 해결된 테마 계산
-  const calculateResolvedTheme = useCallback((currentTheme: Theme): 'light' | 'dark' => {
+  const calculateResolvedTheme = useCallback((currentTheme: Theme): Exclude<Theme, 'system'> => {
     if (currentTheme === 'system') {
       return getSystemTheme();
     }
-    return currentTheme;
+    return currentTheme as Exclude<Theme, 'system'>;
   }, [getSystemTheme]);
 
   // 🔥 테마 설정 함수
@@ -150,6 +195,7 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
 
   // 🔥 테마 토글 함수
   const toggleTheme = useCallback((): void => {
+    // 기본 light/dark 토글, 작가 테마는 직접 setTheme으로 변경
     const newTheme = resolvedTheme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
   }, [resolvedTheme, setTheme]);

@@ -248,6 +248,16 @@ body[data-theme="dark"],
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+
+  /* 🔥 동일한 폰트 크기 변수들 */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
 
   /* 🔥 다크 모드 폰트 설정 - 동적 변수 유지 */
@@ -291,6 +301,230 @@ body[data-theme="dark"],
   }
 }
 
+/* 🔥 작가 전용 테마들 */
+
+/* Sepia Theme - 따뜻한 종이 느낌 */
+[data-theme='sepia'] {
+  --background: 47 30% 90%;
+  --foreground: 30 8% 15%;
+  --bg-primary: #f4f1e8;
+  --bg-secondary: #ede9de;
+  --bg-elevated: #faf8f3;
+  --bg-card: #fefefc;
+  --bg-hover: #eae6db;
+
+  --text-primary: #3c2f1f;
+  --text-secondary: #5d4e3a;
+  --text-muted: #8b7355;
+  --text-inverse: #f4f1e8;
+
+  --accent-primary: #a0522d;
+  --accent-hover: #8b4513;
+  --accent-light: #deb887;
+  --accent-dark: #654321;
+
+  --border-light: #d3c7b8;
+  --border-medium: #c8b99c;
+  --border-dark: #a0916f;
+
+  /* 🔥 동일한 폰트 크기 변수들 */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  color-scheme: light;
+}
+
+/* High Contrast Theme - 접근성 최적화 */
+[data-theme='high-contrast'] {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f0f0f0;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #e0e0e0;
+
+  --text-primary: #000000;
+  --text-secondary: #000000;
+  --text-muted: #333333;
+  --text-inverse: #ffffff;
+
+  --accent-primary: #0000ff;
+  --accent-hover: #0000cc;
+  --accent-light: #6666ff;
+  --accent-dark: #000080;
+
+  --border-light: #000000;
+  --border-medium: #000000;
+  --border-dark: #000000;
+
+  /* 🔥 동일한 폰트 크기 변수들 */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  color-scheme: light;
+}
+
+/* Warm Theme - 따뜻한 색온도 */
+[data-theme='warm'] {
+  --background: 25 20% 95%;
+  --foreground: 25 20% 10%;
+  --bg-primary: #fdf8f3;
+  --bg-secondary: #f7efea;
+  --bg-elevated: #fffcf9;
+  --bg-card: #fffefa;
+  --bg-hover: #f1e6dd;
+
+  --text-primary: #2d1810;
+  --text-secondary: #4a2f1f;
+  --text-muted: #6b4423;
+  --text-inverse: #fdf8f3;
+
+  --accent-primary: #d97706;
+  --accent-hover: #b45309;
+  --accent-light: #fed7aa;
+  --accent-dark: #92400e;
+
+  --border-light: #e7d3c8;
+  --border-medium: #d4b5a0;
+  --border-dark: #a78366;
+
+  /* 🔥 동일한 폰트 크기 변수들 */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  color-scheme: light;
+}
+
+/* Cool Theme - 차가운 색온도 */
+[data-theme='cool'] {
+  --background: 210 20% 95%;
+  --foreground: 210 20% 10%;
+  --bg-primary: #f1f5f9;
+  --bg-secondary: #e2e8f0;
+  --bg-elevated: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-hover: #cbd5e1;
+
+  --text-primary: #0f172a;
+  --text-secondary: #1e293b;
+  --text-muted: #475569;
+  --text-inverse: #f1f5f9;
+
+  --accent-primary: #0284c7;
+  --accent-hover: #0369a1;
+  --accent-light: #7dd3fc;
+  --accent-dark: #075985;
+
+  --border-light: #cbd5e1;
+  --border-medium: #94a3b8;
+  --border-dark: #64748b;
+
+  /* 🔥 동일한 폰트 크기 변수들 */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  color-scheme: light;
+}
+
+/* Forest Theme - 자연스러운 녹색 */
+[data-theme='forest'] {
+  --background: 120 10% 95%;
+  --foreground: 120 20% 15%;
+  --bg-primary: #f0f4f0;
+  --bg-secondary: #e8ede8;
+  --bg-elevated: #f5f8f5;
+  --bg-card: #fafcfa;
+  --bg-hover: #dde4dd;
+
+  --text-primary: #1a2e1a;
+  --text-secondary: #2d4a2d;
+  --text-muted: #4a654a;
+  --text-inverse: #f0f4f0;
+
+  --accent-primary: #059669;
+  --accent-hover: #047857;
+  --accent-light: #a7f3d0;
+  --accent-dark: #065f46;
+
+  --border-light: #d1d5db;
+  --border-medium: #9ca3af;
+  --border-dark: #6b7280;
+
+  /* 🔥 동일한 폰트 크기 변수들 */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  color-scheme: light;
+}
+
+/* Midnight Theme - 극도로 어두운 몰입 */
+[data-theme='midnight'] {
+  --background: 220 20% 5%;
+  --foreground: 220 20% 95%;
+  --bg-primary: #0a0b0f;
+  --bg-secondary: #0f1115;
+  --bg-elevated: #12141a;
+  --bg-card: #0d0e13;
+  --bg-hover: #1a1d24;
+
+  --text-primary: #f1f3f7;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-inverse: #0a0b0f;
+
+  --accent-primary: #4f46e5;
+  --accent-hover: #4338ca;
+  --accent-light: #312e81;
+  --accent-dark: #3730a3;
+
+  --border-light: #1f2937;
+  --border-medium: #374151;
+  --border-dark: #4b5563;
+
+  /* 🔥 동일한 폰트 크기 변수들 */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+
+  color-scheme: dark;
+}
+
 /* 🔥 깜빡임 방지: 테마 전환이 즉시 적용되도록 설정 */
 html {
   /* 🔥 중요: color-scheme 설정으로 브라우저 기본 동작 제어 */
@@ -298,4 +532,29 @@ html {
   
   /* 🔥 부드러운 테마 전환 */
   transition: color-scheme 0.1s ease-in-out;
+}
+
+/* 🔥 기본 폰트 및 테마 적용 - 부드러운 방식 */
+html {
+  font-family: var(--app-font-family);
+  font-size: var(--app-font-size);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: inherit;
+  background-color: inherit;
+  color: inherit;
+}
+
+/* 🔥 폰트 변수 적용 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--app-font-family);
+}
+
+/* 🔥 TipTap 에디터 폰트 적용 */
+.ProseMirror {
+  font-family: var(--app-font-family);
+  font-size: var(--app-font-size);
 }
