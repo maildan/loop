@@ -119,12 +119,14 @@ export class FontObserver {
   }
 
   /**
-   * 폰트 사전 로딩 (성능 최적화)
+   * 폰트 사전 로딩 (성능 최적화) - URL 생성 수정
    */
   static preloadFont(fontFamily: string): void {
     // FontFace API를 사용한 사전 로딩
     if ('fonts' in document) {
-      const fontFace = new FontFace(fontFamily, `url('/fonts/${fontFamily}.woff2')`);
+      // 폰트 이름을 안전한 파일 경로로 변환
+      const safeFontName = fontFamily.replace(/[^a-zA-Z0-9-_]/g, '');
+      const fontFace = new FontFace(fontFamily, `url('/fonts/${safeFontName}/${safeFontName}.woff2')`);
       fontFace.load().then(() => {
         document.fonts.add(fontFace);
         this.loadedFonts.add(fontFamily);

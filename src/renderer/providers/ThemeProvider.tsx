@@ -135,7 +135,7 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     }
   }, []);
 
-  // 🔥 Helper: DOM에 테마 속성 적용 (강화된 범위)
+  // 🔥 Helper: DOM에 테마 속성 적용 (완전한 전파 보장)
   const applyThemeToDOM = useCallback((resolved: Exclude<Theme, 'system'>) => {
     const root = document.documentElement;
     const body = document.body;
@@ -162,16 +162,43 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     const appRoot = document.getElementById('root');
     if (appRoot) {
       appRoot.setAttribute('data-theme', resolved);
+      appRoot.setAttribute('data-color-scheme', baseScheme);
       appRoot.classList.remove(...allThemes);
       appRoot.classList.add(resolved);
     }
+    
+    // 🔥 모든 주요 컨테이너에 테마 강제 적용
+    const containers = [
+      '.app-container',
+      '.main-content',
+      '.sidebar',
+      '.content-area',
+      '.prose',
+      '.editor-content',
+      'main',
+      'article',
+      'section'
+    ];
+    
+    containers.forEach(selector => {
+      const elements = document.querySelectorAll(selector);
+      elements.forEach(element => {
+        element.setAttribute('data-theme', resolved);
+        element.classList.remove(...allThemes);
+        element.classList.add(resolved);
+      });
+    });
+    
+    // 🔥 CSS 변수 강제 재적용 (중요!)
+    root.style.setProperty('--current-theme', resolved);
     
     Logger.debug('THEME_PROVIDER', 'Theme applied to DOM elements', {
       resolved,
       baseScheme,
       rootClasses: root.className,
       bodyClasses: body?.className,
-      appRootExists: !!appRoot
+      appRootExists: !!appRoot,
+      containersUpdated: containers.length
     });
   }, []);  // 🔥 Helper: 폰트 CSS 재적용
   const reapplyFontCSS = useCallback(async (theme: Theme, resolved: Exclude<Theme, 'system'>) => {
