@@ -7,11 +7,13 @@
 /* 🔥 기본 테마 (항상 로드됨) - light/dark만 포함 */
 @import './base.css';
 
-/* 🌈 확장 테마들 (모듈화된 테마 시스템) */
-@import './extended.css';              /* warm, cool, forest, midnight, high-contrast */
-@import './sepia.css';                /* sepia 특수 테마 */
-@import './writer-focus.css';         /* 작가 집중 모드 */
-@import './tiptap-theme-enforcer.css'; /* TipTap 에디터 테마 강제 적용 */
+/* 🌈 확장 테마들 - 개별 모듈화 시스템 */
+@import './sepia.css';                /* 🖋️ 세피아 특수 테마 (빈티지 종이) */
+@import './warm.css';                 /* 🌅 따뜻한 오렌지/노란색 기조 */
+@import './cool.css';                 /* 🌊 시원한 블루/청록색 기조 */
+@import './forest.css';               /* 🌲 자연스러운 그린/에메랄드 기조 */
+@import './midnight.css';             /* 🌃 깊은 밤 퍼플/인디고 기조 */
+@import './high-contrast.css';        /* ⚫⚪ 고대비 접근성 테마 */
 
 /* 🔥 테마 로더 시스템 */
 :root {

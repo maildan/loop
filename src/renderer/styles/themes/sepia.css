@@ -9,7 +9,7 @@
  */
 
 /* 🔥 Sepia 라이트 모드 - 오래된 책 느낌 */
-.sepia {
+[data-theme="sepia"] {
   /* 세피아 종이 배경색 */
   --background: oklch(0.95 0.02 55.67);           /* 연한 세피아 */
   --foreground: oklch(0.25 0.03 45.89);           /* 진한 갈색 */
@@ -44,7 +44,8 @@
 }
 
 /* 🔥 Sepia 다크 모드 - 밤의 서재 */
-.sepia.dark {
+[data-theme="sepia"].dark,
+[data-theme="sepia-dark"] {
   /* 어두운 세피아 배경 */
   --background: oklch(0.18 0.02 45.33);           /* 어두운 갈색 */
   --foreground: oklch(0.82 0.025 55.89);          /* 연한 세피아 */

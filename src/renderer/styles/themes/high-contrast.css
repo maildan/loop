@@ -1,0 +1,139 @@
+/**
+ * ⚫⚪ High Contrast Theme - 고대비 접근성 테마
+ * 
+ * 특징:
+ * - 순수 흰색/검은색 기조
+ * - 최고 가독성 및 접근성
+ * - 시각 장애인 지원
+ * - TipTap 에디터 완벽 지원
+ */
+
+/* 🔥 High Contrast Theme Variables - 라이트 모드 */
+[data-theme="high-contrast"] {
+  /* shadcn/ui 기본 색상 - 고대비 라이트 oklch 형식 */
+  --background: oklch(1 0 0); /* 순수 흰색 */
+  --foreground: oklch(0 0 0); /* 순수 검은색 */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0 0 0); /* 순수 검은색 */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.9 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.25 0 0);
+  --accent: oklch(0 0 0); /* 순수 검은색 액센트 */
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.55 0.3 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0 0 0); /* 검은색 테두리 */
+  --input: oklch(0.9 0 0);
+  --ring: oklch(0 0 0);
+  --radius: 0.25rem;
+
+  /* 🖊️ TipTap 에디터 전용 변수 */
+  --editor-bg: oklch(1 0 0); /* 순수 흰색 */
+  --editor-bg-secondary: oklch(0.95 0 0);
+  --editor-text: oklch(0 0 0); /* 순수 검은색 */
+  --editor-text-muted: oklch(0.25 0 0);
+  --editor-border: oklch(0 0 0); /* 검은색 테두리 */
+  --editor-accent: oklch(0 0 0); /* 순수 검은색 */
+  --editor-selection: oklch(0 0 0 / 0.2); /* 검은색 선택 배경 */
+}
+
+/* 🌙 High Contrast Dark 모드 */
+[data-theme="high-contrast"].dark,
+[data-theme="high-contrast"] .dark {
+  --background: oklch(0 0 0); /* 순수 검은색 */
+  --foreground: oklch(1 0 0); /* 순수 흰색 */
+  --card: oklch(0 0 0);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0 0 0);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(1 0 0); /* 순수 흰색 */
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.1 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.05 0 0);
+  --muted-foreground: oklch(0.75 0 0);
+  --accent: oklch(1 0 0); /* 순수 흰색 액센트 */
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.55 0.3 25);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(1 0 0); /* 흰색 테두리 */
+  --input: oklch(0.1 0 0);
+  --ring: oklch(1 0 0);
+
+  /* 🖊️ TipTap 에디터 다크모드 변수 */
+  --editor-bg: oklch(0 0 0); /* 순수 검은색 */
+  --editor-bg-secondary: oklch(0.05 0 0);
+  --editor-text: oklch(1 0 0); /* 순수 흰색 */
+  --editor-text-muted: oklch(0.75 0 0);
+  --editor-border: oklch(1 0 0); /* 흰색 테두리 */
+  --editor-accent: oklch(1 0 0); /* 순수 흰색 */
+  --editor-selection: oklch(1 0 0 / 0.3); /* 흰색 선택 배경 */
+}
+
+/* 🎯 TipTap 에디터 강제 스타일링 */
+[data-theme="high-contrast"] .ProseMirror {
+  background-color: var(--editor-bg) !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  border: 2px solid var(--editor-border) !important; /* 더 두꺼운 테두리 */
+}
+
+[data-theme="high-contrast"] .ProseMirror::selection {
+  background: var(--editor-selection) !important;
+}
+
+[data-theme="high-contrast"] .ProseMirror *::selection {
+  background: var(--editor-selection) !important;
+}
+
+/* 🔥 High Contrast 테마 헤딩 색상 */
+[data-theme="high-contrast"] .ProseMirror h1,
+[data-theme="high-contrast"] .ProseMirror h2,
+[data-theme="high-contrast"] .ProseMirror h3,
+[data-theme="high-contrast"] .ProseMirror h4,
+[data-theme="high-contrast"] .ProseMirror h5,
+[data-theme="high-contrast"] .ProseMirror h6 {
+  color: var(--editor-text) !important; /* 헤딩도 최대 대비 */
+  font-weight: 900 !important; /* 더 굵은 폰트 */
+  text-decoration: underline !important; /* 명확한 구분 */
+}
+
+/* 📝 High Contrast 테마 인라인 요소 */
+[data-theme="high-contrast"] .ProseMirror strong {
+  color: var(--editor-text) !important;
+  font-weight: 900 !important;
+  text-shadow: 1px 1px 0 var(--editor-accent) !important;
+}
+
+[data-theme="high-contrast"] .ProseMirror em {
+  color: var(--editor-text) !important;
+  font-style: italic !important;
+  text-decoration: underline !important;
+}
+
+[data-theme="high-contrast"] .ProseMirror code {
+  color: var(--editor-text) !important;
+  background-color: var(--editor-accent) !important;
+  padding: 2px 4px !important;
+  border: 1px solid var(--editor-border) !important;
+}
+
+/* 🔗 High Contrast 테마 링크 */
+[data-theme="high-contrast"] .ProseMirror a {
+  color: var(--editor-text) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  border: 1px dashed var(--editor-border) !important;
+  padding: 1px 2px !important;
+}
+
+/* ✨ High Contrast 테마 포커스 효과 */
+[data-theme="high-contrast"] .ProseMirror:focus {
+  box-shadow: 0 0 0 4px var(--editor-accent) !important; /* 더 굵은 포커스 */
+  outline: 2px solid var(--editor-accent) !important;
+}

@@ -1,0 +1,120 @@
+/**
+ * 🌊 Cool Theme - 시원하고 차분한 블루 색조
+ * 
+ * 특징:
+ * - 시원한 블루/청록색 기조
+ * - 차분하고 집중력 향상
+ * - 눈의 피로 감소
+ * - TipTap 에디터 완벽 지원
+ */
+
+/* 🔥 Cool Theme Variables */
+[data-theme="cool"] {
+  /* shadcn/ui 기본 색상 - oklch 형식 사용 */
+  --background: oklch(0.96 0.02 235); /* 시원한 연파랑 */
+  --foreground: oklch(0.25 0.04 260); /* 진한 네이비 텍스트 */
+  --card: oklch(0.98 0.008 240);
+  --card-foreground: oklch(0.25 0.04 260);
+  --popover: oklch(0.96 0.02 235);
+  --popover-foreground: oklch(0.25 0.04 260);
+  --primary: oklch(0.65 0.15 250); /* 밝은 블루 */
+  --primary-foreground: oklch(0.98 0.005 240);
+  --secondary: oklch(0.93 0.02 235);
+  --secondary-foreground: oklch(0.25 0.04 260);
+  --muted: oklch(0.91 0.03 238);
+  --muted-foreground: oklch(0.55 0.02 245);
+  --accent: oklch(0.55 0.08 220); /* 시원한 청록 */
+  --accent-foreground: oklch(0.98 0.005 240);
+  --destructive: oklch(0.62 0.25 25);
+  --destructive-foreground: oklch(0.98 0.005 240);
+  --border: oklch(0.85 0.03 240);
+  --input: oklch(0.85 0.03 240);
+  --ring: oklch(0.65 0.15 250);
+  --radius: 0.5rem;
+
+  /* 🖊️ TipTap 에디터 전용 변수 */
+  --editor-bg: oklch(0.96 0.02 235); /* 시원한 연파랑 */
+  --editor-bg-secondary: oklch(0.93 0.02 235);
+  --editor-text: oklch(0.25 0.04 260); /* 진한 네이비 */
+  --editor-text-muted: oklch(0.55 0.02 245);
+  --editor-border: oklch(0.85 0.03 240);
+  --editor-accent: oklch(0.55 0.08 220); /* 시원한 청록 */
+  --editor-selection: oklch(0.65 0.15 250 / 0.2); /* 파란 선택 배경 */
+}
+
+/* 🌙 Cool Dark 모드 */
+[data-theme="cool"].dark,
+[data-theme="cool"] .dark {
+  --background: 15 23 42; /* 진한 블루 그레이 */
+  --foreground: 241 245 249;
+  --card: 30 41 59;
+  --card-foreground: 241 245 249;
+  --popover: 15 23 42;
+  --popover-foreground: 241 245 249;
+  --primary: 59 130 246;
+  --primary-foreground: 15 23 42;
+  --secondary: 30 41 59;
+  --secondary-foreground: 241 245 249;
+  --muted: 30 41 59;
+  --muted-foreground: 148 163 184;
+  --accent: 14 165 233;
+  --accent-foreground: 15 23 42;
+  --destructive: 239 68 68;
+  --destructive-foreground: 248 250 252;
+  --border: 51 65 85;
+  --input: 51 65 85;
+  --ring: 59 130 246;
+
+  /* 🖊️ TipTap 에디터 다크모드 변수 */
+  --editor-bg: hsl(15 23% 42%);
+  --editor-bg-secondary: hsl(30 41% 59%);
+  --editor-text: hsl(241 245% 249%);
+  --editor-text-muted: hsl(148 163% 184%);
+  --editor-border: hsl(51 65% 85%);
+  --editor-accent: hsl(59 130% 246%);
+  --editor-selection: hsla(14 165% 233% / 0.3);
+}
+
+/* 🎯 TipTap 에디터 강제 스타일링 */
+[data-theme="cool"] .ProseMirror {
+  background-color: var(--editor-bg) !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  border-color: var(--editor-border) !important;
+}
+
+[data-theme="cool"] .ProseMirror::selection {
+  background: var(--editor-selection) !important;
+}
+
+[data-theme="cool"] .ProseMirror *::selection {
+  background: var(--editor-selection) !important;
+}
+
+/* 🔥 Cool 테마 헤딩 색상 */
+[data-theme="cool"] .ProseMirror h1,
+[data-theme="cool"] .ProseMirror h2,
+[data-theme="cool"] .ProseMirror h3,
+[data-theme="cool"] .ProseMirror h4,
+[data-theme="cool"] .ProseMirror h5,
+[data-theme="cool"] .ProseMirror h6 {
+  color: var(--editor-accent) !important;
+}
+
+/* 📝 Cool 테마 인라인 요소 */
+[data-theme="cool"] .ProseMirror strong,
+[data-theme="cool"] .ProseMirror em,
+[data-theme="cool"] .ProseMirror code {
+  color: var(--editor-text) !important;
+}
+
+/* 🔗 Cool 테마 링크 */
+[data-theme="cool"] .ProseMirror a {
+  color: var(--editor-accent) !important;
+}
+
+/* ✨ Cool 테마 포커스 효과 */
+[data-theme="cool"] .ProseMirror:focus {
+  box-shadow: 0 0 0 2px var(--editor-accent) !important;
+  outline: none !important;
+}

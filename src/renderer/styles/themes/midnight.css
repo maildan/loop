@@ -1,0 +1,96 @@
+/**
+ * 🌃 Midnight Theme - 깊은 밤 색조의 다크 테마
+ * 
+ * 특징:
+ * - 진한 퍼플/인디고 기조
+ * - 야간 작업에 최적화
+ * - 눈부심 최소화
+ * - TipTap 에디터 완벽 지원
+ */
+
+/* 🔥 Midnight Theme Variables */
+[data-theme="midnight"] {
+  /* shadcn/ui 기본 색상 - 미드나이트 다크 oklch 형식 */
+  --background: oklch(0.15 0.02 260); /* 깊은 미드나이트 블루 */
+  --foreground: oklch(0.9 0.01 250); /* 연한 블루 그레이 텍스트 */
+  --card: oklch(0.18 0.04 270);
+  --card-foreground: oklch(0.9 0.01 250);
+  --popover: oklch(0.15 0.02 260);
+  --popover-foreground: oklch(0.9 0.01 250);
+  --primary: oklch(0.6 0.15 260); /* 인디고 */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.25 0.03 265);
+  --secondary-foreground: oklch(0.9 0.01 250);
+  --muted: oklch(0.2 0.04 270);
+  --muted-foreground: oklch(0.65 0.02 255);
+  --accent: oklch(0.7 0.2 280); /* 바이올렛 */
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.62 0.25 25);
+  --destructive-foreground: oklch(0.98 0.01 250);
+  --border: oklch(0.3 0.04 265);
+  --input: oklch(0.3 0.04 265);
+  --ring: oklch(0.6 0.15 260);
+  --radius: 0.5rem;
+
+  /* 🖊️ TipTap 에디터 전용 변수 */
+  --editor-bg: oklch(0.15 0.02 260); /* 깊은 미드나이트 블루 */
+  --editor-bg-secondary: oklch(0.18 0.04 270);
+  --editor-text: oklch(0.9 0.01 250); /* 연한 블루 그레이 */
+  --editor-text-muted: oklch(0.65 0.02 255);
+  --editor-border: oklch(0.3 0.04 265);
+  --editor-accent: oklch(0.6 0.15 260); /* 인디고 */
+  --editor-selection: oklch(0.7 0.2 280 / 0.3); /* 바이올렛 선택 배경 */
+}
+
+/* 🎯 TipTap 에디터 강제 스타일링 */
+[data-theme="midnight"] .ProseMirror {
+  background-color: var(--editor-bg) !important;
+  background: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  border-color: var(--editor-border) !important;
+}
+
+[data-theme="midnight"] .ProseMirror::selection {
+  background: var(--editor-selection) !important;
+}
+
+[data-theme="midnight"] .ProseMirror *::selection {
+  background: var(--editor-selection) !important;
+}
+
+/* 🔥 Midnight 테마 헤딩 색상 */
+[data-theme="midnight"] .ProseMirror h1,
+[data-theme="midnight"] .ProseMirror h2,
+[data-theme="midnight"] .ProseMirror h3,
+[data-theme="midnight"] .ProseMirror h4,
+[data-theme="midnight"] .ProseMirror h5,
+[data-theme="midnight"] .ProseMirror h6 {
+  color: var(--editor-accent) !important;
+}
+
+/* 📝 Midnight 테마 인라인 요소 */
+[data-theme="midnight"] .ProseMirror strong,
+[data-theme="midnight"] .ProseMirror em,
+[data-theme="midnight"] .ProseMirror code {
+  color: var(--editor-text) !important;
+}
+
+/* 🔗 Midnight 테마 링크 */
+[data-theme="midnight"] .ProseMirror a {
+  color: var(--editor-accent) !important;
+}
+
+/* ✨ Midnight 테마 포커스 효과 */
+[data-theme="midnight"] .ProseMirror:focus {
+  box-shadow: 0 0 0 2px var(--editor-accent) !important;
+  outline: none !important;
+}
+
+/* 🌟 Midnight 특별 효과 - 별빛 텍스트 글로우 */
+[data-theme="midnight"] .ProseMirror h1 {
+  text-shadow: 0 0 10px hsla(99 102% 241% / 0.3) !important;
+}
+
+[data-theme="midnight"] .ProseMirror h2 {
+  text-shadow: 0 0 8px hsla(139 92% 246% / 0.2) !important;
+}
