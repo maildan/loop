@@ -135,30 +135,45 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     }
   }, []);
 
-  // 🔥 Helper: DOM에 테마 속성 적용
+  // 🔥 Helper: DOM에 테마 속성 적용 (강화된 범위)
   const applyThemeToDOM = useCallback((resolved: Exclude<Theme, 'system'>) => {
     const root = document.documentElement;
     const body = document.body;
     const allThemes = ['light', 'dark', 'system', 'sepia', 'high-contrast', 'warm', 'cool', 'forest', 'midnight'];
+    const baseScheme = AUTHOR_THEMES[resolved as keyof typeof AUTHOR_THEMES]?.baseScheme || resolved;
     
-    // 🔥 데이터 속성 우선으로 테마 설정
+    // 🔥 HTML 요소에 테마 적용 (최우선)
     root.setAttribute('data-theme', resolved);
-    root.setAttribute('data-color-scheme', resolved);
-    (root.style as CSSStyleDeclaration).colorScheme = resolved;
-    
-    // 🔥 모든 테마 클래스 제거 후 현재 테마 추가
+    root.setAttribute('data-color-scheme', baseScheme);
+    root.style.setProperty('color-scheme', baseScheme);
     root.classList.remove(...allThemes);
     root.classList.add(resolved);
-    
+
+    // 🔥 Body 요소에도 동일하게 적용 (이중 보장)
     if (body) {
       body.setAttribute('data-theme', resolved);
+      body.setAttribute('data-color-scheme', baseScheme);
+      body.style.setProperty('color-scheme', baseScheme);
       body.classList.remove(...allThemes);
       body.classList.add(resolved);
-      (body.style as CSSStyleDeclaration).colorScheme = AUTHOR_THEMES[resolved as keyof typeof AUTHOR_THEMES]?.baseScheme || resolved;
     }
-  }, []);
-
-  // 🔥 Helper: 폰트 CSS 재적용
+    
+    // 🔥 #root 요소가 있다면 추가 적용 (React 앱 루트)
+    const appRoot = document.getElementById('root');
+    if (appRoot) {
+      appRoot.setAttribute('data-theme', resolved);
+      appRoot.classList.remove(...allThemes);
+      appRoot.classList.add(resolved);
+    }
+    
+    Logger.debug('THEME_PROVIDER', 'Theme applied to DOM elements', {
+      resolved,
+      baseScheme,
+      rootClasses: root.className,
+      bodyClasses: body?.className,
+      appRootExists: !!appRoot
+    });
+  }, []);  // 🔥 Helper: 폰트 CSS 재적용
   const reapplyFontCSS = useCallback(async (theme: Theme, resolved: Exclude<Theme, 'system'>) => {
     try {
       if ((window as any).electronAPI?.font?.injectCSS) {

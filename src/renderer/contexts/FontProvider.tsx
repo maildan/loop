@@ -60,18 +60,58 @@ const normalizeFontName = (fontName: string): string => {
     return 'Pretendard';
   }
 
-  // 손상된 폰트명 매핑
+  // 손상된 폰트명 및 Apple 시스템 폰트 매핑
   const fontMappings: Record<string, string> = {
+    // 손상된 Arial 폰트들
     'arialceb': 'Arial',
     'arialce': 'Arial', 
     'arialc': 'Arial',
+    'arial_ceb': 'Arial',
+    'arial_ce': 'Arial',
+    
+    // Apple 시스템 폰트들 (공백 없는 버전들)
+    'sfprodisplay': 'SF Pro Display',
+    'sfprotext': 'SF Pro Text',
+    'sfcompactdisplay': 'SF Compact Display',
+    'sfcompacttext': 'SF Compact Text',
+    'sfcompactrounded': 'SF Compact Rounded',
+    'helveticaneue': 'Helvetica Neue',
+    'applesdgothicneo': 'Apple SD Gothic Neo',
+    'applecoloremoji': 'Apple Color Emoji',
+    
+    // Windows 시스템 폰트들
+    'segoeui': 'Segoe UI',
+    'segoeprint': 'Segoe Print',
+    'segoescript': 'Segoe Script',
+    'timesnewroman': 'Times New Roman',
+    
+    // 손상된 Times 폰트들
     'timesceb': 'Times New Roman',
     'timesce': 'Times New Roman',
+    'times_ceb': 'Times New Roman',
+    'times_ce': 'Times New Roman',
+    
+    // 손상된 Calibri 폰트들
     'calibriceb': 'Calibri',
     'calibrice': 'Calibri',
+    'calibri_ceb': 'Calibri',
+    'calibri_ce': 'Calibri',
+    
+    // 기본 시스템 폰트 정규화
     'system ui': 'system-ui',
+    'systemui': 'system-ui',
     'apple system': '-apple-system',
-    'segoe ui': 'Segoe UI'
+    'applesystem': '-apple-system',
+    'segoe ui': 'Segoe UI',
+    
+    // 일반 폰트 정규화
+    'arial': 'Arial',
+    'helvetica': 'Helvetica',
+    'verdana': 'Verdana',
+    'georgia': 'Georgia',
+    'tahoma': 'Tahoma',
+    'courier': 'Courier New',
+    'couriernew': 'Courier New'
   };
 
   // 소문자로 변환하여 매핑 확인

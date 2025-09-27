@@ -184,22 +184,60 @@ export class CSSVariableManager {
       return '"Pretendard", system-ui, sans-serif';
     }
 
-    // 🔥 폰트명 정규화 (파일명/손상된 이름 → 실제 폰트 이름)
+    // 🔥 폰트명 정규화 - Apple 시스템 폰트 및 손상된 폰트명 매핑 강화
     const fontNameMappings: Record<string, string> = {
-      'times': 'Times New Roman',
-      'arial': 'Arial',
-      'arialceb': 'Arial', // 🔥 손상된 Arial 폰트명 매핑
+      // Apple 시스템 폰트들 (공백 없는 버전들)
+      'sfprodisplay': 'SF Pro Display',
+      'sfprotext': 'SF Pro Text', 
+      'sfcompactdisplay': 'SF Compact Display',
+      'sfcompacttext': 'SF Compact Text',
+      'sfcompactrounded': 'SF Compact Rounded',
+      'helveticaneue': 'Helvetica Neue',
+      'applesdgothicneo': 'Apple SD Gothic Neo',
+      'applecoloremoji': 'Apple Color Emoji',
+      
+      // 손상된 Arial 폰트들
+      'arialceb': 'Arial',
       'arialce': 'Arial',
       'arialc': 'Arial',
+      'arial_ceb': 'Arial',
+      'arial_ce': 'Arial',
+      
+      // Windows 시스템 폰트들
+      'segoeui': 'Segoe UI',
+      'segoeprint': 'Segoe Print',
+      'segoescript': 'Segoe Script',
+      'timesnewroman': 'Times New Roman',
+      
+      // 손상된 Times 폰트들
+      'timesceb': 'Times New Roman',
+      'timesce': 'Times New Roman',
+      'times_ceb': 'Times New Roman',
+      'times_ce': 'Times New Roman',
+      
+      // 손상된 Calibri 폰트들
+      'calibriceb': 'Calibri',
+      'calibrice': 'Calibri',
+      'calibri_ceb': 'Calibri',
+      'calibri_ce': 'Calibri',
+      
+      // 기본 시스템 폰트 정규화
+      'system ui': 'system-ui',
+      'systemui': 'system-ui',
+      'apple system': '-apple-system',
+      'applesystem': '-apple-system',
+      'segoe ui': 'Segoe UI',
+      
+      // 일반 폰트들
+      'times': 'Times New Roman',
+      'arial': 'Arial',
       'helvetica': 'Helvetica',
       'verdana': 'Verdana',
       'calibri': 'Calibri',
       'georgia': 'Georgia',
       'tahoma': 'Tahoma',
       'courier': 'Courier New',
-      'system ui': 'system-ui', // 공백 문제 해결
-      'apple system': '-apple-system',
-      'segoe ui': 'Segoe UI'
+      'couriernew': 'Courier New'
     };
 
     // 소문자로 매핑 확인

@@ -5,26 +5,26 @@
 
 /* 🔥 라이트 테마 - 기가차드 컬러 시스템 */
 :root {
-  /* Tailwind 호환 shadcn/ui 색상 시스템 */
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  /* Tailwind 호환 shadcn/ui 색상 시스템 (대비 강화) */
+  --background: 0 0% 100%; /* 순수한 흰색 */
+  --foreground: 0 0% 0%; /* 순수한 검정색 */
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 0 0% 0%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 222.2 47.4% 11.2%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 84% 4.9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 222.2 84% 4.9%;
+  --popover-foreground: 0 0% 0%;
+  --primary: 220 100% 50%; /* 밝고 선명한 블루 */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 95%;
+  --secondary-foreground: 0 0% 10%;
+  --muted: 210 40% 95%;
+  --muted-foreground: 215.4 16.3% 40%;
+  --accent: 210 40% 95%;
+  --accent-foreground: 0 0% 10%;
+  --destructive: 0 100% 50%; /* 선명한 빨강 */
+  --destructive-foreground: 0 0% 100%;
+  --border: 214.3 31.8% 85%;
+  --input: 214.3 31.8% 85%;
+  --ring: 220 100% 50%;
   --radius: 0.5rem;
 
   /* Chart Colors */
@@ -44,17 +44,17 @@
   --sidebar-border: 220 13% 91%;
   --sidebar-ring: 217.2 91.2% 59.8%;
 
-  /* 🔥 작가 친화적 색상 시스템 - 라이트 모드 */
-  --bg-primary: #fefcf7; /* 따뜻한 크림색 (종이 느낌) */
-  --bg-secondary: #f8f6f0;
+  /* 🔥 작가 친화적 색상 시스템 - 라이트 모드 (가시성 최적화) */
+  --bg-primary: #ffffff; /* 순수한 흰색으로 명확한 대비 */
+  --bg-secondary: #f8fafc; /* 약간의 회색빛 */
   --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-hover: #f3f4f6;
+  --bg-hover: #f1f5f9;
 
-  /* 텍스트 - 더 선명한 대비로 개선 */
-  --text-primary: #0a0a0a; /* 더 진한 검정 */
-  --text-secondary: #2d2d2d; /* 더 진한 회색 */
-  --text-muted: #525252; /* 더 진한 muted */
+  /* 텍스트 - 극대화된 대비로 가시성 향상 */
+  --text-primary: #000000; /* 순수한 검정색 */
+  --text-secondary: #1e293b; /* 매우 진한 회색 */
+  --text-muted: #475569; /* 중간 회색 */
   --text-inverse: #ffffff;
 
   /* 강조색 - 차분한 블루 */
@@ -178,31 +178,27 @@
   --slider-thumb-hover: #2563eb;
 }
 
-/* 🔥 다크 테마 - 완전한 선택자 커버리지 */
-.dark,
-:root[data-theme="dark"],
-html[data-theme="dark"],
-body[data-theme="dark"],
+/* 🔥 다크 테마 - 단순화된 선택자 (CSS specificity 최적화) */
 [data-theme="dark"] {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9;
+  --background: 0 0% 0%; /* 순수한 검정색 */
+  --foreground: 0 0% 100%; /* 순수한 흰색 */
+  --card: 0 0% 5%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 5%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 220 100% 60%; /* 밝고 선명한 블루 */
+  --primary-foreground: 0 0% 0%;
+  --secondary: 217.2 32.6% 15%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 217.2 32.6% 15%;
+  --muted-foreground: 215 20.2% 70%;
+  --accent: 217.2 32.6% 15%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 100% 60%; /* 선명한 빨강 */
+  --destructive-foreground: 0 0% 100%;
+  --border: 217.2 32.6% 20%;
+  --input: 217.2 32.6% 20%;
+  --ring: 220 100% 60%;
 
   /* Sidebar Dark Colors */
   --sidebar-background: 240 5.9% 10%;
@@ -214,17 +210,17 @@ body[data-theme="dark"],
   --sidebar-border: 240 3.7% 15.9%;
   --sidebar-ring: 217.2 91.2% 59.8%;
 
-  /* 🔥 작가 친화적 다크 테마 색상 */
-  --bg-primary: #0f0f0f;
-  --bg-secondary: #1a1a1a;
-  --bg-elevated: #262626;
-  --bg-card: #1f1f1f;
-  --bg-hover: #2a2a2a;
+  /* 🔥 작가 친화적 다크 테마 색상 (가시성 최적화) */
+  --bg-primary: #000000; /* 순수한 검정색으로 명확한 대비 */
+  --bg-secondary: #0f172a; /* 매우 진한 회색 */
+  --bg-elevated: #1e293b;
+  --bg-card: #0f172a;
+  --bg-hover: #334155;
 
-  --text-primary: #f5f5f5;
-  --text-secondary: #d4d4d4;
-  --text-muted: #a3a3a3;
-  --text-inverse: #0a0a0a;
+  --text-primary: #ffffff; /* 순수한 흰색 */
+  --text-secondary: #f1f5f9; /* 매우 밝은 회색 */
+  --text-muted: #cbd5e1; /* 중간 밝기 회색 */
+  --text-inverse: #000000;
 
   --accent-primary: #3b82f6;
   --accent-hover: #2563eb;
@@ -272,11 +268,9 @@ body[data-theme="dark"],
   color-scheme: dark;
 }
 
-/* 🔥 미디어 쿼리 지원 - 시스템 테마 자동 감지 (완전한 변수 적용) */
+/* 🔥 미디어 쿼리 지원 - 시스템 테마 자동 감지 (단순화된 선택자) */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]),
-  html:not([data-theme="light"]),
-  body:not([data-theme="light"]) {
+  :root:not([data-theme="light"]) {
     /* Tailwind 호환 다크 모드 색상 */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
@@ -747,3 +741,42 @@ body,
 /* ============================================
  * 🔥 화면 크기 안정성 보장 (End)
  * ============================================ */
+
+/* ============================================
+ * 🔥 Tailwind Base Layer - CSS 변수 강제 적용
+ * ============================================ */
+@layer base {
+  /* HTML/Body 기본 스타일 - CSS 변수 확실한 적용 */
+  html {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--latin-font-family);
+  }
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--latin-font-family);
+    line-height: var(--leading-normal);
+    font-size: var(--text-base);
+  }
+  
+  /* 모든 요소에 대한 기본 테마 변수 상속 보장 */
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  /* 입력 요소들 기본 스타일 */
+  input, textarea, select {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--border));
+  }
+  
+  /* 버튼 요소 기본 스타일 */
+  button {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border-color: hsl(var(--border));
+  }
+}
