@@ -98,6 +98,27 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
         (body.style as CSSStyleDeclaration).colorScheme = resolved;
       }
 
+      // 🔥 테마 변경 시 폰트 CSS 재적용 (중요!)
+      try {
+        if ((window as any).electronAPI?.font?.injectCSS) {
+          const fontResult = await (window as any).electronAPI.font.injectCSS();
+          if (fontResult?.success) {
+            Logger.info('THEME_PROVIDER', '테마 변경 시 폰트 CSS 재적용 성공', {
+              theme: newTheme,
+              resolved,
+              cssKey: fontResult.cssKey
+            });
+          } else {
+            Logger.warn('THEME_PROVIDER', '테마 변경 시 폰트 CSS 재적용 실패', {
+              theme: newTheme,
+              error: fontResult?.error
+            });
+          }
+        }
+      } catch (fontError) {
+        Logger.warn('THEME_PROVIDER', '테마 변경 시 폰트 CSS 재적용 에러', fontError);
+      }
+
       // 🔥 로컬 스토리지에도 저장 (백업)
       localStorage.setItem('loop-theme', newTheme);
 

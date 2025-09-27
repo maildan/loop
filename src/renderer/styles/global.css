@@ -26,31 +26,23 @@
  */
 
 /* ========================================
-   📦 Module Imports (Must come first!)
+   📦 Module Imports
    ======================================== */
 
 /* Core foundation - CSS variables and theming */
-@import '../styles/modules/variables.css';
+@import './modules/variables.css';
 
 /* Typography system - Korean writer optimization */
-@import '../styles/modules/typography.css';
+@import './modules/typography.css';
 
 /* Animation system - Performance-optimized transitions */
-@import '../styles/modules/animations.css';
+@import './modules/animations.css';
 
 /* Component library - Reusable UI elements */
-@import '../styles/modules/components.css';
+@import './modules/components.css';
 
 /* Utility classes - Single-purpose helpers */
-@import '../styles/modules/utilities.css';
-
-/* ========================================
-   🎯 Tailwind CSS Directives
-   ======================================== */
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import './modules/utilities.css';
 
 /* ========================================
    🔧 Core Resets & Base Styles

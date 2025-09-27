@@ -1,0 +1,230 @@
+/**
+ * 🔥 Typography Module - 작가 친화적 타이포그래피 시스템
+ * 한국 작가들을 위한 최적화된 폰트 및 텍스트 스타일
+ */
+
+@layer base {
+  /* 🔥 기본 HTML 텍스트 렌더링 최적화 */
+  html {
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "palt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* 🔥 한글 최적화 */
+    font-variant-ligatures: common-ligatures;
+    font-kerning: auto;
+  }
+
+  /* 🔥 기본 Body 스타일 - 한국 작가 친화적 */
+  body {
+    font-family: var(--app-font-family, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif);
+    font-size: 16px; /* 연구 결과: 16-18px가 최적 */
+    line-height: 1.6; /* 연구 결과: 1.5-1.6 최적 가독성 */
+    letter-spacing: -0.01em; /* 한글 최적화 자간 */
+    word-spacing: 0.02em;
+    font-weight: 400;
+    
+    /* 🔥 모바일 대응 */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* 🔥 헤딩 계층구조 - Bold/Medium/Regular 시스템 */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--app-font-family, 'Pretendard');
+    font-weight: 700; /* Bold for headers */
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 40px); /* 데스크톱: 32-40px, 모바일: 28-34px */
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: clamp(22px, 3vw, 32px); /* 데스크톱: 24-32px, 모바일: 22-28px */
+    font-weight: 600; /* Medium for subheaders */
+  }
+
+  h3 {
+    font-size: clamp(18px, 2.5vw, 24px);
+    font-weight: 600;
+  }
+
+  h4, h5, h6 {
+    font-size: clamp(16px, 2vw, 20px);
+    font-weight: 500;
+  }
+
+  /* 🔥 본문 텍스트 최적화 */
+  p {
+    font-size: 16px; /* 기본 16px */
+    line-height: 1.6;
+    margin-bottom: 1em;
+    
+    /* 🔥 최적 줄길이: 45-75자 */
+    max-width: 65ch; /* 연구 결과 기반 */
+  }
+
+  /* 🔥 작가를 위한 읽기 편한 텍스트 - iA Writer 스타일 */
+  .writer-text {
+    font-family: 'iA Writer Quattro', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 18px; /* 작가용은 약간 크게 */
+    line-height: 1.8; /* 넉넉한 줄간격으로 집중력 향상 */
+    letter-spacing: 0.02em;
+    word-spacing: 0.05em;
+    
+    /* 🔥 집중력 향상을 위한 스타일 */
+    font-weight: 400;
+    color: var(--text-primary);
+    max-width: 70ch; /* 작가용은 조금 더 길게 */
+  }
+
+  /* 🔥 집중 모드 - 인지부하 감소 */
+  .focus-text {
+    transition: opacity 300ms ease, filter 300ms ease;
+  }
+
+  .focus-mode-active .focus-text:not(.focus-active) {
+    opacity: 0.4;
+    filter: blur(0.5px);
+  }
+
+  /* 🔥 읽기 모드 최적화 */
+  .reading-mode {
+    font-size: 18px;
+    line-height: 1.7;
+    max-width: 60ch;
+    margin: 0 auto;
+    color: var(--text-primary);
+  }
+
+  /* 🔥 한글 최적화 클래스 */
+  .korean-optimized {
+    font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, sans-serif;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  /* 🔥 영문 최적화 클래스 */
+  .latin-optimized {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: -0.005em;
+  }
+
+  /* 🔥 코드/모노스페이스 */
+  code, pre, .mono {
+    font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+  }
+
+  /* 🔥 인용문 스타일 */
+  blockquote {
+    font-size: 18px;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 1.5em 0;
+    padding-left: 1.5em;
+    border-left: 4px solid var(--accent-primary);
+    color: var(--text-secondary);
+  }
+
+  /* 🔥 리스트 최적화 */
+  ul, ol {
+    line-height: 1.6;
+    margin-bottom: 1em;
+  }
+
+  li {
+    margin-bottom: 0.5em;
+  }
+
+  /* 🔥 테이블 텍스트 */
+  table {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  th {
+    font-weight: 600;
+  }
+
+  /* 🔥 작은 텍스트 */
+  small, .text-sm {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* 🔥 큰 텍스트 */
+  .text-lg {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .text-xl {
+    font-size: 20px;
+    line-height: 1.5;
+  }
+
+  /* 🔥 접근성 개선 */
+  ::selection {
+    background-color: var(--accent-light);
+    color: var(--text-primary);
+  }
+
+  /* 🔥 미디어 쿼리 - 모바일 Typography */
+  @media (max-width: 768px) {
+    body {
+      font-size: 16px; /* 모바일에서도 16px 유지 */
+      line-height: 1.5;
+    }
+
+    .writer-text {
+      font-size: 16px; /* 모바일에서는 조금 작게 */
+      line-height: 1.7;
+    }
+
+    p {
+      max-width: 50ch; /* 모바일: 35-50자 */
+    }
+
+    .reading-mode {
+      font-size: 17px;
+      max-width: 45ch;
+    }
+  }
+}
+
+/* 🔥 Typography 유틸리티 클래스들 */
+.font-writer {
+  font-family: 'iA Writer Quattro', monospace !important;
+}
+
+.font-korean {
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif !important;
+}
+
+.font-latin {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+.leading-relaxed {
+  line-height: 1.6 !important;
+}
+
+.leading-loose {
+  line-height: 1.8 !important;
+}
+
+.tracking-tight {
+  letter-spacing: -0.02em !important;
+}
+
+.tracking-normal {
+  letter-spacing: -0.01em !important;
+}

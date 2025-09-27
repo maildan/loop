@@ -1,0 +1,467 @@
+/**
+ * 🎬 Animations Module - Writer-Focused Animation System
+ * 
+ * Purpose: Korean author-optimized animations and transitions
+ * 
+ * Features:
+ * - Smooth sidebar navigation animations
+ * - Focus mode transitions
+ * - Writer-friendly micro-interactions
+ * - Performance-optimized keyframes
+ * - Accessibility-conscious timing
+ * 
+ * Design Philosophy:
+ * - Subtle, non-distracting animations
+ * - Research-based timing (300-500ms for UI, <200ms for micro-interactions)
+ * - Reduced motion support
+ * - Korean typography-aware transitions
+ */
+
+/* ========================================
+   🕐 Animation Duration Variables
+   ======================================== */
+
+:root {
+  /* Performance-optimized animation durations */
+  --duration-instant: 100ms;    /* Micro-interactions (hover, focus) */
+  --duration-fast: 200ms;       /* Quick feedback (button press) */
+  --duration-normal: 300ms;     /* Standard UI transitions */
+  --duration-slow: 500ms;       /* Complex layout changes */
+  --duration-glacial: 1000ms;   /* Page transitions */
+  
+  /* Easing curves for writer-friendly animations */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);      /* Sharp exit, smooth entry */
+  --ease-in-out-cubic: cubic-bezier(0.4, 0.0, 0.2, 1); /* Standard smooth */
+  --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);  /* Playful bounce */
+  --ease-writer: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Optimized for text */
+}
+
+/* ========================================
+   🎭 Keyframe Definitions
+   ======================================== */
+
+/* ========================================
+   🗂️ Sidebar Navigation Animations
+   ======================================== */
+
+/* Smooth sidebar slide-in from left */
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Smooth sidebar slide-out to left */
+@keyframes slide-out-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+/* Sidebar slide-in from right */
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Sidebar slide-out to right */
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Smooth sidebar collapse/expand */
+@keyframes sidebar-collapse {
+  from {
+    width: var(--sidebar-width, 280px);
+    opacity: 1;
+  }
+  to {
+    width: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes sidebar-expand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: var(--sidebar-width, 280px);
+    opacity: 1;
+  }
+}
+
+/* Header slide-down animation */
+@keyframes slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Content Fade Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Slide Animations for Content */
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Scale Animations for Interactive Elements */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* Loading & Shimmer Effects */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Focus Mode Transitions */
+@keyframes focus-mode-enter {
+  from {
+    background-color: var(--bg-primary);
+    backdrop-filter: blur(0px);
+  }
+  to {
+    background-color: var(--bg-focus);
+    backdrop-filter: blur(8px);
+  }
+}
+
+@keyframes focus-mode-exit {
+  from {
+    background-color: var(--bg-focus);
+    backdrop-filter: blur(8px);
+  }
+  to {
+    background-color: var(--bg-primary);
+    backdrop-filter: blur(0px);
+  }
+}
+
+/* ========================================
+   🎬 Animation Utility Classes
+   ======================================== */
+
+/* ========================================
+   🗂️ Sidebar Animation Classes
+   ======================================== */
+
+/* Enhanced sidebar animations with better easing */
+.animate-slide-in-left {
+  animation: slide-in-left var(--duration-normal) var(--ease-out-expo) forwards;
+}
+
+.animate-slide-out-left {
+  animation: slide-out-left var(--duration-normal) var(--ease-out-expo) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right var(--duration-normal) var(--ease-out-expo) forwards;
+}
+
+.animate-slide-out-right {
+  animation: slide-out-right var(--duration-normal) var(--ease-out-expo) forwards;
+}
+
+.animate-sidebar-collapse {
+  animation: sidebar-collapse var(--duration-normal) var(--ease-out-expo) forwards;
+  overflow: hidden;
+}
+
+.animate-sidebar-expand {
+  animation: sidebar-expand var(--duration-normal) var(--ease-out-expo) forwards;
+  overflow: hidden;
+}
+
+.animate-slideDown {
+  animation: slide-down var(--duration-slow) var(--ease-out-expo) forwards;
+}
+
+/* Smooth sidebar transitions using CSS transforms */
+.sidebar-smooth {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+  will-change: transform, opacity;
+}
+
+.sidebar-smooth.sidebar-hidden {
+  transform: translateX(-100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar-smooth.sidebar-collapsed {
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Right sidebar transitions */
+.sidebar-right-smooth {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all var(--duration-normal) var(--ease-out-expo);
+  will-change: transform, opacity;
+}
+
+.sidebar-right-smooth.sidebar-hidden {
+  transform: translateX(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Content Animations */
+.animate-fade-in {
+  animation: fadeIn var(--duration-normal) ease-in-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut var(--duration-normal) ease-in-out;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--duration-normal) ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown var(--duration-normal) ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--duration-fast) ease-out;
+}
+
+.animate-scale-out {
+  animation: scaleOut var(--duration-fast) ease-out;
+}
+
+/* Loading Animations */
+.animate-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--bg-hover) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Focus Mode Animations */
+.animate-focus-enter {
+  animation: focus-mode-enter var(--duration-slow) var(--ease-writer) forwards;
+}
+
+.animate-focus-exit {
+  animation: focus-mode-exit var(--duration-slow) var(--ease-writer) forwards;
+}
+
+/* ========================================
+   🎯 Interactive Hover & Focus States
+   ======================================== */
+
+/* Subtle hover animations for buttons and links */
+.hover-lift {
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.hover-lift:hover {
+  transform: translateY(-1px);
+}
+
+.hover-scale {
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Focus states optimized for keyboard navigation */
+.focus-ring {
+  transition: box-shadow var(--duration-fast) var(--ease-writer);
+}
+
+.focus-ring:focus-visible {
+  outline: none;
+  box-shadow: 
+    0 0 0 2px var(--accent-primary),
+    0 0 0 4px var(--accent-light);
+}
+
+/* ========================================
+   ♿ Accessibility & Reduced Motion
+   ======================================== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Keep essential animations but make them instant */
+  .animate-slide-in-left,
+  .animate-slideDown,
+  .animate-fade-in,
+  .animate-slide-up {
+    animation-duration: 0.01ms;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (forced-colors: active) {
+  .animate-shimmer {
+    animation: none;
+    background: ButtonFace;
+  }
+  
+  .focus-ring:focus-visible {
+    outline: 2px solid ButtonText;
+    box-shadow: none;
+  }
+}
+
+/* ========================================
+   🌙 Dark Mode Animation Adjustments
+   ======================================== */
+
+:root[data-theme="dark"] .animate-shimmer,
+.dark .animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--bg-hover) 50%,
+    var(--bg-secondary) 75%
+  );
+}
+
+/* ========================================
+   🔧 Performance Optimizations
+   ======================================== */
+
+/* GPU acceleration for smooth animations */
+.animate-slide-in-left,
+.animate-slideDown,
+.animate-fade-in,
+.animate-slide-up,
+.animate-scale-in {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Remove will-change after animation completes */
+.animate-slide-in-left.animation-complete,
+.animate-slideDown.animation-complete,
+.animate-fade-in.animation-complete,
+.animate-slide-up.animation-complete,
+.animate-scale-in.animation-complete {
+  will-change: auto;
+}

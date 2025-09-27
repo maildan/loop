@@ -41,6 +41,11 @@ export class FontService {
   private readonly allowedExtensions = ['.ttf', '.otf', '.woff', '.woff2'];
   private readonly maxPathDepth = 3; // 최대 하위 폴더 깊이 제한
   
+  // 🔥 CSS key 관리 (Electron 공식 패턴)
+  private cssKeys: Map<Electron.WebContents, Set<string>> = new Map();
+  private currentFont: string = 'Pretendard';
+  private currentSize: number = 14;
+  
   private constructor() {
     // 🔥 안전한 경로 구성 - 개발/프로덕션 환경 분리
     let fontsPath: string;
@@ -640,26 +645,124 @@ export class FontService {
   }
 
   /**
-   * CSS를 생성하고 지정된 webContents에 주입합니다
+   * 🔥 폰트 설정 업데이트 (theme-aware)
+   */
+  public updateFontSettings(fontFamily: string, fontSize: number): void {
+    this.currentFont = fontFamily;
+    this.currentSize = fontSize;
+  }
+
+  /**
+   * 🔥 Theme-aware CSS 생성 (공식 Electron 패턴)
+   */
+  private generateThemeAwareCSS(): string {
+    const baseCSS = `
+      /* 🔥 테마 무관 폰트 변수 설정 */
+      :root,
+      [data-theme="light"],
+      [data-theme="dark"],
+      html.light,
+      html.dark {
+        --app-font-family: ${this.currentFont}, -apple-system, BlinkMacSystemFont, system-ui, sans-serif !important;
+        --app-font-size: ${this.currentSize}px !important;
+      }
+      
+      /* 🔥 강력한 폰트 적용 - 모든 요소에 강제 적용 */
+      *,
+      *::before,
+      *::after {
+        font-family: var(--app-font-family) !important;
+        font-size: var(--app-font-size) !important;
+      }
+      
+      /* 🔥 특정 요소들 개별 적용 */
+      body,
+      input,
+      textarea,
+      select,
+      button,
+      option,
+      div,
+      span,
+      p,
+      a {
+        font-family: var(--app-font-family) !important;
+        font-size: var(--app-font-size) !important;
+      }
+      
+      /* 🔥 제목 요소들은 크기만 조정 */
+      h1 { font-family: var(--app-font-family) !important; font-size: calc(var(--app-font-size) * 1.8) !important; }
+      h2 { font-family: var(--app-font-family) !important; font-size: calc(var(--app-font-size) * 1.6) !important; }
+      h3 { font-family: var(--app-font-family) !important; font-size: calc(var(--app-font-size) * 1.4) !important; }
+      h4 { font-family: var(--app-font-family) !important; font-size: calc(var(--app-font-size) * 1.2) !important; }
+      h5 { font-family: var(--app-font-family) !important; font-size: calc(var(--app-font-size) * 1.1) !important; }
+      h6 { font-family: var(--app-font-family) !important; font-size: var(--app-font-size) !important; }
+    `;
+    
+    return baseCSS;
+  }
+
+  /**
+   * 🔥 기존 CSS 제거 (공식 Electron 패턴)
+   */
+  private async removeExistingCSS(webContents: Electron.WebContents): Promise<void> {
+    const keys = this.cssKeys.get(webContents);
+    if (!keys || keys.size === 0) return;
+
+    try {
+      // 모든 기존 CSS key 제거
+      for (const key of keys) {
+        await webContents.removeInsertedCSS(key);
+      }
+      keys.clear();
+      
+      Logger.debug('FONT_SERVICE', '기존 CSS 제거 완료', { 
+        removedCount: keys.size 
+      });
+    } catch (error) {
+      Logger.warn('FONT_SERVICE', '기존 CSS 제거 실패', error);
+      // 실패해도 계속 진행 (새 CSS는 덮어씀)
+    }
+  }
+
+  /**
+   * 🔥 CSS를 생성하고 지정된 webContents에 주입 (개선된 버전)
    * @param webContents 주입할 webContents 인스턴스
    * @returns 주입된 CSS key (제거 시 사용)
    */
   public async generateAndInjectCSS(webContents: Electron.WebContents): Promise<string | null> {
     try {
-      const css = await this.generateCSS();
+      // 1. 기존 CSS 제거 (공식 패턴)
+      await this.removeExistingCSS(webContents);
+
+      // 2. 새 CSS 생성 (theme-aware)
+      const themeCSS = this.generateThemeAwareCSS();
+      const fontFaceCSS = await this.generateCSS(); // 기존 @font-face CSS
       
-      if (!css) {
+      const combinedCSS = fontFaceCSS + '\n' + themeCSS;
+      
+      if (!combinedCSS.trim()) {
         Logger.warn('FONT_SERVICE', 'No CSS to inject - empty CSS generated');
         return null;
       }
 
-      // webContents에 CSS 주입
-      const cssKey = await webContents.insertCSS(css, { cssOrigin: 'author' });
+      // 3. webContents에 CSS 주입 (공식 패턴)
+      const cssKey = await webContents.insertCSS(combinedCSS, { 
+        cssOrigin: 'author' 
+      });
+      
+      // 4. CSS key 저장
+      if (!this.cssKeys.has(webContents)) {
+        this.cssKeys.set(webContents, new Set());
+      }
+      this.cssKeys.get(webContents)!.add(cssKey);
       
       Logger.info('FONT_SERVICE', 'CSS injected successfully', {
         cssKey,
-        cssLength: css.length,
-        fontsCount: (css.match(/@font-face/g) || []).length
+        cssLength: combinedCSS.length,
+        fontFacesCount: (combinedCSS.match(/@font-face/g) || []).length,
+        currentFont: this.currentFont,
+        currentSize: this.currentSize
       });
 
       return cssKey;
@@ -668,5 +771,39 @@ export class FontService {
       Logger.error('FONT_SERVICE', 'CSS injection failed', error);
       return null;
     }
+  }
+
+  /**
+   * 🔥 테마 변경 시 모든 webContents에 CSS 재적용
+   */
+  public async reapplyFontCSSToAll(): Promise<void> {
+    const webContentsArray = Array.from(this.cssKeys.keys());
+    
+    Logger.info('FONT_SERVICE', 'Reapplying font CSS to all webContents', {
+      count: webContentsArray.length,
+      currentFont: this.currentFont,
+      currentSize: this.currentSize
+    });
+
+    for (const webContents of webContentsArray) {
+      try {
+        if (!webContents.isDestroyed()) {
+          await this.generateAndInjectCSS(webContents);
+        } else {
+          // 파괴된 webContents는 Map에서 제거
+          this.cssKeys.delete(webContents);
+        }
+      } catch (error) {
+        Logger.warn('FONT_SERVICE', 'Failed to reapply CSS to webContents', error);
+      }
+    }
+  }
+
+  /**
+   * 🔥 특정 webContents의 CSS 제거
+   */
+  public async removeCSSFromWebContents(webContents: Electron.WebContents): Promise<void> {
+    await this.removeExistingCSS(webContents);
+    this.cssKeys.delete(webContents);
   }
 }

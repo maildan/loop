@@ -1,0 +1,851 @@
+/**
+ * 🧩 Components Module - Writer-Focused UI Components
+ * 
+ * Purpose: Korean author-optimized component styles
+ * 
+ * Features:
+ * - Writer-friendly buttons and forms
+ * - Distraction-free cards and layouts
+ * - Focus mode components
+ * - Accessibility-first design
+ * - Korean typography integration
+ * 
+ * Design Philosophy:
+ * - Subtle, non-intrusive aesthetics
+ * - Clear visual hierarchy for writing
+ * - Consistent interactive patterns
+ * - Performance-optimized rendering
+ */
+
+/* ========================================
+   🃏 Card Components
+   ======================================== */
+
+.writer-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: var(--space-6);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-fast) ease;
+  
+  /* Performance optimization */
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+}
+
+.writer-card:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 12px 0 rgba(37, 99, 235, 0.1);
+  transform: translateY(-2px);
+}
+
+.writer-card-compact {
+  padding: var(--space-4);
+  border-radius: 8px;
+}
+
+.writer-card-elevated {
+  box-shadow: var(--shadow-md);
+}
+
+.writer-card-elevated:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+/* Card transition helper */
+.card-transition {
+  will-change: transform, box-shadow;
+  transform: translateZ(0);
+}
+
+/* ========================================
+   🔘 Button Components
+   ======================================== */
+
+/* Primary button - main actions */
+.writer-button-primary {
+  background: var(--accent-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--app-font-family);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  line-height: 1.4;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+  
+  /* Accessibility */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  
+  /* Performance */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.writer-button-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.writer-button-primary:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.writer-button-primary:disabled {
+  background: var(--border-medium);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Secondary button - alternative actions */
+.writer-button-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--app-font-family);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+  
+  /* Accessibility */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  
+  /* Performance */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.writer-button-secondary:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+.writer-button-secondary:active {
+  transform: translateY(0);
+}
+
+.writer-button-secondary:disabled {
+  background: var(--bg-secondary);
+  border-color: var(--border-light);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Ghost button - minimal actions */
+.writer-button-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 6px;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--app-font-family);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+}
+
+.writer-button-ghost:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* Button sizes */
+.writer-button-sm {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-xs);
+  min-height: 32px;
+}
+
+.writer-button-lg {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--text-base);
+  min-height: 48px;
+}
+
+.writer-button-xl {
+  padding: var(--space-5) var(--space-8);
+  font-size: var(--text-lg);
+  min-height: 56px;
+}
+
+/* ========================================
+   🔘 Toggle Components - Writer-Optimized
+   ======================================== */
+
+/* Enhanced toggle switch - larger, more accessible */
+.writer-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: var(--space-3);
+}
+
+.writer-toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Toggle switch track - made larger */
+.writer-toggle-track {
+  position: relative;
+  width: 60px;  /* Increased from typical 44px */
+  height: 32px; /* Increased from typical 24px */
+  background: var(--border-medium);
+  border-radius: 16px;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+  border: 2px solid transparent;
+}
+
+/* Toggle switch thumb - larger and more tactile */
+.writer-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 28px;  /* Increased from typical 20px */
+  height: 28px; /* Increased from typical 20px */
+  background: white;
+  border-radius: 50%;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* Toggle states */
+.writer-toggle input:checked + .writer-toggle-track {
+  background: var(--accent-primary);
+}
+
+.writer-toggle input:checked + .writer-toggle-track .writer-toggle-thumb {
+  transform: translateX(28px); /* Adjusted for larger size */
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Focus states for accessibility */
+.writer-toggle input:focus-visible + .writer-toggle-track {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Hover states */
+.writer-toggle:hover .writer-toggle-track {
+  background: var(--border-dark);
+}
+
+.writer-toggle:hover input:checked + .writer-toggle-track {
+  background: var(--accent-hover);
+}
+
+/* Disabled state */
+.writer-toggle input:disabled + .writer-toggle-track {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.writer-toggle input:disabled + .writer-toggle-track .writer-toggle-thumb {
+  background: #f3f4f6;
+}
+
+/* Toggle with label */
+.writer-toggle-label {
+  font-family: var(--app-font-family);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* Compact toggle variant */
+.writer-toggle-compact .writer-toggle-track {
+  width: 48px;
+  height: 26px;
+  border-radius: 13px;
+}
+
+.writer-toggle-compact .writer-toggle-thumb {
+  width: 22px;
+  height: 22px;
+  top: 2px;
+  left: 2px;
+}
+
+.writer-toggle-compact input:checked + .writer-toggle-track .writer-toggle-thumb {
+  transform: translateX(22px);
+}
+
+/* Large toggle variant for important settings */
+.writer-toggle-large .writer-toggle-track {
+  width: 76px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+.writer-toggle-large .writer-toggle-thumb {
+  width: 36px;
+  height: 36px;
+  top: 2px;
+  left: 2px;
+}
+
+.writer-toggle-large input:checked + .writer-toggle-track .writer-toggle-thumb {
+  transform: translateX(36px);
+}
+
+/* ========================================
+   📝 Form Components
+   ======================================== */
+
+/* Input fields - writer-friendly */
+.writer-input {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--app-font-family);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  line-height: 1.5;
+  width: 100%;
+  transition: all var(--duration-fast) var(--ease-writer);
+  
+  /* Korean text optimization */
+  letter-spacing: -0.01em;
+}
+
+.writer-input:focus {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: -2px;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-primary);
+}
+
+.writer-input:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.writer-input::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+/* Textarea - optimized for writing */
+.writer-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: var(--leading-relaxed);
+}
+
+/* Select dropdown */
+.writer-select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: 16px;
+  padding-right: var(--space-10);
+  cursor: pointer;
+}
+
+/* Form groups */
+.writer-form-group {
+  margin-bottom: var(--space-4);
+}
+
+.writer-form-label {
+  display: block;
+  font-family: var(--app-font-family);
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+}
+
+.writer-form-error {
+  font-size: var(--text-xs);
+  color: var(--error);
+  margin-top: var(--space-1);
+}
+
+/* ========================================
+   🎯 Icon Components
+   ======================================== */
+
+.writer-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--accent-light);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+  flex-shrink: 0;
+}
+
+.writer-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent-primary);
+  flex-shrink: 0;
+}
+
+.writer-icon-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  margin-bottom: var(--space-2);
+}
+
+.writer-icon-sm svg {
+  width: 16px;
+  height: 16px;
+}
+
+.writer-icon-lg {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  margin-bottom: var(--space-6);
+}
+
+.writer-icon-lg svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* ========================================
+   📄 Content Components
+   ======================================== */
+
+/* Text styling utilities */
+.writer-text-primary {
+  color: var(--text-primary);
+  font-family: var(--app-font-family);
+}
+
+.writer-text-secondary {
+  color: var(--text-secondary);
+  font-family: var(--app-font-family);
+}
+
+.writer-text-muted {
+  color: var(--text-muted);
+  font-family: var(--app-font-family);
+}
+
+/* Prose content - optimized for Korean */
+.prose,
+.text-content {
+  color: var(--text-primary);
+  font-family: var(--app-font-family);
+  line-height: var(--leading-relaxed);
+  letter-spacing: -0.01em;
+  
+  /* Word breaking for long content */
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  color: var(--text-primary);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-3);
+}
+
+.prose p {
+  margin-bottom: var(--space-4);
+}
+
+.prose strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+/* ========================================
+   🎨 Focus Mode Components - Enhanced
+   ======================================== */
+
+.focus-mode {
+  background: var(--bg-focus);
+  transition: all var(--duration-slow) var(--ease-writer);
+  position: relative;
+}
+
+.focus-mode::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-focus);
+  z-index: -1;
+}
+
+.focus-mode .sidebar {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-100%);
+  transition: var(--sidebar-transition);
+}
+
+.focus-mode .header {
+  opacity: 0.2;
+  transition: opacity var(--duration-slow) ease;
+  backdrop-filter: blur(4px);
+}
+
+.focus-mode .main-content {
+  max-width: var(--focus-width);
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-8);
+  transition: all var(--duration-slow) var(--ease-writer);
+  min-height: 100vh;
+}
+
+/* Enhanced focus mode text */
+.focus-mode .writer-text,
+.focus-mode .prose {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: var(--focus-line-height);
+  max-width: var(--focus-width);
+  margin: 0 auto;
+  color: var(--text-primary);
+}
+
+/* ========================================
+   ✍️ Writer-Specific Components
+   ======================================== */
+
+/* Enhanced writing area */
+.writer-workspace {
+  background: var(--bg-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.writer-main {
+  flex: 1;
+  display: flex;
+  max-width: 100%;
+  position: relative;
+}
+
+.writer-sidebar {
+  width: var(--sidebar-width);
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border-light);
+  transition: var(--sidebar-transition);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.writer-sidebar.collapsed {
+  width: var(--sidebar-width-collapsed);
+  overflow: hidden;
+}
+
+.writer-sidebar.hidden {
+  width: 0;
+  border-right: none;
+  overflow: hidden;
+}
+
+.writer-content {
+  flex: 1;
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Enhanced toolbar */
+.writer-toolbar {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-light);
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--touch-target-min);
+}
+
+.writer-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-2);
+  border-right: 1px solid var(--border-light);
+}
+
+.writer-toolbar-group:last-child {
+  border-right: none;
+  margin-left: auto;
+}
+
+/* Enhanced status bar */
+.writer-status {
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border-light);
+  padding: var(--space-2) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  min-height: 32px;
+}
+
+.writer-status-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Enhanced document tabs */
+.writer-tabs {
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.writer-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.writer-tab {
+  background: transparent;
+  border: none;
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--app-font-family);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--duration-fast) ease;
+  white-space: nowrap;
+  min-height: var(--touch-target-min);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.writer-tab:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.writer-tab.active {
+  color: var(--accent-primary);
+  border-bottom-color: var(--accent-primary);
+  background: var(--bg-primary);
+}
+
+.writer-tab-close {
+  opacity: 0;
+  transition: opacity var(--duration-fast) ease;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1);
+  margin: calc(var(--space-1) * -1);
+}
+
+.writer-tab:hover .writer-tab-close {
+  opacity: 1;
+}
+
+.writer-tab-close:hover {
+  background: var(--error-light);
+  color: var(--error);
+}
+
+/* ========================================
+   🔧 Utility Components
+   ======================================== */
+
+/* Reading mode - enhanced readability */
+.reading-mode {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--text-primary);
+  max-width: 65ch;
+  margin: 0 auto;
+}
+
+/* Tooltips and popovers */
+.tooltip,
+.popover {
+  position: absolute !important;
+  max-width: 80vw;
+  white-space: normal !important;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-medium);
+  border-radius: 8px;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+}
+
+/* Loading states */
+.loading-skeleton {
+  background: linear-gradient(
+    90deg, 
+    var(--bg-secondary) 25%, 
+    var(--bg-hover) 50%, 
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* ========================================
+   ♿ Accessibility Enhancements
+   ======================================== */
+
+/* Focus visibility */
+.focusable:focus-visible,
+.writer-button-primary:focus-visible,
+.writer-button-secondary:focus-visible,
+.writer-input:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+}
+
+/* Screen reader only content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ========================================
+   📱 Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .writer-card {
+    padding: var(--space-4);
+    border-radius: 8px;
+  }
+
+  .writer-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .writer-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .writer-button-primary,
+  .writer-button-secondary {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+  }
+
+  .focus-mode .main-content {
+    padding: var(--space-4);
+  }
+
+  .prose,
+  .text-content {
+    font-size: var(--text-base);
+  }
+}
+
+@media (max-width: 480px) {
+  .writer-card {
+    padding: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .writer-icon {
+    width: 36px;
+    height: 36px;
+    margin-bottom: var(--space-3);
+  }
+
+  .writer-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ========================================
+   🌙 Dark Mode Adjustments
+   ======================================== */
+
+:root[data-theme="dark"] .writer-card,
+.dark .writer-card {
+  background: var(--bg-elevated);
+  border-color: var(--border-light);
+}
+
+:root[data-theme="dark"] .writer-card:hover,
+.dark .writer-card:hover {
+  box-shadow: 0 4px 12px 0 rgba(59, 130, 246, 0.15);
+}
+
+:root[data-theme="dark"] .loading-skeleton,
+.dark .loading-skeleton {
+  background: linear-gradient(
+    90deg, 
+    var(--bg-secondary) 25%, 
+    var(--bg-hover) 50%, 
+    var(--bg-secondary) 75%
+  );
+}

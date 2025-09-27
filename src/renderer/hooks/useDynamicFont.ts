@@ -1,6 +1,7 @@
 // 🔥 동적 폰트 훅 - public/fonts TTF 기반
 import { useState, useEffect, useCallback } from 'react';
 import { Logger } from '../../shared/logger';
+import { getFontDisplayName } from '../../shared/utils/fontUtils';
 
 interface UseDynamicFontResult {
     currentFont: string;
@@ -161,9 +162,13 @@ export function useDynamicFont(): UseDynamicFontResult {
                         displayLabel: `${actualFontName || family?.displayName || family?.name || 'Unknown'} (${style} ${weight})`
                     });
                     
+                    // 🔥 폰트명 정규화 - fontUtils 사용 (통합된 매핑 시스템)
+                    const rawName = actualFontName || family?.displayName || family?.name || 'Unknown';
+                    const normalizedName = getFontDisplayName(rawName);
+                    
                     return {
                         value: uniqueValue,
-                        label: `${actualFontName || family?.displayName || family?.name || 'Unknown'} (${style} ${weight})`,
+                        label: `${normalizedName} (${style} ${weight})`,
                         category: family?.category || 'other'
                     };
                 });
@@ -198,6 +203,52 @@ export function useDynamicFont(): UseDynamicFontResult {
             setLoading(false);
         }
     }, [injectFontCSS]);
+
+    // 🔥 테마 변경 감지 및 자동 폰트 리로딩
+    useEffect(() => {
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === 'attributes' && 
+                    (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme')) {
+                    
+                    const target = mutation.target as HTMLElement;
+                    const isDarkMode = target.classList.contains('dark') || 
+                                     target.getAttribute('data-theme') === 'dark';
+                    
+                    Logger.info('DYNAMIC_FONT', '🔥 테마 변경 감지, 폰트 재적용 시작', {
+                        isDarkMode,
+                        classes: target.className,
+                        dataTheme: target.getAttribute('data-theme')
+                    });
+                    
+                    // 폰트 CSS 재주입
+                    (async () => {
+                        try {
+                            const result = await (window as any).electronAPI?.font?.injectCSS?.();
+                            if (result?.success) {
+                                Logger.info('DYNAMIC_FONT', '✅ 테마 변경 시 폰트 자동 재적용 성공', {
+                                    cssKey: result.cssKey,
+                                    isDarkMode
+                                });
+                            }
+                        } catch (error) {
+                            Logger.error('DYNAMIC_FONT', '❌ 테마 변경 시 폰트 재적용 실패', error);
+                        }
+                    })();
+                    
+                    break; // 하나의 변경만 처리
+                }
+            }
+        });
+
+        // HTML 요소의 class와 data-theme 속성 변경 감지
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class', 'data-theme']
+        });
+
+        return () => observer.disconnect();
+    }, []);
 
     // 🔥 초기 로드
     useEffect(() => {
@@ -238,12 +289,61 @@ export function useDynamicFont(): UseDynamicFontResult {
         }
     }, []);
 
-    // 🔥 폰트 적용 - webContents CSS 주입 방식
+    // 🔥 폰트 적용 - webContents CSS 주입 방식 (스마트 매핑 포함)
     const setFont = useCallback(async (family: string) => {
         try {
-            // 🔥 1. CSS 변수 즉시 적용 (UI 반응성)
-            document.documentElement.style.setProperty('--app-font-family', family);
-            document.body.style.fontFamily = family;
+            // 🔥 동적 스마트 매핑: 선택된 값을 실제 CSS font-family로 변환
+            const smartFontMapping = (fontValue: string): string => {
+                if (!fontValue || fontValue.trim() === '') {
+                    return 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif';
+                }
+
+                // 이미 CSS font-family 형태인 경우 (쉼표 포함)
+                if (fontValue.includes(',')) {
+                    return fontValue;
+                }
+
+                // 동적 폰트 타입 감지 및 폴백 체인 생성
+                const detectFontType = (name: string) => {
+                    const lowerName = name.toLowerCase();
+                    
+                    if (/nanum|나눔|malgun|맑은|gothic|바탕|dotum|돋움/.test(lowerName)) {
+                        return 'korean';
+                    } else if (/hiragino|yu.gothic|meiryo|ms.gothic/.test(lowerName)) {
+                        return 'japanese';
+                    } else if (/mono|code|consolas|menlo|courier/.test(lowerName)) {
+                        return 'monospace';
+                    } else if (/serif|times|georgia/.test(lowerName)) {
+                        return 'serif';
+                    }
+                    return 'sans-serif';
+                };
+
+                const fontType = detectFontType(fontValue);
+                const quotedFont = `"${fontValue}"`;
+
+                // 타입별 폴백 체인 생성
+                const fallbackChains = {
+                    korean: `${quotedFont}, "Apple SD Gothic Neo", "Noto Sans CJK KR", "Malgun Gothic", sans-serif`,
+                    japanese: `${quotedFont}, "Hiragino Sans", "Yu Gothic", sans-serif`,
+                    monospace: `${quotedFont}, "SF Mono", "Monaco", "Menlo", "Consolas", monospace`,
+                    serif: `${quotedFont}, "Times New Roman", "Georgia", serif`,
+                    'sans-serif': `${quotedFont}, system-ui, -apple-system, BlinkMacSystemFont, sans-serif`
+                };
+
+                return fallbackChains[fontType];
+            };
+
+            const cssFamily = smartFontMapping(family);
+            
+            Logger.info('DYNAMIC_FONT', '🔥 동적 스마트 매핑 적용', {
+                originalValue: family,
+                mappedCSSFamily: cssFamily
+            });
+
+            // 🔥 1. CSS 변수 즉시 적용 (UI 반응성) - 변환된 CSS 값 사용
+            document.documentElement.style.setProperty('--app-font-family', cssFamily);
+            document.body.style.fontFamily = cssFamily;
 
             // 🔥 2. webContents를 통한 CSS 주입으로 전체 폰트 정의 새로고침
             try {
