@@ -32,6 +32,9 @@
 /* Core foundation - CSS variables and theming */
 @import '../styles/modules/variables.css';
 
+/* 🎨 새로운 다중 테마 시스템 */
+@import '../styles/themes/index.css';
+
 /* Typography system - Korean writer optimization */
 @import '../styles/modules/typography.css';
 

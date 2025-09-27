@@ -1,56 +1,58 @@
-/* 🎨 MarkdownEditor CSS Variables - 테마 시스템 */
+/* 🎨 MarkdownEditor CSS Variables - 메인 테마 시스템과 완벽 동기화 */
 
 :root {
-  /* 🔥 작가 친화적 색상 팔레트 */
-  --editor-bg: #ffffff;
-  --editor-bg-secondary: #f8fafc;
-  --editor-text: #334155;
-  --editor-text-muted: #64748b;
-  --editor-text-light: #94a3b8;
-  --editor-border: #e2e8f0;
-  --editor-accent: #6366f1;
-  --editor-accent-light: rgba(99, 102, 241, 0.1);
+  /* 🔥 메인 테마 변수 직접 사용 - 라이트 모드 */
+  --editor-bg: hsl(var(--background));
+  --editor-bg-secondary: hsl(var(--muted));
+  --editor-text: hsl(var(--foreground));
+  --editor-text-muted: hsl(var(--muted-foreground));
+  --editor-text-light: hsl(var(--muted-foreground) / 0.7);
+  --editor-border: hsl(var(--border));
+  --editor-accent: hsl(var(--primary));
+  --editor-accent-light: hsl(var(--primary) / 0.1);
 
-  /* 🔥 FIXED: active 상태 색상을 중성적인 색으로 변경 */
-  --button-active: rgba(148, 163, 184, 0.2); /* 기존 보라색 대신 회색 */
-  --button-hover: rgba(148, 163, 184, 0.1);
+  /* 🔥 인터랙션 색상 - 메인 테마 기반 */
+  --button-active: hsl(var(--accent));
+  --button-hover: hsl(var(--accent) / 0.8);
 
-  /* 🔥 포커스 효과 */
-  --focus-text-shadow: 0 0 8px rgba(99, 102, 241, 0.3);
+  /* 🔥 포커스 효과 - 메인 테마 기반 */
+  --focus-text-shadow: 0 0 8px hsl(var(--primary) / 0.3);
 
-  /* 🔥 헤딩 구분선 색상 */
-  --heading-border-h1: rgba(148, 163, 184, 0.3); /* 중성적인 회색 */
-  --heading-border-h2: rgba(148, 163, 184, 0.2);
+  /* 🔥 헤딩 구분선 색상 - 메인 테마 기반 */
+  --heading-border-h1: hsl(var(--border));
+  --heading-border-h2: hsl(var(--border) / 0.6);
 
   /* 🔥 폰트 시스템 변수 */
   --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --app-font-size: 14px;
 
-  /* 🔥 툴바 색상 */
-  --toolbar-bg: rgba(255, 255, 255, 0.95);
-  --toolbar-border: rgba(0, 0, 0, 0.05);
+  /* 🔥 툴바 색상 - 메인 테마 기반 */
+  --toolbar-bg: hsl(var(--background) / 0.95);
+  --toolbar-border: hsl(var(--border) / 0.5);
 }
 
-/* 🌙 다크 모드 색상 */
-[data-theme="dark"] {
-  --editor-bg: #0f172a;
-  --editor-bg-secondary: #1e293b;
-  --editor-text: #f1f5f9;
-  --editor-text-muted: #94a3b8;
-  --editor-text-light: #64748b;
-  --editor-border: #334155;
-  --editor-accent: #818cf8;
-  --editor-accent-light: rgba(129, 140, 248, 0.15);
+/* 🌙 다크 모드 색상 - 메인 테마 시스템과 완벽 동기화 */
+[data-theme="dark"],
+.dark {
+  /* 🔥 메인 테마 변수 직접 사용 - 다크 모드 */
+  --editor-bg: hsl(var(--background));
+  --editor-bg-secondary: hsl(var(--muted));
+  --editor-text: hsl(var(--foreground));
+  --editor-text-muted: hsl(var(--muted-foreground));
+  --editor-text-light: hsl(var(--muted-foreground) / 0.7);
+  --editor-border: hsl(var(--border));
+  --editor-accent: hsl(var(--primary));
+  --editor-accent-light: hsl(var(--primary) / 0.15);
 
-  /* 🔥 다크 모드에서도 중성적인 active 색상 */
-  --button-active: rgba(148, 163, 184, 0.25);
-  --button-hover: rgba(148, 163, 184, 0.15);
+  /* 🔥 다크 모드 인터랙션 색상 - 메인 테마 기반 */
+  --button-active: hsl(var(--accent));
+  --button-hover: hsl(var(--accent) / 0.8);
 
-  /* 🔥 다크 모드 헤딩 구분선 */
-  --heading-border-h1: rgba(148, 163, 184, 0.3);
-  --heading-border-h2: rgba(148, 163, 184, 0.15);
+  /* 🔥 다크 모드 헤딩 구분선 - 메인 테마 기반 */
+  --heading-border-h1: hsl(var(--border));
+  --heading-border-h2: hsl(var(--border) / 0.6);
 
-  /* 🔥 다크 모드 툴바 */
-  --toolbar-bg: rgba(26, 26, 26, 0.95);
-  --toolbar-border: rgba(255, 255, 255, 0.05);
+  /* 🔥 다크 모드 툴바 - 메인 테마 기반 */
+  --toolbar-bg: hsl(var(--background) / 0.95);
+  --toolbar-border: hsl(var(--border) / 0.5);
 }

@@ -3,20 +3,57 @@
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { Logger } from '../../shared/logger';
 
-// 🔥 테마 타입 정의 - 작가 전용 테마들 추가
-export type Theme = 'light' | 'dark' | 'system' | 'sepia' | 'high-contrast' | 'warm' | 'cool' | 'forest' | 'midnight';
+// 🔥 테마 타입 정의 - 새로운 다중 테마 시스템과 통합
+export type Theme = 
+  | 'light' 
+  | 'dark' 
+  | 'system' 
+  | 'writer-focus' 
+  | 'writer-focus-dark'
+  | 'sepia'
+  | 'sepia-dark' 
+  | 'high-contrast' 
+  | 'colorblind-friendly'
+  | 'warm' 
+  | 'cool' 
+  | 'forest' 
+  | 'midnight';
 
-// 작가 전용 테마 메타데이터
+// 🎨 완전한 작가 전용 테마 메타데이터 (새로운 시스템과 통합)
 export const AUTHOR_THEMES = {
-  sepia: {
-    name: '세피아',
-    description: '따뜻한 종이 느낌으로 눈의 피로를 줄입니다',
-    category: 'comfortable',
+  'writer-focus': {
+    name: '작가 집중 모드',
+    description: '장시간 글쓰기에 최적화된 집중 테마 (세리프 폰트, 최소 UI)',
+    category: 'writer',
     baseScheme: 'light'
+  },
+  'writer-focus-dark': {
+    name: '작가 집중 다크',
+    description: '작가 집중 모드의 다크 변형 (극도로 어두운 배경)',
+    category: 'writer',
+    baseScheme: 'dark'
+  },
+  sepia: {
+    name: '세피아 종이',
+    description: '따뜻한 종이 텍스처로 눈의 피로를 줄입니다',
+    category: 'writer',
+    baseScheme: 'light'
+  },
+  'sepia-dark': {
+    name: '세피아 다크',
+    description: '세피아 테마의 다크 변형',
+    category: 'writer',
+    baseScheme: 'dark'
   },
   'high-contrast': {
     name: '고대비',
     description: '접근성을 위한 최대 대비 모드',
+    category: 'accessibility',
+    baseScheme: 'light'
+  },
+  'colorblind-friendly': {
+    name: '색맹 친화',
+    description: '색맹 사용자를 위한 최적화 테마',
     category: 'accessibility',
     baseScheme: 'light'
   },
@@ -81,7 +118,11 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     try {
       const html = document.documentElement;
       const dataTheme = html.getAttribute('data-theme') as Exclude<Theme, 'system'>;
-      const validThemes: Exclude<Theme, 'system'>[] = ['light', 'dark', 'sepia', 'high-contrast', 'warm', 'cool', 'forest', 'midnight'];
+      const validThemes: Exclude<Theme, 'system'>[] = [
+        'light', 'dark', 'writer-focus', 'writer-focus-dark', 
+        'sepia', 'sepia-dark', 'high-contrast', 'colorblind-friendly',
+        'warm', 'cool', 'forest', 'midnight'
+      ];
       
       if (dataTheme && validThemes.includes(dataTheme)) return dataTheme;
       
@@ -138,18 +179,38 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
   // 🔥 Helper: DOM에 클래스 기반 테마 적용 (shadcn/ui 표준 - 최소화)
   const applyThemeToDOM = useCallback((resolved: Exclude<Theme, 'system'>) => {
     const root = document.documentElement;
-    const allThemes = ['light', 'dark', 'sepia', 'high-contrast', 'warm', 'cool', 'forest', 'midnight'];
-    const baseScheme = AUTHOR_THEMES[resolved as keyof typeof AUTHOR_THEMES]?.baseScheme || resolved;
     
-    // 🔥 shadcn/ui 표준: HTML root만 class 적용 (Body, #root 중복 제거)
+    // 🎨 모든 테마 클래스 정의 (새로운 시스템 포함)
+    const allThemes = [
+      'light', 'dark', 'writer-focus', 'writer-focus-dark',
+      'sepia', 'sepia-dark', 'high-contrast', 'colorblind-friendly',
+      'warm', 'cool', 'forest', 'midnight'
+    ];
+    
+    const baseScheme = AUTHOR_THEMES[resolved as keyof typeof AUTHOR_THEMES]?.baseScheme || 
+      (resolved.includes('dark') || resolved === 'dark' ? 'dark' : 'light');
+    
+    // 🔥 새로운 테마 시스템 호환: 클래스 기반 적용
     root.classList.remove(...allThemes);
-    root.classList.add(resolved);
-    root.style.colorScheme = baseScheme; // setProperty 대신 직접 할당으로 성능 개선
     
-    Logger.debug('THEME_PROVIDER', 'Optimized theme applied to DOM', {
+    // 특수 테마 처리 (writer-focus-dark -> writer-focus + dark)
+    if (resolved === 'writer-focus-dark') {
+      root.classList.add('writer-focus', 'dark');
+    } else if (resolved === 'sepia-dark') {
+      root.classList.add('sepia', 'dark');
+    } else {
+      root.classList.add(resolved);
+    }
+    
+    // data-theme 속성도 설정 (에디터 호환성)
+    root.setAttribute('data-theme', baseScheme);
+    root.style.colorScheme = baseScheme;
+    
+    Logger.info('THEME_PROVIDER', '🎨 새로운 테마 시스템으로 테마 적용 완료', {
       resolved,
       baseScheme,
-      rootClasses: root.className
+      rootClasses: root.className,
+      dataTheme: root.getAttribute('data-theme')
     });
   }, []);  // 🔥 Helper: 폰트 CSS 재적용
   const reapplyFontCSS = useCallback(async (theme: Theme, resolved: Exclude<Theme, 'system'>) => {
@@ -174,15 +235,40 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     }
   }, []);
 
-  // 🔥 Helper: HTML에서 현재 테마 감지
+  // 🔥 Helper: HTML에서 현재 테마 감지 (새로운 시스템 포함)
   const detectCurrentThemeFromDOM = useCallback((): Exclude<Theme, 'system'> => {
     const htmlElement = document.documentElement;
-    const dataTheme = htmlElement.getAttribute('data-theme') as Exclude<Theme, 'system'>;
-    const validThemes: Exclude<Theme, 'system'>[] = ['light', 'dark', 'sepia', 'high-contrast', 'warm', 'cool', 'forest', 'midnight'];
+    const validThemes: Exclude<Theme, 'system'>[] = [
+      'light', 'dark', 'writer-focus', 'writer-focus-dark', 
+      'sepia', 'sepia-dark', 'high-contrast', 'colorblind-friendly',
+      'warm', 'cool', 'forest', 'midnight'
+    ];
     
+    // 🎨 클래스 기반 새로운 테마 감지 (우선순위)
+    if (htmlElement.classList.contains('writer-focus') && htmlElement.classList.contains('dark')) {
+      return 'writer-focus-dark';
+    }
+    if (htmlElement.classList.contains('writer-focus')) {
+      return 'writer-focus';
+    }
+    if (htmlElement.classList.contains('sepia') && htmlElement.classList.contains('dark')) {
+      return 'sepia-dark';
+    }
+    if (htmlElement.classList.contains('sepia')) {
+      return 'sepia';
+    }
+    if (htmlElement.classList.contains('high-contrast')) {
+      return 'high-contrast';
+    }
+    if (htmlElement.classList.contains('colorblind-friendly')) {
+      return 'colorblind-friendly';
+    }
+    
+    // data-theme 속성 기반 감지 (레거시)
+    const dataTheme = htmlElement.getAttribute('data-theme') as Exclude<Theme, 'system'>;
     if (dataTheme && validThemes.includes(dataTheme)) return dataTheme;
     
-    // 클래스 기반 감지 (레거시)
+    // 기본 클래스 감지 (레거시)
     if (htmlElement.classList.contains('dark')) return 'dark';
     if (htmlElement.classList.contains('light')) return 'light';
     

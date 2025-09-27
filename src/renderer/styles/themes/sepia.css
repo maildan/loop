@@ -1,0 +1,161 @@
+/**
+ * 📜 Sepia/Paper Theme - 종이 질감의 따뜻한 테마
+ * 
+ * 특징:
+ * - 종이 같은 자연스러운 색감
+ * - 눈의 피로를 덜어주는 세피아 톤
+ * - 블루라이트 최소화로 장시간 작업 적합
+ * - 빈티지한 분위기의 편안한 읽기 환경
+ */
+
+/* 🔥 Sepia 라이트 모드 - 오래된 책 느낌 */
+.sepia {
+  /* 세피아 종이 배경색 */
+  --background: oklch(0.95 0.02 55.67);           /* 연한 세피아 */
+  --foreground: oklch(0.25 0.03 45.89);           /* 진한 갈색 */
+  --card: oklch(0.93 0.025 58.44);                /* 카드 배경 */
+  --card-foreground: oklch(0.25 0.03 45.89);
+  --primary: oklch(0.4 0.08 40.33);               /* 깊은 갈색 */
+  --primary-foreground: oklch(0.95 0.02 55.67);
+  --secondary: oklch(0.88 0.03 52.78);            /* 연한 베이지 */
+  --secondary-foreground: oklch(0.35 0.05 42.56);
+  --muted: oklch(0.88 0.03 52.78);
+  --muted-foreground: oklch(0.5 0.04 48.44);      /* 중간 갈색 */
+  --accent: oklch(0.85 0.035 50.67);
+  --accent-foreground: oklch(0.35 0.05 42.56);
+  --destructive: oklch(0.5 0.12 35.89);           /* 세피아 빨강 */
+  --destructive-foreground: oklch(0.95 0.02 55.67);
+  --border: oklch(0.8 0.04 48.22);                /* 연한 경계선 */
+  --input: oklch(0.9 0.025 54.33);
+  --ring: oklch(0.45 0.06 43.78);
+
+  /* 에디터 - 오래된 종이 질감 */
+  --editor-bg: oklch(0.96 0.018 57.89);           /* 오래된 종이 */
+  --editor-bg-secondary: oklch(0.91 0.03 55.44);  
+  --editor-text: oklch(0.22 0.035 43.67);         /* 잉크 색상 */
+  --editor-text-muted: oklch(0.45 0.04 46.33);
+  --editor-border: oklch(0.78 0.045 47.89);
+  --editor-accent: oklch(0.38 0.1 38.44);         /* 강조 갈색 */
+
+  /* 사이드바 - 책등 색상 */
+  --sidebar: oklch(0.89 0.035 51.44);
+  --sidebar-foreground: oklch(0.3 0.04 44.67);
+  --sidebar-border: oklch(0.75 0.05 45.89);
+}
+
+/* 🔥 Sepia 다크 모드 - 밤의 서재 */
+.sepia.dark {
+  /* 어두운 세피아 배경 */
+  --background: oklch(0.18 0.02 45.33);           /* 어두운 갈색 */
+  --foreground: oklch(0.82 0.025 55.89);          /* 연한 세피아 */
+  --card: oklch(0.22 0.025 48.67);                /* 어두운 카드 */
+  --card-foreground: oklch(0.82 0.025 55.89);
+  --primary: oklch(0.75 0.06 50.44);              /* 황금 갈색 */
+  --primary-foreground: oklch(0.2 0.025 45.33);
+  --secondary: oklch(0.28 0.03 42.78);            /* 어두운 베이지 */
+  --secondary-foreground: oklch(0.78 0.03 52.56);
+  --muted: oklch(0.28 0.03 42.78);
+  --muted-foreground: oklch(0.58 0.035 48.44);    /* 중간 세피아 */
+  --accent: oklch(0.32 0.035 40.67);
+  --accent-foreground: oklch(0.78 0.03 52.56);
+  --destructive: oklch(0.55 0.1 25.89);           /* 어두운 세피아 빨강 */
+  --destructive-foreground: oklch(0.85 0.02 55.67);
+  --border: oklch(0.35 0.04 38.22);               /* 어두운 경계선 */
+  --input: oklch(0.3 0.035 41.33);
+  --ring: oklch(0.65 0.05 48.78);
+
+  /* 에디터 - 밤의 양피지 */
+  --editor-bg: oklch(0.15 0.018 42.89);           /* 어두운 양피지 */
+  --editor-bg-secondary: oklch(0.2 0.025 45.44);  
+  --editor-text: oklch(0.8 0.03 53.67);           /* 연한 잉크 */
+  --editor-text-muted: oklch(0.55 0.035 46.33);
+  --editor-border: oklch(0.32 0.04 38.89);
+  --editor-accent: oklch(0.72 0.08 52.44);        /* 황금 강조색 */
+
+  /* 사이드바 - 어두운 책장 */
+  --sidebar: oklch(0.25 0.03 43.44);
+  --sidebar-foreground: oklch(0.78 0.03 52.67);
+  --sidebar-border: oklch(0.32 0.04 38.89);
+}
+
+/* 🔥 Sepia 전용 스타일링 */
+.sepia {
+  /* 따뜻한 그림자 효과 */
+  --shadow-warm: 0 4px 20px oklch(0.3 0.05 40.44 / 0.15);
+  --shadow-paper: inset 0 1px 3px oklch(0.4 0.03 45.67 / 0.1);
+
+  /* 종이 텍스처 효과 */
+  .ProseMirror,
+  .card,
+  [data-ui="card"] {
+    position: relative;
+  }
+
+  .ProseMirror::before,
+  .card::before,
+  [data-ui="card"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, oklch(0.9 0.01 50.44 / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, oklch(0.85 0.02 48.33 / 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .ProseMirror > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* 부드러운 전환 효과 */
+  * {
+    transition: color 0.4s ease, background-color 0.4s ease, border-color 0.4s ease;
+  }
+
+  /* 따뜻한 스크롤바 */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: oklch(var(--muted) / 0.3);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: oklch(var(--muted-foreground) / 0.4);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(var(--accent-foreground) / 0.6);
+  }
+
+  /* 버튼 호버 효과 */
+  button:hover,
+  [role="button"]:hover {
+    box-shadow: var(--shadow-warm);
+  }
+
+  /* 입력 필드 종이 질감 */
+  input,
+  textarea,
+  [contenteditable] {
+    box-shadow: var(--shadow-paper);
+  }
+
+  /* 링크 색상 조정 */
+  a {
+    color: oklch(0.45 0.08 35.44);
+    text-decoration-color: oklch(0.45 0.08 35.44 / 0.3);
+  }
+
+  .dark a {
+    color: oklch(0.72 0.06 52.44);
+    text-decoration-color: oklch(0.72 0.06 52.44 / 0.4);
+  }
+}
