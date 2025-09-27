@@ -18,7 +18,13 @@ export class ThemeClassManager {
   static getCurrentTheme(): Theme {
     const html = document.documentElement;
     
-    // 클래스 기반 테마 감지
+    // 🔥 data-theme 속성 우선 확인 (CSS 셀렉터와 일치)
+    const dataTheme = html.getAttribute('data-theme');
+    if (dataTheme && this.validateTheme(dataTheme as Theme)) {
+      return dataTheme as Theme;
+    }
+    
+    // 클래스 기반 테마 감지 (fallback)
     if (html.classList.contains('dark')) return 'dark';
     if (html.classList.contains('writer-focus')) {
       return html.classList.contains('dark') ? 'writer-focus-dark' : 'writer-focus';
@@ -45,6 +51,9 @@ export class ThemeClassManager {
     
     // 새 테마 적용
     this.addThemeClasses(html, theme);
+    
+    // 🔥 data-theme 속성 설정 (CSS 셀렉터를 위해 필수!)
+    this.setDataThemeAttribute(html, theme);
     
     // color-scheme 설정
     this.setColorScheme(html, theme);
@@ -81,6 +90,19 @@ export class ThemeClassManager {
 
     const classes = themeClassMap[theme] || [];
     classes.forEach(className => html.classList.add(className));
+  }
+
+  /**
+   * 🔥 data-theme 속성 설정 (CSS 셀렉터용)
+   */
+  private static setDataThemeAttribute(html: HTMLElement, theme: Theme): void {
+    // system 테마는 실제 테마로 변환
+    if (theme === 'system') {
+      theme = this.getSystemDarkModePreference() ? 'dark' : 'light';
+    }
+    
+    // data-theme 속성 설정
+    html.setAttribute('data-theme', theme);
   }
 
   /**

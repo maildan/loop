@@ -87,10 +87,22 @@ export default defineConfig({
     publicDir: false,
     plugins: [
       react(),
-      // � 동적으로 스캔된 폰트 파일들을 평면화하여 복사
+      // 🚀 동적으로 스캔된 폰트 파일들을 평면화하여 복사
       viteStaticCopy({
         targets: fontCopyTargets
-      })
+      }),
+      // 🔥 CSS MIME 타입 강제 설정 플러그인
+      {
+        name: 'css-mime-type-fixer',
+        configureServer(server: any) {
+          server.middlewares.use((req: any, res: any, next: any) => {
+            if (req.url && req.url.endsWith('.css')) {
+              res.setHeader('Content-Type', 'text/css; charset=utf-8');
+            }
+            next();
+          });
+        }
+      }
     ],
     // 🔥 Electron 환경에 맞는 base path 설정
     base: process.env.NODE_ENV === 'development' ? '/' : './',
@@ -132,10 +144,19 @@ export default defineConfig({
         interval: 1000,
         ignored: ['!**/src/**/*.{js,ts,jsx,tsx}']
       },
-      // 🔥 폰트 파일 MIME 타입 설정
+      // 🔥 CSS 및 폰트 파일 MIME 타입 설정
       headers: {
         'Access-Control-Allow-Origin': '*',
       }
+    },
+    // 🔥 CSS 처리 설정 강화
+    css: {
+      // CSS 모듈 설정
+      modules: {
+        localsConvention: 'camelCase'
+      },
+      // PostCSS 설정
+      postcss: './postcss.config.cjs'
     },
     build: {
       // 프로덕션 빌드 최적화
