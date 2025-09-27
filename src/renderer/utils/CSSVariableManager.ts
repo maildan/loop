@@ -20,6 +20,27 @@ export class CSSVariableManager {
   private static readonly CSS_VAR_PREFIX = '--app-';
   
   /**
+   * 🔥 TipTap 에디터에 테마 CSS 변수들 직접 동기화 (public 메소드)
+   */
+  static syncTipTapThemeVariables(variables: { name: string; value: string }[]): void {
+    try {
+      const cssVariables: CSSVariableDefinition[] = variables.map(v => ({
+        name: v.name,
+        value: v.value
+      }));
+      
+      // private 메소드를 통해 TipTap에 적용
+      this.applyToTipTapEditor(cssVariables);
+      
+      Logger.info('CSS_VARIABLES', 'TipTap 에디터 테마 변수 동기화 완료', {
+        variables: cssVariables.map(v => `${v.name}: ${v.value}`)
+      });
+    } catch (error) {
+      Logger.error('CSS_VARIABLES', 'TipTap 에디터 테마 변수 동기화 실패', error);
+    }
+  }
+
+  /**
    * 🔥 핵심 폰트 CSS 변수들을 DOM에 직접 적용
    */
   static applyFontVariables(fontSettings: {

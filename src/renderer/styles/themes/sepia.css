@@ -159,3 +159,40 @@
     text-decoration-color: oklch(0.72 0.06 52.44 / 0.4);
   }
 }
+
+/* 🔥 TipTap 에디터 전용 강제 적용 - 배경색 문제 해결 */
+[data-theme="sepia"] .tiptap-editor,
+[data-theme="sepia"] .ProseMirror,
+[data-theme="sepia"] .tiptap,
+.sepia .tiptap-editor,
+.sepia .ProseMirror,
+.sepia .tiptap {
+  background-color: var(--editor-bg) !important;
+  color: var(--editor-text) !important;
+  border-color: var(--editor-border) !important;
+}
+
+[data-theme="sepia"] .tiptap-editor:focus,
+[data-theme="sepia"] .ProseMirror:focus,
+.sepia .tiptap-editor:focus,
+.sepia .ProseMirror:focus {
+  background-color: var(--editor-bg) !important;
+  outline: 2px solid var(--editor-accent) !important;
+  outline-offset: 2px;
+}
+
+/* 에디터 내부 요소들도 강제 적용 */
+[data-theme="sepia"] .tiptap-editor *,
+[data-theme="sepia"] .ProseMirror *,
+.sepia .tiptap-editor *,
+.sepia .ProseMirror * {
+  color: inherit;
+}
+
+/* 에디터 플레이스홀더 */
+[data-theme="sepia"] .tiptap-editor .is-editor-empty:first-child::before,
+[data-theme="sepia"] .ProseMirror .is-editor-empty:first-child::before,
+.sepia .tiptap-editor .is-editor-empty:first-child::before,
+.sepia .ProseMirror .is-editor-empty:first-child::before {
+  color: var(--editor-text-muted) !important;
+}

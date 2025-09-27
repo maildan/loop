@@ -1,12 +1,22 @@
 /**
- * 🎨 Theme Manager Utility - 다중 테마 관리 시스템
+ * 🎨 Theme Manager Utility - 모듈화된 테마 관리 시스템
  * 
- * React Hook과 Context를 통한 테마 상태 관리
+ * 새로운 아키텍처:
+ * - ThemeClassManager: DOM 클래스 조작 전담  
+ * - ThemeCSSManager: CSS 변수 및 애니메이션 관리
+ * - TipTapThemeSync: TipTap 에디터 테마 동기화
+ * - ThemeUtils: 통합 인터페이스 (이 파일)
+ * 
+ * 복잡도: 각 모듈 10 이하로 제한
+ * 유지보수성: 단일 책임 원칙 적용
  */
 
-import { Theme, ThemeMetadata, ThemeConfig, ThemeTransitionOptions, UserThemePreferences } from '@/shared/types/theme';
+import { Theme, ThemeMetadata, ThemeTransitionOptions, UserThemePreferences } from '@/shared/types/theme';
+import { ThemeClassManager } from './theme/ThemeClassManager';
+import { ThemeCSSManager } from './theme/ThemeCSSManager';
+import { TipTapThemeSync } from './theme/TipTapThemeSync';
 
-/* 🔥 기본 테마 메타데이터 */
+/* 🔥 확장된 테마 메타데이터 */
 export const DEFAULT_THEMES: ThemeMetadata[] = [
   {
     id: 'light',
@@ -28,6 +38,54 @@ export const DEFAULT_THEMES: ThemeMetadata[] = [
     author: 'shadcn',
     version: '1.0.0',
     tags: ['기본', '어둠', '표준'],
+    supportsDarkMode: true,
+    isAccessible: true,
+    colorSpace: 'oklch'
+  },
+  {
+    id: 'warm',
+    name: '따뜻한 테마',
+    description: '부드럽고 따뜻한 색감의 테마',
+    category: 'custom',
+    author: 'Loop Team',
+    version: '1.0.0',
+    tags: ['따뜻함', '주황', '베이지'],
+    supportsDarkMode: false,
+    isAccessible: true,
+    colorSpace: 'oklch'
+  },
+  {
+    id: 'cool',
+    name: '시원한 테마',
+    description: '차갑고 깔끔한 블루 톤 테마',
+    category: 'custom',
+    author: 'Loop Team',
+    version: '1.0.0',
+    tags: ['시원함', '파랑', '깔끔'],
+    supportsDarkMode: false,
+    isAccessible: true,
+    colorSpace: 'oklch'
+  },
+  {
+    id: 'forest',
+    name: '숲 테마',
+    description: '자연스러운 녹색 계열 테마',
+    category: 'custom',
+    author: 'Loop Team',
+    version: '1.0.0',
+    tags: ['자연', '녹색', '평화'],
+    supportsDarkMode: false,
+    isAccessible: true,
+    colorSpace: 'oklch'
+  },
+  {
+    id: 'midnight',
+    name: '자정 테마',
+    description: '깊은 밤의 어두운 테마',
+    category: 'custom',
+    author: 'Loop Team',
+    version: '1.0.0',
+    tags: ['어둠', '자정', '진한'],
     supportsDarkMode: true,
     isAccessible: true,
     colorSpace: 'oklch'
@@ -58,154 +116,102 @@ export const DEFAULT_THEMES: ThemeMetadata[] = [
   }
 ];
 
-/* 🔥 테마 유틸리티 클래스 */
+/* 🔥 통합 테마 유틸리티 클래스 */
 export class ThemeUtils {
   
   /**
-   * 현재 적용된 테마 감지
+   * 현재 적용된 테마 감지 (위임)
    */
   static getCurrentTheme(): Theme {
-    const html = document.documentElement;
-    
-    // 클래스 기반 테마 감지
-    if (html.classList.contains('dark')) return 'dark';
-    if (html.classList.contains('writer-focus')) {
-      return html.classList.contains('dark') ? 'writer-focus-dark' : 'writer-focus';
-    }
-    if (html.classList.contains('sepia')) {
-      return html.classList.contains('dark') ? 'sepia-dark' : 'sepia';
-    }
-    
-    return 'light';
+    return ThemeClassManager.getCurrentTheme();
   }
 
   /**
-   * 테마 클래스 적용
+   * 테마 적용 (통합 인터페이스)
    */
-  static applyThemeClasses(theme: Theme): void {
-    const html = document.documentElement;
-    
-    // 기존 테마 클래스 제거
-    html.classList.remove('dark', 'writer-focus', 'sepia', 'high-contrast', 'colorblind-friendly');
-    
-    // 새 테마 적용
-    switch (theme) {
-      case 'dark':
-        html.classList.add('dark');
-        break;
-      case 'writer-focus':
-        html.classList.add('writer-focus');
-        break;
-      case 'writer-focus-dark':
-        html.classList.add('writer-focus', 'dark');
-        break;
-      case 'sepia':
-        html.classList.add('sepia');
-        break;
-      case 'sepia-dark':
-        html.classList.add('sepia', 'dark');
-        break;
-      case 'high-contrast':
-        html.classList.add('high-contrast');
-        break;
-      case 'colorblind-friendly':
-        html.classList.add('colorblind-friendly');
-        break;
-      case 'light':
-      default:
-        // 라이트 모드는 기본값이므로 클래스 추가 불필요
-        break;
-    }
-    
-    // color-scheme 설정
-    const isDark = theme.includes('dark') || theme === 'dark';
-    html.style.colorScheme = isDark ? 'dark' : 'light';
-  }
-
-  /**
-   * CSS 변수 값 가져오기
-   */
-  static getCSSVariable(variable: string): string {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue(variable)
-      .trim();
-  }
-
-  /**
-   * CSS 변수 값 설정
-   */
-  static setCSSVariable(variable: string, value: string): void {
-    document.documentElement.style.setProperty(variable, value);
-  }
-
-  /**
-   * 시스템 다크 모드 선호도 확인
-   */
-  static getSystemDarkModePreference(): boolean {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  }
-
-  /**
-   * 고대비 모드 선호도 확인
-   */
-  static getSystemHighContrastPreference(): boolean {
-    return window.matchMedia('(prefers-contrast: high)').matches;
-  }
-
-  /**
-   * 애니메이션 감소 선호도 확인
-   */
-  static getSystemReducedMotionPreference(): boolean {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  /**
-   * 테마 전환 애니메이션
-   */
-  static async animateThemeTransition(
-    options: ThemeTransitionOptions = {}
-  ): Promise<void> {
-    const {
-      duration = 300,
-      easing = 'cubic-bezier(0.4, 0, 0.2, 1)',
-      skipAnimation = false,
-      onStart,
-      onComplete
-    } = options;
-
-    if (skipAnimation || this.getSystemReducedMotionPreference()) {
-      onStart?.();
-      onComplete?.();
+  static applyTheme(theme: Theme, options?: ThemeTransitionOptions): void {
+    // 테마 유효성 검사
+    if (!ThemeClassManager.validateTheme(theme)) {
+      console.warn(`Invalid theme: ${theme}`);
       return;
     }
 
-    onStart?.();
-
-    // 전환 중 클래스 추가
-    document.documentElement.classList.add('theme-transitioning');
-
-    // CSS 변수로 애니메이션 설정
-    this.setCSSVariable('--theme-transition-duration', `${duration}ms`);
-    this.setCSSVariable('--theme-transition-easing', easing);
-
-    // 애니메이션 완료 대기
-    await new Promise(resolve => setTimeout(resolve, duration));
-
-    // 전환 중 클래스 제거
-    document.documentElement.classList.remove('theme-transitioning');
-
-    onComplete?.();
+    // 애니메이션과 함께 테마 적용
+    ThemeCSSManager.animateThemeTransition({
+      ...options,
+      onStart: () => {
+        // 클래스 적용
+        ThemeClassManager.applyThemeClasses(theme);
+        options?.onStart?.();
+      },
+      onComplete: () => {
+        // TipTap 동기화
+        TipTapThemeSync.syncTipTapEditorVariables();
+        
+        // sepia 테마 특별 처리
+        if (theme.includes('sepia')) {
+          TipTapThemeSync.forceThemeSpecificStyles('sepia');
+        }
+        
+        options?.onComplete?.();
+      }
+    });
   }
 
   /**
-   * 테마 유효성 검사
+   * CSS 변수 값 가져오기 (위임)
+   */
+  static getCSSVariable(variable: string): string {
+    return ThemeCSSManager.getCSSVariable(variable);
+  }
+
+  /**
+   * CSS 변수 값 설정 (위임)
+   */
+  static setCSSVariable(variable: string, value: string): void {
+    ThemeCSSManager.setCSSVariable(variable, value);
+  }
+
+  /**
+   * TipTap 에디터 테마 동기화 (위임)
+   */
+  static syncTipTapEditorVariables(): void {
+    TipTapThemeSync.syncTipTapEditorVariables();
+  }
+
+  /**
+   * TipTap 에디터 스타일 강제 적용 (위임)
+   */
+  static forceTipTapEditorStyles(): void {
+    TipTapThemeSync.forceTipTapEditorStyles();
+  }
+  /**
+   * 시스템 선호도 확인 (위임)
+   */
+  static getSystemDarkModePreference(): boolean {
+    return ThemeClassManager.getSystemDarkModePreference();
+  }
+
+  static getSystemHighContrastPreference(): boolean {
+    return ThemeClassManager.getSystemHighContrastPreference();
+  }
+
+  static getSystemReducedMotionPreference(): boolean {
+    return ThemeClassManager.getSystemReducedMotionPreference();
+  }
+
+  /**
+   * 테마 전환 애니메이션 (위임)
+   */
+  static async animateThemeTransition(options: ThemeTransitionOptions = {}): Promise<void> {
+    return ThemeCSSManager.animateThemeTransition(options);
+  }
+
+  /**
+   * 테마 유효성 검사 (위임)
    */
   static validateTheme(theme: Theme): boolean {
-    const validThemes: Theme[] = [
-      'light', 'dark', 'writer-focus', 'writer-focus-dark', 
-      'sepia', 'sepia-dark', 'high-contrast', 'colorblind-friendly'
-    ];
-    return validThemes.includes(theme);
+    return ThemeClassManager.validateTheme(theme);
   }
 
   /**
@@ -216,113 +222,51 @@ export class ThemeUtils {
   }
 
   /**
-   * 다크 모드 여부 확인
+   * 다크 모드 여부 확인 (위임)
    */
   static isDarkTheme(theme: Theme): boolean {
-    return theme === 'dark' || theme.endsWith('-dark');
+    return ThemeClassManager.isDarkTheme(theme);
   }
 
   /**
-   * 기본 테마로 전환
+   * 기본 테마로 전환 (위임)
    */
   static getBaseTheme(theme: Theme): 'light' | 'dark' {
-    return this.isDarkTheme(theme) ? 'dark' : 'light';
+    return ThemeClassManager.getBaseTheme(theme);
   }
 
   /**
-   * 로컬 스토리지에서 사용자 선호도 로드
+   * 사용자 선호도 관리 (위임)
    */
   static loadUserPreferences(): UserThemePreferences {
-    try {
-      const stored = localStorage.getItem('user-theme-preferences');
-      if (stored) {
-        return JSON.parse(stored);
-      }
-    } catch (error) {
-      console.warn('Failed to load user theme preferences:', error);
-    }
-
-    // 기본값 반환
-    return {
-      preferredTheme: this.getSystemDarkModePreference() ? 'dark' : 'light',
-      autoSwitchDarkMode: false,
-      accessibility: {
-        highContrast: this.getSystemHighContrastPreference(),
-        colorblindFriendly: false,
-        reducedMotion: this.getSystemReducedMotionPreference()
-      },
-      customThemes: [],
-      favoriteThemes: ['light', 'dark', 'writer-focus', 'sepia']
-    };
+    return ThemeCSSManager.loadUserPreferences();
   }
 
-  /**
-   * 로컬 스토리지에 사용자 선호도 저장
-   */
   static saveUserPreferences(preferences: UserThemePreferences): void {
-    try {
-      localStorage.setItem('user-theme-preferences', JSON.stringify(preferences));
-    } catch (error) {
-      console.warn('Failed to save user theme preferences:', error);
-    }
+    ThemeCSSManager.saveUserPreferences(preferences);
   }
 
-  /**
-   * 시간 기반 자동 테마 전환 확인
-   */
   static shouldAutoSwitchToDark(preferences: UserThemePreferences): boolean {
-    if (!preferences.autoSwitchDarkMode || !preferences.darkModeSchedule) {
-      return false;
-    }
-
-    const now = new Date();
-    const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-    const { start, end } = preferences.darkModeSchedule;
-
-    // 일반적인 경우 (18:00 ~ 07:00)
-    if (start > end) {
-      return currentTime >= start || currentTime < end;
-    }
-    // 특수한 경우 (예: 07:00 ~ 18:00는 라이트 모드)
-    else {
-      return currentTime >= start && currentTime < end;
-    }
+    return ThemeCSSManager.shouldAutoSwitchToDark(preferences);
   }
 
   /**
-   * 테마 CSS 파일 동적 로드
+   * 🔥 하위 호환성을 위한 기존 메서드 (Deprecated)
+   * @deprecated Use applyTheme() instead
    */
-  static async loadThemeCSS(theme: Theme): Promise<void> {
-    // 기본 테마는 이미 로드되어 있음
-    if (theme === 'light' || theme === 'dark') return;
-
-    const themeFile = theme.replace('-dark', ''); // writer-focus-dark → writer-focus
-    const cssUrl = `/src/renderer/styles/themes/${themeFile}.css`;
-
-    // 이미 로드된 경우 스킵
-    if (document.querySelector(`link[data-theme="${themeFile}"]`)) return;
-
-    return new Promise((resolve, reject) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = cssUrl;
-      link.setAttribute('data-theme', themeFile);
-      
-      link.onload = () => resolve();
-      link.onerror = () => reject(new Error(`Failed to load theme: ${theme}`));
-      
-      document.head.appendChild(link);
-    });
+  static applyThemeClasses(theme: Theme): void {
+    // ThemeClassManager로 위임
+    ThemeClassManager.applyThemeClasses(theme);
+    
+    // TipTap 동기화도 실행
+    TipTapThemeSync.syncTipTapEditorVariables();
   }
 
   /**
-   * 테마 CSS 파일 언로드
+   * 🔥 완전 모듈화된 테마 시스템
+   * - CSS: global.css에서 정적 import
+   * - 클래스: ThemeClassManager가 관리
+   * - 변수: ThemeCSSManager가 관리  
+   * - TipTap: TipTapThemeSync가 관리
    */
-  static unloadThemeCSS(theme: Theme): void {
-    const themeFile = theme.replace('-dark', '');
-    const link = document.querySelector(`link[data-theme="${themeFile}"]`);
-    if (link) {
-      link.remove();
-    }
-  }
 }

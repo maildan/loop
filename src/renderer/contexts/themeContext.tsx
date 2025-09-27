@@ -10,6 +10,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { Theme, ThemeContextValue, UserThemePreferences, ThemeTransitionOptions } from '../../shared/types/theme';
+import { Logger } from '../../shared/logger';
 
 // 🎨 완전한 작가 전용 테마 메타데이터 (기존 providers/ThemeProvider.tsx에서 이동)
 export const AUTHOR_THEMES = {
@@ -76,6 +77,7 @@ export const AUTHOR_THEMES = {
 } as const;
 import { ThemeUtils } from '../utils/themeUtils';
 
+
 /* 🔥 테마 컨텍스트 생성 */
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
@@ -123,19 +125,17 @@ export function ThemeProvider({
     setIsTransitioning(true);
 
     try {
-      // 테마 CSS 로드 (필요한 경우)
-      await ThemeUtils.loadThemeCSS(newTheme);
+      // 🔥 동적 CSS 로딩 제거 - 모든 CSS는 이미 정적으로 로드됨
 
       // 애니메이션과 함께 테마 전환
       await ThemeUtils.animateThemeTransition({
         ...options,
         onStart: () => {
           options.onStart?.();
-          // 이전 테마의 CSS 언로드는 나중에
+          // 테마 클래스 즉시 적용
+          ThemeUtils.applyThemeClasses(newTheme);
         },
         onComplete: () => {
-          // 테마 클래스 적용
-          ThemeUtils.applyThemeClasses(newTheme);
           
           // 상태 업데이트
           setTheme(newTheme);
@@ -144,7 +144,7 @@ export function ThemeProvider({
           try {
             localStorage.setItem(storageKey, newTheme);
           } catch (error) {
-            console.warn('Failed to save theme to localStorage:', error);
+            Logger.error('error','Failed to save theme to localStorage:', error);
           }
 
           // 사용자 선호도 업데이트
@@ -243,7 +243,7 @@ export function ThemeProvider({
         initialTheme = systemDark ? 'dark' : 'light';
       }
     } catch (error) {
-      console.warn('Failed to load saved theme:', error);
+      Logger.error('error','Failed to load saved theme:');
     }
 
     // 초기 테마 적용
