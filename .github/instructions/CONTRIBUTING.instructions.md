@@ -19,8 +19,8 @@ Every contributor must follow these instructions to ensure **stability, reproduc
 
 - **Node.js**: LTS (current project uses Node 20.x).  
 - **Electron**: 38 LTS (main process).  
-- **Next.js**: 15 (renderer, App Router).  
-- **TailwindCSS**: v4.  
+- **VITE**: 15 (renderer, App Router).  
+- **TailwindCSS**: v3.  
 - **TypeScript**: strict mode.  
 
 Install Node via [nvm](https://github.com/nvm-sh/nvm) or fnm to ensure consistent versioning.  
@@ -41,7 +41,7 @@ npm install -g pnpm
 
 ```sh
 pnpm install        # install dependencies (respecting lockfile)
-pnpm dev            # run development servers (Electron + Next.js)
+pnpm dev            # run development servers (Electron + VITE)
 pnpm build          # build all targets
 pnpm test           # run unit/integration tests
 pnpm lint           # run eslint checks
@@ -55,7 +55,7 @@ pnpm lint           # run eslint checks
 
 ```
 /main       → Electron main process (startup, IPC, system integration)
-/renderer   → Next.js 15 app (UI, TailwindCSS v4)
+/renderer   → VITE (UI, TailwindCSS v3)
 /shared     → Shared types, DTOs, and utilities
 /tests      → Unit, integration, and E2E tests
 ```
@@ -67,7 +67,7 @@ pnpm lint           # run eslint checks
 1. **TypeScript strict mode** is enforced.
 2. Use **ES Modules** (`import`/`export`). No CommonJS.
 3. IPC must be typed via `/shared/ipc/*.ts`.
-4. TailwindCSS v4 utility classes only. No inline CSS.
+3. TailwindCSS v3 utility classes only. No inline CSS.
 5. All public exports require TSDoc comments.
 6. No unused dependencies.
 7. No direct Node API access in renderer.

@@ -13,7 +13,7 @@ Legacy or deprecated code is forbidden.
 
 ## Project overview
 - Desktop application built on **Electron 38 LTS**.  
-- Frontend: **Next.js 15** (App Router) with **TailwindCSS v4**.  
+- Frontend: **VITE** (App Router) with **TailwindCSS v3**.  
 - Strict TypeScript for both main and renderer.  
 - Goal: correctness, maintainability, clear separation of concerns.  
 
@@ -21,7 +21,7 @@ Legacy or deprecated code is forbidden.
 
 ## Tech stack
 - Node.js (LTS), Electron 38, TypeScript (strict mode).  
-- Renderer: Next.js 15 + TailwindCSS v4.  
+- Renderer: VITE + TailwindCSS v3.
 - Main: Electron process, IPC, system-level logic.  
 - Shared: cross-process types and utilities.  
 - Package manager: **pnpm** (workspace-aware, lockfile required).  
@@ -32,8 +32,8 @@ Legacy or deprecated code is forbidden.
 ## Coding guidelines
 1. **Type-safety**: `strict: true`. No `any` unless documented.  
 2. **IPC**: Use `contextBridge` and typed channels. No direct Node API in renderer.  
-3. **Styling**: TailwindCSS v4 utility-first. No inline CSS. No legacy class patterns.  
-4. **Modules**: ES Modules only. Prefer named exports.  
+3. **Styling**: TailwindCSS v3 utility-first. No inline CSS. No legacy class patterns.  
+3. **Modules**: ES Modules only. Prefer named exports.  
 5. **Error handling**: Always explicit. No silent catch.  
 6. **Security**: No `eval`, no remote code execution. Renderer must be sandboxed.  
 7. **Testing**: Vitest for unit/integration, Playwright for E2E.  
@@ -66,7 +66,7 @@ Legacy or deprecated code is forbidden.
 ## Do / Don't
 - DO: `pnpm add -w -D` for dev deps.  
 - DO: Type-safe IPC contracts under `/shared/ipc.ts`.  
-- DO: TailwindCSS v4 classes only.  
+- DO: TailwindCSS v3 classes only.  
 - DON’T: Use CommonJS.  
 - DON’T: Mix main and renderer concerns.  
 
@@ -84,7 +84,7 @@ Legacy or deprecated code is forbidden.
 1. "Add a typed IPC channel for user preferences"  
    → Create `/shared/ipc/preferences.ts`, update `/main/ipc/preferences.ts`, and `/renderer/hooks/usePreferences.tsx` with unit tests.  
 
-2. "Integrate TailwindCSS v4 into Next.js 15 App Router"  
+2. "Integrate TailwindCSS v3 into Next.js 15 App Router"  
    → Provide `tailwind.config.ts`, `postcss.config.js`, and update `renderer/app/layout.tsx`.  
 
 3. "Add Playwright E2E test for window open/close"  

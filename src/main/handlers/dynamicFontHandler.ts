@@ -68,15 +68,31 @@ async function loadFontFromZip(zipFileName: string): Promise<FontLoadResult> {
     try {
         Logger.debug('FONT_HANDLER', 'Loading font from ZIP', { zipFileName });
 
+        // 🔒 보안 검증: 파일명 검증
+        if (!zipFileName || typeof zipFileName !== 'string') {
+            throw new Error('유효하지 않은 ZIP 파일명입니다');
+        }
+
+        // 🔒 Path traversal 공격 방지
+        const sanitizedFileName = path.basename(zipFileName);
+        if (sanitizedFileName !== zipFileName || zipFileName.includes('..') || zipFileName.includes('/') || zipFileName.includes('\\')) {
+            throw new Error('보안상 위험한 파일명이 감지되었습니다');
+        }
+
+        // 🔒 확장자 검증
+        if (!zipFileName.endsWith('.zip')) {
+            throw new Error('ZIP 파일만 허용됩니다');
+        }
+
         // 캐시 확인
-        if (fontCache.has(zipFileName)) {
-            const cachedFonts = fontCache.get(zipFileName)!;
-            Logger.info('FONT_HANDLER', 'Font loaded from cache', { zipFileName, fontCount: cachedFonts.length });
+        if (fontCache.has(sanitizedFileName)) {
+            const cachedFonts = fontCache.get(sanitizedFileName)!;
+            Logger.info('FONT_HANDLER', 'Font loaded from cache', { zipFileName: sanitizedFileName, fontCount: cachedFonts.length });
             return { success: true, fonts: cachedFonts };
         }
 
         const fontsDir = getFontsDir();
-        const zipPath = path.join(fontsDir, zipFileName);
+        const zipPath = path.join(fontsDir, sanitizedFileName);
 
         // ZIP 파일 존재 확인
         try {

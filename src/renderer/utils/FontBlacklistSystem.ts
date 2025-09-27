@@ -318,8 +318,18 @@ export class FontBlacklistSystem {
         }
       }
 
-      // Remove url(...) occurrences that reference the fontName
-      const urlRegex = new RegExp(`url\\([^)]*${fontName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[^)]*\\)`, 'gi');
+      // Remove url(...) occurrences that reference the fontName (안전한 정적 패턴으로 수정)
+      const escapedFontName = fontName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      
+      // 입력 검증: 폰트명이 너무 길거나 위험한 문자 포함 시 처리 중단
+      if (escapedFontName.length > 200 || /[<>{}\\]/.test(fontName)) {
+        Logger.warn('FONT_BLACKLIST', `잠재적으로 위험한 폰트명 감지: ${fontName}`);
+        return css;
+      }
+      
+      // 안전한 정적 패턴 구성
+      const urlPattern = `url\\([^)]*${escapedFontName}[^)]*\\)`;
+      const urlRegex = new RegExp(urlPattern, 'gi');
       out = out.replace(urlRegex, '');
 
       return out;

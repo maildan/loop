@@ -60,9 +60,9 @@ Development principle: **stability, single responsibility, type safety, reproduc
    - Typed IPC channels defined in `/shared`.  
    - Renderer accesses system APIs only through preload + `contextBridge`.  
 
-4. **Renderer (Next.js style)**  
+4. **Renderer (VITE style)**  
    - Functional React components only.  
-   - TailwindCSS v4 utilities for styling.  
+   - TailwindCSS v3 utilities for styling.  
    - Hooks and contexts for state management.  
 
 5. **Stability First**  

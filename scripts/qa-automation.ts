@@ -292,7 +292,16 @@ class QAAutomation {
           if (importedItems) {
             const items = importedItems[1].split(',').map(item => item.trim());
             items.forEach(item => {
-              const regex = new RegExp(`\\b${item}\\b`, 'g');
+              // 입력 검증: import 항목이 너무 길거나 위험한 문자 포함 시 스킵
+              const trimmedItem = item.trim();
+              if (trimmedItem.length > 100 || /[<>{}\\^$|]/.test(trimmedItem)) {
+                console.warn(`잠재적으로 위험한 import 항목 감지: ${trimmedItem}`);
+                return;
+              }
+              
+              // 안전한 정적 패턴으로 변경
+              const escapedItem = trimmedItem.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const regex = new RegExp(`\\b${escapedItem}\\b`, 'g');
               const matches = content.match(regex);
               if (!matches || matches.length <= 1) { // import 자체만 있고 사용 안됨
                 issues.push({

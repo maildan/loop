@@ -18,9 +18,21 @@ function generateFontCopyTargets() {
   const fontFamilies = fs.readdirSync(fontsDir, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory() && !dirent.name.startsWith('.'))
     .map(dirent => dirent.name)
+    .filter(name => {
+      // 🔒 보안: 위험한 디렉토리명 필터링
+      const sanitizedName = name.replace(/[^a-zA-Z0-9_-]/g, '');
+      return sanitizedName === name && !name.includes('..') && name.length < 100;
+    })
 
   for (const familyName of fontFamilies) {
-    const familyPath = resolve(fontsDir, familyName)
+    // 🔒 보안: 경로 정규화 및 검증
+    const sanitizedFamilyName = familyName.replace(/[^a-zA-Z0-9_-]/g, '');
+    if (sanitizedFamilyName !== familyName) {
+      console.warn(`⚠️  위험한 폰트 디렉토리명 건너뜀: ${familyName}`);
+      continue;
+    }
+    
+    const familyPath = resolve(fontsDir, sanitizedFamilyName)
     
     // 각 폰트 패밀리 디렉토리 전체를 복사 (구조 유지)
     targets.push({
