@@ -12,7 +12,7 @@ import { UISettingsSection } from '../../app/settings/components/sections/UISett
 import { NotificationSettingsSection } from '../../app/settings/components/sections/NotificationSettingsSection';
 import { PerformanceSettingsSection } from '../../app/settings/components/sections/PerformanceSettingsSection';
 import { SettingsActions } from '../../app/settings/components/SettingsActions';
-import { useTheme } from '../../providers/ThemeProvider';
+import { useTheme } from '../../contexts/themeContext';
 import type { SettingSection } from '../../app/settings/types';
 
 /**

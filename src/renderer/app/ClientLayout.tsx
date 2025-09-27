@@ -6,7 +6,7 @@ import { AppSidebar } from '../components/layout/AppSidebar';
 import { AppHeader } from '../components/layout/AppHeader';
 // MonitoringProvider 제거됨 - 기획 변경으로 불필요
 import { AuthProvider } from '../contexts/AuthContext';
-import { ThemeProvider } from '../providers/ThemeProvider';
+import { ThemeProvider } from '../contexts/themeContext';
 import { FontProvider } from '../contexts/FontProvider';
 import { useSettings } from './settings/hooks/useSettings';
 import { Logger } from '../../shared/logger';

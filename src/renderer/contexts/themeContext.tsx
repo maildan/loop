@@ -1,13 +1,79 @@
 /**
- * 🎨 Theme Context - React 테마 상태 관리
+ * 🎨 Advanced Theme Context - 고급 테마 컨텍스트
  * 
- * 전역 테마 상태 관리와 컨텍스트 제공
+ * shadcn/ui 기반의 확장된 테마 시스템
+ * - 다중 테마 지원 (Light, Dark, Writer 모드 등)
+ * - 사용자 설정 저장
+ * - 접근성 옵션
+ * - 부드러운 전환 효과
  */
-
-'use client';
 
 import React, { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 import { Theme, ThemeContextValue, UserThemePreferences, ThemeTransitionOptions } from '../../shared/types/theme';
+
+// 🎨 완전한 작가 전용 테마 메타데이터 (기존 providers/ThemeProvider.tsx에서 이동)
+export const AUTHOR_THEMES = {
+  'writer-focus': {
+    name: '작가 집중 모드',
+    description: '장시간 글쓰기에 최적화된 집중 테마 (세리프 폰트, 최소 UI)',
+    category: 'writer',
+    baseScheme: 'light'
+  },
+  'writer-focus-dark': {
+    name: '작가 집중 다크',
+    description: '작가 집중 모드의 다크 변형 (극도로 어두운 배경)',
+    category: 'writer',
+    baseScheme: 'dark'
+  },
+  sepia: {
+    name: '세피아 종이',
+    description: '따뜻한 종이 텍스처로 눈의 피로를 줄입니다',
+    category: 'writer',
+    baseScheme: 'light'
+  },
+  'sepia-dark': {
+    name: '세피아 다크',
+    description: '세피아 테마의 다크 변형',
+    category: 'writer',
+    baseScheme: 'dark'
+  },
+  'high-contrast': {
+    name: '고대비',
+    description: '접근성을 위한 최대 대비 모드',
+    category: 'accessibility',
+    baseScheme: 'light'
+  },
+  'colorblind-friendly': {
+    name: '색맹 친화',
+    description: '색맹 사용자를 위한 최적화 테마',
+    category: 'accessibility',
+    baseScheme: 'light'
+  },
+  warm: {
+    name: '따뜻함',
+    description: '따뜻한 색온도로 편안한 작업 환경',
+    category: 'comfortable',
+    baseScheme: 'light'
+  },
+  cool: {
+    name: '시원함',
+    description: '차가운 색온도로 집중력 향상',
+    category: 'focus',
+    baseScheme: 'light'
+  },
+  forest: {
+    name: '숲',
+    description: '자연스러운 녹색으로 안정감 제공',
+    category: 'comfortable',
+    baseScheme: 'light'
+  },
+  midnight: {
+    name: '자정',
+    description: '극도로 어두운 환경에서 최적화된 테마',
+    category: 'dark',
+    baseScheme: 'dark'
+  }
+} as const;
 import { ThemeUtils } from '../utils/themeUtils';
 
 /* 🔥 테마 컨텍스트 생성 */
@@ -231,6 +297,17 @@ export function ThemeProvider({
     return () => clearInterval(interval);
   }, [enableAutoSwitch, preferences, theme, changeTheme]);
 
+  /* 🔥 기존 providers/ThemeProvider.tsx 호환성 함수들 */
+  const toggleTheme = useCallback(() => {
+    const nextTheme: Theme = theme === 'dark' ? 'light' : 'dark';
+    changeTheme(nextTheme);
+  }, [theme, changeTheme]);
+
+  // resolvedTheme - system이 아닌 실제 적용된 테마
+  const resolvedTheme: Exclude<Theme, 'system'> = theme === 'system' 
+    ? (ThemeUtils.getSystemDarkModePreference() ? 'dark' : 'light')
+    : (theme as Exclude<Theme, 'system'>);
+
   /* 🔥 컨텍스트 값 생성 */
   const contextValue: ThemeContextValue = {
     // 현재 상태
@@ -263,7 +340,11 @@ export function ThemeProvider({
     // 접근성 정보
     supportsHighContrast: true,
     supportsColorblindFriendly: true,
-    supportsReducedMotion: ThemeUtils.getSystemReducedMotionPreference()
+    supportsReducedMotion: ThemeUtils.getSystemReducedMotionPreference(),
+
+    // 🔥 기존 providers/ThemeProvider.tsx 호환성 속성들
+    resolvedTheme,
+    toggleTheme
   };
 
   return (

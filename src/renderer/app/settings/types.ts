@@ -2,7 +2,7 @@
 'use client';
 
 import React from 'react';
-import type { Theme } from '../../providers/ThemeProvider';
+import type { Theme } from '../../../shared/types/theme';
 
 /**
  * 🔥 설정 섹션 타입 (main/settings와 완전 호환)

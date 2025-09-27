@@ -5,7 +5,7 @@
  */
 
 /* 🔥 기본 테마 타입 */
-export type BaseTheme = 'light' | 'dark';
+export type BaseTheme = 'light' | 'dark' | 'system';
 
 /* 🔥 확장 테마 타입 */
 export type ExtendedTheme = 
@@ -14,7 +14,11 @@ export type ExtendedTheme =
   | 'sepia'
   | 'sepia-dark'
   | 'high-contrast'
-  | 'colorblind-friendly';
+  | 'colorblind-friendly'
+  | 'warm'
+  | 'cool'
+  | 'forest'
+  | 'midnight';
 
 /* 🔥 전체 테마 타입 */
 export type Theme = BaseTheme | ExtendedTheme;
@@ -94,6 +98,10 @@ export interface ThemeContextValue {
   supportsHighContrast: boolean;
   supportsColorblindFriendly: boolean;
   supportsReducedMotion: boolean;
+
+  // 🔥 providers/ThemeProvider.tsx 호환성 (기존 AppSettingsSection 등을 위해)
+  resolvedTheme: Exclude<Theme, 'system'>; // system이 아닌 실제 적용된 테마
+  toggleTheme: () => void; // 간단한 light/dark 토글
 }
 
 /* 🔥 테마 저장소 설정 */

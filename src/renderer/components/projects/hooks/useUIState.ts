@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { Logger } from '../../../../shared/logger';
-import { useTheme } from '../../../providers/ThemeProvider';
+import { useTheme } from '../../../contexts/themeContext';
 
 interface UseUIStateReturn {
   // UI 상태

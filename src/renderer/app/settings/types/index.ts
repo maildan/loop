@@ -1,7 +1,7 @@
 'use client';
 
 // 🔥 기가차드 Settings 타입 정의 - Electron-Store 완벽 호환!
-import type { Theme } from '../../../providers/ThemeProvider';
+import type { Theme } from '../../../../shared/types/theme';
 
 /**
  * 🎯 Settings 섹션 타입 (main/settings와 완벽 호환)
