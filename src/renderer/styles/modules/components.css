@@ -71,7 +71,7 @@
   border: none;
   border-radius: 8px;
   padding: var(--space-3) var(--space-4);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   font-weight: 500;
   font-size: var(--text-sm);
   line-height: 1.4;
@@ -116,7 +116,7 @@
   border: 1px solid var(--border-medium);
   border-radius: 8px;
   padding: var(--space-3) var(--space-4);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   font-weight: 500;
   font-size: var(--text-sm);
   cursor: pointer;
@@ -159,7 +159,7 @@
   border: none;
   border-radius: 6px;
   padding: var(--space-2) var(--space-3);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   font-weight: 500;
   font-size: var(--text-sm);
   cursor: pointer;
@@ -273,7 +273,7 @@
 
 /* Toggle with label */
 .writer-toggle-label {
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--text-primary);
@@ -344,7 +344,7 @@
   border: 1px solid var(--border-medium);
   border-radius: 8px;
   padding: var(--space-3) var(--space-4);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   font-size: var(--text-base);
   color: var(--text-primary);
   line-height: 1.5;
@@ -397,7 +397,7 @@
 
 .writer-form-label {
   display: block;
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   font-weight: 500;
   font-size: var(--text-sm);
   color: var(--text-primary);
@@ -464,24 +464,24 @@
 /* Text styling utilities */
 .writer-text-primary {
   color: var(--text-primary);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
 }
 
 .writer-text-secondary {
   color: var(--text-secondary);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
 }
 
 .writer-text-muted {
   color: var(--text-muted);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
 }
 
 /* Prose content - optimized for Korean */
 .prose,
 .text-content {
   color: var(--text-primary);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   line-height: var(--leading-relaxed);
   letter-spacing: -0.01em;
   
@@ -680,7 +680,7 @@
   background: transparent;
   border: none;
   padding: var(--space-3) var(--space-4);
-  font-family: var(--app-font-family);
+  font-family: var(--dynamic-font-family);
   font-size: var(--text-sm);
   color: var(--text-muted);
   cursor: pointer;

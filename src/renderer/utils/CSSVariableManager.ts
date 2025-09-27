@@ -33,30 +33,18 @@ export class CSSVariableManager {
       const root = document.documentElement;
       const variables: CSSVariableDefinition[] = [];
 
-      // 폰트 패밀리 (가장 중요)
+      // 폰트 패밀리 (단일 변수로 통합)
       if (fontSettings.family) {
         const sanitizedFamily = this.sanitizeFontFamily(fontSettings.family);
-        variables.push({
-          name: `${this.CSS_VAR_PREFIX}font-family`,
-          value: sanitizedFamily
-        });
-        
-        // 🔥 NEW: variables.css에서 참조하는 동적 변수들 설정
         variables.push({
           name: '--dynamic-font-family',
           value: sanitizedFamily
         });
       }
 
-      // 폰트 크기
+      // 폰트 크기 (단일 변수로 통합)
       if (fontSettings.size !== undefined) {
         const fontSize = `${Math.max(8, Math.min(72, fontSettings.size))}px`;
-        variables.push({
-          name: `${this.CSS_VAR_PREFIX}font-size`,
-          value: fontSize
-        });
-        
-        // 🔥 NEW: variables.css에서 참조하는 동적 변수들 설정
         variables.push({
           name: '--dynamic-font-size',
           value: fontSize
@@ -196,16 +184,22 @@ export class CSSVariableManager {
       return '"Pretendard", system-ui, sans-serif';
     }
 
-    // 🔥 NEW: 일반적인 폰트명 정규화 (파일명 → 실제 폰트 이름)
+    // 🔥 폰트명 정규화 (파일명/손상된 이름 → 실제 폰트 이름)
     const fontNameMappings: Record<string, string> = {
       'times': 'Times New Roman',
       'arial': 'Arial',
+      'arialceb': 'Arial', // 🔥 손상된 Arial 폰트명 매핑
+      'arialce': 'Arial',
+      'arialc': 'Arial',
       'helvetica': 'Helvetica',
       'verdana': 'Verdana',
       'calibri': 'Calibri',
       'georgia': 'Georgia',
       'tahoma': 'Tahoma',
-      'courier': 'Courier New'
+      'courier': 'Courier New',
+      'system ui': 'system-ui', // 공백 문제 해결
+      'apple system': '-apple-system',
+      'segoe ui': 'Segoe UI'
     };
 
     // 소문자로 매핑 확인
@@ -304,8 +298,8 @@ export class CSSVariableManager {
     try {
       const root = document.documentElement;
       const fontVariables = [
-        `${this.CSS_VAR_PREFIX}font-family`,
-        `${this.CSS_VAR_PREFIX}font-size`,
+        '--dynamic-font-family',
+        '--dynamic-font-size',
         `${this.CSS_VAR_PREFIX}font-weight`,
         `${this.CSS_VAR_PREFIX}line-height`,
         `${this.CSS_VAR_PREFIX}letter-spacing`
@@ -330,8 +324,8 @@ export class CSSVariableManager {
       const computedStyle = getComputedStyle(root);
       
       const fontVariables = [
-        `${this.CSS_VAR_PREFIX}font-family`,
-        `${this.CSS_VAR_PREFIX}font-size`,
+        '--dynamic-font-family',
+        '--dynamic-font-size',
         `${this.CSS_VAR_PREFIX}font-weight`,
         `${this.CSS_VAR_PREFIX}line-height`,
         `${this.CSS_VAR_PREFIX}letter-spacing`

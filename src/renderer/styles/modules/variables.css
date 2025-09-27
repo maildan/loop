@@ -149,8 +149,7 @@
   --radius-full: 9999px;
   
   /* 🔥 Typography 시스템 */
-  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  --app-font-size: 16px;
+    /* 🔥 동적 폰트 CSS 변수들 (FontProvider에서 설정) - 단일 변수로 통합 */
   --writer-font-family: 'iA Writer Quattro', 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
   --korean-font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
   --latin-font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -303,7 +302,10 @@ body[data-theme="dark"],
 
 /* 🔥 작가 전용 테마들 */
 
-/* Sepia Theme - 빈티지 원고지 🟤📜 */
+/* Sepia Theme - 고전 양피지 ✨ */
+:root[data-theme='sepia'],
+html[data-theme='sepia'],
+body[data-theme='sepia'],
 [data-theme='sepia'] {
   --background: 47 30% 90%;
   --foreground: 30 8% 15%;
@@ -343,7 +345,10 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* High Contrast Theme - 접근성 최적화 ⚫⚪ */
+/* High-contrast Theme - 검정/흰색 명료함 ⚫⚪ */
+:root[data-theme='high-contrast'],
+html[data-theme='high-contrast'],
+body[data-theme='high-contrast'],
 [data-theme='high-contrast'] {
   --background: 0 0% 100%;
   --foreground: 0 0% 0%;
@@ -383,7 +388,10 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* Warm Theme - 노을/일몰 🌅🔥 */
+/* Warm Theme - 붉은 벽돌 아늑함 🧱❤️ */
+:root[data-theme='warm'],
+html[data-theme='warm'],
+body[data-theme='warm'],
 [data-theme='warm'] {
   --background: 25 20% 95%;
   --foreground: 25 20% 10%;
@@ -423,7 +431,10 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* Cool Theme - 바다/북극 ❄️🌊 */
+/* Cool Theme - 얼음 바다 차가움 🧊💙 */
+:root[data-theme='cool'],
+html[data-theme='cool'],
+body[data-theme='cool'],
 [data-theme='cool'] {
   --background: 210 20% 95%;
   --foreground: 210 20% 10%;
@@ -463,7 +474,10 @@ body[data-theme="dark"],
   color-scheme: light;
 }
 
-/* Forest Theme - 깊은 정글 🌲🌿 */
+/* Forest Theme - 깊은 정글 신비로움 🌲💚 */
+:root[data-theme='forest'],
+html[data-theme='forest'],
+body[data-theme='forest'],
 [data-theme='forest'] {
   --background: 120 10% 95%;
   --foreground: 120 20% 15%;
@@ -504,6 +518,9 @@ body[data-theme="dark"],
 }
 
 /* Midnight Theme - 우주/심연 🌌⭐ */
+:root[data-theme='midnight'],
+html[data-theme='midnight'],
+body[data-theme='midnight'],
 [data-theme='midnight'] {
   --background: 220 20% 5%;
   --foreground: 220 20% 95%;
@@ -554,8 +571,8 @@ html {
 
 /* 🔥 기본 폰트 및 테마 적용 - 부드러운 방식 */
 html {
-  font-family: var(--app-font-family, var(--dynamic-font-family, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif));
-  font-size: var(--app-font-size, var(--dynamic-font-size, 16px));
+  font-family: var(--dynamic-font-family, 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif);
+  font-size: var(--dynamic-font-size, 16px);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   /* 🔥 모든 테마에서 부드러운 전환 */
@@ -563,30 +580,30 @@ html {
 }
 
 body {
-  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
-  font-size: var(--app-font-size, var(--dynamic-font-size, inherit));
+  font-family: var(--dynamic-font-family, inherit);
+  font-size: var(--dynamic-font-size, inherit);
   background-color: var(--bg-primary);
   color: var(--text-primary);
   /* 🔥 body에서도 CSS 변수 직접 사용 */
   transition: background-color 0.2s ease, color 0.2s ease, font-family 0.1s ease;
 }
 
-/* 🔥 폰트 변수 적용 */
+/* 🔥 폰트 변수 적용 - 단일 변수로 통합 */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
+  font-family: var(--dynamic-font-family, inherit);
   transition: font-family 0.1s ease;
 }
 
 /* 🔥 TipTap 에디터 폰트 적용 */
 .ProseMirror {
-  font-family: var(--app-font-family, var(--dynamic-font-family, inherit)) !important;
-  font-size: var(--app-font-size, var(--dynamic-font-size, inherit)) !important;
+  font-family: var(--dynamic-font-family, inherit) !important;
+  font-size: var(--dynamic-font-size, inherit) !important;
   transition: font-family 0.1s ease, font-size 0.1s ease;
 }
 
 /* 🔥 모든 입력 요소에 폰트 적용 */
 input, textarea, select, button {
-  font-family: var(--app-font-family, var(--dynamic-font-family, inherit));
+  font-family: var(--dynamic-font-family, inherit);
   transition: font-family 0.1s ease;
 }
 
@@ -698,3 +715,35 @@ article .text-gray-900, article .text-gray-800, article .text-gray-700 {
 article .bg-white, article .bg-gray-50, article .bg-gray-100 {
   background-color: var(--bg-primary);
 }
+
+/* ============================================
+ * 🔥 화면 크기 안정성 보장 (Start)
+ * ============================================ */
+
+/* 🔥 안정적인 viewport 처리 */
+html,
+body,
+#root {
+  height: -webkit-fill-available;
+}
+
+/* 🔥 안정적인 최소 높이 설정 (100vh 대신 안전한 방법) */
+.min-h-screen-safe {
+  min-height: calc(100vh - (env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
+  min-height: -webkit-fill-available;
+}
+
+.h-screen-safe {
+  height: calc(100vh - (env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
+  height: -webkit-fill-available;
+}
+
+/* 🔥 기존 min-h-screen을 안전한 버전으로 대체 */
+.min-h-screen {
+  min-height: calc(100vh - (env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px)));
+  min-height: -webkit-fill-available;
+}
+
+/* ============================================
+ * 🔥 화면 크기 안정성 보장 (End)
+ * ============================================ */

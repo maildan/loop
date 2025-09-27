@@ -54,6 +54,38 @@ export const useFont = () => {
   return context;
 };
 
+// 🔥 폰트명 정규화 함수 (FontProvider 외부에 정의)
+const normalizeFontName = (fontName: string): string => {
+  if (!fontName || typeof fontName !== 'string') {
+    return 'Pretendard';
+  }
+
+  // 손상된 폰트명 매핑
+  const fontMappings: Record<string, string> = {
+    'arialceb': 'Arial',
+    'arialce': 'Arial', 
+    'arialc': 'Arial',
+    'timesceb': 'Times New Roman',
+    'timesce': 'Times New Roman',
+    'calibriceb': 'Calibri',
+    'calibrice': 'Calibri',
+    'system ui': 'system-ui',
+    'apple system': '-apple-system',
+    'segoe ui': 'Segoe UI'
+  };
+
+  // 소문자로 변환하여 매핑 확인
+  const lowerFontName = fontName.toLowerCase().trim();
+  const mappedFont = fontMappings[lowerFontName];
+  
+  if (mappedFont) {
+    Logger.info('FONT_PROVIDER', `폰트명 정규화: ${fontName} → ${mappedFont}`);
+    return mappedFont;
+  }
+
+  return fontName;
+};
+
 export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // 🔥 State (최소화)
   const [currentFont, setCurrentFont] = useState<string>('Pretendard');
@@ -139,23 +171,26 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsLoading(true);
       setError(null);
 
-      // 블랙리스트 확인
-      const isBlacklisted = await FontBlacklistSystem.isBlacklisted(fontFamily);
+      // 🔥 0단계: 폰트명 정규화
+      const normalizedFontFamily = normalizeFontName(fontFamily);
+
+      // 블랙리스트 확인 (정규화된 이름으로)
+      const isBlacklisted = await FontBlacklistSystem.isBlacklisted(normalizedFontFamily);
       if (isBlacklisted) {
-        const errorMsg = `블랙리스트된 폰트: ${fontFamily}`;
+        const errorMsg = `블랙리스트된 폰트: ${normalizedFontFamily}`;
         setError(errorMsg);
         Logger.warn('FONT_PROVIDER', errorMsg);
         return;
       }
 
-      // 🔥 1단계: 실제 폰트 파일 로딩 시도
-      const fontLoaded = await loadFont(fontFamily);
+      // 🔥 1단계: 실제 폰트 파일 로딩 시도 (정규화된 이름으로)
+      const fontLoaded = await loadFont(normalizedFontFamily);
       if (!fontLoaded) {
-        Logger.warn('FONT_PROVIDER', `폰트 파일 로딩 실패, CSS 변수만 적용: ${fontFamily}`);
+        Logger.warn('FONT_PROVIDER', `폰트 파일 로딩 실패, CSS 변수만 적용: ${normalizedFontFamily}`);
       }
 
       // 🔥 2단계: 스마트 매핑 적용: 폰트명을 정규화하고 CSS font-family 생성
-      const displayName = getFontDisplayName(fontFamily);
+      const displayName = getFontDisplayName(normalizedFontFamily);
       const smartCSSFamily = generateCSSFontFamily(fontFamily);
       
       Logger.info('FONT_PROVIDER', '스마트 폰트 매핑 적용', {
@@ -227,8 +262,11 @@ export const FontProvider: React.FC<{ children: React.ReactNode }> = ({ children
    * 🔥 폰트 로딩 (스마트 매핑 + FontLoader 위임)
    */
   const loadFont = useCallback(async (fontId: string): Promise<boolean> => {
+    // 🔥 폰트명 정규화: 손상된 폰트명을 미리 수정
+    const normalizedFontId = normalizeFontName(fontId);
+    
     // 🔥 폰트명 추출: CSS family 문자열에서 첫 번째 폰트명만 추출
-    const extractedFontName = fontId ? fontId.split(',')[0]?.trim().replace(/['"]/g, '') || fontId : '';
+    const extractedFontName = normalizedFontId ? normalizedFontId.split(',')[0]?.trim().replace(/['"]/g, '') || normalizedFontId : '';
     
     // 🔥 유연한 폰트 검색: ID, 이름으로 검색 (family 속성 제거)
     let fontMetadata = availableFonts.find(f => 
