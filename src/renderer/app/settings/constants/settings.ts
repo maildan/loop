@@ -34,6 +34,15 @@ export const THEME_OPTIONS = [
   { value: 'light' as const, label: '라이트 모드' },
   { value: 'dark' as const, label: '다크 모드' },
   { value: 'system' as const, label: '시스템 설정 따르기' },
+  { value: 'writer-focus' as const, label: '작가 집중모드' },
+  { value: 'writer-focus-dark' as const, label: '작가 집중모드 (다크)' },
+  { value: 'sepia' as const, label: '세피아 톤' },
+  { value: 'sepia-dark' as const, label: '세피아 톤 (다크)' },
+  { value: 'warm' as const, label: '따뜻한 테마' },
+  { value: 'cool' as const, label: '차가운 테마' },
+  { value: 'forest' as const, label: '숲 테마' },
+  { value: 'midnight' as const, label: '미드나이트' },
+  { value: 'high-contrast' as const, label: '고대비 모드' },
 ] as const;
 
 /**

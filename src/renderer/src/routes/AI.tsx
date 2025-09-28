@@ -1,5 +1,4 @@
-'use client';
-
+// 'use client' 제거됨 - React에서 불필요
 // AI 탭 이거 씀
 
 import React, { useState, useCallback, useMemo } from 'react';

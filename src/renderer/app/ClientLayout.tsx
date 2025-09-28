@@ -9,7 +9,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { ThemeProvider } from '../providers/ThemeProvider';
 import { useSettings } from './settings/hooks/useSettings';
 import { Logger } from '../../shared/logger';
-import './global.css';
+import '../styles/index.css';
 
 interface ClientLayoutProps {
     readonly children: ReactNode;

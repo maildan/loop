@@ -1,5 +1,7 @@
 // 🔥 기가차드 공유 타입 정의 - Electron API 통합
 
+import type { Theme } from './types/theme';
+
 // 🔥 Result 타입 - 함수 결과 래핑
 export interface Result<TData = unknown> {
   success: boolean;
@@ -538,7 +540,7 @@ export interface TypingStats {
 
 export interface UserPreferences {
   language: string;
-  theme: 'light' | 'dark' | 'system';
+  theme: Theme;
   enableNotifications: boolean;
   enableSounds: boolean;
   autoStartMonitoring: boolean;

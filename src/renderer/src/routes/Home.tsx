@@ -1,4 +1,4 @@
-'use client';
+// 'use client' 제거됨 - React에서 불필요
 
 import React from 'react';
 import { DashboardMain } from '../../components/dashboard/DashboardMain';

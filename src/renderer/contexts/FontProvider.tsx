@@ -1,5 +1,4 @@
-// 🔥 Font Provider - React Context로 실시간 폰트 관리
-'use client';
+
 
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { Logger } from '../../shared/logger';

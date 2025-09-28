@@ -1,0 +1,112 @@
+/* 🔥 Warm Theme - 아늑하고 따뜻한 작업 환경을 위한 테마 */
+
+.warm {
+  /* 기본 배경 - 따뜻한 아이보리 */
+  --background: 45 15% 97%;
+  --foreground: 25 30% 12%;
+  --card: 45 15% 98%;
+  --card-foreground: 25 30% 12%;
+  --popover: 45 15% 98%;
+  --popover-foreground: 25 30% 12%;
+  --primary: 20 85% 50%;
+  --primary-foreground: 45 15% 98%;
+  --secondary: 45 10% 92%;
+  --secondary-foreground: 25 30% 12%;
+  --muted: 45 10% 92%;
+  --muted-foreground: 25 15% 45%;
+  --accent: 45 10% 92%;
+  --accent-foreground: 25 30% 12%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 45 15% 98%;
+  --border: 45 10% 88%;
+  --input: 45 10% 88%;
+  --ring: 20 85% 50%;
+
+  /* 기가차드 따뜻한 색상 시스템 */
+  --bg-primary: #faf8f5;     /* 따뜻한 아이보리 */
+  --bg-secondary: #f5f2ee;   /* 연한 웜 그레이 */
+  --bg-elevated: #ffffff;    /* 순수 화이트 */
+  --bg-card: #ffffff;
+  --bg-hover: #f0ede8;       /* 호버시 웜 그레이 */
+
+  /* 텍스트 - 따뜻한 다크 톤 */
+  --text-primary: #2d1810;   /* 따뜻한 다크 브라운 */
+  --text-secondary: #3d2817; /* 미디엄 브라운 */
+  --text-muted: #6b5445;     /* 뮤트 브라운 */
+  --text-inverse: #faf8f5;
+
+  /* 강조색 - 따뜻한 코랄/오렌지 */
+  --accent-primary: #ea580c; /* 웜 오렌지 */
+  --accent-hover: #dc2626;   /* 더 진한 오렌지 */
+  --accent-light: #fed7d7;   /* 연한 코랄 */
+  --accent-dark: #c2410c;    /* 다크 오렌지 */
+
+  /* 경계선 - 따뜻한 뉴트럴 */
+  --border-light: #ede8e1;   /* 연한 웜 그레이 */
+  --border-medium: #e1ddd4;  /* 미디엄 웜 그레이 */
+  --border-dark: #d6cfc4;    /* 다크 웜 그레이 */
+
+  /* 상태 색상 - 따뜻한 톤 조화 */
+  --success: #16a34a;        /* 자연스러운 그린 */
+  --success-light: #dcfce7;
+  --warning: #f59e0b;        /* 골든 옐로우 */
+  --warning-light: #fef3c7;
+  --error: #dc2626;          /* 웜 레드 */
+  --error-light: #fee2e2;
+}
+
+/* 🔥 Cool Theme - 시원하고 집중력 향상을 위한 테마 */
+.cool {
+  /* 기본 배경 - 시원한 블루 그레이 */
+  --background: 210 15% 97%;
+  --foreground: 215 25% 12%;
+  --card: 210 15% 98%;
+  --card-foreground: 215 25% 12%;
+  --popover: 210 15% 98%;
+  --popover-foreground: 215 25% 12%;
+  --primary: 215 85% 50%;
+  --primary-foreground: 210 15% 98%;
+  --secondary: 210 10% 92%;
+  --secondary-foreground: 215 25% 12%;
+  --muted: 210 10% 92%;
+  --muted-foreground: 215 15% 45%;
+  --accent: 210 10% 92%;
+  --accent-foreground: 215 25% 12%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 15% 98%;
+  --border: 210 10% 88%;
+  --input: 210 10% 88%;
+  --ring: 215 85% 50%;
+
+  /* 기가차드 시원한 색상 시스템 */
+  --bg-primary: #f8fafc;     /* 시원한 블루 화이트 */
+  --bg-secondary: #f1f5f9;   /* 연한 블루 그레이 */
+  --bg-elevated: #ffffff;    /* 순수 화이트 */
+  --bg-card: #ffffff;
+  --bg-hover: #e2e8f0;       /* 호버시 블루 그레이 */
+
+  /* 텍스트 - 시원한 다크 톤 */
+  --text-primary: #0f172a;   /* 시원한 다크 블루 */
+  --text-secondary: #1e293b; /* 미디엄 블루 그레이 */
+  --text-muted: #475569;     /* 뮤트 블루 그레이 */
+  --text-inverse: #f8fafc;
+
+  /* 강조색 - 시원한 블루 */
+  --accent-primary: #0ea5e9; /* 스카이 블루 */
+  --accent-hover: #0284c7;   /* 더 진한 블루 */
+  --accent-light: #e0f2fe;   /* 연한 스카이 */
+  --accent-dark: #0c4a6e;    /* 다크 블루 */
+
+  /* 경계선 - 시원한 그레이 */
+  --border-light: #e2e8f0;   /* 연한 블루 그레이 */
+  --border-medium: #cbd5e1;  /* 미디엄 블루 그레이 */
+  --border-dark: #94a3b8;    /* 다크 블루 그레이 */
+
+  /* 상태 색상 - 시원한 톤 조화 */
+  --success: #059669;        /* 쿨 그린 */
+  --success-light: #d1fae5;
+  --warning: #d97706;        /* 쿨 오렌지 */
+  --warning-light: #fed7aa;
+  --error: #dc2626;          /* 쿨 레드 */
+  --error-light: #fee2e2;
+}

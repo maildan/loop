@@ -1,0 +1,24 @@
+/* 🔥 기가차드 스타일 시스템 - 완전한 모듈화된 CSS 집계 파일 */
+/* TailwindCSS v3 + 기가차드 테마 시스템 통합 */
+/* 모든 1,571줄의 CSS가 적절히 모듈별로 분리되어 임포트됩니다 */
+
+/* Tailwind CSS 기본 레이어 + HTML 기본 스타일링 */
+@import './base.css';
+
+/* 기가차드 테마 시스템 (CSS Variables) */
+@import './theme.css';
+
+/* 컴포넌트 스타일 */
+@import './components.css';
+
+/* 유틸리티 및 애니메이션 스타일 */
+@import './utilities.css';
+
+/* 🎯 모듈화 완료! 
+   - base.css: TailwindCSS + 작가 친화적 Typography + HTML 기본 스타일
+   - theme.css: 모든 CSS Variables (Light/Dark 테마)
+   - components.css: 재사용 가능한 컴포넌트 클래스들
+   - utilities.css: 애니메이션 + 유틸리티 클래스들
+   
+   총 1,571줄의 CSS가 4개 모듈로 완전히 분리되었습니다.
+*/

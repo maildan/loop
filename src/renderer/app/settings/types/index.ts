@@ -2,6 +2,8 @@
 
 // 🔥 기가차드 Settings 타입 정의 - Electron-Store 완벽 호환!
 
+import type { Theme } from '../../../../shared/types/theme';
+
 /**
  * 🎯 Settings 섹션 타입 (main/settings와 완벽 호환)
  */
@@ -13,7 +15,7 @@ export type SettingSection = 'app' | 'keyboard' | 'ui' | 'performance';
  */
 export interface SettingsData {
   readonly app: {
-    theme: 'light' | 'dark' | 'system';
+    theme: Theme;
     language: string;
     autoSave: boolean;
     startMinimized: boolean;
@@ -117,7 +119,7 @@ export interface SettingSectionProps<T extends keyof SettingsData> {
  * 🔥 App Section Props (테마 변경 포함)
  */
 export interface AppSectionProps extends SettingSectionProps<'app'> {
-  readonly setTheme: (theme: 'light' | 'dark' | 'system') => void;
+  readonly setTheme: (theme: Theme) => void;
 }
 
 /**

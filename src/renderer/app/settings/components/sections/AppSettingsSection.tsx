@@ -1,5 +1,5 @@
 // 🔥 기가차드 앱 설정 섹션 - 최적화
-'use client';
+// 'use client' 제거됨 - React에서 불필요
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Settings } from 'lucide-react';
@@ -7,10 +7,12 @@ import { SETTINGS_PAGE_STYLES } from '../../constants/styles';
 import { SettingItem } from '../controls/SettingItem';
 import { Toggle } from '../controls/Toggle';
 import { useTheme } from '../../../../providers/ThemeProvider';
+import type { Theme } from '../../../../../shared/types/theme';
 import { useDynamicFont } from '../../../../hooks/useDynamicFont';
 import { Logger } from '../../../../../shared/logger';
 import GoogleAccountActions from '../GoogleAccountActions';
 import type { SettingsData, UpdateSettingFunction } from '../../types';
+import { THEME_OPTIONS } from '../../constants/settings';
 
 /**
  * 🔥 앱 설정 섹션 Props
@@ -18,7 +20,7 @@ import type { SettingsData, UpdateSettingFunction } from '../../types';
 interface AppSettingsSectionProps {
   settings: SettingsData['app'];
   updateSetting: UpdateSettingFunction;
-  setTheme: (theme: 'light' | 'dark' | 'system') => void;
+  setTheme: (theme: Theme) => void;
 }
 
 /**
@@ -33,7 +35,7 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
   const { availableFonts, loading: fontsLoading, error: fontsError, setFont } = useDynamicFont();
 
   // 🔥 로컬 테마 상태 (설정 UI 표시용)
-  const [displayTheme, setDisplayTheme] = useState<'light' | 'dark' | 'system'>(settings.theme);
+  const [displayTheme, setDisplayTheme] = useState<Theme>(settings.theme);
 
   // 🔥 설정이 변경되면 로컬 상태 동기화
   useEffect(() => {
@@ -49,7 +51,7 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
 
   // 🔥 테마 변경 핸들러 (ThemeProvider + 설정 동시 업데이트)
   const handleThemeChange = useCallback(async (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newTheme = event.target.value as 'light' | 'dark' | 'system';
+    const newTheme = event.target.value as Theme;
 
     try {
       // 1. 로컬 상태 즉시 업데이트 (UI 반응성)
@@ -150,9 +152,11 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
               onChange={handleThemeChange}
               className={SETTINGS_PAGE_STYLES.select}
             >
-              <option value="system">시스템</option>
-              <option value="light">라이트</option>
-              <option value="dark">다크</option>
+              {THEME_OPTIONS.map(option => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           }
         />

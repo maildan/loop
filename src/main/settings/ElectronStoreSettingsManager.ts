@@ -2,6 +2,7 @@
 
 import Store from 'electron-store';
 import { Logger } from '../../shared/logger';
+import type { Theme } from '../../shared/types/theme';
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
@@ -13,7 +14,7 @@ import { app } from 'electron';
  */
 interface SimpleSettingsSchema {
   app: {
-    theme: 'light' | 'dark' | 'system';
+    theme: Theme;
     language: string;
     autoSave: boolean;
     startMinimized: boolean;

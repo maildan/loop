@@ -3,6 +3,8 @@
 import { Logger } from '../../shared/logger';
 import { createSuccess, createError, type Result, isObject } from '../../shared/common';
 import { TypingSession, TypingStats, UserPreferences } from '../../shared/types';
+import type { Theme } from '../../shared/types/theme';
+import { isValidTheme } from '../../shared/types/theme';
 
 // #DEBUG: Database service entry point
 Logger.debug('DATABASE', 'Database service module loaded');
@@ -297,7 +299,7 @@ export class DatabaseService {
 
       // 설정 필드 매핑 (Prisma UserSettings 모델과 UserPreferences 타입 매핑)
       const settingsData = {
-        theme: (typeof parsedPreferences.theme === 'string') ? parsedPreferences.theme : 'light',
+        theme: (typeof parsedPreferences.theme === 'string' && isValidTheme(parsedPreferences.theme)) ? parsedPreferences.theme : 'light',
         language: (typeof parsedPreferences.language === 'string') ? parsedPreferences.language : 'ko',
         keyboardLayout: 'qwerty', // 기본값
         showRealTimeWpm: true, // 기본값
@@ -430,11 +432,11 @@ export class DatabaseService {
     }
 
     const theme = String(data.theme || 'light');
-    const validTheme = theme === 'dark' || theme === 'system' ? theme : 'light';
+    const validTheme = isValidTheme(theme) ? theme as Theme : 'light';
 
     return {
       language: String(data.language || 'en'),
-      theme: validTheme as 'light' | 'dark' | 'system',
+      theme: validTheme,
       enableNotifications: Boolean(data.enableNotifications),
       enableSounds: Boolean(data.enableSounds),
       autoStartMonitoring: Boolean(data.autoStartMonitoring),

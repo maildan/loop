@@ -1,0 +1,113 @@
+/* 🔥 Sepia Theme - 눈 피로 감소를 위한 따뜻한 세피아 테마 */
+
+/* Light variant */
+.sepia {
+  /* 기본 배경 - 따뜻한 세피아 톤 */
+  --background: 42 25% 94%;
+  --foreground: 30 50% 15%;
+  --card: 42 25% 96%;
+  --card-foreground: 30 50% 15%;
+  --popover: 42 25% 96%;
+  --popover-foreground: 30 50% 15%;
+  --primary: 25 95% 39%;
+  --primary-foreground: 42 25% 96%;
+  --secondary: 42 15% 90%;
+  --secondary-foreground: 30 50% 15%;
+  --muted: 42 15% 90%;
+  --muted-foreground: 30 25% 40%;
+  --accent: 42 15% 90%;
+  --accent-foreground: 30 50% 15%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 42 25% 96%;
+  --border: 42 15% 85%;
+  --input: 42 15% 85%;
+  --ring: 25 95% 39%;
+
+  /* 기가차드 세피아 색상 시스템 */
+  --bg-primary: #f1e7d0;     /* 따뜻한 크림 */
+  --bg-secondary: #eae0c9;   /* 연한 베이지 */
+  --bg-elevated: #f4ead4;    /* 약간 밝은 크림 */
+  --bg-card: #f4ead4;
+  --bg-hover: #e5d9bf;       /* 호버시 조금 더 진한 톤 */
+
+  /* 텍스트 - 따뜻한 갈색 톤 */
+  --text-primary: #433422;   /* 다크 브라운 */
+  --text-secondary: #504231; /* 미디엄 브라운 */
+  --text-muted: #6b5d4a;     /* 뮤트 브라운 */
+  --text-inverse: #f1e7d0;
+
+  /* 강조색 - 따뜻한 오렌지 브라운 */
+  --accent-primary: #b45309; /* 오렌지 브라운 */
+  --accent-hover: #92400e;   /* 더 진한 오렌지 브라운 */
+  --accent-light: #fed7aa;   /* 연한 오렌지 */
+  --accent-dark: #78350f;    /* 다크 오렌지 브라운 */
+
+  /* 경계선 - 부드러운 베이지 */
+  --border-light: #ded0bf;   /* 연한 베이지 */
+  --border-medium: #d1c2af;  /* 미디엄 베이지 */
+  --border-dark: #c4b59d;    /* 다크 베이지 */
+
+  /* 상태 색상 - 세피아 톤 조화 */
+  --success: #16a34a;        /* 자연스러운 그린 */
+  --success-light: #dcfce7;
+  --warning: #d97706;        /* 따뜻한 오렌지 */
+  --warning-light: #fed7aa;
+  --error: #dc2626;          /* 조화로운 레드 */
+  --error-light: #fee2e2;
+}
+
+/* Dark variant */
+.sepia-dark {
+  /* 기본 배경 - 다크 세피아 톤 */
+  --background: 25 30% 8%;
+  --foreground: 42 25% 85%;
+  --card: 25 30% 10%;
+  --card-foreground: 42 25% 85%;
+  --popover: 25 30% 10%;
+  --popover-foreground: 42 25% 85%;
+  --primary: 42 25% 85%;
+  --primary-foreground: 25 30% 8%;
+  --secondary: 30 25% 15%;
+  --secondary-foreground: 42 25% 85%;
+  --muted: 30 25% 15%;
+  --muted-foreground: 42 15% 60%;
+  --accent: 30 25% 15%;
+  --accent-foreground: 42 25% 85%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 42 25% 85%;
+  --border: 30 25% 15%;
+  --input: 30 25% 15%;
+  --ring: 42 25% 85%;
+
+  /* 기가차드 다크 세피아 색상 */
+  --bg-primary: #1a1612;     /* 다크 초콜릿 */
+  --bg-secondary: #221f19;   /* 더 진한 초콜릿 */
+  --bg-elevated: #2a251e;    /* 엘리베이티드 초콜릿 */
+  --bg-card: #2a251e;
+  --bg-hover: #332d24;       /* 호버 초콜릿 */
+
+  /* 텍스트 - 따뜻한 라이트 톤 */
+  --text-primary: #e8dcc6;   /* 따뜻한 화이트 */
+  --text-secondary: #d4c5a9; /* 미디엄 베이지 */
+  --text-muted: #a1936f;     /* 뮤트 베이지 */
+  --text-inverse: #1a1612;
+
+  /* 강조색 - 따뜻한 골드 */
+  --accent-primary: #fbbf24; /* 골든 옐로우 */
+  --accent-hover: #f59e0b;   /* 더 진한 골드 */
+  --accent-light: #78350f;   /* 다크 오렌지 */
+  --accent-dark: #92400e;    /* 매우 진한 오렌지 */
+
+  /* 경계선 */
+  --border-light: #332d24;
+  --border-medium: #3d342a;
+  --border-dark: #4a3f33;
+
+  /* 상태 색상 - 다크 세피아 조화 */
+  --success: #22c55e;
+  --success-light: #064e3b;
+  --warning: #f59e0b;
+  --warning-light: #78350f;
+  --error: #ef4444;
+  --error-light: #7f1d1d;
+}

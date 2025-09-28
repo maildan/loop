@@ -1,5 +1,7 @@
 // 🔥 기가차드 Settings 타입 정의 - 완전 타입 안전!
 
+import type { Theme } from '../../shared/types/theme';
+
 /**
  * 🔥 기본 키보드 설정 인터페이스
  */
@@ -24,7 +26,7 @@ interface BaseKeyboardConfig {
  */
 export interface AppSettingsSchema {
   // 기본 설정
-  theme: 'light' | 'dark' | 'system';
+  theme: Theme;
   language: 'ko' | 'en' | 'ja' | 'zh';
   autoStart: boolean;
   minimizeToTray: boolean;

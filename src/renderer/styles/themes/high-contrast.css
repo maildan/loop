@@ -1,0 +1,152 @@
+/* 🔥 High Contrast Theme - 최대 접근성과 가독성을 위한 고대비 테마 */
+
+.high-contrast {
+  /* 기본 배경 - 순수 화이트와 블랙의 극대비 */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 0%;
+  --primary: 240 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 95%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 0 0% 90%;
+  --muted-foreground: 0 0% 20%;
+  --accent: 0 0% 90%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 100% 40%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 80%;
+  --input: 0 0% 80%;
+  --ring: 240 100% 50%;
+
+  /* 기가차드 고대비 색상 시스템 */
+  --bg-primary: #ffffff;     /* 순수 화이트 */
+  --bg-secondary: #f5f5f5;   /* 매우 연한 그레이 */
+  --bg-elevated: #ffffff;    /* 순수 화이트 */
+  --bg-card: #ffffff;
+  --bg-hover: #e5e5e5;       /* 호버시 연한 그레이 */
+
+  /* 텍스트 - 최대 대비도 */
+  --text-primary: #000000;   /* 순수 블랙 */
+  --text-secondary: #1a1a1a; /* 매우 진한 그레이 */
+  --text-muted: #333333;     /* 진한 그레이 */
+  --text-inverse: #ffffff;
+
+  /* 강조색 - 고대비 블루 */
+  --accent-primary: #0000ff; /* 순수 블루 */
+  --accent-hover: #0000cc;   /* 더 진한 블루 */
+  --accent-light: #e6f0ff;   /* 연한 블루 */
+  --accent-dark: #000080;    /* 다크 블루 */
+
+  /* 경계선 - 선명한 그레이 */
+  --border-light: #cccccc;   /* 미디엄 그레이 */
+  --border-medium: #999999;  /* 진한 그레이 */
+  --border-dark: #666666;    /* 매우 진한 그레이 */
+
+  /* 상태 색상 - 고대비 최적화 */
+  --success: #008000;        /* 순수 그린 */
+  --success-light: #e6ffe6;
+  --warning: #ff8000;        /* 순수 오렌지 */
+  --warning-light: #fff0e6;
+  --error: #cc0000;          /* 순수 레드 */
+  --error-light: #ffe6e6;
+
+  /* 🔥 고대비 전용 추가 변수 */
+  --focus-outline: 3px solid #0000ff;
+  --focus-outline-offset: 2px;
+}
+
+/* 🔥 고대비 테마 전용 스타일 강화 */
+.high-contrast *:focus {
+  outline: var(--focus-outline) !important;
+  outline-offset: var(--focus-outline-offset) !important;
+}
+
+.high-contrast a {
+  color: #0000ff !important;
+  text-decoration: underline !important;
+}
+
+.high-contrast a:hover {
+  color: #0000cc !important;
+  background: #e6f0ff !important;
+}
+
+.high-contrast button {
+  border: 2px solid #000000 !important;
+  font-weight: 600 !important;
+}
+
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast select {
+  border: 2px solid #000000 !important;
+}
+
+.high-contrast .card,
+.high-contrast .popover {
+  border: 2px solid #000000 !important;
+}
+
+/* 🔥 고대비 다크 변형도 지원 */
+@media (prefers-color-scheme: dark) {
+  .high-contrast[data-theme="system"] {
+    /* 다크 모드일 때 자동 전환 */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 60 100% 50%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 100%;
+
+    --bg-primary: #000000;
+    --bg-secondary: #1a1a1a;
+    --bg-elevated: #000000;
+    --bg-card: #000000;
+    --bg-hover: #333333;
+
+    --text-primary: #ffffff;
+    --text-secondary: #f5f5f5;
+    --text-muted: #cccccc;
+    --text-inverse: #000000;
+
+    --accent-primary: #ffff00;
+    --accent-hover: #cccc00;
+    --accent-light: #333300;
+    --accent-dark: #999900;
+
+    --border-light: #666666;
+    --border-medium: #999999;
+    --border-dark: #cccccc;
+
+    --success: #00ff00;
+    --warning: #ffff00;
+    --error: #ff0000;
+
+    --focus-outline: 3px solid #ffff00;
+  }
+
+  .high-contrast[data-theme="system"] *:focus {
+    outline: var(--focus-outline) !important;
+  }
+
+  .high-contrast[data-theme="system"] a {
+    color: #ffff00 !important;
+  }
+
+  .high-contrast[data-theme="system"] button,
+  .high-contrast[data-theme="system"] input,
+  .high-contrast[data-theme="system"] textarea,
+  .high-contrast[data-theme="system"] select,
+  .high-contrast[data-theme="system"] .card,
+  .high-contrast[data-theme="system"] .popover {
+    border-color: #ffffff !important;
+  }
+}

@@ -1,0 +1,201 @@
+/* 🔥 기가차드 확장 테마 시스템 - 작가 친화적 테마 모음 */
+/* TailwindCSS v3 + 기가차드 테마 시스템과 완벽 호환 */
+
+/* 🎨 Writer Focus Themes - 최고 가독성 */
+@import './writer-focus.css';
+
+/* 🎨 Sepia Themes - 눈 피로 감소 */
+@import './sepia.css';
+
+/* 🎨 Warm & Cool Themes - 감정 기반 색상 */
+@import './warm-cool.css';
+
+/* 🎨 Nature Themes - 자연 친화적 */
+@import './forest-midnight.css';
+
+/* 🎨 Accessibility Theme - 고대비 접근성 */
+@import './high-contrast.css';
+
+/* ===== 🔥 테마 전환 애니메이션 ===== */
+
+/* 모든 CSS Variables에 부드러운 전환 효과 적용 */
+:root {
+  transition: 
+    --background 0.3s ease,
+    --foreground 0.3s ease,
+    --card 0.3s ease,
+    --card-foreground 0.3s ease,
+    --popover 0.3s ease,
+    --popover-foreground 0.3s ease,
+    --primary 0.3s ease,
+    --primary-foreground 0.3s ease,
+    --secondary 0.3s ease,
+    --secondary-foreground 0.3s ease,
+    --muted 0.3s ease,
+    --muted-foreground 0.3s ease,
+    --accent 0.3s ease,
+    --accent-foreground 0.3s ease,
+    --destructive 0.3s ease,
+    --destructive-foreground 0.3s ease,
+    --border 0.3s ease,
+    --input 0.3s ease,
+    --ring 0.3s ease,
+    --bg-primary 0.3s ease,
+    --bg-secondary 0.3s ease,
+    --bg-elevated 0.3s ease,
+    --bg-card 0.3s ease,
+    --bg-hover 0.3s ease,
+    --text-primary 0.3s ease,
+    --text-secondary 0.3s ease,
+    --text-muted 0.3s ease,
+    --text-inverse 0.3s ease,
+    --accent-primary 0.3s ease,
+    --accent-hover 0.3s ease,
+    --accent-light 0.3s ease,
+    --accent-dark 0.3s ease,
+    --border-light 0.3s ease,
+    --border-medium 0.3s ease,
+    --border-dark 0.3s ease;
+}
+
+/* ===== 🔥 테마별 특수 효과 ===== */
+
+/* Writer Focus 테마 - 최적화된 타이포그래피 */
+.writer-focus,
+.writer-focus-dark {
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Sepia 테마 - 따뜻한 필터 효과 */
+.sepia,
+.sepia-dark {
+  filter: sepia(0.05) hue-rotate(5deg) saturate(1.1);
+}
+
+/* Warm 테마 - 따뜻한 분위기 */
+.warm {
+  filter: hue-rotate(5deg) saturate(1.05) brightness(1.02);
+}
+
+/* Cool 테마 - 시원한 분위기 */
+.cool {
+  filter: hue-rotate(-5deg) saturate(1.05) brightness(0.98);
+}
+
+/* Forest 테마 - 자연스러운 색감 */
+.forest {
+  filter: hue-rotate(10deg) saturate(1.1);
+}
+
+/* Midnight 테마 - 부드러운 다크 */
+.midnight {
+  filter: brightness(0.95) contrast(1.05);
+}
+
+/* High Contrast 테마 - 접근성 최적화 (필터 없음) */
+.high-contrast {
+  filter: contrast(1.2);
+}
+
+/* ===== 🔥 반응형 테마 적용 ===== */
+
+/* 시스템 다크모드 감지시 자동 테마 조정 */
+@media (prefers-color-scheme: dark) {
+  /* Writer Focus 자동 다크 전환 */
+  html[data-theme="writer-focus"].system {
+    @apply writer-focus-dark;
+  }
+  
+  /* Sepia 자동 다크 전환 */
+  html[data-theme="sepia"].system {
+    @apply sepia-dark;
+  }
+}
+
+/* 고대비 모드 감지시 자동 전환 */
+@media (prefers-contrast: high) {
+  html[data-theme="system"] {
+    @apply high-contrast;
+  }
+}
+
+/* 저운동성 모드시 애니메이션 비활성화 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none !important;
+  }
+  
+  .writer-focus,
+  .writer-focus-dark,
+  .sepia,
+  .sepia-dark,
+  .warm,
+  .cool,
+  .forest,
+  .midnight,
+  .high-contrast {
+    filter: none !important;
+  }
+}
+
+/* ===== 🔥 테마 디버깅 도구 (개발용) ===== */
+@media (prefers-reduced-motion: no-preference) {
+  /* 개발 모드에서만 테마 전환 시각적 피드백 */
+  body::before {
+    content: attr(data-theme);
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: var(--accent-primary);
+    color: var(--accent-foreground);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* 테마 변경시 잠시 표시 */
+  body[data-theme-changed="true"]::before {
+    opacity: 1;
+    animation: theme-change-indicator 2s ease forwards;
+  }
+}
+
+@keyframes theme-change-indicator {
+  0% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* ===== 🔥 포커스 모드별 테마 최적화 ===== */
+
+/* Focus 모드에서 테마별 최적화 */
+.focus-mode.writer-focus,
+.focus-mode.writer-focus-dark {
+  /* Writer Focus에서 최대 가독성 */
+  font-size: 1.1em;
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+
+.focus-mode.sepia,
+.focus-mode.sepia-dark {
+  /* Sepia에서 눈 피로 최소화 */
+  filter: sepia(0.1) brightness(1.05);
+}
+
+.focus-mode.forest {
+  /* Forest에서 자연스러운 집중 */
+  filter: saturate(0.9) brightness(1.02);
+}
+
+.focus-mode.midnight {
+  /* Midnight에서 야간 작업 최적화 */
+  filter: brightness(0.9) contrast(1.1);
+}

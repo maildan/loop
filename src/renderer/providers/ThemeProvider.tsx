@@ -1,14 +1,19 @@
-'use client';
+// 'use client' 제거됨 - React에서 불필요
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { Logger } from '../../shared/logger';
-
-// 🔥 테마 타입 정의
-export type Theme = 'light' | 'dark' | 'system';
+import { 
+  type Theme, 
+  type ResolvedTheme, 
+  isDarkTheme,
+  resolveThemeMode,
+  isValidTheme,
+  ALL_THEMES 
+} from '../../shared/types/theme';
 
 interface ThemeContextType {
   theme: Theme;
-  resolvedTheme: 'light' | 'dark'; // 실제 적용된 테마 (system 해결됨)
+  resolvedTheme: ResolvedTheme; // 실제 적용된 테마 (system 해결됨)
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
 }
@@ -36,12 +41,15 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
   // 초기값으로 사용하여 hydration mismatch를 방지합니다.
   // 초기값은 서버가 삽입한 HTML 속성(data-theme/class)을 우선 사용합니다.
   // 시스템 프리퍼런스(matchMedia)는 클라이언트 마운트 이후에만 적용합니다.
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>(() => {
     if (typeof window === 'undefined') return 'light';
     try {
       const html = document.documentElement;
       const dataTheme = html.getAttribute('data-theme');
-      if (dataTheme === 'dark' || dataTheme === 'light') return dataTheme as 'light' | 'dark';
+      // 확장 테마들도 지원
+      if (dataTheme && ['light', 'dark', 'writer-focus', 'writer-focus-dark', 'sepia', 'sepia-dark', 'warm', 'cool', 'forest', 'midnight', 'high-contrast'].includes(dataTheme)) {
+        return dataTheme as ResolvedTheme;
+      }
       if (html.classList.contains('dark')) return 'dark';
       if (html.classList.contains('light')) return 'light';
       // 아무 설정이 없으면 서버 기본과 동일하게 'light'로 시작
@@ -51,18 +59,19 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
     }
   });
 
-  // 🔥 시스템 테마 감지
+  // 🔥 시스템 테마 감지 (기본 light/dark만)
   const getSystemTheme = useCallback((): 'light' | 'dark' => {
     if (typeof window === 'undefined') return 'light';
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }, []);
 
-  // 🔥 해결된 테마 계산
-  const calculateResolvedTheme = useCallback((currentTheme: Theme): 'light' | 'dark' => {
+  // 🔥 해결된 테마 계산 (확장 테마 지원)
+  const calculateResolvedTheme = useCallback((currentTheme: Theme): ResolvedTheme => {
     if (currentTheme === 'system') {
       return getSystemTheme();
     }
-    return currentTheme;
+    // 확장 테마들은 그대로 반환
+    return currentTheme as ResolvedTheme;
   }, [getSystemTheme]);
 
   // 🔥 테마 설정 함수
@@ -89,13 +98,28 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
       // 🔥 HTML/Body 속성 및 클래스 업데이트 (즉시)
       const root = document.documentElement;
       const body = document.body;
-      root.classList.remove('light', 'dark');
+      
+      // 모든 테마 클래스 제거 (theme-init.js와 동기화)
+      const allThemeClasses = ['light', 'dark', 'writer-focus', 'writer-focus-dark', 'sepia', 'sepia-dark', 'warm', 'cool', 'forest', 'midnight', 'high-contrast'];
+      allThemeClasses.forEach(cls => root.classList.remove(cls));
+      
+      // 새 테마 클래스 추가
       root.classList.add(resolved);
       root.setAttribute('data-theme', resolved);
-      (root.style as CSSStyleDeclaration).colorScheme = resolved;
+      
+      // color-scheme 설정 (다크 테마 판단)
+      const isDarkTheme = resolved === 'dark' || resolved.includes('-dark') || resolved === 'midnight';
+      (root.style as CSSStyleDeclaration).colorScheme = isDarkTheme ? 'dark' : 'light';
+      
       if (body) {
         body.setAttribute('data-theme', resolved);
-        (body.style as CSSStyleDeclaration).colorScheme = resolved;
+        body.setAttribute('data-theme-changed', 'true'); // 디버깅용
+        (body.style as CSSStyleDeclaration).colorScheme = isDarkTheme ? 'dark' : 'light';
+        
+        // 디버깅 속성 제거 (2초 후)
+        setTimeout(() => {
+          body.removeAttribute('data-theme-changed');
+        }, 2000);
       }
 
       // 🔥 로컬 스토리지에도 저장 (백업)

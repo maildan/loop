@@ -15,6 +15,7 @@ import {
   ProjectStructure,
   ProjectNote
 } from '../shared/types';
+import type { Theme } from '../shared/types/theme';
 import type {
   SettingsSchema,
   SettingsResult,
@@ -134,7 +135,7 @@ const electronAPI: ElectronAPI = {
 
   theme: {
     get: () => ipcRenderer.invoke('theme:get'),
-    set: (theme: 'light' | 'dark' | 'system') => ipcRenderer.invoke('theme:set', theme),
+    set: (theme: Theme) => ipcRenderer.invoke('theme:set', theme),
   },
 
   settings: {

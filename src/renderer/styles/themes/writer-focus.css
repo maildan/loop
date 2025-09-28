@@ -1,0 +1,97 @@
+/* 🔥 Writer Focus Theme - 최고 가독성과 집중을 위한 테마 */
+
+/* Light variant */
+.writer-focus {
+  /* 기본 배경 - 순수한 화이트 (종이 느낌) */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 5%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 5%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 5%;
+  --primary: 210 79% 46%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 98%;
+  --secondary-foreground: 0 0% 11%;
+  --muted: 210 40% 98%;
+  --muted-foreground: 0 0% 40%;
+  --accent: 210 40% 98%;
+  --accent-foreground: 0 0% 11%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 210 79% 46%;
+
+  /* 기가차드 작가 전용 색상 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f5f5f5;
+
+  /* 텍스트 - 최대 대비도 */
+  --text-primary: #000000;
+  --text-secondary: #1a1a1a;
+  --text-muted: #666666;
+  --text-inverse: #ffffff;
+
+  /* 강조색 - 차분한 블루 (눈의 피로 최소화) */
+  --accent-primary: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-light: #eff6ff;
+  --accent-dark: #1e40af;
+
+  /* 경계선 - 매우 부드러운 회색 */
+  --border-light: #f0f0f0;
+  --border-medium: #e5e5e5;
+  --border-dark: #d4d4d4;
+}
+
+/* Dark variant */
+.writer-focus-dark {
+  /* 기본 배경 - 진한 차콜 (순수 검정 피하기) */
+  --background: 0 0% 8%;
+  --foreground: 0 0% 95%;
+  --card: 0 0% 8%;
+  --card-foreground: 0 0% 95%;
+  --popover: 0 0% 8%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 0 0% 11%;
+  --secondary: 217 32% 18%;
+  --secondary-foreground: 0 0% 95%;
+  --muted: 217 32% 18%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 217 32% 18%;
+  --accent-foreground: 0 0% 95%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 0 0% 95%;
+  --border: 217 32% 18%;
+  --input: 217 32% 18%;
+  --ring: 212 27% 84%;
+
+  /* 기가차드 작가 전용 색상 (다크) */
+  --bg-primary: #141414;
+  --bg-secondary: #1a1a1a;
+  --bg-elevated: #1f1f1f;
+  --bg-card: #1f1f1f;
+  --bg-hover: #262626;
+
+  /* 텍스트 - 눈 피로 최소화 */
+  --text-primary: #f5f5f5;
+  --text-secondary: #e5e5e5;
+  --text-muted: #a3a3a3;
+  --text-inverse: #141414;
+
+  /* 강조색 - 부드러운 블루 (다크 모드 최적화) */
+  --accent-primary: #60a5fa;
+  --accent-hover: #3b82f6;
+  --accent-light: #1e3a8a;
+  --accent-dark: #1d4ed8;
+
+  /* 경계선 */
+  --border-light: #262626;
+  --border-medium: #404040;
+  --border-dark: #525252;
+}
