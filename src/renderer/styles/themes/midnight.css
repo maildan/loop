@@ -39,7 +39,129 @@
   --editor-text-muted: oklch(0.65 0.02 255);
   --editor-border: oklch(0.3 0.04 265);
   --editor-accent: oklch(0.6 0.15 260); /* 인디고 */
+  --editor-accent-light: oklch(0.6 0.15 260 / 0.3); /* 연한 인디고 (selection용) */
   --editor-selection: oklch(0.7 0.2 280 / 0.3); /* 바이올렛 선택 배경 */
+}
+
+/* 🔥 Midnight 전용 스타일링 - 신비로운 야간 UI */
+.midnight {
+  /* 별빛 그림자 효과 */
+  --shadow-midnight: 0 8px 32px oklch(0.6 0.15 260 / 0.3);
+  --shadow-starlight: inset 0 1px 0 oklch(0.7 0.2 280 / 0.2);
+  --glow-accent: 0 0 20px oklch(0.7 0.2 280 / 0.4);
+
+  /* 미묘한 별빛 배경 */
+  & .ProseMirror,
+  & .card,
+  & [data-ui="card"] {
+    position: relative;
+    background-image: 
+      radial-gradient(circle at 20% 30%, oklch(0.6 0.15 260 / 0.1) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, oklch(0.7 0.2 280 / 0.08) 0%, transparent 40%),
+      radial-gradient(circle at 40% 80%, oklch(0.5 0.1 290 / 0.06) 0%, transparent 30%);
+  }
+
+  /* 부드러운 글로우 전환 */
+  & * {
+    transition: all 0.6s ease, box-shadow 0.4s ease;
+  }
+
+  /* 스크롤바 미드나이트 테마 */
+  & ::-webkit-scrollbar {
+    width: 10px;
+    background: oklch(0.15 0.02 260);
+  }
+
+  & ::-webkit-scrollbar-track {
+    background: oklch(0.2 0.04 270);
+    border-radius: 5px;
+  }
+
+  & ::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      180deg,
+      oklch(0.6 0.15 260),
+      oklch(0.7 0.2 280)
+    );
+    border-radius: 5px;
+    box-shadow: var(--glow-accent);
+  }
+
+  & ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      180deg,
+      oklch(0.7 0.2 280),
+      oklch(0.8 0.25 290)
+    );
+  }
+
+  /* 버튼 글로우 효과 */
+  & button:hover,
+  & [role="button"]:hover {
+    box-shadow: var(--shadow-midnight), var(--glow-accent);
+    transform: translateY(-2px);
+  }
+
+  & button:active,
+  & [role="button"]:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-starlight);
+  }
+
+  /* 입력 필드 미드나이트 스타일 */
+  & input,
+  & textarea,
+  & [contenteditable] {
+    background-color: oklch(0.18 0.04 270);
+    border-color: oklch(0.3 0.04 265);
+    box-shadow: var(--shadow-starlight);
+  }
+
+  & input:focus,
+  & textarea:focus,
+  & [contenteditable]:focus {
+    box-shadow: var(--glow-accent), var(--shadow-starlight);
+    border-color: oklch(0.6 0.15 260);
+  }
+
+  /* 링크 별빛 효과 */
+  & a {
+    color: oklch(0.7 0.2 280);
+    text-decoration-color: oklch(0.7 0.2 280 / 0.5);
+    text-shadow: 0 0 8px oklch(0.7 0.2 280 / 0.3);
+  }
+
+  & a:hover {
+    color: oklch(0.8 0.25 290);
+    text-shadow: 0 0 12px oklch(0.8 0.25 290 / 0.5);
+  }
+
+  /* 카드 미드나이트 글로우 */
+  & .card,
+  & [data-ui="card"] {
+    background-color: oklch(0.18 0.04 270);
+    border-color: oklch(0.3 0.04 265);
+    box-shadow: var(--shadow-midnight);
+  }
+
+  & .card:hover,
+  & [data-ui="card"]:hover {
+    box-shadow: var(--shadow-midnight), var(--glow-accent);
+  }
+
+  /* 특별한 별빛 텍스트 효과 */
+  & h1, & h2, & h3 {
+    text-shadow: 0 0 10px oklch(0.6 0.15 260 / 0.3);
+  }
+
+  /* 에디터 특별 처리 */
+  & .ProseMirror {
+    box-shadow: var(--shadow-starlight), var(--shadow-midnight);
+  }
+
+  & .ProseMirror:focus {
+    box-shadow: var(--glow-accent), var(--shadow-starlight);
+  }
 }
 
 /* 🎯 TipTap 에디터 강제 스타일링 */

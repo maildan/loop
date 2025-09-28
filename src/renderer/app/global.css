@@ -1,372 +1,44 @@
 /**
- * 🎨 Global Styles - Modular CSS Architecture
+ * 🎨 Global Styles Index - Modular CSS Architecture
  * 
  * Loop - Korean Writer-Focused Application
  * 
- * Architecture:
- * - variables.css: CSS variables, themes, color system
- * - typography.css: Korean writer-optimized typography
- * - animations.css: Performance-optimized animations and transitions
- * - components.css: Reusable UI components (buttons, cards, forms)
- * - utilities.css: Single-purpose utility classes
+ * 이 파일은 모든 CSS 모듈을 가져와서 통합합니다.
+ * 각 모듈은 특정 기능에 집중하며, 순서가 중요합니다.
  * 
- * Design Philosophy:
- * - Korean writer-focused UX
- * - Accessibility-first approach
- * - Performance-optimized rendering
- * - Consistent design system
- * - Modular and maintainable architecture
- * 
- * Features:
- * - Research-based Korean typography (16-18px, 1.5-1.6 line-height)
- * - Writer-friendly color palette (cream backgrounds, high contrast)
- * - Distraction-free focus modes
- * - Smooth, non-intrusive animations
- * - Comprehensive accessibility support
+ * ⚠️ CRITICAL: @import 문은 모든 다른 CSS 규칙보다 앞서 와야 합니다 (PostCSS 규칙)
  */
 
 /* ========================================
-   📦 Module Imports (Must come first!)
+   � All @import Statements FIRST (PostCSS 규칙)
    ======================================== */
 
-/* Core foundation - CSS variables and theming */
+/* 1. CSS Variables & Theme System */
 @import '../styles/modules/variables.css';
-
-/* 🎨 새로운 다중 테마 시스템 */
 @import '../styles/themes/index.css';
 
-/* Typography system - Korean writer optimization */
+/* 2. Base Styles & Reset */
+@import '../styles/modules/base.css';
+
+/* 3. Typography System */
 @import '../styles/modules/typography.css';
 
-/* Animation system - Performance-optimized transitions */
+/* 4. Custom Scrollbars */
+@import '../styles/modules/scrollbar.css';
+
+/* 5. Animations & Transitions */
 @import '../styles/modules/animations.css';
 
-/* Component library - Reusable UI elements */
+/* 6. UI Components */
 @import '../styles/modules/components.css';
 
-/* Utility classes - Single-purpose helpers */
+/* 7. Utility Classes */
 @import '../styles/modules/utilities.css';
 
 /* ========================================
-   🎯 Tailwind CSS Directives
+   🎯 Tailwind CSS Foundation (모든 @import 이후)
    ======================================== */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* ========================================
-   🔧 Core Resets & Base Styles
-   ======================================== */
-
-/* Modern CSS reset */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* Smooth scrolling with reduced motion support */
-html {
-  scroll-behavior: smooth;
-  color-scheme: light dark;
-  -webkit-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-/* Base theme application */
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-feature-settings: "rlig" 1, "calt" 1;
-  font-synthesis-weight: none;
-  text-rendering: optimizeLegibility;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Root application container */
-#__next {
-  height: 100%;
-  isolation: isolate;
-}
-
-/* ========================================
-   🎛 Custom Scrollbars (WebKit)
-   ======================================== */
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-medium);
-  border-radius: 4px;
-  transition: background-color var(--duration-fast) ease;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--border-dark);
-}
-
-/* Dark mode scrollbar adjustments */
-:root[data-theme="dark"] ::-webkit-scrollbar-track,
-.dark ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
-
-:root[data-theme="dark"] ::-webkit-scrollbar-thumb,
-.dark ::-webkit-scrollbar-thumb {
-  background: var(--border-medium);
-}
-
-:root[data-theme="dark"] ::-webkit-scrollbar-thumb:hover,
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-dark);
-}
-
-/* ========================================
-   🎯 Selection Styles
-   ======================================== */
-
-::selection {
-  background-color: var(--accent-light);
-  color: var(--accent-dark);
-}
-
-::-moz-selection {
-  background-color: var(--accent-light);
-  color: var(--accent-dark);
-}
-
-/* Dark mode selection */
-:root[data-theme="dark"] ::selection,
-.dark ::selection {
-  background-color: var(--accent-primary);
-  color: var(--text-inverse);
-}
-
-/* ========================================
-   🔘 Form Element Resets
-   ======================================== */
-
-/* Button reset */
-button {
-  background: none;
-  border: none;
-  padding: 0;
-  margin: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-  color: inherit;
-}
-
-/* Input, textarea, select reset */
-input,
-textarea,
-select {
-  background: transparent;
-  border: none;
-  font: inherit;
-  color: inherit;
-  outline: none;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: var(--text-muted);
-  opacity: 1;
-}
-
-/* Remove default focus styles - we use custom focus-visible */
-input:focus,
-textarea:focus,
-select:focus,
-button:focus {
-  outline: none;
-}
-
-/* ========================================
-   ♿ Accessibility Enhancements
-   ======================================== */
-
-/* Focus management */
-*:focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-/* Remove focus for mouse users */
-*:focus:not(:focus-visible) {
-  outline: none;
-}
-
-/* Ensure interactive elements are accessible */
-button,
-a,
-input,
-textarea,
-select {
-  min-height: 44px; /* Touch target size */
-}
-
-/* Skip to main content link */
-.skip-to-main {
-  position: absolute;
-  top: -40px;
-  left: 6px;
-  background: var(--bg-elevated);
-  color: var(--text-primary);
-  padding: var(--space-2) var(--space-4);
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: 500;
-  z-index: 9999;
-  transition: top var(--duration-fast) ease;
-}
-
-.skip-to-main:focus {
-  top: 6px;
-}
-
-/* ========================================
-   🌙 Theme Transition Support
-   ======================================== */
-
-/* Smooth theme transitions */
-*,
-*::before,
-*::after {
-  transition: 
-    background-color var(--duration-fast) ease,
-    border-color var(--duration-fast) ease,
-    color var(--duration-fast) ease;
-}
-
-/* Prevent transitions on theme switch */
-.theme-transition-disabled * {
-  transition: none !important;
-}
-
-/* ========================================
-   📱 Mobile Optimizations
-   ======================================== */
-
-/* Prevent horizontal scroll on mobile */
-html,
-body {
-  overflow-x: hidden;
-}
-
-/* Improve touch performance */
-* {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Mobile-specific adjustments */
-@media (max-width: 768px) {
-  /* Larger touch targets on mobile */
-  button,
-  a,
-  input,
-  textarea,
-  select {
-    min-height: 48px;
-  }
-  
-  /* Prevent zoom on input focus */
-  input,
-  textarea,
-  select {
-    font-size: 16px;
-  }
-}
-
-/* ========================================
-   🎭 Print Styles
-   ======================================== */
-
-@media print {
-  /* Hide interactive elements */
-  button,
-  .no-print {
-    display: none !important;
-  }
-  
-  /* Optimize for print */
-  * {
-    background: white !important;
-    color: black !important;
-    box-shadow: none !important;
-  }
-  
-  /* Better page breaks */
-  h1, h2, h3, h4, h5, h6 {
-    page-break-after: avoid;
-  }
-  
-  p, div {
-    page-break-inside: avoid;
-  }
-}
-
-/* ========================================
-   🔧 Development & Debug Helpers
-   ======================================== */
-
-/* Development mode outline helper */
-.debug-layout * {
-  outline: 1px solid rgba(255, 0, 0, 0.3) !important;
-}
-
-/* Performance monitoring helper */
-.performance-monitor {
-  will-change: transform;
-  contain: layout style paint;
-}
-
-/* ========================================
-   🏁 Final Optimizations
-   ======================================== */
-
-/* Force GPU acceleration for smooth performance */
-.app-container {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-}
-
-/* Prevent layout shift during font loading */
-.font-loading {
-  font-display: swap;
-  text-rendering: optimizeLegibility;
-}
-
-/* Optimize rendering for Korean characters */
-body {
-  text-rendering: optimizeSpeed;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Critical rendering path optimization */
-.critical-content {
-  contain: layout;
-  content-visibility: auto;
-}

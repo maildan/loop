@@ -39,7 +39,86 @@
   --editor-text-muted: oklch(0.55 0.02 245);
   --editor-border: oklch(0.85 0.03 240);
   --editor-accent: oklch(0.55 0.08 220); /* 시원한 청록 */
+  --editor-accent-light: oklch(0.55 0.08 220 / 0.3); /* 연한 청록 (selection용) */
   --editor-selection: oklch(0.65 0.15 250 / 0.2); /* 파란 선택 배경 */
+}
+
+/* 🔥 Cool 전용 스타일링 - UI 요소 완전 적용 */
+.cool {
+  /* 시원한 그림자 효과 */
+  --shadow-cool: 0 4px 20px oklch(0.65 0.15 250 / 0.15);
+  --shadow-frost: inset 0 1px 3px oklch(0.3 0.05 240 / 0.1);
+
+  /* 시원한 배경 텍스처 */
+  & .ProseMirror,
+  & .card,
+  & [data-ui="card"] {
+    position: relative;
+  }
+
+  & .ProseMirror::before,
+  & .card::before,
+  & [data-ui="card"]::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(circle at 25% 25%, oklch(0.65 0.15 250 / 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, oklch(0.3 0.05 240 / 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  & .ProseMirror > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* 부드러운 전환 효과 */
+  & * {
+    transition: color 0.4s, background-color 0.4s, border-color 0.4s;
+  }
+
+  /* 스크롤바 스타일링 */
+  & ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  & ::-webkit-scrollbar-track {
+    background: oklch(var(--muted) / 0.3);
+  }
+
+  & ::-webkit-scrollbar-thumb {
+    background: oklch(var(--muted-foreground) / 0.4);
+    border-radius: 4px;
+  }
+
+  & ::-webkit-scrollbar-thumb:hover {
+    background: oklch(var(--accent-foreground) / 0.6);
+  }
+
+  /* 호버 효과 */
+  & button:hover,
+  & [role="button"]:hover {
+    box-shadow: var(--shadow-cool);
+  }
+
+  & input,
+  & textarea,
+  & [contenteditable] {
+    box-shadow: var(--shadow-frost);
+  }
+
+  /* 링크 스타일링 */
+  & a {
+    color: oklch(0.65 0.15 250);
+    text-decoration-color: oklch(0.65 0.15 250 / 0.3);
+  }
+
+  & .dark a {
+    color: oklch(0.75 0.12 260);
+    text-decoration-color: oklch(0.75 0.12 260 / 0.4);
+  }
 }
 
 /* 🌙 Cool Dark 모드 */

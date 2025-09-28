@@ -45,15 +45,19 @@ export class ThemeClassManager {
    */
   static applyThemeClasses(theme: Theme): void {
     const html = document.documentElement;
+    const body = document.body;
     
     // 기존 테마 클래스 제거
     this.removeAllThemeClasses(html);
+    if (body) this.removeAllThemeClasses(body);
     
     // 새 테마 적용
     this.addThemeClasses(html, theme);
+    if (body) this.addThemeClasses(body, theme);
     
     // 🔥 data-theme 속성 설정 (CSS 셀렉터를 위해 필수!)
     this.setDataThemeAttribute(html, theme);
+    if (body) this.setDataThemeAttribute(body, theme);
     
     // color-scheme 설정
     this.setColorScheme(html, theme);

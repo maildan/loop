@@ -1,0 +1,81 @@
+/**
+ * 🔧 Base Styles - Core resets and foundation
+ * 
+ * Loop Application Base Layer
+ * - Modern CSS reset
+ * - Root element setup  
+ * - Base theme application
+ * - Essential layout foundations
+ */
+
+/* ========================================
+   🔄 Modern CSS Reset
+   ======================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ========================================
+   🌐 HTML Root Configuration
+   ======================================== */
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ========================================
+   🎨 Base Theme Application
+   ======================================== */
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ========================================
+   🏗️ Layout Foundations
+   ======================================== */
+
+#root,
+#__next {
+  height: 100%;
+  isolation: isolate;
+}
+
+/* ========================================
+   🎯 Selection Styles - 낮은 우선순위 (테마별 selection이 이를 덮어쓸 수 있도록)
+   ======================================== */
+
+:not([data-theme]) ::selection,
+:not(.sepia):not(.warm):not(.cool):not(.forest):not(.midnight):not(.high-contrast) ::selection {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}
+
+:not([data-theme]) ::-moz-selection,
+:not(.sepia):not(.warm):not(.cool):not(.forest):not(.midnight):not(.high-contrast) ::-moz-selection {
+  background-color: var(--accent);
+  color: var(--accent-foreground);
+}

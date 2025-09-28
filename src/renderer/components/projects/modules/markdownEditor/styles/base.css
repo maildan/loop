@@ -1,9 +1,16 @@
 /* 🔥 MarkdownEditor Base Styles - TipTap 기본 설정 */
 
-/* TipTap 에디터 컨테이너 */
+/* TipTap 에디터 컨테이너 - 글로벌 CSS로부터 독립 */
 .markdown-editor,
 div[class*="w-full h-full flex flex-col relative"] {
   @apply h-full w-full relative;
+  
+  /* 🔥 글로벌 CSS 오버라이드 - 에디터 독립성 */
+  background: var(--editor-bg);
+  color: var(--editor-text);
+  font-family: inherit !important;
+  line-height: inherit !important;
+  
   /* 🔥 FIXED: 터치패드 스크롤 최적화 */
   overflow-y: auto !important;
   overflow-x: hidden !important;
@@ -14,15 +21,20 @@ div[class*="w-full h-full flex flex-col relative"] {
   overscroll-behavior: contain;
 }
 
-/* 🔥 ProseMirror 에디터 기본 스타일 */
+/* 🔥 ProseMirror 에디터 기본 스타일 - 글로벌 CSS 오버라이드 */
 .ProseMirror {
   @apply outline-none min-h-full p-8 leading-7 text-base;
   
   /* 🔥 폰트 시스템 연동 - 기본 폰트 설정 */
-  font-family: var(--app-font-family);
-  font-size: var(--app-font-size);
+  font-family: var(--app-font-family) !important;
+  font-size: var(--app-font-size) !important;
   color: var(--editor-text);
   background: var(--editor-bg);
+  
+  /* 🔥 글로벌 리셋 오버라이드 - 에디터 독립성 보장 */
+  margin: 0 !important;
+  padding: 2rem !important;
+  box-sizing: border-box !important;
   
   /* 🔥 스크롤 최적화 - 에디터 자체는 스크롤하지 않음 */
   overflow: visible;
@@ -45,19 +57,34 @@ div[class*="w-full h-full flex flex-col relative"] {
   @apply text-gray-400 italic pointer-events-none float-left h-0;
 }
 
-/* 🔥 selection 스타일 개선 */
-.ProseMirror ::selection {
-  background: var(--editor-accent-light);
-  color: var(--editor-text);
+/* 🔥 selection 스타일 개선 - 강력한 우선순위 */
+.ProseMirror::selection {
+  background: var(--editor-selection) !important;
+  color: var(--editor-text) !important;
+}
+
+.ProseMirror *::selection {
+  background: var(--editor-selection) !important;
+  color: var(--editor-text) !important;
+}
+
+.ProseMirror::-moz-selection {
+  background: var(--editor-selection) !important;
+  color: var(--editor-text) !important;
+}
+
+.ProseMirror *::-moz-selection {
+  background: var(--editor-selection) !important;
+  color: var(--editor-text) !important;
 }
 
 /* 🔥 드래그 상태 개선 */
 .ProseMirror.ProseMirror-hideselection *::selection {
-  background: transparent;
+  background: transparent !important;
 }
 
 .ProseMirror.ProseMirror-hideselection *::-moz-selection {
-  background: transparent;
+  background: transparent !important;
 }
 
 /* 🔥 기본 마진 리셋 - 간격 축소 */
@@ -91,6 +118,7 @@ div[class*="w-full h-full flex flex-col relative"] {
 .ProseMirror blockquote {
   /* 전역 폰트 설정을 상속하되, 로컬 폰트 설정은 여전히 가능 */
   font-family: inherit;
+  color: inherit; /* 테마 색상 상속 허용 */
 }
 
 /* 특정 폰트가 적용된 텍스트도 전역 설정이 우선되도록 함 */

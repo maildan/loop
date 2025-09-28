@@ -1,0 +1,48 @@
+/**
+ * 🎛️ Scrollbar Styles - Custom scrollbar design
+ * 
+ * Loop Application Scrollbar System
+ * - WebKit scrollbar customization
+ * - Theme-aware scrollbar colors
+ * - Smooth transitions and interactions
+ */
+
+/* ========================================
+   🎨 WebKit Scrollbars
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* ========================================
+   🌙 Dark Mode Adjustments
+   ======================================== */
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
