@@ -39,10 +39,22 @@
   --editor-accent-light: 0.38 0.1 38.44 / 0.3; /* 연한 강조 색상 (selection용) */
   --editor-selection: 0.38 0.1 38.44 / 0.2; /* 텍스트 선택 배경 */
 
+  /* 팝오버 색상 - 라이트 모드 */
+  --popover: 0.92 0.02 53.67;
+  --popover-foreground: 0.25 0.03 45.89;
+
   /* 사이드바 - 책등 색상 */
   --sidebar: 0.89 0.035 51.44;
   --sidebar-foreground: 0.3 0.04 44.67;
+  --sidebar-primary: 0.35 0.05 42.33;
+  --sidebar-primary-foreground: 0.89 0.035 51.44;
+  --sidebar-accent: 0.85 0.04 48.67;
+  --sidebar-accent-foreground: 0.3 0.04 44.67;
   --sidebar-border: 0.75 0.05 45.89;
+  --sidebar-ring: 0.68 0.06 43.89;
+
+  /* Border radius */
+  --radius: 0.625rem;
 }
 
 /* 🔥 Sepia 다크 모드 - 밤의 서재 */
@@ -75,10 +87,19 @@
   --editor-border: 0.32 0.04 38.89;
   --editor-accent: 0.72 0.08 52.44;        /* 황금 강조색 */
 
+  /* 팝오버 색상 - 다크 모드 */
+  --popover: 0.22 0.025 44.33;
+  --popover-foreground: 0.78 0.03 52.67;
+
   /* 사이드바 - 어두운 책장 */
   --sidebar: 0.25 0.03 43.44;
   --sidebar-foreground: 0.78 0.03 52.67;
+  --sidebar-primary: 0.45 0.06 46.89;
+  --sidebar-primary-foreground: 0.85 0.02 55.67;
+  --sidebar-accent: 0.3 0.04 41.22;
+  --sidebar-accent-foreground: 0.78 0.03 52.67;
   --sidebar-border: 0.32 0.04 38.89;
+  --sidebar-ring: 0.55 0.05 47.33;
 }
 
 /* 🔥 Sepia 전용 스타일링 */

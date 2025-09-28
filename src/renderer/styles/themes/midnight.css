@@ -30,7 +30,21 @@
   --border: 0.3 0.04 265;
   --input: 0.3 0.04 265;
   --ring: 0.6 0.15 260;
-  --radius: 0.5rem;
+  --radius: 0.625rem;
+
+  /* 팝오버 색상 - 미드나이트 모드 */
+  --popover: 0.2 0.03 268;
+  --popover-foreground: 0.9 0.01 250;
+
+  /* 사이드바 - 밤하늘 */
+  --sidebar: 0.18 0.04 270;
+  --sidebar-foreground: 0.9 0.01 250;
+  --sidebar-primary: 0.7 0.2 280;
+  --sidebar-primary-foreground: 1 0 0;
+  --sidebar-accent: 0.25 0.04 265;
+  --sidebar-accent-foreground: 0.9 0.01 250;
+  --sidebar-border: 0.3 0.04 265;
+  --sidebar-ring: 0.6 0.15 260;
 
   /* 🖊️ TipTap 에디터 전용 변수 */
   --editor-bg: 0.15 0.02 260; /* 깊은 미드나이트 블루 */

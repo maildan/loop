@@ -32,6 +32,20 @@
   --ring: 0 0 0;
   --radius: 0.25rem;
 
+  /* 팝오버 색상 - 고대비 모드 */
+  --popover: 1 0 0;
+  --popover-foreground: 0 0 0;
+
+  /* 사이드바 - 고대비 */
+  --sidebar: 0.95 0 0;
+  --sidebar-foreground: 0 0 0;
+  --sidebar-primary: 0 0 0;
+  --sidebar-primary-foreground: 1 0 0;
+  --sidebar-accent: 0.9 0 0;
+  --sidebar-accent-foreground: 0 0 0;
+  --sidebar-border: 0 0 0;
+  --sidebar-ring: 0 0 0;
+
   /* 🖊️ TipTap 에디터 전용 변수 */
   --editor-bg: 1 0 0; /* 순수 흰색 */
   --editor-bg-secondary: 0.95 0 0;

@@ -29,6 +29,23 @@
   --input: 0.95 0.01 75.22;
   --ring: 0.35 0.06 50.33;
 
+  /* 팝오버 색상 - 라이트 모드 */
+  --popover: 0.98 0.005 82.11;
+  --popover-foreground: 0.2 0.015 57.33;
+
+  /* 사이드바 - 책상 목재 */
+  --sidebar: 0.94 0.012 78.44;
+  --sidebar-foreground: 0.2 0.015 57.33;
+  --sidebar-primary: 0.25 0.04 45.87;
+  --sidebar-primary-foreground: 0.97 0.01 80.22;
+  --sidebar-accent: 0.92 0.015 75.89;
+  --sidebar-accent-foreground: 0.25 0.04 45.87;
+  --sidebar-border: 0.88 0.015 70.44;
+  --sidebar-ring: 0.35 0.06 50.33;
+
+  /* Border radius */
+  --radius: 0.625rem;
+
   /* 에디터 - 종이 질감 */
   --editor-bg: 0.99 0.005 85.11;            /* 고급 종이 흰색 */
   --editor-bg-secondary: 0.96 0.008 82.77;  

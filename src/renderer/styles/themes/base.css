@@ -71,8 +71,8 @@
   --accent-foreground: 0.985 0 0;
   --destructive: 0.704 0.191 22.216;
   --destructive-foreground: 0.985 0 0;
-  --border: 1 0 0 / 10%;
-  --input: 1 0 0 / 15%;
+  --border: 0.269 0 0;
+  --input: 0.269 0 0;
   --ring: 0.556 0 0;
   
   /* 사이드바 색상 - 다크 모드 (순수 OKLCH 값) */
@@ -82,7 +82,7 @@
   --sidebar-primary-foreground: 0.985 0 0;
   --sidebar-accent: 0.269 0 0;
   --sidebar-accent-foreground: 0.985 0 0;
-  --sidebar-border: 1 0 0 / 10%;
+  --sidebar-border: 0.922 0 0;
   --sidebar-ring: 0.439 0 0;
 
   /* 에디터 색상 - 다크 모드 (순수 OKLCH 값) */
@@ -90,7 +90,7 @@
   --editor-bg-secondary: 0.205 0 0;
   --editor-text: 0.985 0 0;
   --editor-text-muted: 0.708 0 0;
-  --editor-border: 1 0 0 / 10%;
+  --editor-border: 0.269 0 0;
   --editor-accent: 0.922 0 0;
 
   color-scheme: dark;

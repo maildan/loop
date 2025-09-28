@@ -30,7 +30,21 @@
   --border: 0.8 0.06 150;
   --input: 0.8 0.06 150;
   --ring: 0.45 0.12 150;
-  --radius: 0.5rem;
+  --radius: 0.625rem;
+
+  /* 팝오버 색상 - 라이트 모드 */
+  --popover: 0.95 0.02 153;
+  --popover-foreground: 0.25 0.05 150;
+
+  /* 사이드바 - 숲의 나무 */
+  --sidebar: 0.88 0.04 152;
+  --sidebar-foreground: 0.25 0.05 150;
+  --sidebar-primary: 0.6 0.15 145;
+  --sidebar-primary-foreground: 0.98 0.01 150;
+  --sidebar-accent: 0.84 0.06 150;
+  --sidebar-accent-foreground: 0.25 0.05 150;
+  --sidebar-border: 0.8 0.06 150;
+  --sidebar-ring: 0.45 0.12 150;
 
   /* 🖊️ TipTap 에디터 전용 변수 */
   --editor-bg: 0.92 0.03 155; /* 자연스러운 연한 녹색 */
