@@ -11,43 +11,43 @@
 /* 🔥 Warm Theme Variables */
 [data-theme="warm"] {
   /* shadcn/ui 기본 색상 - oklch 형식 사용 */
-  --background: oklch(0.91 0.02 50); /* 따뜻한 베이지 톤 */
-  --foreground: oklch(0.35 0.03 45); /* 진한 브라운 텍스트 */
-  --card: oklch(0.93 0.018 52);
-  --card-foreground: oklch(0.35 0.03 45);
-  --popover: oklch(0.91 0.02 50);
-  --popover-foreground: oklch(0.35 0.03 45);
-  --primary: oklch(0.25 0.04 40); /* 다크 브라운 */
-  --primary-foreground: oklch(0.95 0.05 65); /* 골든 옐로 */
-  --secondary: oklch(0.88 0.025 48);
-  --secondary-foreground: oklch(0.35 0.03 45);
-  --muted: oklch(0.86 0.03 46);
-  --muted-foreground: oklch(0.6 0.02 48);
-  --accent: oklch(0.7 0.1 55); /* 따뜻한 오렌지 */
-  --accent-foreground: oklch(0.98 0.01 50);
-  --destructive: oklch(0.62 0.25 25);
-  --destructive-foreground: oklch(0.98 0.01 50);
-  --border: oklch(0.82 0.04 48);
-  --input: oklch(0.82 0.04 48);
-  --ring: oklch(0.7 0.1 55);
+  --background: 0.91 0.02 50; /* 따뜻한 베이지 톤 */
+  --foreground: 0.35 0.03 45; /* 진한 브라운 텍스트 */
+  --card: 0.93 0.018 52;
+  --card-foreground: 0.35 0.03 45;
+  --popover: 0.91 0.02 50;
+  --popover-foreground: 0.35 0.03 45;
+  --primary: 0.25 0.04 40; /* 다크 브라운 */
+  --primary-foreground: 0.95 0.05 65; /* 골든 옐로 */
+  --secondary: 0.88 0.025 48;
+  --secondary-foreground: 0.35 0.03 45;
+  --muted: 0.86 0.03 46;
+  --muted-foreground: 0.6 0.02 48;
+  --accent: 0.7 0.1 55; /* 따뜻한 오렌지 */
+  --accent-foreground: 0.98 0.01 50;
+  --destructive: 0.62 0.25 25;
+  --destructive-foreground: 0.98 0.01 50;
+  --border: 0.82 0.04 48;
+  --input: 0.82 0.04 48;
+  --ring: 0.7 0.1 55;
   --radius: 0.5rem;
 
   /* 🖊️ TipTap 에디터 전용 변수 */
-  --editor-bg: oklch(0.91 0.02 50); /* 따뜻한 베이지 */
-  --editor-bg-secondary: oklch(0.88 0.025 48);
-  --editor-text: oklch(0.35 0.03 45); /* 진한 브라운 */
-  --editor-text-muted: oklch(0.6 0.02 48);
-  --editor-border: oklch(0.82 0.04 48);
-  --editor-accent: oklch(0.7 0.1 55); /* 따뜻한 오렌지 */
-  --editor-accent-light: oklch(0.7 0.1 55 / 0.3); /* 연한 오렌지 (selection용) */
-  --editor-selection: oklch(0.7 0.1 55 / 0.2); /* 오렌지 선택 배경 */
+  --editor-bg: 0.91 0.02 50; /* 따뜻한 베이지 */
+  --editor-bg-secondary: 0.88 0.025 48;
+  --editor-text: 0.35 0.03 45; /* 진한 브라운 */
+  --editor-text-muted: 0.6 0.02 48;
+  --editor-border: 0.82 0.04 48;
+  --editor-accent: 0.7 0.1 55; /* 따뜻한 오렌지 */
+  --editor-accent-light: 0.7 0.1 55 / 0.3; /* 연한 오렌지 (selection용) */
+  --editor-selection: 0.7 0.1 55 / 0.2; /* 오렌지 선택 배경 */
 }
 
 /* 🔥 Warm 전용 스타일링 - UI 요소 완전 적용 */
 .warm {
   /* 따뜻한 그림자 효과 */
-  --shadow-warm: 0 4px 20px oklch(0.7 0.1 55 / 0.15);
-  --shadow-paper: inset 0 1px 3px oklch(0.25 0.04 40 / 0.1);
+  --shadow-warm: 0 4px 20px 0.7 0.1 55 / 0.15;
+  --shadow-paper: inset 0 1px 3px 0.25 0.04 40 / 0.1;
 
   /* 따뜻한 배경 텍스처 */
   & .ProseMirror,
@@ -63,8 +63,8 @@
     position: absolute;
     inset: 0;
     background-image: 
-      radial-gradient(circle at 25% 25%, oklch(0.7 0.1 55 / 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, oklch(0.25 0.04 40 / 0.05) 0%, transparent 50%);
+      radial-gradient(circle at 25% 25%, 0.7 0.1 55 / 0.1 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, 0.25 0.04 40 / 0.05 0%, transparent 50%);
     pointer-events: none;
     z-index: 1;
   }
@@ -118,16 +118,16 @@
   }
 
   & ::-webkit-scrollbar-track {
-    background: oklch(var(--muted) / 0.3);
+    background: var(--muted / 0.3);
   }
 
   & ::-webkit-scrollbar-thumb {
-    background: oklch(var(--muted-foreground) / 0.4);
+    background: var(--muted-foreground / 0.4);
     border-radius: 4px;
   }
 
   & ::-webkit-scrollbar-thumb:hover {
-    background: oklch(var(--accent-foreground) / 0.6);
+    background: var(--accent-foreground / 0.6);
   }
 
   /* 호버 효과 */
@@ -144,13 +144,13 @@
 
   /* 링크 스타일링 */
   & a {
-    color: oklch(0.7 0.1 55);
-    text-decoration-color: oklch(0.7 0.1 55 / 0.3);
+    color: 0.7 0.1 55;
+    text-decoration-color: 0.7 0.1 55 / 0.3;
   }
 
   & .dark a {
-    color: oklch(0.8 0.08 60);
-    text-decoration-color: oklch(0.8 0.08 60 / 0.4);
+    color: 0.8 0.08 60;
+    text-decoration-color: 0.8 0.08 60 / 0.4;
   }
 }
 

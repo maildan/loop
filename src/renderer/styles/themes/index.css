@@ -8,7 +8,8 @@
 @import './base.css';
 
 /* 🌈 확장 테마들 - 개별 모듈화 시스템 */
-@import './sepia.css';                /* 🖋️ 세피아 특수 테마 (빈티지 종이) */
+@import './writer-focus.css';         /* 🖋️ 작가 집중 테마 (최우선 작가 테마) */
+@import './sepia.css';                /* � 세피아 특수 테마 (빈티지 종이) */
 @import './warm.css';                 /* 🌅 따뜻한 오렌지/노란색 기조 */
 @import './cool.css';                 /* 🌊 시원한 블루/청록색 기조 */
 @import './forest.css';               /* 🌲 자연스러운 그린/에메랄드 기조 */
@@ -49,20 +50,20 @@
 /* 🔥 고대비 접근성 지원 */
 @media (prefers-contrast: high) {
   :root {
-    --border: oklch(0 0 0) !important;
-    --ring: oklch(0.5 0.2 240) !important;
+    --border: 0 0 0 !important;
+    --ring: 0.5 0.2 240 !important;
   }
   
   .dark {
-    --border: oklch(1 0 0) !important;
-    --foreground: oklch(1 0 0) !important;
+    --border: 1 0 0 !important;
+    --foreground: 1 0 0 !important;
   }
 }
 
 /* 🔥 색약 지원 (적록 색맹) */
 @media (prefers-color-scheme: no-preference) {
   .colorblind-friendly {
-    --destructive: oklch(0.6 0.15 60);        /* 주황색으로 변경 */
-    --primary: oklch(0.4 0.2 240);             /* 파란색 강화 */
+    --destructive: 0.6 0.15 60;        /* 주황색으로 변경 */
+    --primary: 0.4 0.2 240;             /* 파란색 강화 */
   }
 }

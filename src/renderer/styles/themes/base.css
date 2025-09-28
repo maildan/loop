@@ -10,88 +10,88 @@
   /* 기본 레이아웃 */
   --radius: 0.625rem;
   
-  /* 라이트 모드 색상 */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* 라이트 모드 색상 (순수 OKLCH 값) */
+  --background: 1 0 0;
+  --foreground: 0.145 0 0;
+  --card: 1 0 0;
+  --card-foreground: 0.145 0 0;
+  --popover: 1 0 0;
+  --popover-foreground: 0.145 0 0;
+  --primary: 0.205 0 0;
+  --primary-foreground: 0.985 0 0;
+  --secondary: 0.97 0 0;
+  --secondary-foreground: 0.205 0 0;
+  --muted: 0.97 0 0;
+  --muted-foreground: 0.556 0 0;
+  --accent: 0.97 0 0;
+  --accent-foreground: 0.205 0 0;
+  --destructive: 0.577 0.245 27.325;
+  --destructive-foreground: 0.985 0 0;
+  --border: 0.922 0 0;
+  --input: 0.922 0 0;
+  --ring: 0.708 0 0;
   
-  /* 사이드바 색상 */
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* 사이드바 색상 (순수 OKLCH 값) */
+  --sidebar: 0.985 0 0;
+  --sidebar-foreground: 0.145 0 0;
+  --sidebar-primary: 0.205 0 0;
+  --sidebar-primary-foreground: 0.985 0 0;
+  --sidebar-accent: 0.97 0 0;
+  --sidebar-accent-foreground: 0.205 0 0;
+  --sidebar-border: 0.922 0 0;
+  --sidebar-ring: 0.708 0 0;
 
-  /* 에디터 색상 (TipTap 통합) */
-  --editor-bg: oklch(1 0 0);
-  --editor-bg-secondary: oklch(0.98 0 0);
-  --editor-text: oklch(0.145 0 0);
-  --editor-text-muted: oklch(0.556 0 0);
-  --editor-border: oklch(0.922 0 0);
-  --editor-accent: oklch(0.205 0 0);
+  /* 에디터 색상 (순수 OKLCH 값) */
+  --editor-bg: 1 0 0;
+  --editor-bg-secondary: 0.98 0 0;
+  --editor-text: 0.145 0 0;
+  --editor-text-muted: 0.556 0 0;
+  --editor-border: 0.922 0 0;
+  --editor-accent: 0.205 0 0;
 
   color-scheme: light;
 }
 
 /* 🔥 기본 다크 테마 (shadcn/ui 공식 OKLCH 값) */
 .dark {
-  /* 다크 모드 색상 */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.269 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.371 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  /* 다크 모드 색상 (순수 OKLCH 값) */
+  --background: 0.145 0 0;
+  --foreground: 0.985 0 0;
+  --card: 0.205 0 0;
+  --card-foreground: 0.985 0 0;
+  --popover: 0.269 0 0;
+  --popover-foreground: 0.985 0 0;
+  --primary: 0.922 0 0;
+  --primary-foreground: 0.205 0 0;
+  --secondary: 0.269 0 0;
+  --secondary-foreground: 0.985 0 0;
+  --muted: 0.269 0 0;
+  --muted-foreground: 0.708 0 0;
+  --accent: 0.371 0 0;
+  --accent-foreground: 0.985 0 0;
+  --destructive: 0.704 0.191 22.216;
+  --destructive-foreground: 0.985 0 0;
+  --border: 1 0 0 / 10%;
+  --input: 1 0 0 / 15%;
+  --ring: 0.556 0 0;
   
-  /* 사이드바 색상 - 다크 모드 */
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.439 0 0);
+  /* 사이드바 색상 - 다크 모드 (순수 OKLCH 값) */
+  --sidebar: 0.205 0 0;
+  --sidebar-foreground: 0.985 0 0;
+  --sidebar-primary: 0.488 0.243 264.376;
+  --sidebar-primary-foreground: 0.985 0 0;
+  --sidebar-accent: 0.269 0 0;
+  --sidebar-accent-foreground: 0.985 0 0;
+  --sidebar-border: 1 0 0 / 10%;
+  --sidebar-ring: 0.439 0 0;
 
-  /* 에디터 색상 - 다크 모드 */
-  --editor-bg: oklch(0.145 0 0);
-  --editor-bg-secondary: oklch(0.205 0 0);
-  --editor-text: oklch(0.985 0 0);
-  --editor-text-muted: oklch(0.708 0 0);
-  --editor-border: oklch(1 0 0 / 10%);
-  --editor-accent: oklch(0.922 0 0);
+  /* 에디터 색상 - 다크 모드 (순수 OKLCH 값) */
+  --editor-bg: 0.145 0 0;
+  --editor-bg-secondary: 0.205 0 0;
+  --editor-text: 0.985 0 0;
+  --editor-text-muted: 0.708 0 0;
+  --editor-border: 1 0 0 / 10%;
+  --editor-accent: 0.922 0 0;
 
   color-scheme: dark;
 }

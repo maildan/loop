@@ -1,58 +1,58 @@
 /* 🎨 MarkdownEditor CSS Variables - 메인 테마 시스템과 완벽 동기화 */
 
 :root {
-  /* 🔥 메인 테마 변수 직접 사용 - 라이트 모드 */
-  --editor-bg: hsl(var(--background));
-  --editor-bg-secondary: hsl(var(--muted));
-  --editor-text: hsl(var(--foreground));
-  --editor-text-muted: hsl(var(--muted-foreground));
-  --editor-text-light: hsl(var(--muted-foreground) / 0.7);
-  --editor-border: hsl(var(--border));
-  --editor-accent: hsl(var(--primary));
-  --editor-accent-light: hsl(var(--primary) / 0.1);
+  /* 🔥 메인 테마 변수 직접 사용 - OKLCH 포맷으로 변환 */
+  --editor-bg: oklch(var(--background));
+  --editor-bg-secondary: oklch(var(--muted));
+  --editor-text: oklch(var(--foreground));
+  --editor-text-muted: oklch(var(--muted-foreground));
+  --editor-text-light: oklch(var(--muted-foreground) / 0.7);
+  --editor-border: oklch(var(--border));
+  --editor-accent: oklch(var(--primary));
+  --editor-accent-light: oklch(var(--primary) / 0.1);
 
-  /* 🔥 인터랙션 색상 - 메인 테마 기반 */
-  --button-active: hsl(var(--accent));
-  --button-hover: hsl(var(--accent) / 0.8);
+  /* 🔥 인터랙션 색상 - OKLCH 포맷으로 변환 */
+  --button-active: oklch(var(--accent));
+  --button-hover: oklch(var(--accent) / 0.8);
 
-  /* 🔥 포커스 효과 - 메인 테마 기반 */
-  --focus-text-shadow: 0 0 8px hsl(var(--primary) / 0.3);
+  /* 🔥 포커스 효과 - OKLCH 포맷으로 변환 */
+  --focus-text-shadow: 0 0 8px oklch(var(--primary) / 0.3);
 
-  /* 🔥 헤딩 구분선 색상 - 메인 테마 기반 */
-  --heading-border-h1: hsl(var(--border));
-  --heading-border-h2: hsl(var(--border) / 0.6);
+  /* 🔥 헤딩 구분선 색상 - OKLCH 포맷으로 변환 */
+  --heading-border-h1: oklch(var(--border));
+  --heading-border-h2: oklch(var(--border) / 0.6);
 
   /* 🔥 폰트 시스템 변수 */
   --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
   --app-font-size: 14px;
 
-  /* 🔥 툴바 색상 - 메인 테마 기반 */
-  --toolbar-bg: hsl(var(--background) / 0.95);
-  --toolbar-border: hsl(var(--border) / 0.5);
+  /* 🔥 툴바 색상 - OKLCH 포맷으로 변환 */
+  --toolbar-bg: oklch(var(--background) / 0.95);
+  --toolbar-border: oklch(var(--border) / 0.5);
 }
 
 /* 🌙 다크 모드 색상 - 메인 테마 시스템과 완벽 동기화 */
 [data-theme="dark"],
 .dark {
   /* 🔥 메인 테마 변수 직접 사용 - 다크 모드 */
-  --editor-bg: hsl(var(--background));
-  --editor-bg-secondary: hsl(var(--muted));
-  --editor-text: hsl(var(--foreground));
-  --editor-text-muted: hsl(var(--muted-foreground));
-  --editor-text-light: hsl(var(--muted-foreground) / 0.7);
-  --editor-border: hsl(var(--border));
-  --editor-accent: hsl(var(--primary));
-  --editor-accent-light: hsl(var(--primary) / 0.15);
+  --editor-bg: oklch(var(--background));
+  --editor-bg-secondary: oklch(var(--muted));
+  --editor-text: oklch(var(--foreground));
+  --editor-text-muted: oklch(var(--muted-foreground));
+  --editor-text-light: oklch(var(--muted-foreground) / 0.7);
+  --editor-border: oklch(var(--border));
+  --editor-accent: oklch(var(--primary));
+  --editor-accent-light: oklch(var(--primary) / 0.15);
 
   /* 🔥 다크 모드 인터랙션 색상 - 메인 테마 기반 */
-  --button-active: hsl(var(--accent));
-  --button-hover: hsl(var(--accent) / 0.8);
+  --button-active: oklch(var(--accent));
+  --button-hover: oklch(var(--accent) / 0.8);
 
   /* 🔥 다크 모드 헤딩 구분선 - 메인 테마 기반 */
-  --heading-border-h1: hsl(var(--border));
-  --heading-border-h2: hsl(var(--border) / 0.6);
+  --heading-border-h1: oklch(var(--border));
+  --heading-border-h2: oklch(var(--border) / 0.6);
 
   /* 🔥 다크 모드 툴바 - 메인 테마 기반 */
-  --toolbar-bg: hsl(var(--background) / 0.95);
-  --toolbar-border: hsl(var(--border) / 0.5);
+  --toolbar-bg: oklch(var(--background) / 0.95);
+  --toolbar-border: oklch(var(--border) / 0.5);
 }

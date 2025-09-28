@@ -11,43 +11,43 @@
 /* 🔥 Forest Theme Variables */
 [data-theme="forest"] {
   /* shadcn/ui 기본 색상 - oklch 형식 사용 */
-  --background: oklch(0.92 0.03 155); /* 자연스러운 연한 녹색 배경 */
-  --foreground: oklch(0.25 0.05 150); /* 진한 포레스트 그린 텍스트 */
-  --card: oklch(0.94 0.025 155);
-  --card-foreground: oklch(0.25 0.05 150);
-  --popover: oklch(0.92 0.03 155);
-  --popover-foreground: oklch(0.25 0.05 150);
-  --primary: oklch(0.45 0.12 150); /* 깊은 에메랄드 */
-  --primary-foreground: oklch(0.98 0.01 150);
-  --secondary: oklch(0.88 0.04 152);
-  --secondary-foreground: oklch(0.25 0.05 150);
-  --muted: oklch(0.85 0.05 148);
-  --muted-foreground: oklch(0.6 0.03 152);
-  --accent: oklch(0.6 0.15 145); /* 자연스러운 그린 액센트 */
-  --accent-foreground: oklch(0.98 0.01 150);
-  --destructive: oklch(0.62 0.25 25);
-  --destructive-foreground: oklch(0.98 0.01 150);
-  --border: oklch(0.8 0.06 150);
-  --input: oklch(0.8 0.06 150);
-  --ring: oklch(0.45 0.12 150);
+  --background: 0.92 0.03 155; /* 자연스러운 연한 녹색 배경 */
+  --foreground: 0.25 0.05 150; /* 진한 포레스트 그린 텍스트 */
+  --card: 0.94 0.025 155;
+  --card-foreground: 0.25 0.05 150;
+  --popover: 0.92 0.03 155;
+  --popover-foreground: 0.25 0.05 150;
+  --primary: 0.45 0.12 150; /* 깊은 에메랄드 */
+  --primary-foreground: 0.98 0.01 150;
+  --secondary: 0.88 0.04 152;
+  --secondary-foreground: 0.25 0.05 150;
+  --muted: 0.85 0.05 148;
+  --muted-foreground: 0.6 0.03 152;
+  --accent: 0.6 0.15 145; /* 자연스러운 그린 액센트 */
+  --accent-foreground: 0.98 0.01 150;
+  --destructive: 0.62 0.25 25;
+  --destructive-foreground: 0.98 0.01 150;
+  --border: 0.8 0.06 150;
+  --input: 0.8 0.06 150;
+  --ring: 0.45 0.12 150;
   --radius: 0.5rem;
 
   /* 🖊️ TipTap 에디터 전용 변수 */
-  --editor-bg: oklch(0.92 0.03 155); /* 자연스러운 연한 녹색 */
-  --editor-bg-secondary: oklch(0.88 0.04 152);
-  --editor-text: oklch(0.25 0.05 150); /* 진한 포레스트 그린 */
-  --editor-text-muted: oklch(0.6 0.03 152);
-  --editor-border: oklch(0.8 0.06 150);
-  --editor-accent: oklch(0.6 0.15 145); /* 자연스러운 그린 액센트 */
-  --editor-accent-light: oklch(0.6 0.15 145 / 0.3); /* 연한 그린 (selection용) */
-  --editor-selection: oklch(0.45 0.12 150 / 0.2); /* 에메랄드 선택 배경 */
+  --editor-bg: 0.92 0.03 155; /* 자연스러운 연한 녹색 */
+  --editor-bg-secondary: 0.88 0.04 152;
+  --editor-text: 0.25 0.05 150; /* 진한 포레스트 그린 */
+  --editor-text-muted: 0.6 0.03 152;
+  --editor-border: 0.8 0.06 150;
+  --editor-accent: 0.6 0.15 145; /* 자연스러운 그린 액센트 */
+  --editor-accent-light: 0.6 0.15 145 / 0.3; /* 연한 그린 (selection용) */
+  --editor-selection: 0.45 0.12 150 / 0.2; /* 에메랄드 선택 배경 */
 }
 
 /* 🔥 Forest 전용 스타일링 - UI 요소 완전 적용 */
 .forest {
   /* 자연스러운 그림자 효과 */
-  --shadow-forest: 0 4px 20px oklch(0.45 0.12 150 / 0.15);
-  --shadow-nature: inset 0 1px 3px oklch(0.25 0.05 150 / 0.1);
+  --shadow-forest: 0 4px 20px 0.45 0.12 150 / 0.15;
+  --shadow-nature: inset 0 1px 3px 0.25 0.05 150 / 0.1;
 
   /* 자연 배경 텍스처 */
   & .ProseMirror,
@@ -63,8 +63,8 @@
     position: absolute;
     inset: 0;
     background-image: 
-      radial-gradient(circle at 25% 25%, oklch(0.45 0.12 150 / 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, oklch(0.25 0.05 150 / 0.05) 0%, transparent 50%);
+      radial-gradient(circle at 25% 25%, 0.45 0.12 150 / 0.1 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, 0.25 0.05 150 / 0.05 0%, transparent 50%);
     pointer-events: none;
     z-index: 1;
   }
@@ -85,16 +85,16 @@
   }
 
   & ::-webkit-scrollbar-track {
-    background: oklch(var(--muted) / 0.3);
+    background: var(--muted / 0.3);
   }
 
   & ::-webkit-scrollbar-thumb {
-    background: oklch(var(--muted-foreground) / 0.4);
+    background: var(--muted-foreground / 0.4);
     border-radius: 4px;
   }
 
   & ::-webkit-scrollbar-thumb:hover {
-    background: oklch(var(--accent-foreground) / 0.6);
+    background: var(--accent-foreground / 0.6);
   }
 
   /* 호버 효과 */
@@ -111,47 +111,47 @@
 
   /* 링크 스타일링 */
   & a {
-    color: oklch(0.45 0.12 150);
-    text-decoration-color: oklch(0.45 0.12 150 / 0.3);
+    color: 0.45 0.12 150;
+    text-decoration-color: 0.45 0.12 150 / 0.3;
   }
 
   & .dark a {
-    color: oklch(0.65 0.1 155);
-    text-decoration-color: oklch(0.65 0.1 155 / 0.4);
+    color: 0.65 0.1 155;
+    text-decoration-color: 0.65 0.1 155 / 0.4;
   }
 }
 
 /* 🌙 Forest Dark 모드 */
 [data-theme="forest"].dark,
 [data-theme="forest"] .dark {
-  --background: 6 20 14; /* 진한 포레스트 그린 */
-  --foreground: 187 247 208;
-  --card: 20 83 45;
-  --card-foreground: 187 247 208;
-  --popover: 6 20 14;
-  --popover-foreground: 187 247 208;
-  --primary: 34 197 94;
-  --primary-foreground: 6 20 14;
-  --secondary: 20 83 45;
-  --secondary-foreground: 187 247 208;
-  --muted: 20 83 45;
-  --muted-foreground: 134 239 172;
-  --accent: 16 185 129;
-  --accent-foreground: 6 20 14;
-  --destructive: 239 68 68;
-  --destructive-foreground: 248 250 252;
-  --border: 21 128 61;
-  --input: 21 128 61;
-  --ring: 34 197 94;
+  --background: 0.16 0.04 155; /* 진한 포레스트 그린 */
+  --foreground: 0.92 0.08 145;
+  --card: 0.38 0.15 150;
+  --card-foreground: 0.92 0.08 145;
+  --popover: 0.16 0.04 155;
+  --popover-foreground: 0.92 0.08 145;
+  --primary: 0.75 0.25 145;
+  --primary-foreground: 0.16 0.04 155;
+  --secondary: 0.38 0.15 150;
+  --secondary-foreground: 0.92 0.08 145;
+  --muted: 0.38 0.15 150;
+  --muted-foreground: 0.88 0.12 148;
+  --accent: 0.68 0.22 155;
+  --accent-foreground: 0.16 0.04 155;
+  --destructive: 0.6 0.23 25;
+  --destructive-foreground: 0.98 0.01 255;
+  --border: 0.56 0.18 150;
+  --input: 0.56 0.18 150;
+  --ring: 0.75 0.25 145;
 
   /* 🖊️ TipTap 에디터 다크모드 변수 */
-  --editor-bg: hsl(6 20% 14%);
-  --editor-bg-secondary: hsl(20 83% 45%);
-  --editor-text: hsl(187 247% 208%);
-  --editor-text-muted: hsl(134 239% 172%);
-  --editor-border: hsl(21 128% 61%);
-  --editor-accent: hsl(34 197% 94%);
-  --editor-selection: hsla(16 185% 129% / 0.3);
+  --editor-bg: 0.16 0.04 155;
+  --editor-bg-secondary: 0.38 0.15 150;
+  --editor-text: 0.92 0.08 145;
+  --editor-text-muted: 0.88 0.12 148;
+  --editor-border: 0.56 0.18 150;
+  --editor-accent: 0.75 0.25 145;
+  --editor-selection: 0.68 0.22 155 / 0.3;
 }
 
 /* 🎯 TipTap 에디터 강제 스타일링 */

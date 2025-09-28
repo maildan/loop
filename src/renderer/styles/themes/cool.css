@@ -11,43 +11,43 @@
 /* 🔥 Cool Theme Variables */
 [data-theme="cool"] {
   /* shadcn/ui 기본 색상 - oklch 형식 사용 */
-  --background: oklch(0.96 0.02 235); /* 시원한 연파랑 */
-  --foreground: oklch(0.25 0.04 260); /* 진한 네이비 텍스트 */
-  --card: oklch(0.98 0.008 240);
-  --card-foreground: oklch(0.25 0.04 260);
-  --popover: oklch(0.96 0.02 235);
-  --popover-foreground: oklch(0.25 0.04 260);
-  --primary: oklch(0.65 0.15 250); /* 밝은 블루 */
-  --primary-foreground: oklch(0.98 0.005 240);
-  --secondary: oklch(0.93 0.02 235);
-  --secondary-foreground: oklch(0.25 0.04 260);
-  --muted: oklch(0.91 0.03 238);
-  --muted-foreground: oklch(0.55 0.02 245);
-  --accent: oklch(0.55 0.08 220); /* 시원한 청록 */
-  --accent-foreground: oklch(0.98 0.005 240);
-  --destructive: oklch(0.62 0.25 25);
-  --destructive-foreground: oklch(0.98 0.005 240);
-  --border: oklch(0.85 0.03 240);
-  --input: oklch(0.85 0.03 240);
-  --ring: oklch(0.65 0.15 250);
+  --background: 0.96 0.02 235; /* 시원한 연파랑 */
+  --foreground: 0.25 0.04 260; /* 진한 네이비 텍스트 */
+  --card: 0.98 0.008 240;
+  --card-foreground: 0.25 0.04 260;
+  --popover: 0.96 0.02 235;
+  --popover-foreground: 0.25 0.04 260;
+  --primary: 0.65 0.15 250; /* 밝은 블루 */
+  --primary-foreground: 0.98 0.005 240;
+  --secondary: 0.93 0.02 235;
+  --secondary-foreground: 0.25 0.04 260;
+  --muted: 0.91 0.03 238;
+  --muted-foreground: 0.55 0.02 245;
+  --accent: 0.55 0.08 220; /* 시원한 청록 */
+  --accent-foreground: 0.98 0.005 240;
+  --destructive: 0.62 0.25 25;
+  --destructive-foreground: 0.98 0.005 240;
+  --border: 0.85 0.03 240;
+  --input: 0.85 0.03 240;
+  --ring: 0.65 0.15 250;
   --radius: 0.5rem;
 
   /* 🖊️ TipTap 에디터 전용 변수 */
-  --editor-bg: oklch(0.96 0.02 235); /* 시원한 연파랑 */
-  --editor-bg-secondary: oklch(0.93 0.02 235);
-  --editor-text: oklch(0.25 0.04 260); /* 진한 네이비 */
-  --editor-text-muted: oklch(0.55 0.02 245);
-  --editor-border: oklch(0.85 0.03 240);
-  --editor-accent: oklch(0.55 0.08 220); /* 시원한 청록 */
-  --editor-accent-light: oklch(0.55 0.08 220 / 0.3); /* 연한 청록 (selection용) */
-  --editor-selection: oklch(0.65 0.15 250 / 0.2); /* 파란 선택 배경 */
+  --editor-bg: 0.96 0.02 235; /* 시원한 연파랑 */
+  --editor-bg-secondary: 0.93 0.02 235;
+  --editor-text: 0.25 0.04 260; /* 진한 네이비 */
+  --editor-text-muted: 0.55 0.02 245;
+  --editor-border: 0.85 0.03 240;
+  --editor-accent: 0.55 0.08 220; /* 시원한 청록 */
+  --editor-accent-light: 0.55 0.08 220 / 0.3; /* 연한 청록 (selection용) */
+  --editor-selection: 0.65 0.15 250 / 0.2; /* 파란 선택 배경 */
 }
 
 /* 🔥 Cool 전용 스타일링 - UI 요소 완전 적용 */
 .cool {
   /* 시원한 그림자 효과 */
-  --shadow-cool: 0 4px 20px oklch(0.65 0.15 250 / 0.15);
-  --shadow-frost: inset 0 1px 3px oklch(0.3 0.05 240 / 0.1);
+  --shadow-cool: 0 4px 20px 0.65 0.15 250 / 0.15;
+  --shadow-frost: inset 0 1px 3px 0.3 0.05 240 / 0.1;
 
   /* 시원한 배경 텍스처 */
   & .ProseMirror,
@@ -63,8 +63,8 @@
     position: absolute;
     inset: 0;
     background-image: 
-      radial-gradient(circle at 25% 25%, oklch(0.65 0.15 250 / 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 75% 75%, oklch(0.3 0.05 240 / 0.05) 0%, transparent 50%);
+      radial-gradient(circle at 25% 25%, 0.65 0.15 250 / 0.1 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, 0.3 0.05 240 / 0.05 0%, transparent 50%);
     pointer-events: none;
     z-index: 1;
   }
@@ -85,16 +85,16 @@
   }
 
   & ::-webkit-scrollbar-track {
-    background: oklch(var(--muted) / 0.3);
+    background: var(--muted / 0.3);
   }
 
   & ::-webkit-scrollbar-thumb {
-    background: oklch(var(--muted-foreground) / 0.4);
+    background: var(--muted-foreground / 0.4);
     border-radius: 4px;
   }
 
   & ::-webkit-scrollbar-thumb:hover {
-    background: oklch(var(--accent-foreground) / 0.6);
+    background: var(--accent-foreground / 0.6);
   }
 
   /* 호버 효과 */
@@ -111,47 +111,47 @@
 
   /* 링크 스타일링 */
   & a {
-    color: oklch(0.65 0.15 250);
-    text-decoration-color: oklch(0.65 0.15 250 / 0.3);
+    color: 0.65 0.15 250;
+    text-decoration-color: 0.65 0.15 250 / 0.3;
   }
 
   & .dark a {
-    color: oklch(0.75 0.12 260);
-    text-decoration-color: oklch(0.75 0.12 260 / 0.4);
+    color: 0.75 0.12 260;
+    text-decoration-color: 0.75 0.12 260 / 0.4;
   }
 }
 
 /* 🌙 Cool Dark 모드 */
 [data-theme="cool"].dark,
 [data-theme="cool"] .dark {
-  --background: 15 23 42; /* 진한 블루 그레이 */
-  --foreground: 241 245 249;
-  --card: 30 41 59;
-  --card-foreground: 241 245 249;
-  --popover: 15 23 42;
-  --popover-foreground: 241 245 249;
-  --primary: 59 130 246;
-  --primary-foreground: 15 23 42;
-  --secondary: 30 41 59;
-  --secondary-foreground: 241 245 249;
-  --muted: 30 41 59;
-  --muted-foreground: 148 163 184;
-  --accent: 14 165 233;
-  --accent-foreground: 15 23 42;
-  --destructive: 239 68 68;
-  --destructive-foreground: 248 250 252;
-  --border: 51 65 85;
-  --input: 51 65 85;
-  --ring: 59 130 246;
+  --background: 0.19 0.04 258; /* 진한 블루 그레이 */
+  --foreground: 0.96 0.01 255;
+  --card: 0.28 0.04 260;
+  --card-foreground: 0.96 0.01 255;
+  --popover: 0.19 0.04 258;
+  --popover-foreground: 0.96 0.01 255;
+  --primary: 0.59 0.18 264;
+  --primary-foreground: 0.19 0.04 258;
+  --secondary: 0.28 0.04 260;
+  --secondary-foreground: 0.96 0.01 255;
+  --muted: 0.28 0.04 260;
+  --muted-foreground: 0.71 0.02 250;
+  --accent: 0.55 0.18 250;
+  --accent-foreground: 0.19 0.04 258;
+  --destructive: 0.6 0.23 25;
+  --destructive-foreground: 0.98 0.01 255;
+  --border: 0.39 0.04 255;
+  --input: 0.39 0.04 255;
+  --ring: 0.59 0.18 264;
 
   /* 🖊️ TipTap 에디터 다크모드 변수 */
-  --editor-bg: hsl(15 23% 42%);
-  --editor-bg-secondary: hsl(30 41% 59%);
-  --editor-text: hsl(241 245% 249%);
-  --editor-text-muted: hsl(148 163% 184%);
-  --editor-border: hsl(51 65% 85%);
-  --editor-accent: hsl(59 130% 246%);
-  --editor-selection: hsla(14 165% 233% / 0.3);
+  --editor-bg: 0.19 0.04 258;
+  --editor-bg-secondary: 0.28 0.04 260;
+  --editor-text: 0.96 0.01 255;
+  --editor-text-muted: 0.71 0.02 250;
+  --editor-border: 0.39 0.04 255;
+  --editor-accent: 0.59 0.18 264;
+  --editor-selection: 0.55 0.18 250 / 0.3;
 }
 
 /* 🎯 TipTap 에디터 강제 스타일링 */

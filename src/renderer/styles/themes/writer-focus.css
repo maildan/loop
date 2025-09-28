@@ -11,31 +11,31 @@
 /* 🔥 Writer Focus 라이트 모드 - 종이 느낌 */
 .writer-focus {
   /* 따뜻한 종이 색상 배경 */
-  --background: oklch(0.98 0.008 83.66);           /* 크림색 종이 */
-  --foreground: oklch(0.2 0.015 57.33);            /* 따뜻한 검은색 */
-  --card: oklch(0.97 0.01 80.22);                  /* 부드러운 카드 */
-  --card-foreground: oklch(0.2 0.015 57.33);
-  --primary: oklch(0.25 0.04 45.87);               /* 깊은 갈색 */
-  --primary-foreground: oklch(0.97 0.01 80.22);
-  --secondary: oklch(0.94 0.012 78.44);            /* 연한 베이지 */
-  --secondary-foreground: oklch(0.25 0.04 45.87);
-  --muted: oklch(0.94 0.012 78.44);
-  --muted-foreground: oklch(0.5 0.02 55.67);       /* 부드러운 회색 */
-  --accent: oklch(0.92 0.015 75.89);
-  --accent-foreground: oklch(0.25 0.04 45.87);
-  --destructive: oklch(0.55 0.18 25.89);           /* 따뜻한 빨강 */
-  --destructive-foreground: oklch(0.97 0.01 80.22);
-  --border: oklch(0.88 0.015 70.44);               /* 연한 경계선 */
-  --input: oklch(0.95 0.01 75.22);
-  --ring: oklch(0.35 0.06 50.33);
+  --background: 0.98 0.008 83.66;           /* 크림색 종이 */
+  --foreground: 0.2 0.015 57.33;            /* 따뜻한 검은색 */
+  --card: 0.97 0.01 80.22;                  /* 부드러운 카드 */
+  --card-foreground: 0.2 0.015 57.33;
+  --primary: 0.25 0.04 45.87;               /* 깊은 갈색 */
+  --primary-foreground: 0.97 0.01 80.22;
+  --secondary: 0.94 0.012 78.44;            /* 연한 베이지 */
+  --secondary-foreground: 0.25 0.04 45.87;
+  --muted: 0.94 0.012 78.44;
+  --muted-foreground: 0.5 0.02 55.67;       /* 부드러운 회색 */
+  --accent: 0.92 0.015 75.89;
+  --accent-foreground: 0.25 0.04 45.87;
+  --destructive: 0.55 0.18 25.89;           /* 따뜻한 빨강 */
+  --destructive-foreground: 0.97 0.01 80.22;
+  --border: 0.88 0.015 70.44;               /* 연한 경계선 */
+  --input: 0.95 0.01 75.22;
+  --ring: 0.35 0.06 50.33;
 
   /* 에디터 - 종이 질감 */
-  --editor-bg: oklch(0.99 0.005 85.11);            /* 고급 종이 흰색 */
-  --editor-bg-secondary: oklch(0.96 0.008 82.77);  
-  --editor-text: oklch(0.18 0.02 52.44);           /* 진한 잉크 색상 */
-  --editor-text-muted: oklch(0.45 0.025 55.89);
-  --editor-border: oklch(0.85 0.02 68.33);
-  --editor-accent: oklch(0.3 0.08 48.67);          /* 강조 브라운 */
+  --editor-bg: 0.99 0.005 85.11;            /* 고급 종이 흰색 */
+  --editor-bg-secondary: 0.96 0.008 82.77;  
+  --editor-text: 0.18 0.02 52.44;           /* 진한 잉크 색상 */
+  --editor-text-muted: 0.45 0.025 55.89;
+  --editor-border: 0.85 0.02 68.33;
+  --editor-accent: 0.3 0.08 48.67;          /* 강조 브라운 */
 
   /* UI 밀도 조정 */
   --spacing-scale: 0.9;                            /* 컴팩트한 UI */
@@ -45,31 +45,31 @@
 /* 🔥 Writer Focus 다크 모드 - 깊은 밤 집중 */
 .writer-focus.dark {
   /* 극도로 어두운 배경 */
-  --background: oklch(0.08 0.005 240);             /* 거의 검은색 */
-  --foreground: oklch(0.88 0.01 60.44);           /* 따뜻한 흰색 */
-  --card: oklch(0.12 0.008 235.67);               /* 어두운 카드 */
-  --card-foreground: oklch(0.88 0.01 60.44);
-  --primary: oklch(0.7 0.04 45.89);               /* 따뜻한 황금색 */
-  --primary-foreground: oklch(0.1 0.008 240);
-  --secondary: oklch(0.15 0.01 230.44);           /* 어두운 배경 */
-  --secondary-foreground: oklch(0.85 0.015 58.33);
-  --muted: oklch(0.18 0.012 225.67);
-  --muted-foreground: oklch(0.6 0.02 50.89);      /* 부드러운 회색 */
-  --accent: oklch(0.22 0.015 220.44);
-  --accent-foreground: oklch(0.85 0.015 58.33);
-  --destructive: oklch(0.6 0.15 20.44);           /* 부드러운 빨강 */
-  --destructive-foreground: oklch(0.9 0.008 55.67);
-  --border: oklch(0.25 0.015 215.89);             /* 최소한의 경계 */
-  --input: oklch(0.2 0.012 225.44);
-  --ring: oklch(0.65 0.06 48.89);
+  --background: 0.08 0.005 240;             /* 거의 검은색 */
+  --foreground: 0.88 0.01 60.44;           /* 따뜻한 흰색 */
+  --card: 0.12 0.008 235.67;               /* 어두운 카드 */
+  --card-foreground: 0.88 0.01 60.44;
+  --primary: 0.7 0.04 45.89;               /* 따뜻한 황금색 */
+  --primary-foreground: 0.1 0.008 240;
+  --secondary: 0.15 0.01 230.44;           /* 어두운 배경 */
+  --secondary-foreground: 0.85 0.015 58.33;
+  --muted: 0.18 0.012 225.67;
+  --muted-foreground: 0.6 0.02 50.89;      /* 부드러운 회색 */
+  --accent: 0.22 0.015 220.44;
+  --accent-foreground: 0.85 0.015 58.33;
+  --destructive: 0.6 0.15 20.44;           /* 부드러운 빨강 */
+  --destructive-foreground: 0.9 0.008 55.67;
+  --border: 0.25 0.015 215.89;             /* 최소한의 경계 */
+  --input: 0.2 0.012 225.44;
+  --ring: 0.65 0.06 48.89;
 
   /* 에디터 - 깊은 밤 집중 모드 */
-  --editor-bg: oklch(0.06 0.002 245);             /* 가장 어두운 배경 */
-  --editor-bg-secondary: oklch(0.1 0.005 240);    
-  --editor-text: oklch(0.85 0.015 55.44);         /* 부드러운 백색 */
-  --editor-text-muted: oklch(0.55 0.02 48.89);
-  --editor-border: oklch(0.2 0.01 220.67);
-  --editor-accent: oklch(0.75 0.08 50.33);        /* 따뜻한 강조색 */
+  --editor-bg: 0.06 0.002 245;             /* 가장 어두운 배경 */
+  --editor-bg-secondary: 0.1 0.005 240;    
+  --editor-text: 0.85 0.015 55.44;         /* 부드러운 백색 */
+  --editor-text-muted: 0.55 0.02 48.89;
+  --editor-border: 0.2 0.01 220.67;
+  --editor-accent: 0.75 0.08 50.33;        /* 따뜻한 강조색 */
 
   /* 최소 UI 모드 */
   --ui-opacity: 0.3;                              /* 비활성 UI 투명도 */
@@ -115,6 +115,6 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: oklch(var(--muted-foreground) / 0.3);
+    background: var(--muted-foreground / 0.3);
   }
 }

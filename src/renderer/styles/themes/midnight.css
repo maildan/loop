@@ -11,44 +11,44 @@
 /* 🔥 Midnight Theme Variables */
 [data-theme="midnight"] {
   /* shadcn/ui 기본 색상 - 미드나이트 다크 oklch 형식 */
-  --background: oklch(0.15 0.02 260); /* 깊은 미드나이트 블루 */
-  --foreground: oklch(0.9 0.01 250); /* 연한 블루 그레이 텍스트 */
-  --card: oklch(0.18 0.04 270);
-  --card-foreground: oklch(0.9 0.01 250);
-  --popover: oklch(0.15 0.02 260);
-  --popover-foreground: oklch(0.9 0.01 250);
-  --primary: oklch(0.6 0.15 260); /* 인디고 */
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.25 0.03 265);
-  --secondary-foreground: oklch(0.9 0.01 250);
-  --muted: oklch(0.2 0.04 270);
-  --muted-foreground: oklch(0.65 0.02 255);
-  --accent: oklch(0.7 0.2 280); /* 바이올렛 */
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.62 0.25 25);
-  --destructive-foreground: oklch(0.98 0.01 250);
-  --border: oklch(0.3 0.04 265);
-  --input: oklch(0.3 0.04 265);
-  --ring: oklch(0.6 0.15 260);
+  --background: 0.15 0.02 260; /* 깊은 미드나이트 블루 */
+  --foreground: 0.9 0.01 250; /* 연한 블루 그레이 텍스트 */
+  --card: 0.18 0.04 270;
+  --card-foreground: 0.9 0.01 250;
+  --popover: 0.15 0.02 260;
+  --popover-foreground: 0.9 0.01 250;
+  --primary: 0.6 0.15 260; /* 인디고 */
+  --primary-foreground: 1 0 0;
+  --secondary: 0.25 0.03 265;
+  --secondary-foreground: 0.9 0.01 250;
+  --muted: 0.2 0.04 270;
+  --muted-foreground: 0.65 0.02 255;
+  --accent: 0.7 0.2 280; /* 바이올렛 */
+  --accent-foreground: 1 0 0;
+  --destructive: 0.62 0.25 25;
+  --destructive-foreground: 0.98 0.01 250;
+  --border: 0.3 0.04 265;
+  --input: 0.3 0.04 265;
+  --ring: 0.6 0.15 260;
   --radius: 0.5rem;
 
   /* 🖊️ TipTap 에디터 전용 변수 */
-  --editor-bg: oklch(0.15 0.02 260); /* 깊은 미드나이트 블루 */
-  --editor-bg-secondary: oklch(0.18 0.04 270);
-  --editor-text: oklch(0.9 0.01 250); /* 연한 블루 그레이 */
-  --editor-text-muted: oklch(0.65 0.02 255);
-  --editor-border: oklch(0.3 0.04 265);
-  --editor-accent: oklch(0.6 0.15 260); /* 인디고 */
-  --editor-accent-light: oklch(0.6 0.15 260 / 0.3); /* 연한 인디고 (selection용) */
-  --editor-selection: oklch(0.7 0.2 280 / 0.3); /* 바이올렛 선택 배경 */
+  --editor-bg: 0.15 0.02 260; /* 깊은 미드나이트 블루 */
+  --editor-bg-secondary: 0.18 0.04 270;
+  --editor-text: 0.9 0.01 250; /* 연한 블루 그레이 */
+  --editor-text-muted: 0.65 0.02 255;
+  --editor-border: 0.3 0.04 265;
+  --editor-accent: 0.6 0.15 260; /* 인디고 */
+  --editor-accent-light: 0.6 0.15 260 / 0.3; /* 연한 인디고 (selection용) */
+  --editor-selection: 0.7 0.2 280 / 0.3; /* 바이올렛 선택 배경 */
 }
 
 /* 🔥 Midnight 전용 스타일링 - 신비로운 야간 UI */
 .midnight {
   /* 별빛 그림자 효과 */
-  --shadow-midnight: 0 8px 32px oklch(0.6 0.15 260 / 0.3);
-  --shadow-starlight: inset 0 1px 0 oklch(0.7 0.2 280 / 0.2);
-  --glow-accent: 0 0 20px oklch(0.7 0.2 280 / 0.4);
+  --shadow-midnight: 0 8px 32px 0.6 0.15 260 / 0.3;
+  --shadow-starlight: inset 0 1px 0 0.7 0.2 280 / 0.2;
+  --glow-accent: 0 0 20px 0.7 0.2 280 / 0.4;
 
   /* 미묘한 별빛 배경 */
   & .ProseMirror,
@@ -56,9 +56,9 @@
   & [data-ui="card"] {
     position: relative;
     background-image: 
-      radial-gradient(circle at 20% 30%, oklch(0.6 0.15 260 / 0.1) 0%, transparent 40%),
-      radial-gradient(circle at 80% 70%, oklch(0.7 0.2 280 / 0.08) 0%, transparent 40%),
-      radial-gradient(circle at 40% 80%, oklch(0.5 0.1 290 / 0.06) 0%, transparent 30%);
+      radial-gradient(circle at 20% 30%, 0.6 0.15 260 / 0.1 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, 0.7 0.2 280 / 0.08 0%, transparent 40%),
+      radial-gradient(circle at 40% 80%, 0.5 0.1 290 / 0.06 0%, transparent 30%);
   }
 
   /* 부드러운 글로우 전환 */
@@ -69,19 +69,19 @@
   /* 스크롤바 미드나이트 테마 */
   & ::-webkit-scrollbar {
     width: 10px;
-    background: oklch(0.15 0.02 260);
+    background: 0.15 0.02 260;
   }
 
   & ::-webkit-scrollbar-track {
-    background: oklch(0.2 0.04 270);
+    background: 0.2 0.04 270;
     border-radius: 5px;
   }
 
   & ::-webkit-scrollbar-thumb {
     background: linear-gradient(
       180deg,
-      oklch(0.6 0.15 260),
-      oklch(0.7 0.2 280)
+      0.6 0.15 260,
+      0.7 0.2 280
     );
     border-radius: 5px;
     box-shadow: var(--glow-accent);
@@ -90,8 +90,8 @@
   & ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(
       180deg,
-      oklch(0.7 0.2 280),
-      oklch(0.8 0.25 290)
+      0.7 0.2 280,
+      0.8 0.25 290
     );
   }
 
@@ -112,8 +112,8 @@
   & input,
   & textarea,
   & [contenteditable] {
-    background-color: oklch(0.18 0.04 270);
-    border-color: oklch(0.3 0.04 265);
+    background-color: 0.18 0.04 270;
+    border-color: 0.3 0.04 265;
     box-shadow: var(--shadow-starlight);
   }
 
@@ -121,26 +121,26 @@
   & textarea:focus,
   & [contenteditable]:focus {
     box-shadow: var(--glow-accent), var(--shadow-starlight);
-    border-color: oklch(0.6 0.15 260);
+    border-color: 0.6 0.15 260;
   }
 
   /* 링크 별빛 효과 */
   & a {
-    color: oklch(0.7 0.2 280);
-    text-decoration-color: oklch(0.7 0.2 280 / 0.5);
-    text-shadow: 0 0 8px oklch(0.7 0.2 280 / 0.3);
+    color: 0.7 0.2 280;
+    text-decoration-color: 0.7 0.2 280 / 0.5;
+    text-shadow: 0 0 8px 0.7 0.2 280 / 0.3;
   }
 
   & a:hover {
-    color: oklch(0.8 0.25 290);
-    text-shadow: 0 0 12px oklch(0.8 0.25 290 / 0.5);
+    color: 0.8 0.25 290;
+    text-shadow: 0 0 12px 0.8 0.25 290 / 0.5;
   }
 
   /* 카드 미드나이트 글로우 */
   & .card,
   & [data-ui="card"] {
-    background-color: oklch(0.18 0.04 270);
-    border-color: oklch(0.3 0.04 265);
+    background-color: 0.18 0.04 270;
+    border-color: 0.3 0.04 265;
     box-shadow: var(--shadow-midnight);
   }
 
@@ -151,7 +151,7 @@
 
   /* 특별한 별빛 텍스트 효과 */
   & h1, & h2, & h3 {
-    text-shadow: 0 0 10px oklch(0.6 0.15 260 / 0.3);
+    text-shadow: 0 0 10px 0.6 0.15 260 / 0.3;
   }
 
   /* 에디터 특별 처리 */
