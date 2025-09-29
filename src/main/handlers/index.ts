@@ -9,7 +9,6 @@ import { setupTrayIpcHandlers } from './trayIpcHandlers';
 import { setupOAuthIpcHandlers } from './oauthIpcHandlers';
 import { setupProjectIpcHandlers } from './projectIpcHandlers';
 import { setupAIIpcHandlers } from './aiIpcHandlers';
-import { registerDynamicFontHandlers } from './dynamicFontHandler';
 import { setupFontIpcHandlers } from './fontIpcHandlers';
 import { setupAppIpcHandlers } from './appIpcHandlers';
 

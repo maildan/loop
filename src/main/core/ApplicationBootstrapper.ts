@@ -15,6 +15,7 @@ import { windowManager } from '../core/window';
 // unifiedHandler 제거됨 - 모니터링 기능 불필요
 import * as fs from 'fs';
 import * as path from 'path';
+import { registerFontProtocol } from '../protocols/registerFontProtocol';
 
 // Helper: resolve + whitelist + containment checks to avoid path traversal
 function resolveAndValidate(filePath: string | null, baseDir: string, allowedFilenames?: string[]): string | null {
@@ -168,7 +169,7 @@ export class ApplicationBootstrapper {
   /**
    * 🔥 커스텀 프로토콜 설정 (avatar 파일 안전 접근용 + OAuth 리다이렉트용)
    */
-  private setupCustomProtocols(): void {
+  private async setupCustomProtocols(): Promise<void> {
     const avatarsDir = path.join(app.getPath('userData'), 'avatars');
     if (!fs.existsSync(avatarsDir)) {
       fs.mkdirSync(avatarsDir, { recursive: true });
@@ -227,6 +228,13 @@ export class ApplicationBootstrapper {
     });
 
     Logger.info('BOOTSTRAPPER', '🔒 Custom protocols registered (loop-avatar://, loop://)');
+
+    try {
+      await registerFontProtocol();
+      Logger.info('BOOTSTRAPPER', '🔒 loop-font protocol registered');
+    } catch (error) {
+      Logger.error('BOOTSTRAPPER', 'Failed to register loop-font protocol', error);
+    }
   }
 
   /**
@@ -236,7 +244,7 @@ export class ApplicationBootstrapper {
     this.eventController.setupAppEvents({
       onReady: async () => {
         // 🔥 onReady 이벤트가 발생했으므로, 여기서 프로토콜을 등록합니다.
-        this.setupCustomProtocols();
+        await this.setupCustomProtocols();
         // 그 다음에 윈도우를 생성하는 기존 로직을 실행합니다.
         await this.handleAppReady();
       },

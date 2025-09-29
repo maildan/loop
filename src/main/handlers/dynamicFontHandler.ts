@@ -1,4 +1,5 @@
-// 🔥 기가차드 동적 폰트 핸들러 - ZIP 기반 폰트 로딩
+// 🔥 기가차드 동적 폰트 핸들러 - ZIP 기반 폰트 로딩 (LEGACY)
+// NOTE: This module is deprecated. The new FontService pipeline should be used instead.
 
 import { ipcMain, app, IpcMainInvokeEvent } from 'electron';
 import fs from 'fs/promises';
@@ -205,64 +206,8 @@ async function downloadWebFont(fontFamily: string, weights: number[] = [400]): P
  * 🔥 IPC 핸들러 등록
  */
 export function registerDynamicFontHandlers(): void {
-    Logger.debug('FONT_HANDLER', 'Registering dynamic font IPC handlers');
-
-    // 폰트 ZIP 목록 조회
-    ipcMain.handle('font:get-list', async () => {
-        try {
-            await ensureFontsDirectory();
-            const fontsDir = getFontsDir();
-            const files = await fs.readdir(fontsDir);
-            const zipFiles = files.filter(file => file.toLowerCase().endsWith('.zip'));
-
-            Logger.info('FONT_HANDLER', 'Font ZIP list retrieved', {
-                fontsDir,
-                zipCount: zipFiles.length,
-                zipFiles
-            });
-
-            return { zipFiles };
-        } catch (error) {
-            Logger.error('FONT_HANDLER', 'Failed to read fonts directory', error);
-            return { zipFiles: [] };
-        }
-    });
-
-    // ZIP에서 폰트 로드
-    ipcMain.handle('font:load-from-zip', async (_event: IpcMainInvokeEvent, zipFileName: string) => {
-        return await loadFontFromZip(zipFileName);
-    });
-
-    // 웹폰트 다운로드
-    ipcMain.handle('font:download-web', async (_event: IpcMainInvokeEvent, fontFamily: string, weights?: number[]) => {
-        return await downloadWebFont(fontFamily, weights);
-    });
-
-    // 폰트 캐시 클리어
-    ipcMain.handle('font:clear-cache', async () => {
-        try {
-            fontCache.clear();
-            Logger.info('FONT_HANDLER', 'Font cache cleared successfully');
-            return { success: true };
-        } catch (error) {
-            Logger.error('FONT_HANDLER', 'Failed to clear font cache', error);
-            return { success: false };
-        }
-    });
-
-    // 로드된 폰트 목록 조회
-    ipcMain.handle('font:get-loaded', async () => {
-        const loadedFonts = Array.from(fontCache.keys());
-        Logger.debug('FONT_HANDLER', 'Loaded fonts list retrieved', {
-            count: loadedFonts.length,
-            fonts: loadedFonts
-        });
-        return { fonts: loadedFonts };
-    });
-
-    Logger.info('FONT_HANDLER', 'Dynamic font IPC handlers registered successfully', {
-        handlersCount: 5
-    });
+    Logger.warn('FONT_HANDLER', 'registerDynamicFontHandlers is deprecated. Use setupFontIpcHandlers instead.');
+    throw new Error('registerDynamicFontHandlers is deprecated.');
 }
 
 // #DEBUG: Font handler exit point

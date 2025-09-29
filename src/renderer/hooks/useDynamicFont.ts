@@ -1,191 +1,176 @@
 // 🔥 동적 폰트 훅 - public/fonts TTF 기반
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Logger } from '../../shared/logger';
 
+interface FontOption {
+  value: string;
+  label: string;
+  category: string;
+}
+
 interface UseDynamicFontResult {
-    currentFont: string;
-    availableFonts: Array<{ value: string; label: string; category: string }>;
-    setFont: (family: string) => void;
-    loading: boolean;
-    error: string | null;
-    reload: () => Promise<void>;
+  currentFont: string;
+  availableFonts: FontOption[];
+  setFont: (family: string) => void;
+  loading: boolean;
+  error: string | null;
+  reload: () => Promise<void>;
+}
+
+const STYLE_ELEMENT_ID = 'loop-dynamic-fonts';
+const STORAGE_KEY = 'loop-font-family';
+
+function getSavedFont(): string | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    return localStorage.getItem(STORAGE_KEY);
+  } catch (error) {
+    Logger.warn('DYNAMIC_FONT', 'Failed to read stored font family', error);
+    return null;
+  }
+}
+
+function saveFont(family: string): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    localStorage.setItem(STORAGE_KEY, family);
+  } catch (error) {
+    Logger.warn('DYNAMIC_FONT', 'Failed to persist selected font family', error);
+  }
+}
+
+function applyFontToDocument(family: string): void {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const normalized = family && family.trim().length > 0 ? family : 'system-ui, sans-serif';
+  document.documentElement.style.setProperty('--app-font-family', normalized);
+  document.body.style.fontFamily = normalized;
+}
+
+async function injectFontCss(): Promise<void> {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+
+  try {
+    const css = await window.electronAPI?.font?.generateCSS?.();
+    if (!css || css.trim().length === 0) {
+      return;
+    }
+
+    let style = document.getElementById(STYLE_ELEMENT_ID) as HTMLStyleElement | null;
+    if (!style) {
+      style = document.createElement('style');
+      style.id = STYLE_ELEMENT_ID;
+      document.head.appendChild(style);
+    }
+
+    style.textContent = css;
+    Logger.info('DYNAMIC_FONT', 'Injected dynamic font CSS', { length: css.length });
+  } catch (error) {
+    Logger.error('DYNAMIC_FONT', 'Failed to inject dynamic font CSS', error);
+  }
 }
 
 export function useDynamicFont(): UseDynamicFontResult {
-    const [currentFont, setCurrentFont] = useState('');
-    const [availableFonts, setAvailableFonts] = useState<Array<{ value: string; label: string; category: string }>>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+  const [currentFont, setCurrentFont] = useState<string>(() => getSavedFont() ?? 'system-ui, sans-serif');
+  const [availableFonts, setAvailableFonts] = useState<FontOption[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-    // 🔥 폰트 CSS 주입
-    const injectFontCSS = useCallback(async () => {
-        try {
-            const css = await (window as any).electronAPI?.font?.generateCSS?.();
-            if (css) {
-                // 기존 동적 폰트 스타일 제거
-                const existingStyle = document.getElementById('dynamic-fonts');
-                if (existingStyle) {
-                    existingStyle.remove();
-                }
+  const applyAndStoreFont = useCallback((family: string) => {
+    applyFontToDocument(family);
+    saveFont(family);
+    setCurrentFont(family);
+  }, []);
 
-                // 폰트 정규화 CSS 추가
-                const normalizedCSS = css + `
-                    /* 🔥 폰트 사이즈 정규화 */
-                    * {
-                        font-size-adjust: 0.5 !important;
-                        line-height: 1.6 !important;
-                    }
-                    
-                    /* 텍스트 에디터 영역 정규화 */
-                    textarea, input[type="text"], input[type="email"], .text-editor {
-                        font-size-adjust: 0.5 !important;
-                        line-height: 1.6 !important;
-                        vertical-align: baseline !important;
-                    }
-                    
-                    /* 특정 컴포넌트 정규화 */
-                    .idea-content, .synopsis-content, .character-content, .notes-content {
-                        font-size-adjust: 0.5 !important;
-                        line-height: 1.6 !important;
-                    }
-                    
-                    /* 폰트 패밀리별 개별 조정 */
-                    .font-korean { font-size-adjust: 0.48 !important; }
-                    .font-english { font-size-adjust: 0.52 !important; }
-                    .font-monospace { font-size-adjust: 0.45 !important; }
-                `;
+  const loadFonts = useCallback(async () => {
+    if (typeof window === 'undefined') {
+      return;
+    }
 
-                // 새 폰트 스타일 추가
-                const style = document.createElement('style');
-                style.id = 'dynamic-fonts';
-                style.textContent = normalizedCSS;
-                document.head.appendChild(style);
+    setLoading(true);
+    setError(null);
 
-                Logger.info('DYNAMIC_FONT', '정규화된 폰트 CSS 주입 완료', { cssLength: normalizedCSS.length });
-            }
-        } catch (e) {
-            Logger.warn('DYNAMIC_FONT', '폰트 CSS 주입 실패', e);
-        }
-    }, []);
+    try {
+      await window.electronAPI?.font?.initialize?.();
 
-    // 🔥 사용 가능한 폰트 로드
-    const loadAvailableFonts = useCallback(async () => {
-        try {
-            setLoading(true);
-            setError(null);
+      const [dynamicFonts = [], staticFonts = []] = await Promise.all([
+        window.electronAPI?.font?.getAvailableFonts?.(),
+        window.electronAPI?.font?.getStaticFonts?.()
+      ]);
 
-            // 폰트 서비스 초기화
-            await (window as any).electronAPI?.font?.initialize?.();
+      const merged = [...staticFonts, ...dynamicFonts] as FontOption[];
+      setAvailableFonts(merged);
 
-            // 동적 폰트 + 정적 폰트 조합
-            const [dynamicFonts, staticFonts] = await Promise.all([
-                (window as any).electronAPI?.font?.getAvailableFonts?.() || [],
-                (window as any).electronAPI?.font?.getStaticFonts?.() || []
-            ]);
+      await injectFontCss();
 
-            const allFonts = [
-                ...staticFonts,
-                ...dynamicFonts
-            ];
+      Logger.info('DYNAMIC_FONT', 'Font manifest loaded', {
+        dynamicCount: dynamicFonts?.length ?? 0,
+        staticCount: staticFonts?.length ?? 0,
+        total: merged.length
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '폰트를 불러오는데 실패했습니다.';
+      setError(message);
+      Logger.error('DYNAMIC_FONT', 'Failed to load fonts', err);
 
-            setAvailableFonts(allFonts);
+      // 최소한의 폴백 보장
+      setAvailableFonts([
+        { value: 'system-ui, sans-serif', label: '시스템 기본', category: 'system' },
+        { value: '-apple-system, BlinkMacSystemFont, sans-serif', label: 'Apple 시스템', category: 'system' }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-            // 폰트 CSS 주입
-            await injectFontCSS();
+  useEffect(() => {
+    loadFonts().catch(error => {
+      Logger.error('DYNAMIC_FONT', 'Unexpected error during font load', error);
+    });
+  }, [loadFonts]);
 
-            Logger.info('DYNAMIC_FONT', '폰트 목록 로드 완료', {
-                dynamicCount: dynamicFonts.length,
-                staticCount: staticFonts.length,
-                totalCount: allFonts.length
-            });
-        } catch (e) {
-            Logger.error('DYNAMIC_FONT', '폰트 로드 실패', e);
-            setError('폰트를 불러오는데 실패했습니다.');
+  useEffect(() => {
+    applyFontToDocument(currentFont);
+  }, [currentFont]);
 
-            // 폴백 폰트 목록
-            setAvailableFonts([
-                { value: 'system-ui, sans-serif', label: '시스템 기본', category: 'system' },
-                { value: '-apple-system, BlinkMacSystemFont, sans-serif', label: 'Apple 시스템', category: 'system' },
-            ]);
-        } finally {
-            setLoading(false);
-        }
-    }, [injectFontCSS]);
+  const setFont = useCallback(
+    (family: string) => {
+      applyAndStoreFont(family);
+    },
+    [applyAndStoreFont]
+  );
 
-    // 🔥 초기 로드
-    useEffect(() => {
-        (async () => {
-            await loadAvailableFonts();
+  const reload = useCallback(async () => {
+    try {
+      await window.electronAPI?.font?.reload?.();
+    } catch (error) {
+      Logger.warn('DYNAMIC_FONT', 'Font reload request failed', error);
+    }
 
-            // 현재 적용된 폰트 감지
-            const initial = (
-                getComputedStyle(document.documentElement).getPropertyValue('--app-font-family') ||
-                getComputedStyle(document.body).fontFamily
-            ).trim();
-            setCurrentFont(initial);
-        })();
-    }, [loadAvailableFonts]);
+    await loadFonts();
+  }, [loadFonts]);
 
-    // 🔥 폰트 적용 - 기가차드 강화버전 + 사이즈 정규화
-    const setFont = useCallback((family: string) => {
-        try {
-            // 🔥 CSS 변수와 body 동시 적용으로 깜빡임 방지
-            document.documentElement.style.setProperty('--app-font-family', family);
-            document.body.style.fontFamily = family;
-
-            // 🔥 폰트 정규화 스타일 적용
-            const normalizeStyle = `
-                font-size-adjust: 0.5 !important;
-                line-height: 1.6 !important;
-                vertical-align: baseline !important;
-            `;
-
-            // 🔥 모든 요소에 즉시 적용 (깜빡임 없는 전환 + 정규화)
-            const allElements = document.querySelectorAll('*');
-            allElements.forEach((element) => {
-                if (element instanceof HTMLElement) {
-                    element.style.fontFamily = family;
-                    // 텍스트 입력 요소들에는 정규화 적용
-                    if (element.tagName === 'TEXTAREA' ||
-                        element.tagName === 'INPUT' ||
-                        element.classList.contains('text-editor') ||
-                        element.classList.contains('idea-content') ||
-                        element.classList.contains('synopsis-content')) {
-                        element.style.fontSizeAdjust = '0.5';
-                        element.style.lineHeight = '1.6';
-                        element.style.verticalAlign = 'baseline';
-                    }
-                }
-            });
-
-            setCurrentFont(family);
-            Logger.info('DYNAMIC_FONT', '🔥 기가차드 정규화 폰트 적용 완료', {
-                family,
-                appliedToElements: allElements.length
-            });
-        } catch (e) {
-            Logger.error('DYNAMIC_FONT', '폰트 적용 실패', e);
-        }
-    }, []);
-
-    // 🔥 폰트 리로드
-    const reload = useCallback(async () => {
-        try {
-            await (window as any).electronAPI?.font?.reload?.();
-            await loadAvailableFonts();
-        } catch (e) {
-            Logger.error('DYNAMIC_FONT', '폰트 리로드 실패', e);
-        }
-    }, [loadAvailableFonts]);
-
-    return {
-        currentFont,
-        availableFonts,
-        setFont,
-        loading,
-        error,
-        reload
-    };
+  return useMemo(
+    () => ({
+      currentFont,
+      availableFonts,
+      setFont,
+      loading,
+      error,
+      reload
+    }),
+    [availableFonts, currentFont, error, loading, reload, setFont]
+  );
 }
 
 export default useDynamicFont;

@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import type { Editor } from '@tiptap/react';
 import { 
   ArrowLeft, 
@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
 import { useSettings } from '../../../app/settings/hooks/useSettings';
+import { useDynamicFont } from '../../../hooks/useDynamicFont';
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
@@ -82,64 +83,19 @@ export function ProjectHeader({
   const [customFontSize, setCustomFontSize] = useState<number>(FONT_SIZE_RANGE.default);
   const [customLineHeight, setCustomLineHeight] = useState<number>(LINE_HEIGHT_RANGE.default);
 
-  // 🔥 폰트 시스템 연동 (safe)
-  const [availableFonts, setAvailableFonts] = useState<any[]>([]);
-  const [currentFont, setCurrentFont] = useState<string>('Pretendard');
+  // 🔥 폰트 시스템 연동 (shared hook)
+  const {
+    availableFonts,
+    currentFont: activeFont,
+    setFont: applyFontPreference,
+    loading: fontsLoading,
+    error: fontError
+  } = useDynamicFont();
   
   // 🔥 설정 시스템 연동 (optional)
   const settingsResult = useSettings();
   const settings = settingsResult?.settings;
 
-  // 🔥 폰트 목록 로딩 (실제 .otf 파일들)
-  useEffect(() => {
-    const loadFonts = async () => {
-      try {
-        Logger.debug('ProjectHeader', 'Starting font loading process');
-        
-        // IPC를 통해 실제 폰트 목록 가져오기
-        if (window.electronAPI?.font?.getAvailableFonts) {
-          Logger.debug('ProjectHeader', 'IPC font API available, loading fonts');
-          const fonts = await window.electronAPI.font.getAvailableFonts();
-          Logger.info('ProjectHeader', 'Fonts loaded from IPC', { 
-            count: fonts?.length || 0,
-            fonts: fonts?.map(f => f.label) || []
-          });
-          
-          if (fonts && fonts.length > 0) {
-            setAvailableFonts(fonts);
-            Logger.info('ProjectHeader', 'Set available fonts from IPC', { count: fonts.length });
-            return;
-          }
-        } else {
-          Logger.warn('ProjectHeader', 'IPC font API not available');
-        }
-        
-        // Fallback: 기본 폰트 목록 설정
-        Logger.info('ProjectHeader', 'Using fallback fonts');
-        const defaultFonts = [
-          { id: 'gangwon', name: '강원교육모두체', cssFamily: '강원교육모두체, Gangwon' },
-          { id: 'pretendard', name: 'Pretendard', cssFamily: 'Pretendard' },
-          { id: 'noto-sans-kr', name: 'Noto Sans KR', cssFamily: 'Noto Sans KR' },
-          { id: 'malgun-gothic', name: '맑은 고딕', cssFamily: 'Malgun Gothic' },
-          { id: 'nanumgothic', name: '나눔고딕', cssFamily: 'NanumGothic' },
-          { id: 'sf-pro-display', name: 'SF Pro Display', cssFamily: 'SF Pro Display' },
-        ];
-        setAvailableFonts(defaultFonts);
-        Logger.info('ProjectHeader', 'Set fallback fonts', { count: defaultFonts.length });
-      } catch (error) {
-        Logger.error('ProjectHeader', 'Failed to load fonts', error);
-        // 에러 시 최소한의 기본 폰트
-        const errorFallbackFonts = [
-          { id: 'gangwon', name: '강원교육모두체', cssFamily: '강원교육모두체' },
-          { id: 'pretendard', name: 'Pretendard', cssFamily: 'Pretendard' }
-        ];
-        setAvailableFonts(errorFallbackFonts);
-        Logger.info('ProjectHeader', 'Set error fallback fonts', { count: errorFallbackFonts.length });
-      }
-    };
-
-    loadFonts();
-  }, []);
 
   // 🔥 현재 에디터 상태 확인
   const editorState = useMemo(() => {
@@ -251,9 +207,38 @@ export function ProjectHeader({
     Logger.debug('WYSIWYG_TOOLBAR', 'Text color changed', { color });
   }, [editor]);
 
+  const getSimplifiedFontName = useCallback((fontFamily: string | undefined | null): string => {
+    if (!fontFamily || fontFamily.trim().length === 0) {
+      return 'System';
+    }
+
+    const firstFont = fontFamily.split(',')[0]?.trim() ?? '';
+    const cleaned = firstFont.replace(/['"]/g, '');
+
+    const fontMap: Record<string, string> = {
+      '-apple-system': 'System',
+      'blinkmacsystemfont': 'System',
+      'system-ui': 'System',
+      'sans-serif': 'Sans',
+      'serif': 'Serif',
+      'monospace': 'Mono',
+      'gangwon_mac': 'Gangwon',
+      'gangwon_win': 'Gangwon',
+      'calibri-font-family': 'Calibri',
+      'nanum-gothic': 'Nanum Gothic',
+      'nanum gothic': 'Nanum Gothic',
+      'sf-pro-display': 'SF Pro',
+      'times-new-roman': 'Times'
+    };
+
+    const lookupKey = cleaned.toLowerCase();
+    return fontMap[lookupKey] ?? cleaned;
+  }, []);
+
   const handleFontFamily = useCallback(async (fontFamily: string) => {
     Logger.info('ProjectHeader', 'Font family change requested', { fontFamily });
-    
+    applyFontPreference(fontFamily);
+
     if (!editor) {
       Logger.warn('ProjectHeader', 'No editor available for font family change');
       return;
@@ -265,11 +250,7 @@ export function ProjectHeader({
       console.log('🔍 Available commands:', Object.keys(editor.commands));
       console.log('🔍 FontFamily command available:', !!editor.commands.setFontFamily);
       
-      // 🎨 1. 전역 CSS 변수 업데이트 (즉시 적용)
-      document.documentElement.style.setProperty('--app-font-family', fontFamily);
-      Logger.info('ProjectHeader', 'CSS 변수 업데이트 완료', { fontFamily });
-      
-      // 🎨 2. TipTap setFontFamily 명령어도 실행 (선택된 텍스트용)
+      // 🎨 TipTap setFontFamily 명령어도 실행 (선택된 텍스트용)
       Logger.debug('ProjectHeader', 'Applying fontFamily via TipTap setFontFamily command', { fontFamily });
       
       if (editor.commands.setFontFamily) {
@@ -281,9 +262,6 @@ export function ProjectHeader({
           
           // 🧹 빈 TextStyle span 정리 (TipTap 공식 명령어)
           editor.commands.removeEmptyTextStyle();
-          
-          // 💾 현재 폰트 상태 저장 (간소화된 이름으로)
-          setCurrentFont(getSimplifiedFontName(fontFamily));
           
           // 🔍 디버깅: HTML 결과 확인
           setTimeout(() => {
@@ -309,7 +287,7 @@ export function ProjectHeader({
         fontFamily 
       });
     }
-  }, [editor]);
+  }, [applyFontPreference, editor, getSimplifiedFontName]);
 
   const handleFontSize = useCallback((fontSize: number) => {
     if (!editor) {
@@ -317,94 +295,67 @@ export function ProjectHeader({
       return;
     }
 
+    const fontSizeValue = `${fontSize}px`;
+
     try {
-      // 🔥 TipTap 공식 setFontSize 명령어 사용
-      const fontSizeValue = `${fontSize}px`;
-      const success = editor.commands.setFontSize(fontSizeValue);
-      
-      if (success) {
-        Logger.info('ProjectHeader', 'Font size applied successfully via TipTap command', { 
-          fontSize: fontSizeValue 
-        });
-        
-        // 🧹 빈 TextStyle span 정리
-        editor.commands.removeEmptyTextStyle();
-        
-        // 💾 커스텀 폰트 크기 상태 저장
-        setCustomFontSize(fontSize);
-        
+      const didApply = typeof editor.commands.setFontSize === 'function'
+        ? editor.commands.setFontSize(fontSizeValue)
+        : editor.chain().focus().setMark('textStyle', { fontSize: fontSizeValue }).run();
+
+      if (didApply) {
+        Logger.info('ProjectHeader', 'Font size applied', { fontSize: fontSizeValue });
+        editor.commands.removeEmptyTextStyle?.();
       } else {
-        Logger.warn('ProjectHeader', 'TipTap setFontSize command failed', { fontSize: fontSizeValue });
+        Logger.warn('ProjectHeader', 'Font size command did not execute', { fontSize: fontSizeValue });
       }
-      
     } catch (error) {
-      Logger.error('ProjectHeader', 'Font size change failed', { 
-        error: String(error), 
-        fontSize 
+      Logger.error('ProjectHeader', 'Font size change failed', {
+        error: String(error),
+        fontSize: fontSizeValue
       });
     }
   }, [editor]);
 
   const handleLineHeight = useCallback((lineHeight: number) => {
-    if (editor) {
-      // 🔥 선택된 텍스트에 줄간격 적용
-      editor.chain().focus().setMark('textStyle', { lineHeight: lineHeight.toString() }).run();
-      
-      // 🔥 에디터 전체에도 CSS로 적용 (fallback)
-      const editorElement = editor.view.dom as HTMLElement;
-      if (editorElement) {
-        editorElement.style.lineHeight = lineHeight.toString();
+    if (!editor) {
+      Logger.warn('ProjectHeader', 'No editor available for line height change');
+      return;
+    }
+
+    const normalized = Number.isFinite(lineHeight) ? lineHeight : LINE_HEIGHT_RANGE.default;
+
+    try {
+      const setLineHeightCommand = (editor.commands as Record<string, unknown>).setLineHeight as
+        | ((value: number) => boolean)
+        | undefined;
+
+      const didApply = typeof setLineHeightCommand === 'function'
+        ? setLineHeightCommand(normalized)
+        : editor.chain().focus().setMark('textStyle', { lineHeight: normalized }).run();
+
+      if (didApply) {
+        Logger.info('ProjectHeader', 'Line height applied', { lineHeight: normalized });
+        editor.commands.removeEmptyTextStyle?.();
+      } else {
+        Logger.warn('ProjectHeader', 'Line height command did not execute', { lineHeight: normalized });
       }
-      
-      Logger.debug('WYSIWYG_TOOLBAR', 'Line height changed', { lineHeight });
+    } catch (error) {
+      Logger.error('ProjectHeader', 'Line height change failed', {
+        error: String(error),
+        lineHeight: normalized
+      });
     }
   }, [editor]);
 
-  // 🔥 폰트 이름 간소화 함수
-  const getSimplifiedFontName = useCallback((fontFamily: string): string => {
-    if (!fontFamily || typeof fontFamily !== 'string') return 'Pretendard';
-    
-    // CSS font-family 스타일에서 첫 번째 폰트만 추출
-    const firstFont = fontFamily.split(',')[0]?.trim() || fontFamily;
-    
-    // 따옴표 제거
-    const cleaned = firstFont.replace(/['"]/g, '');
-    
-    // 일반적인 시스템 폰트들을 단순화
-    const fontMap: Record<string, string> = {
-      '-apple-system': 'System',
-      'BlinkMacSystemFont': 'System',
-      'system-ui': 'System',
-      'sans-serif': 'Sans',
-      'serif': 'Serif',
-      'monospace': 'Mono',
-      'Gangwon_mac': 'Gangwon',
-      'Gangwon_win': 'Gangwon',
-      'calibri-font-family': 'Calibri',
-      'nanum-gothic': 'Nanum Gothic',
-      'nanum gothic': 'Nanum Gothic',
-      'sf-pro-display': 'SF Pro',
-      'times-new-roman': 'Times'
-    };
-    
-    const result = fontMap[cleaned.toLowerCase()] || cleaned;
-    
-    // 🔍 디버깅 로그
-    console.log('🔍 Font simplification:', {
-      original: fontFamily,
-      firstFont,
-      cleaned,
-      result
-    });
-    
-    return result;
-  }, []);
-
   // 🔥 폰트 설정 함수 (핸들러 함수들 뒤에 정의)
   const setFont = useCallback((fontFamily: string) => {
-    setCurrentFont(getSimplifiedFontName(fontFamily));
-    handleFontFamily(fontFamily);
-  }, [handleFontFamily, getSimplifiedFontName]);
+    handleFontFamily(fontFamily).catch(error => {
+      Logger.error('ProjectHeader', 'Font family handler rejected', {
+        fontFamily,
+        error: String(error)
+      });
+    });
+  }, [handleFontFamily]);
 
   Logger.debug('WYSIWYG_TOOLBAR', 'Rendering toolbar', {
     hasEditor: !!editor,
@@ -461,25 +412,47 @@ export function ProjectHeader({
             className={TOOLBAR_STYLES.dropdown}
             title="폰트 선택"
           >
-            <span>{getSimplifiedFontName(currentFont) || 'Pretendard'}</span>
+            <span>
+              {fontsLoading ? '폰트 불러오는 중…' : getSimplifiedFontName(activeFont) || 'Pretendard'}
+            </span>
             <ChevronDown size={14} />
           </button>
           {showFontDropdown && (
             <div className="absolute top-full left-0 mt-1 w-40 bg-[var(--editor-bg)] border border-[color:var(--editor-border)] rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto text-[color:var(--editor-text)]">
-              {availableFonts.map((font) => (
-                <button
-                  key={font.value}
-                  type="button"
-                  onClick={() => {
-                    setShowFontDropdown(false);
-                    setFont(font.value);
-                  }}
-                  className="w-full px-2 py-1.5 text-left text-xs transition-colors hover:bg-[var(--editor-accent-light)]"
-                  style={{ fontFamily: font.value }}
-                >
-                  {font.label}
-                </button>
-              ))}
+              {fontsLoading ? (
+                <div className="px-3 py-2 text-xs text-[color:var(--editor-text-muted)]">
+                  폰트를 불러오는 중이에요…
+                </div>
+              ) : fontError ? (
+                <div className="px-3 py-2 text-xs text-red-400">
+                  {fontError}
+                </div>
+              ) : availableFonts.length > 0 ? (
+                availableFonts.map((font) => {
+                  const isActive = font.value === activeFont;
+
+                  return (
+                    <button
+                      key={font.value}
+                      type="button"
+                      onClick={() => {
+                        setShowFontDropdown(false);
+                        setFont(font.value);
+                      }}
+                      className={`w-full px-2 py-1.5 text-left text-xs transition-colors rounded ${
+                        isActive ? 'bg-[var(--editor-accent-light)] text-[color:var(--editor-accent)]' : 'hover:bg-[var(--editor-accent-light)]'
+                      }`}
+                      style={{ fontFamily: font.value }}
+                    >
+                      {font.label}
+                    </button>
+                  );
+                })
+              ) : (
+                <div className="px-3 py-2 text-xs text-[color:var(--editor-text-muted)]">
+                  사용할 수 있는 폰트가 없습니다.
+                </div>
+              )}
             </div>
           )}
         </div>

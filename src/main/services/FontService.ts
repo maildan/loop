@@ -3,38 +3,57 @@
  * TTF 파일을 스캔하고 CSS @font-face 동적 생성
  */
 
+import { app } from 'electron';
 import path from 'path';
-import fs from 'fs/promises';
-import { existsSync } from 'fs';
+import { promises as fs } from 'fs';
+import type { Dirent } from 'fs';
 import { Logger } from '../../shared/logger';
+import ttf2woff2 from 'ttf2woff2';
+
+export type FontCategory = 'korean' | 'japanese' | 'english' | 'system';
 
 interface FontInfo {
     family: string;
     weight: string;
-    style: string;
+    style: 'normal' | 'italic';
     filePath: string;
     displayName: string;
-    category: 'korean' | 'japanese' | 'english' | 'system';
+    category: FontCategory;
+    variantId: string;
 }
 
 interface FontFamily {
     name: string;
     displayName: string;
-    category: 'korean' | 'japanese' | 'english' | 'system';
+    category: FontCategory;
     variants: FontInfo[];
     cssFamily: string;
 }
 
+interface FontOption {
+    value: string;
+    label: string;
+    category: FontCategory;
+}
+
+const STATIC_FONT_OPTIONS: FontOption[] = [
+    { value: 'system-ui, sans-serif', label: '시스템 기본', category: 'system' },
+    { value: '-apple-system, BlinkMacSystemFont, sans-serif', label: 'Apple 시스템', category: 'system' },
+    { value: 'Arial, Helvetica, sans-serif', label: 'Arial', category: 'english' },
+    { value: 'Times New Roman, Times, serif', label: 'Times New Roman', category: 'english' },
+    { value: 'Verdana, Geneva, sans-serif', label: 'Verdana', category: 'english' },
+    { value: 'Georgia, serif', label: 'Georgia', category: 'english' }
+];
+
 class FontService {
     private static instance: FontService;
     private fontsCache: Map<string, FontFamily> = new Map();
-    private fontsPath: string;
+    private variantIndex: Map<string, string> = new Map();
+    private fontsPath: string | null = null;
+    private cachePath: string | null = null;
     private isInitialized = false;
 
-    private constructor() {
-        // public/fonts 경로 설정
-        this.fontsPath = path.join(process.cwd(), 'public', 'fonts');
-    }
+    private constructor() {}
 
     public static getInstance(): FontService {
         if (!FontService.instance) {
@@ -43,322 +62,97 @@ class FontService {
         return FontService.instance;
     }
 
-    /**
-     * 🔥 폰트 폴더 스캔 및 초기화
-     */
     public async initialize(): Promise<void> {
-        if (this.isInitialized) return;
+        if (this.isInitialized) {
+            return;
+        }
 
-        try {
-            Logger.info('FONT_SERVICE', '🔍 폰트 폴더 스캔 시작', { fontsPath: this.fontsPath });
+        await app.whenReady();
 
-            await this.scanFontsDirectory();
-            this.isInitialized = true;
+        const { source, cache } = await this.resolvePaths();
+        this.fontsPath = source;
+        this.cachePath = cache;
 
-            Logger.info('FONT_SERVICE', '✅ 폰트 서비스 초기화 완료', {
-                totalFamilies: this.fontsCache.size,
-                families: Array.from(this.fontsCache.keys())
+        this.fontsCache.clear();
+        this.variantIndex.clear();
+
+        await this.scanFontsDirectory();
+        this.isInitialized = true;
+
+        Logger.info('FONT_SERVICE', '✅ Font service ready', {
+            families: Array.from(this.fontsCache.keys()),
+            cachePath: this.cachePath
+        });
+    }
+
+    public async reload(): Promise<void> {
+        this.isInitialized = false;
+        this.fontsCache.clear();
+        this.variantIndex.clear();
+        await this.initialize();
+    }
+
+    public getAvailableFonts(): FontOption[] {
+        this.ensureInitialized();
+
+        const fonts: FontOption[] = [];
+        for (const family of this.fontsCache.values()) {
+            fonts.push({
+                value: family.cssFamily,
+                label: family.displayName,
+                category: family.category
             });
-        } catch (error) {
-            Logger.error('FONT_SERVICE', '❌ 폰트 서비스 초기화 실패', error);
-            throw error;
         }
+
+        // 정렬: 카테고리 → 라벨
+        return fonts.sort((a, b) => {
+            if (a.category !== b.category) {
+                return a.category.localeCompare(b.category);
+            }
+            return a.label.localeCompare(b.label, 'ko');
+        });
     }
 
-    /**
-     * 🔥 폰트 디렉토리 스캔
-     */
-    private async scanFontsDirectory(): Promise<void> {
-        try {
-            const fontDirs = await fs.readdir(this.fontsPath, { withFileTypes: true });
-
-            Logger.info('FONT_SERVICE', '🔍 폰트 디렉토리 스캔 시작', {
-                totalDirs: fontDirs.length,
-                directories: fontDirs.filter(d => d.isDirectory() && !d.name.startsWith('.')).map(d => d.name)
-            });
-
-            for (const dir of fontDirs) {
-                if (!dir.isDirectory() || dir.name.startsWith('.')) {
-                    Logger.debug('FONT_SERVICE', `⏭️ 디렉토리 스킵: ${dir.name}`, { isDirectory: dir.isDirectory(), startsWithDot: dir.name.startsWith('.') });
-                    continue;
-                }
-
-                Logger.info('FONT_SERVICE', `🔍 폰트 디렉토리 처리 시작: ${dir.name}`);
-                await this.processFontDirectory(dir.name);
-            }
-        } catch (error) {
-            Logger.error('FONT_SERVICE', '폰트 디렉토리 스캔 실패', error);
-        }
+    public getStaticFonts(): FontOption[] {
+        return STATIC_FONT_OPTIONS;
     }
 
-    /**
-     * 🔥 개별 폰트 디렉토리 처리
-     */
-    private async processFontDirectory(dirName: string): Promise<void> {
-        const dirPath = path.join(this.fontsPath, dirName);
+    public getFontFamily(identifier: string): FontFamily | null {
+        this.ensureInitialized();
 
-        try {
-            // Noto_Sans 특별 처리 (JP/KR 서브폴더)
-            if (dirName === 'Noto_Sans') {
-                await this.processNotoSansDirectory(dirPath);
-                return;
-            }
-
-            const fontInfo = await this.scanForFontFiles(dirPath, dirName);
-            if (fontInfo.length > 0) {
-                const family = this.createFontFamily(dirName, fontInfo);
-                this.fontsCache.set(family.name, family);
-                Logger.debug('FONT_SERVICE', `폰트 패밀리 등록: ${family.name}`, { variantCount: fontInfo.length });
-            } else {
-                Logger.warn('FONT_SERVICE', `🚨 폰트 패밀리에서 TTF 파일을 찾을 수 없음: ${dirName}`, { dirPath });
-            }
-        } catch (error) {
-            Logger.warn('FONT_SERVICE', `폰트 디렉토리 처리 실패: ${dirName}`, error);
+        if (!identifier) {
+            return null;
         }
-    }
 
-    /**
-     * 🔥 Noto Sans 특별 처리 (JP/KR 통합)
-     */
-    private async processNotoSansDirectory(dirPath: string): Promise<void> {
-        const allFonts: FontInfo[] = [];
-
-        try {
-            const subDirs = await fs.readdir(dirPath, { withFileTypes: true });
-
-            for (const subDir of subDirs) {
-                if (!subDir.isDirectory() || subDir.name.startsWith('.')) continue;
-
-                const subDirPath = path.join(dirPath, subDir.name);
-                const fonts = await this.scanForFontFiles(subDirPath, 'Noto Sans');
-                allFonts.push(...fonts);
-            }
-
-            if (allFonts.length > 0) {
-                const family = this.createFontFamily('Noto_Sans', allFonts);
-                family.displayName = 'Noto Sans (KR/JP)';
-                family.category = 'korean'; // 한국어로 분류
-                this.fontsCache.set('Noto_Sans', family);
-                Logger.info('FONT_SERVICE', 'Noto Sans 통합 폰트 등록', { variantCount: allFonts.length });
-            }
-        } catch (error) {
-            Logger.error('FONT_SERVICE', 'Noto Sans 처리 실패', error);
+        const direct = this.fontsCache.get(identifier);
+        if (direct) {
+            return direct;
         }
-    }
 
-    /**
-     * 🔥 폰트 파일(TTF/OTF) 스캔
-     */
-    private async scanForFontFiles(dirPath: string, familyName: string): Promise<FontInfo[]> {
-        const fonts: FontInfo[] = [];
-
-        async function scanRecursive(currentPath: string): Promise<void> {
-            try {
-                const items = await fs.readdir(currentPath, { withFileTypes: true });
-
-                for (const item of items) {
-                    const itemPath = path.join(currentPath, item.name);
-
-                    if (item.isDirectory()) {
-                        await scanRecursive(itemPath);
-                    } else if (item.name.toLowerCase().endsWith('.ttf') || item.name.toLowerCase().endsWith('.otf')) {
-                        const fontType = item.name.toLowerCase().endsWith('.ttf') ? 'TTF' : 'OTF';
-                        Logger.debug('FONT_SERVICE', `🔍 ${fontType} 파일 발견: ${item.name}`, { itemPath });
-                        const fontInfo = FontService.parseFont(itemPath, familyName);
-                        if (fontInfo) {
-                            fonts.push(fontInfo);
-                            Logger.debug('FONT_SERVICE', `✅ 폰트 정보 파싱 성공: ${item.name}`, fontInfo);
-                        } else {
-                            Logger.warn('FONT_SERVICE', `❌ 폰트 정보 파싱 실패: ${item.name}`, { itemPath });
-                        }
-                    }
-                }
-            } catch (error) {
-                Logger.warn('FONT_SERVICE', `폰트 파일 스캔 실패: ${currentPath}`, error);
+        for (const family of this.fontsCache.values()) {
+            if (
+                family.cssFamily === identifier ||
+                family.displayName === identifier ||
+                family.name === identifier
+            ) {
+                return family;
             }
         }
 
-        await scanRecursive(dirPath);
-        return fonts;
+        return null;
     }
 
-    /**
-     * 🔥 폰트 파일명(TTF/OTF)에서 폰트 정보 추출
-     */
-    private static parseFont(filePath: string, familyName: string): FontInfo | null {
-        // TTF 또는 OTF 확장자 제거
-        const ext = path.extname(filePath).toLowerCase();
-        const fileName = path.basename(filePath, ext);
-
-        // 가중치 매핑
-        const weightMap: Record<string, string> = {
-            'thin': '100',
-            'extralight': '200',
-            'light': '300',
-            'regular': '400',
-            'medium': '500',
-            'semibold': '600',
-            'bold': '700',
-            'extrabold': '800',
-            'black': '900',
-            'variable': '400' // Variable 폰트는 기본 400
-        };
-
-        let weight = '400';
-        let style = 'normal';
-
-        const lowerFileName = fileName.toLowerCase();
-
-        // 가중치 감지
-        for (const [keyword, w] of Object.entries(weightMap)) {
-            if (lowerFileName.includes(keyword)) {
-                weight = w;
-                break;
-            }
-        }
-
-        // 이탤릭 감지
-        if (lowerFileName.includes('italic')) {
-            style = 'italic';
-        }
-
-        // 카테고리 결정
-        const category = FontService.determineFontCategory(familyName);
-
-        return {
-            family: familyName,
-            weight,
-            style,
-            filePath,
-            displayName: FontService.createDisplayName(familyName, fileName),
-            category
-        };
-    }
-
-    /**
-     * 🔥 폰트 카테고리 결정
-     */
-    private static determineFontCategory(familyName: string): 'korean' | 'japanese' | 'english' | 'system' {
-        const korean = ['nanum', 'pretendard', 'gangwon', 'malgun', 'noto_sans'];
-        const japanese = ['ms gothic', 'ms mincho', 'pretendardjp'];
-        const english = ['arial', 'times', 'verdana', 'calibri', 'sf-pro'];
-
-        const lowerName = familyName.toLowerCase();
-
-        if (korean.some(k => lowerName.includes(k))) return 'korean';
-        if (japanese.some(j => lowerName.includes(j))) return 'japanese';
-        if (english.some(e => lowerName.includes(e))) return 'english';
-
-        return 'system';
-    }
-
-    /**
-     * 🔥 표시명 생성
-     */
-    private static createDisplayName(familyName: string, fileName: string): string {
-        const displayMap: Record<string, string> = {
-            'Pretendard': 'Pretendard (프리텐다드)',
-            'PretendardJP': 'Pretendard JP',
-            'nanum-gothic': 'Nanum Gothic (나눔고딕)',
-            'Noto_Sans': 'Noto Sans',
-            'Gangwon_mac': 'Gangwon Mac (강원교육모두체)',
-            'Gangwon_win': 'Gangwon Win (강원교육모두체)',
-            'MS Gothic': 'MS Gothic (MS ゴシック)',
-            'MS Mincho Regular': 'MS Mincho (MS 明朝)',
-            'sf-pro-display': 'SF Pro Display',
-            'arial': 'Arial',
-            'times-new-roman': 'Times New Roman',
-            'Verdana': 'Verdana',
-            'calibri-font-family': 'Calibri'
-        };
-
-        return displayMap[familyName] || familyName;
-    }
-
-    /**
-     * 🔥 폰트 패밀리 생성
-     */
-    private createFontFamily(dirName: string, fonts: FontInfo[]): FontFamily {
-        const category = FontService.determineFontCategory(dirName);
-        const displayName = FontService.createDisplayName(dirName, '');
-
-        // CSS font-family 문자열 생성
-        const cssFamily = this.generateCSSFontFamily(dirName, fonts);
-
-        return {
-            name: dirName,
-            displayName,
-            category,
-            variants: fonts,
-            cssFamily
-        };
-    }
-
-    /**
-     * 🔥 CSS font-family 문자열 생성
-     */
-    private generateCSSFontFamily(familyName: string, fonts: FontInfo[]): string {
-        const baseName = familyName.replace(/[-_]/g, ' ');
-
-        // 폴백 폰트 추가
-        const fallbacks = {
-            korean: ['-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-            japanese: ['-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-            english: ['-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-            system: ['system-ui', 'sans-serif']
-        };
-
-        const category = FontService.determineFontCategory(familyName);
-        const fallbackList = fallbacks[category];
-
-        return `"${baseName}", ${fallbackList.join(', ')}`;
-    }
-
-    /**
-     * 🔥 @font-face CSS 생성
-     */
     public generateFontFaceCSS(): string {
+        this.ensureInitialized();
+
         const css: string[] = [];
 
         for (const family of this.fontsCache.values()) {
             for (const font of family.variants) {
-                // 🎯 단순한 상대경로 사용 - 실무 표준 방식
-                let relativePath = path.relative(this.fontsPath, font.filePath);
-                relativePath = relativePath.replace(/\\/g, '/'); // Windows 경로 정규화
-
-                // WOFF2 우선, 없으면 원본 확장자 사용
-                const woff2Path = relativePath.replace(/\.(ttf|otf)$/i, '.woff2');
-                const woff2FilePath = path.join(this.fontsPath, woff2Path);
-
-                const finalPath = existsSync(woff2FilePath) ? woff2Path : relativePath;
-                const format = finalPath.endsWith('.woff2') ? 'woff2' :
-                    finalPath.endsWith('.woff') ? 'woff' : 'truetype';
-
-                // 🔥 개발/프로덕션 모드별 URL 생성
-                const isDev = process.env.NODE_ENV === 'development';
-                let fontUrl: string;
-                
-                if (isDev) {
-                    // 개발 모드: Vite dev server를 통한 상대경로
-                    fontUrl = `/fonts/${finalPath}`;
-                } else {
-                    // 프로덕션 모드: 절대경로 + file:// 프로토콜
-                    const absoluteFontPath = path.join(this.fontsPath, finalPath);
-                    fontUrl = `file://${absoluteFontPath.replace(/\\/g, '/')}`;
-                }
-
-                Logger.debug('FONT_SERVICE', '🔗 Font URL mapping', {
-                    originalPath: font.filePath,
-                    relativePath: finalPath,
-                    fontUrl,
-                    family: font.family,
-                    format
-                });
-
                 css.push(`
 @font-face {
-  font-family: "${font.family.replace(/[-_]/g, ' ')}";
-  src: url("${fontUrl}") format("${format}");
+  font-family: "${family.displayName}";
+  src: url("loop-font://${font.variantId}") format("woff2");
   font-weight: ${font.weight};
   font-style: ${font.style};
   font-display: swap;
@@ -369,45 +163,344 @@ class FontService {
         return css.join('\n');
     }
 
-    /**
-     * 🔥 사용 가능한 폰트 목록 반환
-     */
-    public getAvailableFonts(): Array<{ value: string; label: string; category: string }> {
-        const fonts: Array<{ value: string; label: string; category: string }> = [];
+    public async getFontBinary(variantId: string): Promise<ArrayBuffer | null> {
+        this.ensureInitialized();
 
-        for (const family of this.fontsCache.values()) {
-            fonts.push({
-                value: family.cssFamily,
-                label: family.displayName,
-                category: family.category
-            });
+        const filePath = this.variantIndex.get(variantId);
+        if (!filePath) {
+            Logger.warn('FONT_SERVICE', 'Requested font variant not found', { variantId });
+            return null;
         }
 
-        // 카테고리별 정렬
-        return fonts.sort((a, b) => {
-            const categoryOrder = { korean: 1, japanese: 2, english: 3, system: 4 };
-            const orderA = categoryOrder[a.category as keyof typeof categoryOrder] || 5;
-            const orderB = categoryOrder[b.category as keyof typeof categoryOrder] || 5;
+        try {
+            const buffer = await fs.readFile(filePath);
+            return buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength) as ArrayBuffer;
+        } catch (error) {
+            Logger.error('FONT_SERVICE', 'Failed to read cached font file', { variantId, filePath, error });
+            return null;
+        }
+    }
 
-            if (orderA !== orderB) return orderA - orderB;
-            return a.label.localeCompare(b.label);
+    private ensureInitialized(): void {
+        if (!this.isInitialized) {
+            throw new Error('FontService has not been initialized yet. Call initialize() first.');
+        }
+    }
+
+    private async resolvePaths(): Promise<{ source: string; cache: string }> {
+        const candidates = [
+            path.join(process.cwd(), 'public', 'fonts'),
+            path.join(app.getAppPath(), 'public', 'fonts'),
+            path.join(process.resourcesPath ?? '', 'public', 'fonts')
+        ].filter(Boolean);
+
+        for (const candidate of candidates) {
+            try {
+                const stats = await fs.stat(candidate);
+                if (stats.isDirectory()) {
+                    const cacheDir = path.join(app.getPath('userData'), 'fonts-cache');
+                    await fs.mkdir(cacheDir, { recursive: true });
+                    return { source: candidate, cache: cacheDir };
+                }
+            } catch {
+                // continue to next candidate
+            }
+        }
+
+    const fallback = candidates[0] ?? path.join(process.cwd(), 'public', 'fonts');
+        const cacheDir = path.join(app.getPath('userData'), 'fonts-cache');
+        await fs.mkdir(cacheDir, { recursive: true });
+
+        Logger.warn('FONT_SERVICE', 'No font directory found in candidates, using fallback', {
+            fallback
+        });
+
+        return { source: fallback, cache: cacheDir };
+    }
+
+    private async scanFontsDirectory(): Promise<void> {
+        if (!this.fontsPath) {
+            Logger.warn('FONT_SERVICE', 'Fonts path is not defined, skipping scan');
+            return;
+        }
+
+        try {
+            const fontDirs = await fs.readdir(this.fontsPath, { withFileTypes: true });
+
+            for (const dir of fontDirs) {
+                if (!dir.isDirectory() || dir.name.startsWith('.')) {
+                    continue;
+                }
+
+                if (dir.name === 'Noto_Sans') {
+                    await this.processNotoSansDirectory(path.join(this.fontsPath, dir.name));
+                } else {
+                    await this.processFontDirectory(dir.name);
+                }
+            }
+        } catch (error) {
+            Logger.error('FONT_SERVICE', 'Failed to scan fonts directory', { fontsPath: this.fontsPath, error });
+        }
+    }
+
+    private async processFontDirectory(dirName: string): Promise<void> {
+        if (!this.fontsPath) {
+            return;
+        }
+
+        const dirPath = path.join(this.fontsPath, dirName);
+        const fontInfo = await this.scanForFontFiles(dirPath, dirName);
+        if (fontInfo.length === 0) {
+            Logger.warn('FONT_SERVICE', 'Font directory did not contain convertible files', { dirName });
+            return;
+        }
+
+        const family = this.createFontFamily(dirName, fontInfo);
+        this.fontsCache.set(family.name, family);
+        fontInfo.forEach(info => this.variantIndex.set(info.variantId, info.filePath));
+
+        Logger.debug('FONT_SERVICE', 'Registered font family', {
+            family: family.name,
+            variants: fontInfo.length
         });
     }
 
-    /**
-     * 🔥 특정 폰트 패밀리 정보 조회
-     */
-    public getFontFamily(familyName: string): FontFamily | null {
-        return this.fontsCache.get(familyName) || null;
+    private async processNotoSansDirectory(dirPath: string): Promise<void> {
+        const allFonts: FontInfo[] = [];
+
+        try {
+            const subDirs = await fs.readdir(dirPath, { withFileTypes: true });
+
+            for (const subDir of subDirs) {
+                if (!subDir.isDirectory() || subDir.name.startsWith('.')) {
+                    continue;
+                }
+
+                const fonts = await this.scanForFontFiles(path.join(dirPath, subDir.name), 'Noto_Sans');
+                allFonts.push(...fonts);
+            }
+
+            if (allFonts.length > 0) {
+                const family = this.createFontFamily('Noto_Sans', allFonts);
+                family.displayName = 'Noto Sans (KR/JP)';
+                family.category = 'korean';
+                this.fontsCache.set('Noto_Sans', family);
+                allFonts.forEach(info => this.variantIndex.set(info.variantId, info.filePath));
+
+                Logger.info('FONT_SERVICE', 'Registered merged Noto Sans family', {
+                    variants: allFonts.length
+                });
+            }
+        } catch (error) {
+            Logger.error('FONT_SERVICE', 'Failed to process Noto Sans directory', { dirPath, error });
+        }
     }
 
-    /**
-     * 🔥 폰트 서비스 리로드
-     */
-    public async reload(): Promise<void> {
-        this.fontsCache.clear();
-        this.isInitialized = false;
-        await this.initialize();
+    private async scanForFontFiles(dirPath: string, familyName: string): Promise<FontInfo[]> {
+        const fonts: FontInfo[] = [];
+
+        const scanRecursive = async (currentPath: string): Promise<void> => {
+            let items: Dirent[] = [];
+            try {
+                items = await fs.readdir(currentPath, { withFileTypes: true });
+            } catch (error) {
+                Logger.warn('FONT_SERVICE', 'Failed to read directory while scanning fonts', { currentPath, error });
+                return;
+            }
+
+            for (const item of items) {
+                const itemPath = path.join(currentPath, item.name);
+                if (item.isDirectory()) {
+                    await scanRecursive(itemPath);
+                    continue;
+                }
+
+                const lowerName = item.name.toLowerCase();
+                if (!lowerName.endsWith('.ttf') && !lowerName.endsWith('.otf') && !lowerName.endsWith('.woff2')) {
+                    continue;
+                }
+
+                const parsed = FontService.parseFont(itemPath, familyName);
+                if (!parsed) {
+                    continue;
+                }
+
+                try {
+                    const cachedPath = await this.ensureWoff2(itemPath, familyName, parsed.displayName);
+                    parsed.filePath = cachedPath;
+                    parsed.variantId = this.createVariantId(familyName, parsed, fonts.length);
+                    fonts.push(parsed);
+                } catch (error) {
+                    Logger.error('FONT_SERVICE', 'Failed to convert font to WOFF2', {
+                        file: itemPath,
+                        error
+                    });
+                }
+            }
+        };
+
+        await scanRecursive(dirPath);
+        return fonts;
+    }
+
+    private async ensureWoff2(sourcePath: string, familyName: string, displayName: string): Promise<string> {
+        const ext = path.extname(sourcePath).toLowerCase();
+        if (ext === '.woff2') {
+            return sourcePath;
+        }
+
+        if (!this.cachePath) {
+            throw new Error('Font cache path has not been resolved');
+        }
+
+        const familyDir = path.join(this.cachePath, this.sanitizeId(familyName));
+        await fs.mkdir(familyDir, { recursive: true });
+
+        const baseName = path.basename(sourcePath, ext);
+        const targetPath = path.join(familyDir, `${baseName}.woff2`);
+
+        if (await this.isCacheValid(sourcePath, targetPath)) {
+            return targetPath;
+        }
+
+        const fontBuffer = await fs.readFile(sourcePath);
+        const converted = await Promise.resolve(ttf2woff2(fontBuffer));
+        const outBuffer = Buffer.isBuffer(converted) ? converted : Buffer.from(converted);
+        await fs.writeFile(targetPath, outBuffer);
+
+        Logger.info('FONT_SERVICE', 'Converted font to WOFF2', {
+            family: familyName,
+            file: displayName,
+            source: sourcePath,
+            target: targetPath
+        });
+
+        return targetPath;
+    }
+
+    private async isCacheValid(sourcePath: string, targetPath: string): Promise<boolean> {
+        try {
+            const [sourceStat, targetStat] = await Promise.all([
+                fs.stat(sourcePath),
+                fs.stat(targetPath)
+            ]);
+
+            return targetStat.mtimeMs >= sourceStat.mtimeMs && targetStat.size > 0;
+        } catch {
+            return false;
+        }
+    }
+
+    private createFontFamily(dirName: string, fonts: FontInfo[]): FontFamily {
+        const category = FontService.determineFontCategory(dirName);
+        const displayName = FontService.createDisplayName(dirName, fonts[0]?.displayName ?? dirName);
+        const cssFamily = this.generateCSSFontFamily(displayName);
+
+        return {
+            name: dirName,
+            displayName,
+            category,
+            variants: fonts,
+            cssFamily
+        };
+    }
+
+    private generateCSSFontFamily(displayName: string): string {
+        const fallbacks = ['-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'];
+        return `"${displayName}"` + (fallbacks.length ? `, ${fallbacks.join(', ')}` : '');
+    }
+
+    private createVariantId(familyName: string, font: FontInfo, index: number): string {
+        const parts = [
+            this.sanitizeId(familyName),
+            font.weight || '400',
+            font.style || 'normal',
+            index.toString()
+        ];
+        return parts.join('-');
+    }
+
+    private sanitizeId(value: string): string {
+        return value.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    }
+
+    private static parseFont(filePath: string, familyName: string): FontInfo | null {
+        const ext = path.extname(filePath).toLowerCase();
+        const fileName = path.basename(filePath, ext);
+        const lowerFileName = fileName.toLowerCase();
+
+        const weightMap: Record<string, string> = {
+            thin: '100',
+            extralight: '200',
+            light: '300',
+            regular: '400',
+            medium: '500',
+            semibold: '600',
+            bold: '700',
+            extrabold: '800',
+            black: '900',
+            variable: '400'
+        };
+
+        let weight = '400';
+        for (const [keyword, mapped] of Object.entries(weightMap)) {
+            if (lowerFileName.includes(keyword)) {
+                weight = mapped;
+                break;
+            }
+        }
+
+        const style: 'normal' | 'italic' = lowerFileName.includes('italic') ? 'italic' : 'normal';
+        const category = FontService.determineFontCategory(familyName);
+        const displayName = FontService.createDisplayName(familyName, fileName);
+
+        return {
+            family: familyName,
+            weight,
+            style,
+            filePath,
+            displayName,
+            category,
+            variantId: ''
+        };
+    }
+
+    private static determineFontCategory(familyName: string): FontCategory {
+        const name = familyName.toLowerCase();
+        if (/(nanum|pretendard|gangwon|malgun|noto_sans|noto-sans|hangang)/.test(name)) {
+            return 'korean';
+        }
+        if (/(ms gothic|ms mincho|pretendardjp|jp)/.test(name)) {
+            return 'japanese';
+        }
+        if (/(arial|times|verdana|calibri|sf-pro|roboto|inter)/.test(name)) {
+            return 'english';
+        }
+        return 'system';
+    }
+
+    private static createDisplayName(familyName: string, fallback: string): string {
+        const map: Record<string, string> = {
+            Pretendard: 'Pretendard',
+            PretendardJP: 'Pretendard JP',
+            'nanum-gothic': 'Nanum Gothic (나눔고딕)',
+            Noto_Sans: 'Noto Sans',
+            'Noto_Sans_KR': 'Noto Sans KR',
+            'Noto_Sans_JP': 'Noto Sans JP',
+            Gangwon_mac: '강원교육모두체 (Mac)',
+            Gangwon_win: '강원교육모두체 (Windows)',
+            'MS Gothic': 'MS Gothic',
+            'MS Mincho Regular': 'MS Mincho',
+            'sf-pro-display': 'SF Pro Display',
+            arial: 'Arial',
+            'times-new-roman': 'Times New Roman',
+            Verdana: 'Verdana',
+            'calibri-font-family': 'Calibri',
+            Roboto: 'Roboto',
+            Inter: 'Inter'
+        };
+
+        return map[familyName] || fallback || familyName;
     }
 }
 
