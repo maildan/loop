@@ -9,12 +9,13 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { Logger } from '../../shared/logger';
+import { isValidTheme, type Theme } from '../../shared/types/theme';
 import { themeManager, type ThemeMode } from '../utils/themeManager';
 
 interface ThemeContextType {
-  theme: 'light' | 'dark' | 'system';
+  theme: Theme;
   resolvedTheme: ThemeMode; // 실제 적용된 테마 (system 해결됨)
-  setTheme: (theme: 'light' | 'dark' | 'system') => void;
+  setTheme: (theme: Theme) => Promise<void>;
   toggleTheme: () => void;
 }
 
@@ -23,40 +24,40 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 interface ThemeProviderProps {
   children: React.ReactNode;
-  defaultTheme?: 'light' | 'dark' | 'system';
+  defaultTheme?: Theme;
 }
 
 export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProviderProps): React.ReactElement {
-  const [theme, setThemeState] = useState<'light' | 'dark' | 'system'>(defaultTheme);
+  const [theme, setThemeState] = useState<Theme>(defaultTheme);
   const [resolvedTheme, setResolvedTheme] = useState<ThemeMode>('light');
 
   /**
    * 🎯 테마 설정 (설정 저장 포함)
    */
-  const setTheme = useCallback(async (newTheme: 'light' | 'dark' | 'system'): Promise<void> => {
+  const setTheme = useCallback(async (newTheme: Theme): Promise<void> => {
     try {
       Logger.debug('THEME_PROVIDER', 'Setting theme', { newTheme });
       
       setThemeState(newTheme);
       
-      if (window.electronAPI) {
+      if (window.electronAPI?.theme) {
         // Electron 환경: preload API 사용
         const response = await window.electronAPI.theme.set(newTheme);
         if (!response.success) {
           Logger.error('THEME_PROVIDER', 'Failed to save theme:', response.error);
         }
-      }
-      
-      // 해결된 테마 계산
-      let resolved: ThemeMode;
-      if (newTheme === 'system') {
-        resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       } else {
-        resolved = newTheme;
+        // 웹 환경: localStorage 유지
+        try {
+          localStorage.setItem('loop-theme', newTheme);
+        } catch (storageError) {
+          Logger.warn('THEME_PROVIDER', 'Unable to persist theme to localStorage', storageError);
+        }
       }
       
       // DOM 업데이트는 themeManager가 담당
-      themeManager.applyTheme(resolved);
+      themeManager.applyTheme(newTheme);
+      const resolved = themeManager.getResolvedThemeMode();
       setResolvedTheme(resolved);
       
       Logger.info('THEME_PROVIDER', 'Theme updated', { theme: newTheme, resolved });
@@ -70,7 +71,7 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
    */
   const toggleTheme = useCallback((): void => {
     const newTheme = resolvedTheme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
+    void setTheme(newTheme);
   }, [resolvedTheme, setTheme]);
 
   /**
@@ -79,18 +80,18 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
   useEffect(() => {
     const initializeTheme = async (): Promise<void> => {
       try {
-        let initialTheme: 'light' | 'dark' | 'system' = defaultTheme;
+        let initialTheme: Theme = defaultTheme;
         
         if (window.electronAPI) {
           // Electron 환경: 저장된 설정 로드
           const response = await window.electronAPI.theme.get();
-          if (response.success && response.data) {
+          if (response.success && isValidTheme(response.data)) {
             initialTheme = response.data;
           }
         } else {
           // 웹 환경: localStorage 사용
-          const saved = localStorage.getItem('loop-theme') as 'light' | 'dark' | 'system' | null;
-          if (saved && ['light', 'dark', 'system'].includes(saved)) {
+          const saved = localStorage.getItem('loop-theme');
+          if (isValidTheme(saved)) {
             initialTheme = saved;
           }
         }
@@ -112,73 +113,78 @@ export function ThemeProvider({ children, defaultTheme = 'system' }: ThemeProvid
    * 🎯 시스템 테마 변경 및 설정 변경 리스너 설정
    */
   useEffect(() => {
-    if (window.electronAPI) {
-      if (!window.electronAPI.theme) {
-        Logger.error('THEME_PROVIDER', 'electronAPI.theme is undefined');
-        return;
-      }
-
-      const onChange = window.electronAPI.theme.onChange?.bind(window.electronAPI.theme);
-      const onSystemChange = window.electronAPI.theme.onSystemChange?.bind(window.electronAPI.theme);
-
-      if (typeof onChange !== 'function' || typeof onSystemChange !== 'function') {
-        Logger.error('THEME_PROVIDER', 'electronAPI.theme listeners are missing or invalid', window.electronAPI.theme);
-        return;
-      }
-
-      let unsubscribeThemeChange: (() => void) | undefined;
-      let unsubscribeSystemChange: (() => void) | undefined;
-
-      try {
-        unsubscribeThemeChange = onChange((newResolvedTheme: ThemeMode) => {
-          setResolvedTheme(newResolvedTheme);
-          Logger.debug('THEME_PROVIDER', 'Theme changed via IPC', { newResolvedTheme });
-        });
-      } catch (error) {
-        Logger.error('THEME_PROVIDER', 'Failed to subscribe to theme changes', error);
-      }
-
-      try {
-        unsubscribeSystemChange = onSystemChange((shouldUseDarkColors: boolean) => {
-          if (theme === 'system') {
-            const systemTheme = shouldUseDarkColors ? 'dark' : 'light';
-            setResolvedTheme(systemTheme);
-            themeManager.applyTheme(systemTheme);
-            Logger.debug('THEME_PROVIDER', 'System theme changed', { systemTheme });
-          }
-        });
-      } catch (error) {
-        Logger.error('THEME_PROVIDER', 'Failed to subscribe to system theme changes', error);
-      }
-
-      return () => {
-        try {
-          unsubscribeThemeChange?.();
-        } catch (error) {
-          Logger.warn('THEME_PROVIDER', 'Failed to cleanup theme change listener', error);
-        }
-
-        try {
-          unsubscribeSystemChange?.();
-        } catch (error) {
-          Logger.warn('THEME_PROVIDER', 'Failed to cleanup system theme listener', error);
-        }
-      };
-    } else {
-      // 웹 환경에서의 시스템 테마 감지
+    if (!window.electronAPI?.theme) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      const handleSystemThemeChange = (event: MediaQueryListEvent) => {
         if (theme === 'system') {
-          const systemTheme = e.matches ? 'dark' : 'light';
-          setResolvedTheme(systemTheme);
-          themeManager.applyTheme(systemTheme);
-          Logger.debug('THEME_PROVIDER', 'System theme changed (web)', { systemTheme });
+          themeManager.applyTheme('system', event.matches);
+          const resolved = themeManager.getResolvedThemeMode();
+          setResolvedTheme(resolved);
+          Logger.debug('THEME_PROVIDER', 'System theme changed (web)', { resolved });
         }
       };
 
       mediaQuery.addEventListener('change', handleSystemThemeChange);
       return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
     }
+
+    const { theme: themeApi } = window.electronAPI;
+    const cleanupFns: Array<() => void> = [];
+
+    if (typeof themeApi.onChange === 'function') {
+      try {
+        const unsubscribe = themeApi.onChange((nextTheme: Theme) => {
+          if (!isValidTheme(nextTheme)) {
+            return;
+          }
+
+          setThemeState(nextTheme);
+          themeManager.applyTheme(nextTheme);
+          const resolved = themeManager.getResolvedThemeMode();
+          setResolvedTheme(resolved);
+          Logger.debug('THEME_PROVIDER', 'Theme changed via IPC', { nextTheme, resolved });
+        });
+
+        if (typeof unsubscribe === 'function') {
+          cleanupFns.push(unsubscribe);
+        }
+      } catch (error) {
+        Logger.error('THEME_PROVIDER', 'Failed to subscribe to theme changes', error);
+      }
+    } else {
+      Logger.error('THEME_PROVIDER', 'electronAPI.theme.onChange is missing or invalid', themeApi);
+    }
+
+    if (typeof themeApi.onSystemChange === 'function') {
+      try {
+        const unsubscribe = themeApi.onSystemChange((shouldUseDarkColors: boolean) => {
+          if (theme === 'system') {
+            themeManager.applyTheme('system', shouldUseDarkColors);
+            const resolved = themeManager.getResolvedThemeMode();
+            setResolvedTheme(resolved);
+            Logger.debug('THEME_PROVIDER', 'System theme changed', { resolved });
+          }
+        });
+
+        if (typeof unsubscribe === 'function') {
+          cleanupFns.push(unsubscribe);
+        }
+      } catch (error) {
+        Logger.error('THEME_PROVIDER', 'Failed to subscribe to system theme changes', error);
+      }
+    } else {
+      Logger.error('THEME_PROVIDER', 'electronAPI.theme.onSystemChange is missing or invalid', themeApi);
+    }
+
+    return () => {
+      cleanupFns.forEach((cleanup) => {
+        try {
+          cleanup();
+        } catch (error) {
+          Logger.warn('THEME_PROVIDER', 'Failed to cleanup theme listener', error);
+        }
+      });
+    };
   }, [theme]);
 
   const value: ThemeContextType = {

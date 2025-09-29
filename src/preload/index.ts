@@ -16,6 +16,7 @@ import {
   ProjectNote
 } from '../shared/types';
 import type { Theme } from '../shared/types/theme';
+import { isValidTheme } from '../shared/types/theme';
 import type {
   SettingsSchema,
   SettingsResult,
@@ -135,46 +136,109 @@ const electronAPI: ElectronAPI = {
 
   theme: {
     get: async () => {
-      const response = await ipcRenderer.invoke('settings:get', 'app.theme');
-      if (response.success) {
-        const theme = response.data;
-        // BasicTheme만 반환 (light, dark, system)
-        if (theme === 'light' || theme === 'dark' || theme === 'system') {
-          return {
-            success: true,
-            data: theme,
-            timestamp: new Date()
-          };
-        }
+      const fallbackTheme: Theme = 'light';
+
+      const response = await ipcRenderer.invoke('settings:get', 'app.theme').catch((error: unknown) => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown theme retrieval error';
+        console.error('🚨 Failed to load theme from settings:', error);
+        return { success: false, error: errorMessage } as { success: false; error: string };
+      });
+
+      if (!response || typeof response !== 'object') {
+        console.warn('⚠️ Received empty theme response from settings, defaulting to light.');
+        return {
+          success: false,
+          data: fallbackTheme,
+          error: 'Invalid theme response from main process',
+          timestamp: new Date(),
+        } satisfies IpcResponse<Theme>;
       }
+
+      const rawTheme = (response as { data?: unknown }).data;
+      const hasValidTheme = isValidTheme(rawTheme);
+
+      if ((response as { success?: boolean }).success && hasValidTheme) {
+        return {
+          success: true,
+          data: rawTheme,
+          timestamp: new Date(),
+        } satisfies IpcResponse<Theme>;
+      }
+
+      if (!hasValidTheme && rawTheme !== undefined) {
+        console.warn('⚠️ Falling back to light theme because settings value was invalid:', rawTheme);
+      }
+
+      const errorMessage = typeof (response as { error?: string }).error === 'string'
+        ? (response as { error?: string }).error
+        : 'Invalid theme received from main process, defaulting to light';
+
       return {
-        success: true,
-        data: 'light' as 'light' | 'dark' | 'system', // 기본값
-        timestamp: new Date()
-      };
+        success: false,
+        data: fallbackTheme,
+        error: errorMessage,
+        timestamp: new Date(),
+      } satisfies IpcResponse<Theme>;
     },
-    set: async (theme: 'light' | 'dark' | 'system') => {
-      const response = await ipcRenderer.invoke('settings:set', 'app.theme', theme);
-      return {
-        success: response.success,
-        data: response.success,
-        timestamp: new Date()
-      };
+    set: async (theme: Theme) => {
+      const createResponse = (success: boolean, error?: string): IpcResponse<boolean> => ({
+        success,
+        data: success,
+        error,
+        timestamp: new Date(),
+      });
+
+      if (!isValidTheme(theme)) {
+        console.warn('⚠️ Attempted to persist invalid theme, ignoring:', theme);
+        return createResponse(false, 'Invalid theme value provided to preload bridge');
+      }
+
+      const rawResponse = await ipcRenderer.invoke('settings:set', 'app.theme', theme).catch((error: unknown) => {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown theme persistence error';
+        console.error('🚨 Failed to save theme preference:', error);
+        return { success: false, error: errorMessage } as { success: false; error: string };
+      });
+
+      if (!rawResponse || typeof rawResponse !== 'object') {
+        console.error('🚨 Failed to persist theme preference: unknown response payload');
+        return createResponse(false, 'Unknown theme persistence failure');
+      }
+
+      const typedResponse = rawResponse as { success?: boolean; error?: unknown; data?: unknown };
+
+      if (typedResponse.success) {
+        return createResponse(true);
+      }
+
+      const errorMessage = typeof typedResponse.error === 'string' ? typedResponse.error : 'Unknown theme persistence failure';
+
+      if (typedResponse.data !== undefined) {
+        console.error('🚨 Failed to persist theme preference:', errorMessage, typedResponse.data);
+      } else {
+        console.error('🚨 Failed to persist theme preference:', errorMessage);
+      }
+
+      return createResponse(false, errorMessage);
     },
-    onChange: (callback: (theme: 'light' | 'dark') => void) => {
-      const handleSettingsChange = (_event: Electron.IpcRendererEvent, change: { keyPath: string, value: unknown }) => {
-        if (change.keyPath === 'app.theme') {
-          let resolvedTheme: 'light' | 'dark';
-          if (change.value === 'system') {
-            resolvedTheme = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
-          } else if (change.value === 'light' || change.value === 'dark') {
-            resolvedTheme = change.value;
-          } else {
-            resolvedTheme = 'light'; // 기본값
-          }
-          callback(resolvedTheme);
+    onChange: (callback: (theme: Theme) => void) => {
+      const handleSettingsChange = (_event: Electron.IpcRendererEvent, change: { keyPath: string; value: unknown }) => {
+        if (change.keyPath !== 'app.theme') {
+          return;
+        }
+
+        const nextTheme: Theme = isValidTheme(change.value) ? change.value : 'light';
+
+        if (!isValidTheme(change.value)) {
+          console.warn('⚠️ Received invalid theme value from settings change event, defaulting to light:', change.value);
+        }
+
+        try {
+          callback(nextTheme);
+        } catch (error) {
+          console.error('🚨 Theme change callback threw an error:', error);
         }
       };
+
       ipcRenderer.on('settings:changed', handleSettingsChange);
       return () => ipcRenderer.removeListener('settings:changed', handleSettingsChange);
     },
@@ -273,36 +337,58 @@ const electronAPI: ElectronAPI = {
   readFileAsDataUrl: (filePath: string) => ipcRenderer.invoke('settings:read-file', filePath),
 };
 
+const readLoopSnapshotFromKeychain = async (): Promise<unknown | null> => {
+  try {
+    const resp = await ipcRenderer.invoke('keychain:get-snapshot');
+    if (!resp) {
+      return null;
+    }
+
+    if (!resp.ok) {
+      return null;
+    }
+
+    if (!resp.data) {
+      return null;
+    }
+
+    return resp.data;
+  } catch (error) {
+    // ignore keychain errors and fallback to file storage
+  }
+
+  return null;
+};
+
+const readLoopSnapshotFromFile = async (): Promise<unknown | null> => {
+  try {
+    const userDataPath = await ipcRenderer.invoke('app:get-user-data-path').catch(() => process.cwd());
+    const basePath = typeof userDataPath === 'string' && userDataPath.length > 0 ? userDataPath : process.cwd();
+    const filePath = path.join(basePath, '.auth_snapshot.json');
+
+    if (!fs.existsSync(filePath)) {
+      return null;
+    }
+
+    const raw = fs.readFileSync(filePath, { encoding: 'utf-8' });
+    return JSON.parse(raw);
+  } catch (error) {
+    // ignore file system errors
+  }
+
+  return null;
+};
+
 // Attach async loopSnapshot API dynamically to avoid typing issues
 ; (electronAPI as any).loopSnapshot = {
   getAsync: async () => {
-    try {
-      // Delegate to main process keychain handler first
-      const resp = await ipcRenderer.invoke('keychain:get-snapshot');
-      if (resp && resp.ok && resp.data) return resp.data;
-    } catch (e) {
-      // ignore keychain errors and fallback to file
+    const keychainSnapshot = await readLoopSnapshotFromKeychain();
+    if (keychainSnapshot) {
+      return keychainSnapshot;
     }
 
-    // fallback to file (userData then cwd)
-    try {
-      // Try to get userData path via IPC first
-      let userDataPath: string;
-      try {
-        userDataPath = await ipcRenderer.invoke('app:get-user-data-path') || process.cwd();
-      } catch (e) {
-        userDataPath = process.cwd();
-      }
-      const filePath = path.join(userDataPath, '.auth_snapshot.json');
-      if (fs.existsSync(filePath)) {
-        const raw = fs.readFileSync(filePath, { encoding: 'utf-8' });
-        return JSON.parse(raw);
-      }
-    } catch (e) {
-      // ignore
-    }
-
-    return null;
+    const fileSnapshot = await readLoopSnapshotFromFile();
+    return fileSnapshot ?? null;
   }
 };
 

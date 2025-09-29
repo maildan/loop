@@ -1,6 +1,7 @@
 // 🔥 기가차드 Settings 기본값 정의 - 모든 설정의 기본값!
 
 import { Logger } from '../../shared/logger';
+import { ALL_THEMES } from '../../shared/types/theme';
 import { SettingsSchema } from './types';
 
 // #DEBUG: Settings defaults entry point
@@ -319,7 +320,7 @@ export const getDefaultSettings = {
  */
 export const SETTINGS_CONSTRAINTS = {
   app: {
-    theme: ['light', 'dark', 'system'],
+    theme: ALL_THEMES,
     language: ['ko', 'en', 'ja', 'zh'],
     logLevel: ['debug', 'info', 'warn', 'error'],
     windowBounds: {

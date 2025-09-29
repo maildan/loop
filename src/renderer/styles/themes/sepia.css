@@ -57,7 +57,7 @@
 }
 
 /* Dark variant */
-html[data-theme="sepia"]-dark {
+[data-theme="sepia-dark"] {
   /* 기본 배경 - 다크 세피아 톤 */
   --background: 25 30% 8%;
   --foreground: 42 25% 85%;

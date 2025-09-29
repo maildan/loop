@@ -6,15 +6,22 @@
  * - 실시간 테마 변경
  * - 시스템 테마 자동 감지
  */
+import type { Theme } from '../../shared/types/theme';
+import { resolveThemeMode, isValidTheme, ALL_THEMES } from '../../shared/types/theme';
 
 export type ThemeMode = 'light' | 'dark';
 
 export class ThemeDOMManager {
   private static instance: ThemeDOMManager | null = null;
-  private currentTheme: ThemeMode = 'light';
+  private currentThemePreference: Theme = 'system';
+  private currentResolvedMode: ThemeMode = 'light';
+  private readonly systemDarkMediaQuery: MediaQueryList;
+  private listenersRegistered = false;
 
   private constructor() {
-    this.initializeTheme();
+    this.systemDarkMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    void this.initializeTheme();
+    this.setupSystemThemeListener();
   }
 
   public static getInstance(): ThemeDOMManager {
@@ -29,27 +36,16 @@ export class ThemeDOMManager {
    */
   private async initializeTheme(): Promise<void> {
     try {
-      if (window.electronAPI) {
+      let initialTheme: Theme = 'system';
+
+      if (window.electronAPI?.theme) {
         const response = await window.electronAPI.theme.get();
-        if (response.success && response.data) {
-          let resolvedTheme: ThemeMode;
-          
-          if (response.data === 'system') {
-            // 시스템 테마 감지
-            resolvedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-          } else if (response.data === 'light' || response.data === 'dark') {
-            resolvedTheme = response.data;
-          } else {
-            resolvedTheme = 'light';
-          }
-          
-          this.applyTheme(resolvedTheme);
+        if (response.success && isValidTheme(response.data)) {
+          initialTheme = response.data;
         }
-      } else {
-        // Fallback: 시스템 테마 감지
-        const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        this.applyTheme(systemTheme);
       }
+
+      this.applyTheme(initialTheme);
     } catch (error) {
       console.error('🚨 Failed to initialize theme:', error);
       this.applyTheme('light'); // 기본값
@@ -59,58 +55,100 @@ export class ThemeDOMManager {
   /**
    * 🎯 테마 적용 (DOM 조작)
    */
-  public applyTheme(theme: ThemeMode): void {
+  public applyTheme(theme: Theme, systemPrefersDarkOverride?: boolean): void {
+    const preference = isValidTheme(theme) ? theme : 'system';
+    const systemPrefersDark = systemPrefersDarkOverride ?? this.systemDarkMediaQuery.matches;
+    const resolvedMode = resolveThemeMode(preference, systemPrefersDark);
+    const dataThemeValue = preference === 'system' ? resolvedMode : preference;
+
+    this.currentThemePreference = preference;
+    this.currentResolvedMode = resolvedMode;
+
     const html = document.documentElement;
     const body = document.body;
-    
-    // 기존 테마 클래스 제거
-    html.classList.remove('theme-light', 'theme-dark', 'dark');
-    body.classList.remove('theme-light', 'theme-dark', 'dark');
-    
-    // 새 테마 클래스 추가
-    html.classList.add(`theme-${theme}`);
-    body.classList.add(`theme-${theme}`);
-    
-    // 현재 테마 저장
-    this.currentTheme = theme;
-    
-    // Tailwind 호환성을 위한 dark 클래스 관리
-    if (theme === 'dark') {
+
+    // 기존 클래스 정리
+    const classesToRemove = new Set<string>([
+      'dark',
+      'theme-light',
+      'theme-dark',
+    ]);
+
+    ALL_THEMES.forEach((supportedTheme) => {
+      classesToRemove.add(`theme-${supportedTheme}`);
+      classesToRemove.add(supportedTheme);
+    });
+
+    classesToRemove.forEach((className) => {
+      html.classList.remove(className);
+      body.classList.remove(className);
+    });
+
+    // 새 클래스 설정
+    html.classList.add(`theme-${resolvedMode}`);
+    body.classList.add(`theme-${resolvedMode}`);
+
+    if (preference !== 'system') {
+      html.classList.add(`theme-${preference}`);
+      body.classList.add(`theme-${preference}`);
+    }
+
+    if (resolvedMode === 'dark') {
       html.classList.add('dark');
       body.classList.add('dark');
     }
-    
-    // 명시적으로 스타일 강제 적용
-    html.style.setProperty('background-color', theme === 'dark' ? '#0f1419' : '#fefcf7');
-    html.style.setProperty('color', theme === 'dark' ? '#f8fafc' : '#0a0a0a');
-    body.style.setProperty('background-color', theme === 'dark' ? '#0f1419' : '#fefcf7');
-    body.style.setProperty('color', theme === 'dark' ? '#f8fafc' : '#0a0a0a');
-    
-    // 메타 테마 컬러 업데이트
-    this.updateMetaThemeColor(theme);
-    
-    console.log(`🎨 Theme applied: ${theme}`, { 
+
+    // data-theme 속성 업데이트
+    html.setAttribute('data-theme', dataThemeValue);
+    body.setAttribute('data-theme', dataThemeValue);
+    html.setAttribute('data-theme-mode', resolvedMode);
+    body.setAttribute('data-theme-mode', resolvedMode);
+    html.setAttribute('data-theme-preference', preference);
+    body.setAttribute('data-theme-preference', preference);
+
+    // 명시적 스타일 적용
+    const computedStyles = window.getComputedStyle(body);
+    const fallbackBackground = resolvedMode === 'dark' ? '#0f1419' : '#fefcf7';
+    const fallbackText = resolvedMode === 'dark' ? '#f8fafc' : '#0a0a0a';
+    const backgroundColor =
+      computedStyles.getPropertyValue('--bg-primary').trim() ||
+      computedStyles.getPropertyValue('--background').trim() ||
+      fallbackBackground;
+    const textColor =
+      computedStyles.getPropertyValue('--text-primary').trim() ||
+      computedStyles.getPropertyValue('--foreground').trim() ||
+      fallbackText;
+
+    html.style.setProperty('background-color', backgroundColor);
+    html.style.setProperty('color', textColor);
+    body.style.setProperty('background-color', backgroundColor);
+    body.style.setProperty('color', textColor);
+
+    this.updateMetaThemeColor(backgroundColor);
+
+    console.log(`🎨 Theme applied: ${preference}`, {
+      resolvedMode,
+      dataThemeValue,
       htmlClasses: html.classList.toString(),
       bodyClasses: body.classList.toString(),
       computedStyles: {
-        backgroundColor: window.getComputedStyle(html).backgroundColor,
-        color: window.getComputedStyle(html).color,
-        bgPrimary: window.getComputedStyle(html).getPropertyValue('--bg-primary'),
-        textPrimary: window.getComputedStyle(html).getPropertyValue('--text-primary'),
-        background: window.getComputedStyle(html).getPropertyValue('--background'),
-        foreground: window.getComputedStyle(html).getPropertyValue('--foreground')
-      }
+        backgroundColor,
+        color: textColor,
+        bgPrimary: computedStyles.getPropertyValue('--bg-primary'),
+        textPrimary: computedStyles.getPropertyValue('--text-primary'),
+        background: computedStyles.getPropertyValue('--background'),
+        foreground: computedStyles.getPropertyValue('--foreground'),
+      },
     });
   }
 
   /**
    * 🎯 메타 테마 컬러 업데이트
    */
-  private updateMetaThemeColor(theme: ThemeMode): void {
+  private updateMetaThemeColor(color: string): void {
     const metaThemeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
     
     if (metaThemeColor) {
-      const color = theme === 'dark' ? '#0f1419' : '#fefcf7';
       metaThemeColor.setAttribute('content', color);
     }
   }
@@ -118,24 +156,28 @@ export class ThemeDOMManager {
   /**
    * 🎯 현재 테마 반환
    */
-  public getCurrentTheme(): ThemeMode {
-    return this.currentTheme;
+  public getCurrentTheme(): Theme {
+    return this.currentThemePreference;
+  }
+
+  public getResolvedThemeMode(): ThemeMode {
+    return this.currentResolvedMode;
   }
 
   /**
    * 🎯 테마 토글
    */
   public async toggleTheme(): Promise<void> {
-    const newTheme = this.currentTheme === 'light' ? 'dark' : 'light';
-    await this.setTheme(newTheme);
+    const newThemePreference = this.currentResolvedMode === 'dark' ? 'light' : 'dark';
+    await this.setTheme(newThemePreference);
   }
 
   /**
    * 🎯 테마 설정 (설정 저장 포함)
    */
-  public async setTheme(theme: ThemeMode): Promise<void> {
+  public async setTheme(theme: Theme): Promise<void> {
     try {
-      if (window.electronAPI) {
+      if (window.electronAPI?.theme) {
         const response = await window.electronAPI.theme.set(theme);
         if (response.success) {
           this.applyTheme(theme);
@@ -155,40 +197,48 @@ export class ThemeDOMManager {
    * 🎯 시스템 테마 변경 리스너 설정
    */
   public setupSystemThemeListener(): void {
-    if (window.electronAPI) {
-      try {
-        window.electronAPI.theme?.onSystemChange?.((shouldUseDarkColors: boolean) => {
-          window.electronAPI.theme?.get().then(response => {
-            if (response.success && response.data === 'system') {
-              const systemTheme = shouldUseDarkColors ? 'dark' : 'light';
-              this.applyTheme(systemTheme);
+    if (this.listenersRegistered) {
+      return;
+    }
+
+    this.listenersRegistered = true;
+
+    if (window.electronAPI?.theme) {
+      const { theme } = window.electronAPI;
+
+      if (typeof theme.onChange === 'function') {
+        try {
+          theme.onChange((newTheme: Theme) => {
+            if (isValidTheme(newTheme)) {
+              this.applyTheme(newTheme);
             }
-          }).catch(error => {
-            console.error('🚨 Failed to resolve system theme:', error);
           });
-        });
-      } catch (error) {
-        console.error('🚨 Failed to subscribe system theme listener:', error);
+        } catch (error) {
+          console.error('🚨 Failed to subscribe theme change listener:', error);
+        }
       }
 
-      try {
-        window.electronAPI.theme?.onChange?.((theme: ThemeMode) => {
-          this.applyTheme(theme);
-        });
-      } catch (error) {
-        console.error('🚨 Failed to subscribe theme change listener:', error);
+      if (typeof theme.onSystemChange === 'function') {
+        try {
+          theme.onSystemChange((shouldUseDarkColors: boolean) => {
+            if (this.currentThemePreference === 'system') {
+              this.applyTheme('system', shouldUseDarkColors);
+            }
+          });
+        } catch (error) {
+          console.error('🚨 Failed to subscribe system theme listener:', error);
+        }
       }
     }
 
-    // 웹 환경에서의 시스템 테마 감지
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    mediaQuery.addEventListener('change', (e) => {
-      // Electron 환경이 아닌 경우에만 적용
-      if (!window.electronAPI) {
-        const systemTheme = e.matches ? 'dark' : 'light';
-        this.applyTheme(systemTheme);
+    // 시스템 테마 감지 (웹/디폴트)
+    const handleSystemPreferenceChange = (event: MediaQueryListEvent) => {
+      if (this.currentThemePreference === 'system') {
+        this.applyTheme('system', event.matches);
       }
-    });
+    };
+
+    this.systemDarkMediaQuery.addEventListener('change', handleSystemPreferenceChange);
   }
 }
 

@@ -2,24 +2,22 @@
 
 /* 🔥 헤딩 스타일 */
 .ProseMirror h1 {
-  @apply text-4xl font-bold leading-tight my-12 mb-6 cursor-text pb-3 transition-all duration-300 ease-in-out;
+  @apply text-4xl font-bold leading-tight my-12 mb-6 cursor-text transition-all duration-300 ease-in-out;
   font-family: var(--app-font-family);
   color: var(--editor-text);
   letter-spacing: -0.025em;
-  border-bottom: 2px solid var(--heading-border-h1);
 }
 
 .ProseMirror h1:hover {
   color: var(--editor-accent);
-  border-bottom-color: var(--editor-accent);
 }
 
+
 .ProseMirror h2 {
-  @apply text-3xl font-semibold leading-snug my-10 mb-4 cursor-text pb-2 transition-all duration-300 ease-in-out;
+  @apply text-3xl font-semibold leading-snug my-10 mb-4 cursor-text transition-all duration-300 ease-in-out;
   font-family: var(--app-font-family);
   color: var(--editor-text);
   letter-spacing: -0.02em;
-  border-bottom: 1px solid var(--heading-border-h2);
 }
 
 .ProseMirror h2:hover {

@@ -20,7 +20,7 @@ import { THEME_OPTIONS } from '../../constants/settings';
 interface AppSettingsSectionProps {
   settings: SettingsData['app'];
   updateSetting: UpdateSettingFunction;
-  setTheme: (theme: Theme) => void;
+  setTheme: (theme: Theme) => Promise<void>;
 }
 
 /**
@@ -58,7 +58,7 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
       setDisplayTheme(newTheme);
 
       // 2. ThemeProvider 업데이트 (실제 테마 적용)
-      setTheme(newTheme);
+      await setTheme(newTheme);
 
       // 3. 설정 저장 (백엔드 동기화)
       await updateSetting('app', 'theme', newTheme);

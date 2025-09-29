@@ -56,7 +56,7 @@
 }
 
 /* 🔥 Midnight Theme - 야간 작업을 위한 깊고 부드러운 다크 테마 */
-html.midnight {
+[data-theme="midnight"] {
   /* 기본 배경 - 깊은 미드나이트 블루 */
   --background: 220 25% 6%;
   --foreground: 220 15% 88%;

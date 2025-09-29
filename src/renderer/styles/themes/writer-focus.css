@@ -49,7 +49,7 @@
 }
 
 /* Dark variant - 🔥 Higher specificity for proper override */
-html.writer-focus-dark {
+[data-theme="writer-focus-dark"] {
   /* 기본 배경 - 진한 차콜 (순수 검정 피하기) */
   --background: 0 0% 8%;
   --foreground: 0 0% 95%;
