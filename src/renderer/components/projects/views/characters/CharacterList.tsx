@@ -18,14 +18,14 @@ interface CharacterListProps {
 
 const CHARACTERS_STYLES = {
     characterGrid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
-    addButton: 'group bg-white dark:bg-gray-800 rounded-xl border-2 border-dashed border-slate-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 transition-all duration-200 p-8 flex flex-col items-center justify-center text-center min-h-[200px] cursor-pointer',
-    addButtonIcon: 'w-12 h-12 text-slate-400 dark:text-gray-500 group-hover:text-blue-600 dark:group-hover:text-blue-400 mb-3 transition-colors duration-200',
-    addButtonText: 'text-slate-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 font-medium transition-colors duration-200',
+    addButton: 'group bg-card rounded-xl border-2 border-dashed border-border hover:border-[hsl(var(--accent-primary))] transition-all duration-200 p-8 flex flex-col items-center justify-center text-center min-h-[200px] cursor-pointer hover:bg-[hsl(var(--accent))]/10',
+    addButtonIcon: 'w-12 h-12 text-muted-foreground group-hover:text-[hsl(var(--accent-primary))] mb-3 transition-colors duration-200',
+    addButtonText: 'text-muted-foreground group-hover:text-[hsl(var(--accent-primary))] font-medium transition-colors duration-200',
     emptyState: 'text-center py-16',
-    emptyStateIcon: 'mx-auto w-24 h-24 text-slate-300 dark:text-gray-600 mb-4',
-    emptyStateTitle: 'text-xl font-semibold text-slate-600 dark:text-gray-400 mb-2',
-    emptyStateDescription: 'text-slate-500 dark:text-gray-500 mb-6 max-w-md mx-auto',
-    emptyStateButton: 'inline-flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-150',
+    emptyStateIcon: 'mx-auto w-24 h-24 text-muted-foreground/70 mb-4 text-6xl',
+    emptyStateTitle: 'text-xl font-semibold text-[hsl(var(--foreground))] mb-2',
+    emptyStateDescription: 'text-muted-foreground mb-6 max-w-md mx-auto',
+    emptyStateButton: 'inline-flex items-center space-x-2 px-4 py-2 bg-[hsl(var(--accent-primary))] hover:bg-[hsl(var(--accent-primary))]/90 text-[hsl(var(--accent-foreground))] rounded-lg transition-colors duration-150',
 };
 
 export function CharacterList({

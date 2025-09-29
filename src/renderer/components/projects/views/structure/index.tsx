@@ -26,26 +26,29 @@ export interface StructureViewProps {
 
 // 🔥 기가차드 작가 친화적 구조 스타일
 const STRUCTURE_STYLES = {
-    container: 'max-w-screen-xl mx-auto bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
-    header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
+    container: 'max-w-screen-xl mx-auto bg-[hsl(var(--background))] text-[hsl(var(--foreground))]',
+    header: 'p-6 bg-card/90 supports-[backdrop-filter]:bg-card/75 backdrop-blur-md border-b border-[hsl(var(--border))]/60',
     headerTop: 'flex items-center justify-between mb-4',
-    title: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
-    subtitle: 'text-slate-600 dark:text-gray-400 leading-relaxed',
+    title: 'text-2xl font-bold text-[hsl(var(--foreground))]',
+    subtitle: 'text-sm text-muted-foreground leading-relaxed',
 
     // 구조 아이템 스타일
-    structureItem: 'flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-200 cursor-pointer',
-    itemIcon: 'w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0',
+    structureItem: 'group relative flex items-center gap-4 p-4 bg-card border border-border rounded-xl hover:shadow-md hover:border-[hsl(var(--accent))]/60 hover:bg-[hsl(var(--accent))]/10 transition-all duration-200 cursor-pointer',
+    itemIcon: 'w-6 h-6 text-[hsl(var(--accent-primary))] flex-shrink-0',
     itemContent: 'flex-1 min-w-0',
-    itemTitle: 'font-medium text-gray-900 dark:text-gray-100 truncate',
-    itemType: 'text-xs text-gray-500 dark:text-gray-400 mt-1',
-    itemActions: 'flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity',
-    actionButton: 'p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded',
-    editInput: 'w-full px-2 py-1 text-sm bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-500',
+    itemTitle: 'font-semibold text-[hsl(var(--foreground))] truncate',
+    itemType: 'text-xs text-muted-foreground mt-1',
+    itemActions: 'flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity',
+    actionButton: 'p-2 rounded-lg text-muted-foreground hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent))]/10 transition-colors',
+    editInput: 'w-full px-3 py-2 border-2 border-[hsl(var(--accent-primary))] rounded-lg text-sm font-semibold text-[hsl(var(--foreground))] bg-card focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-primary))]/60',
 
     // 추가 메뉴 스타일
-    addButton: 'w-full flex items-center justify-between gap-3 p-4 text-gray-600 dark:text-gray-300 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-400 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer',
-    addMenu: 'mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden',
-    addMenuItem: 'flex items-center gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors border-b border-gray-100 dark:border-gray-700 last:border-b-0',
+    addButton: 'flex items-center justify-between gap-3 p-3 text-muted-foreground border-2 border-dashed border-border rounded-lg hover:border-[hsl(var(--accent-primary))] hover:text-[hsl(var(--accent-primary))] hover:bg-[hsl(var(--accent))]/10 transition-colors cursor-pointer',
+    addMenu: 'mt-2 bg-card border border-border rounded-lg shadow-lg overflow-hidden',
+    addMenuItem: 'flex items-center gap-3 p-3 hover:bg-[hsl(var(--accent))]/10 cursor-pointer transition-colors border-b border-border last:border-b-0',
+    addMenuIcon: 'w-5 h-5 text-[hsl(var(--accent-primary))]',
+    addMenuText: 'font-medium text-[hsl(var(--foreground))]',
+    addMenuDesc: 'text-xs text-muted-foreground',
 } as const;
 
 const EMPTY_STRUCTURES: ProjectStructure[] = [];
@@ -262,7 +265,7 @@ const StructureView = memo(function StructureView({
                             프로젝트의 구조를 체계적으로 관리하고 편집하세요
                         </p>
                     </div>
-                    <BarChart3 className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                    <BarChart3 className="w-8 h-8 text-[hsl(var(--accent-primary))]" />
                 </div>
             </div>
 

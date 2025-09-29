@@ -36,20 +36,20 @@ interface StructureViewProps {
 
 // 🔥 기가차드 작가 친화적 구조 스타일
 const STRUCTURE_STYLES = {
-  container: 'max-w-screen-xl mx-auto bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+  container: 'max-w-screen-xl mx-auto bg-[hsl(var(--background))] text-[hsl(var(--foreground))]',
 
   // 🔥 개선된 헤더
-  header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
+  header: 'p-6 bg-card/90 supports-[backdrop-filter]:bg-card/75 backdrop-blur-md border-b border-[hsl(var(--border))]/60',
   headerTop: 'flex items-center justify-between mb-4',
-  title: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
-  subtitle: 'text-slate-600 dark:text-gray-400 leading-relaxed',
+  title: 'text-2xl font-bold text-[hsl(var(--foreground))]',
+  subtitle: 'text-sm text-muted-foreground leading-relaxed',
 
   // 🔥 통계 요약
   statsGrid: 'grid grid-cols-3 gap-4 mt-4',
-  statCard: 'p-3 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700',
-  statIcon: 'w-5 h-5 text-blue-600 dark:text-blue-400 mb-2',
-  statValue: 'text-lg font-semibold text-gray-900 dark:text-gray-100',
-  statLabel: 'text-xs text-slate-600 dark:text-gray-400',
+  statCard: 'p-3 bg-card border border-border rounded-lg shadow-sm',
+  statIcon: 'w-5 h-5 text-[hsl(var(--accent-primary))] mb-2',
+  statValue: 'text-lg font-semibold text-[hsl(var(--foreground))]',
+  statLabel: 'text-xs text-muted-foreground',
 
   // 🔥 메인 콘텐츠 - 스크롤 영역 개선
   content: 'flex-1 flex flex-col min-h-0',
@@ -58,36 +58,36 @@ const STRUCTURE_STYLES = {
 
   // 🔥 개선된 구조 아이템
   structureList: 'space-y-3 pb-4',
-  structureItem: 'group relative flex items-center gap-4 p-4 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-xl hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all duration-200 cursor-pointer',
-  itemDragHandle: 'opacity-0 group-hover:opacity-100 w-5 h-5 text-slate-400 dark:text-gray-500 cursor-grab active:cursor-grabbing transition-opacity',
-  itemIcon: 'w-6 h-6 text-blue-600 dark:text-blue-400 flex-shrink-0',
+  structureItem: 'group relative flex items-center gap-4 p-4 bg-card border border-border rounded-xl hover:shadow-md hover:border-[hsl(var(--accent))]/60 hover:bg-[hsl(var(--accent))]/10 transition-all duration-200 cursor-pointer',
+  itemDragHandle: 'opacity-0 group-hover:opacity-100 w-5 h-5 text-muted-foreground/70 cursor-grab active:cursor-grabbing transition-opacity',
+  itemIcon: 'w-6 h-6 text-[hsl(var(--accent-primary))] flex-shrink-0',
   itemContent: 'flex-1 min-w-0',
-  itemTitle: 'font-semibold text-gray-900 dark:text-gray-100 truncate',
+  itemTitle: 'font-semibold text-[hsl(var(--foreground))] truncate',
   itemMeta: 'flex items-center gap-4 mt-1',
-  itemType: 'text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full font-medium',
-  itemStats: 'text-xs text-slate-500 dark:text-gray-400',
+  itemType: 'text-xs px-2 py-1 bg-[hsl(var(--accent))]/20 text-[hsl(var(--accent-primary))] rounded-full font-medium',
+  itemStats: 'text-xs text-muted-foreground',
   itemActions: 'flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity',
-  actionButton: 'p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-gray-700 text-slate-500 dark:text-gray-400 hover:text-slate-700 dark:hover:text-gray-300 transition-colors',
+  actionButton: 'p-2 rounded-lg text-muted-foreground hover:text-[hsl(var(--foreground))] hover:bg-[hsl(var(--accent))]/10 transition-colors',
 
   // 🔥 개선된 추가 메뉴 - 크기 더 축소
   addMenuContainer: 'relative',
-  addButton: 'flex items-center justify-center gap-1.5 w-full p-2 border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-md text-slate-600 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all duration-200 group',
+  addButton: 'flex items-center justify-center gap-1.5 w-full p-2 border-2 border-dashed border-border text-muted-foreground rounded-md hover:border-[hsl(var(--accent-primary))] hover:text-[hsl(var(--accent-primary))] hover:bg-[hsl(var(--accent))]/10 transition-all duration-200 group',
   addIcon: 'w-3.5 h-3.5 group-hover:scale-110 transition-transform',
   addText: 'text-xs font-medium',
-  addMenu: 'absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-md shadow-xl z-50 overflow-visible max-h-96 overflow-y-auto',
-  addMenuItem: 'flex items-center gap-2 px-2.5 py-1.5 hover:bg-slate-50 dark:hover:bg-gray-700 cursor-pointer transition-colors',
-  addMenuIcon: 'w-3.5 h-3.5 text-slate-600 dark:text-gray-400',
-  addMenuText: 'text-xs font-medium text-gray-900 dark:text-gray-100',
-  addMenuDesc: 'text-xs text-slate-500 dark:text-gray-400',
+  addMenu: 'absolute top-full left-0 right-0 mt-1 bg-card border border-border rounded-md shadow-xl z-50 overflow-visible max-h-96 overflow-y-auto',
+  addMenuItem: 'flex items-center gap-2 px-2.5 py-1.5 hover:bg-[hsl(var(--accent))]/10 cursor-pointer transition-colors',
+  addMenuIcon: 'w-3.5 h-3.5 text-muted-foreground',
+  addMenuText: 'text-xs font-medium text-[hsl(var(--foreground))]',
+  addMenuDesc: 'text-xs text-muted-foreground',
 
   // 🔥 편집 모드
-  editInput: 'w-full px-3 py-2 border-2 border-blue-400 rounded-lg text-sm font-semibold text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500',
+  editInput: 'w-full px-3 py-2 border-2 border-[hsl(var(--accent-primary))] rounded-lg text-sm font-semibold text-[hsl(var(--foreground))] bg-card focus:outline-none focus:ring-2 focus:ring-[hsl(var(--accent-primary))]/60',
 
   // 🔥 빈 상태
   emptyState: 'flex flex-col items-center justify-center h-64 text-center',
-  emptyIcon: 'w-16 h-16 text-slate-400 dark:text-gray-500 mb-4',
-  emptyTitle: 'text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2',
-  emptyDescription: 'text-slate-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed',
+  emptyIcon: 'w-16 h-16 text-muted-foreground mb-4',
+  emptyTitle: 'text-xl font-semibold text-[hsl(var(--foreground))] mb-2',
+  emptyDescription: 'text-muted-foreground max-w-md mx-auto leading-relaxed',
 } as const;
 
 // 타입별 아이콘 매핑 (main 타입 제거)
@@ -426,16 +426,16 @@ const StructureView = memo(function StructureView({
 
     return (
       <div
-        className="flex items-center justify-between p-3 mb-2 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+        className="flex items-center justify-between p-3 mb-2 bg-card border border-border rounded-lg cursor-pointer hover:bg-[hsl(var(--accent))]/10 transition-colors"
         onClick={() => toggleFolder(folderType)}
       >
         <div className="flex items-center gap-3">
           <div className={`transform transition-transform ${isCollapsed ? '' : 'rotate-90'}`}>
-            <ChevronRight className="w-4 h-4 text-gray-500" />
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </div>
-          <IconComponent className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-          <span className="font-medium text-gray-900 dark:text-gray-100">{title}</span>
-          <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full">
+          <IconComponent className="w-5 h-5 text-[hsl(var(--accent-primary))]" />
+          <span className="font-medium text-[hsl(var(--foreground))]">{title}</span>
+          <span className="text-xs px-2 py-1 bg-[hsl(var(--accent))]/20 text-[hsl(var(--accent-primary))] rounded-full">
             {count}
           </span>
         </div>
@@ -457,7 +457,7 @@ const StructureView = memo(function StructureView({
       <div className={STRUCTURE_STYLES.content}>
         <div className={STRUCTURE_STYLES.structureList}>
           {isLoading ? (
-            <div className="p-6 text-center text-sm text-gray-500">로딩중...</div>
+            <div className="p-6 text-center text-sm text-muted-foreground">로딩중...</div>
           ) : structures.length === 0 ? (
             /* 🔥 빈 상태 */
             <div className={STRUCTURE_STYLES.emptyState}>
@@ -504,21 +504,21 @@ const StructureView = memo(function StructureView({
                           </div>
                           <div className={STRUCTURE_STYLES.itemType}>프로젝트 메인 컨텐츠</div>
                           {mainContent && (
-                            <div className="text-xs text-gray-500 mt-1">
+                            <div className="text-xs text-muted-foreground mt-1">
                               {mainContent.substring(0, 100)}
                               {mainContent.length > 100 && '...'}
                             </div>
                           )}
                           {!mainContent && (
-                            <div className="text-xs text-gray-400 italic mt-1">
+                            <div className="text-xs text-muted-foreground italic mt-1">
                               Write 탭에서 메인 스토리를 작성해보세요
                             </div>
                           )}
                         </div>
-                        <div className="text-xs text-gray-400 flex flex-col items-end">
+                        <div className="text-xs text-muted-foreground flex flex-col items-end">
                           <span>{writerStats?.wordCount || 0} 단어</span>
                           {writerStats?.charCount && (
-                            <span className="text-xs text-gray-300">
+                            <span className="text-xs text-muted-foreground/70">
                               {writerStats.charCount} 자
                             </span>
                           )}
@@ -543,7 +543,7 @@ const StructureView = memo(function StructureView({
                           <div key={item.id} className="relative">
                             {/* 🔥 연결선 표시 */}
                             {isConnected && (
-                              <div className="absolute left-3 top-12 w-0.5 h-8 bg-blue-300 dark:bg-blue-600 z-10"></div>
+                              <div className="absolute left-3 top-12 w-0.5 h-8 bg-[hsl(var(--accent-primary))]/50 z-10"></div>
                             )}
 
                             <div
@@ -749,9 +749,13 @@ const StructureView = memo(function StructureView({
               }}
               className={STRUCTURE_STYLES.addButton}
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-5 h-5 text-[hsl(var(--accent-primary))]" />
               <span>새 항목 추가</span>
-              {showAddMenu ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+              {showAddMenu ? (
+                <ChevronDown className="w-4 h-4 text-muted-foreground" />
+              ) : (
+                <ChevronRight className="w-4 h-4 text-muted-foreground" />
+              )}
             </button>
 
             {showAddMenu && (
@@ -766,12 +770,12 @@ const StructureView = memo(function StructureView({
                     }}
                     className={STRUCTURE_STYLES.addMenuItem}
                   >
-                    <Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <Icon className="w-5 h-5 text-[hsl(var(--accent-primary))]" />
                     <div className="flex-1">
-                      <div className="font-medium text-gray-900 dark:text-gray-100">
+                      <div className="font-medium text-[hsl(var(--foreground))]">
                         {label}
                       </div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                      <div className="text-xs text-muted-foreground">
                         {description}
                       </div>
                     </div>

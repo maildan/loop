@@ -8,10 +8,10 @@ interface CharacterStatsProps {
 
 const CHARACTERS_STYLES = {
     statsGrid: 'grid grid-cols-3 gap-4 mt-4',
-    statCard: 'p-3 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700',
-    statIcon: 'w-5 h-5 text-blue-600 dark:text-blue-400 mb-2',
-    statValue: 'text-lg font-semibold text-gray-900 dark:text-gray-100',
-    statLabel: 'text-xs text-slate-600 dark:text-gray-400',
+    statCard: 'p-3 bg-card border border-border rounded-lg shadow-sm',
+    statIcon: 'w-5 h-5 text-[hsl(var(--accent-primary))] mb-2',
+    statValue: 'text-lg font-semibold text-[hsl(var(--foreground))]',
+    statLabel: 'text-xs text-muted-foreground',
 };
 
 export function CharacterStats({ characters }: CharacterStatsProps) {

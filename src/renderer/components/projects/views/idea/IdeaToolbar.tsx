@@ -14,14 +14,14 @@ interface IdeaToolbarProps {
 }
 
 const IDEA_STYLES = {
-    toolbar: 'flex items-center justify-between p-4 border-b border-slate-200 dark:border-gray-700',
-    toolbarLeft: 'flex items-center gap-3',
+    toolbar: 'flex flex-wrap items-center justify-between gap-3 border-b border-border bg-card/80 p-4 backdrop-blur-sm',
+    toolbarLeft: 'flex flex-wrap items-center gap-3',
     toolbarRight: 'flex items-center gap-2',
     searchContainer: 'relative',
-    searchIcon: 'absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400',
-    searchInput: 'pl-10 pr-4 py-2 w-64 border border-slate-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400',
-    filterSelect: 'px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
-    actionButton: 'p-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors',
+    searchIcon: 'absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground',
+    searchInput: 'w-64 rounded-lg border border-border bg-background py-2 pl-10 pr-4 text-foreground transition-colors placeholder:text-muted-foreground focus:border-[hsl(var(--accent-primary))] focus:ring-2 focus:ring-[hsl(var(--accent-primary))]',
+    filterSelect: 'rounded-lg border border-border bg-background px-3 py-2 text-foreground transition-colors focus:border-[hsl(var(--accent-primary))] focus:ring-2 focus:ring-[hsl(var(--accent-primary))]',
+    actionButton: 'rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground',
 };
 
 export function IdeaToolbar({

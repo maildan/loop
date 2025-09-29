@@ -13,27 +13,27 @@ export const SynopsisStats = React.memo(({ analysis }: SynopsisStatsProps): Reac
         {
             value: analysis.totalWords.toLocaleString(),
             label: '총 단어 수',
-            color: 'text-indigo-600 dark:text-indigo-400'
+            color: 'text-[hsl(var(--chart-1))]'
         },
         {
             value: analysis.totalChapters.toString(),
             label: '챕터',
-            color: 'text-green-600 dark:text-green-400'
+            color: 'text-[var(--success)]'
         },
         {
             value: analysis.totalCharacters.toString(),
             label: '캐릭터',
-            color: 'text-blue-600 dark:text-blue-400'
+            color: 'text-[hsl(var(--chart-3))]'
         },
         {
             value: `${analysis.storyConsistency}%`,
             label: '스토리 일관성',
-            color: 'text-yellow-600 dark:text-yellow-400'
+            color: 'text-[var(--warning)]'
         },
         {
             value: `${analysis.characterConsistency}%`,
             label: '캐릭터 일관성',
-            color: 'text-purple-600 dark:text-purple-400'
+            color: 'text-[hsl(var(--chart-5))]'
         }
     ];
 

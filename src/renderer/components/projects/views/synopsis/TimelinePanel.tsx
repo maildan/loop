@@ -58,9 +58,9 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                         <div className="space-y-4 pb-6">{/* pb-6 for bottom padding */}
                             {elements.length === 0 ? (
                                 <Card className="p-8 text-center">
-                                    <Calendar className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                                    <h3 className="text-lg font-medium text-gray-600 mb-2">타임라인이 비어있습니다</h3>
-                                    <p className="text-gray-500">프로젝트에 이벤트를 추가하여 타임라인을 구성해보세요.</p>
+                                    <Calendar className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+                                    <h3 className="mb-2 text-lg font-medium text-muted-foreground">타임라인이 비어있습니다</h3>
+                                    <p className="text-muted-foreground">프로젝트에 이벤트를 추가하여 타임라인을 구성해보세요.</p>
                                 </Card>
                             ) : (
                                 // 🔥 elements를 생성 순서로 정렬하여 타임라인 구성
@@ -77,20 +77,20 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                     .map((item, index) => (
                                     <div key={item.id} className="flex items-start space-x-4">
                                         <div className="flex flex-col items-center">
-                                            <div className={`w-3 h-3 rounded-full ${
-                                                item.type === 'main' ? 'bg-green-500' :
-                                                item.type === 'chapter' ? 'bg-indigo-500' :
-                                                item.type === 'character' ? 'bg-purple-500' :
-                                                item.type === 'synopsis' ? 'bg-blue-500' :
-                                                'bg-gray-500'
+                                            <div className={`h-3 w-3 rounded-full ${
+                                                item.type === 'main' ? 'bg-[var(--success)]' :
+                                                item.type === 'chapter' ? 'bg-[hsl(var(--chart-1))]' :
+                                                item.type === 'character' ? 'bg-[hsl(var(--chart-5))]' :
+                                                item.type === 'synopsis' ? 'bg-[hsl(var(--chart-3))]' :
+                                                'bg-muted-foreground'
                                             }`}></div>
                                             {index < elements.length - 1 && (
-                                                <div className="w-0.5 h-16 bg-gray-300 dark:bg-gray-600 mt-2"></div>
+                                                <div className="mt-2 h-16 w-0.5 bg-border"></div>
                                             )}
                                         </div>
                                         <div className="flex-1 pb-8">
                                             <div
-                                                className={`bg-white dark:bg-gray-800 rounded-lg p-4 border dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow ${item.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10' : ''
+                                                className={`rounded-lg border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md ${item.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-[hsl(var(--accent-primary))]/10' : ''
                                                     }`}
                                                 onClick={() => {
                                                     // 🔥 챕터 클릭 시 네비게이션
@@ -99,21 +99,21 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                                     }
                                                 }}
                                             >
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <h3 className={`font-medium flex items-center gap-2 ${item.type === 'chapter' && onNavigateToChapter
-                                                        ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
-                                                        : 'text-gray-900 dark:text-gray-100'
+                                                <div className="mb-2 flex items-center justify-between">
+                                                    <h3 className={`flex items-center gap-2 font-medium ${item.type === 'chapter' && onNavigateToChapter
+                                                        ? 'text-[hsl(var(--accent-primary))] hover:text-[var(--accent-hover)]'
+                                                        : 'text-foreground'
                                                         }`}>
-                                                        {item.type === 'main' && <BookOpen className="w-4 h-4 text-green-500" />}
-                                                        {item.type === 'chapter' && <Hash className="w-4 h-4 text-indigo-500" />}
-                                                        {item.type === 'synopsis' && <FileText className="w-4 h-4 text-blue-500" />}
-                                                        {!['main', 'chapter', 'synopsis'].includes(item.type) && <Sparkles className="w-4 h-4 text-purple-500" />}
+                                                        {item.type === 'main' && <BookOpen className="h-4 w-4 text-[var(--success)]" />}
+                                                        {item.type === 'chapter' && <Hash className="h-4 w-4 text-[hsl(var(--chart-1))]" />}
+                                                        {item.type === 'synopsis' && <FileText className="h-4 w-4 text-[hsl(var(--chart-3))]" />}
+                                                        {!['main', 'chapter', 'synopsis'].includes(item.type) && <Sparkles className="h-4 w-4 text-[hsl(var(--chart-5))]" />}
                                                         {item.title}
                                                         {item.type === 'chapter' && onNavigateToChapter && (
-                                                            <span className="ml-2 text-xs text-gray-500">(클릭하여 편집)</span>
+                                                            <span className="ml-2 text-xs text-muted-foreground">(클릭하여 편집)</span>
                                                         )}
                                                     </h3>
-                                                    <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded">
+                                                    <span className="rounded bg-muted px-2 py-1 text-xs text-muted-foreground">
                                                         {item.type === 'main' ? '메인' :
                                                             item.type === 'chapter' ? '챕터' :
                                                                 item.type === 'character' ? '인물' :
@@ -122,11 +122,11 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                                                             item.type === 'memo' ? '메모' : item.type}
                                                     </span>
                                                 </div>
-                                                <div className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                                <div className="mb-2 text-sm text-muted-foreground">
                                                     {item.content?.substring(0, 150) || '내용 없음'}
                                                     {(item.content?.length || 0) > 150 && '...'}
                                                 </div>
-                                                <div className="text-xs text-gray-500">
+                                                <div className="text-xs text-muted-foreground">
                                                     {item.createdAt?.toLocaleDateString('ko-KR') || '날짜 미상'}
                                                 </div>
                                             </div>

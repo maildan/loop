@@ -21,17 +21,17 @@ interface IdeaListProps {
 const IDEA_STYLES = {
     content: 'flex-1 overflow-hidden',
     scrollArea: 'h-full overflow-y-auto px-6 pb-6',
-    statsGrid: 'grid grid-cols-2 md:grid-cols-4 gap-4 mb-6',
-    statCard: 'bg-white dark:bg-gray-800 p-4 rounded-xl border border-slate-200 dark:border-gray-700',
-    statIcon: 'w-6 h-6 text-blue-600 dark:text-blue-400 mb-2',
-    statValue: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
-    statLabel: 'text-sm text-gray-600 dark:text-gray-400',
+    statsGrid: 'grid grid-cols-2 gap-4 mb-6 md:grid-cols-4',
+    statCard: 'rounded-xl border border-border bg-card p-4 shadow-sm',
+    statIcon: 'mb-2 h-6 w-6 text-[hsl(var(--accent-primary))]',
+    statValue: 'text-2xl font-bold text-foreground',
+    statLabel: 'text-sm text-muted-foreground',
     cardsContainer: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
     listContainer: 'space-y-3',
-    emptyState: 'text-center py-16',
-    emptyIcon: 'mx-auto w-16 h-16 text-gray-400 dark:text-gray-500 mb-4',
-    emptyTitle: 'text-lg font-semibold text-gray-600 dark:text-gray-400 mb-2',
-    emptyDescription: 'text-gray-500 dark:text-gray-500 max-w-md mx-auto',
+    emptyState: 'py-16 text-center',
+    emptyIcon: 'mx-auto mb-4 h-16 w-16 text-muted-foreground',
+    emptyTitle: 'mb-2 text-lg font-semibold text-muted-foreground',
+    emptyDescription: 'mx-auto max-w-md text-muted-foreground',
 };
 
 export function IdeaList({

@@ -62,21 +62,21 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
         if (totalPages <= 1) return null;
 
         return (
-            <div className="flex items-center justify-center gap-2 mt-4">
+            <div className="mt-4 flex items-center justify-center gap-2">
                 <button
                     onClick={() => handlePageChange(type, Math.max(1, currentPage[type] - 1))}
                     disabled={currentPage[type] === 1}
-                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+                    className="rounded-md border border-border px-3 py-1 text-sm transition-colors hover:bg-muted/60 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     이전
                 </button>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground">
                     {currentPage[type]} / {totalPages}
                 </span>
                 <button
                     onClick={() => handlePageChange(type, Math.min(totalPages, currentPage[type] + 1))}
                     disabled={currentPage[type] === totalPages}
-                    className="px-3 py-1 text-sm border rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-800"
+                    className="rounded-md border border-border px-3 py-1 text-sm transition-colors hover:bg-muted/60 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     다음
                 </button>
@@ -111,7 +111,7 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
     const renderElementCard = (element: ProjectElement, icon: React.ReactNode) => (
         <Card
             key={element.id}
-            className={`p-4 hover:shadow-md transition-shadow ${element.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/10' : ''
+            className={`p-4 transition-shadow hover:shadow-md ${element.type === 'chapter' && onNavigateToChapter ? 'cursor-pointer hover:bg-[hsl(var(--accent-primary))]/10' : ''
                 }`}
             onClick={() => {
                 // 🔥 챕터 클릭 시 네비게이션
@@ -126,16 +126,16 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                     {icon}
                 </div>
                 <div className="flex-1">
-                    <h4 className={`font-medium mb-2 ${element.type === 'chapter' && onNavigateToChapter
-                        ? 'text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300'
-                        : 'text-gray-900 dark:text-gray-100'
+                    <h4 className={`mb-2 font-medium ${element.type === 'chapter' && onNavigateToChapter
+                        ? 'text-[hsl(var(--accent-primary))] hover:text-[var(--accent-hover)]'
+                        : 'text-foreground'
                         }`}>
                         {element.title}
                         {element.type === 'chapter' && onNavigateToChapter && (
-                            <span className="ml-2 text-xs text-gray-500">(클릭하여 편집)</span>
+                            <span className="ml-2 text-xs text-muted-foreground">(클릭하여 편집)</span>
                         )}
                     </h4>
-                    <div className="text-sm text-gray-600 dark:text-gray-400 line-clamp-3">
+                    <div className="text-sm text-muted-foreground line-clamp-3">
                         {/* 🔥 마크다운 텍스트를 간단히 정리해서 표시 */}
                         {element.content
                             ?.replace(/#{1,6}\s+/g, '') // 헤딩 마크 제거
@@ -152,18 +152,18 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                             {element.tags && element.tags.length > 0 && (
                                 <div className="flex gap-1">
                                     {element.tags.slice(0, 2).map(tag => (
-                                        <span key={tag} className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs rounded">
+                                        <span key={tag} className="rounded bg-[hsl(var(--accent-primary))]/15 px-2 py-1 text-xs text-[hsl(var(--accent-primary))]">
                                             {tag}
                                         </span>
                                     ))}
                                     {element.tags.length > 2 && (
-                                        <span className="text-xs text-gray-500">+{element.tags.length - 2}</span>
+                                        <span className="text-xs text-muted-foreground">+{element.tags.length - 2}</span>
                                     )}
                                 </div>
                             )}
                         </div>
                         {element.wordCount && (
-                            <span className="text-xs text-gray-500">
+                            <span className="text-xs text-muted-foreground">
                                 {element.wordCount.toLocaleString()}자
                             </span>
                         )}
@@ -201,22 +201,22 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                         <div className="space-y-8 pb-6">
                             {elements.length === 0 ? (
                                 <Card className="p-8 text-center">
-                                    <Map className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                                    <h3 className="text-lg font-medium text-gray-600 mb-2">아웃라인이 비어있습니다</h3>
-                                    <p className="text-gray-500">사이드바에서 챕터, 인물, 아이디어를 추가하여 아웃라인을 구성해보세요.</p>
+                                    <Map className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+                                    <h3 className="mb-2 text-lg font-medium text-muted-foreground">아웃라인이 비어있습니다</h3>
+                                    <p className="text-muted-foreground">사이드바에서 챕터, 인물, 아이디어를 추가하여 아웃라인을 구성해보세요.</p>
                                 </Card>
                             ) : (
                                 <>
                                     {/* � 메인 스토리 섹션 */}
                                     {categorizedElements.mains.length > 0 && (
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                                <FileText className="w-5 h-5" />
+                                            <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
+                                                <FileText className="h-5 w-5 text-[hsl(var(--chart-5))]" />
                                                 메인 스토리 ({categorizedElements.mains.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {getPaginatedItems(categorizedElements.mains, 'mains').map((element) =>
-                                                    renderElementCard(element, <FileText className="w-4 h-4 text-purple-500" />)
+                                                    renderElementCard(element, <FileText className="h-4 w-4 text-[hsl(var(--chart-5))]" />)
                                                 )}
                                             </div>
                                             {renderPagination('mains', categorizedElements.mains.length)}
@@ -226,13 +226,13 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                     {/* �📖 챕터 섹션 */}
                                     {categorizedElements.chapters.length > 0 && (
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                                <FileText className="w-5 h-5" />
+                                            <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
+                                                <FileText className="h-5 w-5 text-[hsl(var(--chart-1))]" />
                                                 챕터 ({categorizedElements.chapters.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 {getPaginatedItems(categorizedElements.chapters, 'chapters').map((element) =>
-                                                    renderElementCard(element, <FileText className="w-4 h-4 text-blue-500" />)
+                                                    renderElementCard(element, <FileText className="h-4 w-4 text-[hsl(var(--chart-1))]" />)
                                                 )}
                                             </div>
                                             {renderPagination('chapters', categorizedElements.chapters.length)}
@@ -242,13 +242,13 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                     {/* 👥 인물 섹션 */}
                                     {categorizedElements.characters.length > 0 && (
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                                <User className="w-5 h-5" />
+                                            <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
+                                                <User className="h-5 w-5 text-[var(--success)]" />
                                                 인물 ({categorizedElements.characters.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                                 {getPaginatedItems(categorizedElements.characters, 'characters').map((element) =>
-                                                    renderElementCard(element, <User className="w-4 h-4 text-green-500" />)
+                                                    renderElementCard(element, <User className="h-4 w-4 text-[var(--success)]" />)
                                                 )}
                                             </div>
                                             {renderPagination('characters', categorizedElements.characters.length)}
@@ -258,13 +258,13 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                     {/* 💡 아이디어 섹션 */}
                                     {categorizedElements.ideas.length > 0 && (
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                                <Lightbulb className="w-5 h-5" />
+                                            <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
+                                                <Lightbulb className="h-5 w-5 text-[var(--warning)]" />
                                                 아이디어 ({categorizedElements.ideas.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                                 {getPaginatedItems(categorizedElements.ideas, 'ideas').map((element) =>
-                                                    renderElementCard(element, <Lightbulb className="w-4 h-4 text-yellow-500" />)
+                                                    renderElementCard(element, <Lightbulb className="h-4 w-4 text-[var(--warning)]" />)
                                                 )}
                                             </div>
                                             {renderPagination('ideas', categorizedElements.ideas.length)}
@@ -274,13 +274,13 @@ export const OutlinePanel: React.FC<OutlinePanelProps> = ({
                                     {/* 📝 메모 & 노트 섹션 */}
                                     {(categorizedElements.memos.length > 0 || categorizedElements.notes.length > 0) && (
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4 flex items-center gap-2">
-                                                <FileText className="w-5 h-5" />
+                                            <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
+                                                <FileText className="h-5 w-5 text-muted-foreground" />
                                                 메모 & 노트 ({categorizedElements.memos.length + categorizedElements.notes.length})
                                             </h3>
                                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                                 {getPaginatedItems([...categorizedElements.memos, ...categorizedElements.notes], 'memos').map((element) =>
-                                                    renderElementCard(element, <FileText className="w-4 h-4 text-gray-500" />)
+                                                    renderElementCard(element, <FileText className="h-4 w-4 text-muted-foreground" />)
                                                 )}
                                             </div>
                                             {renderPagination('memos', categorizedElements.memos.length + categorizedElements.notes.length)}

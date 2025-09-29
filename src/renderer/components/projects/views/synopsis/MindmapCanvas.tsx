@@ -9,17 +9,15 @@ import React, { useMemo, useState, useRef, useCallback } from 'react';
 import { Card } from '../../../ui/Card';
 import { Button } from '../../../ui/Button';
 import { Logger } from '../../../../../shared/logger';
-import {
-    BookOpen,
-    User,
-    Lightbulb,
-    FileText,
-    Target,
-    ZoomIn,
-    ZoomOut,
-    RotateCw,
-    Maximize2
-} from 'lucide-react';
+import { Target, ZoomIn, ZoomOut, RotateCw } from 'lucide-react';
+
+const CATEGORY_CONFIG = [
+    { type: 'main', label: '메인 스토리', icon: '📚', color: 'var(--accent-primary)' },
+    { type: 'chapter', label: '챕터', icon: '📖', color: 'hsl(var(--chart-1))' },
+    { type: 'character', label: '캐릭터', icon: '👤', color: 'hsl(var(--chart-5))' },
+    { type: 'idea', label: '아이디어', icon: '💡', color: 'hsl(var(--chart-4))' },
+    { type: 'synopsis', label: '시놉시스', icon: '📝', color: 'hsl(var(--chart-3))' }
+] as const;
 
 interface ProjectElement {
     id: string;
@@ -72,13 +70,10 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
         };
 
         // 🔥 2. 데이터를 타입별로 분류
-        const categories = [
-            { type: 'main', items: elements.filter(e => e.type === 'main'), label: '메인 스토리', color: '#8b5cf6', icon: '📚' },
-            { type: 'chapter', items: elements.filter(e => e.type === 'chapter'), label: '챕터', color: '#3b82f6', icon: '📖' },
-            { type: 'character', items: elements.filter(e => e.type === 'character'), label: '캐릭터', color: '#10b981', icon: '👤' },
-            { type: 'idea', items: elements.filter(e => e.type === 'idea'), label: '아이디어', color: '#f59e0b', icon: '💡' },
-            { type: 'synopsis', items: elements.filter(e => e.type === 'synopsis'), label: '시놉시스', color: '#ef4444', icon: '📝' }
-        ].filter(cat => cat.items.length > 0); // 빈 카테고리 제외
+        const categories = CATEGORY_CONFIG.map(config => ({
+            ...config,
+            items: elements.filter(e => e.type === config.type)
+        })).filter(cat => cat.items.length > 0); // 빈 카테고리 제외
 
         // 🔥 3. 카테고리 노드들을 원형으로 배치
         const categoryNodes: any[] = [];
@@ -202,10 +197,10 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                                 y1={fromNode.y}
                                 x2={toNode.x}
                                 y2={toNode.y}
-                                stroke={conn.type === 'main' ? '#6b7280' : '#d1d5db'}
+                                stroke={conn.type === 'main' ? 'var(--accent-primary)' : 'hsl(var(--border))'}
                                 strokeWidth={conn.type === 'main' ? 3 : 2}
                                 strokeDasharray={conn.type === 'sub' ? '5,5' : 'none'}
-                                opacity={0.6}
+                                opacity={conn.type === 'main' ? 0.7 : 0.4}
                             />
                         );
                     })}
@@ -220,7 +215,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                             cy={centerNode.y}
                             r={centerNode.radius}
                             fill="url(#centerGradient)"
-                            stroke="#4f46e5"
+                            stroke="var(--accent-dark)"
                             strokeWidth="4"
                             className="cursor-pointer filter drop-shadow-lg"
                             onClick={() => handleNodeClick(centerNode)}
@@ -230,7 +225,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                             y={centerNode.y}
                             textAnchor="middle"
                             dominantBaseline="middle"
-                            className="text-lg font-bold fill-white pointer-events-none"
+                            className="text-lg font-bold fill-[var(--text-inverse)] pointer-events-none"
                         >
                             {centerNode.label}
                         </text>
@@ -244,7 +239,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                                 cy={node.y}
                                 r={node.radius}
                                 fill={node.color}
-                                stroke={selectedNodeId === node.id ? '#1f2937' : 'white'}
+                                stroke={selectedNodeId === node.id ? 'var(--accent-dark)' : 'hsl(var(--card))'}
                                 strokeWidth={selectedNodeId === node.id ? 4 : 2}
                                 className="cursor-pointer filter drop-shadow-md transition-all duration-200 hover:brightness-110"
                                 onClick={() => handleNodeClick(node)}
@@ -254,7 +249,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                                 y={node.y - 5}
                                 textAnchor="middle"
                                 dominantBaseline="middle"
-                                className="text-sm font-semibold fill-white pointer-events-none"
+                                className="text-sm font-semibold fill-[var(--text-inverse)] pointer-events-none"
                             >
                                 {node.icon}
                             </text>
@@ -263,7 +258,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                                 y={node.y + 10}
                                 textAnchor="middle"
                                 dominantBaseline="middle"
-                                className="text-xs font-medium fill-white pointer-events-none"
+                                className="text-xs font-medium fill-[var(--text-inverse)] pointer-events-none"
                             >
                                 {node.label}
                             </text>
@@ -272,7 +267,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                                 y={node.y + 25}
                                 textAnchor="middle"
                                 dominantBaseline="middle"
-                                className="text-xs fill-white/80 pointer-events-none"
+                                className="text-xs fill-[var(--text-inverse)] pointer-events-none opacity-80"
                             >
                                 ({node.itemCount})
                             </text>
@@ -286,10 +281,11 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                                 cx={node.x}
                                 cy={node.y}
                                 r={node.radius}
-                                fill={`${node.color}20`}
+                                fill={node.color}
+                                fillOpacity={selectedNodeId === node.id ? 0.35 : 0.18}
                                 stroke={node.color}
                                 strokeWidth={selectedNodeId === node.id ? 3 : 2}
-                                className="cursor-pointer transition-all duration-200 hover:fill-opacity-40"
+                                className="cursor-pointer transition-opacity duration-200 hover:opacity-90"
                                 onClick={() => handleNodeClick(node)}
                             />
                             <text
@@ -309,8 +305,8 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                 {/* 그라데이션 정의 */}
                 <defs>
                     <radialGradient id="centerGradient" cx="0.5" cy="0.5" r="0.5">
-                        <stop offset="0%" stopColor="#6366f1" />
-                        <stop offset="100%" stopColor="#4f46e5" />
+                        <stop offset="0%" stopColor="var(--accent-light)" />
+                        <stop offset="100%" stopColor="var(--accent-primary)" />
                     </radialGradient>
                 </defs>
             </svg>
@@ -318,14 +314,14 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
     };
 
     return (
-        <div className="relative w-full h-full bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900 rounded-lg overflow-hidden">
+        <div className="relative h-full w-full overflow-hidden rounded-lg bg-gradient-to-br from-background via-muted/60 to-card dark:from-background dark:via-muted/40 dark:to-card">
             {/* 컨트롤 패널 */}
             <div className="absolute top-4 right-4 z-10 flex gap-2">
                 <Button
                     size="sm"
                     variant="outline"
                     onClick={handleZoomIn}
-                    className="bg-white/90 hover:bg-white"
+                    className="border-border bg-card/90 text-foreground backdrop-blur-sm transition-colors hover:bg-card"
                 >
                     <ZoomIn className="w-4 h-4" />
                 </Button>
@@ -333,7 +329,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                     size="sm"
                     variant="outline"
                     onClick={handleZoomOut}
-                    className="bg-white/90 hover:bg-white"
+                    className="border-border bg-card/90 text-foreground backdrop-blur-sm transition-colors hover:bg-card"
                 >
                     <ZoomOut className="w-4 h-4" />
                 </Button>
@@ -341,7 +337,7 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                     size="sm"
                     variant="outline"
                     onClick={handleResetView}
-                    className="bg-white/90 hover:bg-white"
+                    className="border-border bg-card/90 text-foreground backdrop-blur-sm transition-colors hover:bg-card"
                 >
                     <RotateCw className="w-4 h-4" />
                 </Button>
@@ -349,8 +345,8 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
 
             {/* 정보 패널 */}
             <div className="absolute top-4 left-4 z-10">
-                <Card className="p-3 bg-white/90 backdrop-blur-sm">
-                    <div className="text-sm text-gray-600">
+                <Card className="border border-border bg-card/90 p-3 backdrop-blur-sm">
+                    <div className="text-sm text-muted-foreground">
                         <div>총 노드: {mindmapData.totalNodes}</div>
                         <div>줌: {Math.round(zoom * 100)}%</div>
                     </div>
@@ -363,10 +359,10 @@ export const MindmapCanvas: React.FC<MindmapCanvasProps> = ({
                     renderMindmap()
                 ) : (
                     <div className="flex items-center justify-center h-full">
-                        <div className="text-center text-gray-500">
-                            <Target className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                            <h3 className="text-lg font-medium mb-2">프로젝트 요소가 없습니다</h3>
-                            <p className="text-sm">챕터, 캐릭터, 아이디어를 추가하여 마인드맵을 생성해보세요.</p>
+                        <div className="text-center text-muted-foreground">
+                            <Target className="mx-auto mb-4 h-16 w-16 text-muted-foreground opacity-60" />
+                            <h3 className="mb-2 text-lg font-medium text-foreground">프로젝트 요소가 없습니다</h3>
+                            <p className="text-sm text-muted-foreground">챕터, 캐릭터, 아이디어를 추가하여 마인드맵을 생성해보세요.</p>
                         </div>
                     </div>
                 )}

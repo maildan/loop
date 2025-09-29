@@ -15,6 +15,9 @@ interface AddItemMenuProps {
         addButton: string;
         addMenu: string;
         addMenuItem: string;
+        addMenuIcon: string;
+        addMenuText: string;
+        addMenuDesc: string;
     };
 }
 
@@ -47,12 +50,12 @@ export const AddItemMenu: React.FC<AddItemMenuProps> = ({
                             }}
                             className={STRUCTURE_STYLES.addMenuItem}
                         >
-                            <Icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                            <Icon className={STRUCTURE_STYLES.addMenuIcon} />
                             <div className="flex-1">
-                                <div className="font-medium text-gray-900 dark:text-gray-100">
+                                <div className={STRUCTURE_STYLES.addMenuText}>
                                     {label}
                                 </div>
-                                <div className="text-xs text-gray-500 dark:text-gray-400">
+                                <div className={STRUCTURE_STYLES.addMenuDesc}>
                                     {description}
                                 </div>
                             </div>

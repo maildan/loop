@@ -11,7 +11,7 @@ import { IdeaList } from './IdeaList';
 import { IdeaEditor } from './IdeaEditor';
 
 const IDEA_STYLES = {
-    container: 'h-full flex flex-col bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+    container: 'flex h-full flex-col bg-background text-foreground',
 };
 
 const IdeaView = React.memo(({ ideaId: propIdeaId, onBack }: IdeaViewProps): React.ReactElement => {

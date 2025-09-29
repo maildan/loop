@@ -16,14 +16,14 @@ interface CharacterCardProps {
 }
 
 const CHARACTERS_STYLES = {
-    characterCard: 'group bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 overflow-hidden',
-    characterHeader: 'p-4 border-b border-slate-100 dark:border-gray-700',
-    characterAvatar: 'w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg mb-3',
-    characterName: 'font-bold text-lg text-gray-900 dark:text-gray-100 mb-1',
-    characterRole: 'text-sm text-blue-600 dark:text-blue-400 font-medium',
+    characterCard: 'group bg-card border border-border rounded-xl hover:shadow-lg hover:border-[hsl(var(--accent))]/60 hover:bg-[hsl(var(--accent))]/10 transition-all duration-200 overflow-hidden',
+    characterHeader: 'p-4 border-b border-border/60 bg-muted/40',
+    characterAvatar: 'w-12 h-12 rounded-full bg-[hsl(var(--accent-primary))] text-[hsl(var(--accent-foreground))] flex items-center justify-center font-bold text-lg mb-3 shadow-sm',
+    characterName: 'font-bold text-lg text-[hsl(var(--foreground))] mb-1',
+    characterRole: 'text-sm text-[hsl(var(--accent-primary))] font-medium',
     actionButtons: 'absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10',
-    editButton: 'p-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-150',
-    deleteButton: 'p-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-150',
+    editButton: 'p-2 bg-[hsl(var(--accent-primary))] hover:bg-[hsl(var(--accent-primary))]/90 text-[hsl(var(--accent-foreground))] rounded-lg transition-colors duration-150',
+    deleteButton: 'p-2 bg-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive))]/85 text-[hsl(var(--destructive-foreground))] rounded-lg transition-colors duration-150',
 };
 
 export function CharacterCard({

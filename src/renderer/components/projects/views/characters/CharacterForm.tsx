@@ -12,20 +12,20 @@ interface CharacterFormProps {
 }
 
 const CHARACTERS_STYLES = {
-    modalOverlay: 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50',
-    modal: 'bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-4xl max-h-[80vh] overflow-y-auto',
-    modalHeader: 'flex items-center justify-between p-6 border-b border-slate-200 dark:border-gray-700',
-    modalTitle: 'text-xl font-bold text-gray-900 dark:text-gray-100',
+    modalOverlay: 'fixed inset-0 bg-[hsl(var(--background))]/80 backdrop-blur-sm flex items-center justify-center z-50',
+    modal: 'bg-card border border-border rounded-xl shadow-2xl w-full max-w-4xl max-h-[80vh] overflow-y-auto text-[hsl(var(--foreground))]',
+    modalHeader: 'flex items-center justify-between p-6 border-b border-border/60',
+    modalTitle: 'text-xl font-bold text-[hsl(var(--foreground))]',
     modalBody: 'p-6',
-    modalFooter: 'flex justify-end space-x-3 p-6 border-t border-slate-200 dark:border-gray-700',
+    modalFooter: 'flex justify-end gap-3 p-6 border-t border-border/60',
     formGrid: 'grid grid-cols-1 md:grid-cols-2 gap-4',
     formField: 'flex flex-col space-y-2',
-    formLabel: 'text-sm font-medium text-slate-700 dark:text-gray-300',
-    formInput: 'px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100',
-    formTextarea: 'px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 resize-none',
-    button: 'px-4 py-2 rounded-lg font-medium transition-colors duration-150',
-    buttonPrimary: 'bg-blue-600 hover:bg-blue-700 text-white',
-    buttonSecondary: 'bg-slate-200 hover:bg-slate-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-slate-700 dark:text-gray-200',
+    formLabel: 'text-sm font-medium text-muted-foreground',
+    formInput: 'px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-[hsl(var(--accent-primary))]/50 focus:border-[hsl(var(--accent-primary))] bg-background text-[hsl(var(--foreground))]',
+    formTextarea: 'px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-[hsl(var(--accent-primary))]/50 focus:border-[hsl(var(--accent-primary))] bg-background text-[hsl(var(--foreground))] resize-none',
+    button: 'px-4 py-2 rounded-lg font-medium transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--accent-primary))]/40 focus:ring-offset-background',
+    buttonPrimary: 'bg-[hsl(var(--accent-primary))] hover:bg-[hsl(var(--accent-primary))]/90 text-[hsl(var(--accent-foreground))]',
+    buttonSecondary: 'bg-muted hover:bg-muted/80 text-[hsl(var(--foreground))]',
 };
 
 export function CharacterForm({

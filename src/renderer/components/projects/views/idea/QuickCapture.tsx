@@ -7,10 +7,10 @@ interface QuickCaptureProps {
 }
 
 const IDEA_STYLES = {
-    quickCapture: 'p-4 border-b border-slate-200 dark:border-gray-700',
-    captureContainer: 'flex gap-3',
-    captureInput: 'flex-1 px-4 py-3 border border-slate-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-500 dark:placeholder-gray-400',
-    captureButton: 'px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium whitespace-nowrap min-w-[80px] flex items-center gap-2',
+    quickCapture: 'border-b border-border bg-card/80 p-4',
+    captureContainer: 'flex flex-col gap-3 sm:flex-row',
+    captureInput: 'flex-1 rounded-lg border border-border bg-background px-4 py-3 text-foreground transition-colors placeholder:text-muted-foreground focus:border-[hsl(var(--accent-primary))] focus:ring-2 focus:ring-[hsl(var(--accent-primary))]',
+    captureButton: 'flex min-w-[80px] items-center gap-2 rounded-lg bg-[var(--accent-primary)] px-6 py-3 text-sm font-medium text-[hsl(var(--primary-foreground))] transition-colors hover:bg-[var(--accent-hover)] disabled:pointer-events-none disabled:opacity-60',
 };
 
 export function QuickCapture({ onAddIdea }: QuickCaptureProps) {

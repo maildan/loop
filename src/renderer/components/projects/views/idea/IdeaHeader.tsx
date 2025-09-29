@@ -9,16 +9,16 @@ interface IdeaHeaderProps {
 }
 
 const IDEA_STYLES = {
-    header: 'sticky top-0 z-10 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-slate-200 dark:border-gray-700',
+    header: 'sticky top-0 z-10 border-b border-border bg-card/90 backdrop-blur-sm',
     headerTop: 'flex items-center justify-between p-4',
-    backButton: 'flex items-center gap-2 px-3 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors',
-    title: 'text-xl font-bold text-gray-900 dark:text-gray-100',
+    backButton: 'flex items-center gap-2 rounded-lg px-3 py-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground',
+    title: 'text-xl font-bold text-foreground',
     headerActions: 'flex items-center gap-2',
-    viewToggle: 'flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1',
+    viewToggle: 'flex items-center rounded-lg border border-border/60 bg-muted/60 p-1',
     viewButton: 'p-2 rounded-md transition-colors',
-    viewButtonActive: 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm',
-    viewButtonInactive: 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200',
-    addButton: 'flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors',
+    viewButtonActive: 'bg-background text-[hsl(var(--accent-primary))] shadow-sm',
+    viewButtonInactive: 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
+    addButton: 'flex items-center gap-2 rounded-lg bg-[var(--accent-primary)] px-4 py-2 text-[hsl(var(--primary-foreground))] transition-colors hover:bg-[var(--accent-hover)]',
 };
 
 export function IdeaHeader({ onBack, viewMode, onViewModeChange, onAddIdea }: IdeaHeaderProps) {

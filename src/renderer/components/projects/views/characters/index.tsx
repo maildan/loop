@@ -16,11 +16,11 @@ interface CharactersViewProps {
 }
 
 const CHARACTERS_STYLES = {
-    container: 'h-full flex flex-col bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
-    header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
+    container: 'h-full flex flex-col bg-[hsl(var(--background))] text-[hsl(var(--foreground))]',
+    header: 'p-6 bg-card/90 supports-[backdrop-filter]:bg-card/75 backdrop-blur-md border-b border-[hsl(var(--border))]/60',
     headerTop: 'flex items-center justify-between mb-4',
-    title: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
-    subtitle: 'text-slate-600 dark:text-gray-400 leading-relaxed',
+    title: 'text-2xl font-bold text-[hsl(var(--foreground))]',
+    subtitle: 'text-sm text-muted-foreground leading-relaxed',
     content: 'flex-1 flex flex-col min-h-0 h-full',
     scrollArea: 'flex-1 overflow-y-auto max-h-full h-0',
     contentPadding: 'p-6',

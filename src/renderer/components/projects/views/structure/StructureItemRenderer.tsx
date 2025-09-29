@@ -60,7 +60,7 @@ export const StructureItemRenderer: React.FC<StructureItemRendererProps> = ({
         <div className="relative">
             {/* 🔥 연결선 표시 */}
             {isConnected && (
-                <div className="absolute left-3 top-12 w-0.5 h-8 bg-blue-300 dark:bg-blue-600 z-10"></div>
+                <div className="absolute left-3 top-12 w-0.5 h-8 bg-[hsl(var(--accent-primary))]/50 z-10"></div>
             )}
 
             <div

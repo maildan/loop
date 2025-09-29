@@ -660,9 +660,9 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                       max="1000000"
                       step="100"
                     />
-                    <span className="text-sm text-slate-500 dark:text-slate-400">단어</span>
+                    <span className="text-sm text-muted-foreground">단어</span>
                   </div>
-                  <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="mt-1 text-xs text-muted-foreground">
                     권장: 소설 50,000+ / 에세이 5,000+ / 블로그 1,000+
                   </div>
                 </div>
@@ -678,7 +678,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                     onChange={(e) => setDeadline(e.target.value)}
                     min={new Date().toISOString().split('T')[0]}
                   />
-                  <div className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                  <div className="mt-1 text-xs text-muted-foreground">
                     목표 날짜를 설정하면 일일 권장 작성량을 계산해드립니다
                   </div>
                 </div>
@@ -686,12 +686,12 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
 
               {/* 🔥 목표 미리보기 */}
               {targetWords > 0 && (
-                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <div className="flex items-center space-x-2 text-blue-700 dark:text-blue-300">
+                <div className="mt-4 p-3 rounded-lg border bg-[hsl(var(--accent))]/15 border-[hsl(var(--accent))]/40">
+                  <div className="flex items-center space-x-2 text-[hsl(var(--accent-primary))]">
                     <Target className="w-4 h-4" />
                     <span className="font-medium">목표 미리보기</span>
                   </div>
-                  <div className="mt-2 text-sm text-blue-600 dark:text-blue-400">
+                  <div className="mt-2 text-sm text-[hsl(var(--accent-primary))]">
                     총 목표: {targetWords.toLocaleString()}단어
                     {deadline && (() => {
                       const days = Math.ceil((new Date(deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
@@ -729,10 +729,10 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
 
       {/* 🔥 Google Docs 선택 모달 */}
       {showGoogleDocsModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden border border-slate-200 dark:border-slate-700">
-            <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
-              <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-[hsl(var(--background))]/75 supports-[backdrop-filter]:bg-[hsl(var(--background))]/60 backdrop-blur-md">
+          <div className="bg-card text-card-foreground rounded-2xl shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden border border-border">
+            <div className="flex items-center justify-between p-6 border-b border-border bg-card/95 supports-[backdrop-filter]:bg-card/80">
+              <h3 className="text-xl font-bold text-[hsl(var(--foreground))]">
                 Google Docs 선택
               </h3>
               <Button
@@ -746,7 +746,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
             </div>
 
             <div className="p-6 overflow-y-auto max-h-[calc(80vh-140px)]">
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 가져올 Google Docs 문서를 선택하세요:
               </p>
 
@@ -755,15 +755,15 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                   <div
                     key={doc.id}
                     onClick={() => handleGoogleDocSelect(doc)}
-                    className="p-4 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:border-blue-300 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all"
+                    className="p-4 border border-border rounded-lg cursor-pointer transition-all bg-card hover:border-[hsl(var(--accent))]/50 hover:bg-[hsl(var(--accent))]/10"
                   >
                     <div className="flex items-start gap-3">
-                      <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                      <FileText className="w-5 h-5 text-[hsl(var(--accent-primary))] mt-0.5 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-slate-900 dark:text-slate-100 truncate">
+                        <h4 className="font-medium text-[hsl(var(--foreground))] truncate">
                           {doc.name || doc.title || doc.webViewLink?.split('/').pop() || `문서 ${index + 1}`}
                         </h4>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           수정됨: {new Date(doc.modifiedTime).toLocaleDateString('ko-KR')}
                         </p>
                         {doc.webViewLink && (
@@ -772,7 +772,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1"
+                            className="inline-flex items-center gap-1 text-xs text-[hsl(var(--accent-primary))] hover:text-[hsl(var(--accent-hover))] hover:underline mt-1"
                           >
                             <ExternalLink className="w-3 h-3" />
                             Google Docs에서 열기
@@ -785,7 +785,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
               </div>
 
               {googleDocs.length === 0 && (
-                <div className="text-center py-8 text-slate-500 dark:text-slate-400">
+                <div className="text-center py-8 text-muted-foreground">
                   문서를 찾을 수 없습니다.
                 </div>
               )}

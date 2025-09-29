@@ -70,21 +70,21 @@ export const MainStorySection: React.FC<MainStorySectionProps> = ({
                                 </div>
                                 <div className={STRUCTURE_STYLES.itemType}>프로젝트 메인 컨텐츠</div>
                                 {mainContent && (
-                                    <div className="text-xs text-gray-500 mt-1">
+                                    <div className="text-xs text-muted-foreground mt-1">
                                         {mainContent.substring(0, 100)}
                                         {mainContent.length > 100 && '...'}
                                     </div>
                                 )}
                                 {!mainContent && (
-                                    <div className="text-xs text-gray-400 italic mt-1">
+                                    <div className="text-xs text-muted-foreground italic mt-1">
                                         Write 탭에서 메인 스토리를 작성해보세요
                                     </div>
                                 )}
                             </div>
-                            <div className="text-xs text-gray-400 flex flex-col items-end">
+                            <div className="text-xs text-muted-foreground flex flex-col items-end">
                                 <span>{writerStats?.wordCount || 0} 단어</span>
                                 {writerStats?.charCount && (
-                                    <span className="text-xs text-gray-300">
+                                    <span className="text-xs text-muted-foreground/80">
                                         {writerStats.charCount} 자
                                     </span>
                                 )}

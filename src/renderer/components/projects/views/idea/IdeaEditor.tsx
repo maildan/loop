@@ -12,22 +12,22 @@ interface IdeaEditorProps {
 }
 
 const IDEA_STYLES = {
-    modal: 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4',
-    modalContent: 'bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto',
-    modalHeader: 'flex items-center justify-between p-6 border-b border-slate-200 dark:border-gray-700',
-    modalTitle: 'text-xl font-bold text-gray-900 dark:text-gray-100',
+    modal: 'fixed inset-0 z-50 flex items-center justify-center bg-[hsl(var(--foreground)/0.2)] dark:bg-[hsl(var(--background)/0.6)] backdrop-blur-sm p-4',
+    modalContent: 'w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-border bg-card text-card-foreground shadow-xl',
+    modalHeader: 'flex items-center justify-between p-6 border-b border-border/60',
+    modalTitle: 'text-xl font-bold text-foreground',
     modalBody: 'p-6 space-y-6',
-    modalFooter: 'flex justify-end gap-3 p-6 border-t border-slate-200 dark:border-gray-700',
+    modalFooter: 'flex justify-end gap-3 p-6 border-t border-border/60 bg-muted/40',
     formGroup: 'space-y-2',
-    formGrid: 'grid grid-cols-1 md:grid-cols-2 gap-4',
-    label: 'block text-sm font-medium text-gray-700 dark:text-gray-300',
-    input: 'w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
-    textarea: 'w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none',
-    select: 'w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+    formGrid: 'grid grid-cols-1 gap-4 md:grid-cols-2',
+    label: 'block text-sm font-medium text-muted-foreground',
+    input: 'w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground transition-colors focus:border-[hsl(var(--accent-primary))] focus:ring-2 focus:ring-[hsl(var(--accent-primary))]',
+    textarea: 'w-full resize-none rounded-lg border border-border bg-background px-3 py-2 text-foreground transition-colors focus:border-[hsl(var(--accent-primary))] focus:ring-2 focus:ring-[hsl(var(--accent-primary))]',
+    select: 'w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground transition-colors focus:border-[hsl(var(--accent-primary))] focus:ring-2 focus:ring-[hsl(var(--accent-primary))]',
     button: 'px-4 py-2 rounded-lg font-medium transition-colors',
-    primaryButton: 'bg-blue-600 hover:bg-blue-700 text-white',
-    secondaryButton: 'bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100',
-    actionButton: 'p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
+    primaryButton: 'bg-[var(--accent-primary)] text-[hsl(var(--primary-foreground))] hover:bg-[var(--accent-hover)]',
+    secondaryButton: 'bg-muted text-foreground hover:bg-muted/80',
+    actionButton: 'p-2 rounded-lg transition-colors hover:bg-muted hover:text-foreground text-muted-foreground',
 };
 
 export function IdeaEditor({

@@ -26,29 +26,30 @@ const ICON_MAP = {
 };
 
 const PRIORITY_STYLES = {
-    low: 'text-green-600 dark:text-green-400',
-    medium: 'text-yellow-600 dark:text-yellow-400',
-    high: 'text-red-600 dark:text-red-400',
+    low: 'text-[var(--success)]',
+    medium: 'text-[var(--warning)]',
+    high: 'text-[hsl(var(--destructive))]',
 };
 
 const IDEA_STYLES = {
-    ideaCard: 'group bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 cursor-pointer',
-    cardHeader: 'p-4 border-b border-slate-100 dark:border-gray-700',
-    cardTitle: 'font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2',
+    ideaCard: 'group rounded-xl border border-border bg-card hover:shadow-lg transition-all duration-200 cursor-pointer',
+    cardHeader: 'p-4 border-b border-border/60',
+    cardTitle: 'font-semibold text-foreground mb-2 group-hover:text-[hsl(var(--accent-primary))] transition-colors line-clamp-2',
     cardMeta: 'flex items-center gap-3',
-    categoryBadge: 'inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium',
-    stageBadge: 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium',
+    categoryBadge: 'inline-flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium border',
+    stageBadge: 'inline-flex items-center px-2 py-1 rounded-md text-xs font-medium border',
     cardContent: 'p-4',
-    cardDescription: 'text-sm text-gray-600 dark:text-gray-400 line-clamp-3 mb-3',
+    cardDescription: 'text-sm text-muted-foreground line-clamp-3 mb-3',
     cardTags: 'flex flex-wrap gap-1 mb-3',
-    tag: 'inline-flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded-md',
+    tag: 'inline-flex items-center gap-1 px-2 py-1 bg-muted text-muted-foreground text-xs rounded-md border border-border/60',
     cardFooter: 'flex items-center justify-between',
-    cardDate: 'text-xs text-gray-500 dark:text-gray-400',
-    cardActions: 'flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity',
-    actionButton: 'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
-    favoriteButton: 'p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors',
-    favoriteButtonActive: 'text-yellow-500',
-    favoriteButtonInactive: 'text-gray-400 dark:text-gray-500',
+    cardDate: 'text-xs text-muted-foreground',
+    cardActions: 'flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground',
+    actionButton: 'p-1.5 rounded-md transition-colors hover:bg-muted hover:text-foreground',
+    favoriteButton: 'p-1.5 rounded-md transition-colors hover:bg-muted',
+    favoriteButtonActive: 'text-[hsl(var(--accent-primary))]',
+    favoriteButtonInactive: 'text-muted-foreground',
+    deleteButton: 'p-1.5 rounded-md transition-colors hover:bg-[hsl(var(--destructive))]/15 text-[hsl(var(--destructive))]',
 };
 
 export function IdeaCard({
@@ -91,7 +92,7 @@ export function IdeaCard({
     return (
         <div
             className={`${IDEA_STYLES.ideaCard} ${isDragged ? 'opacity-50' : ''
-                } ${isDragOver ? 'ring-2 ring-blue-500' : ''
+                } ${isDragOver ? 'ring-2 ring-[hsl(var(--accent-primary))]' : ''
                 }`}
             onClick={handleCardClick}
             draggable={!!onDragStart}
@@ -124,7 +125,7 @@ export function IdeaCard({
                     <div className={IDEA_STYLES.cardTags}>
                         {idea.tags.slice(0, 3).map((tag, index) => (
                             <span key={index} className={IDEA_STYLES.tag}>
-                                <Tag className="w-2.5 h-2.5" />
+                                <Tag className="w-2.5 h-2.5 text-muted-foreground" />
                                 <span>{tag}</span>
                             </span>
                         ))}
@@ -138,7 +139,7 @@ export function IdeaCard({
 
                 <div className={IDEA_STYLES.cardFooter}>
                     <div className="flex items-center gap-2">
-                        <Clock className="w-3 h-3 text-gray-400" />
+                        <Clock className="w-3 h-3 text-muted-foreground" />
                         <span className={IDEA_STYLES.cardDate}>
                             {idea.updatedAt.toLocaleDateString()}
                         </span>
@@ -165,14 +166,14 @@ export function IdeaCard({
                             className={IDEA_STYLES.actionButton}
                             title="편집"
                         >
-                            <Edit3 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                            <Edit3 className="w-4 h-4" />
                         </button>
                         <button
                             onClick={handleDeleteClick}
-                            className={IDEA_STYLES.actionButton}
+                            className={IDEA_STYLES.deleteButton}
                             title="삭제"
                         >
-                            <Trash2 className="w-4 h-4 text-red-600 dark:text-red-400" />
+                            <Trash2 className="w-4 h-4" />
                         </button>
                     </div>
                 </div>

@@ -15,20 +15,20 @@ const CHARACTER_TABS = [
 ] as const;
 
 const CHARACTERS_STYLES = {
-    tabHeader: 'flex space-x-1 bg-slate-100 dark:bg-gray-700 p-1 rounded-lg',
+    tabHeader: 'flex space-x-1 bg-muted/60 p-1 rounded-lg border border-border/60',
     tabButton: (active: boolean) => `
-        flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium transition-colors
+        flex-1 flex items-center justify-center space-x-2 py-2 px-3 rounded-md text-sm font-medium transition-colors border border-transparent
         ${active
-            ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm'
-            : 'text-slate-600 dark:text-gray-400 hover:text-slate-900 dark:hover:text-gray-200'
+            ? 'bg-card text-[hsl(var(--accent-primary))] shadow-sm border-[hsl(var(--accent))]/40'
+            : 'text-muted-foreground hover:text-[hsl(var(--foreground))] hover:bg-muted/50'
         }
     `,
     tabIcon: 'w-4 h-4',
     tabContent: 'p-4 space-y-4',
     fieldGroup: 'space-y-2',
-    fieldLabel: 'text-sm font-medium text-slate-700 dark:text-gray-300',
-    fieldValue: 'text-sm text-gray-900 dark:text-gray-100 leading-relaxed',
-    fieldEmpty: 'text-slate-400 dark:text-gray-500 italic',
+    fieldLabel: 'text-sm font-medium text-muted-foreground',
+    fieldValue: 'text-sm text-[hsl(var(--foreground))] leading-relaxed',
+    fieldEmpty: 'text-muted-foreground italic',
 };
 
 function TabContent({ character, tab }: { character: ProjectCharacter; tab: string }) {
