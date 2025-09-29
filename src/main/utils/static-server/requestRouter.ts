@@ -27,6 +27,15 @@ export class RequestRouter {
             pathOnly = pathOnly.replace(/\/+/g, '/');
             if (!pathOnly.startsWith('/')) pathOnly = '/' + pathOnly;
 
+            // Normalize asset requests that inherit the current route prefix (e.g., /projects/assets/...)
+            if (pathOnly.includes('/assets/')) {
+                const assetsIndex = pathOnly.indexOf('/assets/');
+                pathOnly = pathOnly.slice(assetsIndex);
+                if (!pathOnly.startsWith('/')) {
+                    pathOnly = `/${pathOnly}`;
+                }
+            }
+
             Logger.debug('REQUEST_ROUTER', 'Processing request', { pathOnly, method: req.method });
 
             // 1. OAuth callback special case

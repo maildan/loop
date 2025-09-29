@@ -1,7 +1,13 @@
-/* 🔥 High Contrast Theme - 최대 접근성과 가독성을 위한 고대비 테마 */
+/**
+ * ⚡ High Contrast Theme — accessibility-first color system.
+ *
+ * Goals:
+ * - Maintain WCAG-friendly contrast ratios across surfaces and text.
+ * - Provide explicit focus outlines and readable editor defaults.
+ * - Align with the shared theme token contract.
+ */
 
 [data-theme="high-contrast"] {
-  /* 기본 배경 - 순수 화이트와 블랙의 극대비 */
   --background: 0 0% 100%;
   --foreground: 0 0% 0%;
   --card: 0 0% 100%;
@@ -10,83 +16,169 @@
   --popover-foreground: 0 0% 0%;
   --primary: 240 100% 50%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 0 0% 95%;
-  --secondary-foreground: 0 0% 0%;
-  --muted: 0 0% 90%;
-  --muted-foreground: 0 0% 20%;
+  --secondary: 0 0% 96%;
+  --secondary-foreground: 0 0% 10%;
+  --muted: 0 0% 92%;
+  --muted-foreground: 0 0% 22%;
   --accent: 0 0% 90%;
   --accent-foreground: 0 0% 0%;
-  --destructive: 0 100% 40%;
+  --destructive: 0 100% 38%;
   --destructive-foreground: 0 0% 100%;
-  --border: 0 0% 80%;
-  --input: 0 0% 80%;
+  --border: 0 0% 30%;
+  --input: 0 0% 30%;
   --ring: 240 100% 50%;
+  --radius: 0.5rem;
 
-  /* 기가차드 고대비 색상 시스템 */
-  --bg-primary: #ffffff;     /* 순수 화이트 */
-  --bg-secondary: #f5f5f5;   /* 매우 연한 그레이 */
-  --bg-elevated: #ffffff;    /* 순수 화이트 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-hover: #e5e5e5;       /* 호버시 연한 그레이 */
+  --bg-hover: #e5e5e5;
 
-  /* 텍스트 - 최대 대비도 */
-  --text-primary: #000000;   /* 순수 블랙 */
-  --text-secondary: #1a1a1a; /* 매우 진한 그레이 */
-  --text-muted: #333333;     /* 진한 그레이 */
+  --text-primary: #000000;
+  --text-secondary: #1a1a1a;
+  --text-muted: #333333;
   --text-inverse: #ffffff;
 
-  /* 강조색 - 고대비 블루 */
-  --accent-primary: #0000ff; /* 순수 블루 */
-  --accent-hover: #0000cc;   /* 더 진한 블루 */
-  --accent-light: #e6f0ff;   /* 연한 블루 */
-  --accent-dark: #000080;    /* 다크 블루 */
+  --accent-primary: #0000ff;
+  --accent-hover: #0000cc;
+  --accent-light: #e6f0ff;
+  --accent-dark: #000080;
 
-  /* 경계선 - 선명한 그레이 */
-  --border-light: #cccccc;   /* 미디엄 그레이 */
-  --border-medium: #999999;  /* 진한 그레이 */
-  --border-dark: #666666;    /* 매우 진한 그레이 */
+  --border-light: #d1d1d1;
+  --border-medium: #9d9d9d;
+  --border-dark: #6c6c6c;
 
-  /* 상태 색상 - 고대비 최적화 */
-  --success: #008000;        /* 순수 그린 */
+  --success: #007a2f;
   --success-light: #e6ffe6;
-  --warning: #ff8000;        /* 순수 오렌지 */
+  --warning: #c96900;
   --warning-light: #fff0e6;
-  --error: #cc0000;          /* 순수 레드 */
+  --error: #b80000;
   --error-light: #ffe6e6;
 
-  /* 🔥 고대비 전용 추가 변수 */
+  --chart-1: 240 100% 50%;
+  --chart-2: 120 92% 36%;
+  --chart-3: 39 100% 52%;
+  --chart-4: 312 96% 45%;
+  --chart-5: 0 100% 40%;
+
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 0 0% 0%;
+  --sidebar-primary: 240 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 95%;
+  --sidebar-accent-foreground: 0 0% 0%;
+  --sidebar-border: 0 0% 30%;
+  --sidebar-ring: 240 100% 50%;
+
+  --editor-bg: #ffffff;
+  --editor-bg-secondary: #f5f5f5;
+  --editor-text: #000000;
+  --editor-text-muted: #333333;
+  --editor-border: #242424;
+  --editor-accent: #0000ff;
+  --editor-accent-light: rgba(0, 0, 255, 0.28);
+  --editor-selection: rgba(0, 0, 255, 0.2);
+
+  --shadow-bold: 0 0 0 2px #000000;
   --focus-outline: 3px solid #0000ff;
-  --focus-outline-offset: 2px;
+  --focus-outline-offset: 3px;
 }
 
-/* 🔥 고대비 테마 전용 스타일 강화 */
-[data-theme="high-contrast"] *:focus {
+html[data-theme="high-contrast"],
+body[data-theme="high-contrast"] {
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-theme="high-contrast"] {
+  background-color: var(--bg-primary, hsl(var(--background)));
+  color: var(--text-primary, hsl(var(--foreground)));
+}
+
+body[data-theme="high-contrast"] .tiptap-editor,
+body[data-theme="high-contrast"] .ProseMirror,
+body[data-theme="high-contrast"] .tiptap {
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  border-color: var(--editor-border);
+  box-shadow: var(--shadow-bold);
+}
+
+body[data-theme="high-contrast"] .tiptap-editor:focus,
+body[data-theme="high-contrast"] .ProseMirror:focus {
   outline: var(--focus-outline);
   outline-offset: var(--focus-outline-offset);
 }
 
-[data-theme="high-contrast"] a {
-  color: #0000ff;
-  text-decoration: underline;
+body[data-theme="high-contrast"] .tiptap-editor *,
+body[data-theme="high-contrast"] .ProseMirror * {
+  color: inherit;
 }
 
-[data-theme="high-contrast"] a:hover {
+body[data-theme="high-contrast"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="high-contrast"] .ProseMirror .is-editor-empty:first-child::before {
+  color: var(--editor-text-muted);
+}
+
+body[data-theme="high-contrast"] .ProseMirror::selection,
+body[data-theme="high-contrast"] .ProseMirror *::selection,
+body[data-theme="high-contrast"] .ProseMirror::-moz-selection,
+body[data-theme="high-contrast"] .ProseMirror *::-moz-selection {
+  background: var(--editor-selection);
+  color: #ffffff;
+}
+
+body[data-theme="high-contrast"] ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+body[data-theme="high-contrast"] ::-webkit-scrollbar-track {
+  background: #d4d4d4;
+}
+
+body[data-theme="high-contrast"] ::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border: 2px solid #ffffff;
+}
+
+body[data-theme="high-contrast"] ::-webkit-scrollbar-thumb:hover {
+  background: #000000;
+}
+
+body[data-theme="high-contrast"] *:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+body[data-theme="high-contrast"] a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-decoration-color: hsl(var(--primary));
+}
+
+body[data-theme="high-contrast"] a:hover {
   color: #0000cc;
   background: #e6f0ff;
 }
 
-[data-theme="high-contrast"] button {
+body[data-theme="high-contrast"] button,
+body[data-theme="high-contrast"] [role="button"] {
   border: 2px solid #000000;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-[data-theme="high-contrast"] input,
-[data-theme="high-contrast"] textarea,
-[data-theme="high-contrast"] select {
+body[data-theme="high-contrast"] input,
+body[data-theme="high-contrast"] textarea,
+body[data-theme="high-contrast"] select,
+body[data-theme="high-contrast"] [contenteditable] {
   border: 2px solid #000000;
+  background: var(--editor-bg-secondary, hsl(var(--card)));
+  color: inherit;
 }
 
-[data-theme="high-contrast"] .card,
-[data-theme="high-contrast"] .popover {
-  border: 2px solid #000000;
+body.focus-mode[data-theme="high-contrast"] {
+  filter: contrast(1.04);
 }

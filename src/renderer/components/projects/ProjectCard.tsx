@@ -26,16 +26,16 @@ import { Logger } from '../../../shared/logger';
 const PROJECT_CARD_STYLES = {
   container: 'group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 min-h-[260px] flex flex-col',
   header: 'flex items-start justify-between p-4 pb-3',
-  title: 'text-lg font-semibold text-slate-900 dark:text-slate-100 line-clamp-2 flex-1 mr-3 leading-relaxed',
+  title: 'text-lg font-semibold text-foreground line-clamp-2 flex-1 mr-3 leading-relaxed',
   moreButton: 'opacity-0 group-hover:opacity-100 transition-opacity duration-200 w-8 h-8 p-0',
   content: 'px-4 pb-3 flex-1 space-y-3',
-  description: 'text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed',
-  metaSection: 'flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400',
+  description: 'text-sm text-muted-foreground line-clamp-3 leading-relaxed',
+  metaSection: 'flex items-center gap-4 text-xs text-muted-foreground',
   metaItem: 'flex items-center gap-1.5',
   progressSection: 'space-y-2',
   progressHeader: 'flex items-center justify-between',
-  progressLabel: 'text-sm font-medium text-slate-700 dark:text-slate-300',
-  progressValue: 'text-sm text-slate-500 dark:text-slate-400',
+  progressLabel: 'text-sm font-medium text-foreground/90',
+  progressValue: 'text-sm text-muted-foreground',
   footer: 'px-4 pb-4 pt-2',
   actionButtons: 'flex items-center gap-2',
   actionButton: 'opacity-0 group-hover:opacity-100 transition-opacity duration-200',
@@ -219,7 +219,11 @@ export function ProjectCard({
 
   return (
     <Card
-      className={`${PROJECT_CARD_STYLES.container} cursor-pointer ${isGoogleDocsProject ? 'ring-2 ring-yellow-400 dark:ring-yellow-600' : isImportProject ? 'ring-2 ring-blue-400 dark:ring-blue-600' : ''}`}
+      className={`${PROJECT_CARD_STYLES.container} cursor-pointer ${isGoogleDocsProject
+        ? 'ring-2 ring-[var(--warning)] ring-offset-2 ring-offset-background'
+        : isImportProject
+          ? 'ring-2 ring-[var(--accent-primary)] ring-offset-2 ring-offset-background'
+          : ''}`}
       role="article"
       aria-label={`프로젝트: ${project.title}`}
       onClick={handleCardClick}
@@ -232,7 +236,7 @@ export function ProjectCard({
             <button
               onClick={(e) => { e.stopPropagation(); e.preventDefault(); openExternal(googleDocMeta?.googleDocUrl || undefined); }}
               title="Google Docs 원본 열기"
-              className="ml-2 inline-flex items-center text-yellow-600 dark:text-yellow-400"
+              className="ml-2 inline-flex items-center text-[var(--warning)] transition-colors hover:opacity-90"
               aria-label="Open Google Docs"
             >
               <ExternalLink className={PROJECT_CARD_STYLES.icon} />
@@ -267,7 +271,7 @@ export function ProjectCard({
           {isGoogleDocsProject && googleDocMeta?.googleDocUrl && (
             <button
               onClick={(e) => { e.stopPropagation(); e.preventDefault(); openExternal(googleDocMeta?.googleDocUrl); }}
-              className="ml-2 text-xs text-blue-600 dark:text-blue-400 underline"
+              className="ml-2 text-xs text-[var(--accent-primary)] underline transition-colors hover:opacity-90"
             >
               원본 열기
             </button>

@@ -1,112 +1,310 @@
-/* 🔥 Forest Theme - 자연 친화적이고 편안한 작업 환경 테마 */
+/**
+ * 🌲 Forest & Midnight Theme Suite — nature inspired duo for day & night.
+ *
+ * Goals:
+ * - Provide a consistent token contract with full editor/sidebar coverage.
+ * - Maintain organic green palette for Forest and deep indigo for Midnight.
+ * - Avoid legacy class selectors or !important rules.
+ */
 
+/* --- Forest Light ---------------------------------------------------- */
 [data-theme="forest"] {
-  /* 기본 배경 - 부드러운 포레스트 그린 */
-  --background: 150 10% 96%;
-  --foreground: 160 30% 15%;
-  --card: 150 10% 97%;
-  --card-foreground: 160 30% 15%;
-  --popover: 150 10% 97%;
-  --popover-foreground: 160 30% 15%;
-  --primary: 160 65% 35%;
-  --primary-foreground: 150 10% 97%;
-  --secondary: 150 8% 90%;
-  --secondary-foreground: 160 30% 15%;
-  --muted: 150 8% 90%;
-  --muted-foreground: 160 20% 40%;
-  --accent: 150 8% 90%;
-  --accent-foreground: 160 30% 15%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 150 10% 97%;
-  --border: 150 8% 85%;
-  --input: 150 8% 85%;
-  --ring: 160 65% 35%;
+  --background: 150 12% 96%;
+  --foreground: 160 32% 16%;
+  --card: 146 14% 95%;
+  --card-foreground: 160 32% 16%;
+  --popover: 148 12% 94%;
+  --popover-foreground: 160 28% 20%;
+  --primary: 151 45% 36%;
+  --primary-foreground: 144 22% 94%;
+  --secondary: 146 16% 90%;
+  --secondary-foreground: 160 26% 26%;
+  --muted: 146 12% 88%;
+  --muted-foreground: 158 18% 42%;
+  --accent: 140 16% 88%;
+  --accent-foreground: 160 24% 24%;
+  --destructive: 6 70% 52%;
+  --destructive-foreground: 144 22% 94%;
+  --border: 146 10% 84%;
+  --input: 146 10% 84%;
+  --ring: 151 45% 36%;
+  --radius: 0.625rem;
 
-  /* 기가차드 포레스트 색상 시스템 */
-  --bg-primary: #f6f9f7;     /* 매우 연한 민트 그린 */
-  --bg-secondary: #f0f4f1;   /* 연한 세이지 그린 */
-  --bg-elevated: #ffffff;    /* 순수 화이트 */
+  --bg-primary: #f6f9f7;
+  --bg-secondary: #edf3ef;
+  --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-hover: #e8f2ea;       /* 호버시 연한 그린 */
+  --bg-hover: #e5efe8;
 
-  /* 텍스트 - 자연스러운 다크 그린 */
-  --text-primary: #1a2e1a;   /* 다크 포레스트 그린 */
-  --text-secondary: #2d4a2d; /* 미디엄 포레스트 그린 */
-  --text-muted: #5a6b5a;     /* 뮤트 그린 그레이 */
+  --text-primary: #1b301b;
+  --text-secondary: #2f4d2f;
+  --text-muted: #5f6f5f;
   --text-inverse: #f6f9f7;
 
-  /* 강조색 - 생생한 포레스트 그린 */
-  --accent-primary: #16a34a; /* 포레스트 그린 */
-  --accent-hover: #15803d;   /* 더 진한 그린 */
-  --accent-light: #dcfce7;   /* 연한 민트 그린 */
-  --accent-dark: #14532d;    /* 다크 포레스트 그린 */
+  --accent-primary: #1faa4b;
+  --accent-hover: #18853c;
+  --accent-light: #dff7e7;
+  --accent-dark: #0f5c2a;
 
-  /* 경계선 - 자연스러운 그린 그레이 */
-  --border-light: #e8f2ea;   /* 연한 민트 */
-  --border-medium: #d1e7dd;  /* 미디엄 세이지 */
-  --border-dark: #a7c4a7;    /* 다크 세이지 */
+  --border-light: #dfece2;
+  --border-medium: #c9ddcd;
+  --border-dark: #a2c2a4;
 
-  /* 상태 색상 - 자연 조화 */
-  --success: #16a34a;        /* 매칭 그린 */
-  --success-light: #dcfce7;
-  --warning: #ca8a04;        /* 어스 옐로우 */
-  --warning-light: #fef3c7;
-  --error: #dc2626;          /* 내추럴 레드 */
-  --error-light: #fee2e2;
+  --success: #1e9b50;
+  --success-light: #d6f6e2;
+  --warning: #ca8a04;
+  --warning-light: #f8e5b8;
+  --error: #dc2626;
+  --error-light: #f6d2d2;
+
+  --chart-1: 151 48% 38%;
+  --chart-2: 24 82% 54%;
+  --chart-3: 197 58% 46%;
+  --chart-4: 90 42% 50%;
+  --chart-5: 10 70% 48%;
+
+  --sidebar-background: 148 18% 90%;
+  --sidebar-foreground: 162 30% 22%;
+  --sidebar-primary: 151 45% 34%;
+  --sidebar-primary-foreground: 142 24% 92%;
+  --sidebar-accent: 142 16% 86%;
+  --sidebar-accent-foreground: 162 30% 22%;
+  --sidebar-border: 140 14% 82%;
+  --sidebar-ring: 151 45% 34%;
+
+  --editor-bg: #f2f7f3;
+  --editor-bg-secondary: #e7efe8;
+  --editor-text: #203420;
+  --editor-text-muted: #5a6b5a;
+  --editor-border: #d6e5d8;
+  --editor-accent: #1faa4b;
+  --editor-accent-light: rgba(31, 170, 75, 0.18);
+  --editor-selection: rgba(31, 170, 75, 0.16);
+
+  --shadow-canopy: 0 14px 32px rgba(37, 73, 49, 0.16);
+  --shadow-focus: inset 0 1px 2px rgba(46, 86, 61, 0.24);
 }
 
-/* 🔥 Midnight Theme - 야간 작업을 위한 깊고 부드러운 다크 테마 */
+/* --- Midnight Dark --------------------------------------------------- */
 [data-theme="midnight"] {
-  /* 기본 배경 - 깊은 미드나이트 블루 */
-  --background: 220 25% 6%;
-  --foreground: 220 15% 88%;
-  --card: 220 25% 8%;
-  --card-foreground: 220 15% 88%;
-  --popover: 220 25% 8%;
-  --popover-foreground: 220 15% 88%;
-  --primary: 220 15% 88%;
-  --primary-foreground: 220 25% 6%;
-  --secondary: 220 20% 12%;
-  --secondary-foreground: 220 15% 88%;
-  --muted: 220 20% 12%;
-  --muted-foreground: 220 10% 60%;
-  --accent: 220 20% 12%;
-  --accent-foreground: 220 15% 88%;
-  --destructive: 0 63% 31%;
-  --destructive-foreground: 220 15% 88%;
-  --border: 220 20% 12%;
-  --input: 220 20% 12%;
-  --ring: 220 15% 88%;
+  --background: 221 35% 7%;
+  --foreground: 220 16% 88%;
+  --card: 222 30% 10%;
+  --card-foreground: 220 16% 88%;
+  --popover: 223 28% 12%;
+  --popover-foreground: 220 18% 88%;
+  --primary: 228 86% 70%;
+  --primary-foreground: 225 38% 12%;
+  --secondary: 225 26% 16%;
+  --secondary-foreground: 222 18% 82%;
+  --muted: 225 20% 20%;
+  --muted-foreground: 220 13% 64%;
+  --accent: 227 28% 24%;
+  --accent-foreground: 222 16% 84%;
+  --destructive: 7 64% 46%;
+  --destructive-foreground: 222 16% 90%;
+  --border: 225 22% 20%;
+  --input: 225 22% 20%;
+  --ring: 228 86% 70%;
+  --radius: 0.625rem;
 
-  /* 기가차드 미드나이트 색상 시스템 */
-  --bg-primary: #0c1220;     /* 깊은 미드나이트 블루 */
-  --bg-secondary: #111827;   /* 조금 더 밝은 미드나이트 */
-  --bg-elevated: #1f2937;    /* 엘리베이티드 블루 그레이 */
+  --bg-primary: #0c1220;
+  --bg-secondary: #111827;
+  --bg-elevated: #1f2937;
   --bg-card: #1f2937;
-  --bg-hover: #374151;       /* 호버시 더 밝은 그레이 */
+  --bg-hover: #273248;
 
-  /* 텍스트 - 부드러운 블루 화이트 */
-  --text-primary: #e5e7eb;   /* 부드러운 화이트 */
-  --text-secondary: #d1d5db; /* 연한 그레이 */
-  --text-muted: #9ca3af;     /* 뮤트 그레이 */
-  --text-inverse: #0c1220;
+  --text-primary: #e5e7eb;
+  --text-secondary: #cbd5f5;
+  --text-muted: #94a3b8;
+  --text-inverse: #0b1221;
 
-  /* 강조색 - 부드러운 인디고 */
-  --accent-primary: #6366f1; /* 인디고 */
-  --accent-hover: #4f46e5;   /* 더 진한 인디고 */
-  --accent-light: #312e81;   /* 다크 인디고 */
-  --accent-dark: #1e1b4b;    /* 매우 진한 인디고 */
+  --accent-primary: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-light: #312e81;
+  --accent-dark: #1e1b4b;
 
-  /* 경계선 - 부드러운 다크 그레이 */
-  --border-light: #374151;   /* 연한 다크 그레이 */
-  --border-medium: #4b5563;  /* 미디엄 그레이 */
-  --border-dark: #6b7280;    /* 더 밝은 그레이 */
+  --border-light: #303950;
+  --border-medium: #3f4a64;
+  --border-dark: #566182;
 
-  /* 상태 색상 - 미드나이트 조화 */
-  --success: #10b981;        /* 소프트 그린 */
-  --success-light: #064e3b;
-  --warning: #f59e0b;        /* 소프트 오렌지 */
-  --warning-light: #78350f;
-  --error: #ef4444;          /* 소프트 레드 */
+  --success: #10b981;
+  --success-light: #0f5130;
+  --warning: #f59e0b;
+  --warning-light: #6b3a0d;
+  --error: #ef4444;
   --error-light: #7f1d1d;
+
+  --chart-1: 228 86% 70%;
+  --chart-2: 160 42% 46%;
+  --chart-3: 280 64% 58%;
+  --chart-4: 48 92% 60%;
+  --chart-5: 4 76% 54%;
+
+  --sidebar-background: 225 26% 16%;
+  --sidebar-foreground: 224 20% 82%;
+  --sidebar-primary: 228 86% 66%;
+  --sidebar-primary-foreground: 226 36% 14%;
+  --sidebar-accent: 227 28% 24%;
+  --sidebar-accent-foreground: 224 20% 82%;
+  --sidebar-border: 223 24% 22%;
+  --sidebar-ring: 228 86% 66%;
+
+  --editor-bg: #0e1426;
+  --editor-bg-secondary: #151d32;
+  --editor-text: #e6ebff;
+  --editor-text-muted: #a6b1d4;
+  --editor-border: #232c43;
+  --editor-accent: #6366f1;
+  --editor-accent-light: rgba(99, 102, 241, 0.28);
+  --editor-selection: rgba(99, 102, 241, 0.18);
+
+  --shadow-canopy: 0 18px 36px rgba(2, 6, 23, 0.62);
+  --shadow-focus: inset 0 1px 2px rgba(57, 67, 102, 0.32);
+}
+
+/* --- Shared refinements ---------------------------------------------- */
+
+html[data-theme="forest"],
+body[data-theme="forest"],
+html[data-theme="midnight"],
+body[data-theme="midnight"] {
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-theme="forest"],
+body[data-theme="midnight"] {
+  background-color: var(--bg-primary, hsl(var(--background)));
+  color: var(--text-primary, hsl(var(--foreground)));
+}
+
+body[data-theme="forest"] .tiptap-editor,
+body[data-theme="forest"] .ProseMirror,
+body[data-theme="forest"] .tiptap,
+body[data-theme="midnight"] .tiptap-editor,
+body[data-theme="midnight"] .ProseMirror,
+body[data-theme="midnight"] .tiptap {
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  border-color: var(--editor-border);
+  box-shadow: var(--shadow-canopy);
+}
+
+body[data-theme="forest"] .tiptap-editor:focus,
+body[data-theme="forest"] .ProseMirror:focus,
+body[data-theme="midnight"] .tiptap-editor:focus,
+body[data-theme="midnight"] .ProseMirror:focus {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 2px;
+}
+
+body[data-theme="forest"] .tiptap-editor *,
+body[data-theme="forest"] .ProseMirror *,
+body[data-theme="midnight"] .tiptap-editor *,
+body[data-theme="midnight"] .ProseMirror * {
+  color: inherit;
+}
+
+body[data-theme="forest"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="forest"] .ProseMirror .is-editor-empty:first-child::before,
+body[data-theme="midnight"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="midnight"] .ProseMirror .is-editor-empty:first-child::before {
+  color: var(--editor-text-muted);
+}
+
+body[data-theme="forest"] .ProseMirror::selection,
+body[data-theme="forest"] .ProseMirror *::selection,
+body[data-theme="forest"] .ProseMirror::-moz-selection,
+body[data-theme="forest"] .ProseMirror *::-moz-selection {
+  background: var(--editor-selection);
+}
+
+body[data-theme="midnight"] .ProseMirror::selection,
+body[data-theme="midnight"] .ProseMirror *::selection,
+body[data-theme="midnight"] .ProseMirror::-moz-selection,
+body[data-theme="midnight"] .ProseMirror *::-moz-selection {
+  background: var(--editor-selection);
+}
+
+body[data-theme="forest"] ::-webkit-scrollbar,
+body[data-theme="midnight"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body[data-theme="forest"] ::-webkit-scrollbar-track {
+  background: rgba(197, 216, 200, 0.45);
+}
+
+body[data-theme="midnight"] ::-webkit-scrollbar-track {
+  background: rgba(39, 49, 72, 0.45);
+}
+
+body[data-theme="forest"] ::-webkit-scrollbar-thumb {
+  background: rgba(45, 122, 74, 0.48);
+  border-radius: 4px;
+}
+
+body[data-theme="midnight"] ::-webkit-scrollbar-thumb {
+  background: rgba(82, 102, 164, 0.5);
+  border-radius: 4px;
+}
+
+body[data-theme="forest"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 122, 74, 0.68);
+}
+
+body[data-theme="midnight"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(82, 102, 164, 0.7);
+}
+
+body[data-theme="forest"] button:hover,
+body[data-theme="forest"] [role="button"]:hover,
+body[data-theme="midnight"] button:hover,
+body[data-theme="midnight"] [role="button"]:hover {
+  box-shadow: var(--shadow-canopy);
+}
+
+body[data-theme="forest"] input,
+body[data-theme="forest"] textarea,
+body[data-theme="forest"] [contenteditable],
+body[data-theme="midnight"] input,
+body[data-theme="midnight"] textarea,
+body[data-theme="midnight"] [contenteditable] {
+  background: var(--editor-bg-secondary, hsl(var(--card)));
+  border-radius: var(--radius-md, 0.5rem);
+  box-shadow: var(--shadow-focus);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+body[data-theme="forest"] input:focus,
+body[data-theme="forest"] textarea:focus,
+body[data-theme="forest"] [contenteditable]:focus,
+body[data-theme="midnight"] input:focus,
+body[data-theme="midnight"] textarea:focus,
+body[data-theme="midnight"] [contenteditable]:focus {
+  border-color: var(--editor-accent);
+  box-shadow: 0 0 0 2px var(--editor-accent-light);
+}
+
+body[data-theme="forest"] a,
+body[data-theme="midnight"] a {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.35);
+}
+
+body[data-theme="forest"] a:hover,
+body[data-theme="midnight"] a:hover {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.5);
+}
+
+body.focus-mode[data-theme="forest"] {
+  filter: saturate(1.06) brightness(1.02);
+}
+
+body.focus-mode[data-theme="midnight"] {
+  filter: brightness(0.94) contrast(1.08);
 }

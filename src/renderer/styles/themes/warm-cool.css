@@ -1,112 +1,310 @@
-/* 🔥 Warm Theme - 아늑하고 따뜻한 작업 환경을 위한 테마 */
+/**
+ * ♨️ Warm & Cool Theme Suite — contrasting focused work palettes.
+ *
+ * Goals:
+ * - Align with the new `[data-theme]` attribute contract introduced with Sepia.
+ * - Provide complete token sets (core, sidebar, editor, charts, shadows).
+ * - Remove legacy class selectors / ensure HSL-compatible values.
+ */
 
+/* --- Warm Light ------------------------------------------------------ */
 [data-theme="warm"] {
-  /* 기본 배경 - 따뜻한 아이보리 */
   --background: 45 15% 97%;
   --foreground: 25 30% 12%;
-  --card: 45 15% 98%;
+  --card: 43 18% 96%;
   --card-foreground: 25 30% 12%;
-  --popover: 45 15% 98%;
-  --popover-foreground: 25 30% 12%;
-  --primary: 20 85% 50%;
-  --primary-foreground: 45 15% 98%;
-  --secondary: 45 10% 92%;
-  --secondary-foreground: 25 30% 12%;
-  --muted: 45 10% 92%;
-  --muted-foreground: 25 15% 45%;
-  --accent: 45 10% 92%;
-  --accent-foreground: 25 30% 12%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 45 15% 98%;
-  --border: 45 10% 88%;
-  --input: 45 10% 88%;
-  --ring: 20 85% 50%;
+  --popover: 42 16% 95%;
+  --popover-foreground: 27 28% 18%;
+  --primary: 20 87% 50%;
+  --primary-foreground: 42 70% 96%;
+  --secondary: 42 16% 90%;
+  --secondary-foreground: 25 26% 22%;
+  --muted: 45 12% 88%;
+  --muted-foreground: 25 18% 46%;
+  --accent: 38 20% 88%;
+  --accent-foreground: 25 24% 24%;
+  --destructive: 6 82% 52%;
+  --destructive-foreground: 42 70% 96%;
+  --border: 40 12% 84%;
+  --input: 40 12% 84%;
+  --ring: 20 87% 50%;
+  --radius: 0.625rem;
 
-  /* 기가차드 따뜻한 색상 시스템 */
-  --bg-primary: #faf8f5;     /* 따뜻한 아이보리 */
-  --bg-secondary: #f5f2ee;   /* 연한 웜 그레이 */
-  --bg-elevated: #ffffff;    /* 순수 화이트 */
+  --bg-primary: #faf8f5;
+  --bg-secondary: #f4efe8;
+  --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-hover: #f0ede8;       /* 호버시 웜 그레이 */
+  --bg-hover: #efe8e0;
 
-  /* 텍스트 - 따뜻한 다크 톤 */
-  --text-primary: #2d1810;   /* 따뜻한 다크 브라운 */
-  --text-secondary: #3d2817; /* 미디엄 브라운 */
-  --text-muted: #6b5445;     /* 뮤트 브라운 */
-  --text-inverse: #faf8f5;
+  --text-primary: #2d1810;
+  --text-secondary: #3f2617;
+  --text-muted: #6c5444;
+  --text-inverse: #fefcf8;
 
-  /* 강조색 - 따뜻한 코랄/오렌지 */
-  --accent-primary: #ea580c; /* 웜 오렌지 */
-  --accent-hover: #dc2626;   /* 더 진한 오렌지 */
-  --accent-light: #fed7d7;   /* 연한 코랄 */
-  --accent-dark: #c2410c;    /* 다크 오렌지 */
+  --accent-primary: #ea580c;
+  --accent-hover: #d9480f;
+  --accent-light: #fde6d4;
+  --accent-dark: #b93816;
 
-  /* 경계선 - 따뜻한 뉴트럴 */
-  --border-light: #ede8e1;   /* 연한 웜 그레이 */
-  --border-medium: #e1ddd4;  /* 미디엄 웜 그레이 */
-  --border-dark: #d6cfc4;    /* 다크 웜 그레이 */
+  --border-light: #ede5da;
+  --border-medium: #e1d5c4;
+  --border-dark: #cdb99d;
 
-  /* 상태 색상 - 따뜻한 톤 조화 */
-  --success: #16a34a;        /* 자연스러운 그린 */
-  --success-light: #dcfce7;
-  --warning: #f59e0b;        /* 골든 옐로우 */
-  --warning-light: #fef3c7;
-  --error: #dc2626;          /* 웜 레드 */
-  --error-light: #fee2e2;
+  --success: #199a55;
+  --success-light: #d9f6e7;
+  --warning: #d97706;
+  --warning-light: #fde6c5;
+  --error: #dc2626;
+  --error-light: #fbd5d5;
+
+  --chart-1: 24 80% 54%;
+  --chart-2: 150 38% 44%;
+  --chart-3: 197 72% 46%;
+  --chart-4: 44 88% 62%;
+  --chart-5: 336 72% 48%;
+
+  --sidebar-background: 42 24% 92%;
+  --sidebar-foreground: 26 28% 24%;
+  --sidebar-primary: 20 87% 48%;
+  --sidebar-primary-foreground: 43 72% 94%;
+  --sidebar-accent: 36 22% 86%;
+  --sidebar-accent-foreground: 26 28% 24%;
+  --sidebar-border: 36 18% 82%;
+  --sidebar-ring: 20 87% 48%;
+
+  --editor-bg: #fbf3ea;
+  --editor-bg-secondary: #f4e7db;
+  --editor-text: #2f1b12;
+  --editor-text-muted: #6f5545;
+  --editor-border: #e6d9c6;
+  --editor-accent: #ea580c;
+  --editor-accent-light: rgba(234, 88, 12, 0.22);
+  --editor-selection: rgba(234, 88, 12, 0.16);
+
+  --shadow-soft: 0 12px 26px rgba(180, 120, 72, 0.18);
+  --shadow-focus: inset 0 1px 2px rgba(206, 160, 118, 0.28);
 }
 
-/* 🔥 Cool Theme - 시원하고 집중력 향상을 위한 테마 */
+/* --- Cool Light ------------------------------------------------------ */
 [data-theme="cool"] {
-  /* 기본 배경 - 시원한 블루 그레이 */
   --background: 210 15% 97%;
   --foreground: 215 25% 12%;
-  --card: 210 15% 98%;
+  --card: 210 18% 98%;
   --card-foreground: 215 25% 12%;
-  --popover: 210 15% 98%;
-  --popover-foreground: 215 25% 12%;
-  --primary: 215 85% 50%;
-  --primary-foreground: 210 15% 98%;
-  --secondary: 210 10% 92%;
-  --secondary-foreground: 215 25% 12%;
-  --muted: 210 10% 92%;
-  --muted-foreground: 215 15% 45%;
-  --accent: 210 10% 92%;
-  --accent-foreground: 215 25% 12%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 210 15% 98%;
-  --border: 210 10% 88%;
-  --input: 210 10% 88%;
-  --ring: 215 85% 50%;
+  --popover: 210 16% 96%;
+  --popover-foreground: 215 24% 16%;
+  --primary: 203 89% 48%;
+  --primary-foreground: 210 24% 96%;
+  --secondary: 212 20% 92%;
+  --secondary-foreground: 216 22% 22%;
+  --muted: 210 12% 90%;
+  --muted-foreground: 215 16% 46%;
+  --accent: 208 18% 88%;
+  --accent-foreground: 215 22% 24%;
+  --destructive: 0 80% 50%;
+  --destructive-foreground: 210 20% 96%;
+  --border: 210 14% 84%;
+  --input: 210 14% 84%;
+  --ring: 203 89% 48%;
+  --radius: 0.625rem;
 
-  /* 기가차드 시원한 색상 시스템 */
-  --bg-primary: #f8fafc;     /* 시원한 블루 화이트 */
-  --bg-secondary: #f1f5f9;   /* 연한 블루 그레이 */
-  --bg-elevated: #ffffff;    /* 순수 화이트 */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-hover: #e2e8f0;       /* 호버시 블루 그레이 */
+  --bg-hover: #e2e8f0;
 
-  /* 텍스트 - 시원한 다크 톤 */
-  --text-primary: #0f172a;   /* 시원한 다크 블루 */
-  --text-secondary: #1e293b; /* 미디엄 블루 그레이 */
-  --text-muted: #475569;     /* 뮤트 블루 그레이 */
+  --text-primary: #0f172a;
+  --text-secondary: #1e293b;
+  --text-muted: #475569;
   --text-inverse: #f8fafc;
 
-  /* 강조색 - 시원한 블루 */
-  --accent-primary: #0ea5e9; /* 스카이 블루 */
-  --accent-hover: #0284c7;   /* 더 진한 블루 */
-  --accent-light: #e0f2fe;   /* 연한 스카이 */
-  --accent-dark: #0c4a6e;    /* 다크 블루 */
+  --accent-primary: #0ea5e9;
+  --accent-hover: #0284c7;
+  --accent-light: #e0f2fe;
+  --accent-dark: #0c4a6e;
 
-  /* 경계선 - 시원한 그레이 */
-  --border-light: #e2e8f0;   /* 연한 블루 그레이 */
-  --border-medium: #cbd5e1;  /* 미디엄 블루 그레이 */
-  --border-dark: #94a3b8;    /* 다크 블루 그레이 */
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-dark: #94a3b8;
 
-  /* 상태 색상 - 시원한 톤 조화 */
-  --success: #059669;        /* 쿨 그린 */
+  --success: #059669;
   --success-light: #d1fae5;
-  --warning: #d97706;        /* 쿨 오렌지 */
-  --warning-light: #fed7aa;
-  --error: #dc2626;          /* 쿨 레드 */
-  --error-light: #fee2e2;
+  --warning: #d97706;
+  --warning-light: #fee8cc;
+  --error: #dc2626;
+  --error-light: #fbd6d6;
+
+  --chart-1: 199 90% 52%;
+  --chart-2: 160 52% 46%;
+  --chart-3: 48 92% 60%;
+  --chart-4: 280 68% 56%;
+  --chart-5: 12 76% 54%;
+
+  --sidebar-background: 214 32% 94%;
+  --sidebar-foreground: 222 30% 20%;
+  --sidebar-primary: 203 89% 48%;
+  --sidebar-primary-foreground: 208 92% 96%;
+  --sidebar-accent: 210 24% 90%;
+  --sidebar-accent-foreground: 215 24% 22%;
+  --sidebar-border: 208 20% 86%;
+  --sidebar-ring: 203 89% 48%;
+
+  --editor-bg: #f5f8ff;
+  --editor-bg-secondary: #e8f0fb;
+  --editor-text: #10203a;
+  --editor-text-muted: #4d5f78;
+  --editor-border: #d7e3f3;
+  --editor-accent: #0ea5e9;
+  --editor-accent-light: rgba(14, 165, 233, 0.2);
+  --editor-selection: rgba(14, 165, 233, 0.16);
+
+  --shadow-soft: 0 16px 32px rgba(31, 41, 55, 0.14);
+  --shadow-focus: inset 0 1px 2px rgba(30, 64, 175, 0.22);
+}
+
+/* --- Theme refinements ------------------------------------------------ */
+
+html[data-theme="warm"],
+body[data-theme="warm"],
+html[data-theme="cool"],
+body[data-theme="cool"] {
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-theme="warm"],
+body[data-theme="cool"] {
+  background-color: var(--bg-primary, hsl(var(--background)));
+  color: var(--text-primary, hsl(var(--foreground)));
+}
+
+body[data-theme="warm"] .tiptap-editor,
+body[data-theme="warm"] .ProseMirror,
+body[data-theme="warm"] .tiptap,
+body[data-theme="cool"] .tiptap-editor,
+body[data-theme="cool"] .ProseMirror,
+body[data-theme="cool"] .tiptap {
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  border-color: var(--editor-border);
+  box-shadow: var(--shadow-focus);
+}
+
+body[data-theme="warm"] .tiptap-editor:focus,
+body[data-theme="warm"] .ProseMirror:focus,
+body[data-theme="cool"] .tiptap-editor:focus,
+body[data-theme="cool"] .ProseMirror:focus {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 2px;
+}
+
+body[data-theme="warm"] .tiptap-editor *,
+body[data-theme="warm"] .ProseMirror *,
+body[data-theme="cool"] .tiptap-editor *,
+body[data-theme="cool"] .ProseMirror * {
+  color: inherit;
+}
+
+body[data-theme="warm"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="warm"] .ProseMirror .is-editor-empty:first-child::before,
+body[data-theme="cool"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="cool"] .ProseMirror .is-editor-empty:first-child::before {
+  color: var(--editor-text-muted);
+}
+
+body[data-theme="warm"] .ProseMirror::selection,
+body[data-theme="warm"] .ProseMirror *::selection,
+body[data-theme="warm"] .ProseMirror::-moz-selection,
+body[data-theme="warm"] .ProseMirror *::-moz-selection {
+  background: var(--editor-selection);
+}
+
+body[data-theme="cool"] .ProseMirror::selection,
+body[data-theme="cool"] .ProseMirror *::selection,
+body[data-theme="cool"] .ProseMirror::-moz-selection,
+body[data-theme="cool"] .ProseMirror *::-moz-selection {
+  background: var(--editor-selection);
+}
+
+body[data-theme="warm"] ::-webkit-scrollbar,
+body[data-theme="cool"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body[data-theme="warm"] ::-webkit-scrollbar-track {
+  background: rgba(227, 211, 192, 0.5);
+}
+
+body[data-theme="cool"] ::-webkit-scrollbar-track {
+  background: rgba(203, 213, 225, 0.45);
+}
+
+body[data-theme="warm"] ::-webkit-scrollbar-thumb {
+  background: rgba(214, 143, 90, 0.55);
+  border-radius: 4px;
+}
+
+body[data-theme="cool"] ::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.4);
+  border-radius: 4px;
+}
+
+body[data-theme="warm"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(214, 143, 90, 0.72);
+}
+
+body[data-theme="cool"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.62);
+}
+
+body[data-theme="warm"] button:hover,
+body[data-theme="warm"] [role="button"]:hover,
+body[data-theme="cool"] button:hover,
+body[data-theme="cool"] [role="button"]:hover {
+  box-shadow: var(--shadow-soft);
+}
+
+body[data-theme="warm"] input,
+body[data-theme="warm"] textarea,
+body[data-theme="warm"] [contenteditable],
+body[data-theme="cool"] input,
+body[data-theme="cool"] textarea,
+body[data-theme="cool"] [contenteditable] {
+  background: var(--editor-bg-secondary, hsl(var(--card)));
+  border-radius: var(--radius-md, 0.5rem);
+  box-shadow: var(--shadow-focus);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+body[data-theme="warm"] input:focus,
+body[data-theme="warm"] textarea:focus,
+body[data-theme="warm"] [contenteditable]:focus,
+body[data-theme="cool"] input:focus,
+body[data-theme="cool"] textarea:focus,
+body[data-theme="cool"] [contenteditable]:focus {
+  border-color: var(--editor-accent);
+  box-shadow: 0 0 0 2px var(--editor-accent-light);
+}
+
+body[data-theme="warm"] a,
+body[data-theme="cool"] a {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.35);
+}
+
+body[data-theme="warm"] a:hover,
+body[data-theme="cool"] a:hover {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.5);
+}
+
+body.focus-mode[data-theme="warm"] {
+  filter: saturate(1.04) brightness(1.03);
+}
+
+body.focus-mode[data-theme="cool"] {
+  filter: saturate(1.06) brightness(1.02);
 }

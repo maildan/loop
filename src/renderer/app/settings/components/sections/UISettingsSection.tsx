@@ -59,71 +59,73 @@ export const UISettingsSection = React.memo<UISettingsSectionProps>(({
         <h2 className={SETTINGS_PAGE_STYLES.sectionTitle}>UI/UX 설정</h2>
       </div>
 
-      <div className={SETTINGS_PAGE_STYLES.settingItem}>
-        <SettingItem
-          title="창 너비"
-          description="앱 창의 기본 너비를 설정하세요 (800-2560px)"
-          control={
-            <input
-              type="number"
-              min="800"
-              max="2560"
-              step="50"
-              value={settings.windowWidth}
-              onChange={handleWindowWidthChange}
-              className={SETTINGS_PAGE_STYLES.numberInput}
-            />
-          }
-        />
+      <div className={SETTINGS_PAGE_STYLES.sectionCardBody}>
+        <div className={SETTINGS_PAGE_STYLES.settingItem}>
+          <SettingItem
+            title="창 너비"
+            description="앱 창의 기본 너비를 설정하세요 (800-2560px)"
+            control={
+              <input
+                type="number"
+                min="800"
+                max="2560"
+                step="50"
+                value={settings.windowWidth}
+                onChange={handleWindowWidthChange}
+                className={SETTINGS_PAGE_STYLES.numberInput}
+              />
+            }
+          />
 
-        <SettingItem
-          title="창 높이"
-          description="앱 창의 기본 높이를 설정하세요 (600-1440px)"
-          control={
-            <input
-              type="number"
-              min="600"
-              max="1440"
-              step="50"
-              value={settings.windowHeight}
-              onChange={handleWindowHeightChange}
-              className={SETTINGS_PAGE_STYLES.numberInput}
-            />
-          }
-        />
+          <SettingItem
+            title="창 높이"
+            description="앱 창의 기본 높이를 설정하세요 (600-1440px)"
+            control={
+              <input
+                type="number"
+                min="600"
+                max="1440"
+                step="50"
+                value={settings.windowHeight}
+                onChange={handleWindowHeightChange}
+                className={SETTINGS_PAGE_STYLES.numberInput}
+              />
+            }
+          />
 
-        <SettingItem
-          title="사이드바 접기"
-          description="앱 시작 시 사이드바를 접힌 상태로 표시합니다"
-          control={
-            <Toggle
-              checked={settings.sidebarCollapsed}
-              onChange={handleSidebarCollapsedToggle}
-            />
-          }
-        />
+          <SettingItem
+            title="사이드바 접기"
+            description="앱 시작 시 사이드바를 접힌 상태로 표시합니다"
+            control={
+              <Toggle
+                checked={settings.sidebarCollapsed}
+                onChange={handleSidebarCollapsedToggle}
+              />
+            }
+          />
 
-        <SettingItem
-          title="줄 번호 표시"
-          description="에디터에서 줄 번호를 표시합니다"
-          control={
-            <Toggle
-              checked={settings.showLineNumbers}
-              onChange={handleShowLineNumbersToggle}
-            />
-          }
-        />
+          <SettingItem
+            title="줄 번호 표시"
+            description="에디터에서 줄 번호를 표시합니다"
+            control={
+              <Toggle
+                checked={settings.showLineNumbers}
+                onChange={handleShowLineNumbersToggle}
+              />
+            }
+          />
 
-        <SettingItem
-          title="단어 수 표시"
-          description="상태바에 단어 수를 표시합니다"
-          control={
-            <Toggle
-              checked={settings.showWordCount}
-              onChange={handleShowWordCountToggle}
-            />
-          }
-        />
+          <SettingItem
+            title="단어 수 표시"
+            description="상태바에 단어 수를 표시합니다"
+            control={
+              <Toggle
+                checked={settings.showWordCount}
+                onChange={handleShowWordCountToggle}
+              />
+            }
+          />
+        </div>
       </div>
     </div>
   );

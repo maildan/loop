@@ -129,7 +129,8 @@ export const ProfileSettingsSection: React.FC<Props> = ({ settings, updateSettin
                 <h2 className={SETTINGS_PAGE_STYLES.sectionTitle}>사용자 프로필</h2>
             </div>
 
-            <div className={SETTINGS_PAGE_STYLES.settingItem}>
+            <div className={SETTINGS_PAGE_STYLES.sectionCardBody}>
+                <div className={SETTINGS_PAGE_STYLES.settingItem}>
                 <SettingItem
                     title="프로필 사진"
                     description="파일 업로드 또는 기본 이니셜을 사용합니다 (최대 5MB, 모든 이미지 편집 가능)"
@@ -168,6 +169,7 @@ export const ProfileSettingsSection: React.FC<Props> = ({ settings, updateSettin
                     )}
                 />
             </div>
+        </div>
             {editingImage && (
                 <ImageCropperModal
                     src={editingImage}

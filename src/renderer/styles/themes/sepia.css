@@ -1,113 +1,318 @@
-/* 🔥 Sepia Theme - 눈 피로 감소를 위한 따뜻한 세피아 테마 */
+/**
+ * 📜 Sepia Theme Suite — warm paper aesthetics for long-form writing.
+ *
+ * Goals:
+ * - Provide valid HSL/hex tokens that work with `hsl(var(--token))` helpers.
+ * - Scope overrides to `[data-theme]` attributes instead of legacy `.sepia` classes.
+ * - Reduce reliance on `!important` while keeping editor styling aligned.
+ */
 
-/* Light variant - 🔥 Higher specificity for proper override */
+/* --- Light Sepia ------------------------------------------------------- */
 [data-theme="sepia"] {
-  /* 기본 배경 - 따뜻한 세피아 톤 */
-  --background: 42 25% 94%;
-  --foreground: 30 50% 15%;
-  --card: 42 25% 96%;
-  --card-foreground: 30 50% 15%;
-  --popover: 42 25% 96%;
-  --popover-foreground: 30 50% 15%;
-  --primary: 25 95% 39%;
-  --primary-foreground: 42 25% 96%;
-  --secondary: 42 15% 90%;
-  --secondary-foreground: 30 50% 15%;
-  --muted: 42 15% 90%;
-  --muted-foreground: 30 25% 40%;
-  --accent: 42 15% 90%;
-  --accent-foreground: 30 50% 15%;
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 42 25% 96%;
-  --border: 42 15% 85%;
-  --input: 42 15% 85%;
-  --ring: 25 95% 39%;
+  /* Core surface tokens (consumed via hsl(var(--token))) */
+  --background: 40 62% 92%;
+  --foreground: 28 32% 24%;
+  --card: 42 60% 95%;
+  --card-foreground: 28 32% 24%;
+  --popover: 40 56% 90%;
+  --popover-foreground: 28 32% 24%;
+  --primary: 30 55% 40%;
+  --primary-foreground: 42 70% 94%;
+  --secondary: 38 42% 86%;
+  --secondary-foreground: 28 28% 30%;
+  --muted: 37 30% 82%;
+  --muted-foreground: 28 22% 40%;
+  --accent: 36 38% 80%;
+  --accent-foreground: 28 28% 30%;
+  --destructive: 12 68% 46%;
+  --destructive-foreground: 42 78% 95%;
+  --border: 36 28% 81%;
+  --input: 36 28% 81%;
+  --ring: 30 55% 40%;
+  --radius: 0.625rem;
 
-  /* 기가차드 세피아 색상 시스템 */
-  --bg-primary: #f1e7d0;     /* 따뜻한 크림 */
-  --bg-secondary: #eae0c9;   /* 연한 베이지 */
-  --bg-elevated: #f4ead4;    /* 약간 밝은 크림 */
-  --bg-card: #f4ead4;
-  --bg-hover: #e5d9bf;       /* 호버시 조금 더 진한 톤 */
+  /* Extended surface + text tokens reused across the app */
+  --bg-primary: #f8f1e3;
+  --bg-secondary: #f2e7d4;
+  --bg-elevated: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #efe1ca;
 
-  /* 텍스트 - 따뜻한 갈색 톤 */
-  --text-primary: #433422;   /* 다크 브라운 */
-  --text-secondary: #504231; /* 미디엄 브라운 */
-  --text-muted: #6b5d4a;     /* 뮤트 브라운 */
-  --text-inverse: #f1e7d0;
+  --text-primary: #3a2b19;
+  --text-secondary: #5b432b;
+  --text-muted: #7f6a50;
+  --text-inverse: #ffffff;
 
-  /* 강조색 - 따뜻한 오렌지 브라운 */
-  --accent-primary: #b45309; /* 오렌지 브라운 */
-  --accent-hover: #92400e;   /* 더 진한 오렌지 브라운 */
-  --accent-light: #fed7aa;   /* 연한 오렌지 */
-  --accent-dark: #78350f;    /* 다크 오렌지 브라운 */
+  --accent-primary: #c07a2e;
+  --accent-hover: #a86726;
+  --accent-light: #f4d7b5;
+  --accent-dark: #8f5520;
 
-  /* 경계선 - 부드러운 베이지 */
-  --border-light: #ded0bf;   /* 연한 베이지 */
-  --border-medium: #d1c2af;  /* 미디엄 베이지 */
-  --border-dark: #c4b59d;    /* 다크 베이지 */
+  --border-light: #e8dac3;
+  --border-medium: #d6c4a7;
+  --border-dark: #bda781;
 
-  /* 상태 색상 - 세피아 톤 조화 */
-  --success: #16a34a;        /* 자연스러운 그린 */
-  --success-light: #dcfce7;
-  --warning: #d97706;        /* 따뜻한 오렌지 */
-  --warning-light: #fed7aa;
-  --error: #dc2626;          /* 조화로운 레드 */
-  --error-light: #fee2e2;
+  --success: #3d8b4c;
+  --success-light: #d7f3df;
+  --warning: #d79a36;
+  --warning-light: #f6e6c6;
+  --error: #b6503c;
+  --error-light: #f4d6cf;
+
+  /* Chart palette tuned for warm sepia visuals */
+  --chart-1: 28 70% 51%;
+  --chart-2: 142 32% 42%;
+  --chart-3: 203 25% 42%;
+  --chart-4: 48 72% 58%;
+  --chart-5: 353 52% 48%;
+
+  /* Sidebar integration */
+  --sidebar-background: 40 46% 88%;
+  --sidebar-foreground: 28 32% 28%;
+  --sidebar-primary: 30 55% 38%;
+  --sidebar-primary-foreground: 42 72% 94%;
+  --sidebar-accent: 36 36% 78%;
+  --sidebar-accent-foreground: 28 32% 30%;
+  --sidebar-border: 34 30% 78%;
+  --sidebar-ring: 30 55% 40%;
+
+  /* Editor specific tokens */
+  --editor-bg: #f7eddc;
+  --editor-bg-secondary: #efe0c7;
+  --editor-text: #3a2b19;
+  --editor-text-muted: #7a6249;
+  --editor-border: #e1d3bd;
+  --editor-accent: #c07a2e;
+  --editor-accent-light: rgba(192, 122, 46, 0.28);
+  --editor-selection: rgba(192, 122, 46, 0.18);
+
+  /* Warm shadow presets */
+  --shadow-warm: 0 12px 28px rgba(131, 98, 52, 0.16);
+  --shadow-paper: inset 0 1px 2px rgba(146, 114, 72, 0.18);
 }
 
-/* Dark variant */
+/* --- Dark Sepia ------------------------------------------------------- */
 [data-theme="sepia-dark"] {
-  /* 기본 배경 - 다크 세피아 톤 */
-  --background: 25 30% 8%;
-  --foreground: 42 25% 85%;
-  --card: 25 30% 10%;
-  --card-foreground: 42 25% 85%;
-  --popover: 25 30% 10%;
-  --popover-foreground: 42 25% 85%;
-  --primary: 42 25% 85%;
-  --primary-foreground: 25 30% 8%;
-  --secondary: 30 25% 15%;
-  --secondary-foreground: 42 25% 85%;
-  --muted: 30 25% 15%;
-  --muted-foreground: 42 15% 60%;
-  --accent: 30 25% 15%;
-  --accent-foreground: 42 25% 85%;
-  --destructive: 0 63% 31%;
-  --destructive-foreground: 42 25% 85%;
-  --border: 30 25% 15%;
-  --input: 30 25% 15%;
-  --ring: 42 25% 85%;
+  --background: 28 24% 18%;
+  --foreground: 40 46% 86%;
+  --card: 30 22% 22%;
+  --card-foreground: 40 46% 86%;
+  --popover: 30 20% 24%;
+  --popover-foreground: 40 46% 86%;
+  --primary: 35 58% 60%;
+  --primary-foreground: 28 24% 18%;
+  --secondary: 32 22% 28%;
+  --secondary-foreground: 40 42% 82%;
+  --muted: 32 18% 34%;
+  --muted-foreground: 38 32% 72%;
+  --accent: 34 26% 36%;
+  --accent-foreground: 40 42% 82%;
+  --destructive: 10 70% 46%;
+  --destructive-foreground: 42 80% 92%;
+  --border: 30 20% 30%;
+  --input: 30 20% 30%;
+  --ring: 35 58% 60%;
+  --radius: 0.625rem;
 
-  /* 기가차드 다크 세피아 색상 */
-  --bg-primary: #1a1612;     /* 다크 초콜릿 */
-  --bg-secondary: #221f19;   /* 더 진한 초콜릿 */
-  --bg-elevated: #2a251e;    /* 엘리베이티드 초콜릿 */
-  --bg-card: #2a251e;
-  --bg-hover: #332d24;       /* 호버 초콜릿 */
+  --bg-primary: #201710;
+  --bg-secondary: #2b2119;
+  --bg-elevated: #2f2219;
+  --bg-card: #2f2219;
+  --bg-hover: #3a2a20;
 
-  /* 텍스트 - 따뜻한 라이트 톤 */
-  --text-primary: #e8dcc6;   /* 따뜻한 화이트 */
-  --text-secondary: #d4c5a9; /* 미디엄 베이지 */
-  --text-muted: #a1936f;     /* 뮤트 베이지 */
-  --text-inverse: #1a1612;
+  --text-primary: #f1e0c5;
+  --text-secondary: #dcc39c;
+  --text-muted: #c5ae8a;
+  --text-inverse: #1a130d;
 
-  /* 강조색 - 따뜻한 골드 */
-  --accent-primary: #fbbf24; /* 골든 옐로우 */
-  --accent-hover: #f59e0b;   /* 더 진한 골드 */
-  --accent-light: #78350f;   /* 다크 오렌지 */
-  --accent-dark: #92400e;    /* 매우 진한 오렌지 */
+  --accent-primary: #d08e3a;
+  --accent-hover: #b87831;
+  --accent-light: #5a3a1e;
+  --accent-dark: #3e2916;
 
-  /* 경계선 */
-  --border-light: #332d24;
-  --border-medium: #3d342a;
-  --border-dark: #4a3f33;
+  --border-light: #3a2a20;
+  --border-medium: #463324;
+  --border-dark: #604733;
 
-  /* 상태 색상 - 다크 세피아 조화 */
-  --success: #22c55e;
-  --success-light: #064e3b;
-  --warning: #f59e0b;
-  --warning-light: #78350f;
-  --error: #ef4444;
-  --error-light: #7f1d1d;
+  --success: #45b36b;
+  --success-light: #1f3d2b;
+  --warning: #e4a84c;
+  --warning-light: #4a351f;
+  --error: #d1644c;
+  --error-light: #4b261b;
+
+  --chart-1: 35 70% 64%;
+  --chart-2: 150 38% 54%;
+  --chart-3: 210 28% 55%;
+  --chart-4: 45 78% 60%;
+  --chart-5: 8 62% 58%;
+
+  --sidebar-background: 30 22% 22%;
+  --sidebar-foreground: 40 42% 82%;
+  --sidebar-primary: 35 58% 55%;
+  --sidebar-primary-foreground: 28 24% 18%;
+  --sidebar-accent: 32 24% 32%;
+  --sidebar-accent-foreground: 40 42% 82%;
+  --sidebar-border: 30 20% 32%;
+  --sidebar-ring: 35 58% 55%;
+
+  --editor-bg: #201710;
+  --editor-bg-secondary: #2b2017;
+  --editor-text: #f1e0c5;
+  --editor-text-muted: #c3aa87;
+  --editor-border: #3a2a20;
+  --editor-accent: #d08e3a;
+  --editor-accent-light: rgba(208, 142, 58, 0.32);
+  --editor-selection: rgba(208, 142, 58, 0.22);
+
+  --shadow-warm: 0 14px 32px rgba(17, 12, 8, 0.65);
+  --shadow-paper: inset 0 1px 2px rgba(64, 45, 30, 0.45);
+}
+
+/* --- Theme specific refinements -------------------------------------- */
+
+html[data-theme="sepia"],
+body[data-theme="sepia"],
+html[data-theme="sepia-dark"],
+body[data-theme="sepia-dark"] {
+  font-feature-settings: "liga" 1, "kern" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-theme="sepia"],
+body[data-theme="sepia-dark"] {
+  background-color: var(--bg-primary, hsl(var(--background)));
+  color: var(--text-primary, hsl(var(--foreground)));
+}
+
+/* TipTap / ProseMirror alignment */
+body[data-theme="sepia"] .tiptap-editor,
+body[data-theme="sepia"] .ProseMirror,
+body[data-theme="sepia"] .tiptap,
+body[data-theme="sepia-dark"] .tiptap-editor,
+body[data-theme="sepia-dark"] .ProseMirror,
+body[data-theme="sepia-dark"] .tiptap {
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  border-color: var(--editor-border);
+  box-shadow: var(--shadow-paper);
+}
+
+body[data-theme="sepia"] .tiptap-editor:focus,
+body[data-theme="sepia"] .ProseMirror:focus,
+body[data-theme="sepia-dark"] .tiptap-editor:focus,
+body[data-theme="sepia-dark"] .ProseMirror:focus {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 2px;
+}
+
+body[data-theme="sepia"] .tiptap-editor *,
+body[data-theme="sepia"] .ProseMirror *,
+body[data-theme="sepia-dark"] .tiptap-editor *,
+body[data-theme="sepia-dark"] .ProseMirror * {
+  color: inherit;
+}
+
+body[data-theme="sepia"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="sepia"] .ProseMirror .is-editor-empty:first-child::before,
+body[data-theme="sepia-dark"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="sepia-dark"] .ProseMirror .is-editor-empty:first-child::before {
+  color: var(--editor-text-muted);
+}
+
+body[data-theme="sepia"] .ProseMirror::selection,
+body[data-theme="sepia"] .ProseMirror *::selection,
+body[data-theme="sepia-dark"] .ProseMirror::selection,
+body[data-theme="sepia-dark"] .ProseMirror *::selection,
+body[data-theme="sepia"] .ProseMirror::-moz-selection,
+body[data-theme="sepia"] .ProseMirror *::-moz-selection,
+body[data-theme="sepia-dark"] .ProseMirror::-moz-selection,
+body[data-theme="sepia-dark"] .ProseMirror *::-moz-selection {
+  background: var(--editor-selection);
+}
+
+/* Scrollbar styling (WebKit) */
+body[data-theme="sepia"] ::-webkit-scrollbar,
+body[data-theme="sepia-dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body[data-theme="sepia"] ::-webkit-scrollbar-track,
+body[data-theme="sepia-dark"] ::-webkit-scrollbar-track {
+  background: rgba(226, 214, 192, 0.4);
+}
+
+body[data-theme="sepia"] ::-webkit-scrollbar-thumb,
+body[data-theme="sepia-dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(156, 126, 84, 0.5);
+  border-radius: 4px;
+}
+
+body[data-theme="sepia"] ::-webkit-scrollbar-thumb:hover,
+body[data-theme="sepia-dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 126, 84, 0.7);
+}
+
+/* Buttons, inputs, anchors */
+body[data-theme="sepia"] button:hover,
+body[data-theme="sepia-dark"] button:hover,
+body[data-theme="sepia"] [role="button"]:hover,
+body[data-theme="sepia-dark"] [role="button"]:hover {
+  box-shadow: var(--shadow-warm);
+}
+
+body[data-theme="sepia"] input,
+body[data-theme="sepia"] textarea,
+body[data-theme="sepia-dark"] input,
+body[data-theme="sepia-dark"] textarea,
+body[data-theme="sepia"] [contenteditable],
+body[data-theme="sepia-dark"] [contenteditable] {
+  box-shadow: var(--shadow-paper);
+  background: var(--editor-bg-secondary, hsl(var(--card)));
+  border-radius: var(--radius-md, 0.5rem);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+body[data-theme="sepia"] input:focus,
+body[data-theme="sepia"] textarea:focus,
+body[data-theme="sepia-dark"] input:focus,
+body[data-theme="sepia-dark"] textarea:focus,
+body[data-theme="sepia"] [contenteditable]:focus,
+body[data-theme="sepia-dark"] [contenteditable]:focus {
+  border-color: var(--editor-accent);
+  box-shadow: 0 0 0 2px var(--editor-accent-light);
+}
+
+body[data-theme="sepia"] a,
+body[data-theme="sepia-dark"] a {
+  color: hsl(30 55% 38%);
+  text-decoration-color: hsl(30 55% 38% / 0.35);
+}
+
+body[data-theme="sepia-dark"] a {
+  color: hsl(35 70% 65%);
+  text-decoration-color: hsl(35 70% 65% / 0.4);
+}
+
+body[data-theme="sepia"] a:hover,
+body[data-theme="sepia-dark"] a:hover {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.4);
+}
+
+/* Focus-mode tweaks */
+body.focus-mode[data-theme="sepia"],
+body.focus-mode[data-theme="sepia-dark"] {
+  filter: saturate(1.03);
+}
+
+body.focus-mode[data-theme="sepia"] {
+  filter: saturate(1.05) brightness(1.03);
+}
+
+body.focus-mode[data-theme="sepia-dark"] {
+  filter: brightness(0.94) contrast(1.06);
 }

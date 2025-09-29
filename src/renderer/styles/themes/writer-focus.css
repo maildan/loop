@@ -1,97 +1,307 @@
-/* 🔥 Writer Focus Theme - 최고 가독성과 집중을 위한 테마 */
+/**
+ * ✍️ Writer Focus Theme Suite — maximized legibility for long drafting sessions.
+ *
+ * Goals:
+ * - Provide a neutral, paper-inspired light theme and a charcoal dark companion.
+ * - Ensure full token coverage for editor, sidebar, charts, shadows.
+ * - Keep colors accessible and reduce glare.
+ */
 
-/* Light variant - 🔥 Data attribute approach for clean CSS */
+/* --- Writer Focus Light ---------------------------------------------- */
 [data-theme="writer-focus"] {
-  /* 기본 배경 - 순수한 화이트 (종이 느낌) */
   --background: 0 0% 100%;
-  --foreground: 0 0% 5%;
-  --card: 0 0% 100%;
-  --card-foreground: 0 0% 5%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 5%;
-  --primary: 210 79% 46%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 210 40% 98%;
-  --secondary-foreground: 0 0% 11%;
-  --muted: 210 40% 98%;
-  --muted-foreground: 0 0% 40%;
-  --accent: 210 40% 98%;
-  --accent-foreground: 0 0% 11%;
+  --foreground: 210 9% 8%;
+  --card: 210 8% 99%;
+  --card-foreground: 210 9% 8%;
+  --popover: 210 7% 98%;
+  --popover-foreground: 210 10% 10%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 220 14% 95%;
+  --secondary-foreground: 215 17% 18%;
+  --muted: 220 12% 90%;
+  --muted-foreground: 220 10% 38%;
+  --accent: 210 28% 90%;
+  --accent-foreground: 215 18% 20%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
-  --border: 220 13% 91%;
-  --input: 220 13% 91%;
-  --ring: 210 79% 46%;
+  --border: 220 13% 89%;
+  --input: 220 13% 89%;
+  --ring: 217 91% 60%;
+  --radius: 0.625rem;
 
-  /* 기가차드 작가 전용 색상 */
   --bg-primary: #ffffff;
-  --bg-secondary: #fafafa;
+  --bg-secondary: #f9fafb;
   --bg-elevated: #ffffff;
   --bg-card: #ffffff;
-  --bg-hover: #f5f5f5;
+  --bg-hover: #f3f4f6;
 
-  /* 텍스트 - 최대 대비도 */
-  --text-primary: #000000;
-  --text-secondary: #1a1a1a;
-  --text-muted: #666666;
+  --text-primary: #0f172a;
+  --text-secondary: #1f2937;
+  --text-muted: #6b7280;
   --text-inverse: #ffffff;
 
-  /* 강조색 - 차분한 블루 (눈의 피로 최소화) */
   --accent-primary: #2563eb;
   --accent-hover: #1d4ed8;
-  --accent-light: #eff6ff;
-  --accent-dark: #1e40af;
+  --accent-light: #e4efff;
+  --accent-dark: #1e3a8a;
 
-  /* 경계선 - 매우 부드러운 회색 */
-  --border-light: #f0f0f0;
-  --border-medium: #e5e5e5;
-  --border-dark: #d4d4d4;
+  --border-light: #e7e9ee;
+  --border-medium: #d4d7dd;
+  --border-dark: #b6bcc5;
+
+  --success: #15803d;
+  --success-light: #d1fae5;
+  --warning: #b45309;
+  --warning-light: #fef3c7;
+  --error: #dc2626;
+  --error-light: #fee2e2;
+
+  --chart-1: 217 91% 60%;
+  --chart-2: 199 89% 48%;
+  --chart-3: 160 55% 46%;
+  --chart-4: 44 92% 60%;
+  --chart-5: 336 72% 50%;
+
+  --sidebar-background: 210 24% 96%;
+  --sidebar-foreground: 215 17% 18%;
+  --sidebar-primary: 217 91% 58%;
+  --sidebar-primary-foreground: 215 52% 96%;
+  --sidebar-accent: 210 20% 92%;
+  --sidebar-accent-foreground: 215 17% 18%;
+  --sidebar-border: 215 18% 88%;
+  --sidebar-ring: 217 91% 58%;
+
+  --editor-bg: #ffffff;
+  --editor-bg-secondary: #f3f4f6;
+  --editor-text: #0f172a;
+  --editor-text-muted: #4b5563;
+  --editor-border: #d9dde5;
+  --editor-accent: #2563eb;
+  --editor-accent-light: rgba(37, 99, 235, 0.2);
+  --editor-selection: rgba(37, 99, 235, 0.16);
+
+  --shadow-focus: 0 12px 28px rgba(15, 23, 42, 0.16);
+  --shadow-subtle: inset 0 1px 2px rgba(79, 114, 170, 0.16);
 }
 
-/* Dark variant - 🔥 Higher specificity for proper override */
+/* --- Writer Focus Dark ----------------------------------------------- */
 [data-theme="writer-focus-dark"] {
-  /* 기본 배경 - 진한 차콜 (순수 검정 피하기) */
-  --background: 0 0% 8%;
-  --foreground: 0 0% 95%;
-  --card: 0 0% 8%;
-  --card-foreground: 0 0% 95%;
-  --popover: 0 0% 8%;
-  --popover-foreground: 0 0% 95%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 0 0% 11%;
-  --secondary: 217 32% 18%;
-  --secondary-foreground: 0 0% 95%;
-  --muted: 217 32% 18%;
-  --muted-foreground: 215 20% 65%;
-  --accent: 217 32% 18%;
-  --accent-foreground: 0 0% 95%;
-  --destructive: 0 63% 31%;
-  --destructive-foreground: 0 0% 95%;
-  --border: 217 32% 18%;
-  --input: 217 32% 18%;
-  --ring: 212 27% 84%;
+  --background: 220 14% 9%;
+  --foreground: 210 10% 96%;
+  --card: 222 14% 10%;
+  --card-foreground: 210 10% 96%;
+  --popover: 220 12% 12%;
+  --popover-foreground: 210 12% 92%;
+  --primary: 214 95% 78%;
+  --primary-foreground: 222 20% 14%;
+  --secondary: 225 17% 20%;
+  --secondary-foreground: 210 14% 92%;
+  --muted: 225 14% 24%;
+  --muted-foreground: 214 20% 66%;
+  --accent: 219 16% 26%;
+  --accent-foreground: 210 12% 92%;
+  --destructive: 3 68% 52%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 225 18% 24%;
+  --input: 225 18% 24%;
+  --ring: 214 95% 78%;
+  --radius: 0.625rem;
 
-  /* 기가차드 작가 전용 색상 (다크) */
   --bg-primary: #141414;
   --bg-secondary: #1a1a1a;
   --bg-elevated: #1f1f1f;
   --bg-card: #1f1f1f;
   --bg-hover: #262626;
 
-  /* 텍스트 - 눈 피로 최소화 */
   --text-primary: #f5f5f5;
   --text-secondary: #e5e5e5;
-  --text-muted: #a3a3a3;
-  --text-inverse: #141414;
+  --text-muted: #9ca3af;
+  --text-inverse: #0e0e0e;
 
-  /* 강조색 - 부드러운 블루 (다크 모드 최적화) */
   --accent-primary: #60a5fa;
   --accent-hover: #3b82f6;
   --accent-light: #1e3a8a;
   --accent-dark: #1d4ed8;
 
-  /* 경계선 */
-  --border-light: #262626;
-  --border-medium: #404040;
+  --border-light: #2c2c2c;
+  --border-medium: #3f3f3f;
   --border-dark: #525252;
+
+  --success: #22c55e;
+  --success-light: #14532d;
+  --warning: #fbbf24;
+  --warning-light: #78350f;
+  --error: #f87171;
+  --error-light: #7f1d1d;
+
+  --chart-1: 214 95% 78%;
+  --chart-2: 199 90% 62%;
+  --chart-3: 152 47% 52%;
+  --chart-4: 280 70% 64%;
+  --chart-5: 0 78% 62%;
+
+  --sidebar-background: 225 18% 18%;
+  --sidebar-foreground: 210 12% 92%;
+  --sidebar-primary: 214 95% 72%;
+  --sidebar-primary-foreground: 224 20% 16%;
+  --sidebar-accent: 219 16% 26%;
+  --sidebar-accent-foreground: 210 12% 92%;
+  --sidebar-border: 225 18% 22%;
+  --sidebar-ring: 214 95% 72%;
+
+  --editor-bg: #13151b;
+  --editor-bg-secondary: #1a1d24;
+  --editor-text: #f8fafc;
+  --editor-text-muted: #cbd5f5;
+  --editor-border: #272b35;
+  --editor-accent: #60a5fa;
+  --editor-accent-light: rgba(96, 165, 250, 0.28);
+  --editor-selection: rgba(96, 165, 250, 0.2);
+
+  --shadow-focus: 0 18px 36px rgba(11, 14, 22, 0.65);
+  --shadow-subtle: inset 0 1px 2px rgba(56, 63, 84, 0.34);
+}
+
+/* --- Shared refinements ---------------------------------------------- */
+
+html[data-theme="writer-focus"],
+body[data-theme="writer-focus"],
+html[data-theme="writer-focus-dark"],
+body[data-theme="writer-focus-dark"] {
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body[data-theme="writer-focus"],
+body[data-theme="writer-focus-dark"] {
+  background-color: var(--bg-primary, hsl(var(--background)));
+  color: var(--text-primary, hsl(var(--foreground)));
+}
+
+body[data-theme="writer-focus"] .tiptap-editor,
+body[data-theme="writer-focus"] .ProseMirror,
+body[data-theme="writer-focus"] .tiptap,
+body[data-theme="writer-focus-dark"] .tiptap-editor,
+body[data-theme="writer-focus-dark"] .ProseMirror,
+body[data-theme="writer-focus-dark"] .tiptap {
+  background-color: var(--editor-bg);
+  color: var(--editor-text);
+  border-color: var(--editor-border);
+  box-shadow: var(--shadow-focus);
+}
+
+body[data-theme="writer-focus"] .tiptap-editor:focus,
+body[data-theme="writer-focus"] .ProseMirror:focus,
+body[data-theme="writer-focus-dark"] .tiptap-editor:focus,
+body[data-theme="writer-focus-dark"] .ProseMirror:focus {
+  outline: 2px solid var(--editor-accent);
+  outline-offset: 2px;
+}
+
+body[data-theme="writer-focus"] .tiptap-editor *,
+body[data-theme="writer-focus"] .ProseMirror *,
+body[data-theme="writer-focus-dark"] .tiptap-editor *,
+body[data-theme="writer-focus-dark"] .ProseMirror * {
+  color: inherit;
+}
+
+body[data-theme="writer-focus"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="writer-focus"] .ProseMirror .is-editor-empty:first-child::before,
+body[data-theme="writer-focus-dark"] .tiptap-editor .is-editor-empty:first-child::before,
+body[data-theme="writer-focus-dark"] .ProseMirror .is-editor-empty:first-child::before {
+  color: var(--editor-text-muted);
+}
+
+body[data-theme="writer-focus"] .ProseMirror::selection,
+body[data-theme="writer-focus"] .ProseMirror *::selection,
+body[data-theme="writer-focus"] .ProseMirror::-moz-selection,
+body[data-theme="writer-focus"] .ProseMirror *::-moz-selection,
+body[data-theme="writer-focus-dark"] .ProseMirror::selection,
+body[data-theme="writer-focus-dark"] .ProseMirror *::selection,
+body[data-theme="writer-focus-dark"] .ProseMirror::-moz-selection,
+body[data-theme="writer-focus-dark"] .ProseMirror *::-moz-selection {
+  background: var(--editor-selection);
+}
+
+body[data-theme="writer-focus"] ::-webkit-scrollbar,
+body[data-theme="writer-focus-dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body[data-theme="writer-focus"] ::-webkit-scrollbar-track {
+  background: rgba(209, 213, 219, 0.45);
+}
+
+body[data-theme="writer-focus-dark"] ::-webkit-scrollbar-track {
+  background: rgba(62, 70, 85, 0.45);
+}
+
+body[data-theme="writer-focus"] ::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.38);
+  border-radius: 4px;
+}
+
+body[data-theme="writer-focus-dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.5);
+  border-radius: 4px;
+}
+
+body[data-theme="writer-focus"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.58);
+}
+
+body[data-theme="writer-focus-dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.7);
+}
+
+body[data-theme="writer-focus"] button:hover,
+body[data-theme="writer-focus"] [role="button"]:hover,
+body[data-theme="writer-focus-dark"] button:hover,
+body[data-theme="writer-focus-dark"] [role="button"]:hover {
+  box-shadow: var(--shadow-focus);
+}
+
+body[data-theme="writer-focus"] input,
+body[data-theme="writer-focus"] textarea,
+body[data-theme="writer-focus"] [contenteditable],
+body[data-theme="writer-focus-dark"] input,
+body[data-theme="writer-focus-dark"] textarea,
+body[data-theme="writer-focus-dark"] [contenteditable] {
+  background: var(--editor-bg-secondary, hsl(var(--card)));
+  border-radius: var(--radius-md, 0.5rem);
+  box-shadow: var(--shadow-subtle);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+body[data-theme="writer-focus"] input:focus,
+body[data-theme="writer-focus"] textarea:focus,
+body[data-theme="writer-focus"] [contenteditable]:focus,
+body[data-theme="writer-focus-dark"] input:focus,
+body[data-theme="writer-focus-dark"] textarea:focus,
+body[data-theme="writer-focus-dark"] [contenteditable]:focus {
+  border-color: var(--editor-accent);
+  box-shadow: 0 0 0 2px var(--editor-accent-light);
+}
+
+body[data-theme="writer-focus"] a,
+body[data-theme="writer-focus-dark"] a {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.35);
+}
+
+body[data-theme="writer-focus"] a:hover,
+body[data-theme="writer-focus-dark"] a:hover {
+  color: hsl(var(--primary));
+  text-decoration-color: hsl(var(--primary) / 0.5);
+}
+
+body.focus-mode[data-theme="writer-focus"] {
+  filter: saturate(1.02) brightness(1.02);
+}
+
+body.focus-mode[data-theme="writer-focus-dark"] {
+  filter: brightness(0.94) contrast(1.05);
 }

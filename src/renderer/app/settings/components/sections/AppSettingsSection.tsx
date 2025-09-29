@@ -142,132 +142,134 @@ export const AppSettingsSection = React.memo<AppSettingsSectionProps>(({
         <h2 className={SETTINGS_PAGE_STYLES.sectionTitle}>앱 설정</h2>
       </div>
 
-      <div className={SETTINGS_PAGE_STYLES.settingItem}>
-        <SettingItem
-          title="테마"
-          description="앱의 외관 테마를 선택하세요"
-          control={
-            <select
-              value={displayTheme}
-              onChange={handleThemeChange}
-              className={SETTINGS_PAGE_STYLES.select}
-            >
-              {THEME_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          }
-        />
+      <div className={SETTINGS_PAGE_STYLES.sectionCardBody}>
+        <div className={SETTINGS_PAGE_STYLES.settingItem}>
+          <SettingItem
+            title="테마"
+            description="앱의 외관 테마를 선택하세요"
+            control={
+              <select
+                value={displayTheme}
+                onChange={handleThemeChange}
+                className={SETTINGS_PAGE_STYLES.select}
+              >
+                {THEME_OPTIONS.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            }
+          />
 
-        <SettingItem
-          title="언어"
-          description="앱에서 사용할 언어를 선택하세요"
-          control={
-            <select
-              value={settings.language}
-              onChange={handleLanguageChange}
-              className={SETTINGS_PAGE_STYLES.select}
-            >
-              <option value="ko">한국어</option>
-              <option value="en">English</option>
-              <option value="ja">日本語</option>
-            </select>
-          }
-        />
+          <SettingItem
+            title="언어"
+            description="앱에서 사용할 언어를 선택하세요"
+            control={
+              <select
+                value={settings.language}
+                onChange={handleLanguageChange}
+                className={SETTINGS_PAGE_STYLES.select}
+              >
+                <option value="ko">한국어</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+              </select>
+            }
+          />
 
-        <SettingItem
-          title="자동 저장"
-          description="작업 내용을 자동으로 저장합니다"
-          control={
-            <Toggle
-              checked={settings.autoSave}
-              onChange={handleAutoSaveToggle}
-            />
-          }
-        />
+          <SettingItem
+            title="자동 저장"
+            description="작업 내용을 자동으로 저장합니다"
+            control={
+              <Toggle
+                checked={settings.autoSave}
+                onChange={handleAutoSaveToggle}
+              />
+            }
+          />
 
-        <SettingItem
-          title="최소화 상태로 시작"
-          description="앱 시작 시 최소화된 상태로 실행합니다"
-          control={
-            <Toggle
-              checked={settings.startMinimized}
-              onChange={handleStartMinimizedToggle}
-            />
-          }
-        />
+          <SettingItem
+            title="최소화 상태로 시작"
+            description="앱 시작 시 최소화된 상태로 실행합니다"
+            control={
+              <Toggle
+                checked={settings.startMinimized}
+                onChange={handleStartMinimizedToggle}
+              />
+            }
+          />
 
-        <SettingItem
-          title="시스템 트레이로 최소화"
-          description="창을 닫을 때 시스템 트레이로 최소화합니다"
-          control={
-            <Toggle
-              checked={settings.minimizeToTray}
-              onChange={handleMinimizeToTrayToggle}
-            />
-          }
-        />
+          <SettingItem
+            title="시스템 트레이로 최소화"
+            description="창을 닫을 때 시스템 트레이로 최소화합니다"
+            control={
+              <Toggle
+                checked={settings.minimizeToTray}
+                onChange={handleMinimizeToTrayToggle}
+              />
+            }
+          />
 
-        <SettingItem
-          title="글꼴 크기"
-          description="앱에서 사용할 글꼴 크기를 설정하세요 (10-24px)"
-          control={
-            <input
-              type="number"
-              min="10"
-              max="24"
-              value={settings.fontSize}
-              onChange={handleFontSizeChange}
-              className={SETTINGS_PAGE_STYLES.numberInput}
-            />
-          }
-        />
+          <SettingItem
+            title="글꼴 크기"
+            description="앱에서 사용할 글꼴 크기를 설정하세요 (10-24px)"
+            control={
+              <input
+                type="number"
+                min="10"
+                max="24"
+                value={settings.fontSize}
+                onChange={handleFontSizeChange}
+                className={SETTINGS_PAGE_STYLES.numberInput}
+              />
+            }
+          />
 
-        <SettingItem
-          title="글꼴 패밀리"
-          description={
-            fontsError
-              ? `폰트를 불러오는데 문제가 있습니다: ${fontsError}`
-              : "앱에서 사용할 글꼴을 선택하세요"
-          }
-          control={
-            <select
-              value={settings.fontFamily}
-              onChange={handleFontFamilyChange}
-              className={SETTINGS_PAGE_STYLES.select}
-              disabled={fontsLoading}
-            >
-              {fontsLoading ? (
-                <option value="">폰트 목록 로딩 중...</option>
-              ) : (
-                <>
-                  {/* 동적 폰트 카테고리별 그룹 */}
-                  {[...new Set(availableFonts.map(f => f.category))].map(category => {
-                    const categoryFonts = availableFonts.filter(f => f.category === category);
-                    const categoryLabels: Record<string, string> = {
-                      system: '시스템 폰트',
-                      korean: '한국어 폰트',
-                      japanese: '일본어 폰트',
-                      english: '영어 폰트'
-                    };
+          <SettingItem
+            title="글꼴 패밀리"
+            description={
+              fontsError
+                ? `폰트를 불러오는데 문제가 있습니다: ${fontsError}`
+                : "앱에서 사용할 글꼴을 선택하세요"
+            }
+            control={
+              <select
+                value={settings.fontFamily}
+                onChange={handleFontFamilyChange}
+                className={SETTINGS_PAGE_STYLES.select}
+                disabled={fontsLoading}
+              >
+                {fontsLoading ? (
+                  <option value="">폰트 목록 로딩 중...</option>
+                ) : (
+                  <>
+                    {/* 동적 폰트 카테고리별 그룹 */}
+                    {[...new Set(availableFonts.map(f => f.category))].map(category => {
+                      const categoryFonts = availableFonts.filter(f => f.category === category);
+                      const categoryLabels: Record<string, string> = {
+                        system: '시스템 폰트',
+                        korean: '한국어 폰트',
+                        japanese: '일본어 폰트',
+                        english: '영어 폰트'
+                      };
 
-                    return (
-                      <optgroup key={category} label={categoryLabels[category] || category}>
-                        {categoryFonts.map(font => (
-                          <option key={font.value} value={font.value}>
-                            {font.label}
-                          </option>
-                        ))}
-                      </optgroup>
-                    );
-                  })}
-                </>
-              )}
-            </select>
-          }
-        />
+                      return (
+                        <optgroup key={category} label={categoryLabels[category] || category}>
+                          {categoryFonts.map(font => (
+                            <option key={font.value} value={font.value}>
+                              {font.label}
+                            </option>
+                          ))}
+                        </optgroup>
+                      );
+                    })}
+                  </>
+                )}
+              </select>
+            }
+          />
+        </div>
         {/* Google account actions (로그아웃 등) */}
         <GoogleAccountActions />
       </div>

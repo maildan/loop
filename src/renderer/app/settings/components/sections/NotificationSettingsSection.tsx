@@ -55,7 +55,8 @@ export const NotificationSettingsSection = React.memo<NotificationSettingsSectio
                 <h2 className={SETTINGS_PAGE_STYLES.sectionTitle}>알림 설정</h2>
             </div>
 
-            <div className={SETTINGS_PAGE_STYLES.settingItem}>
+            <div className={SETTINGS_PAGE_STYLES.sectionCardBody}>
+                <div className={SETTINGS_PAGE_STYLES.settingItem}>
                 <SettingItem
                     title="알림 활성화"
                     description="시스템 알림을 받아보실 수 있습니다"
@@ -114,6 +115,7 @@ export const NotificationSettingsSection = React.memo<NotificationSettingsSectio
                         />
                     }
                 />
+            </div>
             </div>
         </div>
     );
