@@ -41,14 +41,14 @@ declare global {
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수 - 작가 친화적 3모드 분석
 const ANALYTICS_STYLES = {
   container: 'container mx-auto px-4 py-6 max-w-7xl space-y-6',
-  pageTitle: 'text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6',
+  pageTitle: 'text-3xl font-bold text-[color:hsl(var(--foreground))] mb-6',
 
   // 🎯 탭 시스템 스타일
-  tabContainer: 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-2 mb-8',
+  tabContainer: 'bg-[color:hsl(var(--card))] border border-[color:hsl(var(--border))] rounded-2xl p-2 mb-8 shadow-sm',
   tabList: 'flex space-x-2',
   tab: 'flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer',
-  tabActive: 'bg-blue-600 text-white shadow-lg',
-  tabInactive: 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800',
+  tabActive: 'bg-[color:var(--accent-primary)] text-[color:var(--text-inverse,#ffffff)] shadow-lg',
+  tabInactive: 'text-[color:hsl(var(--muted-foreground))] hover:bg-[color:hsl(var(--muted))]',
   tabIcon: 'text-2xl',
   tabLabel: 'font-medium',
 
@@ -59,33 +59,33 @@ const ANALYTICS_STYLES = {
   kpiTertiary: 'opacity-90', // 3순위: 트렌드 & 프로젝트 수
 
   // 💡 액션 카드 스타일
-  insightCard: 'bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-blue-500/50 rounded-2xl p-6 mb-6',
+  insightCard: 'bg-[color:var(--accent-light)] border border-[color:var(--accent-primary)]/40 rounded-2xl p-6 mb-6 shadow-sm',
   insightHeader: 'flex items-center justify-between mb-4',
   insightIcon: 'text-3xl mr-3',
-  insightTitle: 'text-blue-200 font-semibold text-lg',
-  insightDescription: 'text-slate-300 text-sm mb-4',
-  insightAction: 'px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors',
+  insightTitle: 'text-[color:var(--accent-primary)] font-semibold text-lg',
+  insightDescription: 'text-[color:hsl(var(--muted-foreground))] text-sm mb-4',
+  insightAction: 'px-4 py-2 bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--text-inverse,#ffffff)] rounded-lg transition-colors',
 
   // 📊 차트 그리드
   chartsGrid: 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-8',
-  chartCard: 'p-6 hover:shadow-lg transition-shadow cursor-pointer',
-  chartTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4 flex items-center',
-  chartPlaceholder: 'h-48 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 rounded-lg flex flex-col items-center justify-center text-slate-500 dark:text-slate-400',
+  chartCard: 'p-6 hover:shadow-lg transition-shadow cursor-pointer bg-[color:hsl(var(--card))] border border-[color:hsl(var(--border))] rounded-2xl',
+  chartTitle: 'text-lg font-semibold text-[color:hsl(var(--foreground))] mb-4 flex items-center',
+  chartPlaceholder: 'h-48 bg-[color:hsl(var(--muted))] rounded-lg flex flex-col items-center justify-center text-[color:hsl(var(--muted-foreground))]',
 
   // 🎯 빈 상태 스타일
   emptyState: 'flex flex-col items-center justify-center py-16 px-8',
   emptyIcon: 'text-8xl mb-6 opacity-50',
-  emptyTitle: 'text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4',
-  emptyDescription: 'text-lg text-slate-600 dark:text-slate-400 text-center mb-8 max-w-md',
-  emptyAction: 'px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors font-medium',
+  emptyTitle: 'text-2xl font-bold text-[color:hsl(var(--foreground))] mb-4',
+  emptyDescription: 'text-lg text-[color:hsl(var(--muted-foreground))] text-center mb-8 max-w-md',
+  emptyAction: 'px-8 py-3 bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--text-inverse,#ffffff)] rounded-xl transition-colors font-medium',
 
   // 🏆 프로젝트 랭킹 스타일
-  rankingCard: 'p-4 bg-slate-50 dark:bg-slate-800 rounded-xl mb-4 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors cursor-pointer',
+  rankingCard: 'p-4 bg-[color:hsl(var(--muted))] rounded-xl mb-4 hover:bg-[color:hsl(var(--muted) / 0.85)] transition-colors cursor-pointer',
   rankingHeader: 'flex items-center justify-between mb-2',
-  rankingRank: 'text-2xl font-bold text-blue-600',
-  rankingTitle: 'font-semibold text-slate-900 dark:text-slate-100',
-  rankingScore: 'text-sm text-green-600 font-medium',
-  rankingDetails: 'text-sm text-slate-600 dark:text-slate-400',
+  rankingRank: 'text-2xl font-bold text-[color:var(--accent-primary)]',
+  rankingTitle: 'font-semibold text-[color:hsl(var(--foreground))]',
+  rankingScore: 'text-sm text-[color:var(--success)] font-medium',
+  rankingDetails: 'text-sm text-[color:hsl(var(--muted-foreground))]',
 
   // 📱 모바일 최적화
   mobileGrid: 'grid grid-cols-2 gap-4 sm:grid-cols-4',
@@ -314,10 +314,10 @@ export function AnalyticsPageClient(): React.ReactElement {
             <span className={ANALYTICS_STYLES.rankingScore}>{project.score}점</span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          {project.trend === 'up' && <ArrowUp className="w-4 h-4 text-green-500" />}
-          {project.trend === 'down' && <ArrowDown className="w-4 h-4 text-red-500" />}
-          {project.trend === 'stable' && <Activity className="w-4 h-4 text-blue-500" />}
+        <div className="flex items-center gap-2 text-[color:hsl(var(--muted-foreground))]">
+          {project.trend === 'up' && <ArrowUp className="w-4 h-4 text-[color:var(--success)]" />}
+          {project.trend === 'down' && <ArrowDown className="w-4 h-4 text-[color:var(--error)]" />}
+          {project.trend === 'stable' && <Activity className="w-4 h-4 text-[color:var(--accent-primary)]" />}
           <span className="text-sm font-medium">{project.progress}%</span>
         </div>
       </div>
@@ -333,7 +333,7 @@ export function AnalyticsPageClient(): React.ReactElement {
     <div className="space-y-8">
       {/* 💡 액션 가능한 인사이트 */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-4">
+        <h2 className="text-xl font-bold text-[color:hsl(var(--foreground))] mb-4">
           <Sparkles className="w-5 h-5 inline mr-2" />
           오늘의 인사이트
         </h2>
@@ -354,7 +354,7 @@ export function AnalyticsPageClient(): React.ReactElement {
               period: '목표 달성률'
             }}
             icon={Target}
-            className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"
+            className="bg-[color:var(--accent-light)] border border-[color:var(--accent-primary)]/20"
           />
         </div>
         <KpiCard
@@ -445,7 +445,7 @@ export function AnalyticsPageClient(): React.ReactElement {
     <div className="space-y-8">
       {/* 🎯 프로젝트 목록 */}
       <Card className="p-6">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6">
+        <h2 className="text-xl font-bold text-[color:hsl(var(--foreground))] mb-6">
           <BookOpen className="w-5 h-5 inline mr-2" />
           프로젝트별 분석
         </h2>
@@ -465,9 +465,9 @@ export function AnalyticsPageClient(): React.ReactElement {
                     </div>
                     <div className="text-right">
                       <div className={ANALYTICS_STYLES.rankingScore}>
-                        {project.trend === 'up' && <ArrowUp className="w-4 h-4 inline text-green-600" />}
-                        {project.trend === 'down' && <ArrowDown className="w-4 h-4 inline text-red-600" />}
-                        {project.trend === 'stable' && <span className="w-4 h-4 inline-block text-blue-600">-</span>}
+                        {project.trend === 'up' && <ArrowUp className="w-4 h-4 inline text-[color:var(--success)]" />}
+                        {project.trend === 'down' && <ArrowDown className="w-4 h-4 inline text-[color:var(--error)]" />}
+                        {project.trend === 'stable' && <span className="w-4 h-4 inline-block text-[color:var(--accent-primary)]">-</span>}
                         진행률 {project.progress}%
                       </div>
                       <ProgressBar value={project.progress} className="w-32 mt-1" />
@@ -476,7 +476,7 @@ export function AnalyticsPageClient(): React.ReactElement {
                 </div>
                 <div className="mt-4 flex justify-end">
                   <Button
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg"
+                    className="px-4 py-2 rounded-lg bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--text-inverse,#ffffff)] transition-colors"
                     onClick={() => {
                       Logger.info('ANALYTICS_PAGE', 'Navigating to project details', { projectId: project.id });
                       navigate(`/projects/${project.id}`);
@@ -490,12 +490,12 @@ export function AnalyticsPageClient(): React.ReactElement {
           </div>
         ) : (
           <div className="text-center py-8">
-            <BookOpen className="w-16 h-16 mx-auto text-slate-400 mb-4" />
-            <p className="text-lg text-slate-600 dark:text-slate-400 mb-4">
+            <BookOpen className="w-16 h-16 mx-auto text-[color:hsl(var(--muted-foreground))] mb-4" />
+            <p className="text-lg text-[color:hsl(var(--muted-foreground))] mb-4">
               아직 생성된 프로젝트가 없습니다
             </p>
             <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+              className="px-6 py-2 rounded-lg bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--text-inverse,#ffffff)] transition-colors"
               onClick={() => {
                 Logger.info('ANALYTICS_PAGE', 'Creating new project from analytics');
                 navigate('/projects?create=true');
@@ -510,21 +510,21 @@ export function AnalyticsPageClient(): React.ReactElement {
       {/* 🎯 프로젝트 통계 개요 */}
       {projectRankings.length > 0 && (
         <Card className="p-6">
-          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
+          <h3 className="text-lg font-semibold text-[color:hsl(var(--foreground))] mb-4">
             프로젝트 통계 개요
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{dashboardData.totalProjects}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">총 프로젝트</div>
+            <div className="text-center p-4 bg-[color:var(--accent-light)] rounded-lg">
+              <div className="text-2xl font-bold text-[color:var(--accent-primary)]">{dashboardData.totalProjects}</div>
+              <div className="text-sm text-[color:hsl(var(--muted-foreground))]">총 프로젝트</div>
             </div>
-            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">{dashboardData.activeProjects}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">진행 중</div>
+            <div className="text-center p-4 bg-[color:var(--success-light,#d1fae5)] rounded-lg">
+              <div className="text-2xl font-bold text-[color:var(--success)]">{dashboardData.activeProjects}</div>
+              <div className="text-sm text-[color:hsl(var(--muted-foreground))]">진행 중</div>
             </div>
-            <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">{dashboardData.completedProjects}</div>
-              <div className="text-sm text-slate-600 dark:text-slate-400">완료됨</div>
+            <div className="text-center p-4 bg-[color:var(--accent-light)] rounded-lg">
+              <div className="text-2xl font-bold text-[color:var(--accent-primary)]">{dashboardData.completedProjects}</div>
+              <div className="text-sm text-[color:hsl(var(--muted-foreground))]">완료됨</div>
             </div>
           </div>
         </Card>
@@ -536,7 +536,7 @@ export function AnalyticsPageClient(): React.ReactElement {
     <div className="space-y-8">
       {/* 🏆 프로젝트 성과 랭킹 */}
       <Card className="p-6">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-6">
+        <h2 className="text-xl font-bold text-[color:hsl(var(--foreground))] mb-6">
           <Award className="w-5 h-5 inline mr-2" />
           프로젝트 성과 랭킹
         </h2>
@@ -548,8 +548,8 @@ export function AnalyticsPageClient(): React.ReactElement {
           </div>
         ) : (
           <div className="text-center py-8">
-            <Award className="w-16 h-16 mx-auto text-slate-400 mb-4" />
-            <p className="text-lg text-slate-600 dark:text-slate-400">
+            <Award className="w-16 h-16 mx-auto text-[color:hsl(var(--muted-foreground))] mb-4" />
+            <p className="text-lg text-[color:hsl(var(--muted-foreground))]">
               프로젝트 랭킹을 위해서는 더 많은 데이터가 필요합니다
             </p>
           </div>
@@ -557,15 +557,15 @@ export function AnalyticsPageClient(): React.ReactElement {
 
         {/* 📊 종합 추천 */}
         {projectRankings.length > 0 && (
-          <div className="mt-6 p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg">
+          <div className="mt-6 p-4 bg-[color:var(--success-light,#d1fae5)] border border-[color:var(--success)]/30 rounded-lg">
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-medium text-green-900 dark:text-green-100">💡 추천</div>
-                <div className="text-sm text-green-700 dark:text-green-200">
+                <div className="font-medium text-[color:var(--success)]">💡 추천</div>
+                <div className="text-sm text-[color:hsl(var(--muted-foreground))]">
                   {projectRankings[0]?.title}의 성공 패턴을 다른 프로젝트에 적용해보세요
                 </div>
               </div>
-              <Button className="bg-green-600 hover:bg-green-700 text-white">
+              <Button className="bg-[color:var(--success)] hover:bg-[color:var(--success)]/90 text-[color:var(--text-inverse,#ffffff)]">
                 패턴 적용
               </Button>
             </div>
@@ -652,7 +652,11 @@ export function AnalyticsPageClient(): React.ReactElement {
             <Button
               key={period}
               variant={timeFilter === period ? 'primary' : 'ghost'}
-              className={`px-4 py-2 ${timeFilter === period ? 'bg-blue-600 text-white' : 'text-slate-600 dark:text-slate-400'}`}
+              className={`px-4 py-2 transition-colors ${
+                timeFilter === period
+                  ? 'bg-[color:var(--accent-primary)] text-[color:var(--text-inverse,#ffffff)]'
+                  : 'text-[color:hsl(var(--muted-foreground))] hover:bg-[color:hsl(var(--muted))]'
+              }`}
               onClick={() => setTimeFilter(period)}
             >
               {period}
@@ -689,18 +693,21 @@ export function AnalyticsPageClient(): React.ReactElement {
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map(i => (
-              <div key={i} className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-700">
-                <div className="animate-pulse">
-                  <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4 mb-2"></div>
-                  <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded w-1/2 mb-2"></div>
-                  <div className="h-3 bg-slate-200 dark:bg-slate-700 rounded w-full"></div>
+              <div
+                key={i}
+                className="p-6 rounded-xl border bg-[color:hsl(var(--card))] border-[color:hsl(var(--border))] shadow-sm"
+              >
+                <div className="animate-pulse space-y-2">
+                  <div className="h-4 rounded w-3/4 bg-[color:hsl(var(--muted))]"></div>
+                  <div className="h-8 rounded w-1/2 bg-[color:hsl(var(--muted))]"></div>
+                  <div className="h-3 rounded w-full bg-[color:hsl(var(--muted))]"></div>
                 </div>
               </div>
             ))}
           </div>
           <div className="text-center py-8">
-            <div className="text-lg text-slate-600 dark:text-slate-400">실제 데이터를 불러오는 중...</div>
-            <div className="text-sm text-slate-500 dark:text-slate-500 mt-1">프로젝트, 캐릭터, 통계 분석 중</div>
+            <div className="text-lg text-[color:hsl(var(--foreground))]/80">실제 데이터를 불러오는 중...</div>
+            <div className="text-sm text-[color:hsl(var(--muted-foreground))] mt-1">프로젝트, 캐릭터, 통계 분석 중</div>
           </div>
         </div>
       ) : !hasData ? (

@@ -14,10 +14,10 @@ const AVATAR_STYLES = {
     xl: 'h-16 w-16 text-lg',
   },
   image: 'aspect-square h-full w-full object-cover object-center',
-  fallback: 'flex h-full w-full items-center justify-center bg-slate-100 text-slate-600 font-medium',
-  icon: 'h-1/2 w-1/2 text-slate-400',
+  fallback: 'flex h-full w-full items-center justify-center bg-[color:hsl(var(--muted))] text-[color:hsl(var(--muted-foreground))] font-medium',
+  icon: 'h-1/2 w-1/2 text-[color:hsl(var(--muted-foreground))]',
   status: {
-    base: 'absolute bottom-0 right-0 rounded-full border-2 border-white',
+    base: 'absolute bottom-0 right-0 rounded-full border-2 border-[color:hsl(var(--background))]',
     sizes: {
       sm: 'h-2 w-2',
       md: 'h-2.5 w-2.5',
@@ -25,10 +25,10 @@ const AVATAR_STYLES = {
       xl: 'h-4 w-4',
     },
     variants: {
-      online: 'bg-green-500',
-      away: 'bg-yellow-500',
-      busy: 'bg-red-500',
-      offline: 'bg-slate-400',
+      online: 'bg-[color:var(--success)]',
+      away: 'bg-[color:var(--warning)]',
+      busy: 'bg-[color:var(--error)]',
+      offline: 'bg-[color:hsl(var(--muted-foreground))]',
     },
   },
 } as const;

@@ -86,7 +86,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       title: '첫 번째 메모',
       content: '이야기의 핵심 아이디어를 여기에 적어보세요.',
       tags: ['아이디어'],
-      color: '#3b82f6',
+  color: 'var(--accent-primary)',
       isPinned: false,
       createdAt: defaultDate,
       updatedAt: defaultDate
@@ -97,7 +97,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       title: '설정 노트',
       content: '세계관, 배경 설정에 대한 내용을 정리합니다.',
       tags: ['설정', '세계관'],
-      color: '#10b981',
+  color: 'var(--success)',
       isPinned: true,
       createdAt: defaultDate,
       updatedAt: defaultDate

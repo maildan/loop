@@ -27,41 +27,41 @@ import { Logger } from '../../../shared/logger';
 const AI_PAGE_STYLES = {
   container: 'container mx-auto px-4 py-6 max-w-7xl space-y-6 min-h-screen',
   header: 'text-center mb-8',
-  pageTitle: 'text-3xl font-bold text-slate-900 dark:text-slate-100 mb-2',
-  pageSubtitle: 'text-lg text-slate-600 dark:text-slate-400',
+  pageTitle: 'text-3xl font-bold text-[color:hsl(var(--foreground))] mb-2',
+  pageSubtitle: 'text-lg text-[color:hsl(var(--muted-foreground))]',
   featuresGrid: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8',
-  featureCard: 'group hover:shadow-lg dark:hover:shadow-slate-900/40 transition-all duration-300 hover:-translate-y-1 cursor-pointer',
+  featureCard: 'group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer bg-[color:hsl(var(--card))] border border-[color:hsl(var(--border))] rounded-xl',
   featureContent: 'p-6 text-center',
   featureIcon: 'w-12 h-12 mx-auto mb-4 p-2 rounded-full group-hover:scale-110 transition-transform duration-200',
   featureIconColors: {
-    purple: 'bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400',
-    blue: 'bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400',
-    green: 'bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400',
-    orange: 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400'
+    accent: 'bg-[color:var(--accent-light)] text-[color:var(--accent-primary)]',
+    info: 'bg-[color:hsl(var(--muted) / 0.4)] text-[color:hsl(var(--primary))]',
+    success: 'bg-[color:var(--success-light,#d1fae5)] text-[color:var(--success)]',
+    warning: 'bg-[color:var(--warning-light,#fde68a)] text-[color:var(--warning)]'
   },
-  featureTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2',
-  featureDescription: 'text-sm text-slate-600 dark:text-slate-400 mb-3',
+  featureTitle: 'text-lg font-semibold text-[color:hsl(var(--foreground))] mb-2',
+  featureDescription: 'text-sm text-[color:hsl(var(--muted-foreground))] mb-3',
   featureBadge: 'mt-2',
   chatSection: 'grid grid-cols-1 lg:grid-cols-3 gap-6',
-  chatCard: 'lg:col-span-2 flex flex-col h-96',
-  chatHeader: 'p-4 border-b border-slate-200 dark:border-slate-700',
-  chatTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100',
-  chatMessages: 'flex-1 p-4 overflow-y-auto space-y-4 bg-white dark:bg-slate-800',
-  chatInput: 'p-4 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800',
+  chatCard: 'lg:col-span-2 flex flex-col h-96 bg-[color:hsl(var(--card))] border border-[color:hsl(var(--border))] rounded-xl overflow-hidden',
+  chatHeader: 'p-4 border-b border-[color:hsl(var(--border))]',
+  chatTitle: 'text-lg font-semibold text-[color:hsl(var(--foreground))]',
+  chatMessages: 'flex-1 p-4 overflow-y-auto space-y-4 bg-[color:hsl(var(--card))]',
+  chatInput: 'p-4 border-t border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
   chatInputForm: 'flex gap-2',
   message: 'flex gap-3 max-w-3xl',
   messageUser: 'ml-auto flex-row-reverse',
   messageAvatar: 'flex-shrink-0',
   messageContent: 'flex-1',
   messageBubble: 'rounded-lg p-3 max-w-md',
-  messageBubbleUser: 'bg-blue-600 text-white ml-auto',
-  messageBubbleAi: 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100',
-  messageTime: 'text-xs text-slate-500 dark:text-slate-400 mt-1',
-  suggestionsCard: 'p-6',
-  suggestionsTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4',
+  messageBubbleUser: 'bg-[color:var(--accent-primary)] text-[color:var(--text-inverse,#ffffff)] ml-auto',
+  messageBubbleAi: 'bg-[color:hsl(var(--muted))] text-[color:hsl(var(--foreground))]',
+  messageTime: 'text-xs text-[color:hsl(var(--muted-foreground))] mt-1',
+  suggestionsCard: 'p-6 bg-[color:hsl(var(--card))] border border-[color:hsl(var(--border))] rounded-xl',
+  suggestionsTitle: 'text-lg font-semibold text-[color:hsl(var(--foreground))] mb-4',
   suggestionsList: 'space-y-3',
-  suggestionItem: 'p-3 bg-slate-50 dark:bg-slate-800 rounded-lg cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors',
-  suggestionText: 'text-sm text-slate-700 dark:text-slate-300',
+  suggestionItem: 'p-3 bg-[color:hsl(var(--muted))] rounded-lg cursor-pointer hover:bg-[color:hsl(var(--muted) / 0.75)] transition-colors',
+  suggestionText: 'text-sm text-[color:hsl(var(--muted-foreground))]',
 } as const;
 
 // 🔥 기가차드 규칙: 명시적 타입 정의
@@ -88,7 +88,7 @@ const AI_FEATURES: readonly AiFeature[] = [
     title: '텍스트 분석',
     description: '작성한 글의 문체, 어조, 가독성을 AI가 분석하여 개선점을 제안합니다.',
     icon: FileText,
-    color: 'purple',
+  color: 'accent',
     usageCount: 127,
     isNew: false
   },
@@ -97,7 +97,7 @@ const AI_FEATURES: readonly AiFeature[] = [
     title: '글쓰기 도우미',
     description: '문맥에 맞는 단어 추천, 문장 완성, 표현 개선을 실시간으로 지원합니다.',
     icon: Brain,
-    color: 'blue',
+  color: 'info',
     usageCount: 89,
     isNew: false
   },
@@ -106,7 +106,7 @@ const AI_FEATURES: readonly AiFeature[] = [
     title: '이어쓰기 도움',
     description: '현재 작성 중인 내용을 기반으로 자연스러운 다음 문장을 제안합니다.',
     icon: Lightbulb,
-    color: 'green',
+  color: 'success',
     usageCount: 156,
     isNew: true
   },
@@ -115,7 +115,7 @@ const AI_FEATURES: readonly AiFeature[] = [
     title: '문장 개선',
     description: '기존 문장을 더 매력적이고 자연스럽게 개선하여 제안합니다.',
     icon: TrendingUp,
-    color: 'orange',
+  color: 'warning',
     usageCount: 203,
     isNew: false
   }
@@ -323,7 +323,7 @@ trim(),
                   </div>
                   <div className={AI_PAGE_STYLES.messageTime}>
                     {/* 🔥 하이드레이션 에러 방지: 시간을 클라이언트에서만 렌더링 */}
-                    <HydrationGuard fallback={<span className="text-slate-400">--:--</span>}>
+                    <HydrationGuard fallback={<span className="text-[color:hsl(var(--muted-foreground))]">--:--</span>}>
                       <span suppressHydrationWarning>
                         {new Date(message.timestamp).toLocaleTimeString('ko-KR', { 
                           hour: '2-digit', 

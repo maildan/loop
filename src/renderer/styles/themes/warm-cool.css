@@ -83,6 +83,11 @@
 
   --toolbar-bg: rgba(252, 238, 226, 0.95);
   --toolbar-border: rgba(201, 156, 116, 0.36);
+  --toolbar-foreground: #2f1b12;
+  --toolbar-muted: #6f5545;
+  --toolbar-hover-bg: rgba(209, 170, 130, 0.22);
+  --toolbar-divider: rgba(201, 156, 116, 0.32);
+  --toolbar-shadow: 0 12px 28px rgba(191, 143, 104, 0.16);
   --button-active: rgba(209, 170, 130, 0.28);
   --button-hover: rgba(209, 170, 130, 0.18);
   --focus-text-shadow: 0 0 10px rgba(234, 88, 12, 0.24);
@@ -171,6 +176,11 @@
 
   --toolbar-bg: rgba(229, 244, 255, 0.92);
   --toolbar-border: rgba(148, 197, 233, 0.35);
+  --toolbar-foreground: #10203a;
+  --toolbar-muted: #4d5f78;
+  --toolbar-hover-bg: rgba(148, 197, 233, 0.22);
+  --toolbar-divider: rgba(148, 197, 233, 0.28);
+  --toolbar-shadow: 0 14px 32px rgba(148, 197, 233, 0.18);
   --button-active: rgba(148, 197, 233, 0.26);
   --button-hover: rgba(148, 197, 233, 0.16);
   --focus-text-shadow: 0 0 10px rgba(14, 165, 233, 0.24);

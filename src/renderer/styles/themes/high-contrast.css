@@ -80,6 +80,18 @@
   --editor-accent-light: rgba(0, 0, 255, 0.28);
   --editor-selection: rgba(0, 0, 255, 0.2);
 
+  /* Toolbar + button surfaces */
+  --toolbar-bg: rgba(0, 0, 0, 0.92);
+  --toolbar-border: rgba(255, 255, 255, 0.6);
+  --toolbar-divider: rgba(255, 255, 255, 0.45);
+  --toolbar-foreground: #ffffff;
+  --toolbar-muted: #d1d1d1;
+  --toolbar-hover-bg: rgba(255, 255, 255, 0.18);
+  --toolbar-shadow: 0 0 0 2px rgba(0, 0, 0, 0.65);
+  --button-active: rgba(0, 0, 255, 0.3);
+  --button-hover: rgba(255, 255, 255, 0.2);
+  --focus-text-shadow: 0 0 12px rgba(0, 0, 0, 0.75);
+
   --shadow-bold: 0 0 0 2px #000000;
   --focus-outline: 3px solid #0000ff;
   --focus-outline-offset: 3px;

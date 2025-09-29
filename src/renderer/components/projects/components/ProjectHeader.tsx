@@ -30,14 +30,14 @@ import { useSettings } from '../../../app/settings/hooks/useSettings';
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
-  container: 'w-full h-14 bg-[var(--editor-bg-secondary)] border-b border-[color:var(--editor-border)] flex items-center px-4 gap-1 text-[color:var(--editor-text)]',
+  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex items-center px-4 gap-1 text-[color:var(--toolbar-foreground)]',
   section: 'flex items-center gap-1',
-  divider: 'w-px h-6 bg-[color:var(--editor-border)] opacity-60 mx-2',
-  button: 'h-8 px-2 rounded text-[color:var(--editor-text-muted)] hover:bg-[var(--editor-bg)] transition-colors flex items-center gap-1 text-sm',
-  buttonActive: 'h-8 px-2 rounded bg-[var(--editor-accent-light)] text-[color:var(--editor-accent)] hover:bg-[var(--editor-accent-light)] transition-colors flex items-center gap-1 text-sm',
-  dropdown: 'h-8 px-3 rounded text-[color:var(--editor-text)] hover:bg-[var(--editor-bg)] transition-colors flex items-center gap-2 text-sm border border-[color:var(--editor-border)] bg-[var(--editor-bg-secondary)]',
-  backButton: 'h-8 w-8 rounded text-[color:var(--editor-text-muted)] hover:bg-[var(--editor-bg)] transition-colors flex items-center justify-center',
-  colorButton: 'h-8 w-8 rounded text-[color:var(--editor-text-muted)] hover:bg-[var(--editor-bg)] transition-colors flex items-center justify-center relative',
+  divider: 'w-px h-6 bg-[color:var(--toolbar-divider)] opacity-70 mx-2',
+  button: 'h-8 px-2 rounded text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  buttonActive: 'h-8 px-2 rounded bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  dropdown: 'h-8 px-3 rounded text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center gap-2 text-sm border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)] shadow-sm',
+  backButton: 'h-8 w-8 rounded text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  colorButton: 'h-8 w-8 rounded text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-center relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
 } as const;
 
 // 🎨 사용자 정의 폰트 크기 입력 범위
@@ -243,8 +243,10 @@ export function ProjectHeader({
   }, [editor]);
 
   const handleTextColor = useCallback(() => {
-    // 기본 빨간색으로 설정 (향후 색상 피커로 대체 가능)
-    const color = '#ff0000';
+    const rootStyles = getComputedStyle(document.documentElement);
+    const accentValue = rootStyles.getPropertyValue('--accent-primary').trim();
+    const color = accentValue || `hsl(${rootStyles.getPropertyValue('--primary')})`;
+
     editor?.chain().focus().setMark('textStyle', { color }).run();
     Logger.debug('WYSIWYG_TOOLBAR', 'Text color changed', { color });
   }, [editor]);
@@ -411,7 +413,7 @@ export function ProjectHeader({
   });
 
   return (
-    <div className={TOOLBAR_STYLES.container}>
+  <div className={TOOLBAR_STYLES.container} style={{ boxShadow: 'var(--toolbar-shadow)' }}>
       {/* 🔥 왼쪽 영역 - Back 버튼 */}
       <div className={TOOLBAR_STYLES.section}>
         <button

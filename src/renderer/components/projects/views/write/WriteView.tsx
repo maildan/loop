@@ -5,7 +5,7 @@ import { WriteStats } from './WriteStats';
 import type { WriteViewProps, WriteStats as StatsType } from './types';
 
 const WRITE_STYLES = {
-    container: 'flex-1 flex flex-col h-full bg-white dark:bg-gray-900 transition-colors duration-300 writer-optimized',
+    container: 'flex-1 flex flex-col h-full bg-[color:hsl(var(--background))] transition-colors duration-300 writer-optimized',
 } as const;
 
 export const WriteView = React.memo<WriteViewProps>(({ content, onChange, isFocusMode }) => {

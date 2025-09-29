@@ -7,21 +7,21 @@ import { X as XIcon, AlertTriangle } from 'lucide-react';
 
 // 🔥 프리컴파일된 스타일 (11원칙 준수)
 const CONFIRM_DIALOG_STYLES = {
-  overlay: 'fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50',
-  dialog: 'bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden',
-  header: 'flex items-center gap-3 p-6 border-b border-slate-200 dark:border-slate-700',
-  icon: 'w-8 h-8 text-red-500 flex-shrink-0',
+  overlay: 'fixed inset-0 z-[100] flex items-center justify-center bg-[color:hsl(var(--foreground))]/55 backdrop-blur-sm',
+  dialog: 'bg-[color:hsl(var(--card))] text-[color:hsl(var(--card-foreground))] rounded-xl shadow-[var(--shadow-xl)] border border-[color:hsl(var(--border))] max-w-md w-full mx-4 overflow-hidden transition-colors duration-200',
+  header: 'flex items-center gap-3 p-6 border-b border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
+  icon: 'w-8 h-8 text-[color:var(--warning,#d97706)] flex-shrink-0',
   headerText: 'flex-1',
-  title: 'text-lg font-bold text-slate-900 dark:text-slate-100',
-  message: 'text-sm text-slate-600 dark:text-slate-400 mt-1',
-  closeButton: 'w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors',
-  content: 'p-6',
-  description: 'text-slate-700 dark:text-slate-300 leading-relaxed mb-4',
-  projectName: 'font-semibold text-slate-900 dark:text-slate-100',
-  warning: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-800 dark:text-red-200',
-  footer: 'flex items-center justify-end gap-3 p-6 border-t border-slate-200 dark:border-slate-700',
-  cancelButton: 'px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors',
-  deleteButton: 'px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium',
+  title: 'text-lg font-bold text-[color:hsl(var(--foreground))]',
+  message: 'text-sm text-[color:hsl(var(--muted-foreground))] mt-1',
+  closeButton: 'w-8 h-8 flex items-center justify-center rounded-lg text-[color:hsl(var(--muted-foreground))] hover:bg-[color:hsl(var(--muted))] hover:text-[color:hsl(var(--foreground))] transition-colors',
+  content: 'p-6 bg-[color:hsl(var(--card))]',
+  description: 'text-[color:hsl(var(--muted-foreground))] leading-relaxed mb-4',
+  projectName: 'font-semibold text-[color:hsl(var(--foreground))]',
+  warning: 'bg-[color:var(--warning-light,#fef3c7)] border border-[color:var(--warning,#d97706)]/40 rounded-lg p-3 text-sm text-[color:var(--warning,#d97706)] shadow-[var(--shadow-sm)]',
+  footer: 'flex items-center justify-end gap-3 p-6 border-t border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
+  cancelButton: 'px-4 py-2 text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] hover:bg-[color:hsl(var(--muted))] rounded-lg transition-colors font-medium',
+  deleteButton: 'px-4 py-2 bg-[color:var(--destructive)] hover:bg-[color:var(--destructive)]/85 text-[color:var(--destructive-foreground,#ffffff)] rounded-lg transition-colors font-medium shadow-[var(--shadow-sm)]',
 } as const;
 
 interface ConfirmDeleteDialogProps {

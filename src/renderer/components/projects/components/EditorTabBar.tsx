@@ -23,20 +23,20 @@ interface ContextMenuState {
 
 const TAB_STYLES = {
     // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar z-index를 ProjectHeader보다 높게 설정
-    container: 'flex items-center bg-[var(--editor-bg-secondary)] border-b border-[color:var(--editor-border)] relative z-[1000]', // 950 → 1000으로 증가
+    container: 'flex items-center bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] relative z-[1000]', // 950 → 1000으로 증가
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
-    tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-[color:var(--editor-border)] cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
-    activeTab: 'bg-[var(--editor-bg)] text-[color:var(--editor-text)] shadow-sm',
-    inactiveTab: 'bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text-muted)] hover:bg-[var(--editor-bg)] hover:text-[color:var(--editor-text)]',
+    tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-[color:var(--toolbar-divider)] cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
+    activeTab: 'bg-[var(--editor-bg)] text-[color:var(--toolbar-foreground)]',
+    inactiveTab: 'bg-[var(--toolbar-bg)] text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)]',
     dragOver: 'bg-[var(--editor-accent-light)] border-[color:var(--editor-accent)]',
     tabIcon: 'text-xs',
     tabTitle: 'flex-1 truncate font-medium',
-    closeButton: 'hover:bg-[var(--editor-bg)] rounded p-1 transition-all duration-200 opacity-0 group-hover:opacity-100',
+    closeButton: 'hover:bg-[var(--toolbar-hover-bg)] rounded p-1 transition-all duration-200 opacity-0 group-hover:opacity-100 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)]',
     closeButtonVisible: 'opacity-100',
-    newTabButton: 'px-3 py-2 text-[color:var(--editor-text-muted)] hover:text-[color:var(--editor-text)] hover:bg-[var(--editor-bg)] transition-all duration-200 rounded-md mx-2',
-    contextMenu: 'absolute bg-[var(--editor-bg)] border border-[color:var(--editor-border)] rounded-lg shadow-xl py-1 z-[1010] min-w-[180px]', // 960 → 1010으로 증가
-    contextMenuItem: 'px-3 py-2 text-sm text-[color:var(--editor-text)] hover:bg-[var(--editor-accent-light)] cursor-pointer flex items-center gap-2',
-    contextMenuSeparator: 'border-t border-[color:var(--editor-border)] my-1',
+    newTabButton: 'px-3 py-2 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-all duration-200 rounded-md mx-2',
+    contextMenu: 'absolute bg-[var(--toolbar-bg)] border border-[color:var(--toolbar-border)] rounded-lg shadow-xl py-1 z-[1010] min-w-[180px]', // 960 → 1010으로 증가
+    contextMenuItem: 'px-3 py-2 text-sm text-[color:var(--toolbar-foreground)] hover:bg-[var(--button-hover)] cursor-pointer flex items-center gap-2',
+    contextMenuSeparator: 'border-t border-[color:var(--toolbar-divider)] my-1',
 } as const;
 
 export const EditorTabBar = memo(function EditorTabBar({
@@ -204,7 +204,7 @@ export const EditorTabBar = memo(function EditorTabBar({
     }, [contextMenu.isOpen, closeContextMenu]);
 
     return (
-        <div ref={containerRef} className={TAB_STYLES.container}>
+    <div ref={containerRef} className={TAB_STYLES.container} style={{ boxShadow: 'var(--toolbar-shadow)' }}>
             <div className={TAB_STYLES.tabsWrapper}>
                 {stableTabs.map((tab, index) => {
                     const isActive = tab.id === activeTabId;
@@ -220,6 +220,7 @@ export const EditorTabBar = memo(function EditorTabBar({
                 ${isActive ? TAB_STYLES.activeTab : TAB_STYLES.inactiveTab}
                 ${isDragOver ? TAB_STYLES.dragOver : ''}
               `}
+                            style={isActive ? { boxShadow: 'var(--toolbar-shadow)' } : undefined}
                             onClick={() => onTabClick(tab.id)}
                             onContextMenu={(e) => handleContextMenu(e, tab.id)}
                             onDragStart={(e) => handleDragStart(e, tab.id)}

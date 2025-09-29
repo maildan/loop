@@ -17,83 +17,83 @@ interface CharactersViewProps {
 
 // 🔥 기가차드 캐릭터 스타일 - 카드 기반 레이아웃
 const CHARACTERS_STYLES = {
-  container: 'h-full flex flex-col bg-gradient-to-br from-slate-50 to-white dark:from-gray-900 dark:to-gray-800',
+  container: 'h-full flex flex-col bg-[color:hsl(var(--background))]',
 
   // 🔥 개선된 헤더
-  header: 'p-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-gray-700/50',
+  header: 'p-6 bg-[color:hsl(var(--card))]/85 backdrop-blur-sm border-b border-[color:hsl(var(--border))] shadow-[var(--shadow-sm)] transition-colors',
   headerTop: 'flex items-center justify-between mb-4',
-  title: 'text-2xl font-bold text-gray-900 dark:text-gray-100',
-  subtitle: 'text-slate-600 dark:text-gray-400 leading-relaxed',
+  title: 'text-2xl font-bold text-[color:hsl(var(--foreground))]',
+  subtitle: 'text-[color:hsl(var(--muted-foreground))] leading-relaxed',
 
   // 🔥 통계 카드
   statsGrid: 'grid grid-cols-3 gap-4 mt-4',
-  statCard: 'p-3 bg-white dark:bg-gray-800 rounded-lg border border-slate-200 dark:border-gray-700',
-  statIcon: 'w-5 h-5 text-blue-600 dark:text-blue-400 mb-2',
-  statValue: 'text-lg font-semibold text-gray-900 dark:text-gray-100',
-  statLabel: 'text-xs text-slate-600 dark:text-gray-400',
+  statCard: 'p-3 bg-[color:hsl(var(--card))] rounded-lg border border-[color:hsl(var(--border))] shadow-[var(--shadow-sm)]',
+  statIcon: 'w-5 h-5 text-[color:var(--accent-primary)] mb-2',
+  statValue: 'text-lg font-semibold text-[color:hsl(var(--foreground))]',
+  statLabel: 'text-xs text-[color:hsl(var(--muted-foreground))]',
 
   // 🔥 콘텐츠 영역 - 강제 높이 설정
   content: 'flex-1 flex flex-col min-h-0 h-full',
-  scrollArea: 'flex-1 overflow-y-auto max-h-full h-0', // h-0 강제로 flex 높이 계산
+  scrollArea: 'flex-1 overflow-y-auto max-h-full h-0',
   contentPadding: 'p-6',
 
   // 🔥 캐릭터 그리드
   characterGrid: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
 
   // 🔥 캐릭터 카드 - 확장 가능
-  characterCard: 'group bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 overflow-hidden',
-  characterHeader: 'p-4 border-b border-slate-100 dark:border-gray-700',
-  characterAvatar: 'w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg mb-3',
-  characterName: 'font-bold text-lg text-gray-900 dark:text-gray-100 mb-1',
-  characterRole: 'text-sm text-blue-600 dark:text-blue-400 font-medium',
+  characterCard: 'group bg-[color:hsl(var(--card))] rounded-xl border border-[color:hsl(var(--border))] hover:shadow-[var(--shadow-lg)] transition-all duration-200 overflow-hidden',
+  characterHeader: 'p-4 border-b border-[color:hsl(var(--border))]/70',
+  characterAvatar: 'w-12 h-12 rounded-full bg-[color:var(--accent-primary)] flex items-center justify-center text-[color:var(--text-inverse,#ffffff)] font-bold text-lg mb-3 shadow-[var(--shadow-sm)]',
+  characterName: 'font-bold text-lg text-[color:hsl(var(--foreground))] mb-1',
+  characterRole: 'text-sm text-[color:var(--accent-primary)] font-medium',
 
   // 🔥 탭 시스템
-  tabContainer: 'flex border-b border-slate-100 dark:border-gray-700',
-  tab: 'px-3 py-2 text-sm font-medium text-slate-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition-colors',
-  tabActive: 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400',
+  tabContainer: 'flex border-b border-[color:hsl(var(--border))]',
+  tab: 'px-3 py-2 text-sm font-medium text-[color:hsl(var(--muted-foreground))] hover:text-[color:var(--accent-primary)] cursor-pointer transition-colors',
+  tabActive: 'text-[color:var(--accent-primary)] border-b-2 border-[color:var(--accent-primary)]',
 
   // 🔥 탭 콘텐츠
   tabContent: 'p-4 space-y-3',
   fieldGroup: 'space-y-2',
-  fieldLabel: 'text-xs font-medium text-slate-500 dark:text-gray-400 uppercase tracking-wide',
-  fieldValue: 'text-sm text-gray-700 dark:text-gray-300 leading-relaxed',
-  fieldEmpty: 'text-xs text-slate-400 dark:text-gray-500 italic',
+  fieldLabel: 'text-xs font-medium text-[color:hsl(var(--muted-foreground))] uppercase tracking-wide',
+  fieldValue: 'text-sm text-[color:hsl(var(--foreground))] leading-relaxed',
+  fieldEmpty: 'text-xs text-[color:hsl(var(--muted-foreground))]/70 italic',
 
   // 🔥 액션 버튼
   actionButtons: 'absolute top-3 right-3 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity',
-  editButton: 'p-1.5 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors cursor-pointer',
-  deleteButton: 'p-1.5 text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors cursor-pointer',
+  editButton: 'p-1.5 text-[color:hsl(var(--muted-foreground))] hover:text-[color:var(--accent-primary)] hover:bg-[color:var(--accent-light,#dbeafe)]/60 rounded-lg transition-colors cursor-pointer',
+  deleteButton: 'p-1.5 text-[color:hsl(var(--muted-foreground))] hover:text-[color:var(--destructive)] hover:bg-[color:var(--error-light,#fee2e2)]/70 rounded-lg transition-colors cursor-pointer',
 
   // 🔥 추가 버튼
-  addButton: 'group relative flex flex-col items-center justify-center gap-4 p-8 bg-white dark:bg-gray-800 border-2 border-dashed border-slate-300 dark:border-gray-600 rounded-xl hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-all duration-200 cursor-pointer',
-  addButtonIcon: 'w-8 h-8 text-slate-400 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors group-hover:scale-110 transform',
-  addButtonText: 'text-base font-medium text-slate-600 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors',
+  addButton: 'group relative flex flex-col items-center justify-center gap-4 p-8 bg-[color:hsl(var(--card))] border-2 border-dashed border-[color:hsl(var(--border))] rounded-xl hover:border-[color:var(--accent-primary)] hover:bg-[color:var(--accent-light,#dbeafe)]/60 transition-all duration-200 cursor-pointer',
+  addButtonIcon: 'w-8 h-8 text-[color:hsl(var(--muted-foreground))] group-hover:text-[color:var(--accent-primary)] transition-colors group-hover:scale-110 transform',
+  addButtonText: 'text-base font-medium text-[color:hsl(var(--muted-foreground))] group-hover:text-[color:var(--accent-primary)] transition-colors',
 
   // 🔥 편집 모달 오버레이
-  modalOverlay: 'fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4',
-  modal: 'bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden',
-  modalHeader: 'p-6 border-b border-slate-200 dark:border-gray-700 flex items-center justify-between',
-  modalTitle: 'text-xl font-bold text-gray-900 dark:text-gray-100',
+  modalOverlay: 'fixed inset-0 bg-[color:hsl(var(--foreground))]/55 z-50 flex items-center justify-center p-4 backdrop-blur-sm',
+  modal: 'bg-[color:hsl(var(--card))] rounded-xl shadow-[var(--shadow-xl)] max-w-2xl w-full max-h-[90vh] overflow-hidden border border-[color:hsl(var(--border))] transition-colors',
+  modalHeader: 'p-6 border-b border-[color:hsl(var(--border))] flex items-center justify-between',
+  modalTitle: 'text-xl font-bold text-[color:hsl(var(--foreground))]',
   modalBody: 'p-6 overflow-y-auto max-h-[60vh]',
-  modalFooter: 'p-6 border-t border-slate-200 dark:border-gray-700 flex gap-3 justify-end',
+  modalFooter: 'p-6 border-t border-[color:hsl(var(--border))] flex gap-3 justify-end',
 
   // 🔥 폼 필드
   formGrid: 'grid grid-cols-1 md:grid-cols-2 gap-4',
   formField: 'space-y-2',
-  formLabel: 'text-sm font-medium text-gray-700 dark:text-gray-300',
-  formInput: 'w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500',
-  formTextarea: 'w-full px-3 py-2 border border-slate-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none',
+  formLabel: 'text-sm font-medium text-[color:hsl(var(--muted-foreground))]',
+  formInput: 'w-full px-3 py-2 border border-[color:hsl(var(--border))] rounded-lg text-sm text-[color:hsl(var(--foreground))] bg-[color:hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-primary)] focus:border-[color:var(--accent-primary)]',
+  formTextarea: 'w-full px-3 py-2 border border-[color:hsl(var(--border))] rounded-lg text-sm text-[color:hsl(var(--foreground))] bg-[color:hsl(var(--card))] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent-primary)] focus:border-[color:var(--accent-primary)] resize-none',
 
   // 🔥 버튼
   button: 'px-4 py-2 rounded-lg font-medium transition-colors',
-  buttonPrimary: 'bg-blue-600 hover:bg-blue-700 text-white',
-  buttonSecondary: 'bg-slate-200 hover:bg-slate-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-700 dark:text-gray-200',
+  buttonPrimary: 'bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover,#1d4ed8)] text-[color:var(--text-inverse,#ffffff)]',
+  buttonSecondary: 'bg-[color:hsl(var(--muted))] hover:bg-[color:hsl(var(--muted))]/80 text-[color:hsl(var(--foreground))]',
 
   // 🔥 빈 상태
   emptyState: 'flex flex-col items-center justify-center h-64 text-center',
-  emptyIcon: 'w-16 h-16 text-slate-400 dark:text-gray-500 mb-4',
-  emptyTitle: 'text-xl font-semibold text-gray-900 dark:text-gray-100 mb-2',
-  emptyDescription: 'text-slate-600 dark:text-gray-400 max-w-md mx-auto leading-relaxed',
+  emptyIcon: 'w-16 h-16 text-[color:hsl(var(--muted-foreground))] mb-4',
+  emptyTitle: 'text-xl font-semibold text-[color:hsl(var(--foreground))] mb-2',
+  emptyDescription: 'text-[color:hsl(var(--muted-foreground))] max-w-md mx-auto leading-relaxed',
 } as const;
 
 // 🔥 탭 정의

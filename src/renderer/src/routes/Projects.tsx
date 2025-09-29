@@ -17,7 +17,7 @@ const PROJECTS_PAGE_STYLES = {
   error: 'flex flex-col items-center justify-center min-h-96 text-center',
   errorTitle: 'text-xl font-semibold text-red-600 dark:text-red-400 mb-2',
   errorMessage: 'text-slate-600 dark:text-slate-400 mb-4',
-  retryButton: 'mt-4',
+  retryButton: 'mt-4 px-4 py-2 rounded-lg bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover)] text-[color:var(--text-inverse,#ffffff)] transition-colors',
 } as const;
 
 // 🔥 기가차드 규칙: BE 연동을 위한 기본값 (로딩 중 사용)
@@ -286,7 +286,7 @@ function ProjectsPageContent(): React.ReactElement {
         </p>
         <button
           onClick={() => loadProjects()}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+          className={PROJECTS_PAGE_STYLES.retryButton}
         >
           다시 시도
         </button>
