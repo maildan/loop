@@ -41,13 +41,13 @@ interface ProjectSidebarProps {
 // 🔥 Scrivener Binder + iA Writer 스타일 사이드바
 const SIDEBAR_STYLES = {
     // 기본 컨테이너 - 작가 친화적 디자인 (애니메이션 개선)
-    container: 'flex flex-col bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-out h-full relative shadow-sm will-change-transform',
+    container: 'flex flex-col bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text)] border-r border-[color:var(--editor-border)] transition-all duration-300 ease-out h-full relative shadow-sm will-change-transform',
     default: 'w-16', // 🔥 기본 상태: 아이콘만 표시 (미니멀)
     expanded: 'w-80', // 🔥 hover 시: 더 넓은 320px로 확장
     collapsed: 'w-0 overflow-hidden', // 🔥 완전 숨김
 
     // 🔥 Scrivener Binder 스타일: 부드러운 슬라이드 효과 (개선된 애니메이션)
-    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-80 bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-2xl z-40 transform -translate-x-full transition-all duration-300 ease-out backdrop-blur-sm will-change-transform',
+    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-80 bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text)] border-r border-[color:var(--editor-border)] shadow-2xl z-40 transform -translate-x-full transition-all duration-300 ease-out backdrop-blur-sm will-change-transform',
     hoverVisible: 'transform translate-x-0 opacity-100',
     hoverHidden: 'transform -translate-x-full opacity-90',
 
@@ -55,24 +55,24 @@ const SIDEBAR_STYLES = {
     hoverTrigger: 'absolute left-0 top-14 w-12 h-[calc(100%-3.5rem)] z-35 hover:w-16 transition-all duration-200 ease-out will-change-transform',
 
     // 🔥 Scrivener Binder 스타일 메뉴 섹션
-    menuSection: 'p-4 space-y-2 border-b border-gray-200/50 dark:border-gray-700/50',
-    menuSectionTitle: 'text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3 px-2',
+    menuSection: 'p-4 space-y-2 border-b border-[color:var(--editor-border)]',
+    menuSectionTitle: 'text-xs font-semibold text-[color:var(--editor-text-muted)] uppercase tracking-wide mb-3 px-2',
     menuItem: 'flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-all duration-200 cursor-pointer rounded-lg group relative',
-    menuItemActive: 'bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 text-blue-700 dark:text-blue-300 shadow-sm border-l-3 border-blue-500',
-    menuItemInactive: 'text-gray-700 dark:text-gray-300 hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-700 dark:hover:to-gray-600 hover:shadow-sm',
+    menuItemActive: 'bg-[var(--editor-accent-light)] text-[color:var(--editor-accent)] shadow-sm border-l-[3px] border-[color:var(--editor-accent)]',
+    menuItemInactive: 'text-[color:var(--editor-text-muted)] hover:bg-[var(--editor-bg)] hover:text-[color:var(--editor-text)] hover:shadow-sm',
 
     // 섹션 헤더
-    sectionHeader: 'text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 px-3',
+    sectionHeader: 'text-xs font-semibold text-[color:var(--editor-text-muted)] mb-2 px-3',
 
     // 구조 아이템
     structureList: 'space-y-1 px-3',
-    structureItem: 'flex items-center gap-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer transition-colors',
+    structureItem: 'flex items-center gap-2 py-1.5 text-sm text-[color:var(--editor-text-muted)] hover:text-[color:var(--editor-accent)] cursor-pointer transition-colors',
 
     // 통계 영역
-    statsSection: 'p-3 border-t border-gray-200 dark:border-gray-700',
+    statsSection: 'p-3 border-t border-[color:var(--editor-border)]',
     statItem: 'flex justify-between items-center py-1 text-sm',
-    statLabel: 'text-gray-600 dark:text-gray-400',
-    statValue: 'font-medium text-gray-900 dark:text-gray-100',
+    statLabel: 'text-[color:var(--editor-text-muted)]',
+    statValue: 'font-medium text-[color:var(--editor-text)]',
 
     // 스크롤 영역
     scrollArea: 'flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar',
@@ -303,9 +303,9 @@ const SidebarContent = memo(function SidebarContent({
                         {/* 메인 스토리 및 챕터 섹션 */}
                         <div>
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">스토리</h4>
+                                <h4 className="text-xs font-semibold text-[color:var(--editor-text-muted)]">스토리</h4>
                                 <button
-                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                    className="text-[color:var(--editor-accent)] p-1 rounded transition-colors hover:bg-[var(--editor-accent-light)]"
                                     onClick={onAddStructure}
                                     title="새 챕터 추가"
                                 >
@@ -316,19 +316,19 @@ const SidebarContent = memo(function SidebarContent({
                                 {/* 메인 스토리 표시 */}
                                 <div className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
                                     <div className="flex items-center gap-2 flex-1">
-                                        <BookOpen size={12} className="text-green-500" />
-                                        <span className="truncate font-medium">메인 스토리</span>
+                                        <BookOpen size={12} className="text-[var(--success)]" />
+                                        <span className="truncate font-medium text-[color:var(--editor-text)]">메인 스토리</span>
                                     </div>
                                 </div>
                                 {/* 챕터들 표시 */}
                                 {structure.filter(item => item.type === 'chapter' || !item.type).map((item) => (
                                     <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
                                         <div className="flex items-center gap-2 flex-1">
-                                            <FileText size={12} className="text-blue-500" />
-                                            <span className="truncate">{item.title}</span>
+                                            <FileText size={12} className="text-[color:var(--editor-accent)]" />
+                                            <span className="truncate text-[color:var(--editor-text)]">{item.title}</span>
                                         </div>
                                         <button
-                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                            className="text-[color:var(--editor-text-muted)] p-1 rounded transition-colors hover:text-[color:var(--editor-text)] hover:bg-[var(--editor-bg)]"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setStructureMenuId(structureMenuId === item.id ? null : item.id);
@@ -344,9 +344,9 @@ const SidebarContent = memo(function SidebarContent({
                         {/* 시놉시스 서브섹션 */}
                         <div>
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">시놉시스</h4>
+                                <h4 className="text-xs font-semibold text-[color:var(--editor-text-muted)]">시놉시스</h4>
                                 <button
-                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                    className="text-[color:var(--editor-accent)] p-1 rounded transition-colors hover:bg-[var(--editor-accent-light)]"
                                     onClick={() => onAddStructure?.()}
                                     title="새 시놉시스 추가"
                                 >
@@ -357,11 +357,11 @@ const SidebarContent = memo(function SidebarContent({
                                 {structure.filter(item => item.type === 'synopsis').map((item) => (
                                     <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
                                         <div className="flex items-center gap-2 flex-1">
-                                            <Target size={12} className="text-green-500" />
-                                            <span className="truncate">{item.title}</span>
+                                            <Target size={12} className="text-[var(--success)]" />
+                                            <span className="truncate text-[color:var(--editor-text)]">{item.title}</span>
                                         </div>
                                         <button
-                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                            className="text-[color:var(--editor-text-muted)] p-1 rounded transition-colors hover:text-[color:var(--editor-text)] hover:bg-[var(--editor-bg)]"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setStructureMenuId(structureMenuId === item.id ? null : item.id);
@@ -377,9 +377,9 @@ const SidebarContent = memo(function SidebarContent({
                         {/* 메모 서브섹션 */}
                         <div>
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="text-xs font-semibold text-gray-600 dark:text-gray-400">메모</h4>
+                                <h4 className="text-xs font-semibold text-[color:var(--editor-text-muted)]">메모</h4>
                                 <button
-                                    className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                    className="text-[color:var(--editor-accent)] p-1 rounded transition-colors hover:bg-[var(--editor-accent-light)]"
                                     onClick={onAddNote}
                                     title="새 메모 추가"
                                 >
@@ -390,11 +390,11 @@ const SidebarContent = memo(function SidebarContent({
                                 {structure.filter(item => item.type === 'section').map((item) => (
                                     <div key={item.id} className={`${SIDEBAR_STYLES.structureItem} justify-between relative`}>
                                         <div className="flex items-center gap-2 flex-1">
-                                            <BookOpen size={12} className="text-yellow-500" />
-                                            <span className="truncate">{item.title}</span>
+                                            <BookOpen size={12} className="text-[var(--warning)]" />
+                                            <span className="truncate text-[color:var(--editor-text)]">{item.title}</span>
                                         </div>
                                         <button
-                                            className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                            className="text-[color:var(--editor-text-muted)] p-1 rounded transition-colors hover:text-[color:var(--editor-text)] hover:bg-[var(--editor-bg)]"
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 setStructureMenuId(structureMenuId === item.id ? null : item.id);
@@ -415,7 +415,7 @@ const SidebarContent = memo(function SidebarContent({
                         <div className="flex items-center justify-between mb-4">
                             <h3 className={SIDEBAR_STYLES.sectionHeader}>캐릭터 관리</h3>
                             <button
-                                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                className="text-[color:var(--editor-accent)] p-1 rounded transition-colors hover:bg-[var(--editor-accent-light)]"
                                 onClick={onAddCharacter}
                                 title="새 캐릭터 추가"
                             >
@@ -425,8 +425,8 @@ const SidebarContent = memo(function SidebarContent({
                         <div className={SIDEBAR_STYLES.structureList}>
                             {characters.map((character) => (
                                 <div key={character.id} className={`${SIDEBAR_STYLES.structureItem}`}>
-                                    <Users size={12} className="text-green-500" />
-                                    <span className="truncate">{character.name}</span>
+                                    <Users size={12} className="text-[var(--success)]" />
+                                    <span className="truncate text-[color:var(--editor-text)]">{character.name}</span>
                                 </div>
                             ))}
                         </div>
@@ -439,7 +439,7 @@ const SidebarContent = memo(function SidebarContent({
                         <div className="flex items-center justify-between mb-4">
                             <h3 className={SIDEBAR_STYLES.sectionHeader}>메모 관리</h3>
                             <button
-                                className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                                className="text-[color:var(--editor-accent)] p-1 rounded transition-colors hover:bg-[var(--editor-accent-light)]"
                                 onClick={onAddNote}
                                 title="새 메모 추가"
                             >

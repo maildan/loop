@@ -25,37 +25,37 @@ import {
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수 - 작가 친화적 다크모드 완전 지원
 const PROJECT_CREATOR_STYLES = {
-  overlay: 'fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4',
-  modal: 'bg-white dark:bg-slate-900 rounded-2xl shadow-xl dark:shadow-slate-900/50 w-full max-w-4xl max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700',
-  header: 'flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900',
-  title: 'text-2xl font-bold text-slate-900 dark:text-slate-100',
-  closeButton: 'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300 transition-colors p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800',
-  content: 'p-6 overflow-y-auto max-h-[calc(90vh-140px)] bg-white dark:bg-slate-900',
+  overlay: 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-[hsl(var(--background))]/70 supports-[backdrop-filter]:bg-[hsl(var(--background))]/55 backdrop-blur-md transition-colors',
+  modal: 'bg-card text-card-foreground rounded-2xl shadow-xl border border-border w-full max-w-4xl max-h-[90vh] overflow-hidden',
+  header: 'flex items-center justify-between p-6 border-b border-border bg-card/95 supports-[backdrop-filter]:bg-card/80',
+  title: 'text-2xl font-bold text-[hsl(var(--foreground))]',
+  closeButton: 'text-muted-foreground hover:text-[hsl(var(--foreground))] transition-colors p-1 rounded-lg hover:bg-[hsl(var(--accent))]/15',
+  content: 'p-6 overflow-y-auto max-h-[calc(90vh-140px)] bg-card',
 
   // 플랫폼 선택
   platformSection: 'mb-8',
-  sectionTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4',
+  sectionTitle: 'text-lg font-semibold text-[hsl(var(--foreground))] mb-4',
   platformGrid: 'grid grid-cols-1 md:grid-cols-3 gap-4',
-  platformCard: 'p-4 border-2 rounded-xl cursor-pointer transition-all hover:border-blue-300 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-950/20',
-  platformCardSelected: 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-950/20',
-  platformCardDefault: 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800',
-  platformIcon: 'w-8 h-8 text-blue-600 dark:text-blue-400 mb-2',
-  platformTitle: 'font-semibold text-slate-900 dark:text-slate-100 mb-1',
-  platformDescription: 'text-sm text-slate-600 dark:text-slate-400',
+  platformCard: 'p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 shadow-sm bg-card text-card-foreground',
+  platformCardSelected: 'border-[hsl(var(--accent-primary))] bg-[hsl(var(--accent))]/20 ring-1 ring-[hsl(var(--accent))]/40',
+  platformCardDefault: 'border-border hover:border-[hsl(var(--accent))]/50 hover:bg-[hsl(var(--accent))]/10',
+  platformIcon: 'w-8 h-8 text-[hsl(var(--accent-primary))] mb-2',
+  platformTitle: 'font-semibold text-[hsl(var(--foreground))] mb-1 flex items-center',
+  platformDescription: 'text-sm text-muted-foreground leading-relaxed',
 
   // 프로젝트 정보
   formSection: 'mb-6',
-  label: 'block text-sm font-medium text-slate-900 dark:text-slate-100 mb-2',
+  label: 'block text-sm font-medium text-[hsl(var(--foreground))] mb-2',
   inputGroup: 'mb-4',
   genreGrid: 'grid grid-cols-2 md:grid-cols-4 gap-2 mt-2',
-  genreButton: 'p-2 text-sm border rounded-lg transition-colors',
-  genreSelected: 'border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-950/20 text-blue-700 dark:text-blue-300',
-  genreDefault: 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800',
+  genreButton: 'p-2 text-sm border rounded-lg transition-all duration-200 flex items-center justify-center gap-1',
+  genreSelected: 'border-[hsl(var(--accent-primary))] bg-[hsl(var(--accent))]/20 text-[hsl(var(--accent-primary))] shadow-sm',
+  genreDefault: 'border-border text-muted-foreground hover:text-[hsl(var(--foreground))] hover:border-[hsl(var(--accent))]/50 hover:bg-[hsl(var(--accent))]/10',
 
   // 버튼
-  footer: 'flex items-center justify-between p-6 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900',
-  secondaryButton: 'px-4 py-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800',
-  primaryButton: 'px-6 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
+  footer: 'flex items-center justify-between p-6 border-t border-border bg-card/95 supports-[backdrop-filter]:bg-card/80',
+  secondaryButton: 'px-4 py-2 text-muted-foreground hover:text-[hsl(var(--foreground))] transition-colors rounded-lg hover:bg-[hsl(var(--accent))]/10',
+  primaryButton: 'px-6 py-2 bg-[hsl(var(--accent-primary))] text-[hsl(var(--accent-foreground))] rounded-lg hover:bg-[hsl(var(--accent-hover))] transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
 } as const;
 
 // 🔥 플랫폼 옵션 타입 정의
@@ -537,7 +537,9 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                       <div className={PROJECT_CREATOR_STYLES.platformTitle}>
                         {platform.name}
                         {platform.recommended && (
-                          <Badge className="ml-2 text-xs bg-blue-100 text-blue-700">추천</Badge>
+                          <Badge className="ml-2 text-xs bg-[hsl(var(--accent))]/20 text-[hsl(var(--accent-primary))] border border-[hsl(var(--accent))]/40">
+                            추천
+                          </Badge>
                         )}
                         {platform.external && (
                           <ExternalLink className="inline w-4 h-4 ml-1" />
@@ -554,28 +556,28 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
 
             {/* 🔥 Google Docs 연동 상태 표시 */}
             {selectedPlatform === 'google-docs' && selectedGoogleDoc && (
-              <div className="mb-6 p-4 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+              <div className="mb-6 p-4 rounded-lg border bg-[color:var(--success-light)] border-[color:var(--success)]/40 text-[color:var(--success)]/90">
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0">
-                    <div className="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[color:var(--success-light)]/70 text-[color:var(--success)]">
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-semibold text-green-800 dark:text-green-200">
+                    <h4 className="text-sm font-semibold text-[color:var(--success)]">
                       📄 Google Docs 문서 연결됨
                     </h4>
-                    <p className="mt-1 text-sm text-green-700 dark:text-green-300">
+                    <p className="mt-1 text-sm text-[color:var(--success)]">
                       <strong>{selectedGoogleDoc.title || selectedGoogleDoc.name}</strong>
                     </p>
                     {selectedGoogleDoc.content && (
-                      <p className="mt-1 text-xs text-green-600 dark:text-green-400">
+                      <p className="mt-1 text-xs text-[color:var(--success)]">
                         ✅ 내용 가져오기 완료 ({selectedGoogleDoc.content.length}자)
                       </p>
                     )}
-                    <p className="mt-2 text-xs text-green-600 dark:text-green-400">
+                    <p className="mt-2 text-xs text-[color:var(--success)]">
                       💡 프로젝트 생성 후 Loop에서 바로 편집할 수 있습니다
                     </p>
                   </div>

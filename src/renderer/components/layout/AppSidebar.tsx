@@ -26,28 +26,28 @@ import { Logger } from '../../../shared/logger';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수 (단순화된 상태)
 const SIDEBAR_STYLES = {
-  container: 'relative flex flex-col h-full bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 transition-all duration-300',
+  container: 'relative flex flex-col h-full bg-[hsl(var(--sidebar-background))] text-[hsl(var(--sidebar-foreground))] border-r border-[hsl(var(--sidebar-border))] transition-all duration-300',
   collapsed: 'w-0 overflow-hidden', // 🔥 완전히 숨김 (아이콘 없음)
   expanded: 'w-64',
-  hoverContent: 'absolute left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-l border-slate-200 dark:border-slate-700 shadow-lg z-30',
-  logoSection: 'h-auto min-h-[4rem] flex flex-col justify-center border-b border-slate-200 dark:border-slate-700 px-6 py-3',
-  logoText: 'text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent',
-  profileSection: 'border-b border-slate-200 dark:border-slate-700 p-4',
+  hoverContent: 'absolute left-0 top-0 h-full w-64 bg-[hsl(var(--sidebar-background))] text-[hsl(var(--sidebar-foreground))] border-r border-l border-[hsl(var(--sidebar-border))] shadow-lg z-30',
+  logoSection: 'h-auto min-h-[4rem] flex flex-col justify-center border-b border-[hsl(var(--sidebar-border))] px-6 py-3',
+  logoText: 'text-xl font-bold bg-gradient-to-r from-[color:var(--accent-primary)] to-[color:var(--accent-dark)] bg-clip-text text-transparent',
+  profileSection: 'border-b border-[hsl(var(--sidebar-border))] p-4',
   profileContent: 'flex items-center gap-3',
   profileInfo: 'flex-1',
-  profileName: 'font-medium text-slate-900 dark:text-slate-100 text-sm',
+  profileName: 'font-medium text-[hsl(var(--sidebar-foreground))] text-sm',
   profileStatus: 'flex items-center gap-1 mt-0.5',
-  statusDot: 'w-1.5 h-1.5 bg-green-500 rounded-full',
-  statusText: 'text-xs text-slate-500 dark:text-slate-400',
-  collapseButton: 'h-6 w-6 p-0 text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300',
+  statusDot: 'w-1.5 h-1.5 rounded-full bg-[color:var(--success)]',
+  statusText: 'text-xs text-muted-foreground',
+  collapseButton: 'h-6 w-6 p-0 text-muted-foreground hover:text-foreground transition-colors',
   navSection: 'flex-1 py-4',
   navList: 'space-y-1 px-3',
-  navItem: 'flex items-center h-10 px-3 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all duration-150 group cursor-pointer',
-  navItemActive: 'flex items-center h-10 px-3 bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 rounded-lg font-medium',
+  navItem: 'flex items-center h-10 px-3 text-[hsl(var(--sidebar-foreground))]/80 hover:bg-[hsl(var(--sidebar-accent))] hover:text-[hsl(var(--sidebar-accent-foreground))] rounded-lg transition-all duration-150 group cursor-pointer',
+  navItemActive: 'flex items-center h-10 px-3 bg-[hsl(var(--sidebar-primary))] text-[hsl(var(--sidebar-primary-foreground))] rounded-lg font-medium shadow-sm ring-1 ring-[hsl(var(--sidebar-ring))]/50',
   icon: 'w-5 h-5 group-hover:scale-110 transition-transform duration-150 flex-shrink-0',
   text: 'ml-3 font-medium',
   badge: 'ml-auto',
-  bottomSection: 'border-t border-slate-200 dark:border-slate-700 p-3',
+  bottomSection: 'border-t border-[hsl(var(--sidebar-border))] p-3',
 } as const;
 
 // 🔥 사이드바 네비게이션 아이템들 (컴포넌트 외부로 이동, id 추가)
@@ -486,7 +486,7 @@ export function AppSidebar({
 
             {/* 확장 시 사용자 프로필: Google 계정 정보 노출 */}
             <div
-              className="flex items-center gap-3 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors"
+              className="flex items-center gap-3 cursor-pointer hover:bg-[hsl(var(--sidebar-accent))] p-2 rounded-lg transition-colors"
               onClick={() => {
                 Logger.info('SIDEBAR', 'User profile clicked');
                 onNavigate?.('/settings');
@@ -496,46 +496,46 @@ export function AppSidebar({
               aria-label="사용자 프로필"
             >
               {!authLoaded && settingsLoading ? (
-                <div className="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                <div className="w-10 h-10 rounded-full bg-muted animate-pulse" />
               ) : (
                 <Avatar
                   size="lg"
                   src={avatarSrc || undefined}
                   aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
-                  className="border-2 border-white dark:border-slate-800 shadow-sm"
+                  className="border-2 border-[hsl(var(--border))] shadow-sm"
                 >
                   <span className="text-lg font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
                 </Avatar>
               )}
               <div className="flex-1">
-                <div className="font-medium text-slate-900 dark:text-slate-100 text-sm">{
+                <div className="font-medium text-[hsl(var(--foreground))] text-sm">{
                   // skeleton for name until authLoaded
                   !authLoaded && settingsLoading ? (
-                    <div className="h-4 w-28 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
+                    <div className="h-4 w-28 bg-muted rounded animate-pulse" />
                   ) : (
                     // Show display name from account settings, or fall back to email, or Loop 사용자
                     (accountProfile?.displayName || accountProfile?.username || accountProfile?.email || (googleUserInfo?.isAuthenticated ? (googleUserInfo.userName || googleUserInfo.userEmail) : null) || 'Loop 사용자')
                   )
                 }</div>
                 <div className="flex items-center gap-1 mt-0.5">
-                  <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
-                  <span suppressHydrationWarning className="text-xs text-slate-500 dark:text-slate-400">{
+                  <div className={isOnline ? 'w-1.5 h-1.5 bg-[color:var(--success)] rounded-full' : 'w-1.5 h-1.5 bg-[hsl(var(--muted-foreground))] rounded-full'} />
+                  <span suppressHydrationWarning className="text-xs text-muted-foreground">{
                     !authLoaded ? '상태 확인 중...' : (googleUserInfo?.isAuthenticated ? 'Google 계정' : (accountProfile?.displayName || accountProfile?.username || accountProfile?.email ? '로컬 계정' : (isOnline ? '온라인' : '오프라인')))
                   }</span>
                 </div>
                 {visibleProfile && visibleProfile.isAuthenticated && visibleProfile.userEmail && (
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 transition-opacity duration-200">{visibleProfile.userEmail}</div>
+                  <div className="text-xs text-muted-foreground mt-1 transition-opacity duration-200">{visibleProfile.userEmail}</div>
                 )}
               </div>
             </div>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3 py-4">
-            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">L</div>
+            <div className="w-8 h-8 bg-gradient-to-r from-[color:var(--accent-primary)] to-[color:var(--accent-dark)] rounded-lg flex items-center justify-center text-[color:var(--text-inverse,#ffffff)] font-bold text-sm">L</div>
 
             {/* 축소 시 사용자 프로필 - Google 계정 정보 표시 */}
             <div
-              className="flex flex-col items-center gap-1 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 p-2 rounded-lg transition-colors mt-2"
+              className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[hsl(var(--sidebar-accent))] p-2 rounded-lg transition-colors mt-2"
               onClick={() => {
                 Logger.info('SIDEBAR', 'User profile clicked (collapsed)');
                 onNavigate?.('/settings');
@@ -546,18 +546,18 @@ export function AppSidebar({
             >
               {!authLoaded && settingsLoading ? (
                 // loading skeleton
-                <div className="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 animate-pulse" />
+                <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
               ) : (
                 <Avatar
                   size="md"
                   src={avatarSrc || undefined}
                   aria-label={(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'Loop 사용자')}
-                  className="border-2 border-white dark:border-slate-800 shadow-sm"
+                  className="border-2 border-[hsl(var(--border))] shadow-sm"
                 >
                   <span className="text-sm font-medium">{(accountProfile?.displayName || accountProfile?.username || googleUserInfo?.userName || 'L').charAt(0).toUpperCase()}</span>
                 </Avatar>
               )}
-              <div className={isOnline ? 'w-1.5 h-1.5 bg-green-500 rounded-full' : 'w-1.5 h-1.5 bg-gray-400 rounded-full'} />
+              <div className={isOnline ? 'w-1.5 h-1.5 bg-[color:var(--success)] rounded-full' : 'w-1.5 h-1.5 bg-[hsl(var(--muted-foreground))] rounded-full'} />
             </div>
 
             <Button
@@ -604,7 +604,7 @@ export function AppSidebar({
       {/* 🔥 hover 시 Portal을 통한 애니메이션 사이드바 */}
       {collapsed && isHovered && canRenderPortal && createPortal(
         <div
-          className="fixed left-0 top-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 shadow-xl transform transition-transform duration-300 ease-out animate-slide-in-left"
+          className="fixed left-0 top-0 h-full w-64 bg-[hsl(var(--sidebar-background))] text-[hsl(var(--sidebar-foreground))] border-r border-[hsl(var(--sidebar-border))] shadow-xl transform transition-transform duration-300 ease-out animate-slide-in-left"
           style={{
             zIndex: 2147483646,
             transform: 'translateX(0)'

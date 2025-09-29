@@ -1,7 +1,3 @@
-'use client';
-
-// 이거 씀
-
 import React, { useState, useMemo, useCallback, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -36,43 +32,43 @@ import { Logger } from '../../../shared/logger';
 // 🔥 작가 친화적 스타일 상수 - 미니멀하고 집중할 수 있는 디자인
 const DASHBOARD_STYLES = {
   container: 'flex-1 flex flex-col min-h-screen',
-  header: 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm border-b border-slate-200/50 dark:border-slate-700/50 p-8',
+  header: 'bg-[hsl(var(--background))]/80 backdrop-blur-sm border-b border-[hsl(var(--border))]/60 p-8 supports-[backdrop-filter]:bg-[hsl(var(--background))]/60',
   headerContent: 'max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6',
-  headerTitle: 'text-3xl font-light text-slate-900 dark:text-slate-100 tracking-tight p-4 m-2',
-  headerSubtitle: 'text-slate-600 dark:text-slate-400 mt-2 text-lg leading-relaxed p-2 m-1',
+  headerTitle: 'text-3xl font-light text-[hsl(var(--foreground))] tracking-tight p-4 m-2',
+  headerSubtitle: 'text-muted-foreground mt-2 text-lg leading-relaxed p-2 m-1',
   headerActions: 'flex items-center gap-4',
   content: 'flex-1 overflow-y-auto p-8 max-w-6xl mx-auto w-full space-y-8',
 
   // 🔥 작가 친화적 모니터링 패널 - 차분한 색상
   // 모니터링 관련 CSS 클래스들 제거됨 - 기능 불필요
   statValue: 'text-3xl font-light tracking-tight',
-  statLabel: 'text-slate-300 text-sm font-medium tracking-wide mt-1',
+  statLabel: 'text-sm font-medium text-muted-foreground mt-1',
 
   // 🔥 작가 친화적 카드 디자인 - 최소한의 장식
   quickActions: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6',
-  quickActionCard: 'bg-white dark:bg-slate-800/50 border border-slate-200/80 dark:border-slate-700/50 p-6 rounded-xl hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-200 group min-h-[140px] flex flex-col justify-between',
-  quickActionIcon: 'w-6 h-6 text-slate-600 dark:text-slate-400 group-hover:text-slate-800 dark:group-hover:text-slate-200 transition-colors',
-  quickActionTitle: 'font-medium text-slate-900 dark:text-slate-100 mt-3 mb-2 tracking-tight',
-  quickActionDesc: 'text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-3',
-  quickActionStatus: 'text-xs font-medium text-slate-500 dark:text-slate-500',
+  quickActionCard: 'bg-card border border-border p-6 rounded-xl hover:bg-[hsl(var(--accent))]/40 hover:border-[hsl(var(--accent))]/60 transition-all duration-200 group min-h-[140px] flex flex-col justify-between shadow-sm',
+  quickActionIcon: 'w-6 h-6 text-muted-foreground group-hover:text-[hsl(var(--accent-primary))] transition-colors',
+  quickActionTitle: 'font-medium text-[hsl(var(--foreground))] mt-3 mb-2 tracking-tight',
+  quickActionDesc: 'text-sm text-muted-foreground leading-relaxed mb-3',
+  quickActionStatus: 'text-xs font-medium text-muted-foreground',
   mainGrid: 'grid grid-cols-1 lg:grid-cols-2 gap-6',
   projectList: 'space-y-4',
-  projectItem: 'bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-lg',
+  projectItem: 'bg-muted/60 border border-border p-4 rounded-lg transition-colors',
   projectHeader: 'flex items-center justify-between mb-3',
-  projectTitle: 'font-semibold text-slate-900 dark:text-slate-100',
+  projectTitle: 'font-semibold text-[hsl(var(--foreground))]',
   projectProgress: 'mb-2',
   projectStats: 'flex justify-between items-center',
-  progressText: 'text-sm font-medium text-slate-700 dark:text-slate-300',
-  progressGoal: 'text-xs text-slate-500 dark:text-slate-400',
+  progressText: 'text-sm font-medium text-[hsl(var(--foreground))]',
+  progressGoal: 'text-xs text-muted-foreground',
   recentFiles: 'space-y-2',
-  fileItem: 'flex items-center p-3 bg-slate-50 dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg cursor-pointer transition-colors',
-  fileIcon: 'w-4 h-4 text-slate-600 dark:text-slate-400 mr-3 flex-shrink-0',
+  fileItem: 'flex items-center p-3 bg-muted/60 hover:bg-muted rounded-lg cursor-pointer transition-colors border border-transparent hover:border-[hsl(var(--accent))]/50',
+  fileIcon: 'w-4 h-4 text-muted-foreground mr-3 flex-shrink-0',
   fileInfo: 'flex-1 min-w-0',
-  fileName: 'font-medium text-slate-900 dark:text-slate-100 text-sm truncate',
-  fileProject: 'text-xs text-slate-500 dark:text-slate-400',
-  fileMeta: 'text-right flex-shrink-0',
-  fileTime: 'text-xs font-medium text-slate-700 dark:text-slate-300',
-  fileStatus: 'text-xs text-green-600 dark:text-green-400',
+  fileName: 'font-medium text-[hsl(var(--foreground))] text-sm truncate',
+  fileProject: 'text-xs text-muted-foreground',
+  fileMeta: 'text-right flex-shrink-0 text-muted-foreground',
+  fileTime: 'text-xs font-medium text-muted-foreground',
+  fileStatus: 'text-xs font-medium text-[var(--success)]',
 } as const;
 
 // MonitoringData 인터페이스 제거됨 - 모니터링 기능 불필요
@@ -411,8 +407,8 @@ export function DashboardMain(): React.ReactElement {
           {/* 활성 프로젝트 */}
           <Card>
             <div className="flex items-center gap-2 mb-4">
-              <Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100">활성 프로젝트</h3>
+              <Target className="w-5 h-5 text-[hsl(var(--accent-primary))]" />
+              <h3 className="font-semibold text-[hsl(var(--foreground))]">활성 프로젝트</h3>
             </div>
 
             {loadingStates.projects ? (
@@ -420,8 +416,8 @@ export function DashboardMain(): React.ReactElement {
             ) : (
               <div className={DASHBOARD_STYLES.projectList}>
                 {projects.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500 dark:text-slate-400">
-                    <Target className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Target className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-70" />
                     <p>아직 프로젝트가 없습니다</p>
                     <p className="text-sm">새 프로젝트를 만들어보세요!</p>
                   </div>
@@ -430,7 +426,7 @@ export function DashboardMain(): React.ReactElement {
                     <div
                       key={project.id}
                       className={`${DASHBOARD_STYLES.projectItem} ${project.status === 'active'
-                        ? 'bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800'
+                        ? 'bg-[hsl(var(--accent))]/40 border-[hsl(var(--accent))]/60'
                         : ''
                         }`}
                     >
@@ -468,8 +464,8 @@ export function DashboardMain(): React.ReactElement {
           {/* 최근 파일 */}
           <Card>
             <div className="flex items-center gap-2 mb-4">
-              <Clock className="w-5 h-5 text-green-600 dark:text-green-400" />
-              <h3 className="font-semibold text-slate-900 dark:text-slate-100">최근 파일</h3>
+              <Clock className="w-5 h-5 text-[var(--success)]" />
+              <h3 className="font-semibold text-[hsl(var(--foreground))]">최근 파일</h3>
             </div>
 
             {loadingStates.recentFiles ? (
@@ -477,8 +473,8 @@ export function DashboardMain(): React.ReactElement {
             ) : (
               <div className={DASHBOARD_STYLES.recentFiles}>
                 {recentFiles.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500 dark:text-slate-400">
-                    <Clock className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Clock className="w-12 h-12 mx-auto mb-3 text-muted-foreground opacity-70" />
                     <p>최근 작업한 파일이 없습니다</p>
                     <p className="text-sm">작업을 시작해보세요!</p>
                   </div>

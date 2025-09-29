@@ -23,20 +23,20 @@ interface ContextMenuState {
 
 const TAB_STYLES = {
     // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar z-index를 ProjectHeader보다 높게 설정
-    container: 'flex items-center bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-[1000]', // 950 → 1000으로 증가
+    container: 'flex items-center bg-[var(--editor-bg-secondary)] border-b border-[color:var(--editor-border)] relative z-[1000]', // 950 → 1000으로 증가
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
-    tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-gray-200 dark:border-gray-700 cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
-    activeTab: 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 shadow-sm',
-    inactiveTab: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-750 hover:text-gray-800 dark:hover:text-gray-200',
-    dragOver: 'bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-600',
+    tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-[color:var(--editor-border)] cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
+    activeTab: 'bg-[var(--editor-bg)] text-[color:var(--editor-text)] shadow-sm',
+    inactiveTab: 'bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text-muted)] hover:bg-[var(--editor-bg)] hover:text-[color:var(--editor-text)]',
+    dragOver: 'bg-[var(--editor-accent-light)] border-[color:var(--editor-accent)]',
     tabIcon: 'text-xs',
     tabTitle: 'flex-1 truncate font-medium',
-    closeButton: 'hover:bg-gray-200 dark:hover:bg-gray-600 rounded p-1 transition-all duration-200 opacity-0 group-hover:opacity-100',
+    closeButton: 'hover:bg-[var(--editor-bg)] rounded p-1 transition-all duration-200 opacity-0 group-hover:opacity-100',
     closeButtonVisible: 'opacity-100',
-    newTabButton: 'px-3 py-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 rounded-md mx-2',
-    contextMenu: 'absolute bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl py-1 z-[1010] min-w-[180px]', // 960 → 1010으로 증가
-    contextMenuItem: 'px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex items-center gap-2',
-    contextMenuSeparator: 'border-t border-gray-200 dark:border-gray-600 my-1',
+    newTabButton: 'px-3 py-2 text-[color:var(--editor-text-muted)] hover:text-[color:var(--editor-text)] hover:bg-[var(--editor-bg)] transition-all duration-200 rounded-md mx-2',
+    contextMenu: 'absolute bg-[var(--editor-bg)] border border-[color:var(--editor-border)] rounded-lg shadow-xl py-1 z-[1010] min-w-[180px]', // 960 → 1010으로 증가
+    contextMenuItem: 'px-3 py-2 text-sm text-[color:var(--editor-text)] hover:bg-[var(--editor-accent-light)] cursor-pointer flex items-center gap-2',
+    contextMenuSeparator: 'border-t border-[color:var(--editor-border)] my-1',
 } as const;
 
 export const EditorTabBar = memo(function EditorTabBar({
@@ -239,7 +239,7 @@ export const EditorTabBar = memo(function EditorTabBar({
 
                             {/* 🔥 저장되지 않은 변경사항 표시 (노란색 점) */}
                             {tab.isDirty && (
-                                <span className="text-orange-500 text-xs">●</span>
+                                <span className="text-[var(--warning)] text-xs">●</span>
                             )}
 
                             {/* 🔥 X 버튼을 기본적으로 표시 (메인 탭 제외) */}

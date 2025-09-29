@@ -5,7 +5,7 @@ import { Skeleton } from '../ui/Skeleton';
 
 // 🔥 로딩 스켈레톤 컴포넌트들 - 성능 최적화
 const KpiCardSkeleton = memo(() => (
-  <div className="bg-white dark:bg-slate-800 p-6 rounded-lg border border-slate-200 dark:border-slate-700">
+  <div className="bg-card p-6 rounded-lg border border-border">
     <div className="flex items-center justify-between mb-4">
       <Skeleton className="h-4 w-20" />
       <Skeleton className="h-5 w-5 rounded" />
@@ -18,7 +18,7 @@ const KpiCardSkeleton = memo(() => (
 KpiCardSkeleton.displayName = 'KpiCardSkeleton';
 
 const ProjectCardSkeleton = memo(() => (
-  <div className="bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 p-4 rounded-lg">
+  <div className="bg-muted/60 border border-border p-4 rounded-lg">
     <div className="flex items-center justify-between mb-3">
       <Skeleton className="h-5 w-32" />
       <Skeleton className="h-4 w-12" />
@@ -34,7 +34,7 @@ const ProjectCardSkeleton = memo(() => (
 ProjectCardSkeleton.displayName = 'ProjectCardSkeleton';
 
 const FileItemSkeleton = memo(() => (
-  <div className="flex items-center p-3 bg-slate-50 dark:bg-slate-800 rounded-lg">
+  <div className="flex items-center p-3 bg-muted/60 rounded-lg">
     <Skeleton className="h-4 w-4 mr-3" />
     <div className="flex-1">
       <Skeleton className="h-4 w-32 mb-1" />
