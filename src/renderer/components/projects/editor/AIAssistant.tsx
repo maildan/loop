@@ -1,6 +1,5 @@
 'use client';
 
-
 import React from 'react';
 import { Button } from '../../ui/Button';
 import {
@@ -9,7 +8,6 @@ import {
   Map,
   MessageSquare,
   Clock,
-  Target,
   TrendingUp,
   ChevronRight,
   PanelRightClose
@@ -34,20 +32,30 @@ interface AIAssistantProps {
 }
 
 const STYLES = {
-  rightSidebar: 'w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-300 ease-in-out',
+  rightSidebar:
+    'w-80 bg-[color:hsl(var(--card))] border-l border-[color:hsl(var(--border))] flex flex-col transition-all duration-300 ease-in-out text-[color:hsl(var(--foreground))]',
   rightSidebarCollapsed: 'w-0 overflow-hidden transition-all duration-300 ease-in-out',
-  rightSidebarHeader: 'flex items-center justify-between p-3 border-b border-slate-200 dark:border-slate-800',
-  rightSidebarTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100',
-  iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400',
-  statCard: 'bg-slate-50 dark:bg-slate-800/50 rounded-lg p-3 mb-3',
+  rightSidebarHeader:
+    'flex items-center justify-between p-3 border-b border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
+  rightSidebarTitle: 'text-lg font-semibold text-[color:hsl(var(--foreground))]',
+  iconButton:
+    'flex items-center justify-center w-9 h-9 rounded-lg transition-colors text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] hover:bg-[color:hsl(var(--muted))]/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/30 focus-visible:ring-offset-0',
+  statCard:
+    'bg-[color:hsl(var(--muted))]/45 rounded-lg p-3 mb-3 border border-[color:hsl(var(--border))]/60 shadow-[var(--shadow-sm,0_8px_18px_rgba(15,23,42,0.12))] transition-colors',
   statGrid: 'grid grid-cols-2 gap-2 mb-4',
   statItem: 'text-center',
-  statValue: 'text-lg font-semibold text-slate-900 dark:text-slate-100',
-  statLabel: 'text-xs text-slate-500 dark:text-slate-400',
-  statSubtext: 'text-xs text-slate-500 dark:text-slate-400',
-  progressBar: 'w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 mb-2',
-  progressFill: 'bg-blue-600 h-2 rounded-full transition-all duration-300',
-  aiButton: 'w-full justify-start p-3 mb-2 h-auto',
+  statValue: 'text-lg font-semibold text-[color:hsl(var(--foreground))]',
+  statLabel: 'text-xs text-[color:hsl(var(--muted-foreground))]',
+  statSubtext: 'text-xs text-[color:hsl(var(--muted-foreground))]',
+  progressBar: 'w-full bg-[color:hsl(var(--muted))] rounded-full h-2 mb-2 overflow-hidden',
+  progressFill:
+    'bg-[color:var(--accent-primary)] h-2 rounded-full transition-all duration-300 shadow-[var(--shadow-sm,0_4px_10px_rgba(37,99,235,0.4))]',
+  aiButton: 'w-full justify-start p-3 mb-2 h-auto text-[color:hsl(var(--foreground))]',
+  sectionHeading: 'text-sm font-medium mb-3 flex items-center text-[color:hsl(var(--foreground))]',
+  sectionIconAccent: 'w-4 h-4 mr-2 text-[color:var(--accent-primary)]',
+  sectionIconSuccess: 'w-4 h-4 mr-2 text-[color:var(--success)]',
+  sectionSubtitle: 'text-xs text-[color:hsl(var(--muted-foreground))]',
+  chevron: 'w-4 h-4 text-[color:hsl(var(--muted-foreground))]',
 } as const;
 
 export function AIAssistant({
@@ -56,7 +64,6 @@ export function AIAssistant({
   writerStats,
   onAIAction
 }: AIAssistantProps): React.ReactElement {
-
   const handleAIAction = (action: 'improve' | 'character' | 'plot' | 'dialogue') => {
     if (onAIAction) {
       onAIAction(action);
@@ -84,11 +91,11 @@ export function AIAssistant({
         </button>
       </div>
 
-      <div className="p-3 overflow-y-auto">
+      <div className="p-3 overflow-y-auto bg-[color:hsl(var(--card))]">
         {/* 작가 통계 */}
         <div className={STYLES.statCard}>
-          <h3 className="text-sm font-medium mb-3 flex items-center">
-            <TrendingUp className="w-4 h-4 mr-2 text-blue-500" />
+          <h3 className={STYLES.sectionHeading}>
+            <TrendingUp className={STYLES.sectionIconAccent} />
             작업 통계
           </h3>
 
@@ -111,20 +118,18 @@ export function AIAssistant({
             </div>
           </div>
 
-          {/* 목표 진행률 */}
           {writerStats.targetWords && (
             <div className="mt-3">
               <div className="flex justify-between items-center mb-1">
-                <span className="text-xs text-slate-600 dark:text-slate-400">일일 목표</span>
-                <span className="text-xs font-medium">{getProgressPercentage().toFixed(0)}%</span>
+                <span className={STYLES.sectionSubtitle}>일일 목표</span>
+                <span className="text-xs font-medium text-[color:hsl(var(--foreground))]">
+                  {getProgressPercentage().toFixed(0)}%
+                </span>
               </div>
               <div className={STYLES.progressBar}>
-                <div
-                  className={STYLES.progressFill}
-                  style={{ width: `${getProgressPercentage()}%` }}
-                />
+                <div className={STYLES.progressFill} style={{ width: `${getProgressPercentage()}%` }} />
               </div>
-              <div className="text-xs text-center text-slate-500 dark:text-slate-400 mt-1">
+              <div className={`${STYLES.sectionSubtitle} text-center mt-1`}>
                 {writerStats.words} / {writerStats.targetWords.toLocaleString()} 단어
               </div>
             </div>
@@ -133,21 +138,19 @@ export function AIAssistant({
 
         {/* 세션 통계 */}
         <div className={STYLES.statCard}>
-          <h3 className="text-sm font-medium mb-3 flex items-center">
-            <Clock className="w-4 h-4 mr-2 text-green-500" />
+          <h3 className={STYLES.sectionHeading}>
+            <Clock className={STYLES.sectionIconSuccess} />
             현재 세션
           </h3>
 
           <div className="flex justify-between items-center mb-2">
             <div>
-              <div className={STYLES.statSubtext}>작성한 단어</div>
-              <div className="text-lg font-medium text-green-600 dark:text-green-400">
-                +{writerStats.sessionWords}
-              </div>
+              <div className={STYLES.sectionSubtitle}>작성한 단어</div>
+              <div className="text-lg font-medium text-[color:var(--success)]">+{writerStats.sessionWords}</div>
             </div>
             <div className="text-right">
-              <div className={STYLES.statSubtext}>글쓰기 시간</div>
-              <div className="text-lg font-medium">
+              <div className={STYLES.sectionSubtitle}>글쓰기 시간</div>
+              <div className="text-lg font-medium text-[color:hsl(var(--foreground))]">
                 {formatTime(writerStats.sessionTime)}
               </div>
             </div>
@@ -155,19 +158,19 @@ export function AIAssistant({
 
           <div className="flex justify-between items-center">
             <div>
-              <div className={STYLES.statSubtext}>평균 속도</div>
+              <div className={STYLES.sectionSubtitle}>평균 속도</div>
             </div>
             <div className="text-right">
               <div className={STYLES.statValue}>{writerStats.wpm}</div>
-              <div className={STYLES.statSubtext}>WPM</div>
+              <div className={STYLES.sectionSubtitle}>WPM</div>
             </div>
           </div>
         </div>
 
         {/* AI 작가 도우미 */}
         <div className="mt-6">
-          <h3 className="text-sm font-medium mb-3 flex items-center">
-            <Sparkles className="w-4 h-4 mr-2 text-purple-500" />
+          <h3 className={STYLES.sectionHeading}>
+            <Sparkles className={STYLES.sectionIconAccent} />
             AI 작가 도우미
           </h3>
 
@@ -180,13 +183,13 @@ export function AIAssistant({
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center">
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-500" />
+                  <Sparkles className={STYLES.sectionIconAccent} />
                   <div className="text-left">
-                    <div className="font-medium">문장 개선 제안</div>
-                    <div className="text-xs text-slate-500">더 나은 표현을 찾아드려요</div>
+                    <div className="font-medium text-[color:hsl(var(--foreground))]">문장 개선 제안</div>
+                    <div className={STYLES.sectionSubtitle}>더 나은 표현을 찾아드려요</div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+                <ChevronRight className={STYLES.chevron} />
               </div>
             </Button>
 
@@ -198,13 +201,13 @@ export function AIAssistant({
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center">
-                  <Users className="w-4 h-4 mr-2 text-purple-500" />
+                  <Users className={STYLES.sectionIconAccent} />
                   <div className="text-left">
-                    <div className="font-medium">등장인물 분석</div>
-                    <div className="text-xs text-slate-500">캐릭터의 일관성을 확인해요</div>
+                    <div className="font-medium text-[color:hsl(var(--foreground))]">캐릭터 확장</div>
+                    <div className={STYLES.sectionSubtitle}>인물의 배경과 성격을 다듬어요</div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+                <ChevronRight className={STYLES.chevron} />
               </div>
             </Button>
 
@@ -216,13 +219,13 @@ export function AIAssistant({
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center">
-                  <Map className="w-4 h-4 mr-2 text-green-500" />
+                  <Map className={STYLES.sectionIconAccent} />
                   <div className="text-left">
-                    <div className="font-medium">플롯 구조 확인</div>
-                    <div className="text-xs text-slate-500">이야기 흐름을 분석해요</div>
+                    <div className="font-medium text-[color:hsl(var(--foreground))]">플롯 구조 강화</div>
+                    <div className={STYLES.sectionSubtitle}>스토리 전개를 설계해요</div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+                <ChevronRight className={STYLES.chevron} />
               </div>
             </Button>
 
@@ -234,13 +237,13 @@ export function AIAssistant({
             >
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center">
-                  <MessageSquare className="w-4 h-4 mr-2 text-orange-500" />
+                  <MessageSquare className={STYLES.sectionIconAccent} />
                   <div className="text-left">
-                    <div className="font-medium">대화문 개선</div>
-                    <div className="text-xs text-slate-500">자연스러운 대화를 만들어요</div>
+                    <div className="font-medium text-[color:hsl(var(--foreground))]">대화 개선</div>
+                    <div className={STYLES.sectionSubtitle}>자연스럽고 생동감 있는 대사를 제안해요</div>
                   </div>
                 </div>
-                <ChevronRight className="w-4 h-4 text-slate-400" />
+                <ChevronRight className={STYLES.chevron} />
               </div>
             </Button>
           </div>

@@ -11,10 +11,10 @@ export interface ProjectEditorLayoutProps {
 // 🔥 기가차드 UI 문제점 해결된 스타일
 export const WRITER_EDITOR_STYLES = {
     // 전체 레이아웃
-    container: 'h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200',
+    container: 'h-screen flex flex-col bg-[color:hsl(var(--background))] text-[color:hsl(var(--foreground))] transition-colors duration-200',
 
     // 헤더 (🔥 nav 중첩 문제 해결)
-    header: 'flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700',
+    header: 'flex items-center justify-between px-4 py-3 bg-[color:hsl(var(--card))] border-b border-[color:hsl(var(--border))] shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))] transition-colors duration-200',
     headerLeft: 'flex items-center gap-3',
     headerCenter: 'flex-1 max-w-md mx-auto',
     headerRight: 'flex items-center gap-2',
@@ -23,16 +23,16 @@ export const WRITER_EDITOR_STYLES = {
     main: 'flex flex-1 overflow-hidden',
 
     // 🔥 에디터 영역 수정 (한줄 문제, 스크롤 제한 해결)
-    editorContainer: 'flex-1 flex flex-col h-full bg-white dark:bg-gray-900 transition-colors duration-200',
+    editorContainer: 'flex-1 flex flex-col h-full bg-[color:hsl(var(--background))] transition-colors duration-200',
     editorContent: 'flex-1 min-h-0 overflow-hidden', // 🔥 min-h-0 추가로 flex 영역 제대로 잡힘
 
     // UI 컨트롤
-    iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400',
-    iconButtonActive: 'flex items-center justify-center w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
-    titleInput: 'border-none bg-transparent focus:outline-none focus:ring-0 text-lg font-medium w-full placeholder:text-gray-400 dark:placeholder:text-gray-500 text-gray-900 dark:text-gray-100',
+    iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] hover:bg-[color:hsl(var(--muted))]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/25 focus-visible:ring-offset-0',
+    iconButtonActive: 'flex items-center justify-center w-9 h-9 rounded-lg bg-[color:var(--accent-light,#dbeafe)] text-[color:var(--accent-primary)] shadow-[var(--shadow-sm,0_6px_14px_rgba(37,99,235,0.18))]',
+    titleInput: 'border-none bg-transparent focus:outline-none focus:ring-0 text-lg font-medium w-full placeholder:text-[color:hsl(var(--muted-foreground))] text-[color:hsl(var(--foreground))]',
 
     // 🔥 백 버튼 개선 (중첩 문제 해결)
-    backButton: 'flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors',
+    backButton: 'flex items-center gap-2 px-3 py-1.5 text-sm text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] hover:bg-[color:hsl(var(--muted))]/55 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/25 focus-visible:ring-offset-0',
 } as const;
 
 export function ProjectEditorContainer({ children, className = '' }: ProjectEditorLayoutProps): React.ReactElement {

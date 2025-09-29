@@ -85,33 +85,42 @@ interface ChatMessage {
 }
 
 const STATS_STYLES = {
-  rightSidebar: 'w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col transition-all duration-300 ease-in-out',
+  rightSidebar:
+    'w-80 bg-[color:hsl(var(--card))] border-l border-[color:hsl(var(--border))] flex flex-col transition-all duration-300 ease-in-out text-[color:hsl(var(--foreground))]',
   rightSidebarCollapsed: 'w-0 overflow-hidden transition-all duration-300 ease-in-out',
-  rightSidebarHeader: 'flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-800',
-  rightSidebarTitle: 'text-lg font-semibold text-slate-900 dark:text-slate-100',
-  iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400',
-  statCard: 'bg-slate-50 dark:bg-slate-800 rounded-lg p-3 mb-3',
-  statTitle: 'text-xs font-medium text-slate-600 dark:text-slate-400 mb-1',
-  statValue: 'text-lg font-bold text-slate-900 dark:text-slate-100',
-  statSubtext: 'text-xs text-slate-500 dark:text-slate-400',
+  rightSidebarHeader:
+    'flex items-center justify-between p-4 border-b border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
+  rightSidebarTitle: 'text-lg font-semibold text-[color:hsl(var(--foreground))]',
+  iconButton:
+    'flex items-center justify-center w-9 h-9 rounded-lg transition-colors text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] hover:bg-[color:hsl(var(--muted))]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/30 focus-visible:ring-offset-0',
+  statCard:
+    'bg-[color:hsl(var(--muted))]/45 rounded-lg p-3 mb-3 border border-[color:hsl(var(--border))]/60 shadow-[var(--shadow-sm,0_8px_18px_rgba(15,23,42,0.12))] transition-colors',
+  statTitle: 'text-xs font-medium text-[color:hsl(var(--muted-foreground))] mb-1',
+  statValue: 'text-lg font-bold text-[color:hsl(var(--foreground))]',
+  statSubtext: 'text-xs text-[color:hsl(var(--muted-foreground))]',
 
   // 🔥 탭 스타일 추가
-  tabs: 'flex border-b border-slate-200 dark:border-slate-800',
-  tab: 'px-4 py-2 text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 cursor-pointer',
-  tabActive: 'px-4 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 cursor-pointer',
-  tabContent: 'p-4 flex-1 overflow-y-auto',
+  tabs: 'flex border-b border-[color:hsl(var(--border))]',
+  tab: 'px-4 py-2 text-sm text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] cursor-pointer transition-colors',
+  tabActive: 'px-4 py-2 text-sm font-medium text-[color:var(--accent-primary)] border-b-2 border-[color:var(--accent-primary)] cursor-pointer',
+  tabContent: 'p-4 flex-1 overflow-y-auto bg-[color:hsl(var(--card))]',
 
   // 🔥 AI 채팅 스타일 - UI 잘림 문제 해결
-  chatContainer: 'flex flex-col h-full overflow-hidden',
+  chatContainer: 'flex flex-col h-full overflow-hidden bg-[color:hsl(var(--card))]',
   chatMessages: 'flex-1 overflow-y-auto px-2 py-3 space-y-3 max-h-[calc(100%-60px)]',
-  chatMessage: 'p-3 rounded-lg text-sm break-words whitespace-pre-wrap max-w-[90%]', // 개선: 긴 텍스트 개행 및 줄바꿈 보존, 너비 제한
-  userMessage: 'bg-blue-100 dark:bg-blue-900/40 ml-8 mr-2 text-slate-800 dark:text-slate-200',
-  aiMessage: 'bg-slate-100 dark:bg-slate-800 ml-2 mr-8 text-slate-800 dark:text-slate-200 overflow-auto',
-  chatInputContainer: 'flex p-2 border-t border-slate-200 dark:border-slate-800 mt-auto',
-  chatInput: 'flex-1 rounded-l-md px-3 py-2 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-600 dark:focus:ring-blue-500',
-  chatSendButton: 'flex items-center justify-center px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-r-md transition-colors disabled:bg-blue-400 disabled:cursor-not-allowed',
+  chatMessage: 'p-3 rounded-lg text-sm break-words whitespace-pre-wrap max-w-[90%]',
+  userMessage: 'bg-[color:var(--accent-light,#dbeafe)] ml-8 mr-2 text-[color:var(--accent-primary)]',
+  aiMessage: 'bg-[color:hsl(var(--muted))] ml-2 mr-8 text-[color:hsl(var(--foreground))] overflow-auto',
+  chatInputContainer: 'flex p-2 border-t border-[color:hsl(var(--border))] mt-auto bg-[color:hsl(var(--card))]',
+  chatInput:
+    'flex-1 rounded-l-md px-3 py-2 border border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))] text-[color:hsl(var(--foreground))] focus:outline-none focus:ring-1 focus:ring-[color:var(--accent-primary)]',
+  chatSendButton:
+    'flex items-center justify-center px-3 py-2 bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover,#1d4ed8)] text-[color:var(--text-inverse,#ffffff)] rounded-r-md transition-colors disabled:bg-[color:var(--accent-primary)]/60 disabled:cursor-not-allowed',
   loadingDots: 'flex space-x-1 items-center justify-center py-2',
-  loadingDot: 'w-2 h-2 bg-slate-400 rounded-full animate-pulse',
+  loadingDot: 'w-2 h-2 bg-[color:hsl(var(--muted-foreground))] rounded-full animate-pulse',
+  aiButton:
+    'w-full justify-start transition-colors text-[color:hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/25 focus-visible:ring-offset-0',
+  sectionIconAccent: 'w-4 h-4 mr-2 text-[color:var(--accent-primary)]'
 } as const;
 
 export function WriterStatsPanel({
@@ -566,14 +575,14 @@ export function WriterStatsPanel({
               </div>
             </div>
 
-            <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2 mb-2">
+            <div className="w-full bg-[color:hsl(var(--muted))]/70 rounded-full h-2 mb-2">
               <div
-                className="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300"
+                className="bg-[color:var(--accent-primary)] h-2 rounded-full transition-all duration-300 shadow-[var(--shadow-sm,0_6px_12px_rgba(37,99,235,0.35))]"
                 style={{ width: `${Math.min(100, displayStats.progress)}%` }}
               />
             </div>
 
-            <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex justify-between text-xs text-[color:hsl(var(--muted-foreground))]">
               <span>{displayStats.wordCount.toLocaleString()} 단어</span>
               <span>{displayStats.progress}%</span>
             </div>
@@ -584,7 +593,7 @@ export function WriterStatsPanel({
             <div className={STATS_STYLES.statCard}>
               <span className={STATS_STYLES.statTitle}>단어 수</span>
               <div className={STATS_STYLES.statValue}>{displayStats.wordCount.toLocaleString()}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              <div className="text-xs text-[color:hsl(var(--muted-foreground))] mt-1">
                 {displayStats.wordCount > lastWordCount ? '↗' : displayStats.wordCount < lastWordCount ? '↘' : '→'}
                 실시간
               </div>
@@ -593,19 +602,19 @@ export function WriterStatsPanel({
             <div className={STATS_STYLES.statCard}>
               <span className={STATS_STYLES.statTitle}>문자 수</span>
               <div className={STATS_STYLES.statValue}>{displayStats.charCount.toLocaleString()}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">공백 포함</div>
+              <div className="text-xs text-[color:hsl(var(--muted-foreground))] mt-1">공백 포함</div>
             </div>
 
             <div className={STATS_STYLES.statCard}>
               <span className={STATS_STYLES.statTitle}>단락 수</span>
               <div className={STATS_STYLES.statValue}>{displayStats.paragraphCount}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">구조 분석</div>
+              <div className="text-xs text-[color:hsl(var(--muted-foreground))] mt-1">구조 분석</div>
             </div>
 
             <div className={STATS_STYLES.statCard}>
               <span className={STATS_STYLES.statTitle}>읽기 시간</span>
               <div className={STATS_STYLES.statValue}>{displayStats.readingTime}분</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">200 WPM 기준</div>
+              <div className="text-xs text-[color:hsl(var(--muted-foreground))] mt-1">200 WPM 기준</div>
             </div>
           </div>
 
@@ -626,7 +635,7 @@ export function WriterStatsPanel({
             </div>
             {/* 🔥 WPM 성능 표시기 */}
             <div className="mt-2">
-              <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
+              <div className="flex justify-between text-xs text-[color:hsl(var(--muted-foreground))] mb-1">
                 <span>타이핑 속도</span>
                 <span>
                   {displayStats.wpm < 30 ? '천천히' :
@@ -634,11 +643,11 @@ export function WriterStatsPanel({
                       displayStats.wpm < 90 ? '빠름' : '매우 빠름'}
                 </span>
               </div>
-              <div className="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1">
+              <div className="w-full bg-[color:hsl(var(--muted))]/70 rounded-full h-1">
                 <div
-                  className={`h-1 rounded-full transition-all duration-300 ${displayStats.wpm < 30 ? 'bg-red-400' :
-                    displayStats.wpm < 60 ? 'bg-yellow-400' :
-                      displayStats.wpm < 90 ? 'bg-green-400' : 'bg-blue-400'
+                  className={`h-1 rounded-full transition-all duration-300 ${displayStats.wpm < 30 ? 'bg-[color:var(--destructive)]' :
+                    displayStats.wpm < 60 ? 'bg-[color:var(--warning)]' :
+                      displayStats.wpm < 90 ? 'bg-[color:var(--success)]' : 'bg-[color:var(--accent-primary)]'
                     }`}
                   style={{ width: `${Math.min(100, (displayStats.wpm / 120) * 100)}%` }}
                 />
@@ -650,22 +659,22 @@ export function WriterStatsPanel({
           <div className="mt-6">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center">
-                <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mr-2 animate-pulse"></div>
-                <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">창작 파트너</h3>
+                <div className="w-2 h-2 rounded-full mr-2 animate-pulse bg-[color:var(--accent-primary)]"></div>
+                <h3 className="text-sm font-medium text-[color:hsl(var(--foreground))]">창작 파트너</h3>
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">✨ 함께 써봐요</div>
+              <div className="text-xs text-[color:hsl(var(--muted-foreground))]">✨ 함께 써봐요</div>
             </div>
 
             {/* 환영 메시지 */}
             {Object.keys(aiResults).length === 0 && (
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border border-blue-200 dark:border-blue-800 p-4 rounded-lg mb-4">
+              <div className="bg-[color:hsl(var(--muted))]/55 border border-[color:hsl(var(--border))]/60 p-4 rounded-lg mb-4 shadow-[var(--shadow-sm,0_12px_24px_rgba(15,23,42,0.14))]">
                 <div className="flex items-start">
                   <div className="text-2xl mr-3">🌟</div>
                   <div>
-                    <div className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    <div className="text-sm font-medium text-[color:hsl(var(--foreground))] mb-2">
                       오늘도 멋진 이야기를 써보시네요!
                     </div>
-                    <div className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <div className="text-xs text-[color:hsl(var(--muted-foreground))] leading-relaxed">
                       무엇을 도와드릴까요? 새로운 아이디어가 필요하거나, 막힌 부분을 뚫고 싶으시면 언제든 말씀해주세요.
                     </div>
                   </div>
@@ -677,14 +686,14 @@ export function WriterStatsPanel({
               <Button
                 size="sm"
                 variant="outline"
-                className="w-full justify-start hover:bg-blue-50 dark:hover:bg-blue-900/20 border-blue-200 dark:border-blue-800"
+                className={`${STATS_STYLES.aiButton} border-[color:var(--accent-primary)]/35 hover:bg-[color:var(--accent-light,#dbeafe)]/60`}
                 onClick={handleAIImproveText}
                 disabled={aiLoading === 'improve' || !currentText}
               >
                 {aiLoading === 'improve' ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-blue-500" />
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-[color:var(--accent-primary)]" />
                 ) : (
-                  <Sparkles className="w-4 h-4 mr-2 text-blue-500" />
+                  <Sparkles className={STATS_STYLES.sectionIconAccent} />
                 )}
                 ✨ 문장을 더 매력적으로 만들어봐요
               </Button>
@@ -692,14 +701,14 @@ export function WriterStatsPanel({
               <Button
                 size="sm"
                 variant="outline"
-                className="w-full justify-start hover:bg-purple-50 dark:hover:bg-purple-900/20 border-purple-200 dark:border-purple-800"
+                className={`${STATS_STYLES.aiButton} border-[color:hsl(var(--border))]/60 hover:bg-[color:hsl(var(--muted))]/60`}
                 onClick={handleAICharacterAnalysis}
                 disabled={aiLoading === 'character' || !projectId}
               >
                 {aiLoading === 'character' ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-purple-500" />
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-[color:var(--accent-primary)]" />
                 ) : (
-                  <Users className="w-4 h-4 mr-2 text-purple-500" />
+                  <Users className={STATS_STYLES.sectionIconAccent} />
                 )}
                 👥 캐릭터들이 잘 살아있는지 볼까요?
               </Button>
@@ -707,14 +716,14 @@ export function WriterStatsPanel({
               <Button
                 size="sm"
                 variant="outline"
-                className="w-full justify-start hover:bg-green-50 dark:hover:bg-green-900/20 border-green-200 dark:border-green-800"
+                className={`${STATS_STYLES.aiButton} border-[color:var(--success)]/35 hover:bg-[color:var(--success-light,#dcfce7)]/60`}
                 onClick={handleAIPlotCheck}
                 disabled={aiLoading === 'plot' || !currentText}
               >
                 {aiLoading === 'plot' ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-green-500" />
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-[color:var(--success)]" />
                 ) : (
-                  <Map className="w-4 h-4 mr-2 text-green-500" />
+                  <Map className="w-4 h-4 mr-2 text-[color:var(--success)]" />
                 )}
                 🗺️ 이야기 흐름을 함께 점검해볼까요?
               </Button>
@@ -722,14 +731,14 @@ export function WriterStatsPanel({
               <Button
                 size="sm"
                 variant="outline"
-                className="w-full justify-start hover:bg-orange-50 dark:hover:bg-orange-900/20 border-orange-200 dark:border-orange-800"
+                className={`${STATS_STYLES.aiButton} border-[color:var(--warning)]/35 hover:bg-[color:var(--warning-light,#fef3c7)]/60`}
                 onClick={handleAIDialogueImprovement}
                 disabled={aiLoading === 'dialogue' || !currentText}
               >
                 {aiLoading === 'dialogue' ? (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-orange-500" />
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin text-[color:var(--warning)]" />
                 ) : (
-                  <Speech className="w-4 h-4 mr-2 text-orange-500" />
+                  <Speech className="w-4 h-4 mr-2 text-[color:var(--warning)]" />
                 )}
                 💬 대화가 자연스럽게 들리나요?
               </Button>
@@ -740,32 +749,39 @@ export function WriterStatsPanel({
               <div className="mt-4">
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center">
-                    <div className="text-sm font-medium text-slate-700 dark:text-slate-300">창작 조언</div>
-                    <div className="w-1 h-1 bg-slate-400 rounded-full mx-2"></div>
-                    <div className="text-xs text-slate-500">함께 만든 결과</div>
+                    <div className="text-sm font-medium text-[color:hsl(var(--foreground))]">창작 조언</div>
+                    <div className="w-1 h-1 bg-[color:hsl(var(--muted-foreground))] rounded-full mx-2"></div>
+                    <div className="text-xs text-[color:hsl(var(--muted-foreground))]">함께 만든 결과</div>
                   </div>
                   <button
                     onClick={() => setAiResults({})}
-                    className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                    className="text-xs text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] transition-colors"
                   >
                     모두 지우기
                   </button>
                 </div>
                 <div className="space-y-3 max-h-48 overflow-y-auto">
                   {Object.entries(aiResults).map(([key, result]) => (
-                    <div key={key} className={`border p-4 rounded-lg transition-all duration-200 ${key === 'improve' ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' :
-                      key === 'character' ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800' :
-                        key === 'plot' ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' :
-                          key === 'dialogue' ? 'bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-800' :
-                            'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700'
-                      }`}>
+                    <div
+                      key={key}
+                      className={`border p-4 rounded-lg transition-all duration-200 ${key === 'improve'
+                        ? 'bg-[color:var(--accent-light,#dbeafe)]/70 border-[color:var(--accent-primary)]/45'
+                        : key === 'character'
+                          ? 'bg-[color:hsl(var(--muted))]/55 border-[color:hsl(var(--border))]/60'
+                          : key === 'plot'
+                            ? 'bg-[color:var(--success-light,#d1fae5)]/70 border-[color:var(--success)]/45'
+                            : key === 'dialogue'
+                              ? 'bg-[color:var(--warning-light,#fef3c7)]/70 border-[color:var(--warning)]/45'
+                              : 'bg-[color:hsl(var(--muted))]/45 border-[color:hsl(var(--border))]/60'
+                        }`}
+                    >
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center">
-                          {key === 'improve' && <Sparkles className="w-4 h-4 mr-2 text-blue-500" />}
-                          {key === 'character' && <Users className="w-4 h-4 mr-2 text-purple-500" />}
-                          {key === 'plot' && <Map className="w-4 h-4 mr-2 text-green-500" />}
-                          {key === 'dialogue' && <Speech className="w-4 h-4 mr-2 text-orange-500" />}
-                          <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                          {key === 'improve' && <Sparkles className={STATS_STYLES.sectionIconAccent} />}
+                          {key === 'character' && <Users className={STATS_STYLES.sectionIconAccent} />}
+                          {key === 'plot' && <Map className="w-4 h-4 mr-2 text-[color:var(--success)]" />}
+                          {key === 'dialogue' && <Speech className="w-4 h-4 mr-2 text-[color:var(--warning)]" />}
+                          <span className="text-sm font-medium text-[color:hsl(var(--foreground))]">
                             {key === 'improve' ? '✨ 문장 개선 조언' :
                               key === 'character' ? '👥 캐릭터 분석' :
                                 key === 'plot' ? '🗺️ 플롯 점검' :
@@ -778,16 +794,16 @@ export function WriterStatsPanel({
                             delete newResults[key];
                             return newResults;
                           })}
-                          className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+                          className="text-xs text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] transition-colors"
                         >
                           ✕
                         </button>
                       </div>
-                      <div className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap break-words max-h-80 overflow-y-auto">
+                      <div className="text-xs text-[color:hsl(var(--muted-foreground))] leading-relaxed whitespace-pre-wrap break-words max-h-80 overflow-y-auto">
                         {result}
                       </div>
-                      <div className="mt-2 pt-2 border-t border-slate-200 dark:border-slate-600">
-                        <div className="text-xs text-slate-500 dark:text-slate-400">
+                      <div className="mt-2 pt-2 border-t border-[color:hsl(var(--border))]">
+                        <div className="text-xs text-[color:hsl(var(--muted-foreground))]">
                           💡 <span className="italic">이 조언이 도움이 되셨나요? 더 구체적인 도움이 필요하시면 언제든 말씀해주세요!</span>
                         </div>
                       </div>
@@ -805,9 +821,9 @@ export function WriterStatsPanel({
         <div className={`${STATS_STYLES.chatContainer} h-full`}>
           <div className={STATS_STYLES.chatMessages}>
             {messages.length === 0 ? (
-              <div className="text-center py-6 px-3 text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm mx-2">
-                <Sparkles className="mx-auto w-8 h-8 mb-2 text-blue-500 opacity-90" />
-                <p className="text-sm font-medium">AI 창작 파트너에게 질문하세요</p>
+              <div className="text-center py-6 px-3 text-[color:hsl(var(--muted-foreground))] bg-[color:hsl(var(--muted))]/50 rounded-lg border border-[color:hsl(var(--border))]/70 shadow-[var(--shadow-sm,0_12px_24px_rgba(15,23,42,0.12))] mx-2">
+                <Sparkles className="mx-auto w-8 h-8 mb-2 text-[color:var(--accent-primary)] opacity-90" />
+                <p className="text-sm font-medium text-[color:hsl(var(--foreground))]">AI 창작 파트너에게 질문하세요</p>
                 <p className="text-xs mt-2 leading-relaxed">
                   작품 구조, 캐릭터, 대화, 문체 등에 대한 도움을 받을 수 있습니다.<br />
                   예시: &ldquo;판타지 소설의 마법 체계를 만들어줘&rdquo;<br />또는 &ldquo;이 캐릭터를 더 흥미롭게 만드는 방법은?&rdquo;

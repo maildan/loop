@@ -445,7 +445,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     return (
         <ProjectEditorLayout.Container className="relative overflow-hidden">
             {/* 🔥 ProjectHeader 고정 영역 */}
-            <div className="h-14 relative bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 z-[900]">
+            <div className="h-14 relative bg-[color:hsl(var(--card))] border-b border-[color:hsl(var(--border))] shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))] z-[900] transition-colors duration-200">
                 <ProjectEditorLayout.Header>
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
@@ -469,7 +469,7 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 🔥 EditorTabBar - ProjectHeader와 동일한 레벨에서 렌더링 */}
             {state.currentView === 'write' && (
-                <div className="h-12 relative bg-gray-100 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 z-[1000]">
+                <div className="h-12 relative bg-[color:hsl(var(--muted))]/80 border-b border-[color:hsl(var(--border))] z-[1000] backdrop-blur-sm transition-colors duration-200">
                     <EditorTabBar
                         tabs={state.tabs}
                         activeTabId={state.activeTabId}
@@ -511,7 +511,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                 {/* 🔥 ProjectSidebar 표시 - 헤더 아래 위치 조정 */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-14 w-64 h-[calc(100%-3.5rem)] z-[150] bg-white/98 dark:bg-gray-900/98 backdrop-blur-lg border-r border-gray-200 dark:border-gray-700 shadow-2xl transition-all duration-500 ease-in-out transform translate-x-0 pointer-events-auto animate-slide-in-left"
+                        className="absolute left-0 top-14 w-64 h-[calc(100%-3.5rem)] z-[150] bg-[color:hsl(var(--card))]/95 backdrop-blur-lg border-r border-[color:hsl(var(--border))] shadow-[var(--shadow-xl,0_22px_46px_rgba(15,23,42,0.32))] transition-all duration-500 ease-in-out transform translate-x-0 pointer-events-auto animate-slide-in-left"
                         onMouseEnter={() => {
                             Logger.debug('PROJECT_SIDEBAR', 'Hover area entered');
                             setSidebarHovered(true);
