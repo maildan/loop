@@ -1,6 +1,6 @@
 /* 🔥 Forest Theme - 자연 친화적이고 편안한 작업 환경 테마 */
 
-.forest {
+[data-theme="forest"] {
   /* 기본 배경 - 부드러운 포레스트 그린 */
   --background: 150 10% 96%;
   --foreground: 160 30% 15%;
@@ -56,7 +56,7 @@
 }
 
 /* 🔥 Midnight Theme - 야간 작업을 위한 깊고 부드러운 다크 테마 */
-.midnight {
+html.midnight {
   /* 기본 배경 - 깊은 미드나이트 블루 */
   --background: 220 25% 6%;
   --foreground: 220 15% 88%;

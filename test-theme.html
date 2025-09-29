@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" class="theme-light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>테마 테스트</title>
+  <style>
+    /* 기본 CSS Variables */
+    :root,
+    .theme-light {
+      --bg-primary: #fefcf7;
+      --text-primary: #0a0a0a;
+      --accent-primary: #2563eb;
+    }
+
+    .theme-dark {
+      --bg-primary: #0f1419;
+      --text-primary: #f8fafc;
+      --accent-primary: #3b82f6;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: system-ui, sans-serif;
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    button {
+      background-color: var(--accent-primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+
+    .test-box {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      padding: 1rem;
+      margin: 1rem 0;
+      border: 1px solid var(--accent-primary);
+      border-radius: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>테마 시스템 테스트</h1>
+  <p>현재 배경색이 제대로 나오면 CSS Variables가 작동하는 것입니다.</p>
+  
+  <div class="test-box">
+    <p>이 박스는 CSS Variables를 사용합니다:</p>
+    <ul>
+      <li>배경: var(--bg-primary)</li>
+      <li>텍스트: var(--text-primary)</li>
+      <li>강조: var(--accent-primary)</li>
+    </ul>
+  </div>
+
+  <button onclick="toggleTheme()">테마 전환</button>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('theme-dark');
+      
+      if (isDark) {
+        html.classList.remove('theme-dark');
+        html.classList.add('theme-light');
+      } else {
+        html.classList.remove('theme-light');
+        html.classList.add('theme-dark');
+      }
+    }
+  </script>
+</body>
+</html>

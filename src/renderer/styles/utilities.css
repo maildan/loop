@@ -486,11 +486,11 @@
 /* 🔥 프린트 유틸리티 */
 @media print {
   .print-hidden {
-    display: none !important;
+    display: none;
   }
   
   .print-visible {
-    display: block !important;
+    display: block;
   }
   
   .print-break-before {

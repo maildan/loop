@@ -6,6 +6,7 @@ module.exports = {
     "./src/main/**/*.{js,ts,jsx,tsx}",
     "./src/preload/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class', // 🎨 class 기반 다크 모드 활성화
   theme: {
     extend: {
       // 🔥 CSS 변수를 인식하도록 fontFamily 설정

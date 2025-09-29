@@ -1,7 +1,8 @@
 // React Router App: Main app component with routing structure
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 // import { Inter } from 'next/font/google'; // Removed Next.js font import
+import { themeManager } from '../utils/themeManager';
 import ClientLayout from '../app/ClientLayout';
 import Home from './routes/Home';
 import Analytics from './routes/Analytics';
@@ -24,6 +25,11 @@ const LAYOUT_STYLES = {
 } as const;
 
 export default function App(): React.ReactElement {
+  // 🎨 테마 매니저 초기화
+  useEffect(() => {
+    // setupSystemThemeListener는 ThemeProvider에서 처리됨
+  }, []);
+
   // read auth snapshot synchronously
   let initialAuth: any = null;
   try {

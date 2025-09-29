@@ -14,6 +14,9 @@
 /* 유틸리티 및 애니메이션 스타일 */
 @import './utilities.css';
 
+/* 🔥 확장 테마 시스템 (작가 친화적 테마들) */
+@import './themes/index.css';
+
 /* 🎯 모듈화 완료! 
    - base.css: TailwindCSS + 작가 친화적 Typography + HTML 기본 스타일
    - theme.css: 모든 CSS Variables (Light/Dark 테마)

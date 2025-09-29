@@ -1,7 +1,7 @@
 /* 🔥 Sepia Theme - 눈 피로 감소를 위한 따뜻한 세피아 테마 */
 
-/* Light variant */
-.sepia {
+/* Light variant - 🔥 Higher specificity for proper override */
+[data-theme="sepia"] {
   /* 기본 배경 - 따뜻한 세피아 톤 */
   --background: 42 25% 94%;
   --foreground: 30 50% 15%;
@@ -57,7 +57,7 @@
 }
 
 /* Dark variant */
-.sepia-dark {
+html[data-theme="sepia"]-dark {
   /* 기본 배경 - 다크 세피아 톤 */
   --background: 25 30% 8%;
   --foreground: 42 25% 85%;

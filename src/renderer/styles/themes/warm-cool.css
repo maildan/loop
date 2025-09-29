@@ -1,6 +1,6 @@
 /* 🔥 Warm Theme - 아늑하고 따뜻한 작업 환경을 위한 테마 */
 
-.warm {
+[data-theme="warm"] {
   /* 기본 배경 - 따뜻한 아이보리 */
   --background: 45 15% 97%;
   --foreground: 25 30% 12%;
@@ -56,7 +56,7 @@
 }
 
 /* 🔥 Cool Theme - 시원하고 집중력 향상을 위한 테마 */
-.cool {
+html.cool {
   /* 기본 배경 - 시원한 블루 그레이 */
   --background: 210 15% 97%;
   --foreground: 215 25% 12%;

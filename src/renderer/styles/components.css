@@ -445,9 +445,9 @@ iframe {
 /* Tooltips/popovers must be position-aware and not affect layout */
 .tooltip,
 .popover {
-  position: absolute !important;
+  position: absolute;
   max-width: 80vw;
-  white-space: normal !important;
+  white-space: normal;
 }
 
 /* 🔥 Focus Mode 스타일 - 사이드바/헤더/메인 관리 */

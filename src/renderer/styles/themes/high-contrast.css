@@ -1,6 +1,6 @@
 /* 🔥 High Contrast Theme - 최대 접근성과 가독성을 위한 고대비 테마 */
 
-.high-contrast {
+[data-theme="high-contrast"] {
   /* 기본 배경 - 순수 화이트와 블랙의 극대비 */
   --background: 0 0% 100%;
   --foreground: 0 0% 0%;
@@ -60,40 +60,40 @@
 }
 
 /* 🔥 고대비 테마 전용 스타일 강화 */
-.high-contrast *:focus {
-  outline: var(--focus-outline) !important;
-  outline-offset: var(--focus-outline-offset) !important;
+[data-theme="high-contrast"] *:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
-.high-contrast a {
-  color: #0000ff !important;
-  text-decoration: underline !important;
+[data-theme="high-contrast"] a {
+  color: #0000ff;
+  text-decoration: underline;
 }
 
-.high-contrast a:hover {
-  color: #0000cc !important;
-  background: #e6f0ff !important;
+[data-theme="high-contrast"] a:hover {
+  color: #0000cc;
+  background: #e6f0ff;
 }
 
-.high-contrast button {
-  border: 2px solid #000000 !important;
-  font-weight: 600 !important;
+[data-theme="high-contrast"] button {
+  border: 2px solid #000000;
+  font-weight: 600;
 }
 
-.high-contrast input,
-.high-contrast textarea,
-.high-contrast select {
-  border: 2px solid #000000 !important;
+[data-theme="high-contrast"] input,
+[data-theme="high-contrast"] textarea,
+[data-theme="high-contrast"] select {
+  border: 2px solid #000000;
 }
 
-.high-contrast .card,
-.high-contrast .popover {
-  border: 2px solid #000000 !important;
+[data-theme="high-contrast"] .card,
+[data-theme="high-contrast"] .popover {
+  border: 2px solid #000000;
 }
 
 /* 🔥 고대비 다크 변형도 지원 */
 @media (prefers-color-scheme: dark) {
-  .high-contrast[data-theme="system"] {
+  [data-theme="high-contrast"][data-theme="system"] {
     /* 다크 모드일 때 자동 전환 */
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
@@ -133,20 +133,20 @@
     --focus-outline: 3px solid #ffff00;
   }
 
-  .high-contrast[data-theme="system"] *:focus {
-    outline: var(--focus-outline) !important;
+  [data-theme="high-contrast"][data-theme="system"] *:focus {
+    outline: var(--focus-outline);
   }
 
-  .high-contrast[data-theme="system"] a {
-    color: #ffff00 !important;
+  [data-theme="high-contrast"][data-theme="system"] a {
+    color: #ffff00;
   }
 
-  .high-contrast[data-theme="system"] button,
-  .high-contrast[data-theme="system"] input,
-  .high-contrast[data-theme="system"] textarea,
-  .high-contrast[data-theme="system"] select,
-  .high-contrast[data-theme="system"] .card,
-  .high-contrast[data-theme="system"] .popover {
-    border-color: #ffffff !important;
+  [data-theme="high-contrast"][data-theme="system"] button,
+  [data-theme="high-contrast"][data-theme="system"] input,
+  [data-theme="high-contrast"][data-theme="system"] textarea,
+  [data-theme="high-contrast"][data-theme="system"] select,
+  [data-theme="high-contrast"][data-theme="system"] .card,
+  [data-theme="high-contrast"][data-theme="system"] .popover {
+    border-color: #ffffff;
   }
 }

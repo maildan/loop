@@ -1,7 +1,7 @@
 /* 🔥 Writer Focus Theme - 최고 가독성과 집중을 위한 테마 */
 
-/* Light variant */
-.writer-focus {
+/* Light variant - 🔥 Data attribute approach for clean CSS */
+[data-theme="writer-focus"] {
   /* 기본 배경 - 순수한 화이트 (종이 느낌) */
   --background: 0 0% 100%;
   --foreground: 0 0% 5%;
@@ -48,8 +48,8 @@
   --border-dark: #d4d4d4;
 }
 
-/* Dark variant */
-.writer-focus-dark {
+/* Dark variant - 🔥 Higher specificity for proper override */
+html.writer-focus-dark {
   /* 기본 배경 - 진한 차콜 (순수 검정 피하기) */
   --background: 0 0% 8%;
   --foreground: 0 0% 95%;

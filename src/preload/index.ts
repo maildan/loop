@@ -134,8 +134,82 @@ const electronAPI: ElectronAPI = {
   },
 
   theme: {
-    get: () => ipcRenderer.invoke('theme:get'),
-    set: (theme: Theme) => ipcRenderer.invoke('theme:set', theme),
+    get: async () => {
+      const response = await ipcRenderer.invoke('settings:get', 'app.theme');
+      if (response.success) {
+        const theme = response.data;
+        // BasicTheme만 반환 (light, dark, system)
+        if (theme === 'light' || theme === 'dark' || theme === 'system') {
+          return {
+            success: true,
+            data: theme,
+            timestamp: new Date()
+          };
+        }
+      }
+      return {
+        success: true,
+        data: 'light' as 'light' | 'dark' | 'system', // 기본값
+        timestamp: new Date()
+      };
+    },
+    set: async (theme: 'light' | 'dark' | 'system') => {
+      const response = await ipcRenderer.invoke('settings:set', 'app.theme', theme);
+      return {
+        success: response.success,
+        data: response.success,
+        timestamp: new Date()
+      };
+    },
+    onChange: (callback: (theme: 'light' | 'dark') => void) => {
+      const handleSettingsChange = (_event: Electron.IpcRendererEvent, change: { keyPath: string, value: unknown }) => {
+        if (change.keyPath === 'app.theme') {
+          let resolvedTheme: 'light' | 'dark';
+          if (change.value === 'system') {
+            resolvedTheme = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+          } else if (change.value === 'light' || change.value === 'dark') {
+            resolvedTheme = change.value;
+          } else {
+            resolvedTheme = 'light'; // 기본값
+          }
+          callback(resolvedTheme);
+        }
+      };
+      ipcRenderer.on('settings:changed', handleSettingsChange);
+      return () => ipcRenderer.removeListener('settings:changed', handleSettingsChange);
+    },
+    onSystemChange: (callback: (shouldUseDarkColors: boolean) => void) => {
+      if (!nativeTheme || typeof nativeTheme.on !== 'function' || typeof nativeTheme.off !== 'function') {
+        return () => {
+          // no-op when nativeTheme is unavailable
+        };
+      }
+
+      const handleSystemThemeChange = () => {
+        try {
+          callback(Boolean(nativeTheme.shouldUseDarkColors));
+        } catch (error) {
+          console.error('🚨 Failed to propagate system theme change:', error);
+        }
+      };
+
+      try {
+        nativeTheme.on('updated', handleSystemThemeChange);
+      } catch (error) {
+        console.error('🚨 Failed to subscribe to nativeTheme updates:', error);
+        return () => {
+          // subscription failed, no-op cleanup
+        };
+      }
+
+      return () => {
+        try {
+          nativeTheme.off('updated', handleSystemThemeChange);
+        } catch (error) {
+          console.error('🚨 Failed to unsubscribe nativeTheme listener:', error);
+        }
+      };
+    },
   },
 
   settings: {

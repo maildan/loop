@@ -278,6 +278,8 @@ export interface ElectronAPI {
   theme: {
     get: () => Promise<IpcResponse<'light' | 'dark' | 'system'>>;
     set: (theme: 'light' | 'dark' | 'system') => Promise<IpcResponse<boolean>>;
+    onChange: (callback: (theme: 'light' | 'dark') => void) => void;
+    onSystemChange: (callback: (shouldUseDarkColors: boolean) => void) => void;
   };
 
   // 🐚 Shell API (외부 링크 및 파일 탐색기)

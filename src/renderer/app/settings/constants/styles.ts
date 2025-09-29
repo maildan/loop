@@ -8,9 +8,8 @@
  * - 조건부 스타일링 방지로 리렌더링 감소
  */
 export const SETTINGS_PAGE_STYLES = {
-  // 메인 컨테이너
-  // Use full width with a max-width to avoid flex overflow inside the app layout
-  container: 'w-full max-w-4xl mx-auto px-4 py-6 space-y-6 min-w-0',
+  // 메인 컨테이너 - 스크롤 문제 해결: 단일 스크롤 영역으로 통합
+  container: 'w-full max-w-4xl mx-auto px-4 py-6 space-y-6 min-w-0 flex-1 overflow-y-auto',
   pageTitle: 'text-3xl font-bold text-slate-900 dark:text-slate-100 mb-6',
 
   // 네비게이션
@@ -19,7 +18,7 @@ export const SETTINGS_PAGE_STYLES = {
   navButtonActive: 'bg-blue-600 text-white shadow-md',
   navButtonInactive: 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700',
 
-  // 섹션
+  // 섹션 - 이중 스크롤 제거: 일반 flow로 변경
   section: 'space-y-6',
   sectionCard: 'bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700 p-6',
   sectionHeader: 'flex items-center gap-3 mb-4 pb-3 border-b border-slate-200 dark:border-slate-700',

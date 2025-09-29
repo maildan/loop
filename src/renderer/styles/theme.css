@@ -1,7 +1,8 @@
-/* 🔥 기가차드 테마 시스템 - 완전한 CSS Variables */
+/* 🔥 기가차드 테마 시스템 - Root Class + CSS Variables */
 
-/* 🔥 CSS Variables for Tailwind v3 Compatibility */
-:root {
+/* 🔥 기본 테마 (Light Mode) */
+:root,
+.theme-light {
   /* 기가차드 컬러 시스템 */
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
@@ -236,7 +237,8 @@
   --max-width-container: 1200px;
 }
 
-.dark {
+/* 🔥 다크 테마 */
+.theme-dark {
   --background: 222.2 84% 4.9%;
   --foreground: 210 40% 98%;
   --card: 222.2 84% 4.9%;
@@ -299,6 +301,3 @@
   --error: #ef4444;
   --error-light: #7f1d1d;
 }
-
-/* 🔥 확장 테마 시스템 Import */
-@import './themes/index.css';

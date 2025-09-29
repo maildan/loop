@@ -62,7 +62,7 @@
 
 /* Writer Focus 테마 - 최적화된 타이포그래피 */
 .writer-focus,
-.writer-focus-dark {
+html.writer-focus-dark {
   font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -71,32 +71,32 @@
 
 /* Sepia 테마 - 따뜻한 필터 효과 */
 .sepia,
-.sepia-dark {
+html.sepia-dark {
   filter: sepia(0.05) hue-rotate(5deg) saturate(1.1);
 }
 
 /* Warm 테마 - 따뜻한 분위기 */
-.warm {
+html.warm {
   filter: hue-rotate(5deg) saturate(1.05) brightness(1.02);
 }
 
 /* Cool 테마 - 시원한 분위기 */
-.cool {
+html.cool {
   filter: hue-rotate(-5deg) saturate(1.05) brightness(0.98);
 }
 
 /* Forest 테마 - 자연스러운 색감 */
-.forest {
+html.forest {
   filter: hue-rotate(10deg) saturate(1.1);
 }
 
 /* Midnight 테마 - 부드러운 다크 */
-.midnight {
+html.midnight {
   filter: brightness(0.95) contrast(1.05);
 }
 
 /* High Contrast 테마 - 접근성 최적화 (필터 없음) */
-.high-contrast {
+html.high-contrast {
   filter: contrast(1.2);
 }
 
@@ -125,7 +125,7 @@
 /* 저운동성 모드시 애니메이션 비활성화 */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    transition: none !important;
+    transition: none;
   }
   
   .writer-focus,
@@ -137,7 +137,7 @@
   .forest,
   .midnight,
   .high-contrast {
-    filter: none !important;
+    filter: none;
   }
 }
 
