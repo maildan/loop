@@ -5,21 +5,21 @@ import { X as XIcon, AlertTriangle } from 'lucide-react';
 
 // 🔥 범용 확인 다이얼로그 스타일
 const CONFIRM_DIALOG_STYLES = {
-    overlay: 'fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50',
-    dialog: 'bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden',
-    header: 'flex items-center gap-3 p-6 border-b border-slate-200 dark:border-slate-700',
-    icon: 'w-8 h-8 text-red-500 flex-shrink-0',
+    overlay: 'fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm',
+    dialog: 'mx-4 w-full max-w-md overflow-hidden rounded-xl border border-border bg-card text-foreground shadow-2xl',
+    header: 'flex items-center gap-3 border-b border-border/60 bg-muted/50 p-6',
+    icon: 'h-8 w-8 flex-shrink-0 text-[var(--warning)]',
     headerText: 'flex-1',
-    title: 'text-lg font-bold text-slate-900 dark:text-slate-100',
-    message: 'text-sm text-slate-600 dark:text-slate-400 mt-1',
-    closeButton: 'w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors',
-    content: 'p-6',
-    description: 'text-slate-700 dark:text-slate-300 leading-relaxed mb-4',
-    itemName: 'font-semibold text-slate-900 dark:text-slate-100',
-    warning: 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-800 dark:text-red-200',
-    footer: 'flex items-center justify-end gap-3 p-6 border-t border-slate-200 dark:border-slate-700',
-    cancelButton: 'px-4 py-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors',
-    confirmButton: 'px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-medium',
+    title: 'text-lg font-bold text-foreground',
+    message: 'mt-1 text-sm text-muted-foreground',
+    closeButton: 'flex h-8 w-8 items-center justify-center rounded-lg transition-colors hover:bg-muted/60',
+    content: 'bg-card p-6',
+    description: 'mb-4 text-sm leading-relaxed text-foreground/80',
+    itemName: 'font-semibold text-foreground',
+    warning: 'rounded-lg border border-[var(--warning)] bg-[var(--warning-light)] p-3 text-sm text-[var(--warning)]',
+    footer: 'flex items-center justify-end gap-3 border-t border-border/60 bg-muted/40 p-6',
+    cancelButton: 'rounded-lg px-4 py-2 text-muted-foreground transition-colors hover:bg-muted/60 hover:text-foreground',
+    confirmButton: 'rounded-lg px-4 py-2 font-medium transition-colors bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))] hover:bg-[hsl(var(--destructive))]/85',
 } as const;
 
 interface ConfirmDialogProps {

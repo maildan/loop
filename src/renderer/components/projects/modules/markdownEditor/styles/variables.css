@@ -2,14 +2,14 @@
 
 :root {
   /* 🔥 작가 친화적 색상 팔레트 */
-  --editor-bg: #ffffff;
-  --editor-bg-secondary: #f8fafc;
-  --editor-text: #334155;
-  --editor-text-muted: #64748b;
-  --editor-text-light: #94a3b8;
-  --editor-border: #e2e8f0;
-  --editor-accent: #6366f1;
-  --editor-accent-light: rgba(99, 102, 241, 0.1);
+  --editor-bg: hsl(var(--card));
+  --editor-bg-secondary: hsl(var(--muted));
+  --editor-text: hsl(var(--foreground));
+  --editor-text-muted: hsl(var(--muted-foreground));
+  --editor-text-light: hsl(var(--muted-foreground));
+  --editor-border: hsl(var(--border));
+  --editor-accent: var(--accent-primary);
+  --editor-accent-light: var(--accent-light);
 
   /* 🔥 FIXED: active 상태 색상을 중성적인 색으로 변경 */
   --button-active: rgba(148, 163, 184, 0.2); /* 기존 보라색 대신 회색 */
@@ -33,14 +33,14 @@
 
 /* 🌙 다크 모드 색상 */
 [data-theme="dark"] {
-  --editor-bg: #0f172a;
-  --editor-bg-secondary: #1e293b;
-  --editor-text: #f1f5f9;
-  --editor-text-muted: #94a3b8;
-  --editor-text-light: #64748b;
-  --editor-border: #334155;
-  --editor-accent: #818cf8;
-  --editor-accent-light: rgba(129, 140, 248, 0.15);
+  --editor-bg: hsl(var(--card));
+  --editor-bg-secondary: hsl(var(--muted));
+  --editor-text: hsl(var(--foreground));
+  --editor-text-muted: hsl(var(--muted-foreground));
+  --editor-text-light: hsl(var(--muted-foreground));
+  --editor-border: hsl(var(--border));
+  --editor-accent: var(--accent-primary);
+  --editor-accent-light: var(--accent-light);
 
   /* 🔥 다크 모드에서도 중성적인 active 색상 */
   --button-active: rgba(148, 163, 184, 0.25);
