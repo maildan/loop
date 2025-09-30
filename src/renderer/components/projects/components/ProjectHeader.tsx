@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import type { Editor } from '@tiptap/react';
 import { 
   ArrowLeft, 
@@ -28,17 +28,18 @@ import {
 import { Logger } from '../../../../shared/logger';
 import { useSettings } from '../../../app/settings/hooks/useSettings';
 import { useDynamicFont } from '../../../hooks/useDynamicFont';
+import { Tooltip } from '../../ui/Tooltip';
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
-  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex items-center px-4 gap-1 text-[color:var(--toolbar-foreground)]',
-  section: 'flex items-center gap-1',
+  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex items-center px-3 gap-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm',
+  section: 'flex items-center gap-1.5',
   divider: 'w-px h-6 bg-[color:var(--toolbar-divider)] opacity-70 mx-2',
-  button: 'h-8 px-2 rounded text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  buttonActive: 'h-8 px-2 rounded bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  dropdown: 'h-8 px-3 rounded text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center gap-2 text-sm border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)] shadow-sm',
-  backButton: 'h-8 w-8 rounded text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  colorButton: 'h-8 w-8 rounded text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-center relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  button: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  buttonActive: 'h-8 px-2.5 rounded-md bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-xs font-semibold shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  dropdown: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center gap-1.5 text-xs font-medium border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 backdrop-blur-sm',
+  backButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  colorButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-center relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
 } as const;
 
 // 🎨 사용자 정의 폰트 크기 입력 범위
@@ -56,6 +57,19 @@ const LINE_HEIGHT_RANGE = {
   step: 0.1,
   default: 1.5
 } as const;
+
+const FONT_SCOPE_OPTIONS = [
+  {
+    value: 'document' as const,
+    label: '전체',
+    description: '문서 전체에 폰트를 적용합니다.'
+  },
+  {
+    value: 'selection' as const,
+    label: '선택',
+    description: '선택한 텍스트에만 폰트를 적용합니다.'
+  }
+] as const;
 
 interface ProjectHeaderProps {
   title: string;
@@ -96,6 +110,8 @@ export function ProjectHeader({
     error: fontError
   } = useDynamicFont();
 
+  const previousScopeRef = useRef(editorFontScope);
+
   const activeFont = useMemo(() => {
     if (editorFontScope === 'selection') {
       return selectionScopedFont ?? editorFont ?? appFont;
@@ -109,6 +125,37 @@ export function ProjectHeader({
       setSelectionScopedFont(null);
     }
   }, [editorFontScope]);
+
+  const clearDocumentFontMarks = useCallback(() => {
+    if (!editor) {
+      return;
+    }
+
+    const { from, to } = editor.state.selection;
+    const wasFocused = editor.isFocused;
+
+    editor.chain().focus().selectAll().unsetFontFamily().run();
+
+    if (wasFocused) {
+      editor.chain().focus().setTextSelection({ from, to }).run();
+    } else {
+      editor.chain().setTextSelection({ from, to }).run();
+      editor.view.dom.blur();
+    }
+  }, [editor]);
+
+  useEffect(() => {
+    if (!editor) {
+      previousScopeRef.current = editorFontScope;
+      return;
+    }
+
+    if (editorFontScope === 'document' && previousScopeRef.current === 'selection') {
+      clearDocumentFontMarks();
+    }
+
+    previousScopeRef.current = editorFontScope;
+  }, [clearDocumentFontMarks, editor, editorFontScope]);
   
   // 🔥 설정 시스템 연동 (optional)
   const settingsResult = useSettings();
@@ -259,6 +306,7 @@ export function ProjectHeader({
     if (editorFontScope === 'document') {
       setEditorFont(fontFamily);
       setSelectionScopedFont(null);
+      clearDocumentFontMarks();
     } else {
       setSelectionScopedFont(fontFamily);
     }
@@ -307,7 +355,7 @@ export function ProjectHeader({
         fontFamily
       });
     }
-  }, [editor, editorFontScope, getSimplifiedFontName, setEditorFont]);
+  }, [clearDocumentFontMarks, editor, editorFontScope, getSimplifiedFontName, setEditorFont]);
 
   const handleFontSize = useCallback((fontSize: number) => {
     if (!editor) {
@@ -401,24 +449,26 @@ export function ProjectHeader({
 
       {/* 🔥 왼쪽 영역 - History (Undo/Redo) */}
       <div className={TOOLBAR_STYLES.section}>
-        <button
-          type="button"
-          onClick={handleUndo}
-          disabled={!editorState.canUndo}
-          className={`${TOOLBAR_STYLES.button} ${!editorState.canUndo ? 'opacity-50 cursor-not-allowed' : ''}`}
-          title="실행 취소"
-        >
-          <Undo2 size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleRedo}
-          disabled={!editorState.canRedo}
-          className={`${TOOLBAR_STYLES.button} ${!editorState.canRedo ? 'opacity-50 cursor-not-allowed' : ''}`}
-          title="다시 실행"
-        >
-          <Redo2 size={16} />
-        </button>
+        <Tooltip content="실행 취소 (⌘Z)" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleUndo}
+            disabled={!editorState.canUndo}
+            className={`${TOOLBAR_STYLES.button} ${!editorState.canUndo ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            <Undo2 size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="다시 실행 (⇧⌘Z)" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleRedo}
+            disabled={!editorState.canRedo}
+            className={`${TOOLBAR_STYLES.button} ${!editorState.canRedo ? 'opacity-50 cursor-not-allowed' : ''}`}
+          >
+            <Redo2 size={16} />
+          </button>
+        </Tooltip>
       </div>
 
       <div className={TOOLBAR_STYLES.divider} />
@@ -480,29 +530,36 @@ export function ProjectHeader({
 
       {/* 🔥 폰트 적용 범위 토글 */}
       <div className={`${TOOLBAR_STYLES.section} ml-1`}>
-        <div className="flex items-center overflow-hidden rounded-md border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)] text-[color:var(--toolbar-muted)]">
-          <button
-            type="button"
-            onClick={() => setEditorFontScope('document')}
-            className={`px-2 py-1 text-xs transition-colors ${
-              editorFontScope === 'document'
-                ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)]'
-                : 'hover:bg-[var(--toolbar-hover-bg)]'
-            }`}
-          >
-            문서 전체
-          </button>
-          <button
-            type="button"
-            onClick={() => setEditorFontScope('selection')}
-            className={`px-2 py-1 text-xs transition-colors border-l border-[color:var(--toolbar-border)] ${
-              editorFontScope === 'selection'
-                ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)]'
-                : 'hover:bg-[var(--toolbar-hover-bg)]'
-            }`}
-          >
-            선택 영역
-          </button>
+        <div className="flex items-center overflow-hidden rounded-md border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 text-[color:var(--toolbar-muted)]">
+          {FONT_SCOPE_OPTIONS.map((option, index) => {
+            const isActive = editorFontScope === option.value;
+
+            return (
+              <Tooltip
+                key={option.value}
+                content={
+                  <div className="flex flex-col gap-0.5">
+                    <span className="font-semibold">{option.label}</span>
+                    <span className="text-xs opacity-80">{option.description}</span>
+                  </div>
+                }
+                side="bottom"
+                sideOffset={8}
+              >
+                <button
+                  type="button"
+                  onClick={() => setEditorFontScope(option.value)}
+                  className={`px-2.5 py-1 flex items-center gap-1 text-xs font-medium transition-colors ${
+                    isActive
+                      ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)] shadow-inner'
+                      : 'text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)]'
+                  } ${index > 0 ? 'border-l border-[color:var(--toolbar-border)]/70' : ''}`}
+                >
+                  {option.label}
+                </button>
+              </Tooltip>
+            );
+          })}
         </div>
       </div>
 
@@ -541,20 +598,27 @@ export function ProjectHeader({
                 />
               </div>
               <div className="grid grid-cols-2 gap-1">
-                {[12, 14, 16, 18, 20, 24].map((size) => (
-                  <button
-                    key={size}
-                    type="button"
-                    onClick={() => {
-                      setCustomFontSize(size);
-                      handleFontSize(size);
-                      setShowSizeDropdown(false);
-                    }}
-                    className="px-2 py-1 text-xs rounded transition-colors hover:bg-[var(--editor-accent-light)]"
-                  >
-                    {size}
-                  </button>
-                ))}
+                {[12, 14, 16, 18, 20, 24].map((size) => {
+                  const isPresetActive = Math.abs(customFontSize - size) < 0.001;
+                  return (
+                    <button
+                      key={size}
+                      type="button"
+                      onClick={() => {
+                        setCustomFontSize(size);
+                        handleFontSize(size);
+                        setShowSizeDropdown(false);
+                      }}
+                      className={`px-2 py-1 text-xs rounded transition-colors ${
+                        isPresetActive
+                          ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)] shadow-inner'
+                          : 'hover:bg-[var(--editor-accent-light)]'
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -596,20 +660,27 @@ export function ProjectHeader({
                 />
               </div>
               <div className="grid grid-cols-2 gap-1">
-                {[1.0, 1.2, 1.5, 1.8, 2.0, 2.5].map((height) => (
-                  <button
-                    key={height}
-                    type="button"
-                    onClick={() => {
-                      setCustomLineHeight(height);
-                      handleLineHeight(height);
-                      setShowLineHeightDropdown(false);
-                    }}
-                    className="px-2 py-1 text-xs rounded transition-colors hover:bg-[var(--editor-accent-light)]"
-                  >
-                    {height}
-                  </button>
-                ))}
+                {[1.0, 1.2, 1.5, 1.8, 2.0, 2.5].map((height) => {
+                  const isPresetActive = Math.abs(customLineHeight - height) < 0.001;
+                  return (
+                    <button
+                      key={height}
+                      type="button"
+                      onClick={() => {
+                        setCustomLineHeight(height);
+                        handleLineHeight(height);
+                        setShowLineHeightDropdown(false);
+                      }}
+                      className={`px-2 py-1 text-xs rounded transition-colors ${
+                        isPresetActive
+                          ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)] shadow-inner'
+                          : 'hover:bg-[var(--editor-accent-light)]'
+                      }`}
+                    >
+                      {height}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
@@ -620,128 +691,141 @@ export function ProjectHeader({
 
       {/* 🔥 중앙 영역 - 기본 서식 */}
       <div className={TOOLBAR_STYLES.section}>
-        <button
-          type="button"
-          onClick={handleBold}
-          className={editorState.isBold ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="굵게"
-        >
-          <Bold size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleItalic}
-          className={editorState.isItalic ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="기울임"
-        >
-          <Italic size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleUnderline}
-          className={editorState.isUnderline ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="밑줄"
-        >
-          <Underline size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleStrike}
-          className={editorState.isStrike ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="취소선"
-        >
-          <Strikethrough size={16} />
-        </button>
+        <Tooltip content="굵게 (⌘B)" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleBold}
+            className={editorState.isBold ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <Bold size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="기울임 (⌘I)" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleItalic}
+            className={editorState.isItalic ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <Italic size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="밑줄 (⌘U)" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleUnderline}
+            className={editorState.isUnderline ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <Underline size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="취소선" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleStrike}
+            className={editorState.isStrike ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <Strikethrough size={16} />
+          </button>
+        </Tooltip>
       </div>
 
       <div className={TOOLBAR_STYLES.divider} />
 
       {/* 🔥 중앙 영역 - 색상 및 하이라이트 */}
       <div className={TOOLBAR_STYLES.section}>
-        <button
-          type="button"
-          onClick={handleTextColor}
-          className={TOOLBAR_STYLES.colorButton}
-          title="텍스트 색상"
-        >
-          <Type size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleHighlight}
-          className={editorState.isHighlight ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="형광펜"
-        >
-          <Highlighter size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleLink}
-          className={editorState.isLink ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="링크"
-        >
-          <Link size={16} />
-        </button>
+        <Tooltip content="텍스트 색상" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleTextColor}
+            className={TOOLBAR_STYLES.colorButton}
+          >
+            <Type size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="형광펜" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleHighlight}
+            className={editorState.isHighlight ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <Highlighter size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="링크" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleLink}
+            className={editorState.isLink ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <Link size={16} />
+          </button>
+        </Tooltip>
       </div>
 
       <div className={TOOLBAR_STYLES.divider} />
 
       {/* 🔥 오른쪽 영역 - 정렬 */}
       <div className={TOOLBAR_STYLES.section}>
-        <button
-          type="button"
-          onClick={() => handleAlign('left')}
-          className={editorState.isLeftAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="왼쪽 정렬"
-        >
-          <AlignLeft size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => handleAlign('center')}
-          className={editorState.isCenterAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="가운데 정렬"
-        >
-          <AlignCenter size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => handleAlign('right')}
-          className={editorState.isRightAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="오른쪽 정렬"
-        >
-          <AlignRight size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={() => handleAlign('justify')}
-          className={editorState.isJustifyAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="양쪽 정렬"
-        >
-          <AlignJustify size={16} />
-        </button>
+        <Tooltip content="왼쪽 정렬" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={() => handleAlign('left')}
+            className={editorState.isLeftAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <AlignLeft size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="가운데 정렬" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={() => handleAlign('center')}
+            className={editorState.isCenterAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <AlignCenter size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="오른쪽 정렬" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={() => handleAlign('right')}
+            className={editorState.isRightAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <AlignRight size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="양쪽 정렬" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={() => handleAlign('justify')}
+            className={editorState.isJustifyAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <AlignJustify size={16} />
+          </button>
+        </Tooltip>
       </div>
 
       <div className={TOOLBAR_STYLES.divider} />
 
       {/* 🔥 오른쪽 영역 - 리스트 */}
       <div className={TOOLBAR_STYLES.section}>
-        <button
-          type="button"
-          onClick={handleBulletList}
-          className={editorState.isBulletList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="글머리 기호"
-        >
-          <List size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleOrderedList}
-          className={editorState.isOrderedList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="번호 매기기"
-        >
-          <ListOrdered size={16} />
-        </button>
+        <Tooltip content="글머리 기호" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleBulletList}
+            className={editorState.isBulletList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <List size={16} />
+          </button>
+        </Tooltip>
+        <Tooltip content="번호 매기기" side="bottom" sideOffset={6}>
+          <button
+            type="button"
+            onClick={handleOrderedList}
+            className={editorState.isOrderedList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          >
+            <ListOrdered size={16} />
+          </button>
+        </Tooltip>
       </div>
 
       <div className={TOOLBAR_STYLES.divider} />
