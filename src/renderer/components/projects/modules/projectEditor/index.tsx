@@ -442,11 +442,13 @@ export const ProjectEditor = memo(function ProjectEditor({
         tabsCount: state.tabs.length
     });
 
+    const isWriteView = state.currentView === 'write';
+
     return (
-    <ProjectEditorLayout.Container className="relative overflow-x-hidden">
-            {/* 🔥 ProjectHeader 고정 영역 */}
-            <div className="h-14 relative bg-[color:hsl(var(--card))] border-b border-[color:hsl(var(--border))] shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))] z-[900] transition-colors duration-200">
-                <ProjectEditorLayout.Header>
+        <ProjectEditorLayout.Container className="relative overflow-x-hidden">
+            {/* 🔥 헤더 + 탭바를 하나의 스티키 영역으로 구성하여 안정적인 레이어링 확보 */}
+            <div className="sticky top-0 z-[1300] flex flex-col bg-[color:hsl(var(--card))] transition-colors duration-200 shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))]">
+                <ProjectEditorLayout.Header className="min-h-[3.5rem] shadow-none">
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
                         onTitleChange={(title) => {
@@ -465,11 +467,15 @@ export const ProjectEditor = memo(function ProjectEditor({
                         onToggleSidebar={toggleSidebar}
                     />
                 </ProjectEditorLayout.Header>
-            </div>
 
-            {/* 🔥 EditorTabBar - ProjectHeader와 동일한 레벨에서 렌더링 */}
-            {state.currentView === 'write' && (
-                <div className="h-12 sticky top-14 bg-[color:hsl(var(--muted))]/80 border-b border-[color:hsl(var(--border))] z-[1300] backdrop-blur-sm transition-colors duration-200 shadow-[var(--shadow-md,0_10px_30px_rgba(15,23,42,0.18))]">
+                {/* 🔥 EditorTabBar - 헤더 바로 아래에 배치하여 상단에서 항상 노출 (뷰 전환 시에도 DOM 안정성 유지) */}
+                <div
+                    aria-hidden={!isWriteView}
+                    className={`overflow-hidden backdrop-blur-sm transition-all duration-200 border-b ${isWriteView
+                        ? 'h-12 bg-[color:hsl(var(--muted))]/85 border-[color:hsl(var(--border))] opacity-100'
+                        : 'h-0 opacity-0 border-transparent pointer-events-none'
+                    }`}
+                >
                     <EditorTabBar
                         tabs={state.tabs}
                         activeTabId={state.activeTabId}
@@ -487,7 +493,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                         }}
                     />
                 </div>
-            )}
+            </div>
 
             {/* 🔥 메인 컨텐츠 영역 */}
             <ProjectEditorLayout.Main>
@@ -511,7 +517,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                 {/* 🔥 ProjectSidebar 표시 - 헤더 아래 위치 조정 */}
                 {sidebarHovered && isSidebarCollapsed && (
                     <div
-                        className="absolute left-0 top-14 w-64 h-[calc(100%-3.5rem)] z-[150] bg-[color:hsl(var(--card))]/95 backdrop-blur-lg border-r border-[color:hsl(var(--border))] shadow-[var(--shadow-xl,0_22px_46px_rgba(15,23,42,0.32))] transition-all duration-500 ease-in-out transform translate-x-0 pointer-events-auto animate-slide-in-left"
+                        className="absolute left-0 top-0 w-64 h-full z-[150] bg-[color:hsl(var(--card))]/95 backdrop-blur-lg border-r border-[color:hsl(var(--border))] shadow-[var(--shadow-xl,0_22px_46px_rgba(15,23,42,0.32))] transition-all duration-500 ease-in-out transform translate-x-0 pointer-events-auto animate-slide-in-left"
                         onMouseEnter={() => {
                             Logger.debug('PROJECT_SIDEBAR', 'Hover area entered');
                             setSidebarHovered(true);

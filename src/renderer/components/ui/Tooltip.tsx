@@ -1,11 +1,11 @@
 'use client';
 
-import React, { ReactNode, useState, useRef, useEffect, cloneElement, isValidElement } from 'react';
+import React, { ReactNode, useState, useRef, useEffect, useId } from 'react';
 import { Logger } from '../../../shared/logger';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const TOOLTIP_STYLES = {
-  trigger: 'inline-block relative',
+  trigger: 'relative inline-flex items-center justify-center align-middle',
   tooltip: 'absolute z-50 px-3 py-2 text-xs font-medium text-white bg-slate-900 rounded-md shadow-lg whitespace-nowrap pointer-events-none transition-opacity duration-200',
   arrow: 'absolute w-2 h-2 bg-slate-900 transform rotate-45',
   positions: {
@@ -71,9 +71,8 @@ export function Tooltip({
 }: TooltipProps): React.ReactElement {
   const [internalOpen, setInternalOpen] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
-  const triggerRef = useRef<HTMLElement>(null);
-  const tooltipRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const tooltipId = useId();
 
   const isOpen = controlledOpen !== undefined ? controlledOpen : internalOpen;
   const isControlled = controlledOpen !== undefined;
@@ -153,23 +152,6 @@ export function Tooltip({
     }
   };
 
-  // children에 이벤트 핸들러 추가
-  const triggerElement = isValidElement(children) 
-    ? (() => {
-        const child = children as React.ReactElement<Record<string, unknown>>;
-        const childProps = (child.props || {}) as Record<string, unknown>;
-        return cloneElement(child as React.ReactElement<any>, {
-          onMouseEnter: (e: React.MouseEvent) => { (childProps.onMouseEnter as ((e: React.MouseEvent)=>void) | undefined)?.(e); handleMouseEnter(); },
-          onMouseLeave: (e: React.MouseEvent) => { (childProps.onMouseLeave as ((e: React.MouseEvent)=>void) | undefined)?.(e); handleMouseLeave(); },
-          onClick: (e: React.MouseEvent) => { (childProps.onClick as ((e: React.MouseEvent)=>void) | undefined)?.(e); handleClick(); },
-          onFocus: (e: React.FocusEvent) => { (childProps.onFocus as ((e: React.FocusEvent)=>void) | undefined)?.(e); handleFocus(); },
-          onBlur: (e: React.FocusEvent) => { (childProps.onBlur as ((e: React.FocusEvent)=>void) | undefined)?.(e); handleBlur(); },
-          onKeyDown: (e: React.KeyboardEvent) => { (childProps.onKeyDown as ((e: React.KeyboardEvent)=>void) | undefined)?.(e); handleKeyDown(e); },
-          'aria-describedby': isOpen ? 'tooltip' : undefined,
-        });
-      })()
-    : children;
-
   // Tooltip 스타일 계산
   const tooltipClassName = cn(
     TOOLTIP_STYLES.tooltip,
@@ -186,16 +168,28 @@ export function Tooltip({
   );
 
   if (!mounted) {
-    return <div className={TOOLTIP_STYLES.trigger}>{children}</div>;
+    return (
+      <div className={TOOLTIP_STYLES.trigger}>
+        {children}
+      </div>
+    );
   }
 
   return (
-    <div className={TOOLTIP_STYLES.trigger}>
-      {triggerElement}
+    <div
+      className={TOOLTIP_STYLES.trigger}
+      aria-describedby={isOpen ? tooltipId : undefined}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onKeyDown={handleKeyDown}
+    >
+      {children}
       {isOpen && content && (
         <div
-          ref={tooltipRef}
-          id="tooltip"
+          id={tooltipId}
           role="tooltip"
           className={tooltipClassName}
           style={{

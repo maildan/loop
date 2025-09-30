@@ -20,7 +20,7 @@ export const WRITER_EDITOR_STYLES = {
     headerRight: 'flex items-center gap-2',
 
     // 메인 레이아웃
-    main: 'flex flex-1 overflow-hidden',
+    main: 'relative flex flex-1 overflow-hidden',
 
     // 🔥 에디터 영역 수정 (한줄 문제, 스크롤 제한 해결)
     editorContainer: 'flex-1 flex flex-col h-full bg-[color:hsl(var(--background))] transition-colors duration-200',

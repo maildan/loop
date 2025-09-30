@@ -126,6 +126,39 @@ export function ProjectHeader({
     }
   }, [editorFontScope]);
 
+  const handleToggleFontDropdown = useCallback(() => {
+    setShowFontDropdown((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowSizeDropdown(false);
+        setShowLineHeightDropdown(false);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleToggleSizeDropdown = useCallback(() => {
+    setShowSizeDropdown((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowFontDropdown(false);
+        setShowLineHeightDropdown(false);
+      }
+      return next;
+    });
+  }, []);
+
+  const handleToggleLineHeightDropdown = useCallback(() => {
+    setShowLineHeightDropdown((prev) => {
+      const next = !prev;
+      if (next) {
+        setShowFontDropdown(false);
+        setShowSizeDropdown(false);
+      }
+      return next;
+    });
+  }, []);
+
   const clearDocumentFontMarks = useCallback(() => {
     if (!editor) {
       return;
@@ -478,7 +511,7 @@ export function ProjectHeader({
         <div className="relative">
           <button
             type="button"
-            onClick={() => setShowFontDropdown(!showFontDropdown)}
+            onClick={handleToggleFontDropdown}
             className={TOOLBAR_STYLES.dropdown}
             title="폰트 선택"
           >
@@ -577,7 +610,7 @@ export function ProjectHeader({
         <div className="relative">
           <button
             type="button"
-            onClick={() => setShowSizeDropdown(!showSizeDropdown)}
+            onClick={handleToggleSizeDropdown}
             className={TOOLBAR_STYLES.dropdown}
             title="폰트 크기"
           >
@@ -639,7 +672,7 @@ export function ProjectHeader({
         <div className="relative">
           <button
             type="button"
-            onClick={() => setShowLineHeightDropdown(!showLineHeightDropdown)}
+            onClick={handleToggleLineHeightDropdown}
             className={TOOLBAR_STYLES.dropdown}
             title="줄간격"
           >
