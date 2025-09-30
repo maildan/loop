@@ -443,7 +443,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     });
 
     return (
-        <ProjectEditorLayout.Container className="relative overflow-hidden">
+    <ProjectEditorLayout.Container className="relative overflow-x-hidden">
             {/* 🔥 ProjectHeader 고정 영역 */}
             <div className="h-14 relative bg-[color:hsl(var(--card))] border-b border-[color:hsl(var(--border))] shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))] z-[900] transition-colors duration-200">
                 <ProjectEditorLayout.Header>
@@ -469,7 +469,7 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {/* 🔥 EditorTabBar - ProjectHeader와 동일한 레벨에서 렌더링 */}
             {state.currentView === 'write' && (
-                <div className="h-12 relative bg-[color:hsl(var(--muted))]/80 border-b border-[color:hsl(var(--border))] z-[1000] backdrop-blur-sm transition-colors duration-200">
+                <div className="h-12 sticky top-14 bg-[color:hsl(var(--muted))]/80 border-b border-[color:hsl(var(--border))] z-[1300] backdrop-blur-sm transition-colors duration-200 shadow-[var(--shadow-md,0_10px_30px_rgba(15,23,42,0.18))]">
                     <EditorTabBar
                         tabs={state.tabs}
                         activeTabId={state.activeTabId}

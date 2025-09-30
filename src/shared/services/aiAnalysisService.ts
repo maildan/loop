@@ -83,32 +83,78 @@ export interface TimelineAnalysisResult {
     };
 }
 
+export interface OutlineStructureGap {
+    element: string;
+    importance?: string;
+    suggestion?: string;
+    position?: string;
+}
+
+export interface OutlineRedundantElement {
+    element: string;
+    reason?: string;
+    solution?: string;
+}
+
+export interface OutlineTransitionDetail {
+    from: string;
+    to: string;
+    quality: number;
+    strengths?: string[];
+    weaknesses?: string[];
+    suggestion?: string;
+    example?: string;
+}
+
+export interface OutlineContentSuggestion {
+    category?: string;
+    description?: string;
+    priority?: 'high' | 'medium' | 'low';
+    steps?: string[];
+    expectedOutcome?: string;
+}
+
+export interface OutlineEngagementHook {
+    element: string;
+    effectiveness?: 'high' | 'medium' | 'low' | string;
+    reason?: string;
+    enhancement?: string;
+}
+
+export interface OutlineEngagementPayoff {
+    element: string;
+    impact?: string;
+    improvement?: string;
+}
+
+export interface OutlineEngagementImprovement {
+    area: string;
+    method?: string;
+    example?: string;
+    difficulty?: '쉬움' | '보통' | '어려움' | string;
+}
+
 export interface OutlineAnalysisResult {
     structure: {
         score: number;
         balance: string;
-        missing: string[];
-        redundant: string[];
+        missing: Array<OutlineStructureGap | string>;
+        redundant: Array<OutlineRedundantElement | string>;
     };
     flow: {
         score: number;
-        transitions: Array<{
-            from: string;
-            to: string;
-            quality: number;
-            suggestion?: string;
-        }>;
+        transitions: Array<OutlineTransitionDetail>;
     };
     content: {
         depth: number;
         clarity: number;
         completeness: number;
-        suggestions: string[];
+        suggestions: Array<OutlineContentSuggestion | string>;
     };
     engagement: {
-        hooks: string[];
-        payoffs: string[];
-        improvements: string[];
+        hooks: Array<OutlineEngagementHook | string>;
+        payoffs: Array<OutlineEngagementPayoff | string>;
+        improvements: Array<OutlineEngagementImprovement | string>;
     };
 }
 

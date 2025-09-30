@@ -39,6 +39,10 @@ const bootstrapRendererEnv = () => {
     }
   }
 
+  if (!resolvedEnv.NEXT_PUBLIC_GEMINI_API_KEY) {
+    console.warn('[Loop][env] NEXT_PUBLIC_GEMINI_API_KEY가 설정되지 않았습니다. Gemini 기반 기능이 제한될 수 있습니다.')
+  }
+
   const globalObject = globalThis as { __LOOP_RENDERER_ENV__?: Record<string, string> }
   globalObject.__LOOP_RENDERER_ENV__ = {
     ...(globalObject.__LOOP_RENDERER_ENV__ ?? {}),

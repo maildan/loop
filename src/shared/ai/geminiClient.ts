@@ -40,10 +40,10 @@ export interface IGeminiError {
 }
 
 const GEMINI_ENV_KEYS = ['GEMINI_API_KEY', 'NEXT_PUBLIC_GEMINI_API_KEY'] as const;
-type GeminiEnvKey = (typeof GEMINI_ENV_KEYS)[number];
-type EnvStatus = 'set' | 'missing';
+export type GeminiEnvKey = (typeof GEMINI_ENV_KEYS)[number];
+export type EnvStatus = 'set' | 'missing';
 
-interface GeminiApiKeyResolution {
+export interface GeminiApiKeyResolution {
     apiKey: string | null;
     source: GeminiEnvKey | null;
     statuses: Record<GeminiEnvKey, EnvStatus>;
@@ -83,6 +83,15 @@ function resolveGeminiApiKey(): GeminiApiKeyResolution {
     }
 
     return { apiKey, source, statuses };
+}
+
+export function getGeminiEnvDiagnostics(): { hasApiKey: boolean; source: GeminiEnvKey | null; statuses: Record<GeminiEnvKey, EnvStatus> } {
+    const { apiKey, source, statuses } = resolveGeminiApiKey();
+    return {
+        hasApiKey: Boolean(apiKey),
+        source,
+        statuses
+    };
 }
 
 function parseInteger(value: string | undefined, fallback: number): number {

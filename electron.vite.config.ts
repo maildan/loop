@@ -67,6 +67,19 @@ export default defineConfig(({ mode }) => {
     }
   }
 
+  const privateGeminiApiKey = readEnv('GEMINI_API_KEY')
+  const hasPublicGeminiApiKey = !!publicRendererEnv.NEXT_PUBLIC_GEMINI_API_KEY
+
+  if (!hasPublicGeminiApiKey && privateGeminiApiKey && mode !== 'production') {
+    rendererEnvDefinition.NEXT_PUBLIC_GEMINI_API_KEY = JSON.stringify(privateGeminiApiKey)
+    publicRendererEnv.NEXT_PUBLIC_GEMINI_API_KEY = privateGeminiApiKey
+    console.warn('[Loop][env] NEXT_PUBLIC_GEMINI_API_KEY가 설정되지 않아 개발 모드에서 GEMINI_API_KEY를 임시로 노출합니다. 프로덕션에서는 NEXT_PUBLIC_GEMINI_API_KEY를 명시적으로 설정하세요.')
+  }
+
+  if (!hasPublicGeminiApiKey && !privateGeminiApiKey) {
+    console.warn('[Loop][env] Gemini API 키가 설정되지 않았습니다. AI 분석 기능이 비활성화됩니다. .env 파일을 확인하세요.')
+  }
+
   return {
     main: {
       plugins: [externalizeDepsPlugin()],

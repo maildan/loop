@@ -23,7 +23,7 @@ interface ContextMenuState {
 
 const TAB_STYLES = {
     // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar z-index를 ProjectHeader보다 높게 설정
-    container: 'flex items-center bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] relative z-[1000]', // 950 → 1000으로 증가
+    container: 'flex items-center bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] relative',
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
     tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-[color:var(--toolbar-divider)] cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
     activeTab: 'bg-[var(--editor-bg)] text-[color:var(--toolbar-foreground)]',

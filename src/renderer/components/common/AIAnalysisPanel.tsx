@@ -26,8 +26,10 @@ import type {
     AnalysisResponse,
     TimelineAnalysisResult,
     OutlineAnalysisResult,
+    OutlineStructureGap,
     MindmapAnalysisResult
 } from '../../../shared/services/aiAnalysisService';
+import { GeminiError, type GeminiEnvKey, type EnvStatus, getGeminiEnvDiagnostics } from '../../../shared/ai/geminiClient';
 
 export interface AIAnalysisPanelProps {
     projectId: string;
@@ -61,12 +63,16 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
     const [error, setError] = useState<string | null>(null);
     const [progress, setProgress] = useState(0);
     const [currentTab, setCurrentTab] = useState<'overview' | 'detailed' | 'suggestions'>('overview');
+    const [geminiEnvStatus, setGeminiEnvStatus] = useState<Record<GeminiEnvKey, EnvStatus> | null>(null);
+    const [geminiEnvSource, setGeminiEnvSource] = useState<GeminiEnvKey | null>(null);
 
     // 🔥 AI 분석 실행
     const handleAnalyze = async () => {
         setAnalysisState('analyzing');
         setError(null);
         setProgress(0);
+        setGeminiEnvStatus(null);
+        setGeminiEnvSource(null);
 
         try {
             Logger.info('AI_ANALYSIS_PANEL', 'Starting analysis', {
@@ -120,6 +126,8 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
 
             setAnalysisResult(result);
             setAnalysisState('completed');
+            setGeminiEnvStatus(null);
+            setGeminiEnvSource(null);
 
             onAnalysisComplete?.(result);
 
@@ -133,6 +141,16 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
             setAnalysisState('error');
             const errorMessage = err instanceof Error ? err.message : 'AI 분석 중 오류가 발생했습니다.';
             setError(errorMessage);
+
+            if (err instanceof GeminiError) {
+                const diagnostics = getGeminiEnvDiagnostics();
+                const envStatuses = (err.details?.env ?? null) as Record<GeminiEnvKey, EnvStatus> | null;
+                setGeminiEnvStatus(envStatuses ?? diagnostics.statuses);
+                setGeminiEnvSource(diagnostics.source);
+            } else {
+                setGeminiEnvStatus(null);
+                setGeminiEnvSource(null);
+            }
 
             Logger.error('AI_ANALYSIS_PANEL', 'Analysis failed', {
                 error: errorMessage,
@@ -316,6 +334,8 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
     // 🔥 아웃라인 세부 분석
     const renderOutlineDetails = () => {
         const result = analysisResult!.result as OutlineAnalysisResult;
+        const isStructureGap = (value: OutlineStructureGap | string): value is OutlineStructureGap =>
+            typeof value === 'object' && value !== null && 'element' in value;
 
         return (
             <div className="space-y-4">
@@ -330,12 +350,38 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                         {result.structure.missing.length > 0 && (
                             <div>
                                 <span className="text-sm font-medium text-orange-600">누락 요소:</span>
-                                <ul className="mt-1 ml-4 list-disc">
-                                    {result.structure.missing.map((item: string, index: number) => (
-                                        <li key={index} className="text-xs text-gray-700">
-                                            {item}
-                                        </li>
-                                    ))}
+                                <ul className="mt-1 ml-4 list-disc space-y-2">
+                                    {result.structure.missing.map((item, index) => {
+                                        if (!isStructureGap(item)) {
+                                            return (
+                                                <li key={index} className="list-disc text-xs text-gray-700">
+                                                    {item}
+                                                </li>
+                                            );
+                                        }
+
+                                        const { element, importance, suggestion, position } = item;
+                                        const details = [
+                                            importance && `중요성: ${importance}`,
+                                            suggestion && `제안: ${suggestion}`,
+                                            position && `권장 위치: ${position}`
+                                        ].filter(Boolean);
+
+                                        return (
+                                            <li key={index} className="list-disc marker:text-orange-400">
+                                                <div className="text-xs text-gray-800 font-medium">
+                                                    {element || '요소 미지정'}
+                                                </div>
+                                                {details.length > 0 && (
+                                                    <div className="mt-1 space-y-1 text-[11px] text-gray-600">
+                                                        {details.map(detail => (
+                                                            <div key={detail}>{detail}</div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </div>
                         )}
@@ -502,6 +548,32 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                         <div className="p-3 bg-red-50 border border-red-200 rounded">
                             <p className="text-red-700 text-sm">{error}</p>
                         </div>
+                        {geminiEnvStatus && (
+                            <div className="w-full text-left mt-4 space-y-2">
+                                <div className="text-sm font-semibold text-gray-700">
+                                    Gemini 환경 변수 상태
+                                </div>
+                                <ul className="space-y-1 text-xs">
+                                    {Object.entries(geminiEnvStatus).map(([key, status]) => (
+                                        <li
+                                            key={key}
+                                            className="flex items-center justify-between rounded border border-dashed border-slate-200 bg-white/60 px-3 py-1"
+                                        >
+                                            <span className="font-medium text-slate-600">{key}</span>
+                                            <span className={status === 'set' ? 'text-emerald-600' : 'text-rose-600 font-semibold'}>
+                                                {status === 'set' ? '설정됨' : '누락됨'}
+                                            </span>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <p className="text-xs text-gray-500 leading-relaxed">
+                                    .env 파일에 <code className="font-mono">GEMINI_API_KEY</code> 또는 <code className="font-mono">NEXT_PUBLIC_GEMINI_API_KEY</code>를 추가한 뒤 앱을 다시 시작하세요.
+                                    {geminiEnvSource && (
+                                        <span className="block mt-1">현재 감지된 키 소스: <strong>{geminiEnvSource}</strong></span>
+                                    )}
+                                </p>
+                            </div>
+                        )}
                         <Button
                             onClick={handleAnalyze}
                             variant="outline"
