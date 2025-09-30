@@ -14,9 +14,6 @@ import OAuthCallback from './routes/OAuthCallback';
 import NotFound from './routes/NotFound';
 import '../styles/index.css';
 
-// 🔥 기가차드 규칙: 폰트 클래스 (Next.js font 제거)
-const fontClass = 'font-sans';
-
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const LAYOUT_STYLES = {
   html: 'h-full',
@@ -41,7 +38,7 @@ export default function App(): React.ReactElement {
   }
 
   return (
-    <div className={`${fontClass} ${LAYOUT_STYLES.container}`}>
+    <div className={LAYOUT_STYLES.container}>
       <BrowserRouter>
         <ClientLayout initialAuth={initialAuth}>
           <Routes>
