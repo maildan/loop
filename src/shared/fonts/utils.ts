@@ -5,13 +5,19 @@ const WEIGHT_KEYWORDS: Record<string, string> = {
   thin: '100',
   extralight: '200',
   ultralight: '200',
+  'extra-light': '200',
   light: '300',
   book: '350',
   regular: '400',
+  roman: '400',
   medium: '500',
+  mdm: '500',
   semibold: '600',
+  'semi-bold': '600',
   demibold: '600',
   bold: '700',
+  heavybold: '700',
+  'extra-bold': '800',
   extrabold: '800',
   heavy: '900',
   black: '900',
@@ -80,11 +86,18 @@ export const inferWeight = (fileName: string): string => {
   return '400';
 };
 
-export const inferStyle = (fileName: string): 'normal' | 'italic' => (fileName.toLowerCase().includes('italic') ? 'italic' : 'normal');
+export const inferStyle = (fileName: string): 'normal' | 'italic' => {
+  const lower = fileName.toLowerCase();
+  if (lower.includes('italic') || lower.includes('ital') || lower.includes('itl') || lower.includes('oblique')) {
+    return 'italic';
+  }
+  return 'normal';
+};
 
 export const deriveVariantLabel = (fileName: string): string => {
   const base = path.basename(fileName).replace(/\.[^.]+$/, '');
   const normalized = base
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/[_-]+/g, ' ')
     .replace(/\b([a-z])/g, match => match.toUpperCase());
   return normalized;

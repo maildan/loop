@@ -15,7 +15,7 @@ import { windowManager } from '../core/window';
 // unifiedHandler 제거됨 - 모니터링 기능 불필요
 import * as fs from 'fs';
 import * as path from 'path';
-import { registerFontProtocol } from '../protocols/registerFontProtocol';
+import { fontService } from '../services/FontService';
 
 // Helper: resolve + whitelist + containment checks to avoid path traversal
 function resolveAndValidate(filePath: string | null, baseDir: string, allowedFilenames?: string[]): string | null {
@@ -230,8 +230,7 @@ export class ApplicationBootstrapper {
     Logger.info('BOOTSTRAPPER', '🔒 Custom protocols registered (loop-avatar://, loop://)');
 
     try {
-      await registerFontProtocol();
-      Logger.info('BOOTSTRAPPER', '🔒 loop-font protocol registered');
+      await fontService.registerProtocol();
     } catch (error) {
       Logger.error('BOOTSTRAPPER', 'Failed to register loop-font protocol', error);
     }

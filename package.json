@@ -48,8 +48,6 @@
     "clean": "rimraf out node_modules/.cache",
     "clean:all": "rimraf out node_modules",
     "postinstall": "electron-builder install-app-deps && pnpm db:generate",
-    "fonts:prepare": "tsx scripts/prepare-fonts.ts",
-    "fonts:convert": "pnpm fonts:prepare",
     "debug:main": "cross-env NODE_ENV=development electron --inspect=5858 .",
     "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "clear": "clear;clear",

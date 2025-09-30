@@ -45,11 +45,11 @@
       "to": "prisma/query-engine"
     },
     {
-      "from": "public/fonts-dist",
+      "from": "resources/fonts-dist",
       "to": "fonts-dist"
     },
     {
-      "from": "public/fonts-manifest.json",
+      "from": "resources/fonts-manifest.json",
       "to": "fonts-manifest.json"
     }
   ],
