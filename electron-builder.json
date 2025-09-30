@@ -30,8 +30,6 @@
     "**/*.dll",
     "**/*.dylib",
     "**/*.so",
-    "fonts-dist/**",
-    "resources/fonts-dist/**",
     "node_modules/.prisma/client/**/*",
     "node_modules/prisma-client/runtime/**/*"
   ],
@@ -43,14 +41,6 @@
     {
       "from": "node_modules/.prisma/client/query-engine-darwin-arm64",
       "to": "prisma/query-engine"
-    },
-    {
-      "from": "resources/fonts-dist",
-      "to": "fonts-dist"
-    },
-    {
-      "from": "resources/fonts-manifest.json",
-      "to": "fonts-manifest.json"
     }
   ],
   "extraFiles": [],

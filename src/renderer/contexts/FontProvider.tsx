@@ -403,8 +403,11 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
       }
 
       // 🔥 1. CSS 변수 설정 (테마 변경 시에도 유지)
-      root.style.setProperty('--app-font-family', fontFamily);
-      root.style.setProperty('--dynamic-font-family', fontFamily);
+  root.style.setProperty('--app-font-family', fontFamily);
+  root.style.setProperty('--dynamic-font-family', fontFamily);
+  root.style.setProperty('--font-primary', fontFamily);
+  root.style.setProperty('--font-writing', fontFamily);
+  root.style.setProperty('--font-app', fontFamily);
       root.style.setProperty('--app-font-size', `${size}px`);
 
       // 🔥 2. 직접 적용 (즉시 효과 보장)
@@ -431,6 +434,9 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
         :root {
           --app-font-family: ${fontFamily}, system-ui, sans-serif;
           --dynamic-font-family: ${fontFamily}, system-ui, sans-serif;
+          --font-primary: ${fontFamily}, system-ui, sans-serif;
+          --font-writing: ${fontFamily}, system-ui, sans-serif;
+          --font-app: ${fontFamily}, system-ui, sans-serif;
           --app-font-size: ${size}px;
         }
         
@@ -648,7 +654,8 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
           const css = await window.electronAPI?.font?.generateCSS?.();
           if (css) {
             const dynamicBlacklist = FontBlacklistManager.getBlacklistedFonts();
-            const staticBlacklist = ['강원교육현옥샘', '강원교육모두', 'Gangwon', '%EA%B0%95%EC%9B%90%EA%B5%90%EC%9C%A1'];
+            const additionalBlacklistEnv = (window as any).__LOOP_FONT_STATIC_BLACKLIST__ as string[] | undefined;
+            const staticBlacklist = Array.isArray(additionalBlacklistEnv) ? additionalBlacklistEnv : [];
             const allBlacklistedFonts = [...new Set([...dynamicBlacklist, ...staticBlacklist])];
 
             // remove blacklisted fonts from css string using safe string parsing

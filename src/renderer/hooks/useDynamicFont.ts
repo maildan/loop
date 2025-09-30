@@ -46,7 +46,15 @@ function applyFontToDocument(family: string): void {
   }
 
   const normalized = family && family.trim().length > 0 ? family : 'system-ui, sans-serif';
-  document.documentElement.style.setProperty('--app-font-family', normalized);
+  const root = document.documentElement;
+
+  root.style.setProperty('--app-font-family', normalized);
+  root.style.setProperty('--dynamic-font-family', normalized);
+  root.style.setProperty('--font-primary', normalized);
+  root.style.setProperty('--font-writing', normalized);
+  root.style.setProperty('--font-app', normalized);
+
+  root.style.fontFamily = normalized;
   document.body.style.fontFamily = normalized;
 }
 

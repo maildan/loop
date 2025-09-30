@@ -38,6 +38,7 @@ export const CSP_POLICIES = {
     "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://localhost:* https://localhost:*",
     "style-src 'self' 'unsafe-inline' http://localhost:* https://localhost:*",
     "img-src 'self' data: blob: http://localhost:* https://localhost:* https://lh3.googleusercontent.com",
+    "font-src 'self' data: blob: loop-font:",
     "connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
     "frame-src 'self' http://localhost:* https://localhost:*",
     "worker-src 'self' blob: http://localhost:*"
@@ -48,7 +49,7 @@ export const CSP_POLICIES = {
     `script-src 'self' 'unsafe-inline' https://accounts.google.com http://localhost:${PORTS.STATIC_SERVER}`,
     `style-src 'self' 'unsafe-inline' http://localhost:${PORTS.STATIC_SERVER} http://localhost:${PORTS.RENDERER_DEV} http://localhost:${PORTS.VITE_DEV[0]} http://localhost:${PORTS.VITE_DEV[1]}`,
     "img-src 'self' data: blob: https://ui-avatars.com https://lh3.googleusercontent.com",
-    "font-src 'self' data:",
+  "font-src 'self' data: loop-font:",
     "connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
     "frame-src https://accounts.google.com",
     "worker-src 'self' blob:"

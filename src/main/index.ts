@@ -6,13 +6,26 @@ import 'dotenv/config';
 
 
 import "./core/security"
-import { app } from 'electron';
+import { app, protocol } from 'electron';
 import { join } from 'path';
 import { Logger } from '../shared/logger';
 import { ApplicationBootstrapper } from './core/ApplicationBootstrapper';
 import { performanceOptimizer } from './core/PerformanceOptimizer';
 import { Platform } from './utils/platform';
 import { APP_IDENTITY } from './constants';
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: 'loop-font',
+    privileges: {
+      standard: true,
+      secure: true,
+      supportFetchAPI: true,
+      corsEnabled: true,
+      stream: true
+    }
+  }
+]);
+
 
 // 🔥 환경 변수는 위에서 이미 로드됨
 // 🔥 환경변수 로깅(민감값 제외)

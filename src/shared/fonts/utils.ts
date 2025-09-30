@@ -24,27 +24,85 @@ const WEIGHT_KEYWORDS: Record<string, string> = {
   variable: '400'
 };
 
-const DISPLAY_NAME_OVERRIDES: Record<string, string> = {
-  Pretendard: 'Pretendard',
-  PretendardJP: 'Pretendard JP',
-  'nanum-gothic': 'Nanum Gothic (나눔고딕)',
-  Noto_Sans: 'Noto Sans',
-  Noto_Sans_KR: 'Noto Sans KR',
-  Noto_Sans_JP: 'Noto Sans JP',
-  Gangwon_mac: '강원교육모두체 (Mac)',
-  Gangwon_win: '강원교육모두체 (Windows)',
-  'MS Gothic': 'MS Gothic',
-  'MS Mincho Regular': 'MS Mincho',
-  'sf-pro-display': 'SF Pro Display',
-  arial: 'Arial',
-  'times-new-roman': 'Times New Roman',
-  Verdana: 'Verdana',
-  'calibri-font-family': 'Calibri',
-  Roboto: 'Roboto',
-  Inter: 'Inter'
+const TOKEN_REPLACEMENTS: Record<string, string> = {
+  jp: 'JP',
+  kr: 'KR',
+  ms: 'MS',
+  sf: 'SF',
+  ui: 'UI',
+  us: 'US',
+  uk: 'UK',
+  win: 'Windows',
+  mac: 'Mac',
+  ttf: 'TTF',
+  otf: 'OTF',
+  woff: 'WOFF',
+  woff2: 'WOFF2'
 };
 
-export const sanitizeId = (value: string): string => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const NON_LATIN_REGEX = /[^\u0000-\u007f]/;
+
+const formatDisplayToken = (token: string): string => {
+  const trimmed = token.trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  const match = trimmed.match(/^([\(\[]?)(.*?)([\)\]]?)$/);
+  const prefix = match?.[1] ?? '';
+  const core = match?.[2] ?? trimmed;
+  const suffix = match?.[3] ?? '';
+
+  if (!core) {
+    return trimmed;
+  }
+
+  if (NON_LATIN_REGEX.test(core)) {
+    return `${prefix}${core}${suffix}`;
+  }
+
+  if (/^\d+$/.test(core)) {
+    return `${prefix}${core}${suffix}`;
+  }
+
+  const lower = core.toLowerCase();
+  const replacement = TOKEN_REPLACEMENTS[lower];
+
+  if (replacement) {
+    return `${prefix}${replacement}${suffix}`;
+  }
+
+  if (core.length <= 2) {
+    return `${prefix}${lower.toUpperCase()}${suffix}`;
+  }
+
+  return `${prefix}${core.charAt(0).toUpperCase()}${core.slice(1).toLowerCase()}${suffix}`;
+};
+
+export const sanitizeId = (value: string): string => {
+  if (!value) {
+    return '';
+  }
+
+  // Normalize accents and convert to lowercase ASCII where possible
+  const normalized = value
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  let sanitized = normalized.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+  if (!sanitized) {
+    // Fall back to URL encoding for non-Latin scripts, keep alphanumeric percent pairs
+    sanitized = encodeURIComponent(value)
+      .replace(/%/g, '-')
+      .replace(/[^a-z0-9-]+/gi, '-')
+      .replace(/^-+|-+$/g, '')
+      .toLowerCase();
+  }
+
+  return sanitized;
+};
 
 export const determineFontCategory = (familyName: string): FontCategory => {
   const name = familyName.toLowerCase();
@@ -61,19 +119,25 @@ export const determineFontCategory = (familyName: string): FontCategory => {
 };
 
 export const createDisplayName = (familyName: string, fallback?: string): string => {
-  if (DISPLAY_NAME_OVERRIDES[familyName]) {
-    return DISPLAY_NAME_OVERRIDES[familyName];
+  const source = (familyName || fallback || '').trim();
+  if (!source) {
+    return '';
   }
 
-  if (fallback && DISPLAY_NAME_OVERRIDES[fallback]) {
-    return DISPLAY_NAME_OVERRIDES[fallback];
-  }
-
-  const normalized = fallback ?? familyName;
-  return normalized
+  const withSpacing = source
     .replace(/[_-]+/g, ' ')
-    .replace(/\b([a-z])/g, match => match.toUpperCase())
+    .replace(/([a-z])(\d)/g, '$1 $2')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/([A-Z]{2,})([A-Z][a-z])/g, '$1 $2')
+    .replace(/\s+/g, ' ')
     .trim();
+
+  if (!withSpacing) {
+    return '';
+  }
+
+  const tokens = withSpacing.split(' ').map(formatDisplayToken).filter(Boolean);
+  return tokens.join(' ').replace(/\s+\(/g, ' (');
 };
 
 export const inferWeight = (fileName: string): string => {

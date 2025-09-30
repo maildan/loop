@@ -166,7 +166,7 @@
   @apply px-1.5 py-1 rounded-md text-sm font-medium transition-all duration-200 ease-in-out;
   background: var(--editor-accent-light);
   color: var(--editor-accent);
-  font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', monospace;
+  font-family: var(--font-mono, 'JetBrains Mono', 'Fira Code', 'Monaco', monospace);
   border: 1px solid rgba(99, 102, 241, 0.1);
 }
 
@@ -180,7 +180,7 @@
   @apply my-8 p-6 rounded-xl overflow-x-auto text-sm leading-relaxed;
   background: var(--editor-bg-secondary);
   border: 1px solid var(--editor-border);
-  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-family: var(--font-mono, 'JetBrains Mono', 'Fira Code', monospace);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
 }
 

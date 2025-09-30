@@ -6,7 +6,7 @@ export const CSP = {
     "script-src 'self' 'unsafe-inline' https://accounts.google.com http://localhost:35821",
     "style-src 'self' 'unsafe-inline' http://localhost:35821 http://localhost:4000 http://localhost:5000 http://localhost:5173",
     "img-src 'self' data: blob: https://ui-avatars.com https://lh3.googleusercontent.com",
-    "font-src 'self' data:",
+  "font-src 'self' data: loop-font:",
     // Allow connections to local static server, dev endpoints, and AI APIs (Gemini, OpenAI)
     "connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
     "frame-src https://accounts.google.com",
@@ -20,7 +20,7 @@ export const CSP = {
     "connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
     "frame-src 'self' https://accounts.google.com",
     "worker-src 'self' blob:",
-    "font-src 'self' data: http://localhost:* https://localhost:*"
+  "font-src 'self' data: http://localhost:* https://localhost:* loop-font:"
   ].join('; ')
 };
 

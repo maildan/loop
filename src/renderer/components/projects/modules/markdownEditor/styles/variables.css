@@ -16,7 +16,7 @@
   --heading-border-h2: hsl(var(--border) / 0.35);
 
   /* 🔥 폰트 시스템 변수 */
-  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --app-font-family: var(--app-font-family, system-ui, sans-serif);
   --app-font-size: 14px;
 }
 

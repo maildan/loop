@@ -36,7 +36,7 @@ export class OAuthSuccessPage {
       --success-light: #d1fae5;
       --border-light: #e5e7eb;
       --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --app-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     }
 
     * {
@@ -289,7 +289,7 @@ export class OAuthSuccessPage {
       --error-light: #fee2e2;
       --border-light: #e5e7eb;
       --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-      --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      --app-font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }

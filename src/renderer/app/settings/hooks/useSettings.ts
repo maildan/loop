@@ -30,8 +30,17 @@ export function useSettings(): UseSettingsReturn {
     if (!settings) return;
 
     const root = document.documentElement;
+    const family = settings.app.fontFamily || 'system-ui, sans-serif';
     root.style.setProperty('--app-font-size', `${settings.app.fontSize}px`);
-    root.style.setProperty('--app-font-family', settings.app.fontFamily);
+    root.style.setProperty('--app-font-family', family);
+    root.style.setProperty('--dynamic-font-family', family);
+    root.style.setProperty('--font-primary', family);
+    root.style.setProperty('--font-writing', family);
+    root.style.setProperty('--font-app', family);
+    root.style.fontFamily = family;
+    if (document.body) {
+      document.body.style.fontFamily = family;
+    }
 
     Logger.debug('USE_SETTINGS', 'CSS variables updated', {
       fontSize: settings.app.fontSize,
@@ -143,8 +152,17 @@ export function useSettings(): UseSettingsReturn {
         // 🔥 폰트 설정 CSS 변수 업데이트 (즉시 적용)
         setTimeout(() => {
           const root = document.documentElement;
+          const family = merged.app.fontFamily || 'system-ui, sans-serif';
           root.style.setProperty('--app-font-size', `${merged.app.fontSize}px`);
-          root.style.setProperty('--app-font-family', merged.app.fontFamily);
+          root.style.setProperty('--app-font-family', family);
+          root.style.setProperty('--dynamic-font-family', family);
+          root.style.setProperty('--font-primary', family);
+          root.style.setProperty('--font-writing', family);
+          root.style.setProperty('--font-app', family);
+          root.style.fontFamily = family;
+          if (document.body) {
+            document.body.style.fontFamily = family;
+          }
           Logger.debug('USE_SETTINGS', 'Initial CSS font variables applied', {
             fontSize: merged.app.fontSize,
             fontFamily: merged.app.fontFamily
@@ -230,7 +248,16 @@ export function useSettings(): UseSettingsReturn {
           if (key === 'fontSize') {
             root.style.setProperty('--app-font-size', `${value}px`);
           } else if (key === 'fontFamily') {
-            root.style.setProperty('--app-font-family', value as string);
+            const family = (value as string) || 'system-ui, sans-serif';
+            root.style.setProperty('--app-font-family', family);
+            root.style.setProperty('--dynamic-font-family', family);
+            root.style.setProperty('--font-primary', family);
+            root.style.setProperty('--font-writing', family);
+            root.style.setProperty('--font-app', family);
+            root.style.fontFamily = family;
+            if (document.body) {
+              document.body.style.fontFamily = family;
+            }
           }
           Logger.debug('USE_SETTINGS', 'CSS font variables updated immediately', {
             key,

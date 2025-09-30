@@ -94,7 +94,7 @@
 
   /* 🔥 폰트 설정 변수 */
   --app-font-size: 14px;
-  --app-font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --app-font-family: var(--app-font-family, system-ui, sans-serif);
 
   /* 작가 친화적 폰트 스택 */
   --font-primary: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
