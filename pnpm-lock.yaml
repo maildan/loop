@@ -177,6 +177,9 @@ importers:
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
+      ttf2woff2:
+        specifier: ^8.0.0
+        version: 8.0.0
       zod:
         specifier: ^4.1.9
         version: 4.1.9
@@ -310,9 +313,6 @@ importers:
       tsx:
         specifier: ^4.20.3
         version: 4.20.5
-      ttf2woff2:
-        specifier: ^8.0.0
-        version: 8.0.0
       typescript:
         specifier: ^5
         version: 5.9.2

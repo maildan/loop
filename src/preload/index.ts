@@ -314,7 +314,6 @@ const electronAPI: ElectronAPI = {
     generateCSS: () => ipcRenderer.invoke('font:generate-css'),
     getFontFamily: (familyName: string) => ipcRenderer.invoke('font:get-font-family', familyName),
     reload: () => ipcRenderer.invoke('font:reload'),
-    getStaticFonts: () => ipcRenderer.invoke('font:get-static-fonts'),
   },
 
 

@@ -48,7 +48,8 @@
     "clean": "rimraf out node_modules/.cache",
     "clean:all": "rimraf out node_modules",
     "postinstall": "electron-builder install-app-deps && pnpm db:generate",
-    "fonts:convert": "node scripts/convert-fonts.js",
+    "fonts:prepare": "tsx scripts/prepare-fonts.ts",
+    "fonts:convert": "pnpm fonts:prepare",
     "debug:main": "cross-env NODE_ENV=development electron --inspect=5858 .",
     "debug:test": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "clear": "clear;clear",
@@ -98,7 +99,7 @@
     "firebase": "^12.3.0",
     "google-auth-library": "^10.3.0",
     "googleapis": "^156.0.0",
-    "highlight.js": "^11.11.1",
+  "highlight.js": "^11.11.1",
     "keytar": "^7.9.0",
     "lucide-react": "^0.539.0",
     "node-mac-permissions": "^2.5.0",
@@ -109,9 +110,10 @@
     "rehype-highlight": "^7.0.2",
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.3.1",
-    "tippy.js": "^6.3.7",
-    "zod": "^4.1.9",
-    "zustand": "^5.0.8"
+  "tippy.js": "^6.3.7",
+  "ttf2woff2": "^8.0.0",
+  "zod": "^4.1.9",
+  "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
@@ -156,7 +158,6 @@
     "ts-node": "^10.9.2",
     "ts-prune": "^0.10.3",
     "tsx": "^4.20.3",
-    "ttf2woff2": "^8.0.0",
     "typescript": "^5",
     "wait-on": "^8.0.3"
   },

@@ -1,6 +1,7 @@
 // 🔥 기가차드 공유 타입 정의 - Electron API 통합
 
 import type { Theme } from './types/theme';
+import type { FontOption } from './fonts/types';
 
 // 🔥 Result 타입 - 함수 결과 래핑
 export interface Result<TData = unknown> {
@@ -299,14 +300,13 @@ export interface ElectronAPI {
     revokeAuth: () => Promise<IpcResponse<boolean>>;
   };
 
-  // 🔥 동적 폰트 API (public/fonts TTF 기반)
+  // 🔥 폰트 API (사전 변환된 WOFF2 매니페스트 기반)
   font: {
     initialize: () => Promise<{ success: boolean; error?: string }>;
-    getAvailableFonts: () => Promise<Array<{ value: string; label: string; category: string }>>;
+    getAvailableFonts: () => Promise<FontOption[]>;
     generateCSS: () => Promise<string>;
     getFontFamily: (familyName: string) => Promise<{ name: string; displayName: string; category: string; variants: any[]; cssFamily: string } | null>;
     reload: () => Promise<{ success: boolean; error?: string }>;
-    getStaticFonts: () => Promise<Array<{ value: string; label: string; category: string }>>;
   };
 }
 

@@ -1,5 +1,4 @@
 
-
 import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
 import { Logger } from '../../shared/logger';
 
@@ -732,12 +731,14 @@ export function FontProvider({ children }: { children: React.ReactNode }) {
 
         // 4. 폰트 목록 로드
         try {
-          const [dynamicFonts, staticFonts] = await Promise.all([
-            window.electronAPI?.font?.getAvailableFonts?.() || [],
-            window.electronAPI?.font?.getStaticFonts?.() || []
-          ]);
-          const allFonts = [...staticFonts, ...dynamicFonts];
-          const formattedFonts = allFonts.map(font => ({ id: font.value, name: font.label, cssFamily: font.value, category: font.category, isLocal: true }));
+          const fonts = await window.electronAPI?.font?.getAvailableFonts?.() || [];
+          const formattedFonts = fonts.map(font => ({
+            id: font.value,
+            name: font.label,
+            cssFamily: font.value,
+            category: font.category,
+            isLocal: font.source === 'local'
+          }));
           setAvailableFonts(formattedFonts);
           try { await refreshFonts(); Logger.info('FONT_PROVIDER', 'initializeFonts: refreshFonts executed successfully'); } catch (rfError) { Logger.warn('FONT_PROVIDER', 'initializeFonts: refreshFonts failed', rfError); }
         } catch (e) {

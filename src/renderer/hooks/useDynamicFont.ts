@@ -1,12 +1,7 @@
-// 🔥 동적 폰트 훅 - public/fonts TTF 기반
+// 🔥 동적 폰트 훅 - 사전 변환된 WOFF2 매니페스트 기반
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Logger } from '../../shared/logger';
-
-interface FontOption {
-  value: string;
-  label: string;
-  category: string;
-}
+import type { FontOption } from '../../shared/fonts/types';
 
 interface UseDynamicFontResult {
   currentFont: string;
@@ -103,20 +98,18 @@ export function useDynamicFont(): UseDynamicFontResult {
     try {
       await window.electronAPI?.font?.initialize?.();
 
-      const [dynamicFonts = [], staticFonts = []] = await Promise.all([
-        window.electronAPI?.font?.getAvailableFonts?.(),
-        window.electronAPI?.font?.getStaticFonts?.()
-      ]);
-
-      const merged = [...staticFonts, ...dynamicFonts] as FontOption[];
-      setAvailableFonts(merged);
+      const fonts = (await window.electronAPI?.font?.getAvailableFonts?.()) ?? [];
+      setAvailableFonts(fonts);
 
       await injectFontCss();
 
-      Logger.info('DYNAMIC_FONT', 'Font manifest loaded', {
-        dynamicCount: dynamicFonts?.length ?? 0,
-        staticCount: staticFonts?.length ?? 0,
-        total: merged.length
+      const systemCount = fonts.filter(font => font.source === 'system').length;
+      const localCount = fonts.length - systemCount;
+
+      Logger.info('DYNAMIC_FONT', 'Font catalog loaded', {
+        localCount,
+        systemCount,
+        total: fonts.length
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : '폰트를 불러오는데 실패했습니다.';
@@ -125,8 +118,7 @@ export function useDynamicFont(): UseDynamicFontResult {
 
       // 최소한의 폴백 보장
       setAvailableFonts([
-        { value: 'system-ui, sans-serif', label: '시스템 기본', category: 'system' },
-        { value: '-apple-system, BlinkMacSystemFont, sans-serif', label: 'Apple 시스템', category: 'system' }
+        { value: 'system-ui, sans-serif', label: '시스템 기본', category: 'system', source: 'system' }
       ]);
     } finally {
       setLoading(false);

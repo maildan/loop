@@ -30,8 +30,8 @@
     "**/*.dll",
     "**/*.dylib",
     "**/*.so",
-    "fonts/**",
-    "resources/fonts/**",
+    "fonts-dist/**",
+    "resources/fonts-dist/**",
     "node_modules/.prisma/client/**/*",
     "node_modules/prisma-client/runtime/**/*"
   ],
@@ -45,8 +45,12 @@
       "to": "prisma/query-engine"
     },
     {
-      "from": "public/fonts",
-      "to": "fonts"
+      "from": "public/fonts-dist",
+      "to": "fonts-dist"
+    },
+    {
+      "from": "public/fonts-manifest.json",
+      "to": "fonts-manifest.json"
     }
   ],
   "extraFiles": [],

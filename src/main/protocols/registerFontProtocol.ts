@@ -8,12 +8,10 @@ import { fontService } from '../services/FontService';
  * retrieve WOFF2 font binaries without exposing file:// URLs.
  */
 export async function registerFontProtocol(): Promise<void> {
-  try {
-    await fontService.initialize();
-  } catch (error) {
-    Logger.error('FONT_PROTOCOL', 'Failed to initialize font service before protocol registration', error);
-    throw error;
-  }
+  // Start font service initialization in background - don't wait for it
+  const initPromise = fontService.initialize().catch(error => {
+    Logger.error('FONT_PROTOCOL', 'Font service initialization failed in background', error);
+  });
 
   try {
     await protocol.unhandle?.('loop-font');
@@ -28,6 +26,14 @@ export async function registerFontProtocol(): Promise<void> {
       if (!variantId) {
         Logger.warn('FONT_PROTOCOL', 'Received loop-font request without variant id');
         return new Response(null, { status: 400 });
+      }
+
+      // Ensure font service is initialized before serving fonts
+      try {
+        await fontService.initialize();
+      } catch (initError) {
+        Logger.error('FONT_PROTOCOL', 'Font service initialization failed during request', initError);
+        return new Response(null, { status: 503 });
       }
 
       const arrayBuffer = await fontService.getFontBinary(variantId);

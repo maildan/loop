@@ -8,7 +8,7 @@ export default defineConfig({
     build: {
       rollupOptions: {
         // 외부 의존성 최적화
-        external: ['electron']
+        external: ['electron', 'ttf2woff2']
       }
     }
   },

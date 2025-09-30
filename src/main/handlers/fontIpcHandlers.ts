@@ -79,17 +79,6 @@ export function setupFontIpcHandlers(): void {
             }
         });
 
-        // 🔥 정적 폰트 목록 (기본/시스템 폰트)
-        ipcMain.handle('font:get-static-fonts', async (event: IpcMainInvokeEvent) => {
-            try {
-                Logger.debug('FONT_IPC', 'Static fonts requested');
-                return fontService.getStaticFonts();
-            } catch (error) {
-                Logger.error('FONT_IPC', 'Get static fonts failed', error);
-                return [];
-            }
-        });
-
         Logger.info('FONT_IPC', 'Dynamic font IPC handlers setup completed');
     } catch (error) {
         Logger.error('FONT_IPC', 'Font IPC handlers setup failed', error);
