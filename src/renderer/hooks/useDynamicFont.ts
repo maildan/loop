@@ -23,33 +23,43 @@ const STORAGE_KEY = 'loop-font-family';
 const EDITOR_FONT_STORAGE_KEY = 'loop-editor-font-family';
 const EDITOR_FONT_SCOPE_STORAGE_KEY = 'loop-editor-font-scope';
 
-function getSavedEditorFont(): string | null {
+function readStoredValue(key: string): string | null {
   if (typeof window === 'undefined') {
     return null;
   }
 
   try {
-    return localStorage.getItem(EDITOR_FONT_STORAGE_KEY);
+    const raw = localStorage.getItem(key);
+    const trimmed = raw?.trim();
+    return trimmed && trimmed.length > 0 ? trimmed : null;
   } catch (error) {
-    Logger.warn('DYNAMIC_FONT', 'Failed to read stored editor font family', error);
+    Logger.warn('DYNAMIC_FONT', `Failed to read stored value: ${key}`, error);
     return null;
   }
 }
 
-function saveEditorFont(family: string | null): void {
+function writeStoredValue(key: string, value: string | null): void {
   if (typeof window === 'undefined') {
     return;
   }
 
   try {
-    if (family && family.trim().length > 0) {
-      localStorage.setItem(EDITOR_FONT_STORAGE_KEY, family.trim());
+    if (value && value.trim().length > 0) {
+      localStorage.setItem(key, value.trim());
     } else {
-      localStorage.removeItem(EDITOR_FONT_STORAGE_KEY);
+      localStorage.removeItem(key);
     }
   } catch (error) {
-    Logger.warn('DYNAMIC_FONT', 'Failed to persist editor font family', error);
+    Logger.warn('DYNAMIC_FONT', `Failed to persist stored value: ${key}`, error);
   }
+}
+
+function getSavedEditorFont(): string | null {
+  return readStoredValue(EDITOR_FONT_STORAGE_KEY);
+}
+
+function saveEditorFont(family: string | null): void {
+  writeStoredValue(EDITOR_FONT_STORAGE_KEY, family);
 }
 
 function getSavedEditorFontScope(): EditorFontScope {
@@ -67,15 +77,7 @@ function getSavedEditorFontScope(): EditorFontScope {
 }
 
 function saveEditorFontScope(scope: EditorFontScope): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  try {
-    localStorage.setItem(EDITOR_FONT_SCOPE_STORAGE_KEY, scope);
-  } catch (error) {
-    Logger.warn('DYNAMIC_FONT', 'Failed to persist editor font scope', error);
-  }
+  writeStoredValue(EDITOR_FONT_SCOPE_STORAGE_KEY, scope);
 }
 
 function applyEditorFontPreference(preferred: string | null, fallback: string): void {
@@ -91,28 +93,11 @@ function applyEditorFontPreference(preferred: string | null, fallback: string): 
 }
 
 function getSavedFont(): string | null {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
-  try {
-    return localStorage.getItem(STORAGE_KEY);
-  } catch (error) {
-    Logger.warn('DYNAMIC_FONT', 'Failed to read stored font family', error);
-    return null;
-  }
+  return readStoredValue(STORAGE_KEY);
 }
 
 function saveFont(family: string): void {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  try {
-    localStorage.setItem(STORAGE_KEY, family);
-  } catch (error) {
-    Logger.warn('DYNAMIC_FONT', 'Failed to persist selected font family', error);
-  }
+  writeStoredValue(STORAGE_KEY, family);
 }
 
 function applyFontToDocument(family: string): void {
@@ -158,6 +143,24 @@ async function injectFontCss(): Promise<void> {
   }
 }
 
+function dedupeFonts(fonts: FontOption[]): FontOption[] {
+  const unique = new Map<string, FontOption>();
+
+  fonts.forEach((fontOption) => {
+    const normalizedValue = fontOption.value.trim();
+    const key = normalizedValue.toLowerCase();
+
+    if (!unique.has(key)) {
+      unique.set(key, {
+        ...fontOption,
+        value: normalizedValue
+      });
+    }
+  });
+
+  return Array.from(unique.values());
+}
+
 export function useDynamicFont(): UseDynamicFontResult {
   const [currentFont, setCurrentFont] = useState<string>(() => getSavedFont() ?? 'system-ui, sans-serif');
   const [editorFont, setEditorFontState] = useState<string | null>(() => getSavedEditorFont());
@@ -183,8 +186,8 @@ export function useDynamicFont(): UseDynamicFontResult {
     try {
       await window.electronAPI?.font?.initialize?.();
 
-      const fonts = (await window.electronAPI?.font?.getAvailableFonts?.()) ?? [];
-      setAvailableFonts(fonts);
+  const fonts = (await window.electronAPI?.font?.getAvailableFonts?.()) ?? [];
+  setAvailableFonts(dedupeFonts(fonts));
 
       await injectFontCss();
 

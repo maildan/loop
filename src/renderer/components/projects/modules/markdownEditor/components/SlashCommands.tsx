@@ -116,7 +116,31 @@ const SLASH_COMMANDS: SlashCommand[] = [
       editor.chain()
         .focus()
         .deleteRange(range)
-        .insertContent('- [ ] 할 일 항목\n- [ ] 또 다른 할 일')
+        .insertContent({
+          type: 'taskList',
+          content: [
+            {
+              type: 'taskItem',
+              attrs: { checked: false },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [{ type: 'text', text: '할 일 항목' }]
+                }
+              ]
+            },
+            {
+              type: 'taskItem',
+              attrs: { checked: false },
+              content: [
+                {
+                  type: 'paragraph',
+                  content: [{ type: 'text', text: '또 다른 할 일' }]
+                }
+              ]
+            }
+          ]
+        })
         .run();
     },
   },

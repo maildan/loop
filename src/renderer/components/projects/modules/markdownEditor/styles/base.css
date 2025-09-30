@@ -5,8 +5,10 @@
 div[class*="w-full h-full flex flex-col relative"] {
   @apply h-full w-full relative;
   /* 🔥 FIXED: 터치패드 스크롤 최적화 */
-  overflow-y: auto !important;
   overflow-x: hidden !important;
+  overflow-y: auto;
+  min-height: calc(100vh - var(--editor-viewport-offset, 11rem));
+  padding-bottom: 4rem;
   
   /* macOS 터치패드 최적화 */
   -webkit-overflow-scrolling: touch;
@@ -17,6 +19,9 @@ div[class*="w-full h-full flex flex-col relative"] {
 /* 🔥 ProseMirror 에디터 기본 스타일 */
 .ProseMirror {
   @apply outline-none min-h-full p-8 leading-7 text-base;
+
+  /* 🔥 부모 min-height 상속 */
+  min-height: inherit;
   
   /* 🔥 폰트 시스템 연동 - 기본 폰트 설정 */
   font-family: var(--editor-font-family, var(--app-font-family));

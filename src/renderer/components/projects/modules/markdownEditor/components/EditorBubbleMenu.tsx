@@ -25,10 +25,10 @@ interface EditorBubbleMenuProps {
 }
 
 const BUBBLE_STYLES = {
-    bubble: 'flex flex-nowrap gap-1 p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg z-50 overflow-visible whitespace-nowrap',
-    button: 'px-2 py-1 text-sm bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 rounded transition-colors flex items-center justify-center min-w-[30px]',
-    activeButton: 'px-2 py-1 text-sm bg-blue-200 dark:bg-blue-800 rounded transition-colors flex items-center justify-center min-w-[30px]',
-    divider: 'w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1'
+    bubble: 'flex flex-wrap items-center gap-2 px-3 py-2 bg-[var(--toolbar-bg)]/95 text-[color:var(--toolbar-foreground)] border border-[color:var(--toolbar-border)] rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.35)] backdrop-blur-md z-50 whitespace-nowrap',
+    button: 'min-w-[2.75rem] px-2.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-colors bg-transparent text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/40 focus-visible:ring-offset-0 flex items-center justify-center gap-1',
+    activeButton: 'min-w-[2.75rem] px-2.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold bg-[var(--button-active)] text-[color:var(--editor-accent)] shadow-inner transition-colors flex items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/50 focus-visible:ring-offset-0',
+    divider: 'w-px h-6 bg-[color:var(--toolbar-divider)]/70 mx-1.5'
 } as const;
 
 export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps): React.ReactElement {
@@ -108,35 +108,39 @@ export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps): React.React
         >
             {/* 기본 포맷팅 버튼들 */}
             <button
+                type="button"
                 onClick={handleBold}
                 className={editor.isActive('bold') ? BUBBLE_STYLES.activeButton : BUBBLE_STYLES.button}
                 title="볼드 (Ctrl+B)"
             >
-                <Bold size={14} />
+                <Bold size={16} />
             </button>
 
             <button
+                type="button"
                 onClick={handleItalic}
                 className={editor.isActive('italic') ? BUBBLE_STYLES.activeButton : BUBBLE_STYLES.button}
                 title="이탤릭 (Ctrl+I)"
             >
-                <Italic size={14} />
+                <Italic size={16} />
             </button>
 
             <button
+                type="button"
                 onClick={handleUnderline}
                 className={editor.isActive('underline') ? BUBBLE_STYLES.activeButton : BUBBLE_STYLES.button}
                 title="언더라인 (Ctrl+U)"
             >
-                <UnderlineIcon size={14} />
+                <UnderlineIcon size={16} />
             </button>
 
             <button
+                type="button"
                 onClick={handleStrike}
                 className={editor.isActive('strike') ? BUBBLE_STYLES.activeButton : BUBBLE_STYLES.button}
                 title="취소선 (Ctrl+Shift+S)"
             >
-                <Strikethrough size={14} />
+                <Strikethrough size={16} />
             </button>
 
             {/* 구분선 */}
@@ -144,11 +148,12 @@ export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps): React.React
 
             {/* 고급 포맷팅 */}
             <button
+                type="button"
                 onClick={handleCode}
                 className={editor.isActive('code') ? BUBBLE_STYLES.activeButton : BUBBLE_STYLES.button}
                 title="인라인 코드 (Ctrl+`)"
             >
-                <Code size={14} />
+                <Code size={16} />
             </button>
 
             {/* 구분선 */}
@@ -156,20 +161,22 @@ export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps): React.React
 
             {/* 링크 버튼 */}
             <button
+                type="button"
                 onClick={handleLink}
                 className={editor.isActive('link') ? BUBBLE_STYLES.activeButton : BUBBLE_STYLES.button}
                 title="링크 추가"
             >
-                <Link size={14} />
+                <Link size={16} />
             </button>
 
             {/* 인용구 버튼 */}
             <button
+                type="button"
                 onClick={handleQuote}
                 className={editor.isActive('blockquote') ? BUBBLE_STYLES.activeButton : BUBBLE_STYLES.button}
                 title="인용구"
             >
-                <Quote size={14} />
+                <Quote size={16} />
             </button>
 
             {/* 구분선 */}
@@ -177,29 +184,32 @@ export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps): React.React
 
             {/* 이미지 추가 버튼 */}
             <button
+                type="button"
                 onClick={handleImageAdd}
                 className={BUBBLE_STYLES.button}
                 title="이미지 추가"
             >
-                <ImageIcon size={14} />
+                <ImageIcon size={16} />
             </button>
 
             {/* 복사 버튼 */}
             <button
+                type="button"
                 onClick={handleCopy}
                 className={BUBBLE_STYLES.button}
                 title="선택한 텍스트 복사"
             >
-                <Copy size={14} />
+                <Copy size={16} />
             </button>
 
             {/* 클립보드에서 붙여넣기 버튼 */}
             <button
+                type="button"
                 onClick={handlePaste}
                 className={BUBBLE_STYLES.button}
                 title="클립보드에서 붙여넣기"
             >
-                <Clipboard size={14} />
+                <Clipboard size={16} />
             </button>
 
             {/* 구분선 */}
@@ -207,11 +217,12 @@ export function EditorBubbleMenu({ editor }: EditorBubbleMenuProps): React.React
 
             {/* 추가 옵션 (헤딩 설정) */}
             <button
+                type="button"
                 onClick={handleHeading}
                 className={BUBBLE_STYLES.button}
                 title="헤딩 설정"
             >
-                <MoreHorizontal size={14} />
+                <MoreHorizontal size={16} />
             </button>
         </BubbleMenu>
     );

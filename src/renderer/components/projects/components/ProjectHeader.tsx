@@ -32,12 +32,12 @@ import { Tooltip } from '../../ui/Tooltip';
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
-  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex items-center px-3 gap-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm',
-  section: 'flex items-center gap-1.5',
+  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex flex-wrap items-center px-3 gap-2 gap-y-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm overflow-visible',
+  section: 'flex items-center gap-1.5 shrink-0',
   divider: 'w-px h-6 bg-[color:var(--toolbar-divider)] opacity-70 mx-2',
   button: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
   buttonActive: 'h-8 px-2.5 rounded-md bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-xs font-semibold shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  dropdown: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center gap-1.5 text-xs font-medium border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 backdrop-blur-sm',
+  dropdown: 'h-8 px-3 min-w-[11rem] rounded-md text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-between gap-1.5 text-xs font-medium border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 backdrop-blur-sm whitespace-nowrap shadow-sm',
   backButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
   colorButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-center relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
 } as const;
@@ -488,7 +488,7 @@ export function ProjectHeader({
             <ChevronDown size={14} />
           </button>
           {showFontDropdown && (
-            <div className="absolute top-full left-0 mt-1 w-40 bg-[var(--editor-bg)] border border-[color:var(--editor-border)] rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto text-[color:var(--editor-text)]">
+            <div className="absolute top-full left-0 mt-1 w-44 bg-[var(--editor-bg)] border border-[color:var(--editor-border)] rounded-lg shadow-lg z-50 max-h-60 overflow-y-auto text-[color:var(--editor-text)]">
               {fontsLoading ? (
                 <div className="px-3 py-2 text-xs text-[color:var(--editor-text-muted)]">
                   폰트를 불러오는 중이에요…
@@ -498,26 +498,35 @@ export function ProjectHeader({
                   {fontError}
                 </div>
               ) : availableFonts.length > 0 ? (
-                availableFonts.map((font) => {
-                  const isActive = font.value === activeFont;
+                <>
+                  {availableFonts.map((font) => {
+                    const isActive = font.value === activeFont;
 
-                  return (
-                    <button
-                      key={font.value}
-                      type="button"
-                      onClick={() => {
-                        setShowFontDropdown(false);
-                        setFont(font.value);
-                      }}
-                      className={`w-full px-2 py-1.5 text-left text-xs transition-colors rounded ${
-                        isActive ? 'bg-[var(--editor-accent-light)] text-[color:var(--editor-accent)]' : 'hover:bg-[var(--editor-accent-light)]'
-                      }`}
-                      style={{ fontFamily: font.value }}
-                    >
-                      {font.label}
-                    </button>
-                  );
-                })
+                    return (
+                      <button
+                        key={`${font.value}-${font.source}`}
+                        type="button"
+                        onClick={() => {
+                          setShowFontDropdown(false);
+                          setFont(font.value);
+                        }}
+                        className={`w-full px-3 py-2 text-left text-xs transition-colors rounded-sm ${
+                          isActive ? 'bg-[var(--editor-accent-light)] text-[color:var(--editor-accent)]' : 'hover:bg-[var(--editor-accent-light)]'
+                        }`}
+                        style={{ fontFamily: font.value }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span>{font.label}</span>
+                          {font.source === 'system' && (
+                            <span className="text-[10px] text-[color:var(--editor-text-muted)] opacity-60">
+                              시스템
+                            </span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </>
               ) : (
                 <div className="px-3 py-2 text-xs text-[color:var(--editor-text-muted)]">
                   사용할 수 있는 폰트가 없습니다.
@@ -529,8 +538,8 @@ export function ProjectHeader({
       </div>
 
       {/* 🔥 폰트 적용 범위 토글 */}
-      <div className={`${TOOLBAR_STYLES.section} ml-1`}>
-        <div className="flex items-center overflow-hidden rounded-md border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 text-[color:var(--toolbar-muted)]">
+      <div className={TOOLBAR_STYLES.section}>
+        <div className="flex items-center h-8 rounded-md border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/90 backdrop-blur-sm shadow-sm overflow-hidden">
           {FONT_SCOPE_OPTIONS.map((option, index) => {
             const isActive = editorFontScope === option.value;
 
@@ -549,10 +558,10 @@ export function ProjectHeader({
                 <button
                   type="button"
                   onClick={() => setEditorFontScope(option.value)}
-                  className={`px-2.5 py-1 flex items-center gap-1 text-xs font-medium transition-colors ${
+                  className={`h-full px-3 text-xs font-medium transition-all duration-150 flex items-center justify-center ${
                     isActive
-                      ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)] shadow-inner'
-                      : 'text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)]'
+                      ? 'bg-[var(--editor-accent)] text-white shadow-inner'
+                      : 'text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)]'
                   } ${index > 0 ? 'border-l border-[color:var(--toolbar-border)]/70' : ''}`}
                 >
                   {option.label}

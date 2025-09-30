@@ -39,6 +39,68 @@ export interface IGeminiError {
     retryable: boolean;
 }
 
+const GEMINI_ENV_KEYS = ['GEMINI_API_KEY', 'NEXT_PUBLIC_GEMINI_API_KEY'] as const;
+type GeminiEnvKey = (typeof GEMINI_ENV_KEYS)[number];
+type EnvStatus = 'set' | 'missing';
+
+interface GeminiApiKeyResolution {
+    apiKey: string | null;
+    source: GeminiEnvKey | null;
+    statuses: Record<GeminiEnvKey, EnvStatus>;
+}
+
+function getEnvValue(key: string): string | undefined {
+    const fromProcess = typeof process !== 'undefined' ? process.env?.[key] : undefined;
+    if (typeof fromProcess === 'string' && fromProcess.trim().length > 0) {
+        return fromProcess.trim();
+    }
+
+    const loopRendererEnv = (globalThis as { __LOOP_RENDERER_ENV__?: Record<string, unknown> }).__LOOP_RENDERER_ENV__;
+    const fromGlobal = loopRendererEnv?.[key];
+    if (typeof fromGlobal === 'string' && fromGlobal.trim().length > 0) {
+        return (fromGlobal as string).trim();
+    }
+
+    return undefined;
+}
+
+function resolveGeminiApiKey(): GeminiApiKeyResolution {
+    const statuses = {} as Record<GeminiEnvKey, EnvStatus>;
+    let apiKey: string | null = null;
+    let source: GeminiEnvKey | null = null;
+
+    for (const key of GEMINI_ENV_KEYS) {
+        const value = getEnvValue(key);
+        if (value) {
+            statuses[key] = 'set';
+            if (!apiKey) {
+                apiKey = value;
+                source = key;
+            }
+        } else {
+            statuses[key] = 'missing';
+        }
+    }
+
+    return { apiKey, source, statuses };
+}
+
+function parseInteger(value: string | undefined, fallback: number): number {
+    if (!value) {
+        return fallback;
+    }
+    const parsed = Number.parseInt(value, 10);
+    return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function parseFloatSafe(value: string | undefined, fallback: number): number {
+    if (!value) {
+        return fallback;
+    }
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
+}
+
 // 🔥 Gemini API 클라이언트 - Google AI SDK 기반
 export class GeminiClient {
     private genAI: GoogleGenerativeAI;
@@ -47,7 +109,7 @@ export class GeminiClient {
 
     constructor(config: GeminiConfig) {
         this.config = {
-            model: 'gemini-1.5-flash',
+            model: 'gemini-2.5-flash',
             maxTokens: 4096,
             temperature: 0.7,
             ...config
@@ -359,22 +421,39 @@ let geminiClient: GeminiClient | null = null;
 
 export function getGeminiClient(): GeminiClient {
     if (!geminiClient) {
-        // 🔥 클라이언트와 서버 환경 모두 지원
-        const apiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+        const { apiKey, source, statuses } = resolveGeminiApiKey();
+
         if (!apiKey) {
-            throw new GeminiError('MISSING_API_KEY', 'GEMINI_API_KEY environment variable is required', null, false);
+            const diagnosticMessage = [
+                'Gemini API 키를 찾을 수 없습니다.',
+                '환경변수 GEMINI_API_KEY (권장) 또는 NEXT_PUBLIC_GEMINI_API_KEY 중 하나를 설정해주세요.',
+                '',
+                `현재 상태:
+  - GEMINI_API_KEY: ${statuses.GEMINI_API_KEY}
+  - NEXT_PUBLIC_GEMINI_API_KEY: ${statuses.NEXT_PUBLIC_GEMINI_API_KEY}`,
+                '',
+                '자세한 설정 방법은 docs/ENVIRONMENT_VARIABLES.md 파일을 참고하세요.'
+            ].join('\n');
+
+            throw new GeminiError('MISSING_API_KEY', diagnosticMessage, { env: statuses }, false);
         }
 
-        const model = process.env.GEMINI_MODEL || process.env.NEXT_PUBLIC_GEMINI_MODEL || 'gemini-1.5-flash';
+        if (source === 'NEXT_PUBLIC_GEMINI_API_KEY') {
+            Logger.warn('GEMINI_CLIENT', 'Falling back to NEXT_PUBLIC_GEMINI_API_KEY. Consider setting GEMINI_API_KEY to keep the key private.');
+        }
+
+        const model = getEnvValue('GEMINI_MODEL') || getEnvValue('NEXT_PUBLIC_GEMINI_MODEL') || 'gemini-2.5-flash';
+        const maxTokens = parseInteger(getEnvValue('GEMINI_MAX_TOKENS'), 4096);
+        const temperature = parseFloatSafe(getEnvValue('GEMINI_TEMPERATURE'), 0.7);
 
         geminiClient = new GeminiClient({
             apiKey,
             model,
-            maxTokens: parseInt(process.env.GEMINI_MAX_TOKENS || '4096'),
-            temperature: parseFloat(process.env.GEMINI_TEMPERATURE || '0.7')
+            maxTokens,
+            temperature
         });
 
-        Logger.info('GEMINI_CLIENT', 'Singleton instance created');
+        Logger.info('GEMINI_CLIENT', 'Singleton instance created', { source, envStatus: statuses });
     }
     return geminiClient;
 }

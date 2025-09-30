@@ -14,6 +14,8 @@ import Color from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
 import { FontFamily } from './extensions/FontFamily';
 import { FontSize } from './extensions/FontSize';
+import TaskList from '@tiptap/extension-task-list';
+import TaskItem from '@tiptap/extension-task-item';
 import { Logger } from '../../../../../shared/logger';
 import { DragDropHandler } from './handlers/DragDropHandler';
 import { EditorBubbleMenu } from './components/EditorBubbleMenu';
@@ -73,6 +75,19 @@ export function MarkdownEditor({
                 }),
                 FontSize.configure({
                     types: ['textStyle'],
+                }),
+                TaskList.configure({
+                    HTMLAttributes: {
+                        'data-type': 'taskList',
+                        class: 'task-list',
+                    },
+                }),
+                TaskItem.configure({
+                    nested: true,
+                    HTMLAttributes: {
+                        'data-type': 'taskItem',
+                        class: 'task-item',
+                    },
                 }),
                 SlashCommand.configure({
                     suggestion: slashSuggestion,
