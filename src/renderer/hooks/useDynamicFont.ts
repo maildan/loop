@@ -3,10 +3,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Logger } from '../../shared/logger';
 import type { FontOption } from '../../shared/fonts/types';
 
+export type EditorFontScope = 'document' | 'selection';
+
 interface UseDynamicFontResult {
   currentFont: string;
   availableFonts: FontOption[];
   setFont: (family: string) => void;
+  editorFont: string | null;
+  setEditorFont: (family: string | null) => void;
+  editorFontScope: EditorFontScope;
+  setEditorFontScope: (scope: EditorFontScope) => void;
   loading: boolean;
   error: string | null;
   reload: () => Promise<void>;
@@ -14,6 +20,75 @@ interface UseDynamicFontResult {
 
 const STYLE_ELEMENT_ID = 'loop-dynamic-fonts';
 const STORAGE_KEY = 'loop-font-family';
+const EDITOR_FONT_STORAGE_KEY = 'loop-editor-font-family';
+const EDITOR_FONT_SCOPE_STORAGE_KEY = 'loop-editor-font-scope';
+
+function getSavedEditorFont(): string | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  try {
+    return localStorage.getItem(EDITOR_FONT_STORAGE_KEY);
+  } catch (error) {
+    Logger.warn('DYNAMIC_FONT', 'Failed to read stored editor font family', error);
+    return null;
+  }
+}
+
+function saveEditorFont(family: string | null): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    if (family && family.trim().length > 0) {
+      localStorage.setItem(EDITOR_FONT_STORAGE_KEY, family.trim());
+    } else {
+      localStorage.removeItem(EDITOR_FONT_STORAGE_KEY);
+    }
+  } catch (error) {
+    Logger.warn('DYNAMIC_FONT', 'Failed to persist editor font family', error);
+  }
+}
+
+function getSavedEditorFontScope(): EditorFontScope {
+  if (typeof window === 'undefined') {
+    return 'document';
+  }
+
+  try {
+    const stored = localStorage.getItem(EDITOR_FONT_SCOPE_STORAGE_KEY);
+    return stored === 'selection' ? 'selection' : 'document';
+  } catch (error) {
+    Logger.warn('DYNAMIC_FONT', 'Failed to read stored editor font scope', error);
+    return 'document';
+  }
+}
+
+function saveEditorFontScope(scope: EditorFontScope): void {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    localStorage.setItem(EDITOR_FONT_SCOPE_STORAGE_KEY, scope);
+  } catch (error) {
+    Logger.warn('DYNAMIC_FONT', 'Failed to persist editor font scope', error);
+  }
+}
+
+function applyEditorFontPreference(preferred: string | null, fallback: string): void {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const normalized = preferred && preferred.trim().length > 0 ? preferred.trim() : fallback;
+  const root = document.documentElement;
+
+  root.style.setProperty('--editor-font-family', normalized);
+  root.style.setProperty('--font-writing', normalized);
+}
 
 function getSavedFont(): string | null {
   if (typeof window === 'undefined') {
@@ -85,6 +160,8 @@ async function injectFontCss(): Promise<void> {
 
 export function useDynamicFont(): UseDynamicFontResult {
   const [currentFont, setCurrentFont] = useState<string>(() => getSavedFont() ?? 'system-ui, sans-serif');
+  const [editorFont, setEditorFontState] = useState<string | null>(() => getSavedEditorFont());
+  const [editorFontScope, setEditorFontScopeState] = useState<EditorFontScope>(() => getSavedEditorFontScope());
   const [availableFonts, setAvailableFonts] = useState<FontOption[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -143,12 +220,28 @@ export function useDynamicFont(): UseDynamicFontResult {
     applyFontToDocument(currentFont);
   }, [currentFont]);
 
+  useEffect(() => {
+    applyEditorFontPreference(editorFont, currentFont);
+  }, [currentFont, editorFont]);
+
   const setFont = useCallback(
     (family: string) => {
       applyAndStoreFont(family);
     },
     [applyAndStoreFont]
   );
+
+  const setEditorFont = useCallback((family: string | null) => {
+    const normalized = family && family.trim().length > 0 ? family.trim() : null;
+    setEditorFontState(normalized);
+    saveEditorFont(normalized);
+    applyEditorFontPreference(normalized, currentFont);
+  }, [currentFont]);
+
+  const setEditorScope = useCallback((scope: EditorFontScope) => {
+    setEditorFontScopeState(scope);
+    saveEditorFontScope(scope);
+  }, []);
 
   const reload = useCallback(async () => {
     try {
@@ -165,11 +258,15 @@ export function useDynamicFont(): UseDynamicFontResult {
       currentFont,
       availableFonts,
       setFont,
+      editorFont,
+      setEditorFont,
+      editorFontScope,
+      setEditorFontScope: setEditorScope,
       loading,
       error,
       reload
     }),
-    [availableFonts, currentFont, error, loading, reload, setFont]
+    [availableFonts, currentFont, editorFont, editorFontScope, error, loading, reload, setEditorFont, setEditorScope, setFont]
   );
 }
 

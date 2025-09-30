@@ -70,7 +70,7 @@
   
   /* 📏 최적의 읽기 경험을 위한 타이포그래피 - 설정 시스템 연동 */
   @apply px-8 py-16;
-  font-family: var(--app-font-family) !important;
+  font-family: var(--editor-font-family, var(--app-font-family)) !important;
   font-size: var(--app-font-size) !important;
   @apply leading-7 font-normal;
   letter-spacing: -0.011em;
@@ -342,7 +342,7 @@ mark[data-highlight][data-color="red"] {
 /* � 작가를 위한 타이포그래피 - 읽기 친화적 헤딩 */
 .ProseMirror h1 {
   @apply text-4xl font-bold leading-tight my-12 mb-6 cursor-text pb-3 transition-all duration-300 ease-in-out;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
   color: var(--editor-text);
   letter-spacing: -0.025em;
   border-bottom: 2px solid var(--heading-border-h1);

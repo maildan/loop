@@ -23,7 +23,7 @@
 
 .ProseMirror .image-caption {
   @apply text-sm text-gray-600 dark:text-gray-400 mt-2 italic;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
 }
 
 /* 🎬 비디오 스타일 */

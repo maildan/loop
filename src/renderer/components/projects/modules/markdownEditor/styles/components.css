@@ -124,7 +124,7 @@ mark[data-highlight][data-color="red"] {
 .ProseMirror th,
 .ProseMirror td {
   @apply border border-gray-200 px-4 py-3 text-left;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
 }
 
 .ProseMirror th {

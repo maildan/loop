@@ -17,6 +17,7 @@
 
   /* 🔥 폰트 시스템 변수 */
   --app-font-family: var(--app-font-family, system-ui, sans-serif);
+  --editor-font-family: var(--editor-font-family, var(--app-font-family, system-ui, sans-serif));
   --app-font-size: 14px;
 }
 

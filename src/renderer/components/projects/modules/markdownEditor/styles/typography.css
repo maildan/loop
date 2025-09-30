@@ -3,7 +3,7 @@
 /* 🔥 헤딩 스타일 */
 .ProseMirror h1 {
   @apply text-4xl font-bold leading-tight my-12 mb-6 cursor-text transition-all duration-300 ease-in-out;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
   color: var(--editor-text);
   letter-spacing: -0.025em;
 }
@@ -15,7 +15,7 @@
 
 .ProseMirror h2 {
   @apply text-3xl font-semibold leading-snug my-10 mb-4 cursor-text transition-all duration-300 ease-in-out;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
   color: var(--editor-text);
   letter-spacing: -0.02em;
 }
@@ -26,7 +26,7 @@
 
 .ProseMirror h3 {
   @apply text-xl font-semibold leading-relaxed my-8 mb-3 cursor-text transition-colors duration-300 ease-in-out;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
   color: var(--editor-text);
   letter-spacing: -0.015em;
 }
@@ -39,7 +39,7 @@
 .ProseMirror h5,
 .ProseMirror h6 {
   @apply font-semibold my-6 mb-2 cursor-text transition-colors duration-300 ease-in-out;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
   color: var(--editor-text);
 }
 
@@ -61,7 +61,7 @@
   @apply my-2 leading-6 transition-all duration-300 ease-in-out;
   font-size: var(--app-font-size);
   color: var(--editor-text);
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
   text-indent: 0;
   line-height: 1.5;
   margin-bottom: 0.75rem;
@@ -108,7 +108,7 @@
 .ProseMirror ul,
 .ProseMirror ol {
   @apply my-6 pl-8 leading-7;
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
 }
 
 .ProseMirror ul li,
@@ -145,7 +145,7 @@
   @apply relative my-8 p-6 pr-8 italic text-lg leading-relaxed rounded-r-xl;
   background: linear-gradient(135deg, var(--editor-bg-secondary) 0%, var(--editor-bg) 100%);
   border-left: 4px solid var(--editor-accent);
-  font-family: var(--app-font-family);
+  font-family: var(--editor-font-family, var(--app-font-family));
   color: var(--editor-text-muted);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }

@@ -3,7 +3,7 @@
 
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import type { Editor } from '@tiptap/react';
 import { 
   ArrowLeft, 
@@ -82,15 +82,33 @@ export function ProjectHeader({
   // 🔥 커스텀 폰트 크기 및 줄간격 입력
   const [customFontSize, setCustomFontSize] = useState<number>(FONT_SIZE_RANGE.default);
   const [customLineHeight, setCustomLineHeight] = useState<number>(LINE_HEIGHT_RANGE.default);
+  const [selectionScopedFont, setSelectionScopedFont] = useState<string | null>(null);
 
   // 🔥 폰트 시스템 연동 (shared hook)
   const {
     availableFonts,
-    currentFont: activeFont,
-    setFont: applyFontPreference,
+    currentFont: appFont,
+    editorFont,
+    setEditorFont,
+    editorFontScope,
+    setEditorFontScope,
     loading: fontsLoading,
     error: fontError
   } = useDynamicFont();
+
+  const activeFont = useMemo(() => {
+    if (editorFontScope === 'selection') {
+      return selectionScopedFont ?? editorFont ?? appFont;
+    }
+
+    return editorFont ?? appFont;
+  }, [appFont, editorFont, editorFontScope, selectionScopedFont]);
+
+  useEffect(() => {
+    if (editorFontScope === 'document') {
+      setSelectionScopedFont(null);
+    }
+  }, [editorFontScope]);
   
   // 🔥 설정 시스템 연동 (optional)
   const settingsResult = useSettings();
@@ -236,8 +254,14 @@ export function ProjectHeader({
   }, []);
 
   const handleFontFamily = useCallback(async (fontFamily: string) => {
-    Logger.info('ProjectHeader', 'Font family change requested', { fontFamily });
-    applyFontPreference(fontFamily);
+    Logger.info('ProjectHeader', 'Font family change requested', { fontFamily, scope: editorFontScope });
+
+    if (editorFontScope === 'document') {
+      setEditorFont(fontFamily);
+      setSelectionScopedFont(null);
+    } else {
+      setSelectionScopedFont(fontFamily);
+    }
 
     if (!editor) {
       Logger.warn('ProjectHeader', 'No editor available for font family change');
@@ -250,44 +274,40 @@ export function ProjectHeader({
       console.log('🔍 Available commands:', Object.keys(editor.commands));
       console.log('🔍 FontFamily command available:', !!editor.commands.setFontFamily);
       
-      // 🎨 TipTap setFontFamily 명령어도 실행 (선택된 텍스트용)
-      Logger.debug('ProjectHeader', 'Applying fontFamily via TipTap setFontFamily command', { fontFamily });
-      
-      if (editor.commands.setFontFamily) {
+      // 🎨 TipTap setFontFamily 명령어 - 선택 영역일 때만 인라인 적용
+      const shouldApplyInline = editorFontScope === 'selection';
+      if (shouldApplyInline && editor.commands.setFontFamily) {
+        Logger.debug('ProjectHeader', 'Applying fontFamily via TipTap setFontFamily command', { fontFamily });
         const success = editor.commands.setFontFamily(fontFamily);
         console.log('🎨 setFontFamily result:', success);
-        
+
         if (success) {
           Logger.info('ProjectHeader', 'Font family applied successfully via TipTap command', { fontFamily });
-          
-          // 🧹 빈 TextStyle span 정리 (TipTap 공식 명령어)
           editor.commands.removeEmptyTextStyle();
-          
-          // 🔍 디버깅: HTML 결과 확인
+
           setTimeout(() => {
             console.log('🔍 Editor HTML after font change:', editor.getHTML());
           }, 100);
-          
-          Logger.info('ProjectHeader', 'Font family change completed', { 
+
+          Logger.info('ProjectHeader', 'Font family change completed', {
             fontFamily,
             simplifiedName: getSimplifiedFontName(fontFamily),
-            success: true 
+            success: true
           });
         } else {
           Logger.warn('ProjectHeader', 'TipTap setFontFamily command failed', { fontFamily });
         }
-      } else {
+      } else if (shouldApplyInline && !editor.commands.setFontFamily) {
         Logger.error('ProjectHeader', 'setFontFamily command not available - FontFamily extension may not be loaded');
         console.error('❌ FontFamily extension not properly loaded!');
       }
-      
     } catch (error) {
-      Logger.error('ProjectHeader', 'Font family change failed', { 
-        error: String(error), 
-        fontFamily 
+      Logger.error('ProjectHeader', 'Font family change failed', {
+        error: String(error),
+        fontFamily
       });
     }
-  }, [applyFontPreference, editor, getSimplifiedFontName]);
+  }, [editor, editorFontScope, getSimplifiedFontName, setEditorFont]);
 
   const handleFontSize = useCallback((fontSize: number) => {
     if (!editor) {
@@ -455,6 +475,34 @@ export function ProjectHeader({
               )}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* 🔥 폰트 적용 범위 토글 */}
+      <div className={`${TOOLBAR_STYLES.section} ml-1`}>
+        <div className="flex items-center overflow-hidden rounded-md border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)] text-[color:var(--toolbar-muted)]">
+          <button
+            type="button"
+            onClick={() => setEditorFontScope('document')}
+            className={`px-2 py-1 text-xs transition-colors ${
+              editorFontScope === 'document'
+                ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)]'
+                : 'hover:bg-[var(--toolbar-hover-bg)]'
+            }`}
+          >
+            문서 전체
+          </button>
+          <button
+            type="button"
+            onClick={() => setEditorFontScope('selection')}
+            className={`px-2 py-1 text-xs transition-colors border-l border-[color:var(--toolbar-border)] ${
+              editorFontScope === 'selection'
+                ? 'bg-[var(--button-active)] text-[color:var(--editor-accent)]'
+                : 'hover:bg-[var(--toolbar-hover-bg)]'
+            }`}
+          >
+            선택 영역
+          </button>
         </div>
       </div>
 

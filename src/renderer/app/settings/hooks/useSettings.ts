@@ -30,21 +30,25 @@ export function useSettings(): UseSettingsReturn {
     if (!settings) return;
 
     const root = document.documentElement;
-    const family = settings.app.fontFamily || 'system-ui, sans-serif';
+  const appFamily = settings.app.fontFamily?.trim() || 'system-ui, sans-serif';
+
     root.style.setProperty('--app-font-size', `${settings.app.fontSize}px`);
-    root.style.setProperty('--app-font-family', family);
-    root.style.setProperty('--dynamic-font-family', family);
-    root.style.setProperty('--font-primary', family);
-    root.style.setProperty('--font-writing', family);
-    root.style.setProperty('--font-app', family);
-    root.style.fontFamily = family;
+    root.style.setProperty('--app-font-family', appFamily);
+    root.style.setProperty('--dynamic-font-family', appFamily);
+    root.style.setProperty('--font-primary', appFamily);
+    root.style.setProperty('--font-app', appFamily);
+
+  root.style.setProperty('--editor-font-family', appFamily);
+  root.style.setProperty('--font-writing', appFamily);
+
+    root.style.fontFamily = appFamily;
     if (document.body) {
-      document.body.style.fontFamily = family;
+      document.body.style.fontFamily = appFamily;
     }
 
     Logger.debug('USE_SETTINGS', 'CSS variables updated', {
       fontSize: settings.app.fontSize,
-      fontFamily: settings.app.fontFamily
+      appFontFamily: settings.app.fontFamily
     });
   }, [settings]);
 
@@ -152,20 +156,21 @@ export function useSettings(): UseSettingsReturn {
         // 🔥 폰트 설정 CSS 변수 업데이트 (즉시 적용)
         setTimeout(() => {
           const root = document.documentElement;
-          const family = merged.app.fontFamily || 'system-ui, sans-serif';
+          const appFamily = merged.app.fontFamily || 'system-ui, sans-serif';
           root.style.setProperty('--app-font-size', `${merged.app.fontSize}px`);
-          root.style.setProperty('--app-font-family', family);
-          root.style.setProperty('--dynamic-font-family', family);
-          root.style.setProperty('--font-primary', family);
-          root.style.setProperty('--font-writing', family);
-          root.style.setProperty('--font-app', family);
-          root.style.fontFamily = family;
+          root.style.setProperty('--app-font-family', appFamily);
+          root.style.setProperty('--dynamic-font-family', appFamily);
+          root.style.setProperty('--font-primary', appFamily);
+          root.style.setProperty('--font-app', appFamily);
+          root.style.setProperty('--editor-font-family', appFamily);
+          root.style.setProperty('--font-writing', appFamily);
+          root.style.fontFamily = appFamily;
           if (document.body) {
-            document.body.style.fontFamily = family;
+            document.body.style.fontFamily = appFamily;
           }
           Logger.debug('USE_SETTINGS', 'Initial CSS font variables applied', {
             fontSize: merged.app.fontSize,
-            fontFamily: merged.app.fontFamily
+            appFontFamily: merged.app.fontFamily
           });
         }, 0);
 
@@ -252,8 +257,9 @@ export function useSettings(): UseSettingsReturn {
             root.style.setProperty('--app-font-family', family);
             root.style.setProperty('--dynamic-font-family', family);
             root.style.setProperty('--font-primary', family);
-            root.style.setProperty('--font-writing', family);
             root.style.setProperty('--font-app', family);
+            root.style.setProperty('--editor-font-family', family);
+            root.style.setProperty('--font-writing', family);
             root.style.fontFamily = family;
             if (document.body) {
               document.body.style.fontFamily = family;
@@ -264,6 +270,7 @@ export function useSettings(): UseSettingsReturn {
             value
           });
         }
+
       } else {
         throw new Error(result.error || `Failed to save ${keyPath}`);
       }
@@ -293,7 +300,7 @@ export function useSettings(): UseSettingsReturn {
       Logger.info('USE_SETTINGS', 'Saving all settings...');
 
       // 🔥 명시적으로 모든 카테고리 저장 (누락 방지)
-      const categories = ['app', 'keyboard', 'ui', 'performance', 'account', 'notifications'] as const;
+  const categories = ['app', 'keyboard', 'ui', 'performance', 'account', 'notifications'] as const;
 
       for (const category of categories) {
         const categoryData = settings[category];
@@ -364,6 +371,10 @@ export function useSettings(): UseSettingsReturn {
   useEffect(() => {
     loadSettings();
   }, [loadSettings]);
+
+  useEffect(() => {
+    updateCSSVariables();
+  }, [updateCSSVariables]);
 
   // subscribe to main process broadcasts so UI updates immediately when settings change
   useEffect(() => {

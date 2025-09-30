@@ -92,6 +92,7 @@ export default function Settings(): React.ReactElement {
             updateSetting={updateSetting}
           />
         )}
+
       </div>
 
       {/* 액션 버튼 */}
