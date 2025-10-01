@@ -1,8 +1,14 @@
 // 🔥 기가차드 Shutdown Manager - 깔끔한 종료 처리
 
-import { app } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { Logger } from '../../shared/logger';
 import { ManagerCoordinator } from './ManagerCoordinator';
+
+// 🔥 Global 타입 augmentation
+declare global {
+  // eslint-disable-next-line no-var
+  var mainWindow: BrowserWindow | null | undefined;
+}
 
 /**
  * 🔥 ShutdownManager - 앱 종료 프로세스 전담
@@ -112,9 +118,9 @@ export class ShutdownManager {
       const { getSettingsManager } = await import('../settings');
       const settingsManager = getSettingsManager();
 
-      // 설정이 저장 메서드가 있다면 호출
-      if (settingsManager && typeof (settingsManager as any).save === 'function') {
-        await (settingsManager as any).save();
+      // 설정이 저장 메서드가 있다면 호출 (타입 가드)
+      if (settingsManager && 'save' in settingsManager && typeof settingsManager.save === 'function') {
+        await (settingsManager.save as () => Promise<void>)();
         Logger.info('SHUTDOWN_MANAGER', '💾 Settings saved');
       }
     } catch (error) {
@@ -183,8 +189,8 @@ export class ShutdownManager {
   private finalCleanup(): void {
     try {
       // 글로벌 변수 정리
-      if ((global as any).mainWindow) {
-        (global as any).mainWindow = null;
+      if (global.mainWindow) {
+        global.mainWindow = null;
       }
 
       // 프로세스 정리
