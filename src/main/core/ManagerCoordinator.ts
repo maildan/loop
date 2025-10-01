@@ -14,6 +14,7 @@ import { getTrayManager } from '../managers/TrayManager';
 import { handlersManager } from '../managers/HandlersManager';
 import { sessionManager } from '../managers/SessionManager';
 import { databaseManager } from '../managers/DatabaseManager';
+import { updaterManager } from '../managers/UpdaterManager';
 
 // 🔥 BrowserDetector 인스턴스 생성
 const browserDetector = new BrowserDetector();
@@ -177,6 +178,13 @@ export class ManagerCoordinator {
         Logger.info(this.componentName, '✅ TrayManager 초기화 완료');
       }
 
+      // Updater Manager (자동 업데이트, 패키지된 앱에서만 동작)
+      if (!this.initializedManagers.has('updater')) {
+        await updaterManager.initialize();
+        this.initializedManagers.add('updater');
+        Logger.info(this.componentName, '✅ UpdaterManager 초기화 완료');
+      }
+
       // DataSync Manager (개발모드에서는 비활성화)
       if (!this.isDevelopmentMode && !this.initializedManagers.has('dataSync')) {
         await dataSyncManager.initialize();
@@ -292,6 +300,7 @@ export class ManagerCoordinator {
       const managers = [
         { name: 'browser', instance: browserDetector },
         { name: 'dataSync', instance: dataSyncManager },
+        { name: 'updater', instance: updaterManager },
         { name: 'tray', instance: getTrayManager() },
         { name: 'shortcuts', instance: getShortcutsManager() },
         { name: 'menu', instance: getMenuManager() },
