@@ -1,11 +1,12 @@
 import { ProjectAnalysis, ProjectElement } from '../../../../hooks/useProjectData';
+import { ProjectCharacter, ProjectNote } from '../../../../../shared/types/project';
 
 export interface SynopsisViewProps {
     projectId: string;
     synopsisId?: string;
     onBack?: () => void;
-    characters?: any[];
-    notes?: any[];
+    characters?: ProjectCharacter[];
+    notes?: ProjectNote[];
     content?: string;
 }
 
@@ -15,8 +16,8 @@ export interface TimelinePanelProps {
     analysis: ProjectAnalysis;
     elements: ProjectElement[];
     projectId?: string;
-    characters?: any[];
-    notes?: any[];
+    characters?: ProjectCharacter[];
+    notes?: ProjectNote[];
     content?: string;
     onNavigateToChapter?: (chapterId: string) => void;
 }
@@ -24,8 +25,8 @@ export interface TimelinePanelProps {
 export interface OutlinePanelProps {
     elements: ProjectElement[];
     projectId?: string;
-    characters?: any[];
-    notes?: any[];
+    characters?: ProjectCharacter[];
+    notes?: ProjectNote[];
     content?: string;
 }
 

@@ -4,6 +4,7 @@
 import { ipcMain, IpcMainInvokeEvent, shell } from 'electron';
 import { Logger } from '../../shared/logger';
 import { IpcResponse, Project, ProjectCharacter, ProjectStructure, ProjectNote } from '../../shared/types';
+import type { IdeaItem } from '../types/project';
 import { prismaService } from '../services/PrismaService';
 import { IdeaService } from '../services/ideaService';
 import { SynopsisService } from '../services/synopsisService';
@@ -270,7 +271,7 @@ export function setupProjectIpcHandlers(): void {
       if (updates.author) updateData.author = updates.author;
 
       // 🔥 디버깅 로그: 저장할 데이터 확인
-      console.log('🔥 DEBUG: Backend about to save updateData:', {
+      Logger.debug('PROJECT_IPC', 'Backend about to save updateData', {
         hasChapters: !!updateData.chapters,
         chaptersLength: updateData.chapters?.length,
         chaptersPreview: updateData.chapters?.substring(0, 100)
@@ -1094,7 +1095,7 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
         projectId: note.projectId,
         title: note.title,
         content: note.content || '',
-        tags: note.tags ? (typeof note.tags === 'string' ? note.tags.split(',').map(t => t.trim()) : undefined) : undefined,
+        tags: note.tags ? (typeof note.tags === 'string' ? note.tags.split(',').map((t: string) => t.trim()) : undefined) : undefined,
         createdAt: note.createdAt,
         updatedAt: note.updatedAt,
       }));
@@ -1151,7 +1152,7 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
   });
 
   // 아이디어 생성
-  ipcMain.handle('projects:create-idea', async (event: IpcMainInvokeEvent, projectId: string, ideaData: any): Promise<IpcResponse<any>> => {
+  ipcMain.handle('projects:create-idea', async (event: IpcMainInvokeEvent, projectId: string, ideaData: Omit<IdeaItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<IpcResponse<IdeaItem>> => {
     try {
       Logger.debug('PROJECT_IPC', 'Creating new idea', { projectId, title: ideaData.title });
       
@@ -1183,7 +1184,7 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
   });
 
   // 아이디어 업데이트
-  ipcMain.handle('projects:update-idea', async (event: IpcMainInvokeEvent, ideaId: string, updates: any): Promise<IpcResponse<any>> => {
+  ipcMain.handle('projects:update-idea', async (event: IpcMainInvokeEvent, ideaId: string, updates: Partial<Omit<IdeaItem, 'id' | 'createdAt'>>): Promise<IpcResponse<IdeaItem>> => {
     try {
       Logger.debug('PROJECT_IPC', 'Updating idea', { ideaId });
       

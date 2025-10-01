@@ -173,8 +173,7 @@ export class PerformanceOptimizer {
 
     // 개발 환경에서 성능 정보 출력
     if (process.env.NODE_ENV === 'development') {
-      console.log('🚀 기가차드 성능 최적화 활성화됨:');
-      console.table(optimizationSummary);
+      Logger.info('PERF', '기가차드 성능 최적화 활성화됨', optimizationSummary);
     }
   }
 

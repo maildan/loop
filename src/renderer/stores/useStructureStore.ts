@@ -45,17 +45,17 @@ export const useStructureStore = create<StructureStore>()(
             // 🔥 DB에서 구조 데이터 로드
             loadStructuresFromDB: async (projectId) => {
                 try {
-                    console.log('🔍 [useStructureStore] loadStructuresFromDB called:', { projectId });
+                    Logger.debug('STRUCTURE_STORE', 'loadStructuresFromDB called', { projectId });
 
                     if (!window.electronAPI?.projects?.getStructure) {
-                        console.warn('⚠️ [useStructureStore] electronAPI.projects.getStructure not available');
+                        Logger.warn('STRUCTURE_STORE', 'electronAPI.projects.getStructure not available');
                         return;
                     }
 
                     const result = await window.electronAPI.projects.getStructure(projectId);
 
                     if (result.success && result.data) {
-                        console.log('📊 [useStructureStore] Loaded structures from DB:', {
+                        Logger.debug('STRUCTURE_STORE', 'Loaded structures from DB', {
                             projectId,
                             count: result.data.length,
                             structures: result.data.map(s => ({
@@ -77,11 +77,11 @@ export const useStructureStore = create<StructureStore>()(
 
                         Logger.info('STRUCTURE_STORE', `✅ Loaded ${result.data.length} structures from DB`, { projectId });
                     } else {
-                        console.log('📭 [useStructureStore] No structures found in DB or failed to load:', result.error);
+                        Logger.debug('STRUCTURE_STORE', 'No structures found in DB or failed to load', { error: result.error });
                         Logger.warn('STRUCTURE_STORE', 'Failed to load structures from DB', { projectId, error: result.error });
                     }
                 } catch (error) {
-                    console.error('❌ [useStructureStore] Error loading structures from DB:', error);
+                    Logger.error('STRUCTURE_STORE', 'Error loading structures from DB', error);
                     Logger.error('STRUCTURE_STORE', 'Error loading structures from DB', error);
                 }
             },

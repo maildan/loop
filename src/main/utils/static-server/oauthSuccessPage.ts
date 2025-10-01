@@ -221,7 +221,7 @@ export class OAuthSuccessPage {
         // Loop 앱 커스텀 프로토콜 시도
         window.location.href = 'loop://oauth-success';
       } catch (e) {
-        console.log('Direct app launch failed, continuing with window close');
+        Logger.debug('OAUTH_SUCCESS_PAGE', 'Direct app launch failed, continuing with window close');
       }
     }
     

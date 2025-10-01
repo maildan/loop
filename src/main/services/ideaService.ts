@@ -1,8 +1,21 @@
 // 🔥 아이디어 서비스 - Prisma 데이터 연동
 import type { IdeaItem } from '../../main/types/project';
+import type { ProjectNote } from '../../shared/types';
 import { Logger } from '../../shared/logger';
 import { createSuccess, createError, type Result } from '../../shared/common';
 import { prismaService } from './PrismaService';
+
+// 🔥 아이디어 태그 데이터 타입 (Prisma Json 필드)
+interface IdeaTags {
+  category?: string;
+  stage?: string;
+  tags?: string[];
+  priority?: string;
+  connections?: string[];
+  attachments?: string[];
+  notes?: string;
+  isFavorite?: boolean;
+}
 
 // 🔥 아이디어 서비스
 export class IdeaService {
@@ -19,19 +32,19 @@ export class IdeaService {
                     { sortOrder: 'asc' },
                     { createdAt: 'desc' }
                 ]
-            });
+            }) as ProjectNote[];
 
             // ProjectNote를 IdeaItem으로 매핑
             const mappedIdeas: IdeaItem[] = ideas.map((note) => {
-                const tagsData = (note.tags as any) || {};
+                const tagsData = (note.tags as IdeaTags) || {};
                 return {
                     id: note.id,
                     title: note.title,
                     content: note.content || '',
-                    category: tagsData.category || 'general',
-                    stage: tagsData.stage || 'idea',
+                    category: (tagsData.category as IdeaItem['category']) || 'general',
+                    stage: (tagsData.stage as IdeaItem['stage']) || 'idea',
                     tags: Array.isArray(tagsData.tags) ? tagsData.tags : [],
-                    priority: tagsData.priority || 'medium',
+                    priority: (tagsData.priority as IdeaItem['priority']) || 'medium',
                     connections: Array.isArray(tagsData.connections) ? tagsData.connections : [],
                     attachments: Array.isArray(tagsData.attachments) ? tagsData.attachments : [],
                     notes: tagsData.notes || '',
@@ -79,15 +92,15 @@ export class IdeaService {
             });
 
             // ProjectNote를 IdeaItem으로 매핑
-            const tagsData = (newNote.tags as any) || {};
+            const tagsData = (newNote.tags as IdeaTags) || {};
             const mappedIdea: IdeaItem = {
                 id: newNote.id,
                 title: newNote.title,
                 content: newNote.content || '',
-                category: tagsData.category || 'general',
-                stage: tagsData.stage || 'idea',
+                category: (tagsData.category as IdeaItem['category']) || 'general',
+                stage: (tagsData.stage as IdeaItem['stage']) || 'idea',
                 tags: Array.isArray(tagsData.tags) ? tagsData.tags : [],
-                priority: tagsData.priority || 'medium',
+                priority: (tagsData.priority as IdeaItem['priority']) || 'medium',
                 connections: Array.isArray(tagsData.connections) ? tagsData.connections : [],
                 attachments: Array.isArray(tagsData.attachments) ? tagsData.attachments : [],
                 notes: tagsData.notes || '',
@@ -119,10 +132,10 @@ export class IdeaService {
             }
 
             // 기존 tags 데이터 파싱
-            const existingTags = (existingNote.tags as any) || {};
+            const existingTags = (existingNote.tags as IdeaTags) || {};
             
             // ProjectNote 모델용 데이터 변환
-            const updateData: any = {
+            const updateData: Partial<Pick<ProjectNote, 'title' | 'content' | 'tags' | 'type' | 'updatedAt'>> = {
                 type: 'idea',
                 updatedAt: new Date()
             };
@@ -141,7 +154,7 @@ export class IdeaService {
             if (updates.notes) updatedTags.notes = updates.notes;
             if (updates.isFavorite !== undefined) updatedTags.isFavorite = updates.isFavorite;
             
-            updateData.tags = updatedTags;
+            updateData.tags = updatedTags as any;
 
             const updatedNote = await client.projectNote.update({
                 where: { id },
@@ -149,15 +162,15 @@ export class IdeaService {
             });
 
             // ProjectNote를 IdeaItem으로 매핑
-            const tagsData = (updatedNote.tags as any) || {};
+            const tagsData = (updatedNote.tags as IdeaTags) || {};
             const mappedIdea: IdeaItem = {
                 id: updatedNote.id,
                 title: updatedNote.title,
                 content: updatedNote.content || '',
-                category: tagsData.category || 'general',
-                stage: tagsData.stage || 'idea',
+                category: (tagsData.category as IdeaItem['category']) || 'general',
+                stage: (tagsData.stage as IdeaItem['stage']) || 'idea',
                 tags: Array.isArray(tagsData.tags) ? tagsData.tags : [],
-                priority: tagsData.priority || 'medium',
+                priority: (tagsData.priority as IdeaItem['priority']) || 'medium',
                 connections: Array.isArray(tagsData.connections) ? tagsData.connections : [],
                 attachments: Array.isArray(tagsData.attachments) ? tagsData.attachments : [],
                 notes: tagsData.notes || '',
@@ -200,7 +213,7 @@ export class IdeaService {
                 return createError('아이디어를 찾을 수 없습니다.');
             }
 
-            const tagsData = (note.tags as any) || {};
+            const tagsData = (note.tags as IdeaTags) || {};
             const currentFavorite = tagsData.isFavorite || false;
             
             return this.updateIdea(id, { isFavorite: !currentFavorite });

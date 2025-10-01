@@ -3,7 +3,7 @@
 import { Logger } from '../../shared/logger';
 import type {
   ProcessedKeyboardEvent,
-
+  KeyboardEvent,
   HangulCompositionResult,
   LanguageDetectionResult
 } from '../../shared/types';
@@ -36,7 +36,7 @@ export class KeyboardEventProcessor {
   /**
    * 이벤트 처리 (비활성화됨)
    */
-  public async processEvent(event: any): Promise<ProcessedKeyboardEvent | null> {
+  public async processEvent(event: KeyboardEvent): Promise<ProcessedKeyboardEvent | null> {
     // 모든 이벤트 무시
     return null;
   }
@@ -44,7 +44,7 @@ export class KeyboardEventProcessor {
   /**
    * 이벤트 배치 처리 (비활성화됨)
    */
-  public async processBatch(events: any[]): Promise<ProcessedKeyboardEvent[]> {
+  public async processBatch(events: KeyboardEvent[]): Promise<ProcessedKeyboardEvent[]> {
     // 모든 이벤트 무시
     return [];
   }

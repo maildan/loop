@@ -5,7 +5,7 @@ import { Result, IpcResponse, GoogleDriveFilesResponse, GoogleDriveFile, OAuthTo
 import { GOOGLE_OAUTH_CONFIG } from '../types/oauth';
 import { shell } from 'electron';
 import { createHash, randomBytes, createCipheriv } from 'crypto';
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
 import { PORTS } from '../constants';
@@ -18,6 +18,7 @@ interface OAuthState {
   accessToken?: string;
   refreshToken?: string;
   userEmail?: string;
+  userName?: string;
   expiresAt?: Date;
   scopes?: string[];
 }
@@ -28,6 +29,26 @@ interface GoogleDocument {
   title: string;
   modifiedTime: string;
   webViewLink?: string;
+}
+
+interface GoogleDocContent {
+  body?: {
+    content?: Array<{
+      paragraph?: {
+        elements?: Array<{
+          textRun?: {
+            content?: string;
+          };
+        }>;
+      };
+    }>;
+  };
+}
+
+interface Keytar {
+  setPassword(service: string, account: string, password: string): Promise<void>;
+  getPassword(service: string, account: string): Promise<string | null>;
+  deletePassword(service: string, account: string): Promise<boolean>;
 }
 
 /**
@@ -561,8 +582,8 @@ export class OAuthService extends BaseManager {
     }
     // Retry with exponential backoff
     let attempt = 0;
-    let lastErr: any = null;
-    let response: any = null;
+    let lastErr: AxiosError | null = null;
+    let response: AxiosResponse<OAuthTokenResponse> | null = null;
     while (attempt < 3) {
       try {
         const params2 = new URLSearchParams();
@@ -576,7 +597,7 @@ export class OAuthService extends BaseManager {
         });
         break;
       } catch (err) {
-        lastErr = err;
+        lastErr = err as AxiosError;
         const backoff = Math.pow(2, attempt) * 250; // 250ms, 500ms, 1000ms
         Logger.warn(this.componentName, `Refresh access token attempt ${attempt + 1} failed, retrying in ${backoff}ms`, err);
         await new Promise((r) => setTimeout(r, backoff));
@@ -585,7 +606,7 @@ export class OAuthService extends BaseManager {
     }
     if (!response) {
       // If the remote returned invalid_grant (revoked/expired refresh token), clear stored tokens
-      const errData = lastErr?.response?.data;
+      const errData = (lastErr as AxiosError)?.response?.data as any;
       if (errData && (errData.error === 'invalid_grant' || (errData.error_description && /revoked|expired/i.test(errData.error_description)))) {
         Logger.warn(this.componentName, 'Refresh token invalid (expired or revoked) - clearing stored tokens', errData);
         try {
@@ -622,7 +643,7 @@ export class OAuthService extends BaseManager {
     try {
       const userInfo = await this.getUserInfo(this.oauthState.accessToken as string);
       if (userInfo.email) this.oauthState.userEmail = userInfo.email;
-      if (userInfo.name) (this.oauthState as any).userName = userInfo.name;
+      if (userInfo.name) this.oauthState.userName = userInfo.name;
       if (userInfo.picture) (this.oauthState as any).userPicture = userInfo.picture;
     } catch (e) {
       Logger.warn(this.componentName, 'Failed to fetch user info after refresh', e);
@@ -631,7 +652,7 @@ export class OAuthService extends BaseManager {
     await this.saveTokens();
   }
 
-  private extractTextFromGoogleDoc(docData: any): string {
+  private extractTextFromGoogleDoc(docData: GoogleDocContent): string {
     // Google Docs API 응답에서 텍스트 추출
     let text = '';
 
@@ -653,7 +674,7 @@ export class OAuthService extends BaseManager {
   private async loadStoredTokens(): Promise<void> {
     try {
       // dynamic import for optional native dependency (keytar)
-      let keytar: any = null;
+      let keytar: Keytar | null = null;
       try {
         // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
         keytar = await import('keytar');
@@ -698,7 +719,7 @@ export class OAuthService extends BaseManager {
 
   private async saveTokens(): Promise<void> {
     try {
-      let keytar: any = null;
+      let keytar: Keytar | null = null;
       try {
         keytar = await import('keytar');
       } catch (e) {
@@ -746,7 +767,7 @@ export class OAuthService extends BaseManager {
 
   private async clearStoredTokens(): Promise<void> {
     try {
-      let keytar: any = null;
+      let keytar: Keytar | null = null;
       try {
         keytar = await import('keytar');
         if (!keytar) {
@@ -880,7 +901,7 @@ export class OAuthService extends BaseManager {
       };
       // Try to save snapshot to OS secure storage first (keytar)
       try {
-        let keytar: any = null;
+        let keytar: Keytar | null = null;
         try {
           keytar = await import('keytar');
           if (keytar) {

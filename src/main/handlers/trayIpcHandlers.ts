@@ -1,6 +1,6 @@
 // 🔥 기가차드 Tray IPC 핸들러 - 시스템 트레이 연결!
 
-import { ipcMain } from 'electron';
+import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { getTrayManager } from '../managers/TrayManager';
 
@@ -33,7 +33,7 @@ export function setupTrayIpcHandlers(): void {
   });
 
   // 🔥 키보드 모니터링 상태 업데이트
-  ipcMain.handle('tray:set-monitoring-status', async (_: any, isMonitoring: boolean) => {
+  ipcMain.handle('tray:set-monitoring-status', async (_: IpcMainInvokeEvent, isMonitoring: boolean) => {
     try {
       const trayManager = getTrayManager();
       trayManager.setKeyboardMonitoringStatus(isMonitoring);
@@ -53,7 +53,7 @@ export function setupTrayIpcHandlers(): void {
   });
 
   // 🔥 통계 업데이트
-  ipcMain.handle('tray:update-stats', async (_: any, stats: { wpm: number; accuracy: number; sessionTime: number }) => {
+  ipcMain.handle('tray:update-stats', async (_: IpcMainInvokeEvent, stats: { wpm: number; accuracy: number; sessionTime: number }) => {
     try {
       const trayManager = getTrayManager();
       trayManager.updateStats(stats);
@@ -73,7 +73,7 @@ export function setupTrayIpcHandlers(): void {
   });
 
   // 🔥 성공 알림 표시
-  ipcMain.handle('tray:show-success', async (_: any, message: string) => {
+  ipcMain.handle('tray:show-success', async (_: IpcMainInvokeEvent, message: string) => {
     try {
       const trayManager = getTrayManager();
       trayManager.showSuccessNotification(message);
@@ -93,7 +93,7 @@ export function setupTrayIpcHandlers(): void {
   });
 
   // 🔥 에러 상태 표시
-  ipcMain.handle('tray:show-error', async (_: any, errorMessage: string) => {
+  ipcMain.handle('tray:show-error', async (_: IpcMainInvokeEvent, errorMessage: string) => {
     try {
       const trayManager = getTrayManager();
       trayManager.showErrorStatus(errorMessage);

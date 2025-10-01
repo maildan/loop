@@ -1,5 +1,6 @@
 import { ipcMain } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
+import type { AuthSnapshot } from '../../shared/types/auth';
 
 // Lightweight response wrapper used across handlers
 type IpcGenericResponse<T> = { ok: boolean; data?: T; error?: string };
@@ -10,7 +11,7 @@ type IpcGenericResponse<T> = { ok: boolean; data?: T; error?: string };
  */
 export function registerKeychainHandlers() {
     // get snapshot JSON from keytar
-    ipcMain.handle('keychain:get-snapshot', async (_event: IpcMainInvokeEvent): Promise<IpcGenericResponse<any>> => {
+    ipcMain.handle('keychain:get-snapshot', async (_event: IpcMainInvokeEvent): Promise<IpcGenericResponse<AuthSnapshot | null>> => {
         try {
             // dynamic import to avoid loading on unsupported platforms
             const keytar = await import('keytar');
@@ -24,16 +25,16 @@ export function registerKeychainHandlers() {
             if (!raw) return { ok: true, data: null };
             try {
                 return { ok: true, data: JSON.parse(raw) };
-            } catch (e: any) {
+            } catch (e: unknown) {
                 return { ok: false, error: 'failed to parse snapshot' };
             }
-        } catch (e: any) {
-            return { ok: false, error: e?.message || String(e) };
+        } catch (e: unknown) {
+            return { ok: false, error: e instanceof Error ? e.message : String(e) };
         }
     });
 
     // set snapshot JSON into keytar
-    ipcMain.handle('keychain:set-snapshot', async (_event: IpcMainInvokeEvent, payload: any): Promise<IpcGenericResponse<boolean>> => {
+    ipcMain.handle('keychain:set-snapshot', async (_event: IpcMainInvokeEvent, payload: AuthSnapshot): Promise<IpcGenericResponse<boolean>> => {
         try {
             const keytar = await import('keytar');
             if (!keytar || typeof keytar.setPassword !== 'function') {
@@ -44,8 +45,8 @@ export function registerKeychainHandlers() {
             const raw = JSON.stringify(payload || {});
             await keytar.setPassword(service, account, raw);
             return { ok: true, data: true };
-        } catch (e: any) {
-            return { ok: false, error: e?.message || String(e) };
+        } catch (e: unknown) {
+            return { ok: false, error: e instanceof Error ? e.message : String(e) };
         }
     });
 
@@ -60,8 +61,8 @@ export function registerKeychainHandlers() {
             const account = 'snapshot';
             const removed = await keytar.deletePassword(service, account);
             return { ok: true, data: !!removed };
-        } catch (e: any) {
-            return { ok: false, error: e?.message || String(e) };
+        } catch (e: unknown) {
+            return { ok: false, error: e instanceof Error ? e.message : String(e) };
         }
     });
 }

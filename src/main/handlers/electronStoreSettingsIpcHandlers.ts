@@ -86,7 +86,7 @@ export function setupElectronStoreSettingsIpcHandlers(): void {
   });
 
   // 🔥 카테고리별 설정 저장
-  ipcMain.handle('electron-store-settings:set-category', async (_: IpcMainInvokeEvent, category: string, value: any): Promise<IpcResponse<boolean>> => {
+  ipcMain.handle('electron-store-settings:set-category', async (_: IpcMainInvokeEvent, category: string, value: unknown): Promise<IpcResponse<boolean>> => {
     try {
       const settingsManager = getElectronStoreSettingsManager();
       const success = settingsManager.set(category as any, value);
@@ -116,7 +116,7 @@ export function setupElectronStoreSettingsIpcHandlers(): void {
   });
 
   // 🔥 개별 설정값 저장
-  ipcMain.handle('electron-store-settings:set', async (_: IpcMainInvokeEvent, category: string, key: string, value: any): Promise<IpcResponse<boolean>> => {
+  ipcMain.handle('electron-store-settings:set', async (_: IpcMainInvokeEvent, category: string, key: string, value: unknown): Promise<IpcResponse<boolean>> => {
     try {
       const settingsManager = getElectronStoreSettingsManager();
       const success = settingsManager.set(category as any, key as any, value);
@@ -201,7 +201,7 @@ export function setupElectronStoreSettingsIpcHandlers(): void {
   });
 
   // 🔥 성능 설정 특화 핸들러
-  ipcMain.handle('electron-store-settings:set-performance', async (_: IpcMainInvokeEvent, settings: any): Promise<IpcResponse<boolean>> => {
+  ipcMain.handle('electron-store-settings:set-performance', async (_: IpcMainInvokeEvent, settings: { enableGPUAcceleration: boolean; maxCPUUsage: number; maxMemoryUsage: number; enableHardwareAcceleration: boolean }): Promise<IpcResponse<boolean>> => {
     try {
       const settingsManager = getElectronStoreSettingsManager();
       const success = settingsManager.set('performance', settings);

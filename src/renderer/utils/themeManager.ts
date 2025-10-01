@@ -8,6 +8,7 @@
  */
 import type { Theme } from '../../shared/types/theme';
 import { resolveThemeMode, isValidTheme, ALL_THEMES } from '../../shared/types/theme';
+import { Logger } from '../../shared/logger';
 
 export type ThemeMode = 'light' | 'dark';
 
@@ -47,7 +48,7 @@ export class ThemeDOMManager {
 
       this.applyTheme(initialTheme);
     } catch (error) {
-      console.error('🚨 Failed to initialize theme:', error);
+      Logger.error('THEME_MANAGER', 'Failed to initialize theme', error);
       this.applyTheme('light'); // 기본값
     }
   }
@@ -126,7 +127,7 @@ export class ThemeDOMManager {
 
     this.updateMetaThemeColor(backgroundColor);
 
-    console.log(`🎨 Theme applied: ${preference}`, {
+    Logger.debug('THEME_MANAGER', `Theme applied: ${preference}`, {
       resolvedMode,
       dataThemeValue,
       htmlClasses: html.classList.toString(),
@@ -182,14 +183,14 @@ export class ThemeDOMManager {
         if (response.success) {
           this.applyTheme(theme);
         } else {
-          console.error('🚨 Failed to save theme:', response.error);
+          Logger.error('THEME_MANAGER', 'Failed to save theme', { error: response.error });
         }
       } else {
         // Fallback: DOM만 업데이트
         this.applyTheme(theme);
       }
     } catch (error) {
-      console.error('🚨 Failed to set theme:', error);
+      Logger.error('THEME_MANAGER', 'Failed to set theme', error);
     }
   }
 
@@ -214,7 +215,7 @@ export class ThemeDOMManager {
             }
           });
         } catch (error) {
-          console.error('🚨 Failed to subscribe theme change listener:', error);
+          Logger.error('THEME_MANAGER', 'Failed to subscribe theme change listener', error);
         }
       }
 
@@ -226,7 +227,7 @@ export class ThemeDOMManager {
             }
           });
         } catch (error) {
-          console.error('🚨 Failed to subscribe system theme listener:', error);
+          Logger.error('THEME_MANAGER', 'Failed to subscribe system theme listener', error);
         }
       }
     }

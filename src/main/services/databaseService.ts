@@ -2,7 +2,7 @@
 
 import { Logger } from '../../shared/logger';
 import { createSuccess, createError, type Result, isObject } from '../../shared/common';
-import { TypingSession, TypingStats, UserPreferences } from '../../shared/types';
+import { TypingSession, TypingStats, UserPreferences, Project, ProjectCharacter } from '../../shared/types';
 import type { Theme } from '../../shared/types/theme';
 import { isValidTheme } from '../../shared/types/theme';
 import { ensureDatabaseUrl } from '../utils/prismaPaths';
@@ -570,22 +570,22 @@ export class DatabaseService {
         throw new Error('Failed to fetch some analytics data - check individual errors above');
       }
 
-      const projects = projectsResult.data;
-      const characters = charactersResult.data;
-      const sessions = sessionsResult.data;
-      const recentSessions = recentSessionsResult.data;
+      const projects = projectsResult.data as Project[];
+      const characters = charactersResult.data as ProjectCharacter[];
+      const sessions = sessionsResult.data as TypingSession[];
+      const recentSessions = recentSessionsResult.data as TypingSession[];
 
       // 🎯 통계 계산
       const stats = {
         // 프로젝트 통계
         totalProjects: projects.length,
-        activeProjects: projects.filter((p: any) => p.status === 'active').length,
-        completedProjects: projects.filter((p: any) => p.status === 'completed').length,
-        totalWords: projects.reduce((sum: number, p: any) => sum + (p.wordCount || 0), 0),
+        activeProjects: projects.filter((p: Project) => p.status === 'active').length,
+        completedProjects: projects.filter((p: Project) => p.status === 'completed').length,
+        totalWords: projects.reduce((sum: number, p: Project) => sum + (p.wordCount || 0), 0),
 
         // 캐릭터 통계
         totalCharacters: characters.length,
-        charactersByRole: characters.reduce((acc: any, char: any) => {
+        charactersByRole: characters.reduce((acc: Record<string, number>, char: ProjectCharacter) => {
           acc[char.role] = (acc[char.role] || 0) + 1;
           return acc;
         }, {}),
@@ -593,28 +593,28 @@ export class DatabaseService {
         // 타이핑 통계
         totalSessions: sessions.length,
         avgWpm: sessions.length > 0
-          ? sessions.reduce((sum: number, s: any) => sum + (s.wpm || 0), 0) / sessions.length
+          ? sessions.reduce((sum: number, s: TypingSession) => sum + (s.wpm || 0), 0) / sessions.length
           : 0,
         avgAccuracy: sessions.length > 0
-          ? sessions.reduce((sum: number, s: any) => sum + (s.accuracy || 0), 0) / sessions.length
+          ? sessions.reduce((sum: number, s: TypingSession) => sum + (s.accuracy || 0), 0) / sessions.length
           : 0,
 
         // 주간 통계
-        weeklyWords: recentSessions.reduce((sum: number, s: any) => sum + (s.keyCount || 0), 0),
+        weeklyWords: recentSessions.reduce((sum: number, s: TypingSession) => sum + (s.keyCount || 0), 0),
         weeklyAvgWpm: recentSessions.length > 0
-          ? recentSessions.reduce((sum: number, s: any) => sum + (s.wpm || 0), 0) / recentSessions.length
+          ? recentSessions.reduce((sum: number, s: TypingSession) => sum + (s.wpm || 0), 0) / recentSessions.length
           : 0,
 
         // 오늘 통계
-        todayWords: recentSessions.filter((s: any) => {
+        todayWords: recentSessions.filter((s: TypingSession) => {
           const today = new Date();
           const sessionDate = new Date(s.startTime);
           return sessionDate.toDateString() === today.toDateString();
-        }).reduce((sum: number, s: any) => sum + (s.keyCount || 0), 0),
+        }).reduce((sum: number, s: TypingSession) => sum + (s.keyCount || 0), 0),
 
         // 상세 데이터
         topProjects: projects
-          .sort((a: any, b: any) => (b.wordCount || 0) - (a.wordCount || 0))
+          .sort((a: Project, b: Project) => (b.wordCount || 0) - (a.wordCount || 0))
           .slice(0, 5),
         characterDetails: characters.slice(0, 10),
         recentActivity: recentSessions.slice(0, 10)

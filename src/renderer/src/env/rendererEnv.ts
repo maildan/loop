@@ -9,6 +9,8 @@ type PublicEnvKey = (typeof PUBLIC_ENV_KEYS)[number]
 
 declare const __LOOP_RENDERER_PUBLIC_ENV__: Partial<Record<PublicEnvKey, string>> | undefined
 
+import { Logger } from '../../../shared/logger';
+
 type MutableProcessEnv = Record<string, string | undefined>
 
 const ensureProcessEnv = (key: PublicEnvKey, value: string | undefined) => {
@@ -40,7 +42,7 @@ const bootstrapRendererEnv = () => {
   }
 
   if (!resolvedEnv.NEXT_PUBLIC_GEMINI_API_KEY) {
-    console.warn('[Loop][env] NEXT_PUBLIC_GEMINI_API_KEY가 설정되지 않았습니다. Gemini 기반 기능이 제한될 수 있습니다.')
+    Logger.warn('RENDERER_ENV', 'NEXT_PUBLIC_GEMINI_API_KEY가 설정되지 않았습니다. Gemini 기반 기능이 제한될 수 있습니다.');
   }
 
   const globalObject = globalThis as { __LOOP_RENDERER_ENV__?: Record<string, string> }

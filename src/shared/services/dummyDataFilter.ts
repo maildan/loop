@@ -124,8 +124,8 @@ export class DummyDataFilter {
     /**
      * AI 분석 결과 정화
      */
-    public sanitizeAnalysisResult(result: any): {
-        sanitizedResult: any;
+    public sanitizeAnalysisResult(result: unknown): {
+        sanitizedResult: unknown;
         violationsFound: boolean;
         violationReport: Array<{ field: string; violations: string[] }>;
     } {
@@ -133,7 +133,7 @@ export class DummyDataFilter {
         const sanitizedResult = JSON.parse(JSON.stringify(result)); // deep clone
 
         // 재귀적으로 모든 문자열 필드 검사
-        const sanitizeRecursive = (obj: any, path: string = ''): void => {
+        const sanitizeRecursive = (obj: unknown, path: string = ''): void => {
             if (typeof obj === 'string') {
                 const detection = this.detectDummyContent(obj);
                 if (detection.hasDummyContent) {
@@ -142,11 +142,11 @@ export class DummyDataFilter {
 
                     // 해당 필드를 정화된 텍스트로 교체
                     const pathParts = path.split('.');
-                    let target: any = sanitizedResult;
+                    let target: Record<string, unknown> = sanitizedResult as Record<string, unknown>;
                     for (let i = 0; i < pathParts.length - 1; i++) {
                         const key = pathParts[i];
                         if (key && target && typeof target === 'object') {
-                            target = target[key];
+                            target = target[key] as Record<string, unknown>;
                         }
                     }
                     const lastKey = pathParts[pathParts.length - 1];
@@ -158,9 +158,9 @@ export class DummyDataFilter {
                 obj.forEach((item, index) => {
                     sanitizeRecursive(item, path ? `${path}.${index}` : `${index}`);
                 });
-            } else if (obj && typeof obj === 'object') {
+            } else if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
                 Object.keys(obj).forEach(key => {
-                    sanitizeRecursive(obj[key], path ? `${path}.${key}` : key);
+                    sanitizeRecursive((obj as Record<string, unknown>)[key], path ? `${path}.${key}` : key);
                 });
             }
         };
@@ -245,7 +245,7 @@ export const aiResponseMiddleware = (response: string): string => {
 /**
  * 분석 결과 후처리 미들웨어
  */
-export const analysisResultMiddleware = (result: any): any => {
+export const analysisResultMiddleware = (result: unknown): unknown => {
     const filter = DummyDataFilter.getInstance();
     const sanitization = filter.sanitizeAnalysisResult(result);
 

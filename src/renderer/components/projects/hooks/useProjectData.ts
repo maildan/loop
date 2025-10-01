@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Logger } from '../../../../shared/logger';
 import { calculateWriterStats, type WriterStats as WriterStatsType } from '../editor/WriterStats';
 import { useAutoSave } from './useAutoSave';
-import { ProjectCharacter, ProjectStructure, ProjectNote } from '../../../../shared/types';
+import { ProjectCharacter, ProjectStructure, ProjectNote, Project } from '../../../../shared/types';
 import useStructureStore from '../../../stores/useStructureStore'; // 🔥 스토어 import 추가
 
 // 저장 상태 타입
@@ -221,7 +221,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
 
       const maxAttempts = 4;
       let attempt = 0;
-      let result: { success: boolean; data?: any; error?: string } | null = null;
+      let result: { success: boolean; data?: Project; error?: string } | null = null;
       while (attempt < maxAttempts) {
         attempt += 1;
         try {

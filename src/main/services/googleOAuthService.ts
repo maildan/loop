@@ -442,15 +442,17 @@ export class GoogleOAuthService {
     // attach event to persist new tokens after refresh
     // google-auth-library returns new credentials via getAccessToken or refreshAccessToken on older libs
     // We'll wrap request for token refresh and persist
-    (client as any).on && (client as any).on('tokens', async (newTokens: any) => {
-      try {
-        const merged = { ...tokens, ...newTokens } as OAuthTokens;
-        if (newTokens.expiry_date) merged.expires_at = newTokens.expiry_date;
-        await tokenStorage.saveTokens('google', merged);
-      } catch (e) {
-        Logger.warn(this.componentName, 'Failed to persist refreshed tokens', e);
-      }
-    });
+    if ((client as any).on) {
+      (client as any).on('tokens', async (newTokens: Partial<OAuthTokens> & { expiry_date?: number }) => {
+        try {
+          const merged = { ...tokens, ...newTokens } as OAuthTokens;
+          if (newTokens.expiry_date) merged.expires_at = newTokens.expiry_date;
+          await tokenStorage.saveTokens('google', merged);
+        } catch (e) {
+          Logger.warn(this.componentName, 'Failed to persist refreshed tokens', e);
+        }
+      });
+    }
 
     return client;
   }
