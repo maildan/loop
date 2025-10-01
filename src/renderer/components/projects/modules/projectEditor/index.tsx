@@ -447,8 +447,8 @@ export const ProjectEditor = memo(function ProjectEditor({
     return (
         <ProjectEditorLayout.Container className="relative overflow-x-hidden">
             {/* 🔥 헤더 + 탭바를 하나의 스티키 영역으로 구성하여 안정적인 레이어링 확보 */}
-            <div className="sticky top-0 z-[1300] flex flex-col bg-[color:hsl(var(--card))] transition-colors duration-200 shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))]">
-                <ProjectEditorLayout.Header className="min-h-[3.5rem] shadow-none">
+            <div className="sticky top-0 z-[1200] flex flex-col bg-[color:hsl(var(--card))] transition-colors duration-200 shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))]">
+                <ProjectEditorLayout.Header className="relative z-[1500] min-h-[3.5rem] shadow-none">
                     <ProjectHeader
                         title={projectData?.title || '프로젝트'}
                         onTitleChange={(title) => {
@@ -471,9 +471,9 @@ export const ProjectEditor = memo(function ProjectEditor({
                 {/* 🔥 EditorTabBar - 헤더 바로 아래에 배치하여 상단에서 항상 노출 (뷰 전환 시에도 DOM 안정성 유지) */}
                 <div
                     aria-hidden={!isWriteView}
-                    className={`overflow-hidden backdrop-blur-sm transition-all duration-200 border-b ${isWriteView
-                        ? 'h-12 bg-[color:hsl(var(--muted))]/85 border-[color:hsl(var(--border))] opacity-100'
-                        : 'h-0 opacity-0 border-transparent pointer-events-none'
+                    className={`relative overflow-hidden backdrop-blur-sm transition-all duration-200 border-b ${isWriteView
+                        ? 'z-[1300] h-12 bg-[color:hsl(var(--muted))]/85 border-[color:hsl(var(--border))] opacity-100'
+                        : 'z-[1000] h-0 opacity-0 border-transparent pointer-events-none'
                     }`}
                 >
                     <EditorTabBar

@@ -138,31 +138,94 @@ export class ClipboardService {
 
     // 🔥 Private helper methods
 
+    private isEditorUsable(editor: Editor | null | undefined): editor is Editor {
+        if (!editor || editor.isDestroyed) {
+            return false;
+        }
+
+        const view = editor.view;
+        if (!view) {
+            return false;
+        }
+
+        const dom = view.dom as Node | null;
+        if (!dom || !dom.isConnected) {
+            Logger.warn('CLIPBOARD_SERVICE', 'Editor DOM node is not connected');
+            return false;
+        }
+
+        return true;
+    }
+
+    private async insertImage(editor: Editor, src: string, alt?: string): Promise<boolean> {
+        const defaultView = editor.view?.dom?.ownerDocument?.defaultView ?? (typeof window !== 'undefined' ? window : undefined);
+        const schedule = defaultView?.requestAnimationFrame?.bind(defaultView) ?? ((cb: FrameRequestCallback) => setTimeout(cb, 0));
+
+        return new Promise<boolean>((resolve) => {
+            schedule(() => {
+                try {
+                    const attrs = {
+                        src,
+                        alt: alt ?? 'Uploaded image',
+                        title: alt ?? undefined,
+                    } as const;
+
+                    const chain = editor.chain().focus();
+
+                    if (typeof (chain as typeof chain & { setImage?: (options: { src: string; alt?: string; title?: string }) => typeof chain }).setImage === 'function') {
+                        const result = (chain as typeof chain & { setImage: (options: { src: string; alt?: string; title?: string }) => typeof chain })
+                            .setImage(attrs)
+                            .run();
+
+                        if (result) {
+                            resolve(true);
+                            return;
+                        }
+                    }
+
+                    const inserted = editor.chain().focus().insertContent({
+                        type: 'image',
+                        attrs,
+                    }).run();
+
+                    if (inserted) {
+                        resolve(true);
+                        return;
+                    }
+
+                    Logger.warn('CLIPBOARD_SERVICE', 'Image insertion command returned false');
+                    resolve(false);
+                } catch (error) {
+                    Logger.error('CLIPBOARD_SERVICE', 'Error while inserting image', error);
+                    resolve(false);
+                }
+            });
+        });
+    }
+
     private async processImageFile(editor: Editor, file: File): Promise<ClipboardResult> {
         return new Promise((resolve) => {
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 const src = e.target?.result as string;
-                if (src) {
-                    try {
-                        // 🔥 React DOM 에러 방지를 위한 안전한 처리
-                        setTimeout(() => {
-                            if (editor && !editor.isDestroyed) {
-                                // insertContent 방식으로 변경하여 DOM 조작 안전성 확보
-                                const imageHtml = `<img src="${src}" alt="Uploaded image" />`;
-                                editor.chain().focus().insertContent(imageHtml).run();
-                                Logger.info('CLIPBOARD_SERVICE', 'Image added to editor safely');
-                                resolve({ success: true, data: src });
-                            } else {
-                                resolve({ success: false, error: 'Editor is destroyed' });
-                            }
-                        }, 0);
-                    } catch (error) {
-                        Logger.error('CLIPBOARD_SERVICE', 'Failed to insert image', error);
-                        resolve({ success: false, error: String(error) });
-                    }
-                } else {
+
+                if (!src) {
                     resolve({ success: false, error: 'Failed to read image file' });
+                    return;
+                }
+
+                if (!this.isEditorUsable(editor)) {
+                    resolve({ success: false, error: 'Editor is not ready' });
+                    return;
+                }
+
+                const didInsert = await this.insertImage(editor, src, file.name);
+
+                if (didInsert) {
+                    Logger.info('CLIPBOARD_SERVICE', 'Image added to editor safely');
+                    resolve({ success: true, data: src });
+                } else {
+                    resolve({ success: false, error: 'Failed to insert image into editor' });
                 }
             };
             reader.onerror = () => {

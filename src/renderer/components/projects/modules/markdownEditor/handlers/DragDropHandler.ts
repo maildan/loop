@@ -100,12 +100,24 @@ export class DragDropHandler {
         e.stopPropagation();
 
         this.element?.classList.remove('drag-over');
-        this.setState?.({ isDragOver: false });
 
-        if (!this.editor || !e.dataTransfer) return;
+        if (!this.editor || !e.dataTransfer) {
+            this.setState?.({ isDragOver: false });
+            return;
+        }
+
+        const view = this.editor.view;
+        if (!view?.dom?.isConnected) {
+            Logger.warn('DRAG_DROP_HANDLER', 'Editor view is no longer connected; aborting drop handling');
+            this.setState?.({ isDragOver: false });
+            return;
+        }
 
         const files = e.dataTransfer.files;
-        if (files.length === 0) return;
+        if (files.length === 0) {
+            this.setState?.({ isDragOver: false });
+            return;
+        }
 
         Logger.info('DRAG_DROP_HANDLER', `Processing ${files.length} dropped files`);
 
@@ -118,6 +130,11 @@ export class DragDropHandler {
             }
         } catch (error) {
             Logger.error('DRAG_DROP_HANDLER', 'Error processing dropped files', error);
+        } finally {
+            // React state 업데이트는 이미지 삽입이 완료된 이후에 수행하여 DOM 동기화 오류를 방지
+            queueMicrotask(() => {
+                this.setState?.({ isDragOver: false });
+            });
         }
     };
 

@@ -25,7 +25,7 @@ interface EditorBubbleMenuProps {
 }
 
 const BUBBLE_STYLES = {
-    bubble: 'flex flex-wrap items-center gap-2 px-3 py-2 bg-[var(--toolbar-bg)]/95 text-[color:var(--toolbar-foreground)] border border-[color:var(--toolbar-border)] rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.35)] backdrop-blur-md z-50 whitespace-nowrap',
+    bubble: 'flex flex-wrap items-center gap-2 px-3 py-2 bg-[var(--toolbar-bg)]/95 text-[color:var(--toolbar-foreground)] border border-[color:var(--toolbar-border)] rounded-xl shadow-[0_12px_32px_rgba(0,0,0,0.35)] backdrop-blur-md z-[1600] whitespace-nowrap',
     button: 'min-w-[2.75rem] px-2.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-colors bg-transparent text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/40 focus-visible:ring-offset-0 flex items-center justify-center gap-1',
     activeButton: 'min-w-[2.75rem] px-2.5 py-1.5 rounded-lg text-xs md:text-sm font-semibold bg-[var(--button-active)] text-[color:var(--editor-accent)] shadow-inner transition-colors flex items-center justify-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/50 focus-visible:ring-offset-0',
     divider: 'w-px h-6 bg-[color:var(--toolbar-divider)]/70 mx-1.5'

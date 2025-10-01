@@ -1,12 +1,13 @@
 'use client';
 
 import React, { ReactNode, useState, useRef, useEffect, useId } from 'react';
+import { createPortal } from 'react-dom';
 import { Logger } from '../../../shared/logger';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const TOOLTIP_STYLES = {
   trigger: 'relative inline-flex items-center justify-center align-middle',
-  tooltip: 'absolute z-50 px-3 py-2 text-xs font-medium text-white bg-slate-900 rounded-md shadow-lg whitespace-nowrap pointer-events-none transition-opacity duration-200',
+  tooltip: 'absolute z-[1700] px-3 py-2 text-xs font-medium text-white bg-slate-900 rounded-md shadow-lg whitespace-nowrap pointer-events-none transition-opacity duration-200',
   arrow: 'absolute w-2 h-2 bg-slate-900 transform rotate-45',
   positions: {
     top: {
@@ -168,12 +169,26 @@ export function Tooltip({
   );
 
   if (!mounted) {
-    return (
-      <div className={TOOLTIP_STYLES.trigger}>
-        {children}
-      </div>
-    );
+    return <div className={TOOLTIP_STYLES.trigger}>{children}</div>;
   }
+
+  const tooltipNode = isOpen && content
+    ? createPortal(
+        <div
+          id={tooltipId}
+          role="tooltip"
+          className={tooltipClassName}
+          style={{
+            [side === 'top' || side === 'bottom' ? 'marginTop' as const : 'marginLeft' as const]:
+              (side === 'top' || side === 'left') ? -sideOffset : sideOffset,
+          }}
+        >
+          {content}
+          {showArrow && <div className={arrowClassName} aria-hidden="true" />}
+        </div>,
+        document.body
+      )
+    : null;
 
   return (
     <div
@@ -187,25 +202,7 @@ export function Tooltip({
       onKeyDown={handleKeyDown}
     >
       {children}
-      {isOpen && content && (
-        <div
-          id={tooltipId}
-          role="tooltip"
-          className={tooltipClassName}
-          style={{
-            [side === 'top' || side === 'bottom' ? 'marginTop' as const : 'marginLeft' as const]:
-              (side === 'top' || side === 'left') ? -sideOffset : sideOffset,
-          }}
-        >
-          {content}
-          {showArrow && (
-            <div 
-              className={arrowClassName} 
-              aria-hidden="true"
-            />
-          )}
-        </div>
-      )}
+      {tooltipNode}
     </div>
   );
 }

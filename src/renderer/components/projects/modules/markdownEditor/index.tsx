@@ -12,6 +12,7 @@ import Highlight from '@tiptap/extension-highlight';
 import Link from '@tiptap/extension-link';
 import Color from '@tiptap/extension-color';
 import TextStyle from '@tiptap/extension-text-style';
+import Image from '@tiptap/extension-image';
 import { FontFamily } from './extensions/FontFamily';
 import { FontSize } from './extensions/FontSize';
 import TaskList from '@tiptap/extension-task-list';
@@ -75,6 +76,14 @@ export function MarkdownEditor({
                 }),
                 FontSize.configure({
                     types: ['textStyle'],
+                }),
+                Image.configure({
+                    inline: false,
+                    allowBase64: true,
+                    HTMLAttributes: {
+                        class: 'markdown-editor-image max-w-full rounded-lg shadow-md my-4',
+                        loading: 'lazy'
+                    }
                 }),
                 TaskList.configure({
                     HTMLAttributes: {
