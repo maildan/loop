@@ -43,7 +43,8 @@
     },
     {
       "from": "node_modules/.prisma/client",
-      "to": "prisma/client"
+      "to": "prisma/client",
+      "filter": ["**/*"]
     },
     {
       "from": "prisma/loop.db",
