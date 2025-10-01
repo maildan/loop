@@ -19,7 +19,17 @@
     "out/renderer/**/*",
     "assets/**/*",
     "package.json",
-    "node_modules/node-mac-permissions/**"
+    "node_modules/node-mac-permissions/**",
+    "!node_modules/pretendard-jp/**",
+    "!node_modules/pretendard/**",
+    "!node_modules/**/*.md",
+    "!node_modules/**/*.ts",
+    "!node_modules/**/LICENSE*",
+    "!node_modules/**/README*",
+    "!node_modules/**/*.map",
+    "!node_modules/**/test/**",
+    "!node_modules/**/tests/**",
+    "!node_modules/**/.github/**"
   ],
   "asarUnpack": [
     "**/*.node",
