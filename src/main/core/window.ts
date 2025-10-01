@@ -1,6 +1,6 @@
 // 🔥 기가차드 윈도우 매니저 - 타입 안전한 윈도우 관리 시스템
 
-import { BrowserWindow, screen, Event } from 'electron';
+import { BrowserWindow, screen, Event, app } from 'electron';
 import { join } from 'path';
 import { Logger } from '../../shared/logger';
 import { WindowInfo } from '../../shared/types';
@@ -263,7 +263,7 @@ export class WindowManager {
 
       if (url) {
         targetUrl = url;
-      } else if (process.env.NODE_ENV === 'development') {
+      } else if (!app.isPackaged) {
         // 개발 환경: electron-vite 개발 서버 사용 (포트 5173 고정)
         const rendererUrl = process.env.ELECTRON_RENDERER_URL || process.env.VITE_DEV_SERVER_URL;
         if (rendererUrl && rendererUrl.startsWith('http')) {
@@ -276,16 +276,17 @@ export class WindowManager {
         Logger.info('WINDOW', '🔧 개발 모드 - electron-vite 개발 서버 사용', { 
           url: targetUrl,
           electronRendererUrl: process.env.ELECTRON_RENDERER_URL,
-          viteUrl: process.env.VITE_DEV_SERVER_URL 
+          viteUrl: process.env.VITE_DEV_SERVER_URL,
+          isPackaged: app.isPackaged
         });
       } else {
-        // 프로덕션 환경: 정적 빌드 파일 사용 (pnpm start)
+        // 프로덕션 환경: 정적 빌드 파일 사용 (packaged app)
         const staticServer = StaticServer.getInstance();
         const isHealthy = await staticServer.checkHealth();
 
         if (isHealthy) {
           targetUrl = staticServer.getMainUrl();
-          Logger.info('WINDOW', '🚀 프로덕션 모드 - 정적 파일 사용', { url: targetUrl });
+          Logger.info('WINDOW', '🚀 프로덕션 모드 - 정적 파일 사용', { url: targetUrl, isPackaged: app.isPackaged });
         } else {
           throw new Error('❌ 정적 파일을 찾을 수 없습니다. 먼저 빌드를 실행하세요.');
         }
@@ -293,12 +294,12 @@ export class WindowManager {
 
       try {
         await window.loadURL(targetUrl);
-        Logger.info('WINDOW', 'URL loaded successfully', { windowId, url: targetUrl });
+        Logger.info('WINDO W', 'URL loaded successfully', { windowId, url: targetUrl });
       } catch (error) {
         Logger.error('WINDOW', 'Failed to load URL', { error, targetUrl });
         
         // 개발 환경에서 연결 실패 시 개발 서버를 기다림
-        if (process.env.NODE_ENV === 'development') {
+        if (!app.isPackaged) {
           Logger.info('WINDOW', '개발 서버 연결 대기 중... 5초 후 재시도');
           setTimeout(async () => {
             try {

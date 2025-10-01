@@ -38,6 +38,12 @@ const EDITOR_STYLES = {
     dragOverlay: 'absolute inset-0 border-2 border-dashed border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center z-10 pointer-events-none',
 } as const;
 
+const StableEditorContent = React.memo<{ editor: Editor }>(({ editor }) => (
+    <EditorContent editor={editor} />
+));
+
+StableEditorContent.displayName = 'StableEditorContent';
+
 export function MarkdownEditor({
     content,
     onChange,
@@ -218,7 +224,7 @@ export function MarkdownEditor({
             {!distractionFree && <EditorBubbleMenu editor={editor} />}
 
             {/* 🔥 메인 에디터 */}
-            <EditorContent editor={editor} />
+            <StableEditorContent editor={editor} />
 
             {/* 🌊 타이핑 사운드 피드백 (향후 구현을 위한 준비) */}
             {typewriterMode && (

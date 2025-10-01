@@ -5,6 +5,7 @@ import { createSuccess, createError, type Result, isObject } from '../../shared/
 import { TypingSession, TypingStats, UserPreferences } from '../../shared/types';
 import type { Theme } from '../../shared/types/theme';
 import { isValidTheme } from '../../shared/types/theme';
+import { ensureDatabaseUrl } from '../utils/prismaPaths';
 
 // #DEBUG: Database service entry point
 Logger.debug('DATABASE', 'Database service module loaded');
@@ -83,10 +84,33 @@ export class DatabaseService {
       // #DEBUG: Initializing database
       Logger.debug('DATABASE', 'Initializing database connection');
 
-      // Prisma 클라이언트 동적 로딩 (타입 안전한 방법)
-      const prismaModule = await import('@prisma/client');
-      const PrismaClientConstructor = (prismaModule as unknown as { PrismaClient: new (...args: unknown[]) => PrismaClient }).PrismaClient ||
-        (prismaModule as unknown as { default: { PrismaClient: new (...args: unknown[]) => PrismaClient } }).default?.PrismaClient;
+      const { dbPath, databaseUrl } = ensureDatabaseUrl();
+      this.config.databaseUrl = databaseUrl;
+      Logger.info('DATABASE', 'Resolved Prisma database path', { dbPath, databaseUrl });
+
+      // Prisma 클라이언트 동적 로딩
+      // 패키지 앱에서는 extraResources에서, 개발 환경에서는 node_modules에서 로드
+      let PrismaClientConstructor;
+      
+      if (process.resourcesPath) {
+        // 패키지 앱: extraResources/prisma/client/index.js를 직접 require (default.js의 exports condition 우회)
+        const path = require('path');
+        const prismaClientDir = path.join(process.resourcesPath, 'prisma', 'client');
+        
+        // default.js 대신 index.js 직접 로드
+        const indexPath = path.join(prismaClientDir, 'index.js');
+        Logger.info('DATABASE', 'Loading Prisma client from extraResources', { indexPath });
+        
+        // index.js 직접 require
+        const prismaModule = require(indexPath);
+        PrismaClientConstructor = prismaModule.PrismaClient;
+      } else {
+        // 개발 환경: 일반 node_modules에서 로드
+        Logger.info('DATABASE', 'Loading Prisma client from node_modules');
+        const prismaModule = await import('@prisma/client');
+        PrismaClientConstructor = (prismaModule as unknown as { PrismaClient: new (...args: unknown[]) => PrismaClient }).PrismaClient ||
+          (prismaModule as unknown as { default: { PrismaClient: new (...args: unknown[]) => PrismaClient } }).default?.PrismaClient;
+      }
 
       if (!PrismaClientConstructor) {
         throw new Error('PrismaClient not found in module');
@@ -99,7 +123,7 @@ export class DatabaseService {
           },
         },
         log: this.config.enableLogging ? ['query', 'info', 'warn', 'error'] : [],
-      });
+      }) as PrismaClient;
 
       // 데이터베이스 연결
       await this.prisma.$connect();

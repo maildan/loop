@@ -23,7 +23,7 @@ metadata:
 # ⚙️ 글로벌 설정
 global_config:
   # AI 모델 설정
-  ai_model: "gemini-1.5-flash"
+  ai_model: "gemini-2.5-flash"
   max_tokens: 4096
   temperature: 0.3
   top_p: 0.8

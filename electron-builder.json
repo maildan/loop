@@ -14,24 +14,18 @@
     "output": "release"
   },
   "files": [
-    "dist/main/**/*",
-    "dist/preload/**/*",
-    "dist/renderer/**/*",
-    "dist/shared/**/*",
+    "out/main/**/*",
+    "out/preload/**/*",
+    "out/renderer/**/*",
     "assets/**/*",
     "package.json",
-    "node_modules/.prisma/client/**/*",
-    "node_modules/@prisma/client/runtime/**/*",
-    "node_modules/prisma-client/runtime/**/*",
     "node_modules/node-mac-permissions/**"
   ],
   "asarUnpack": [
     "**/*.node",
     "**/*.dll",
     "**/*.dylib",
-    "**/*.so",
-    "node_modules/.prisma/client/**/*",
-    "node_modules/prisma-client/runtime/**/*"
+    "**/*.so"
   ],
   "extraResources": [
     {
@@ -39,8 +33,12 @@
       "to": "schema.prisma"
     },
     {
-      "from": "node_modules/.prisma/client/query-engine-darwin-arm64",
-      "to": "prisma/query-engine"
+      "from": "node_modules/.prisma/client",
+      "to": "prisma/client"
+    },
+    {
+      "from": "prisma/loop.db",
+      "to": "prisma/loop.db"
     }
   ],
   "extraFiles": [],

@@ -1,8 +1,9 @@
+import { app } from 'electron';
 import { CSP_POLICIES } from '../../constants';
 
 export function buildDefaultHeaders(contentType = 'text/html; charset=utf-8') {
     // 🔥 환경에 따라 적절한 CSP 선택 (constants에서 관리)
-    const isDev = process.env.NODE_ENV === 'development' || process.env.ELECTRON_IS_DEV === 'true';
+    const isDev = !app.isPackaged;
     const cspPolicy = isDev ? CSP_POLICIES.DEVELOPMENT : CSP_POLICIES.PRODUCTION;
 
     return {

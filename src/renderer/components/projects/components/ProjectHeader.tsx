@@ -33,8 +33,8 @@ const TOOLBAR_STYLES = {
   container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex flex-wrap items-center px-3 gap-2 gap-y-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm overflow-visible',
   section: 'flex items-center gap-1.5 shrink-0',
   divider: 'w-px h-6 bg-[color:var(--toolbar-divider)] opacity-70 mx-2',
-  button: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  buttonActive: 'h-8 px-2.5 rounded-md bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-xs font-semibold shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  button: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-xs font-medium leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  buttonActive: 'h-8 px-2.5 rounded-md bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-xs font-semibold leading-none shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
   dropdown: 'h-8 px-3 min-w-[11rem] rounded-md text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-between gap-1.5 text-xs font-medium border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 backdrop-blur-sm whitespace-nowrap shadow-sm',
   backButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
   colorButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-center relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
@@ -823,6 +823,25 @@ export function ProjectHeader({
 
       <div className={TOOLBAR_STYLES.divider} />
 
+      {/* 🔥 오른쪽 영역 - 리스트 */}
+      <div className={TOOLBAR_STYLES.section}>
+        <button
+          type="button"
+          onClick={handleBulletList}
+          className={editorState.isBulletList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          title="글머리 기호"
+        >
+          <List size={16} />
+        </button>
+        <button
+          type="button"
+          onClick={handleOrderedList}
+          className={editorState.isOrderedList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
+          title="번호 매기기"
+        >
+          <ListOrdered size={16} />
+        </button>
+      </div>
 
       <div className={TOOLBAR_STYLES.divider} />
 

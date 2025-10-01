@@ -13,10 +13,23 @@ export class StaticServer {
   private server: import('http').Server | null = null;
   private port = 0;
   private readonly basePort = PORTS.STATIC_SERVER;
-  private readonly staticPath = join(__dirname, '..', 'renderer');
+  private readonly staticPath: string;
 
   private constructor() {
-    Logger.debug('STATIC_SERVER', 'StaticServer lifecycle-only instance created', { staticPath: this.staticPath });
+    // 패키지 앱과 개발 환경 모두 지원하는 경로 설정
+    if (process.resourcesPath) {
+      // 패키지 앱: asar 안의 out/renderer를 __dirname 기준으로 찾기
+      // __dirname이 app.asar/out/main일 때, ../renderer로 접근
+      this.staticPath = join(__dirname, '..', 'renderer');
+    } else {
+      // 개발 환경: out/renderer
+      this.staticPath = join(__dirname, '..', 'renderer');
+    }
+    Logger.debug('STATIC_SERVER', 'StaticServer lifecycle-only instance created', { 
+      staticPath: this.staticPath, 
+      isPackaged: !!process.resourcesPath,
+      dirname: __dirname 
+    });
   }
 
   public static getInstance(): StaticServer { if (!StaticServer.instance) StaticServer.instance = new StaticServer(); return StaticServer.instance; }
@@ -30,19 +43,37 @@ export class StaticServer {
    * Check whether static build exists and ensure the HTTP server is started in production.
    */
   public async checkHealth(): Promise<boolean> {
-    const indexExists = existsSync(join(this.staticPath, 'index.html'));
-    if (!indexExists) return false;
+    const indexPath = join(this.staticPath, 'index.html');
+    const indexExists = existsSync(indexPath);
+    
+    Logger.info('STATIC_SERVER', '🔍 checkHealth called', { 
+      staticPath: this.staticPath,
+      indexPath,
+      indexExists,
+      dirname: __dirname,
+      resourcesPath: process.resourcesPath,
+      serverRunning: !!this.server,
+      currentPort: this.port
+    });
+
+    if (!indexExists) {
+      Logger.error('STATIC_SERVER', '❌ index.html NOT FOUND', { indexPath });
+      return false;
+    }
 
     // If index exists but server not started, start it (restore legacy behaviour)
     if (!this.server) {
       try {
+        Logger.info('STATIC_SERVER', '🚀 Starting server from checkHealth...');
         await this.start();
       } catch (err) {
         Logger.error('STATIC_SERVER', 'Failed to start server in checkHealth', err);
       }
     }
 
-    return this.port > 0;
+    const healthy = this.port > 0;
+    Logger.info('STATIC_SERVER', `Health check result: ${healthy ? '✅ HEALTHY' : '❌ UNHEALTHY'}`, { port: this.port });
+    return healthy;
   }
 
   public async start(): Promise<void> {

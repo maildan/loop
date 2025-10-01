@@ -1,9 +1,12 @@
 'use strict';
 
 // 🔥 Prisma 싱글톤 서비스 - 연결 풀링으로 성능 개선
-import { PrismaClient } from '@prisma/client';
 import { Logger } from '../../shared/logger';
 import { Project, ProjectCharacter, ProjectStructure, ProjectNote } from '../../shared/types';
+import { ensureDatabaseUrl } from '../utils/prismaPaths';
+
+// PrismaClient 타입 정의 (런타임에 동적 로드)
+type PrismaClient = any;
 
 /**
  * 🔥 Prisma 싱글톤 서비스
@@ -44,39 +47,47 @@ class PrismaService {
       this.isConnecting = true;
       Logger.debug('PRISMA_SERVICE', 'Creating new Prisma client');
 
-      // 🔥 절대 경로로 데이터베이스 URL 설정
-      const path = await import('path');
-      const { app } = await import('electron');
-      const fs = await import('fs');
+      const { dbPath, databaseUrl } = ensureDatabaseUrl();
+      Logger.info('PRISMA_SERVICE', '🔍 Prisma database resolved', {
+        dbPath,
+        databaseUrl,
+        cwd: process.cwd(),
+        dirname: __dirname,
+      });
 
-      let dbPath: string;
-      const isProduction = process.env.NODE_ENV === 'production';
-
-      if (app.isPackaged) {
-        // 패키징된 앱에서는 app.getPath('userData') 사용
-        dbPath = path.join(app.getPath('userData'), 'loop.db');
+      // Prisma 클라이언트 동적 로딩 (databaseService와 동일한 패턴)
+      let PrismaClientConstructor;
+      
+      if (process.resourcesPath) {
+        // 패키지 앱: extraResources/prisma/client/index.js를 직접 require (default.js의 exports condition 우회)
+        const path = require('path');
+        const prismaClientDir = path.join(process.resourcesPath, 'prisma', 'client');
+        
+        // default.js 대신 index.js 직접 로드
+        const indexPath = path.join(prismaClientDir, 'index.js');
+        Logger.info('PRISMA_SERVICE', 'Loading Prisma client from extraResources', { indexPath });
+        
+        // index.js 직접 require
+        const prismaModule = require(indexPath);
+        PrismaClientConstructor = prismaModule.PrismaClient;
       } else {
-        // 모든 환경에서 loop.db 통일 사용 (dev.db 제거)
-        const loopCandidates = [
-          path.join(__dirname, '../../../prisma/loop.db'),
-          path.resolve(process.cwd(), 'prisma/loop.db'),
-          path.resolve(__dirname, '../../prisma/loop.db'),
-        ];
-        const loopPath = loopCandidates.find(p => fs.existsSync(p));
-        dbPath = loopPath || path.resolve(process.cwd(), 'prisma/loop.db');
-        Logger.info('PRISMA_SERVICE', `🎯 모든 환경 loop.db 통합 사용 → ${dbPath}`);
+        // 개발 환경: 일반 node_modules에서 로드
+        Logger.info('PRISMA_SERVICE', 'Loading Prisma client from node_modules');
+        const { PrismaClient: PC } = await import('@prisma/client');
+        PrismaClientConstructor = PC;
       }
 
-      Logger.info('PRISMA_SERVICE', `🔍 DB 경로 설정: ${dbPath}`);
-      Logger.info('PRISMA_SERVICE', `🔍 DB 파일 존재: ${fs.existsSync(dbPath)}`);
-      Logger.info('PRISMA_SERVICE', `🔍 현재 작업 디렉토리: ${process.cwd()}`);
-      Logger.info('PRISMA_SERVICE', `🔍 __dirname: ${__dirname}`);
+      if (!PrismaClientConstructor) {
+        throw new Error('PrismaClient not found in module');
+      }
 
-      // Prisma v6에서는 env 파일의 DATABASE_URL을 사용하도록 권장
-      process.env.DATABASE_URL = `file:${dbPath}`;
-      
-      this.client = new PrismaClient({
-        log: ['error', 'warn']
+      this.client = new PrismaClientConstructor({
+        datasources: {
+          db: {
+            url: databaseUrl,
+          },
+        },
+        log: ['error', 'warn'],
       });
 
       // Prisma v6에서는 lazy connection - 첫 쿼리에서 자동 연결
@@ -129,7 +140,7 @@ class PrismaService {
     fn: (client: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>) => Promise<T>
   ): Promise<T> {
     const client = await this.getClient();
-    return client.$transaction(async (prisma) => {
+    return client.$transaction(async (prisma: any) => {
       return fn(prisma);
     });
   }
@@ -142,7 +153,7 @@ class PrismaService {
   ): Promise<T[]> {
     const client = await this.getClient();
 
-    return await client.$transaction(async (tx) => {
+    return await client.$transaction(async (tx: any) => {
       const results: T[] = [];
       for (const operation of operations) {
         const result = await operation(tx);
@@ -165,7 +176,7 @@ class PrismaService {
   ): Promise<void> {
     const client = await this.getClient();
 
-    await client.$transaction(async (tx) => {
+    await client.$transaction(async (tx: any) => {
       Logger.debug('PRISMA_SERVICE', 'Starting project save transaction', {
         projectId: projectData.project.id,
         charactersCount: projectData.characters?.length || 0,

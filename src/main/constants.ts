@@ -45,12 +45,12 @@ export const CSP_POLICIES = {
   ].join('; '),
   
   PRODUCTION: [
-    "default-src 'self' data:",
-    `script-src 'self' 'unsafe-inline' https://accounts.google.com http://localhost:${PORTS.STATIC_SERVER}`,
-    `style-src 'self' 'unsafe-inline' http://localhost:${PORTS.STATIC_SERVER} http://localhost:${PORTS.RENDERER_DEV} http://localhost:${PORTS.VITE_DEV[0]} http://localhost:${PORTS.VITE_DEV[1]}`,
+    "default-src 'self' data: blob:",
+    "script-src 'self' https://accounts.google.com",
+    "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https://ui-avatars.com https://lh3.googleusercontent.com",
-  "font-src 'self' data: loop-font:",
-    "connect-src 'self' http://localhost:* https://localhost:* ws://localhost:* wss://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
+    "font-src 'self' data: loop-font:",
+    "connect-src 'self' http://localhost:* https://www.googleapis.com https://oauth2.googleapis.com https://generativelanguage.googleapis.com https://api.openai.com",
     "frame-src https://accounts.google.com",
     "worker-src 'self' blob:"
   ].join('; ')
