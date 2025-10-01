@@ -4,6 +4,7 @@ import type { ServerResponse } from 'http';
 import { Logger } from '../../../shared/logger';
 import { buildDefaultHeaders } from './headers';
 import { StaticFileProvider } from './staticProvider';
+import { safePathJoin } from '../../../shared/utils/pathSecurity';
 
 export class DynamicRouter {
     private provider: StaticFileProvider;
@@ -62,13 +63,18 @@ export class DynamicRouter {
 
             // Next.js routing: Handle both page (.html) and data (.json) requests
             const isNextDataRequest = pathOnly.startsWith('/_next/data/');
-            let resourcePath: string;
+            let resourcePath: string | null;
 
             if (isNextDataRequest) {
-                resourcePath = join(this.staticPath, pathOnly);
+                resourcePath = safePathJoin(this.staticPath, pathOnly);
             } else {
                 const pagePath = pathOnly.endsWith('/') ? pathOnly.slice(0, -1) : pathOnly;
-                resourcePath = join(this.staticPath, pagePath === '' ? 'index.html' : pagePath + '.html');
+                resourcePath = safePathJoin(this.staticPath, pagePath === '' ? 'index.html' : pagePath + '.html');
+            }
+
+            if (!resourcePath) {
+                Logger.warn('DYNAMIC_ROUTER', 'Path traversal attempt detected', { pathOnly });
+                return false;
             }
 
             if (existsSync(resourcePath)) {
@@ -143,7 +149,16 @@ export class DynamicRouter {
         if (segments.length >= 3) {
             const projectId = segments[2];
             if (projectId && projectId.trim()) {
-                const exactProjectPath = join(this.staticPath, 'projects', projectId, 'index.html');
+                const projectsPath = safePathJoin(this.staticPath, 'projects');
+                if (!projectsPath) {
+                    Logger.warn('DYNAMIC_ROUTER', 'Invalid projects base path');
+                    return false;
+                }
+                const exactProjectPath = safePathJoin(projectsPath, projectId, 'index.html');
+                if (!exactProjectPath) {
+                    Logger.warn('DYNAMIC_ROUTER', 'Path traversal attempt in project route', { projectId });
+                    return false;
+                }
                 if (existsSync(exactProjectPath)) {
                     const headers = buildDefaultHeaders('text/html; charset=utf-8');
                     res.writeHead(200, headers);

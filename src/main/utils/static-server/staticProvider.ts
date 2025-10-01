@@ -3,6 +3,7 @@ import { join, extname } from 'path';
 import type { ServerResponse } from 'http';
 import { Logger } from '../../../shared/logger';
 import { buildDefaultHeaders } from './headers';
+import { safePathJoin } from '../../../shared/utils/pathSecurity';
 
 export class StaticFileProvider {
     private staticPath: string;
@@ -11,10 +12,22 @@ export class StaticFileProvider {
         this.staticPath = staticPath;
     }
 
-    public resolvePath(requestPath: string): string {
+    public resolvePath(requestPath: string): string | null {
         const decoded = decodeURIComponent(requestPath || '/');
-        if (decoded === '/') return join(this.staticPath, 'index.html');
-        return join(this.staticPath, decoded);
+        if (decoded === '/') {
+            const indexPath = safePathJoin(this.staticPath, 'index.html');
+            if (!indexPath) {
+                Logger.warn('STATIC_SERVER', 'Path traversal attempt detected on index', { decoded });
+                return null;
+            }
+            return indexPath;
+        }
+        const safePath = safePathJoin(this.staticPath, decoded);
+        if (!safePath) {
+            Logger.warn('STATIC_SERVER', 'Path traversal attempt detected', { decoded });
+            return null;
+        }
+        return safePath;
     }
 
     public exists(fullPath: string): boolean {

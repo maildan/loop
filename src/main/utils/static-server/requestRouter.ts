@@ -68,6 +68,11 @@ export class RequestRouter {
             // 3. Try static file for file requests
             if (isFileRequest) {
                 const fullPath = this.staticProvider.resolvePath(pathOnly);
+                if (!fullPath) {
+                    // Path traversal attempt detected
+                    this.staticProvider.serve404(res);
+                    return;
+                }
                 if (this.staticProvider.exists(fullPath)) {
                     await this.staticProvider.serveFile(fullPath, res);
                     return;
@@ -84,6 +89,11 @@ export class RequestRouter {
             // 5. SPA History API Fallback: serve index.html for GET/HEAD requests that accept HTML
             if (this.shouldUseSpaFallback(req)) {
                 const indexPath = this.staticProvider.resolvePath('/');
+                if (!indexPath) {
+                    // Path traversal attempt on index (should never happen)
+                    this.staticProvider.serve404(res);
+                    return;
+                }
                 if (this.staticProvider.exists(indexPath)) {
                     Logger.debug('REQUEST_ROUTER', 'SPA fallback served', { pathOnly });
                     await this.staticProvider.serveFile(indexPath, res);

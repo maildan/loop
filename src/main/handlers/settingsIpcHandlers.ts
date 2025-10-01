@@ -1,9 +1,11 @@
 // 🔥 기가차드 Settings IPC 핸들러 - electron-store 기반 완전 리팩토링
 
-import { ipcMain, IpcMainInvokeEvent } from 'electron';
+import { ipcMain, IpcMainInvokeEvent, app } from 'electron';
+import path from 'path';
 import { Logger } from '../../shared/logger';
 import { IpcResponse } from '../../shared/types';
 import { getElectronStoreSettingsManager } from '../settings/ElectronStoreSettingsManager';
+import { validatePathSafety } from '../../shared/utils/pathSecurity';
 
 const componentName = 'SETTINGS_IPC';
 
@@ -129,11 +131,31 @@ export function setupSettingsIpcHandlers(): void {
   Logger.info(componentName, '✅ electron-store based Settings IPC handlers setup complete');
 
   // Read local file as data URL (used for avatar file:// paths)
+  // 🔒 보안: renderer에서 받은 파일 경로는 반드시 userData 디렉토리 내부로 제한
   ipcMain.handle('settings:read-file', async (_event: IpcMainInvokeEvent, filePath: string): Promise<IpcResponse<string>> => {
     try {
       const fs = require('fs');
-      const data = fs.readFileSync(filePath);
-      const ext = (filePath.split('.').pop() || 'png').toLowerCase();
+      
+      // 파일 경로가 userData 디렉토리 내부인지 검증
+      const userDataPath = app.getPath('userData');
+      const resolvedPath = path.resolve(filePath);
+      
+      if (!validatePathSafety(resolvedPath, userDataPath)) {
+        Logger.warn(componentName, 'Path traversal attempt detected in settings:read-file', { 
+          requestedPath: filePath,
+          resolvedPath,
+          userDataPath 
+        });
+        return { 
+          success: false, 
+          error: 'Access denied: File must be within userData directory', 
+          timestamp: new Date() 
+        };
+      }
+      
+      // nosemgrep: javascript-pathtraversal-rule-non-literal-fs-filename
+      const data = fs.readFileSync(resolvedPath);
+      const ext = (resolvedPath.split('.').pop() || 'png').toLowerCase();
       const mime = ext === 'svg' ? 'image/svg+xml' : `image/${ext}`;
       const dataUrl = `data:${mime};base64,${data.toString('base64')}`;
       return { success: true, data: dataUrl, timestamp: new Date() };
