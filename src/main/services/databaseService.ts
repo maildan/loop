@@ -90,9 +90,10 @@ export class DatabaseService {
 
       // Prisma 클라이언트 동적 로딩
       // 패키지 앱에서는 extraResources에서, 개발 환경에서는 node_modules에서 로드
+      const { app } = require('electron');
       let PrismaClientConstructor;
       
-      if (process.resourcesPath) {
+      if (app.isPackaged) {
         // 패키지 앱: extraResources/prisma/client/index.js를 직접 require (default.js의 exports condition 우회)
         const path = require('path');
         const prismaClientDir = path.join(process.resourcesPath, 'prisma', 'client');
