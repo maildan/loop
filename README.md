@@ -1,8 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Loop
 
-## Getting Started
+Loop is an Electron-based desktop application for authors and writers.
 
-First, run the development server:
+## 📥 Download
+
+Get the latest version from [GitHub Releases](https://github.com/maildan/loop/releases):
+- **macOS**: `Loop-{version}-arm64.dmg` (Apple Silicon) or `Loop-{version}.dmg` (Intel)
+- **Windows**: `Loop Setup {version}.exe`
+
+### ⚠️ macOS Security Warning
+If you see "Loop is damaged and can't be opened", run:
+```bash
+xattr -cr /Applications/Loop.app
+```
+[More troubleshooting tips →](docs/troubleshooting.md)
+
+---
+
+## 🛠 Development
+
+### Prerequisites
+- Node.js 20+
+- pnpm 9+
+
+### Getting Started
+
+First, install dependencies and run the development server:
 
 ```bash
 npm run dev
