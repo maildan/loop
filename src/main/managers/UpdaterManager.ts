@@ -55,6 +55,21 @@ export class UpdaterManager {
   }
 
   /**
+   * ManagerCoordinator 호환성을 위한 stop 메서드
+   */
+  public async stop(): Promise<void> {
+    await this.shutdown();
+  }
+
+  /**
+   * ManagerCoordinator 호환성을 위한 cleanup 메서드
+   */
+  public async cleanup(): Promise<void> {
+    // UpdaterManager는 특별한 cleanup이 필요 없음
+    Logger.debug('UPDATER', 'UpdaterManager cleanup 완료');
+  }
+
+  /**
    * 수동으로 업데이트 체크 트리거 (메뉴나 IPC에서 호출 가능)
    */
   public async checkForUpdates(): Promise<void> {
