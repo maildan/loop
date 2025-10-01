@@ -8,6 +8,9 @@ import { ensureDatabaseUrl } from '../utils/prismaPaths';
 // PrismaClient 타입 정의 (런타임에 동적 로드)
 type PrismaClient = any;
 
+// 🔥 트랜잭션 클라이언트 타입 정의
+type TransactionClient = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>;
+
 /**
  * 🔥 Prisma 싱글톤 서비스
  * 매번 새로운 연결을 생성하지 않고 하나의 인스턴스를 재사용하여 성능 개선
@@ -138,10 +141,10 @@ class PrismaService {
    * 🔥 트랜잭션 실행 - Prisma v6 호환
    */
   public async transaction<T>(
-    fn: (client: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>) => Promise<T>
+    fn: (client: TransactionClient) => Promise<T>
   ): Promise<T> {
     const client = await this.getClient();
-    return client.$transaction(async (prisma: any) => {
+    return client.$transaction(async (prisma: TransactionClient) => {
       return fn(prisma);
     });
   }
@@ -150,11 +153,11 @@ class PrismaService {
    * 🔥 배치 저장 - 성능 최적화를 위한 여러 작업 일괄 처리
    */
   public async batchWrite<T>(
-    operations: Array<(tx: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$extends'>) => Promise<T>>
+    operations: Array<(tx: TransactionClient) => Promise<T>>
   ): Promise<T[]> {
     const client = await this.getClient();
 
-    return await client.$transaction(async (tx: any) => {
+    return await client.$transaction(async (tx: TransactionClient) => {
       const results: T[] = [];
       for (const operation of operations) {
         const result = await operation(tx);
@@ -177,7 +180,7 @@ class PrismaService {
   ): Promise<void> {
     const client = await this.getClient();
 
-    await client.$transaction(async (tx: any) => {
+    await client.$transaction(async (tx: TransactionClient) => {
       Logger.debug('PRISMA_SERVICE', 'Starting project save transaction', {
         projectId: projectData.project.id,
         charactersCount: projectData.characters?.length || 0,
