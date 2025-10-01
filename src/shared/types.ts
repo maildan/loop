@@ -1,7 +1,7 @@
 // 🔥 기가차드 공유 타입 정의 - Electron API 통합
 
 import type { Theme } from './types/theme';
-import type { FontOption } from './fonts/types';
+import type { FontOption, FontVariantManifestEntry } from './fonts/types';
 
 // 🔥 Result 타입 - 함수 결과 래핑
 export interface Result<TData = unknown> {
@@ -305,7 +305,7 @@ export interface ElectronAPI {
     initialize: () => Promise<{ success: boolean; error?: string }>;
     getAvailableFonts: () => Promise<FontOption[]>;
     generateCSS: () => Promise<string>;
-    getFontFamily: (familyName: string) => Promise<{ name: string; displayName: string; category: string; variants: any[]; cssFamily: string } | null>;
+    getFontFamily: (familyName: string) => Promise<{ name: string; displayName: string; category: string; variants: FontVariantManifestEntry[]; cssFamily: string } | null>;
     reload: () => Promise<{ success: boolean; error?: string }>;
   };
 }
