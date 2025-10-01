@@ -639,8 +639,8 @@ export class DatabaseService {
       // 🎯 인사이트 생성
       const insights = [];
 
-      if (stats.topProjects.length > 0) {
-        const topProject = stats.topProjects[0];
+      const topProject = stats.topProjects[0];
+      if (topProject) {
         insights.push({
           id: 'top-project',
           type: 'achievement',

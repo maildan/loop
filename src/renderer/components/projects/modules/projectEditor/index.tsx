@@ -408,8 +408,20 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <SynopsisView
                         projectId={projectId}
                         synopsisId="default" // 기본 시놉시스 ID
-                        characters={projectData?.characters || []}
-                        notes={projectData?.notes || []}
+                        characters={(projectData?.characters || []).map(char => ({
+                            ...char,
+                            color: char.color || '#3B82F6',
+                            sortOrder: char.sortOrder ?? 0,
+                            isActive: char.isActive ?? true
+                        }))}
+                        notes={(projectData?.notes || []).map(note => ({
+                            ...note,
+                            type: note.type || 'general',
+                            color: note.color || '#3B82F6',
+                            isPinned: note.isPinned ?? false,
+                            isArchived: note.isArchived ?? false,
+                            sortOrder: note.sortOrder ?? 0
+                        }))}
                         content={projectData?.content || ''}
                         onBack={() => {
                             Logger.info('PROJECT_EDITOR', 'Synopsis view back - returning to structure view');

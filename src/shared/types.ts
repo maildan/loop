@@ -3,30 +3,17 @@
 import type { Theme } from './types/theme';
 import type { FontOption, FontVariantManifestEntry } from './fonts/types';
 
+// 🎭 프로젝트 관련 타입은 types/project.ts에서 import하여 사용
+import type { ProjectCharacter, ProjectStructure, ProjectNote, Project } from './types/project';
+
+// Re-export for convenience
+export type { ProjectCharacter, ProjectStructure, ProjectNote, Project };
+
 // 🔥 Result 타입 - 함수 결과 래핑
 export interface Result<TData = unknown> {
   success: boolean;
   data?: TData;
   error?: string;
-}
-
-// 📚 프로젝트 구조 데이터 - Main ↔ Renderer 공통
-export interface ProjectStructure {
-  id: string;
-  projectId: string;
-  type: 'chapter' | 'synopsis' | 'idea' | 'act' | 'section';
-  title: string;
-  description?: string;
-  content?: string;
-  status?: string;
-  wordCount?: number;
-  sortOrder?: number;
-  parentId?: string;
-  depth?: number;
-  color?: string;
-  isActive?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 // 🔥 IPC 응답 타입 - Main ↔ Renderer 공통
@@ -89,87 +76,6 @@ export interface TypingSession {
   errorsCount?: number;
   applicationName?: string;
   language?: string;
-}
-
-// 🎯 프로젝트 데이터 - Main ↔ Renderer 공통
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  content: string;
-  chapters?: string; // 🔥 chapters 필드 추가 (JSON 문자열, 옵셔널)
-  progress: number;
-  wordCount: number;
-  lastModified: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  genre: string;
-  status: 'active' | 'completed' | 'paused';
-  author?: string; // 🔥 기가차드 추가: 작성자 필드
-}
-
-// 🎭 프로젝트 캐릭터 데이터 - Main ↔ Renderer 공통
-export interface ProjectCharacter {
-  id: string;
-  projectId: string;
-  name: string;
-  role: string;
-  // 🔥 기본 정보
-  description?: string;
-  notes?: string;
-  // 🔥 상세 정보 확장
-  appearance?: string;      // 외모
-  age?: string;            // 나이  
-  occupation?: string;     // 직업
-  birthplace?: string;     // 출신
-  residence?: string;      // 거주지
-  family?: string;         // 가족
-  personality?: string;    // 성격
-  // 🔥 기존 필드들
-  background?: string;
-  goals?: string;
-  conflicts?: string;
-  avatar?: string;
-  color?: string;
-  sortOrder?: number;
-  isActive?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-// 📚 프로젝트 구조 데이터 - Main ↔ Renderer 공통
-export interface ProjectStructure {
-  id: string;
-  projectId: string;
-  type: 'chapter' | 'synopsis' | 'idea' | 'act' | 'section';
-  title: string;
-  description?: string;
-  content?: string;
-  status?: string;
-  wordCount?: number;
-  sortOrder?: number;
-  parentId?: string;
-  depth?: number;
-  color?: string;
-  isActive?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-// 📝 프로젝트 메모 데이터 - Main ↔ Renderer 공통
-export interface ProjectNote {
-  id: string;
-  projectId: string;
-  title: string;
-  content: string;
-  type?: string;
-  tags?: string[];
-  color?: string;
-  isPinned?: boolean;
-  isArchived?: boolean;
-  sortOrder?: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 // 🔥 메인 Electron API 인터페이스 - Main ↔ Renderer 공통
