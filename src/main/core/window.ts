@@ -9,6 +9,7 @@ import { Platform } from '../utils/platform';
 import { StaticServer } from '../utils/StaticServer';
 import { CSP } from './security'; // 🔥 보안 정책 import
 import { DEV_TOOLS } from '../constants';
+import { RenderProcessGoneDetails } from '../types/electron-events';
 
 
 // #DEBUG: Window manager entry point
@@ -185,7 +186,7 @@ export class WindowManager {
     });
 
     // 🔥 렌더러 프로세스 크래시 감지 (Electron 38+에서는 render-process-gone 사용)
-    window.webContents.on('render-process-gone', (event: any, details: any) => {
+    window.webContents.on('render-process-gone', (_event: Event, details: RenderProcessGoneDetails) => {
       Logger.error('WINDOW', `Renderer process gone: ${details.reason}`, {
         windowId,
         exitCode: details.exitCode,
