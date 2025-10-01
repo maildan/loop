@@ -65,7 +65,7 @@ export class ErrorHandler {
       component: 'UNCAUGHT_EXCEPTION',
       context: {
         name: error.name,
-        cause: (error as any).cause,
+        cause: 'cause' in error ? (error as Error & { cause: unknown }).cause : undefined,
       }
     };
 
