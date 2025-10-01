@@ -88,11 +88,17 @@ export class EventController {
     });
 
     // 앱 종료 전 (타입 안전)
-    app.on('before-quit', (event: Event) => {
+    app.on('before-quit', async (event: Event) => {
       Logger.debug(this.componentName, '🛑 App before quit');
-      
-      // ShutdownManager가 이미 종료 처리를 담당하므로 여기서는 추가 작업 불필요
-      // ShutdownManager의 shutdown() 메서드에서 app.exit(0)를 직접 호출함
+
+      try {
+        // ShutdownManager의 shutdown 처리 (비동기)
+        await handlers.onShutdown();
+        Logger.debug(this.componentName, 'Shutdown completed successfully');
+      } catch (error) {
+        Logger.error(this.componentName, 'Shutdown handler failed', error);
+        // 에러가 있어도 앱은 종료될 수 있도록 함
+      }
     });
 
     // SSL 인증서 에러 처리 (타입 안전)

@@ -220,15 +220,23 @@ export class WindowManager {
   private getAppIcon(): string | undefined {
     // #DEBUG: Getting app icon
     try {
-      const isDev = process.env.NODE_ENV === 'development';
+      const isDev = !app.isPackaged && process.env.NODE_ENV !== 'production';
+      const isPackagedProd = app.isPackaged;
+      const isUnpackagedProd = !app.isPackaged && process.env.NODE_ENV === 'production';
 
       let iconsDir: string;
       if (isDev) {
-        // 개발 환경: 프로젝트 루트의 assets 폴더
-        iconsDir = join(process.cwd(), 'assets');
+        // 개발 환경: 프로젝트 루트의 public/assets 폴더
+        iconsDir = join(process.cwd(), 'public', 'assets');
+      } else if (isPackagedProd) {
+        // 패키지된 프로덕션 환경: 패키지된 앱의 public/assets 폴더
+        iconsDir = join(__dirname, '../../../public/assets');
+      } else if (isUnpackagedProd) {
+        // 패키지되지 않은 프로덕션 환경 (pnpm start): 프로젝트 루트의 public/assets 폴더
+        iconsDir = join(process.cwd(), 'public', 'assets');
       } else {
-        // 프로덕션 환경: 패키지된 앱의 assets 폴더
-        iconsDir = join(__dirname, '../../../assets');
+        // 기본값
+        iconsDir = join(process.cwd(), 'public', 'assets');
       }
 
       if (Platform.isWindows()) {

@@ -388,15 +388,23 @@ export class TrayManager extends BaseManager {
   private getTrayIconPath(): string | null {
     try {
       // 🔥 개발 환경과 프로덕션 환경 구분
-      const isDev = process.env.NODE_ENV === 'development';
+      const isDev = !app.isPackaged && process.env.NODE_ENV !== 'production';
+      const isPackagedProd = app.isPackaged;
+      const isUnpackagedProd = !app.isPackaged && process.env.NODE_ENV === 'production';
 
       let iconsDir: string;
       if (isDev) {
-        // 개발 환경: 프로젝트 루트의 public/icon 폴더
-        iconsDir = path.join(process.cwd(), 'public', 'icon');
+        // 개발 환경: 프로젝트 루트의 public/assets 폴더
+        iconsDir = path.join(process.cwd(), 'public', 'assets');
+      } else if (isPackagedProd) {
+        // 패키지된 프로덕션 환경: 패키지된 앱의 public/assets 폴더
+        iconsDir = path.join(process.resourcesPath, 'public', 'assets');
+      } else if (isUnpackagedProd) {
+        // 패키지되지 않은 프로덕션 환경 (pnpm start): 프로젝트 루트의 public/assets 폴더
+        iconsDir = path.join(process.cwd(), 'public', 'assets');
       } else {
-        // 프로덕션 환경: 패키지된 앱의 public/icon 폴더
-        iconsDir = path.join(process.resourcesPath, 'public', 'icon');
+        // 기본값
+        iconsDir = path.join(process.cwd(), 'public', 'assets');
       }
 
       // 🔥 아이콘 경로 존재 여부 미리 확인
@@ -429,13 +437,13 @@ export class TrayManager extends BaseManager {
           }
         }
 
-        // public/icon 폴더에 있는 실제 파일들 사용
+        // public/assets 폴더에 있는 실제 파일들 사용
         const candidates = [
-          'trayTemplate.png',    // 메뉴바 템플릿 아이콘 (가장 적합)
-          'trayTemplate16.png',  // 16x16 크기
-          'trayTemplate32.png',  // 32x32 크기  
-          'app.icns',           // 앱 아이콘
-          'appIcon.png'         // PNG 앱 아이콘
+          'icon.icns',                    // 기본 macOS 아이콘 (가장 안정적)
+          'icon.iconset/icon_16x16.png',  // 메뉴바용 PNG 아이콘
+          'icon_128x128.icns',            // Retina 메뉴바 아이콘
+          'icon.png',                     // PNG 아이콘
+          'icon/icon.png'                 // icon 폴더 안의 PNG
         ];
 
         for (const candidate of candidates) {

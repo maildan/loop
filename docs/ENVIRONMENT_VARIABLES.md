@@ -323,13 +323,4 @@ export function validateEnvironment(): EnvironmentValidation {
 }
 ```
 
-## 📚 관련 문서
 
-- [Architecture Guide](./docs/api/architecture.md) - 전체 아키텍처 이해
-- [Development Setup](./README.md) - 개발 환경 설정
-- [Deployment Guide](./docs/deployment.md) - 배포 가이드
-- [Troubleshooting](./docs/api/troubleshooting.md) - 문제 해결
-
----
-
-**🔥 기가차드 원칙**: 모든 환경변수는 명시적으로 정의되고, 기본값이 제공되어야 하며, 검증되어야 합니다.

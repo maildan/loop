@@ -66,7 +66,7 @@ export class ShutdownManager {
       }
 
       Logger.info('SHUTDOWN_MANAGER', '✅ Shutdown completed successfully');
-      app.exit(0);
+      // EventController의 before-quit 이벤트가 기본 종료 동작을 처리함
 
     } catch (error) {
       Logger.error('SHUTDOWN_MANAGER', '💥 Shutdown error', error);
