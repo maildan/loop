@@ -90,13 +90,9 @@ export class EventController {
     // 앱 종료 전 (타입 안전)
     app.on('before-quit', (event: Event) => {
       Logger.debug(this.componentName, '🛑 App before quit');
-      event.preventDefault();
       
-      // 비동기 종료 처리
-      handlers.onShutdown().catch(error => {
-        Logger.error(this.componentName, 'Shutdown handler failed', error);
-        app.exit(1);
-      });
+      // ShutdownManager가 이미 종료 처리를 담당하므로 여기서는 추가 작업 불필요
+      // ShutdownManager의 shutdown() 메서드에서 app.exit(0)를 직접 호출함
     });
 
     // SSL 인증서 에러 처리 (타입 안전)

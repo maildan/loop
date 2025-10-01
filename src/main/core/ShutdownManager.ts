@@ -49,10 +49,11 @@ export class ShutdownManager {
       // Phase 3: 설정 저장
       await this.saveSettings();
 
-      // Phase 4: 데이터베이스 정리
-      await this.cleanupDatabase();
+      // Phase 4: StaticServer 정리
+      await this.cleanupStaticServer();
 
-      // Phase 5: 윈도우 정리
+      // Phase 5: 데이터베이스 정리
+      await this.cleanupDatabase();
       await this.closeWindows();
 
       // Phase 6: 최종 정리
@@ -65,7 +66,7 @@ export class ShutdownManager {
       }
 
       Logger.info('SHUTDOWN_MANAGER', '✅ Shutdown completed successfully');
-      app.quit();
+      app.exit(0);
 
     } catch (error) {
       Logger.error('SHUTDOWN_MANAGER', '💥 Shutdown error', error);
@@ -122,13 +123,28 @@ export class ShutdownManager {
   }
 
   /**
+   * 🔥 StaticServer 정리
+   */
+  private async cleanupStaticServer(): Promise<void> {
+    try {
+      const { StaticServer } = await import('../utils/StaticServer');
+      const staticServer = StaticServer.getInstance();
+      
+      if (staticServer) {
+        staticServer.cleanup();
+        Logger.info('SHUTDOWN_MANAGER', '🌐 StaticServer cleaned up');
+      }
+    } catch (error) {
+      Logger.error('SHUTDOWN_MANAGER', 'StaticServer cleanup failed', error);
+    }
+  }
+
+  /**
    * 🔥 데이터베이스 정리
    */
   private async cleanupDatabase(): Promise<void> {
     try {
-      const { databaseService } = await import('../services/databaseService');
-
-      // DatabaseService에 cleanup 메서드가 없으므로 제거
+      // 데이터베이스 연결 정리 로직이 필요하면 여기에 추가
       Logger.info('SHUTDOWN_MANAGER', '🗄️ Database cleaned up');
     } catch (error) {
       Logger.error('SHUTDOWN_MANAGER', 'Database cleanup failed', error);

@@ -263,30 +263,36 @@ export class WindowManager {
 
       if (url) {
         targetUrl = url;
-      } else if (!app.isPackaged) {
-        // 개발 환경: electron-vite 개발 서버 사용 (포트 5173 고정)
+      } else if (!app.isPackaged && process.env.NODE_ENV !== 'production') {
+        // 개발 환경: electron-vite 개발 서버 사용 (환경 변수 우선, 기본 5173)
         const rendererUrl = process.env.ELECTRON_RENDERER_URL || process.env.VITE_DEV_SERVER_URL;
         if (rendererUrl && rendererUrl.startsWith('http')) {
           targetUrl = rendererUrl;
         } else if (rendererUrl) {
           targetUrl = `http://localhost:${rendererUrl}`;
         } else {
+          // 환경 변수가 없으면 기본 포트 5173 사용
           targetUrl = 'http://localhost:5173';
         }
         Logger.info('WINDOW', '🔧 개발 모드 - electron-vite 개발 서버 사용', { 
           url: targetUrl,
           electronRendererUrl: process.env.ELECTRON_RENDERER_URL,
           viteUrl: process.env.VITE_DEV_SERVER_URL,
-          isPackaged: app.isPackaged
+          isPackaged: app.isPackaged,
+          nodeEnv: process.env.NODE_ENV
         });
       } else {
-        // 프로덕션 환경: 정적 빌드 파일 사용 (packaged app)
+        // 프로덕션 환경: 정적 빌드 파일 사용 (packaged app 또는 NODE_ENV=production)
         const staticServer = StaticServer.getInstance();
         const isHealthy = await staticServer.checkHealth();
 
         if (isHealthy) {
           targetUrl = staticServer.getMainUrl();
-          Logger.info('WINDOW', '🚀 프로덕션 모드 - 정적 파일 사용', { url: targetUrl, isPackaged: app.isPackaged });
+          Logger.info('WINDOW', '🚀 프로덕션 모드 - 정적 파일 사용', { 
+            url: targetUrl, 
+            isPackaged: app.isPackaged,
+            nodeEnv: process.env.NODE_ENV
+          });
         } else {
           throw new Error('❌ 정적 파일을 찾을 수 없습니다. 먼저 빌드를 실행하세요.');
         }
@@ -294,12 +300,12 @@ export class WindowManager {
 
       try {
         await window.loadURL(targetUrl);
-        Logger.info('WINDO W', 'URL loaded successfully', { windowId, url: targetUrl });
+        Logger.info('WINDOW', 'URL loaded successfully', { windowId, url: targetUrl });
       } catch (error) {
         Logger.error('WINDOW', 'Failed to load URL', { error, targetUrl });
         
         // 개발 환경에서 연결 실패 시 개발 서버를 기다림
-        if (!app.isPackaged) {
+        if (!app.isPackaged && process.env.NODE_ENV !== 'production') {
           Logger.info('WINDOW', '개발 서버 연결 대기 중... 5초 후 재시도');
           setTimeout(async () => {
             try {
