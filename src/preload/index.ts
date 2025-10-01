@@ -1,4 +1,4 @@
-import { contextBridge, ipcRenderer, nativeTheme } from 'electron';
+import { contextBridge, ipcRenderer, nativeTheme, IpcRendererEvent } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
@@ -17,6 +17,7 @@ import {
 } from '../shared/types';
 import type { Theme } from '../shared/types/theme';
 import { isValidTheme } from '../shared/types/theme';
+import { Logger } from '../shared/logger';
 import type {
   SettingsSchema,
   SettingsResult,
@@ -140,12 +141,12 @@ const electronAPI: ElectronAPI = {
 
       const response = await ipcRenderer.invoke('settings:get', 'app.theme').catch((error: unknown) => {
         const errorMessage = error instanceof Error ? error.message : 'Unknown theme retrieval error';
-        console.error('🚨 Failed to load theme from settings:', error);
+        Logger.error('PRELOAD', 'Failed to load theme from settings', error);
         return { success: false, error: errorMessage } as { success: false; error: string };
       });
 
       if (!response || typeof response !== 'object') {
-        console.warn('⚠️ Received empty theme response from settings, defaulting to light.');
+        Logger.warn('PRELOAD', 'Received empty theme response from settings, defaulting to light.');
         return {
           success: false,
           data: fallbackTheme,
@@ -166,7 +167,7 @@ const electronAPI: ElectronAPI = {
       }
 
       if (!hasValidTheme && rawTheme !== undefined) {
-        console.warn('⚠️ Falling back to light theme because settings value was invalid:', rawTheme);
+        Logger.warn('PRELOAD', 'Falling back to light theme because settings value was invalid', { rawTheme });
       }
 
       const errorMessage = typeof (response as { error?: string }).error === 'string'
@@ -189,18 +190,18 @@ const electronAPI: ElectronAPI = {
       });
 
       if (!isValidTheme(theme)) {
-        console.warn('⚠️ Attempted to persist invalid theme, ignoring:', theme);
+        Logger.warn('PRELOAD', 'Attempted to persist invalid theme, ignoring', { theme });
         return createResponse(false, 'Invalid theme value provided to preload bridge');
       }
 
       const rawResponse = await ipcRenderer.invoke('settings:set', 'app.theme', theme).catch((error: unknown) => {
         const errorMessage = error instanceof Error ? error.message : 'Unknown theme persistence error';
-        console.error('🚨 Failed to save theme preference:', error);
+        Logger.error('PRELOAD', 'Failed to save theme preference', error);
         return { success: false, error: errorMessage } as { success: false; error: string };
       });
 
       if (!rawResponse || typeof rawResponse !== 'object') {
-        console.error('🚨 Failed to persist theme preference: unknown response payload');
+        Logger.error('PRELOAD', 'Failed to persist theme preference: unknown response payload');
         return createResponse(false, 'Unknown theme persistence failure');
       }
 
@@ -213,9 +214,9 @@ const electronAPI: ElectronAPI = {
       const errorMessage = typeof typedResponse.error === 'string' ? typedResponse.error : 'Unknown theme persistence failure';
 
       if (typedResponse.data !== undefined) {
-        console.error('🚨 Failed to persist theme preference:', errorMessage, typedResponse.data);
+        Logger.error('PRELOAD', 'Failed to persist theme preference', { errorMessage, data: typedResponse.data });
       } else {
-        console.error('🚨 Failed to persist theme preference:', errorMessage);
+        Logger.error('PRELOAD', 'Failed to persist theme preference', { errorMessage });
       }
 
       return createResponse(false, errorMessage);
@@ -229,13 +230,13 @@ const electronAPI: ElectronAPI = {
         const nextTheme: Theme = isValidTheme(change.value) ? change.value : 'light';
 
         if (!isValidTheme(change.value)) {
-          console.warn('⚠️ Received invalid theme value from settings change event, defaulting to light:', change.value);
+          Logger.warn('PRELOAD', 'Received invalid theme value from settings change event, defaulting to light', { value: change.value });
         }
 
         try {
           callback(nextTheme);
         } catch (error) {
-          console.error('🚨 Theme change callback threw an error:', error);
+          Logger.error('PRELOAD', 'Theme change callback threw an error', error);
         }
       };
 
@@ -253,14 +254,14 @@ const electronAPI: ElectronAPI = {
         try {
           callback(Boolean(nativeTheme.shouldUseDarkColors));
         } catch (error) {
-          console.error('🚨 Failed to propagate system theme change:', error);
+          Logger.error('PRELOAD', 'Failed to propagate system theme change', error);
         }
       };
 
       try {
         nativeTheme.on('updated', handleSystemThemeChange);
       } catch (error) {
-        console.error('🚨 Failed to subscribe to nativeTheme updates:', error);
+        Logger.error('PRELOAD', 'Failed to subscribe to nativeTheme updates', error);
         return () => {
           // subscription failed, no-op cleanup
         };
@@ -270,7 +271,7 @@ const electronAPI: ElectronAPI = {
         try {
           nativeTheme.off('updated', handleSystemThemeChange);
         } catch (error) {
-          console.error('🚨 Failed to unsubscribe nativeTheme listener:', error);
+          Logger.error('PRELOAD', 'Failed to unsubscribe nativeTheme listener', error);
         }
       };
     },
@@ -319,20 +320,30 @@ const electronAPI: ElectronAPI = {
 
 };
 
+// ============================================================
+// Dynamic API Attachments (Type-safe extensions)
+// ============================================================
+
+interface ElectronAPIExtended extends ElectronAPI {
+  settings: ElectronAPI['settings'] & {
+    onDidChange: (listener: (payload: { keyPath: string; value: unknown; reset?: boolean }) => void) => () => void;
+  };
+  files: {
+    readFileAsDataUrl: (filePath: string) => Promise<unknown>;
+  };
+}
+
 // Attach settings.onDidChange in a type-safe way
-(electronAPI as any).settings.onDidChange = (listener: (payload: { keyPath: string; value: unknown; reset?: boolean }) => void) => {
-  const wrapped = (_event: Electron.IpcRendererEvent, data: { keyPath: string; value: unknown; reset?: boolean }) => listener(data);
+const electronAPIExtended = electronAPI as unknown as ElectronAPIExtended;
+
+electronAPIExtended.settings.onDidChange = (listener: (payload: { keyPath: string; value: unknown; reset?: boolean }) => void) => {
+  const wrapped = (_event: IpcRendererEvent, data: { keyPath: string; value: unknown; reset?: boolean }) => listener(data);
   ipcRenderer.on('settings:changed', wrapped);
   return () => ipcRenderer.removeListener('settings:changed', wrapped);
 };
 
 // Attach files API for reading local files as data URLs
-(electronAPI as any).files = {
-  readFileAsDataUrl: (filePath: string) => ipcRenderer.invoke('settings:read-file', filePath),
-};
-
-// attach files helper
-(electronAPI as any).files = {
+electronAPIExtended.files = {
   readFileAsDataUrl: (filePath: string) => ipcRenderer.invoke('settings:read-file', filePath),
 };
 
@@ -378,8 +389,23 @@ const readLoopSnapshotFromFile = async (): Promise<unknown | null> => {
   return null;
 };
 
-// Attach async loopSnapshot API dynamically to avoid typing issues
-; (electronAPI as any).loopSnapshot = {
+// ============================================================
+// Loop Snapshot API (Extended)
+// ============================================================
+
+interface LoopSnapshotAPI {
+  getAsync: () => Promise<unknown | null>;
+  save: (payload: Record<string, unknown>) => Promise<boolean>;
+  delete: () => Promise<boolean>;
+}
+
+interface ElectronAPIWithSnapshot extends ElectronAPIExtended {
+  loopSnapshot: LoopSnapshotAPI;
+}
+
+const electronAPIWithSnapshot = electronAPIExtended as unknown as ElectronAPIWithSnapshot;
+
+electronAPIWithSnapshot.loopSnapshot = {
   getAsync: async () => {
     const keychainSnapshot = await readLoopSnapshotFromKeychain();
     if (keychainSnapshot) {
@@ -388,30 +414,69 @@ const readLoopSnapshotFromFile = async (): Promise<unknown | null> => {
 
     const fileSnapshot = await readLoopSnapshotFromFile();
     return fileSnapshot ?? null;
-  }
+  },
+  save: async (payload: Record<string, unknown>) => {
+    try {
+      const resp = await ipcRenderer.invoke('keychain:set-snapshot', payload);
+      return resp && resp.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+  delete: async () => {
+    try {
+      const resp = await ipcRenderer.invoke('keychain:delete-snapshot');
+      return resp && resp.ok && !!resp.data;
+    } catch (e) {
+      return false;
+    }
+  },
 };
 
-// Provide ability to save/delete snapshot via main process keychain handlers
-; (electronAPI as any).loopSnapshot.save = async (payload: Record<string, unknown>) => {
-  try {
-    const resp = await ipcRenderer.invoke('keychain:set-snapshot', payload);
-    return resp && resp.ok;
-  } catch (e) {
-    return false;
-  }
+// ============================================================
+// Internal Helpers API (Extended)
+// ============================================================
+
+interface ElectronAPIWithInternal extends ElectronAPIWithSnapshot {
+  __internal: {
+    getResourcesPath: () => string;
+  };
+  oauth: ElectronAPIWithSnapshot['oauth'] & {
+    ensureAuthenticated: () => Promise<unknown>;
+  };
+}
+
+const electronAPIFinal = electronAPIWithSnapshot as unknown as ElectronAPIWithInternal;
+
+electronAPIFinal.__internal = {
+  getResourcesPath: () => {
+    try {
+      return process.cwd(); // Safe fallback to current working directory
+    } catch (e) {
+      // ignore
+    }
+    try {
+      const p = process as NodeJS.Process & { resourcesPath?: string };
+      if (p && p.resourcesPath) return p.resourcesPath;
+    } catch (e) {
+      // ignore
+    }
+    return '';
+  },
 };
 
-; (electronAPI as any).loopSnapshot.delete = async () => {
-  try {
-    const resp = await ipcRenderer.invoke('keychain:delete-snapshot');
-    return resp && resp.ok && !!resp.data;
-  } catch (e) {
-    return false;
-  }
-};
+// Attach ensureAuthenticated helper
+try {
+  electronAPIFinal.oauth.ensureAuthenticated = () => ipcRenderer.invoke('oauth:ensure-authenticated');
+} catch (e) {
+  // ignore if oauth is not present
+}
 
-// 🔥 안전한 API 노출
-contextBridge.exposeInMainWorld('electronAPI', electronAPI);
+// ============================================================
+// Expose API to Renderer via contextBridge
+// ============================================================
+
+contextBridge.exposeInMainWorld('electronAPI', electronAPIFinal);
 
 // 🔥 클립보드 API 추가 - 복사/붙여넣기 활성화
 contextBridge.exposeInMainWorld('clipboard', {
@@ -434,28 +499,7 @@ contextBridge.exposeInMainWorld('clipboard', {
   }
 });
 
-// attach internal helpers without changing the public ElectronAPI type
-try {
-  (electronAPI as any).__internal = {
-    getResourcesPath: () => {
-      try {
-        // Try to get app path via IPC (synchronous fallback)
-        return process.cwd(); // Safe fallback to current working directory
-      } catch (e) {
-        // ignore
-      }
-      try {
-        const p = process as NodeJS.Process & { resourcesPath?: string };
-        if (p && p.resourcesPath) return p.resourcesPath;
-      } catch (e) {
-        // ignore
-      }
-      return '';
-    }
-  };
-} catch (e) {
-  // ignore
-}
+// (Internal helpers now attached above before contextBridge.exposeInMainWorld)
 
 // 🔥 초기 스냅샷: renderer에서 SSR과 동일한 초기값을 읽을 수 있도록 지원
 contextBridge.exposeInMainWorld('loopSnapshot', {
@@ -538,10 +582,4 @@ window.addEventListener('error', event => {
   ipcRenderer.send('renderer:error', event.message, event.filename, event.lineno, event.colno, event.error ? (event.error.stack || event.error) : 'No stack');
 });
 
-// Window 글로벌 타입은 shared/types.ts에서 이미 선언됨
-// Attach ensureAuthenticated helper dynamically to avoid changing the public ElectronAPI type
-try {
-  (electronAPI as any).oauth.ensureAuthenticated = () => ipcRenderer.invoke('oauth:ensure-authenticated');
-} catch (e) {
-  // ignore if oauth is not present
-}
+// (OAuth.ensureAuthenticated now attached above before contextBridge.exposeInMainWorld)
