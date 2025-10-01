@@ -8,6 +8,7 @@ import { createHash, randomBytes, createCipheriv } from 'crypto';
 import axios, { AxiosResponse, AxiosError } from 'axios';
 import * as fs from 'fs';
 import * as path from 'path';
+import { safePathJoin } from '../../shared/utils/pathSecurity';
 import { PORTS } from '../constants';
 import { app as electronApp } from 'electron';
 import { windowManager } from '../core/window';
@@ -801,8 +802,8 @@ export class OAuthService extends BaseManager {
           } catch (e) {
             // ignore
           }
-          const filePath = path.join(baseDir, '.auth_snapshot.json');
-          if (fs.existsSync(filePath)) {
+          const filePath = safePathJoin(baseDir, '.auth_snapshot.json');
+          if (filePath && fs.existsSync(filePath)) {
             try { fs.unlinkSync(filePath); Logger.debug(this.componentName, 'Removed auth snapshot file'); } catch (e) { /* ignore */ }
           }
         } catch (e) {
@@ -928,7 +929,11 @@ export class OAuthService extends BaseManager {
         // ignore
       }
 
-      const filePath = path.join(baseDir, '.auth_snapshot.json');
+      const filePath = safePathJoin(baseDir, '.auth_snapshot.json');
+      if (!filePath) {
+        Logger.error(this.componentName, 'Failed to create safe path for auth snapshot');
+        return;
+      }
 
       // If environment variable ENCRYPT_SNAPSHOT_KEY is present, encrypt snapshot before writing
       const encryptionKey = process.env.ENCRYPT_SNAPSHOT_KEY;

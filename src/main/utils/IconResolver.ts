@@ -10,6 +10,7 @@ import * as fs from 'fs';
 import { app } from 'electron';
 import { Logger } from '../../shared/logger';
 import { Platform } from './platform';
+import { safePathJoin } from '../../shared/utils/pathSecurity';
 
 export class IconResolver {
   private static readonly componentName = 'ICON_RESOLVER';

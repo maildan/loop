@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer, nativeTheme, IpcRendererEvent } from 'elect
 import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
+import { safePathJoin } from '../shared/utils/pathSecurity';
 import {
   IPC_CHANNELS,
   IpcResponse,
@@ -374,9 +375,9 @@ const readLoopSnapshotFromFile = async (): Promise<unknown | null> => {
   try {
     const userDataPath = await ipcRenderer.invoke('app:get-user-data-path').catch(() => process.cwd());
     const basePath = typeof userDataPath === 'string' && userDataPath.length > 0 ? userDataPath : process.cwd();
-    const filePath = path.join(basePath, '.auth_snapshot.json');
+    const filePath = safePathJoin(basePath, '.auth_snapshot.json');
 
-    if (!fs.existsSync(filePath)) {
+    if (!filePath || !fs.existsSync(filePath)) {
       return null;
     }
 
@@ -514,12 +515,12 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
       };
       try {
         // Prefer userData location (production fallback) then fallback to project root (dev)
-        let snapPath = path.join(process.cwd(), '.auth_snapshot.json');
+        let snapPath = safePathJoin(process.cwd(), '.auth_snapshot.json');
         // Note: In preload context, we cannot directly access app.getPath()
         // This should be handled via IPC if userData path is needed
         // For now, using safe fallback to current working directory
 
-        if (fs.existsSync(snapPath)) {
+        if (snapPath && fs.existsSync(snapPath)) {
           const raw = fs.readFileSync(snapPath, { encoding: 'utf-8' });
           interface AuthData {
             isAuthenticated?: boolean;

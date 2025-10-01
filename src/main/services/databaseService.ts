@@ -6,6 +6,7 @@ import { TypingSession, TypingStats, UserPreferences, Project, ProjectCharacter 
 import type { Theme } from '../../shared/types/theme';
 import { isValidTheme } from '../../shared/types/theme';
 import { ensureDatabaseUrl } from '../utils/prismaPaths';
+import { safePathJoin } from '../../shared/utils/pathSecurity';
 
 // #DEBUG: Database service entry point
 Logger.debug('DATABASE', 'Database service module loaded');
@@ -96,13 +97,28 @@ export class DatabaseService {
       if (app.isPackaged) {
         // 패키지 앱: extraResources/prisma/client/index.js를 직접 require (default.js의 exports condition 우회)
         const path = require('path');
-        const prismaClientDir = path.join(process.resourcesPath, 'prisma', 'client');
+        const prismaClientDir = safePathJoin(process.resourcesPath || '', 'prisma', 'client');
+        
+        if (!prismaClientDir) {
+          Logger.error('DATABASE', 'Failed to create secure Prisma client directory path');
+          throw new Error('Failed to create secure Prisma client directory path');
+        }
         
         // default.js 대신 index.js 직접 로드
-        const indexPath = path.join(prismaClientDir, 'index.js');
+        const indexPath = safePathJoin(prismaClientDir, 'index.js');
+        if (!indexPath) {
+          Logger.error('DATABASE', 'Failed to create secure Prisma index path');
+          throw new Error('Failed to create secure Prisma index path');
+        }
+        
         Logger.info('DATABASE', 'Loading Prisma client from extraResources', { indexPath });
         
-        // index.js 직접 require
+        // 🔒 보안: 동적 require는 일반적으로 위험하지만, 이 경우는 안전함
+        // - indexPath는 safePathJoin으로 검증된 경로 (process.resourcesPath + 'prisma/client/index.js')
+        // - process.resourcesPath는 Electron이 제공하는 신뢰할 수 있는 경로
+        // - 사용자 입력이 개입하지 않는 고정된 패턴
+        // nosemgrep: javascript.lang.security.audit.unsafe-dynamic-method-exec
+        // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
         const prismaModule = require(indexPath);
         PrismaClientConstructor = prismaModule.PrismaClient;
       } else {

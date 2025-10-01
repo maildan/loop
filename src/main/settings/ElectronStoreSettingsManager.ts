@@ -8,6 +8,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { gzipSync } from 'zlib';
 import { app } from 'electron';
+import { safePathJoin } from '../../shared/utils/pathSecurity';
 
 /**
  * 🔥 간단한 설정 스키마
@@ -290,13 +291,22 @@ export class ElectronStoreSettingsManager {
         const ext = mime.split('/')[1] || 'png';
 
         // create avatars dir under userData
-        const avatarsDir = path.join(app.getPath('userData'), 'avatars');
+        const userDataPath = app.getPath('userData');
+        const avatarsDir = safePathJoin(userDataPath, 'avatars');
+        if (!avatarsDir) {
+          Logger.error(this.componentName, 'Failed to create secure avatars directory path');
+          return false;
+        }
         if (!fs.existsSync(avatarsDir)) fs.mkdirSync(avatarsDir, { recursive: true });
 
         // file name by hash
         const hash = crypto.createHash('sha256').update(buffer).digest('hex').slice(0, 32);
         const fileName = `${hash}.${ext}`;
-        const filePath = path.join(avatarsDir, fileName);
+        const filePath = safePathJoin(avatarsDir, fileName);
+        if (!filePath) {
+          Logger.error(this.componentName, 'Failed to create secure avatar file path');
+          return false;
+        }
 
         // write image file
         fs.writeFileSync(filePath, buffer);

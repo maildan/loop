@@ -8,17 +8,20 @@ import { getSettingsManager } from '../settings';
 import type { SettingsChangeEvent, UISettingsSchema, AppSettingsSchema, KeyboardSettingsSchema, NotificationSettingsSchema } from '../settings/types';
 import path from 'path';
 import { FILE_PATHS } from '../constants';
+import { safePathResolve, validatePathSafety } from '../../shared/utils/pathSecurity';
 
 // Helper: resolve + whitelist + containment checks to avoid path traversal
 function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFilenames?: string[]): string | null {
   try {
     if (!filePath) return null;
     const fs = require('fs');
-    const resolvedCandidate = path.resolve(filePath);
-    const resolvedIconsDir = path.resolve(iconsDir);
+    const resolvedCandidate = safePathResolve(iconsDir, filePath);
+    if (!resolvedCandidate) return null;
+    
+    const resolvedIconsDir = path.normalize(path.resolve(iconsDir));
 
-    // Ensure candidate is inside icons directory
-    if (!resolvedCandidate.startsWith(resolvedIconsDir + path.sep) && resolvedCandidate !== resolvedIconsDir) return null;
+    // Ensure candidate is inside icons directory (already validated by safePathResolve)
+    if (!validatePathSafety(resolvedCandidate, resolvedIconsDir)) return null;
 
     // If a basename whitelist is provided, enforce it
     if (allowedFilenames && allowedFilenames.length > 0) {

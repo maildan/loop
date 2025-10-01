@@ -8,6 +8,7 @@ import { app, protocol } from 'electron';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { createRequire } from 'module';
+import { safePathResolve } from '../../shared/utils/pathSecurity';
 import { Logger } from '../../shared/logger';
 import type {
     FontCategory,
@@ -595,9 +596,9 @@ class FontService {
         }
 
         const normalized = relativePath.replace(/\\/g, '/');
-        const absolute = path.resolve(this.manifestDir, normalized);
+        const absolute = safePathResolve(this.manifestDir, normalized);
 
-        if (!absolute.startsWith(this.manifestDir)) {
+        if (!absolute) {
             Logger.warn('FONT_SERVICE', 'Blocked path traversal attempt in manifest', { relativePath });
             return null;
         }

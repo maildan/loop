@@ -16,6 +16,7 @@ import { windowManager } from '../core/window';
 import * as fs from 'fs';
 import * as path from 'path';
 import { fontService } from '../services/FontService';
+import { safePathJoin, safePathResolve } from '../../shared/utils/pathSecurity';
 
 // Helper: resolve + whitelist + containment checks to avoid path traversal
 function resolveAndValidate(filePath: string | null, baseDir: string, allowedFilenames?: string[]): string | null {
@@ -29,22 +30,28 @@ function resolveAndValidate(filePath: string | null, baseDir: string, allowedFil
     }
 
     // 🔒 보안: baseDir를 사전에 검증된 안전한 경로로 제한
+    const assetsPath = safePathJoin(process.cwd(), 'assets');
+    const publicAssetsPath = safePathJoin(process.cwd(), 'public', 'assets');
+    const publicIconPath = safePathJoin(process.cwd(), 'public', 'icon');
+    const publicPath = safePathJoin(process.cwd(), 'public');
+    
     const safeBases = [
       app.getPath('userData'),
       app.getPath('temp'),
       process.resourcesPath || '',
-      path.join(process.cwd(), 'assets'),
-      path.join(process.cwd(), 'public', 'assets'),
-      path.join(process.cwd(), 'public', 'icon'),
-      path.join(process.cwd(), 'public'),
+      assetsPath,
+      publicAssetsPath,
+      publicIconPath,
+      publicPath,
       process.cwd()
     ].filter(Boolean);
 
-    if (!safeBases.some(safe => baseDir.startsWith(safe))) {
+    if (!safeBases.some(safe => baseDir.startsWith(safe as string))) {
       return null;
     }
 
-    const resolvedCandidate = path.join(baseDir, sanitizedPath);
+    const resolvedCandidate = safePathJoin(baseDir, sanitizedPath);
+    if (!resolvedCandidate) return null;
 
     // Ensure candidate is inside base directory (double check)
     if (!resolvedCandidate.startsWith(baseDir + path.sep) && resolvedCandidate !== baseDir) return null;
@@ -170,7 +177,12 @@ export class ApplicationBootstrapper {
    * 🔥 커스텀 프로토콜 설정 (avatar 파일 안전 접근용 + OAuth 리다이렉트용)
    */
   private async setupCustomProtocols(): Promise<void> {
-    const avatarsDir = path.join(app.getPath('userData'), 'avatars');
+    const userDataPath = app.getPath('userData');
+    const avatarsDir = safePathJoin(userDataPath, 'avatars');
+    if (!avatarsDir) {
+      Logger.error('ApplicationBootstrapper', 'Failed to create secure avatars directory path');
+      return;
+    }
     if (!fs.existsSync(avatarsDir)) {
       fs.mkdirSync(avatarsDir, { recursive: true });
     }
