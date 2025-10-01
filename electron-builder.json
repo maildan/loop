@@ -19,7 +19,6 @@
     "out/renderer/**/*",
     "assets/**/*",
     "package.json",
-    "node_modules/node-mac-permissions/**",
     "!node_modules/pretendard-jp/**",
     "!node_modules/pretendard/**",
     "!node_modules/**/*.md",
@@ -60,6 +59,9 @@
     "gatekeeperAssess": false,
     "hardenedRuntime": true,
     "asar": true,
+    "files": [
+      "node_modules/node-mac-permissions/**"
+    ],
     "target": [
       {
         "target": "dmg",
@@ -86,7 +88,17 @@
           "x64",
           "arm64"
         ]
+      },
+      {
+        "target": "zip",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
       }
+    ],
+    "files": [
+      "!node_modules/node-mac-permissions/**"
     ]
   },
   "linux": {
