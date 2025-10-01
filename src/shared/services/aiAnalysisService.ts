@@ -976,12 +976,9 @@ ${contextualInfo}
     private parseTimelineResponse(content: string): TimelineAnalysisResult {
         try {
             // 🔥 완전 디버깅: 실제 Gemini 응답 전체 로깅
-            console.log('🚨 GEMINI 원본 응답 전체:', content);
-            console.log('🚨 응답 길이:', content.length);
-            console.log('🚨 응답 타입:', typeof content);
-
-            Logger.debug('AI_ANALYSIS_SERVICE', 'Raw Gemini response', {
+            Logger.debug('AI_ANALYSIS_SERVICE', 'GEMINI raw response received', {
                 contentLength: content.length,
+                contentType: typeof content,
                 contentPreview: content.substring(0, 500),
                 contentEnd: content.substring(Math.max(0, content.length - 200))
             });
@@ -993,13 +990,14 @@ ${contextualInfo}
                     .replace(/```json\s*\n?/g, '')  // ```json 제거
                     .replace(/\n?```\s*$/g, '')     // 끝의 ``` 제거
                     .trim();
-                console.log('🧹 마크다운 제거 후:', cleanedContent.substring(0, 200));
+                Logger.debug('AI_ANALYSIS_SERVICE', 'Markdown removed from response', {
+                    cleanedPreview: cleanedContent.substring(0, 200)
+                });
             }
 
             const parsed = JSON.parse(cleanedContent);
-            console.log('✅ JSON 파싱 성공!', parsed);
-
             Logger.debug('AI_ANALYSIS_SERVICE', 'JSON parsing successful', {
+                parsed,
                 hasCoherence: !!parsed.coherence,
                 hasPacing: !!parsed.pacing,
                 hasCausality: !!parsed.causality,
@@ -1007,9 +1005,10 @@ ${contextualInfo}
             });
             return parsed;
         } catch (error) {
-            console.log('💥 JSON 파싱 실패!');
-            console.log('💥 에러:', error);
-            console.log('💥 파싱 시도한 content:', content);
+            Logger.error('AI_ANALYSIS_SERVICE', 'JSON parsing failed', {
+                error: error instanceof Error ? error.message : String(error),
+                attemptedContent: content.substring(0, 300)
+            });
 
             Logger.error('AI_ANALYSIS_SERVICE', 'JSON parse error details', {
                 error: error instanceof Error ? error.message : String(error),
@@ -1062,7 +1061,9 @@ ${contextualInfo}
         // 🔥 랜덤 점수로 fallback 다양성 확보
         const randomScore = () => Math.floor(Math.random() * 30) + 50; // 50-80 범위
 
-        console.log('🔥 Fallback 사용됨! content:', content.substring(0, 200));
+        Logger.warn('AI_ANALYSIS_SERVICE', 'Fallback timeline result used', {
+            contentPreview: content.substring(0, 200)
+        });
 
         return {
             coherence: {
