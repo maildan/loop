@@ -229,6 +229,20 @@ export const ProjectEditor = memo(function ProjectEditor({
         }
     }, [sidebarCollapsed, state.collapsed, actions]);
 
+    // 🎯 Phase 14-D: Performance optimization with useMemo
+    // ✅ ALL hooks MUST be declared BEFORE conditional returns (React Hooks Rules)
+    
+    // Memoize characters and notes arrays to prevent unnecessary re-renders
+    const memoizedCharacters = React.useMemo(
+        () => projectData?.characters || [],
+        [projectData?.characters]
+    );
+    
+    const memoizedNotes = React.useMemo(
+        () => projectData?.notes || [],
+        [projectData?.notes]
+    );
+
     // 🔥 로딩 상태 처리
     if (isLoading) {
         return (
@@ -375,7 +389,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                 return (
                     <CharactersView
                         projectId={projectId}
-                        characters={projectData?.characters || []}
+                        characters={memoizedCharacters}
                         onCharactersChange={(characters) => {
                             if (projectData?.setCharacters) {
                                 projectData.setCharacters(characters);
@@ -389,7 +403,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                 return (
                     <NotesView
                         projectId={projectId}
-                        notes={projectData?.notes || []}
+                        notes={memoizedNotes}
                         onNotesChange={(notes) => {
                             if (projectData?.setNotes) {
                                 projectData.setNotes(notes);
@@ -408,13 +422,13 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <SynopsisView
                         projectId={projectId}
                         synopsisId="default" // 기본 시놉시스 ID
-                        characters={(projectData?.characters || []).map(char => ({
+                        characters={memoizedCharacters.map(char => ({
                             ...char,
                             color: char.color || '#3B82F6',
                             sortOrder: char.sortOrder ?? 0,
                             isActive: char.isActive ?? true
                         }))}
-                        notes={(projectData?.notes || []).map(note => ({
+                        notes={memoizedNotes.map(note => ({
                             ...note,
                             type: note.type || 'general',
                             color: note.color || '#3B82F6',
@@ -545,7 +559,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 currentView={state.currentView}
                                 onViewChange={actions.setCurrentView}
                                 structure={projectData?.structure || []}
-                                characters={projectData?.characters || []}
+                                characters={memoizedCharacters}
                                 collapsed={false}
                                 stats={{
                                     wordCount: projectData?.writerStats?.wordCount || 0,
@@ -581,7 +595,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                         currentView={state.currentView}
                         onViewChange={actions.setCurrentView}
                         structure={projectData?.structure || []}
-                        characters={projectData?.characters || []}
+                        characters={memoizedCharacters}
                         collapsed={false}
                         stats={{
                             wordCount: projectData?.writerStats?.wordCount || 0,

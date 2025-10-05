@@ -103,7 +103,7 @@ const CHARACTER_TABS = [
   { id: 'story', label: '스토리', icon: Heart },
 ] as const;
 
-export function CharactersView({
+export const CharactersView = React.memo(function CharactersView({
   projectId,
   characters,
   onCharactersChange,
@@ -663,4 +663,4 @@ export function CharactersView({
       />
     </div>
   );
-}
+});

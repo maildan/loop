@@ -78,7 +78,7 @@ interface ProjectHeaderProps {
   onToggleSidebar?: () => void;
 }
 
-export function ProjectHeader({
+export const ProjectHeader = React.memo(function ProjectHeader({
   title,
   onTitleChange,
   onBack,
@@ -868,6 +868,6 @@ export function ProjectHeader({
       )}
     </div>
   );
-}
+});
 
 export default ProjectHeader;

@@ -18,6 +18,11 @@ export interface Project {
   userId?: string;
   createdAt: Date;
   lastModified: Date;
+  /**
+   * `updatedAt` is used in IPC conversion and some backend mappings.
+   * Keep it optional for compatibility with older DB rows.
+   */
+  updatedAt?: Date;
   characters?: ProjectCharacter[];
   structure?: ProjectStructure[];
   notes?: ProjectNote[];
@@ -36,9 +41,16 @@ export interface ProjectCharacter {
   goals?: string;
   conflicts?: string;
   avatar?: string;
-  color: string;
-  sortOrder: number;
-  isActive: boolean;
+  // make these optional to allow backward-compatible conversions from DB
+  color?: string;
+  sortOrder?: number;
+  isActive?: boolean;
+  // Additional optional profile fields referenced in UI
+  age?: number | string;
+  occupation?: string;
+  birthplace?: string;
+  residence?: string;
+  family?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -68,12 +80,13 @@ export interface ProjectNote {
   projectId: string;
   title: string;
   content: string;
-  type: string;
+  // note type (idea, plot, general) - optional for backward compatibility
+  type?: string;
   tags?: unknown; // JSON field from Prisma
-  color: string;
-  isPinned: boolean;
-  isArchived: boolean;
-  sortOrder: number;
+  color?: string;
+  isPinned?: boolean;
+  isArchived?: boolean;
+  sortOrder?: number;
   createdAt: Date;
   updatedAt: Date;
 }
