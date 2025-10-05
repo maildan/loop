@@ -12,6 +12,7 @@ import { safePathJoin } from '../../shared/utils/pathSecurity';
 import { PORTS } from '../constants';
 import { app as electronApp } from 'electron';
 import { windowManager } from '../core/window';
+import { keychainAdapter } from '../utils/keychainAdapter';
 
 // 🔥 OAuth 상태 인터페이스
 interface OAuthState {
@@ -44,12 +45,6 @@ interface GoogleDocContent {
       };
     }>;
   };
-}
-
-interface Keytar {
-  setPassword(service: string, account: string, password: string): Promise<void>;
-  getPassword(service: string, account: string): Promise<string | null>;
-  deletePassword(service: string, account: string): Promise<boolean>;
 }
 
 /**
@@ -674,23 +669,9 @@ export class OAuthService extends BaseManager {
 
   private async loadStoredTokens(): Promise<void> {
     try {
-      // dynamic import for optional native dependency (keytar)
-      let keytar: Keytar | null = null;
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment
-        keytar = await import('keytar');
-        if (!keytar) {
-          Logger.debug(this.componentName, 'keytar not available - skipping token load');
-          return;
-        }
-      } catch (e) {
-        Logger.debug(this.componentName, 'keytar dynamic import failed - skipping token load', e);
-        return;
-      }
-
       const service = 'loop-oauth';
       const account = 'google';
-      const stored = await keytar.getPassword(service, account);
+      const stored = await keychainAdapter.getPassword(service, account);
       if (!stored) {
         Logger.debug(this.componentName, 'No stored tokens found in keychain');
         return;
@@ -714,20 +695,12 @@ export class OAuthService extends BaseManager {
         Logger.warn(this.componentName, 'Failed to write auth snapshot after loading tokens', e);
       }
     } catch (error) {
-      Logger.warn(this.componentName, 'Failed to load stored tokens (keytar)', error);
+      Logger.warn(this.componentName, 'Failed to load stored tokens from keychain', error);
     }
   }
 
   private async saveTokens(): Promise<void> {
     try {
-      let keytar: Keytar | null = null;
-      try {
-        keytar = await import('keytar');
-      } catch (e) {
-        Logger.debug(this.componentName, 'keytar dynamic import failed - will fallback to file snapshot', e);
-        keytar = null;
-      }
-
       const service = 'loop-oauth';
       const account = 'google';
       const payload = JSON.stringify({
@@ -738,15 +711,11 @@ export class OAuthService extends BaseManager {
         scopes: this.oauthState.scopes,
       });
 
-      if (keytar && typeof keytar.setPassword === 'function') {
-        try {
-          await keytar.setPassword(service, account, payload);
-          Logger.info(this.componentName, 'Saved OAuth tokens to keychain', { userEmail: this.oauthState.userEmail });
-        } catch (e) {
-          Logger.warn(this.componentName, 'Failed to save tokens to keychain - will fallback to file snapshot', e);
-        }
-      } else {
-        Logger.debug(this.componentName, 'keytar not available - skipping token save to keychain');
+      try {
+        await keychainAdapter.setPassword(service, account, payload);
+        Logger.info(this.componentName, 'Saved OAuth tokens to keychain', { userEmail: this.oauthState.userEmail });
+      } catch (e) {
+        Logger.warn(this.componentName, 'Failed to save tokens to keychain', e);
       }
 
       // update non-sensitive auth snapshot for renderer preload (always attempt)
@@ -768,26 +737,15 @@ export class OAuthService extends BaseManager {
 
   private async clearStoredTokens(): Promise<void> {
     try {
-      let keytar: Keytar | null = null;
-      try {
-        keytar = await import('keytar');
-        if (!keytar) {
-          Logger.debug(this.componentName, 'keytar not available - skipping token clear');
-          return;
-        }
-      } catch (e) {
-        Logger.debug(this.componentName, 'keytar dynamic import failed - skipping token clear', e);
-        return;
-      }
-
       const service = 'loop-oauth';
       const account = 'google';
-      await keytar.deletePassword(service, account);
+      await keychainAdapter.deletePassword(service, account);
       Logger.info(this.componentName, 'Cleared stored OAuth tokens from keychain');
-      // Also remove any non-sensitive auth snapshot stored in keytar and on disk
+      
+      // Also remove any non-sensitive auth snapshot stored in keychain and on disk
       try {
         try {
-          await keytar.deletePassword('loop-auth-snapshot', 'snapshot');
+          await keychainAdapter.deletePassword('loop-auth', 'snapshot');
           Logger.debug(this.componentName, 'Removed auth snapshot from keychain');
         } catch (e) {
           // ignore if snapshot not present
@@ -813,7 +771,7 @@ export class OAuthService extends BaseManager {
         Logger.warn(this.componentName, 'Failed cleaning up auth snapshot after clearing tokens', e);
       }
     } catch (error) {
-      Logger.warn(this.componentName, 'Failed to clear stored tokens (keytar)', error);
+      Logger.warn(this.componentName, 'Failed to clear stored tokens from keychain', error);
     }
   }
 
@@ -900,22 +858,15 @@ export class OAuthService extends BaseManager {
         userName: (this.oauthState as any).userName || null,
         userPicture: (this.oauthState as any).userPicture || null,
       };
-      // Try to save snapshot to OS secure storage first (keytar)
+      // Try to save snapshot to secure keychain storage first
       try {
-        let keytar: Keytar | null = null;
-        try {
-          keytar = await import('keytar');
-          if (keytar) {
-            const service = 'loop-auth-snapshot';
-            const account = 'snapshot';
-            await keytar.setPassword(service, account, JSON.stringify(snapshot));
-            Logger.debug(this.componentName, 'Auth snapshot saved to secure storage');
-            return;
-          }
-        } catch (e) {
-          Logger.warn(this.componentName, 'Keytar not available - falling back to file-based auth snapshot', e);
-        }
+        const service = 'loop-auth';
+        const account = 'snapshot';
+        await keychainAdapter.setPassword(service, account, JSON.stringify(snapshot));
+        Logger.debug(this.componentName, 'Auth snapshot saved to secure storage');
+        return;
       } catch (e) {
+        Logger.warn(this.componentName, 'Failed to save snapshot to keychain - falling back to file-based auth snapshot', e);
         // fallback continues to file write
       }
 
@@ -952,20 +903,17 @@ export class OAuthService extends BaseManager {
           fs.writeFileSync(filePath, JSON.stringify(snapshot), { encoding: 'utf-8', mode: 0o600 });
         }
       } else {
-        // write with restrictive permissions and attempt to remove after delay if keytar is available later
+        // write with restrictive permissions
         fs.writeFileSync(filePath, JSON.stringify(snapshot), { encoding: 'utf-8', mode: 0o600 });
       }
       try {
-        // schedule background task to remove file if keytar becomes available
+        // schedule background task to migrate file to keychain if adapter becomes available
         setTimeout(async () => {
           try {
-            const keytar = await import('keytar');
-            if (keytar) {
-              // move to keytar and remove file
-              await keytar.setPassword('loop-auth-snapshot', 'snapshot', JSON.stringify(snapshot));
-              try { fs.unlinkSync(filePath); } catch (e) { /* ignore */ }
-              Logger.debug(this.componentName, 'Auth snapshot migrated to keychain and file removed');
-            }
+            // try to migrate to keychain and remove file
+            await keychainAdapter.setPassword('loop-auth', 'snapshot', JSON.stringify(snapshot));
+            try { fs.unlinkSync(filePath); } catch (e) { /* ignore */ }
+            Logger.debug(this.componentName, 'Auth snapshot migrated to keychain and file removed');
           } catch (e) {
             // ignore
           }

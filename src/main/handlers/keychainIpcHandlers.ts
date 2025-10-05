@@ -1,27 +1,23 @@
 import { ipcMain } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
 import type { AuthSnapshot } from '../../shared/types/auth';
+import { keychainAdapter } from '../utils/keychainAdapter';
 
 // Lightweight response wrapper used across handlers
 type IpcGenericResponse<T> = { ok: boolean; data?: T; error?: string };
 
 /**
- * Keychain / keytar IPC handlers
+ * Keychain IPC handlers using unified keychain adapter
+ * - Uses native keytar when available, falls back to electron-store
  * - Runs in main process only. Preload/renderer should invoke these handlers.
  */
 export function registerKeychainHandlers() {
-    // get snapshot JSON from keytar
+    // get snapshot JSON from keychain
     ipcMain.handle('keychain:get-snapshot', async (_event: IpcMainInvokeEvent): Promise<IpcGenericResponse<AuthSnapshot | null>> => {
         try {
-            // dynamic import to avoid loading on unsupported platforms
-            const keytar = await import('keytar');
-            if (!keytar || typeof keytar.getPassword !== 'function') {
-                return { ok: false, error: 'keytar not available' };
-            }
-
-            const service = 'loop-auth-snapshot';
+            const service = 'loop-auth';
             const account = 'snapshot';
-            const raw = await keytar.getPassword(service, account);
+            const raw = await keychainAdapter.getPassword(service, account);
             if (!raw) return { ok: true, data: null };
             try {
                 return { ok: true, data: JSON.parse(raw) };
@@ -33,33 +29,25 @@ export function registerKeychainHandlers() {
         }
     });
 
-    // set snapshot JSON into keytar
+    // set snapshot JSON into keychain
     ipcMain.handle('keychain:set-snapshot', async (_event: IpcMainInvokeEvent, payload: AuthSnapshot): Promise<IpcGenericResponse<boolean>> => {
         try {
-            const keytar = await import('keytar');
-            if (!keytar || typeof keytar.setPassword !== 'function') {
-                return { ok: false, error: 'keytar not available' };
-            }
-            const service = 'loop-auth-snapshot';
+            const service = 'loop-auth';
             const account = 'snapshot';
             const raw = JSON.stringify(payload || {});
-            await keytar.setPassword(service, account, raw);
+            await keychainAdapter.setPassword(service, account, raw);
             return { ok: true, data: true };
         } catch (e: unknown) {
             return { ok: false, error: e instanceof Error ? e.message : String(e) };
         }
     });
 
-    // delete snapshot from keytar
+    // delete snapshot from keychain
     ipcMain.handle('keychain:delete-snapshot', async (_event: IpcMainInvokeEvent): Promise<IpcGenericResponse<boolean>> => {
         try {
-            const keytar = await import('keytar');
-            if (!keytar || typeof keytar.deletePassword !== 'function') {
-                return { ok: false, error: 'keytar not available' };
-            }
-            const service = 'loop-auth-snapshot';
+            const service = 'loop-auth';
             const account = 'snapshot';
-            const removed = await keytar.deletePassword(service, account);
+            const removed = await keychainAdapter.deletePassword(service, account);
             return { ok: true, data: !!removed };
         } catch (e: unknown) {
             return { ok: false, error: e instanceof Error ? e.message : String(e) };
