@@ -268,16 +268,25 @@ export class PowerManager extends BaseManager {
       // 배터리 레벨 (가능한 경우)
       if (Platform.isMacOS()) {
         // macOS에서는 시스템 명령어로 배터리 레벨 가져오기
-        try {
-          const { exec } = require('child_process');
-          exec('pmset -g batt | grep -o "[0-9]*%" | head -1', (error: Error | null, stdout: string) => {
-            if (!error && stdout) {
-              const batteryLevel = parseInt(stdout.replace('%', ''));
-              this.currentStatus.batteryLevel = batteryLevel;
-            }
+          try {
+          // Use spawn to avoid shell interpolation and pipelines
+          // child_process.spawn imported at top-level
+          const { spawn } = require('child_process');
+          const pm = spawn('pmset', ['-g', 'batt']);
+          let out = '';
+          pm.stdout.on('data', (chunk: Buffer) => { out += chunk.toString(); });
+          pm.on('close', () => {
+            try {
+              const match = out.match(/(\d+)%/);
+              if (match && match[1]) {
+                const batteryLevel = parseInt(match[1], 10);
+                this.currentStatus.batteryLevel = batteryLevel;
+              }
+            } catch (e) { /* ignore parse errors */ }
           });
+          pm.on('error', () => { /* ignore spawn errors */ });
         } catch (error) {
-          // 배터리 레벨을 가져올 수 없는 경우 무시
+          // unable to spawn pmset - ignore on non-mac environments
         }
       }
 

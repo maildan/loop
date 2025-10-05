@@ -7,6 +7,8 @@ import { Platform } from '../utils/platform';
 import { getSettingsManager } from '../settings';
 import type { SettingsChangeEvent, UISettingsSchema, AppSettingsSchema, KeyboardSettingsSchema, NotificationSettingsSchema } from '../settings/types';
 import path from 'path';
+import fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import { FILE_PATHS } from '../constants';
 import { safePathResolve, validatePathSafety } from '../../shared/utils/pathSecurity';
 
@@ -14,8 +16,7 @@ import { safePathResolve, validatePathSafety } from '../../shared/utils/pathSecu
 function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFilenames?: string[]): string | null {
   try {
     if (!filePath) return null;
-    const fs = require('fs');
-    const resolvedCandidate = safePathResolve(iconsDir, filePath);
+  const resolvedCandidate = safePathResolve(iconsDir, filePath);
     if (!resolvedCandidate) return null;
     
     const resolvedIconsDir = path.normalize(path.resolve(iconsDir));
@@ -29,7 +30,7 @@ function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFi
       if (!allowedFilenames.includes(basename)) return null;
     }
 
-    if (fs.existsSync(resolvedCandidate)) return resolvedCandidate;
+  if (fs.existsSync(resolvedCandidate)) return resolvedCandidate;
     return null;
   } catch (e) {
     return null;
@@ -39,7 +40,6 @@ function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFi
 // Helper: safely read file content for validated paths
 function readValidatedFile(validatedPath: string): string | null {
   try {
-    const fs = require('fs');
     return fs.readFileSync(validatedPath, 'utf-8');
   } catch (e) {
     return null;
@@ -139,8 +139,7 @@ export class TrayManager extends BaseManager {
       // 🔥 플랫폼별 기본 아이콘 생성
       let defaultIcon: Electron.NativeImage;
 
-      // 🔥 fs 모듈 가져오기 (require used for optional runtime environment)
-      const fs = require('fs');
+  // fs is imported at top-level
 
       // 플랫폼별 아이콘 경로 얻기
       const isDev = process.env.NODE_ENV === 'development';
@@ -411,7 +410,7 @@ export class TrayManager extends BaseManager {
       }
 
       // 🔥 아이콘 경로 존재 여부 미리 확인
-      const fs = require('fs');
+  // fs is imported at top-level
 
       Logger.info(this.componentName, '🔄 Resolving tray icon path', {
         iconsDir,
@@ -451,7 +450,7 @@ export class TrayManager extends BaseManager {
 
         for (const candidate of candidates) {
           const iconPath = path.join(iconsDir, candidate);
-          if (require('fs').existsSync(iconPath)) {
+          if (fs.existsSync(iconPath)) {
             Logger.info(this.componentName, '🍎 macOS tray icon found', { iconPath });
             return iconPath;
           }
@@ -488,7 +487,7 @@ export class TrayManager extends BaseManager {
 
         for (const candidate of windowsCandidates) {
           const iconPath = path.join(iconsDir, candidate);
-          if (require('fs').existsSync(iconPath)) {
+          if (fs.existsSync(iconPath)) {
             Logger.info(this.componentName, '🪟 Windows tray icon found', { iconPath });
             return iconPath;
           }

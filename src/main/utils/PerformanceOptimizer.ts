@@ -358,7 +358,11 @@ export class PerformanceOptimizer {
       if (Platform.isWindows()) {
         try {
           // Windows에서만 프로세스 우선순위 설정 시도
-          require('child_process').exec('wmic process where processid=' + process.pid + ' CALL setpriority "high priority"');
+          // Use spawn with argument array to avoid shell interpolation
+          const { spawn } = require('child_process');
+          const whereArg = `processid=${process.pid}`;
+          const wm = spawn('wmic', ['process', 'where', whereArg, 'CALL', 'setpriority', 'high priority']);
+          wm.on('error', () => { /* ignore errors */ });
           prioritySet = true;
         } catch (error) {
           Logger.warn(this.componentName, 'Failed to set high priority on Windows', error);

@@ -1,11 +1,12 @@
 // 🔥 기가차드 Settings IPC 핸들러 - electron-store 기반 완전 리팩토링
 
-import { ipcMain, IpcMainInvokeEvent, app } from 'electron';
+import { ipcMain, IpcMainInvokeEvent, app, BrowserWindow } from 'electron';
 import path from 'path';
 import { Logger } from '../../shared/logger';
 import { IpcResponse } from '../../shared/types';
 import { getElectronStoreSettingsManager } from '../settings/ElectronStoreSettingsManager';
 import { validatePathSafety } from '../../shared/utils/pathSecurity';
+import { promises as fsPromises } from 'fs';
 
 const componentName = 'SETTINGS_IPC';
 
@@ -69,7 +70,7 @@ export function setupSettingsIpcHandlers(): void {
       const success = settingsManager.setDeep(keyPath, value);
       // broadcast change to all renderer windows so they can update immediately
       try {
-        const allWindows = require('electron').BrowserWindow.getAllWindows();
+        const allWindows = BrowserWindow.getAllWindows();
         for (const w of allWindows) {
           try {
             w.webContents.send('settings:changed', { keyPath, value });
@@ -105,7 +106,7 @@ export function setupSettingsIpcHandlers(): void {
 
       // broadcast reset
       try {
-        const allWindows = require('electron').BrowserWindow.getAllWindows();
+        const allWindows = BrowserWindow.getAllWindows();
         for (const w of allWindows) {
           try {
             w.webContents.send('settings:changed', { keyPath: category || 'all', value: null, reset: true });
@@ -134,11 +135,10 @@ export function setupSettingsIpcHandlers(): void {
   // 🔒 보안: renderer에서 받은 파일 경로는 반드시 userData 디렉토리 내부로 제한
   ipcMain.handle('settings:read-file', async (_event: IpcMainInvokeEvent, filePath: string): Promise<IpcResponse<string>> => {
     try {
-      const fs = require('fs');
-      
-      // 파일 경로가 userData 디렉토리 내부인지 검증
-      const userDataPath = app.getPath('userData');
-      const resolvedPath = path.resolve(filePath);
+  // Use fs promises for async safe IO
+  // 파일 경로가 userData 디렉토리 내부인지 검증
+  const userDataPath = app.getPath('userData');
+  const resolvedPath = path.resolve(filePath);
       
       if (!validatePathSafety(resolvedPath, userDataPath)) {
         Logger.warn(componentName, 'Path traversal attempt detected in settings:read-file', { 
@@ -153,11 +153,11 @@ export function setupSettingsIpcHandlers(): void {
         };
       }
       
-      // nosemgrep: javascript-pathtraversal-rule-non-literal-fs-filename
-      const data = fs.readFileSync(resolvedPath);
-      const ext = (resolvedPath.split('.').pop() || 'png').toLowerCase();
-      const mime = ext === 'svg' ? 'image/svg+xml' : `image/${ext}`;
-      const dataUrl = `data:${mime};base64,${data.toString('base64')}`;
+  // nosemgrep: javascript-pathtraversal-rule-non-literal-fs-filename
+  const data = await fsPromises.readFile(resolvedPath);
+  const ext = (resolvedPath.split('.').pop() || 'png').toLowerCase();
+  const mime = ext === 'svg' ? 'image/svg+xml' : `image/${ext}`;
+  const dataUrl = `data:${mime};base64,${data.toString('base64')}`;
       return { success: true, data: dataUrl, timestamp: new Date() };
     } catch (error) {
       return { success: false, error: error instanceof Error ? error.message : String(error), timestamp: new Date() };

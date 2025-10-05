@@ -456,7 +456,7 @@ ${JSON.stringify(timelineData, null, 2)}
             const response: AnalysisResponse<TimelineAnalysisResult> = {
                 id: this.generateAnalysisId(),
                 type: 'timeline',
-                result: sanitizedResult,
+                result: sanitizedResult as TimelineAnalysisResult,
                 confidence: this.calculateConfidence(aiResponse),
                 suggestions: this.extractSuggestions(sanitizedResult),
                 metadata: {
@@ -616,7 +616,7 @@ ${contextualInfo}
             const response: AnalysisResponse<OutlineAnalysisResult> = {
                 id: this.generateAnalysisId(),
                 type: 'outline',
-                result: sanitizedResult,
+                result: sanitizedResult as OutlineAnalysisResult,
                 confidence: this.calculateConfidence(aiResponse),
                 suggestions: this.extractSuggestions(sanitizedResult),
                 metadata: {
@@ -771,7 +771,7 @@ ${contextualInfo}
             const response: AnalysisResponse<MindmapAnalysisResult> = {
                 id: this.generateAnalysisId(),
                 type: 'mindmap',
-                result: sanitizedResult,
+                result: sanitizedResult as MindmapAnalysisResult,
                 confidence: this.calculateConfidence(aiResponse),
                 suggestions: this.extractSuggestions(sanitizedResult),
                 metadata: {

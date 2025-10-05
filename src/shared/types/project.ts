@@ -14,7 +14,10 @@ export interface Project {
   progress: number;
   wordCount: number;
   author: string;
-  platform: string;
+  /**
+   * Platform is optional because some legacy DB rows or IPC conversions may not include it.
+   */
+  platform?: string;
   userId?: string;
   createdAt: Date;
   lastModified: Date;
