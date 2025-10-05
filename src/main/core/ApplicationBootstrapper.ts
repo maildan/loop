@@ -17,6 +17,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fontService } from '../services/FontService';
 import { safePathJoin, safePathResolve } from '../../shared/utils/pathSecurity';
+import { IconResolver } from '../utils/IconResolver';
 
 // Helper: resolve + whitelist + containment checks to avoid path traversal
 function resolveAndValidate(filePath: string | null, baseDir: string, allowedFilenames?: string[]): string | null {
@@ -375,15 +376,18 @@ export class ApplicationBootstrapper {
    */
   private setupAppIcons(): void {
     try {
+      // 🔥 Use IconResolver for consistent icon path resolution
+      const iconPath = IconResolver.getTrayIconPath();
+      
+      if (iconPath) {
+        Logger.debug('BOOTSTRAPPER', 'Using icon from IconResolver', { iconPath });
+      }
+
       // 🔥 개발 환경과 프로덕션 환경 구분
       const isDev = process.env.NODE_ENV === 'development';
 
-      let iconsDir: string;
-      if (isDev) {
-        iconsDir = path.join(process.cwd(), 'public', 'assets');
-      } else {
-        iconsDir = path.join(process.resourcesPath, 'public', 'assets');
-      }
+      // Correct icon directory - always use project root in development
+      const iconsDir = path.join(process.cwd(), 'public', 'assets');
 
       if (process.platform === 'darwin') {
         // 🔥 macOS - ICNS 파일 사용, 여러 후보 경로 시도

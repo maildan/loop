@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import { existsSync, readFileSync } from 'fs'
 import { parse } from 'dotenv'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 const PUBLIC_RENDERER_ENV_KEYS = [
   'NEXT_PUBLIC_GEMINI_API_KEY',
@@ -100,14 +101,23 @@ export default defineConfig(({ mode }) => {
     },
     renderer: {
       root: 'src/renderer',
-      plugins: [react()],
+      plugins: [
+        react(),
+        // 🔥 번들 분석기 (ANALYZE=true 환경변수로 활성화)
+        process.env.ANALYZE === 'true' && visualizer({
+          open: true,
+          filename: 'dist/stats.html',
+          gzipSize: true,
+          brotliSize: true
+        })
+      ].filter(Boolean),
       // 🔥 Electron 환경에 맞는 base path 설정
       base: readEnv('NODE_ENV', RENDERER_ENV_DEFAULTS.NODE_ENV) === 'development' ? '/' : './',
       // 🔥 폰트 파일을 asset으로 인식하도록 설정
       assetsInclude: ['**/*.ttf', '**/*.otf', '**/*.woff', '**/*.woff2'],
       envPrefix: ['VITE_', 'NEXT_PUBLIC_', 'LOOP_'],
       optimizeDeps: {
-        include: ['react', 'react-dom'],
+        include: ['react', 'react-dom', 'zustand'],
         // exclude: ['@tailwindcss/vite'], // 제거 - TailwindCSS 처리 방해
         force: true
       },
@@ -144,18 +154,43 @@ export default defineConfig(({ mode }) => {
         }
       },
       build: {
-        // 프로덕션 빌드 최적화
+        // 🔥 프로덕션 빌드 최적화
+        minify: 'esbuild', // esbuild가 terser보다 빠름
+        sourcemap: mode === 'development' ? 'inline' : false,
+        reportCompressedSize: false, // 빌드 속도 향상
         rollupOptions: {
           output: {
-            // 청킹 전략 최적화
-            manualChunks: {
-              vendor: ['react', 'react-dom'],
-              ui: ['@tiptap/core', '@tiptap/extension-bubble-menu']
+            // 🔥 청킹 전략 최적화 - vendor 분리
+            manualChunks: (id) => {
+              // React 생태계
+              if (id.includes('react') || id.includes('react-dom') || id.includes('scheduler')) {
+                return 'react-vendor'
+              }
+              // Zustand 상태관리
+              if (id.includes('zustand')) {
+                return 'state-vendor'
+              }
+              // Tiptap 에디터
+              if (id.includes('@tiptap') || id.includes('prosemirror')) {
+                return 'editor-vendor'
+              }
+              // Radix UI 컴포넌트
+              if (id.includes('@radix-ui')) {
+                return 'ui-vendor'
+              }
+              // Google AI 관련
+              if (id.includes('@google/generative-ai')) {
+                return 'ai-vendor'
+              }
+              // 기타 node_modules
+              if (id.includes('node_modules')) {
+                return 'vendor'
+              }
             }
           }
         },
-        // 큰 파일에 대한 경고 임계값 증가
-        chunkSizeWarningLimit: 1000
+        // 🔥 청크 크기 경고 임계값 조정
+        chunkSizeWarningLimit: 800
       }
     }
   }

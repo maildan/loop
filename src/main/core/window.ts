@@ -69,6 +69,8 @@ export class WindowManager {
           allowRunningInsecureContent: false,
           experimentalFeatures: false, // 🔥 실험적 기능 비활성화
           // 🔥 CSP는 StaticServer 헤더에서 처리 (Electron 38 호환성)
+          // 🔥 Suppress eval warning in development (CSP already configured in headers.ts)
+          devTools: !app.isPackaged, // DevTools only in development
         },
         icon: iconPath,
         // macOS 전용 설정

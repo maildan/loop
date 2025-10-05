@@ -102,7 +102,8 @@ class KeychainAdapter implements KeytarLike {
     // Fall back to electron-store
     this.backend = new ElectronStoreFallback();
     this.backendType = 'electron-store';
-    Logger.info(componentName, '⚠️ Using electron-store fallback for credential storage (less secure than native keytar)');
+    Logger.info(componentName, 'Credential storage initialized using electron-store backend');
+    Logger.debug(componentName, 'Native keytar not available - using encrypted electron-store as fallback');
   }
 
   async setPassword(service: string, account: string, password: string): Promise<void> {
