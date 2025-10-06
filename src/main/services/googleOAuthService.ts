@@ -5,7 +5,6 @@ import { google } from 'googleapis';
 import { Logger } from '../../shared/logger';
 import { createSuccess, createError, type Result } from '../../shared/common';
 import { tokenStorage } from './tokenStorage';
-import { safeKeychain } from '../utils/safeKeychain';
 import type { OAuthTokens, GoogleUserInfo, OAuthResult, GoogleOAuthConfig } from '../types/oauth';
 import * as crypto from 'crypto';
 import type { OAuth2Client } from 'google-auth-library';
@@ -284,11 +283,12 @@ export class GoogleOAuthService {
 
       const deleteResult = await tokenStorage.deleteTokens('google');
 
-      // remove auth snapshot from secure storage (safeKeychain will fallback to file)
+      // remove auth snapshot from secure storage (keytar) as well
       try {
-        await safeKeychain.deleteSnapshot();
+        const keytar = await import('keytar');
+        await keytar.deletePassword('loop-auth-snapshot', 'snapshot');
       } catch (e) {
-        // ignore cleanup errors
+        // ignore if keytar not available
       }
 
       Logger.info(this.componentName, '✅ Google 연결 해제됨');
