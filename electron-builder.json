@@ -112,7 +112,7 @@
     "icon": "public/assets/icon.png",
     "target": [
       {
-        "target": "nsis",
+        "target": "nsis-web",
         "arch": [
           "x64",
           "arm64"
@@ -162,7 +162,11 @@
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
-    "shortcutName": "Loop"
+    "shortcutName": "Loop",
+    "differentialPackage": true
+  },
+  "nsisWeb": {
+    "artifactName": "${productName} Web Setup ${version}.${ext}"
   },
   "publish": {
     "provider": "github",
