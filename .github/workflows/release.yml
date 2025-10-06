@@ -9,12 +9,8 @@ permissions:
   contents: write # GitHub Release 생성 권한
 
 jobs:
-  release:
-    runs-on: ${{ matrix.os }}
-    
-    strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
+  release-windows:
+    runs-on: windows-latest
     
     steps:
       - name: Checkout repository
@@ -50,42 +46,16 @@ jobs:
       - name: Build application
         run: pnpm build
       
-      - name: Package application (macOS)
-        if: runner.os == 'macOS'
-        run: pnpm dist
-        env:
-          # macOS 코드 사이닝 (optional, 없으면 skip)
-          APPLE_ID: ${{ secrets.APPLE_ID }}
-          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
-          CSC_LINK: ${{ secrets.CSC_LINK }}
-          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
-          # GitHub 토큰 (electron-builder가 자동 업로드에 사용)
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Package application (Windows)
-        if: runner.os == 'Windows'
-        run: pnpm dist
+      - name: Package Windows application
+        run: pnpm dist:win
         env:
           # GitHub 토큰 (electron-builder가 자동 업로드에 사용)
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Upload artifacts (macOS)
-        if: runner.os == 'macOS'
+      - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Loop-${{ runner.os }}
-          path: |
-            release/*.dmg
-            release/*.dmg.blockmap
-            release/*.zip
-            release/latest-mac.yml
-          retention-days: 7
-      
-      - name: Upload artifacts (Windows)
-        if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
-        with:
-          name: Loop-${{ runner.os }}
+          name: Loop-Windows
           path: |
             release/*.exe
             release/*.exe.blockmap
@@ -97,12 +67,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            release/*.dmg
-            release/*.dmg.blockmap
-            release/*.zip
             release/*.exe
             release/*.exe.blockmap
-            release/latest-mac.yml
             release/latest.yml
           draft: false
           prerelease: false

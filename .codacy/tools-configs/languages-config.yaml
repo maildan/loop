@@ -1,0 +1,25 @@
+tools:
+    - name: eslint
+      languages: [Javascript, TypeScript]
+      extensions: [.js, .jsm, .jsx, .mjs, .ts, .tsx, .vue]
+      files: []
+    - name: lizard
+      languages: [Go, Javascript, Kotlin, Python, Ruby, Scala, TypeScript]
+      extensions: [.gemspec, .go, .jbuilder, .js, .jsm, .jsx, .kt, .kts, .mjs, .opal, .podspec, .py, .rake, .rb, .scala, .ts, .tsx, .vue]
+      files: []
+    - name: pmd
+      languages: [Javascript, SQL, XML]
+      extensions: [.js, .jsm, .jsx, .mjs, .pom, .sql, .vue, .wsdl, .xml, .xsl]
+      files: []
+    - name: pylint
+      languages: [Python]
+      extensions: [.py]
+      files: []
+    - name: semgrep
+      languages: [Dockerfile, Go, Javascript, Kotlin, Python, Ruby, SQL, Scala, Shell, TypeScript, YAML]
+      extensions: [.bash, .dockerfile, .gemspec, .go, .jbuilder, .js, .jsm, .jsx, .kt, .kts, .mjs, .opal, .podspec, .py, .rake, .rb, .scala, .sh, .sql, .ts, .tsx, .vue, .yaml, .yml]
+      files: []
+    - name: trivy
+      languages: [Dockerfile, Go, JSON, Javascript, Python, Ruby, Scala, TypeScript, XML, YAML]
+      extensions: [.dockerfile, .gemspec, .go, .jbuilder, .js, .jsm, .json, .jsx, .mjs, .opal, .podspec, .pom, .py, .rake, .rb, .scala, .ts, .tsx, .vue, .wsdl, .xml, .xsl, .yaml, .yml]
+      files: [Berksfile, Capfile, Cheffile, Dockerfile, Fastfile, Gemfile, Gemfile.lock, Guardfile, Pipfile.lock, Podfile, Rakefile, Thorfile, Vagabondfile, Vagrantfile, build.sbt.lock, config.ru, go.mod, package-lock.json, package.json, pnpm-lock.yaml, poetry.lock, requirements.txt, uv.lock, yarn.lock]
