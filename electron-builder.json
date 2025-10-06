@@ -35,16 +35,23 @@
     "**/*.node",
     "**/*.dll",
     "**/*.dylib",
-    "**/*.so"
+    "**/*.so",
+    "node_modules/.prisma/**/*",
+    "node_modules/@prisma/**/*"
   ],
   "extraResources": [
     {
       "from": "prisma/schema.prisma",
-      "to": "schema.prisma"
+      "to": "prisma/schema.prisma"
     },
     {
       "from": "node_modules/.prisma/client",
-      "to": "prisma/client",
+      "to": "node_modules/.prisma/client",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "node_modules/@prisma/client",
+      "to": "node_modules/@prisma/client",
       "filter": ["**/*"]
     },
     {
