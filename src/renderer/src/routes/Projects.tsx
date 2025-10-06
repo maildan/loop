@@ -90,7 +90,11 @@ function ProjectsPageContent(): React.ReactElement {
       }
 
       // 🔥 BE 데이터를 FE 형식으로 변환
-      const projectsData = result.data || [];
+      const projectsData = (result.data || []).map(p => ({
+        ...p,
+        description: p.description || '', // 🔥 undefined 방지
+        status: (p.status || 'draft') as ProjectData['status'] // 🔥 타입 안전성
+      })) as ProjectData[];
       setProjects(projectsData);
 
       Logger.info('PROJECTS_PAGE', `✅ Loaded ${projectsData.length} projects successfully`);
@@ -124,6 +128,7 @@ function ProjectsPageContent(): React.ReactElement {
         status: 'active' as const,
         progress: 0,
         wordCount: 0,
+        author: 'Unknown', // 🔥 필수 필드 추가 (추후 유저 정보로 대체)
         updatedAt: new Date(),
       };
       

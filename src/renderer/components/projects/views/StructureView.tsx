@@ -268,6 +268,11 @@ const StructureView = memo(function StructureView({
       description: '',
       type: type as any, // 🔥 임시 타입 캐스팅
       status: 'planning',
+      wordCount: 0,
+      sortOrder: structures.length,
+      depth: 0,
+      color: '#6366f1',
+      isActive: true,
       projectId,
       createdAt: new Date(),
       updatedAt: new Date()

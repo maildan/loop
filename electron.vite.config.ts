@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
 import { existsSync, readFileSync } from 'fs'
 import { parse } from 'dotenv'
-import { visualizer } from 'rollup-plugin-visualizer'
 
 const PUBLIC_RENDERER_ENV_KEYS = [
   'NEXT_PUBLIC_GEMINI_API_KEY',
@@ -104,7 +103,7 @@ export default defineConfig(({ mode }) => {
       plugins: [
         react(),
         // 🔥 번들 분석기 (ANALYZE=true 환경변수로 활성화)
-        process.env.ANALYZE === 'true' && visualizer({
+        process.env.ANALYZE === 'true' && (require('rollup-plugin-visualizer').default)({
           open: true,
           filename: 'dist/stats.html',
           gzipSize: true,

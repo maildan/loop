@@ -159,19 +159,22 @@ const StructureView = memo(function StructureView({
                 idea: `새로운 아이디어`
             };
 
-            const id = `${type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-            const newItem: ProjectStructure = {
-                id,
-                title: defaultTitles[type],
-                content: '',
-                type,
-                projectId,
-                sortOrder: structures.length,
-                createdAt: new Date(),
-                updatedAt: new Date()
-            };
-
-            await addStructureItem(projectId, newItem);
+        const id = `${type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const newItem: ProjectStructure = {
+            id,
+            title: defaultTitles[type],
+            content: '',
+            type,
+            projectId,
+            sortOrder: structures.length,
+            status: 'draft',
+            wordCount: 0,
+            depth: 0,
+            color: '#6366f1',
+            isActive: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };            await addStructureItem(projectId, newItem);
             Logger.info('STRUCTURE_VIEW', 'Item added successfully', {
                 type,
                 title: newItem.title,

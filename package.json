@@ -167,6 +167,7 @@
       "unrs-resolver"
     ],
     "onlyBuiltDependencies": [
+      "@firebase/util",
       "@parcel/watcher",
       "@prisma/client",
       "@prisma/engines",
