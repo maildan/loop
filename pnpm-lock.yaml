@@ -12,9 +12,6 @@ importers:
 
   .:
     dependencies:
-      '@dataconnect/generated':
-        specifier: link:src/dataconnect-generated
-        version: link:src/dataconnect-generated
       '@fontsource/nanum-gothic':
         specifier: ^5.2.7
         version: 5.2.7

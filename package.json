@@ -54,7 +54,6 @@
     "push": "git push origin main"
   },
   "dependencies": {
-    "@dataconnect/generated": "link:src/dataconnect-generated",
     "@fontsource/nanum-gothic": "^5.2.7",
     "@fontsource/noto-sans-jp": "^5.2.8",
     "@fontsource/noto-sans-kr": "^5.2.8",
