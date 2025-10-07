@@ -825,24 +825,27 @@ export const ProjectHeader = React.memo(function ProjectHeader({
 
       {/* 🔥 맨 오른쪽 - 사이드바 토글 */}
       {onToggleSidebar && (
-        <div className={`${TOOLBAR_STYLES.section} ml-auto`}>
-          <button
-            type="button"
-            onClick={onToggleSidebar}
-            className={TOOLBAR_STYLES.button}
-            title={
-              settings?.ui.sidebarCollapsed || sidebarCollapsed 
-                ? '사이드바 펼치기' 
-                : '사이드바 접기'
-            }
-          >
-            <div className="flex flex-col gap-0.5">
-              <div className="w-3 h-0.5 bg-current"></div>
-              <div className="w-3 h-0.5 bg-current"></div>
-              <div className="w-3 h-0.5 bg-current"></div>
-            </div>
-          </button>
-        </div>
+        <>
+          <div className="flex-1" />
+          <div className={TOOLBAR_STYLES.section}>
+            <button
+              type="button"
+              onClick={onToggleSidebar}
+              className={TOOLBAR_STYLES.button}
+              title={
+                settings?.ui.sidebarCollapsed || sidebarCollapsed 
+                  ? '사이드바 펼치기' 
+                  : '사이드바 접기'
+              }
+            >
+              <div className="flex flex-col gap-0.5">
+                <div className="w-3 h-0.5 bg-current"></div>
+                <div className="w-3 h-0.5 bg-current"></div>
+                <div className="w-3 h-0.5 bg-current"></div>
+              </div>
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

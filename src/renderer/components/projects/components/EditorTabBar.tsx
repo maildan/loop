@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useCallback, memo } from 'react';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, Sparkles } from 'lucide-react';
 import { EditorTab } from '../../../../shared/editor';
 import { Logger } from '../../../../shared/logger';
 
@@ -12,6 +12,8 @@ interface EditorTabBarProps {
     onTabClose: (tabId: string) => void;
     onNewTab: () => void;
     onTabReorder?: (fromIndex: number, toIndex: number) => void;
+    onToggleAISidebar?: () => void; // 🔥 AI 사이드바 토글 함수
+    isAISidebarOpen?: boolean; // 🔥 AI 사이드바 열림 상태
 }
 
 interface ContextMenuState {
@@ -34,6 +36,8 @@ const TAB_STYLES = {
     closeButton: 'hover:bg-[var(--toolbar-hover-bg)] rounded p-1 transition-all duration-200 opacity-0 group-hover:opacity-100 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)]',
     closeButtonVisible: 'opacity-100',
     newTabButton: 'px-3 py-2 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-all duration-200 rounded-md mx-2',
+    aiButton: 'px-3 py-2 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-all duration-200 rounded-md mx-1 flex items-center gap-2', // 🔥 AI 버튼 스타일
+    aiButtonActive: 'bg-[var(--button-active)] text-[color:var(--editor-accent)]', // 🔥 AI 사이드바 열렸을 때
     contextMenu: 'absolute bg-[var(--toolbar-bg)] border border-[color:var(--toolbar-border)] rounded-lg shadow-xl py-1 z-[1010] min-w-[180px]', // 960 → 1010으로 증가
     contextMenuItem: 'px-3 py-2 text-sm text-[color:var(--toolbar-foreground)] hover:bg-[var(--button-hover)] cursor-pointer flex items-center gap-2',
     contextMenuSeparator: 'border-t border-[color:var(--toolbar-divider)] my-1',
@@ -46,6 +50,8 @@ export const EditorTabBar = memo(function EditorTabBar({
     onTabClose,
     onNewTab,
     onTabReorder,
+    onToggleAISidebar,
+    isAISidebarOpen = false,
 }: EditorTabBarProps): React.ReactElement {
     const [draggedTabId, setDraggedTabId] = useState<string | null>(null);
     const [dragOverTabId, setDragOverTabId] = useState<string | null>(null);
@@ -267,6 +273,19 @@ export const EditorTabBar = memo(function EditorTabBar({
             >
                 <Plus size={16} />
             </button>
+
+            {/* 🔥 AI 어시스턴트 버튼 */}
+            {onToggleAISidebar && (
+                <button
+                    type="button"
+                    className={`${TAB_STYLES.aiButton} ${isAISidebarOpen ? TAB_STYLES.aiButtonActive : ''}`}
+                    onClick={onToggleAISidebar}
+                    title="AI 어시스턴트"
+                >
+                    <Sparkles size={16} />
+                    <span className="text-xs font-medium">AI</span>
+                </button>
+            )}
 
             {/* 🔥 컨텍스트 메뉴 */}
             {contextMenu.isOpen && (

@@ -517,6 +517,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                             };
                             actions.addTab(newTab);
                         }}
+                        onToggleAISidebar={actions.toggleRightSidebar}
+                        isAISidebarOpen={state.showRightSidebar}
                     />
                 </div>
             </div>

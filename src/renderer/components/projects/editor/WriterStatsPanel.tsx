@@ -99,10 +99,10 @@ const STATS_STYLES = {
   statValue: 'text-lg font-bold text-[color:hsl(var(--foreground))]',
   statSubtext: 'text-xs text-[color:hsl(var(--muted-foreground))]',
 
-  // 🔥 탭 스타일 추가
+  // 🔥 탭 스타일 추가 - 아이콘 포함
   tabs: 'flex border-b border-[color:hsl(var(--border))]',
-  tab: 'px-4 py-2 text-sm text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] cursor-pointer transition-colors',
-  tabActive: 'px-4 py-2 text-sm font-medium text-[color:var(--accent-primary)] border-b-2 border-[color:var(--accent-primary)] cursor-pointer',
+  tab: 'flex items-center gap-2 px-4 py-2 text-sm text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] cursor-pointer transition-colors',
+  tabActive: 'flex items-center gap-2 px-4 py-2 text-sm font-medium text-[color:var(--accent-primary)] border-b-2 border-[color:var(--accent-primary)] cursor-pointer',
   tabContent: 'p-4 flex-1 overflow-y-auto bg-[color:hsl(var(--card))]',
 
   // 🔥 AI 채팅 스타일 - UI 잘림 문제 해결
@@ -132,8 +132,8 @@ export function WriterStatsPanel({
   projectId
 }: WriterStatsPanelProps): React.ReactElement {
 
-  // 🔥 탭 관리
-  const [activeTab, setActiveTab] = useState<'stats' | 'ai'>('stats');
+  // 🔥 탭 관리 - 3개 탭으로 확장
+  const [activeTab, setActiveTab] = useState<'stats' | 'ai' | 'analysis'>('stats');
 
   // 🔥 AI 기능 상태 관리
   const [aiLoading, setAiLoading] = useState<string | null>(null);
@@ -528,26 +528,35 @@ export function WriterStatsPanel({
     <div className={showRightSidebar ? STATS_STYLES.rightSidebar : STATS_STYLES.rightSidebarCollapsed}>
       <div className={STATS_STYLES.rightSidebarHeader}>
         <h2 className={STATS_STYLES.rightSidebarTitle}>
-          {activeTab === 'stats' ? '작가 통계' : 'AI 창작 파트너'}
+          {activeTab === 'stats' ? '작가 통계' : activeTab === 'ai' ? 'AI 창작 파트너' : '글쓰기 분석'}
         </h2>
         <button className={STATS_STYLES.iconButton} onClick={toggleRightSidebar}>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
 
-      {/* 탭 네비게이션 */}
+      {/* 🔥 탭 네비게이션 - 3개 탭 */}
       <div className={STATS_STYLES.tabs}>
         <div
           className={activeTab === 'stats' ? STATS_STYLES.tabActive : STATS_STYLES.tab}
           onClick={() => setActiveTab('stats')}
         >
+          <BarChart2 className="w-4 h-4" />
           통계
         </div>
         <div
           className={activeTab === 'ai' ? STATS_STYLES.tabActive : STATS_STYLES.tab}
           onClick={() => setActiveTab('ai')}
         >
+          <Sparkles className="w-4 h-4" />
           AI
+        </div>
+        <div
+          className={activeTab === 'analysis' ? STATS_STYLES.tabActive : STATS_STYLES.tab}
+          onClick={() => setActiveTab('analysis')}
+        >
+          <Brain className="w-4 h-4" />
+          분석
         </div>
       </div>
 
@@ -881,6 +890,172 @@ export function WriterStatsPanel({
             >
               <Send className="w-4 h-4" />
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* 🔥 글쓰기 분석 탭 - 작가를 위한 실질적인 데이터 */}
+      {activeTab === 'analysis' && (
+        <div className="p-4 overflow-y-auto space-y-4">
+          {/* 프로젝트 기본 정보 */}
+          <div className={STATS_STYLES.statCard}>
+            <div className="flex items-center gap-2 mb-3">
+              <BookOpen className={STATS_STYLES.sectionIconAccent} />
+              <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">프로젝트 정보</span>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">프로젝트 ID</span>
+                <span className="font-mono text-xs text-[color:hsl(var(--foreground))]">
+                  {projectId?.substring(0, 8) || '없음'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">현재 세션</span>
+                <span className="font-medium text-[color:hsl(var(--foreground))]">
+                  {formatTime(Date.now() - sessionStartTime)}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 글쓰기 속도 분석 */}
+          <div className={STATS_STYLES.statCard}>
+            <div className="flex items-center gap-2 mb-3">
+              <TrendingUp className={STATS_STYLES.sectionIconAccent} />
+              <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">글쓰기 속도</span>
+            </div>
+            <div className="space-y-3">
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="text-xs text-[color:hsl(var(--muted-foreground))]">분당 타자 수 (WPM)</span>
+                  <span className="text-lg font-bold text-[color:var(--accent-primary)]">
+                    {displayStats.wpm}
+                  </span>
+                </div>
+                <div className="w-full bg-[color:hsl(var(--muted))]/70 rounded-full h-1.5">
+                  <div
+                    className="bg-[color:var(--accent-primary)] h-1.5 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, (displayStats.wpm / 100) * 100)}%` }}
+                  />
+                </div>
+                <p className="text-xs text-[color:hsl(var(--muted-foreground))] mt-1">
+                  {displayStats.wpm < 30 && '천천히 작성 중'}
+                  {displayStats.wpm >= 30 && displayStats.wpm < 60 && '평균 속도'}
+                  {displayStats.wpm >= 60 && displayStats.wpm < 90 && '빠른 속도'}
+                  {displayStats.wpm >= 90 && '매우 빠른 속도!'}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="bg-[color:hsl(var(--muted))]/30 p-2 rounded">
+                  <div className="text-[color:hsl(var(--muted-foreground))]">평균 단어/분</div>
+                  <div className="text-base font-bold text-[color:hsl(var(--foreground))]">
+                    {displayStats.wpm}
+                  </div>
+                </div>
+                <div className="bg-[color:hsl(var(--muted))]/30 p-2 rounded">
+                  <div className="text-[color:hsl(var(--muted-foreground))]">글자/분</div>
+                  <div className="text-base font-bold text-[color:hsl(var(--foreground))]">
+                    {Math.round(displayStats.wpm * 5.5)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 시간 투자 분석 */}
+          <div className={STATS_STYLES.statCard}>
+            <div className="flex items-center gap-2 mb-3">
+              <Clock className={STATS_STYLES.sectionIconAccent} />
+              <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">시간 투자</span>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">현재 세션</span>
+                <span className="font-medium text-[color:hsl(var(--foreground))]">
+                  {formatTime(Date.now() - sessionStartTime)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">예상 완료 시간</span>
+                <span className="font-medium text-[color:hsl(var(--foreground))]">
+                  {(() => {
+                    const remaining = displayStats.wordGoal - displayStats.wordCount;
+                    if (remaining <= 0) return '완료!';
+                    if (displayStats.wpm === 0) return '계산 중...';
+                    const minutesLeft = Math.ceil(remaining / displayStats.wpm);
+                    return formatTime(minutesLeft * 60 * 1000);
+                  })()}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">작성 효율</span>
+                <span className="font-medium text-[color:var(--accent-primary)]">
+                  {displayStats.wpm > 0 ? '활발' : '준비 중'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 텍스트 통계 */}
+          <div className={STATS_STYLES.statCard}>
+            <div className="flex items-center gap-2 mb-3">
+              <BarChart2 className={STATS_STYLES.sectionIconAccent} />
+              <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">텍스트 분석</span>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">전체 단어 수</span>
+                <span className="font-bold text-[color:hsl(var(--foreground))]">
+                  {displayStats.wordCount.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">전체 글자 수</span>
+                <span className="font-bold text-[color:hsl(var(--foreground))]">
+                  {displayStats.charCount.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">예상 문장 수</span>
+                <span className="font-medium text-[color:hsl(var(--foreground))]">
+                  {currentText.split(/[.!?]+/).filter(s => s.trim().length > 0).length}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">예상 단락 수</span>
+                <span className="font-medium text-[color:hsl(var(--foreground))]">
+                  {currentText.split(/\n\n+/).filter(p => p.trim().length > 0).length}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* AI 분석 버튼 */}
+          <div className={STATS_STYLES.statCard}>
+            <div className="flex items-center gap-2 mb-3">
+              <Brain className={STATS_STYLES.sectionIconAccent} />
+              <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">AI 분석</span>
+            </div>
+            <button
+              className="w-full px-4 py-2 bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover,#1d4ed8)] text-white rounded-md transition-colors flex items-center justify-center gap-2 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={async () => {
+                if (!currentText.trim() || isAiTyping) return;
+                
+                const analysisPrompt = `다음 텍스트를 분석하고 개선점을 제안해주세요:\n\n${currentText.substring(0, 2000)}${currentText.length > 2000 ? '...' : ''}`;
+                
+                setActiveTab('ai');
+                await sendMessageToOpenAI(analysisPrompt);
+              }}
+              disabled={isAiTyping || !currentText.trim()}
+            >
+              <Brain className="w-4 h-4" />
+              현재 텍스트 분석하기
+            </button>
+            <p className="text-xs text-[color:hsl(var(--muted-foreground))] mt-2 text-center">
+              AI가 글쓰기 스타일, 문법, 구조를 분석합니다
+            </p>
           </div>
         </div>
       )}

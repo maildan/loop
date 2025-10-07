@@ -168,7 +168,9 @@ export const useStructureStore = create<StructureStore>()(
                         // TODO: 실패 시 UI 롤백 로직 추가
                     }
                 } else {
-                    Logger.warn('STRUCTURE_STORE', 'No item found to update', { itemId });
+                    // 아이템이 이미 삭제되었거나 존재하지 않음 (race condition)
+                    Logger.debug('STRUCTURE_STORE', 'No item found to update (possibly deleted)', { itemId, projectId });
+                    return; // DB 업데이트 시도하지 않음
                 }
             },
 
