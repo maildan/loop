@@ -9,19 +9,20 @@ const HELP_STYLES = {
   trigger: 'fixed bottom-4 right-4 z-[9999] w-12 h-12 bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover,#1d4ed8)] text-[color:var(--text-inverse,#ffffff)] rounded-full flex items-center justify-center shadow-[var(--shadow-lg,0_20px_48px_rgba(15,23,42,0.24))] transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/40 focus-visible:ring-offset-0',
   hidden: 'hidden',
   modal: 'fixed inset-0 z-[10000] flex items-center justify-center bg-[color:hsl(var(--foreground))]/60 backdrop-blur-sm',
-  panel: 'bg-[color:hsl(var(--card))] rounded-xl shadow-[var(--shadow-xl,0_26px_60px_rgba(15,23,42,0.32))] max-w-lg w-full mx-4 max-h-[80vh] overflow-hidden border border-[color:hsl(var(--border))] transition-colors',
-  header: 'flex items-center justify-between p-6 border-b border-[color:hsl(var(--border))]',
+  panel: 'bg-[color:hsl(var(--card))] rounded-xl shadow-[var(--shadow-xl,0_26px_60px_rgba(15,23,42,0.32))] max-w-lg w-full mx-4 max-h-[80vh] overflow-hidden border border-[color:hsl(var(--border))] transition-colors flex flex-col',
+  header: 'flex items-center justify-between p-6 border-b border-[color:hsl(var(--border))] flex-shrink-0',
   title: 'text-xl font-bold text-[color:hsl(var(--foreground))]',
   closeButton: 'w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[color:hsl(var(--muted))]/70 transition-colors text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/40 focus-visible:ring-offset-0',
-  content: 'p-6 overflow-y-auto bg-[color:hsl(var(--card))]',
-  helpText: 'prose max-w-none text-sm text-[color:hsl(var(--foreground))] prose-headings:text-[color:hsl(var(--foreground))] prose-p:text-[color:hsl(var(--foreground))] prose-strong:text-[color:var(--accent-primary)]',
-  footer: 'p-4 border-t border-[color:hsl(var(--border))] flex justify-between bg-[color:hsl(var(--card))]',
+  content: 'p-6 overflow-y-auto bg-[color:hsl(var(--card))] flex-1 max-h-[calc(80vh-150px)]',
+  helpText: 'prose max-w-none text-sm text-[color:hsl(var(--foreground))] prose-headings:text-[color:hsl(var(--foreground))] prose-p:text-[color:hsl(var(--foreground))] prose-strong:text-[color:var(--accent-primary)] [font-family:var(--font-primary,inherit)]',
+  footer: 'p-4 border-t border-[color:hsl(var(--border))] flex justify-between bg-[color:hsl(var(--card))] flex-shrink-0',
   hideButton: 'flex items-center gap-2 text-sm text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] transition-colors',
 } as const;
 
 interface ShortcutHelpProps {
   className?: string;
   isWriterStatsOpen?: boolean;
+  isEditorView?: boolean; // 🔥 에디터 뷰인지 확인
 }
 
 // 정적 메서드: 숨겨진 가이드를 다시 표시
@@ -29,7 +30,7 @@ export function resetShortcutHelpVisibility(): void {
   localStorage.setItem('shortcutHelp.isVisible', 'true');
 }
 
-export function ShortcutHelp({ className = '', isWriterStatsOpen = false }: ShortcutHelpProps): React.ReactElement {
+export function ShortcutHelp({ className = '', isWriterStatsOpen = false, isEditorView = false }: ShortcutHelpProps): React.ReactElement {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
 
@@ -91,8 +92,8 @@ export function ShortcutHelp({ className = '', isWriterStatsOpen = false }: Shor
     }
   }, [isWriterStatsOpen]);
 
-  // 가이드 숨김 상태면 아무것도 표시하지 않음
-  if (!isVisible) {
+  // 🔥 가이드 숨김 상태이거나 에디터 뷰가 아니면 표시하지 않음
+  if (!isVisible || !isEditorView) {
     return <></>;
   }
 

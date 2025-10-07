@@ -25,7 +25,7 @@ interface ContextMenuState {
 
 const TAB_STYLES = {
     // 🔥 작가 친화적 디자인: 방해요소 최소화, EditorTabBar z-index를 ProjectHeader보다 높게 설정
-    container: 'flex items-center bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] relative',
+    container: 'flex items-center bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] relative h-12',
     tabsWrapper: 'flex-1 flex overflow-x-auto scrollbar-hide',
     tab: 'flex items-center gap-2 px-4 py-2 text-sm border-r border-[color:var(--toolbar-divider)] cursor-pointer select-none transition-all duration-200 min-w-[120px] max-w-[200px] group relative',
     activeTab: 'bg-[var(--editor-bg)] text-[color:var(--toolbar-foreground)]',
@@ -35,8 +35,8 @@ const TAB_STYLES = {
     tabTitle: 'flex-1 truncate font-medium',
     closeButton: 'hover:bg-[var(--toolbar-hover-bg)] rounded p-1 transition-all duration-200 opacity-0 group-hover:opacity-100 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)]',
     closeButtonVisible: 'opacity-100',
-    newTabButton: 'px-3 py-2 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-all duration-200 rounded-md mx-2',
-    aiButton: 'px-3 py-2 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-all duration-200 rounded-md mx-1 flex items-center gap-2', // 🔥 AI 버튼 스타일
+    newTabButton: 'h-8 px-3 py-2 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-all duration-200 rounded-md mx-2 flex items-center justify-center',
+    aiButton: 'h-8 px-3 py-2 text-[color:var(--toolbar-muted)] hover:text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-all duration-200 rounded-md mx-1 flex items-center gap-2', // 🔥 AI 버튼 스타일
     aiButtonActive: 'bg-[var(--button-active)] text-[color:var(--editor-accent)]', // 🔥 AI 사이드바 열렸을 때
     contextMenu: 'absolute bg-[var(--toolbar-bg)] border border-[color:var(--toolbar-border)] rounded-lg shadow-xl py-1 z-[1010] min-w-[180px]', // 960 → 1010으로 증가
     contextMenuItem: 'px-3 py-2 text-sm text-[color:var(--toolbar-foreground)] hover:bg-[var(--button-hover)] cursor-pointer flex items-center gap-2',

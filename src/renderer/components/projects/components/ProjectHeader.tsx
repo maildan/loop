@@ -29,7 +29,7 @@ import { useDynamicFont } from '../../../hooks/useDynamicFont';
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
-  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex flex-wrap items-center px-3 gap-2 gap-y-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm overflow-visible !leading-none',
+  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex flex-wrap items-center px-3 gap-2 gap-y-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm overflow-visible !leading-none [&_[title]]:delay-100',
   section: 'flex items-center gap-1.5 shrink-0 !leading-none',
   divider: 'w-px h-6 bg-[color:var(--toolbar-divider)] opacity-70 mx-2',
   button: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-xs font-medium !leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
@@ -733,7 +733,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={handleStrike}
           className={editorState.isStrike ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="취소선"
+          title="취소선 (⇧⌘X)"
         >
           <Strikethrough size={16} />
         </button>
@@ -747,7 +747,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={handleTextColor}
           className={TOOLBAR_STYLES.colorButton}
-          title="텍스트 색상"
+          title="텍스트 색상 (⌘K)"
         >
           <Type size={16} />
         </button>
@@ -755,7 +755,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={handleHighlight}
           className={editorState.isHighlight ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="형광펜"
+          title="형광펜 (⇧⌘H)"
         >
           <Highlighter size={16} />
         </button>
@@ -769,7 +769,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={() => handleAlign('left')}
           className={editorState.isLeftAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="왼쪽 정렬"
+          title="왼쪽 정렬 (⇧⌘L)"
         >
           <AlignLeft size={16} />
         </button>
@@ -777,7 +777,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={() => handleAlign('center')}
           className={editorState.isCenterAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="가운데 정렬"
+          title="가운데 정렬 (⇧⌘E)"
         >
           <AlignCenter size={16} />
         </button>
@@ -785,7 +785,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={() => handleAlign('right')}
           className={editorState.isRightAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="오른쪽 정렬"
+          title="오른쪽 정렬 (⇧⌘R)"
         >
           <AlignRight size={16} />
         </button>
@@ -793,7 +793,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={() => handleAlign('justify')}
           className={editorState.isJustifyAlign ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="양쪽 정렬"
+          title="양쪽 정렬 (⇧⌘J)"
         >
           <AlignJustify size={16} />
         </button>
@@ -807,7 +807,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={handleBulletList}
           className={editorState.isBulletList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="글머리 기호"
+          title="글머리 기호 (⇧⌘8)"
         >
           <List size={16} />
         </button>
@@ -815,7 +815,7 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           type="button"
           onClick={handleOrderedList}
           className={editorState.isOrderedList ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="번호 매기기"
+          title="번호 매기기 (⇧⌘7)"
         >
           <ListOrdered size={16} />
         </button>

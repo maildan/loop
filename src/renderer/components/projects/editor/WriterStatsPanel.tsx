@@ -913,7 +913,7 @@ export function WriterStatsPanel({
               <div className="flex justify-between">
                 <span className="text-[color:hsl(var(--muted-foreground))]">현재 세션</span>
                 <span className="font-medium text-[color:hsl(var(--foreground))]">
-                  {formatTime(Date.now() - sessionStartTime)}
+                  {formatTime(Math.floor((Date.now() - sessionStartTime) / 1000 / 60))}
                 </span>
               </div>
             </div>
@@ -974,7 +974,7 @@ export function WriterStatsPanel({
               <div className="flex justify-between">
                 <span className="text-[color:hsl(var(--muted-foreground))]">현재 세션</span>
                 <span className="font-medium text-[color:hsl(var(--foreground))]">
-                  {formatTime(Date.now() - sessionStartTime)}
+                  {formatTime(Math.floor((Date.now() - sessionStartTime) / 1000 / 60))}
                 </span>
               </div>
               <div className="flex justify-between">

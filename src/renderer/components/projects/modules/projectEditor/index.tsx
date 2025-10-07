@@ -755,8 +755,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                 />
             )}
 
-            {/* 단축키 도움말 */}
-            <ShortcutHelp />
+            {/* 🔥 단축키 도움말 - 글쓰기 에디터에서만 표시 */}
+            <ShortcutHelp isEditorView={state.currentView === 'write'} />
         </ProjectEditorLayout.Container>
     );
 });
