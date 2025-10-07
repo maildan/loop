@@ -3,6 +3,7 @@
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { openAIService } from '../services/OpenAIService';
+import { DatabaseService } from '../services/databaseService';
 
 // #DEBUG: AI IPC handlers entry point
 Logger.debug('AI_IPC_HANDLERS', 'AI IPC handlers module loaded');
@@ -388,6 +389,81 @@ export function setupAIIpcHandlers(): void {
     }
   });
 
+  // 🔥 AI 분석 결과 DB 저장
+  ipcMain.handle('ai:save-analysis-result', async (_event: IpcMainInvokeEvent, analysisData: {
+    projectId: string;
+    analysisType: string;
+    inputData: string;
+    prompt?: string;
+    response: string;
+    metadata?: any;
+    confidence?: number;
+    status?: string;
+  }) => {
+    try {
+      Logger.debug('AI_IPC_HANDLERS', 'AI analysis result save requested', {
+        projectId: analysisData.projectId,
+        analysisType: analysisData.analysisType,
+      });
+
+      const dbService = DatabaseService.getInstance();
+      const initResult = await dbService.initialize();
+      
+      if (!initResult.success) {
+        Logger.error('AI_IPC_HANDLERS', 'Database initialization failed', initResult.error);
+        return {
+          success: false,
+          error: '데이터베이스 초기화 실패',
+          timestamp: new Date(),
+        };
+      }
+
+      // 🔥 Prisma를 통해 AI 분석 결과 저장
+      const prisma = (dbService as any).prisma;
+      if (!prisma) {
+        Logger.error('AI_IPC_HANDLERS', 'Prisma client not available');
+        return {
+          success: false,
+          error: '데이터베이스 연결 실패',
+          timestamp: new Date(),
+        };
+      }
+
+      const savedAnalysis = await prisma.aIAnalysis.create({
+        data: {
+          projectId: analysisData.projectId,
+          analysisType: analysisData.analysisType,
+          inputData: analysisData.inputData,
+          prompt: analysisData.prompt || '',
+          response: analysisData.response,
+          metadata: analysisData.metadata || {},
+          confidence: analysisData.confidence || 0,
+          status: analysisData.status || 'completed'
+        }
+      });
+
+      Logger.info('AI_IPC_HANDLERS', 'AI analysis result saved successfully', {
+        analysisId: savedAnalysis.id,
+        projectId: analysisData.projectId,
+        analysisType: analysisData.analysisType,
+      });
+
+      return {
+        success: true,
+        data: savedAnalysis,
+        timestamp: new Date(),
+      };
+
+    } catch (error) {
+      Logger.error('AI_IPC_HANDLERS', 'AI analysis result save failed', error);
+      return {
+        success: false,
+        error: 'AI 분석 결과 저장 중 오류가 발생했습니다',
+        timestamp: new Date(),
+      };
+    }
+  });
+
   Logger.info('AI_IPC_HANDLERS', '✅ AI IPC handlers setup completed');
 }
 
@@ -408,6 +484,7 @@ export function cleanupAIIpcHandlers(): void {
     'ai:get-usage-stats',
     'ai:continue-writing',
     'ai:summarize-text',
+    'ai:save-analysis-result',
   ];
 
   aiHandlers.forEach(handler => {

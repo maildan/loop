@@ -173,6 +173,16 @@ export interface ElectronAPI {
     continueWriting: (projectId: string, currentText: string) => Promise<IpcResponse<{ suggestions: string[] }>>;
     improveText: (text: string, projectContext?: string) => Promise<IpcResponse<{ improvedText: string; explanation: string }>>;
     summarizeText: (text: string) => Promise<IpcResponse<{ summary: string; keyPoints: string[] }>>;
+    saveAnalysisResult: (analysisData: {
+      projectId: string;
+      analysisType: string;
+      inputData: string;
+      prompt?: string;
+      response: string;
+      metadata?: any;
+      confidence?: number;
+      status?: string;
+    }) => Promise<IpcResponse<any>>;
   };
 
   // 🔔 알림 API

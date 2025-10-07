@@ -121,6 +121,7 @@ export class HandlersManager {
           'ai:continue-writing',
           'ai:improve-text',
           'ai:summarize-text',
+          'ai:save-analysis-result',
         ]),
         this.setupHandler('font', () => setupFontIpcHandlers(), [
           'font:initialize',

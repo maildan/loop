@@ -129,6 +129,7 @@ const electronAPI: ElectronAPI = {
     healthCheck: () => ipcRenderer.invoke('ai:health-check'),
     continueWriting: (text: string, context?: string) => ipcRenderer.invoke('ai:continue-writing', text, context),
     summarizeText: (text: string) => ipcRenderer.invoke('ai:summarize-text', text),
+    saveAnalysisResult: (analysisData: any) => ipcRenderer.invoke('ai:save-analysis-result', analysisData),
   },
 
   notifications: {

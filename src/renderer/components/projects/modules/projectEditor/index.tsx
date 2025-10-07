@@ -636,14 +636,15 @@ export const ProjectEditor = memo(function ProjectEditor({
                         toggleRightSidebar={actions.toggleRightSidebar}
                         writerStats={projectData?.writerStats || {
                             wordCount: 0,
-                            characterCount: 0,
+                            charCount: 0,
                             paragraphCount: 0,
-                            pageCount: 0,
-                            readingTime: '0분',
-                            typingSpeed: 0,
-                            sessionWords: 0,
-                            dailyGoal: 1000,
-                            progressPercentage: 0
+                            readingTime: 0,
+                            wordGoal: 1000,
+                            progress: 0,
+                            sessionTime: 0,
+                            wpm: 0,
+                            headingCount: 0,
+                            listItemCount: 0
                         }}
                         setWordGoal={(goal) => {
                             projectData?.setWordGoal(goal);

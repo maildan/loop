@@ -5,7 +5,10 @@ import type { NCPNarrativeStructure } from '../narrative/ncpAnalyzer';
 import { Logger } from '../logger';
 import { aiResponseMiddleware, analysisResultMiddleware, DummyDataFilter } from './dummyDataFilter'; // 🔥 더미데이터 필터링 시스템
 
-// Prisma 타입 (실제로는 @prisma/client에서 import)
+// 🔥 Electron API import (renderer process에서만 사용)
+const electronAPI = (window as any).electronAPI;
+
+// Prisma 타입
 interface AIAnalysisRecord {
     id: string;
     projectId: string;
@@ -61,6 +64,31 @@ export interface TimelineAnalysisResult {
         score: number;
         analysis: string;
         improvements: string[];
+        webnovelOptimization?: string; // 한국 웹소설 회차별 최적화 제안
+    };
+    emotionalArc?: { // 🔥 감정 흐름 분석 (Plutchik)
+        dominantEmotions: string[]; // 주요 감정들
+        emotionFlow: Array<{
+            event: string;
+            emotions: string[];
+            intensity: number; // 0-100
+        }>;
+        catharsis: {
+            score: number;
+            moments: string[];
+        };
+        koreanWebnovelFit: string; // 한국 웹소설 감정 트렌드 부합도
+    };
+    characterConsistency?: { // 🔥 캐릭터 일관성 분석
+        score: number;
+        characters: Array<{
+            name: string;
+            consistencyScore: number;
+            issues: string[];
+            strengths: string[];
+        }>;
+        relationshipDynamics: string;
+        koreanWebnovelArchetypes: string; // 한국 웹소설 전형 캐릭터 분석
     };
     causality: {
         score: number;
@@ -70,6 +98,7 @@ export interface TimelineAnalysisResult {
             issue: string;
         }>;
         suggestions: string[];
+        foreshadowing?: string[]; // 복선 활용도
     };
     structure: {
         acts: Array<{
@@ -80,6 +109,13 @@ export interface TimelineAnalysisResult {
         }>;
         balance: number;
         recommendations: string[];
+        seasonStructure?: string; // 시즌제 구조 제안
+    };
+    koreanWebnovelMetrics?: { // 🔥 한국 웹소설 플랫폼 최적화
+        cliffhangerEffectiveness: number; // 0-100
+        readerEngagementPotential: number;
+        commentInducingMoments: string[];
+        genreTrendAlignment: string;
     };
 }
 
@@ -369,36 +405,61 @@ class AIAnalysisService {
             const workflowAnalysis = await this.performWorkflowAnalysis(timelineData, request.context);
 
             const prompt = `
-당신은 전문 스토리 분석가입니다. 아래 실제 데이터만을 엄격히 분석하세요.
+당신은 한국 웹소설 전문 스토리 분석가입니다. 카카오페이지, 네이버 시리즈, 리디북스 등 주요 플랫폼의 인기작 패턴을 분석해온 전문가로서, 아래 실제 데이터만을 엄격히 분석하세요.
 
 [타임라인 데이터 - ${timelineData.length}개 이벤트]
 ${JSON.stringify(timelineData, null, 2)}
 
-[분석 기준 - development-rules.yml 준수]
+${contextualInfo}
+
+[한국 웹소설 특화 분석 기준]
 
 1. **일관성(coherence)**: 타임라인 이벤트들의 논리적 연결성
    - 이벤트 간 인과관계 명확성 검토
    - 시간적 순서 일관성 확인
-   - 캐릭터 행동 연속성 분석
-   - 설정 일관성 유지 여부
+   - 캐릭터 행동 연속성 분석 (성격, 목표, 능력 일관성)
+   - 설정 일관성 유지 여부 (세계관, 파워 시스템, 사회 구조)
+   - **한국 웹소설 특성**: 회차별 몰입도 유지, 이전 회차와의 연결성
 
 2. **페이싱(pacing)**: 이벤트 간격과 흐름의 적절성
    - 이벤트 밀도 분석 (${timelineData.length}개 이벤트 기준)
    - 긴장감 조절 패턴 확인
    - 휴식 구간 배치 적절성
    - 클라이맥스 빌드업 분석
+   - **한국 웹소설 특성**: 회차 끝 훅(cliffhanger) 효과, 중독성 있는 전개 속도
 
-3. **인과관계(causality)**: 원인과 결과의 명확성
+3. **감정 흐름(emotional arc)**: Plutchik의 8가지 기본 감정 분석
+   - 기쁨(Joy), 슬픔(Sadness), 분노(Anger), 두려움(Fear)
+   - 신뢰(Trust), 혐오(Disgust), 놀람(Surprise), 기대(Anticipation)
+   - 각 이벤트의 주요 감정 식별
+   - 감정 변화의 자연스러움
+   - **한국 웹소설 특성**: 카타르시스 제공, 대리만족 요소
+
+4. **캐릭터 일관성(character consistency)**: 등장인물 행동 패턴
+   - 각 캐릭터의 동기와 목표 일관성
+   - 성장 아크의 자연스러움
+   - 관계 변화의 설득력
+   - **한국 웹소설 특성**: 주인공 버프, 악역 캐릭터성, 히로인 매력도
+
+5. **인과관계(causality)**: 원인과 결과의 명확성
    - 각 이벤트의 발생 원인 추적
    - 결과와 다음 이벤트의 연결성
    - 동기의 명확성 검토
    - 갈등 발전의 논리성
+   - **한국 웹소설 특성**: 떡밥 회수, 복선 활용, 반전 효과
 
-4. **구조(structure)**: 전체적인 스토리 구조의 균형
+6. **구조(structure)**: 전체적인 스토리 구조의 균형
    - 전체 ${timelineData.length}개 이벤트의 균형 분석
    - 시작-전개-절정-결말 비율
    - 서브플롯 통합도
    - 전체적 완성도
+   - **한국 웹소설 특성**: 시즌제 구조, 파트별 절정 배치
+
+🎯 한국 웹소설 플랫폼 최적화 체크리스트:
+- 회차별 중독성: 매 회차 끝에 다음 회를 보고 싶게 만드는가?
+- 댓글 유도 요소: 독자 반응을 이끌어낼 포인트가 있는가?
+- 조회수 최적화: 첫 회차에서 독자를 사로잡는가?
+- 장르 트렌드 부합: 현재 인기 장르의 핵심 요소를 포함하는가?
 
 🚨 CRITICAL 분석 제약사항:
 - 오직 위 ${timelineData.length}개 타임라인 이벤트만 참조하세요
@@ -410,22 +471,59 @@ ${JSON.stringify(timelineData, null, 2)}
   "coherence": {
     "score": [0-100 실제분석점수],
     "issues": ["발견된구체적문제들"],
-    "suggestions": ["구체적개선방안들"]
+    "suggestions": ["구체적개선방안들 - 한국 웹소설 독자 시점"]
   },
   "pacing": {
     "score": [0-100 실제분석점수],
     "analysis": "페이싱분석내용",
-    "improvements": ["구체적페이싱개선방안들"]
+    "improvements": ["구체적페이싱개선방안들"],
+    "webnovelOptimization": "회차별 중독성 및 cliffhanger 최적화 제안"
+  },
+  "emotionalArc": {
+    "dominantEmotions": ["주요감정1", "주요감정2"],
+    "emotionFlow": [
+      {
+        "event": "이벤트명",
+        "emotions": ["기쁨", "분노", "두려움" 등 Plutchik 8감정],
+        "intensity": 85
+      }
+    ],
+    "catharsis": {
+      "score": 75,
+      "moments": ["카타르시스 제공 장면들"]
+    },
+    "koreanWebnovelFit": "한국 웹소설 감정 트렌드 부합도 평가"
+  },
+  "characterConsistency": {
+    "score": 80,
+    "characters": [
+      {
+        "name": "캐릭터명",
+        "consistencyScore": 85,
+        "issues": ["일관성 문제점"],
+        "strengths": ["캐릭터 강점"]
+      }
+    ],
+    "relationshipDynamics": "캐릭터 간 관계 변화 분석",
+    "koreanWebnovelArchetypes": "한국 웹소설 전형(주인공 버프, 악역, 히로인) 분석"
   },
   "causality": {
     "score": [0-100 실제분석점수],
     "brokenLinks": [{"from": "이벤트명", "to": "이벤트명", "issue": "문제점"}],
-    "suggestions": ["인과관계개선방안들"]
+    "suggestions": ["인과관계개선방안들"],
+    "foreshadowing": ["복선 활용 및 떡밥 회수 분석"]
   },
   "structure": {
     "acts": [{"name": "막이름", "start": 시작점, "end": 끝점, "quality": 품질점수}],
     "balance": [0-100 구조균형점수],
-    "recommendations": ["구조개선제안들"]
+    "recommendations": ["구조개선제안들"],
+    "seasonStructure": "시즌제 구조 제안 (1시즌: XX회, 중간 절정 배치)"
+  },
+  "koreanWebnovelMetrics": {
+    "cliffhangerEffectiveness": 85,
+    "readerEngagementPotential": 90,
+    "commentInducingMoments": ["독자 댓글 유도 포인트들"],
+    "genreTrendAlignment": "현재 장르 트렌드 부합도 (판타지/로맨스/무협/현판)"
   }
 }
 
@@ -436,8 +534,22 @@ ${JSON.stringify(timelineData, null, 2)}
 - 일반적인 스토리텔링 조언 대신 위 데이터의 구체적 분석만 제공
 - 데이터에 없는 캐릭터나 설정을 가정하거나 언급 금지
 - 실제 타임라인 이벤트의 제목과 내용만 사용하세요
+- 오직 위 ${timelineData.length}개 타임라인 이벤트만 참조하세요
+- 실제 이벤트 제목을 직접 인용하세요: "${timelineData.map(t => t.title).join('", "')}"
+- 존재하지 않는 챕터 번호 절대 사용 금지
+- 가상의 캐릭터나 설정 추가 금지
+- 일반론이 아닌 이 데이터의 특수한 분석만 제공
 
-반드시 실제 제공된 데이터에만 기반한 의미있는 분석을 제공하세요.
+✅ 반드시 포함해야 할 사항:
+- 실제 제공된 데이터에만 기반한 의미있는 분석
+- 한국 웹소설 독자의 취향과 트렌드를 고려한 피드백
+- 카카오페이지, 네이버 시리즈 등 플랫폼 특성 반영
+- 감정 분석 (Plutchik의 8가지 기본 감정)
+- 캐릭터 일관성 및 매력도 평가
+- 회차별 중독성 및 cliffhanger 효과
+- 장르별 특화 피드백 (판타지/로맨스/무협/현판)
+
+반드시 위 JSON 형식으로 응답하고, 모든 필드를 채워주세요.
             `;
 
             const aiResponse = await this.geminiClient.generateText({
@@ -1074,17 +1186,41 @@ ${contextualInfo}
             pacing: {
                 score: randomScore(),
                 analysis: content.slice(0, 100),
-                improvements: ['응답 형식 개선 필요']
+                improvements: ['응답 형식 개선 필요'],
+                webnovelOptimization: '분석 실패 - 재시도 필요'
+            },
+            emotionalArc: {
+                dominantEmotions: [],
+                emotionFlow: [],
+                catharsis: {
+                    score: 0,
+                    moments: []
+                },
+                koreanWebnovelFit: '분석 실패'
+            },
+            characterConsistency: {
+                score: 0,
+                characters: [],
+                relationshipDynamics: '분석 실패',
+                koreanWebnovelArchetypes: '분석 실패'
             },
             causality: {
                 score: randomScore(),
                 brokenLinks: [],
-                suggestions: ['JSON 형식 수정 필요']
+                suggestions: ['JSON 형식 수정 필요'],
+                foreshadowing: []
             },
             structure: {
                 acts: [],
                 balance: randomScore(),
-                recommendations: ['AI 응답 개선 필요']
+                recommendations: ['AI 응답 개선 필요'],
+                seasonStructure: '분석 실패'
+            },
+            koreanWebnovelMetrics: {
+                cliffhangerEffectiveness: 0,
+                readerEngagementPotential: 0,
+                commentInducingMoments: [],
+                genreTrendAlignment: '분석 실패'
             }
         };
     }
@@ -1157,27 +1293,44 @@ ${contextualInfo}
 
     private async saveAnalysisToDatabase(request: AnalysisRequest, response: AnalysisResponse): Promise<void> {
         try {
-            // 실제로는 Prisma를 통해 데이터베이스에 저장
-            Logger.debug('AI_ANALYSIS_SERVICE', 'Saving analysis to database', {
+            // 🔥 Electron API를 통해 main process에 DB 저장 요청
+            if (!electronAPI?.ai?.saveAnalysisResult) {
+                Logger.warn('AI_ANALYSIS_SERVICE', 'Electron API not available, skipping DB save', {
+                    projectId: request.projectId,
+                    type: request.type
+                });
+                return;
+            }
+
+            Logger.debug('AI_ANALYSIS_SERVICE', 'Saving analysis to database via IPC', {
                 projectId: request.projectId,
                 type: request.type,
                 analysisId: response.id
             });
 
-            // TODO: Prisma를 통한 실제 DB 저장
-            // await prisma.aIAnalysis.create({
-            //   data: {
-            //     projectId: request.projectId,
-            //     analysisType: request.type,
-            //     inputData: JSON.stringify(request.data),
-            //     response: JSON.stringify(response.result),
-            //     metadata: response.metadata,
-            //     confidence: response.confidence,
-            //     status: 'completed'
-            //   }
-            // });
+            // 🔥 IPC를 통해 main process에 분석 결과 저장 요청
+            const saveResult = await electronAPI.ai.saveAnalysisResult({
+                projectId: request.projectId,
+                analysisType: request.type,
+                inputData: JSON.stringify(request.data),
+                prompt: '', // TODO: 프롬프트 저장 로직 추가 필요 시
+                response: JSON.stringify(response.result),
+                metadata: response.metadata || {},
+                confidence: response.confidence || 0,
+                status: 'completed'
+            });
+
+            if (saveResult.success) {
+                Logger.info('AI_ANALYSIS_SERVICE', 'Analysis saved to database successfully via IPC', {
+                    projectId: request.projectId,
+                    type: request.type,
+                    analysisId: response.id
+                });
+            } else {
+                Logger.error('AI_ANALYSIS_SERVICE', 'Failed to save analysis via IPC', saveResult.error);
+            }
         } catch (error) {
-            Logger.error('AI_ANALYSIS_SERVICE', 'Failed to save analysis to database', error);
+            Logger.error('AI_ANALYSIS_SERVICE', 'Failed to save analysis to database via IPC', error);
             // 저장 실패해도 분석 결과는 반환
         }
     }
