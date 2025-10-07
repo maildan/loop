@@ -36,6 +36,7 @@ interface SimpleSettingsSchema {
     focusMode: boolean;
     showLineNumbers: boolean;
     showWordCount: boolean;
+    showShortcutHelp: boolean; // 🔥 ShortcutHelp 표시 여부
   };
   performance: {
     enableGPUAcceleration: boolean;
@@ -71,6 +72,7 @@ const DEFAULT_SIMPLE_SETTINGS: SimpleSettingsSchema = {
     focusMode: false,
     showLineNumbers: true,
     showWordCount: true,
+    showShortcutHelp: true, // 🔥 기본적으로 단축키 가이드 표시
   },
   performance: {
     enableGPUAcceleration: true,

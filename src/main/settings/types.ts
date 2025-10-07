@@ -87,6 +87,9 @@ export interface UISettingsSchema {
   hideToolbars: boolean;
   minimalistMode: boolean;
 
+  // 🔥 ShortcutHelp 표시 여부
+  showShortcutHelp: boolean;
+
   // 애니메이션
   enableAnimations: boolean;
   animationSpeed: 'slow' | 'normal' | 'fast';

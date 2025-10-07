@@ -1090,3 +1090,6 @@ export class NCPStoryAnalyzer {
         return symbolism;
     }
 }
+
+// 🔥 한국 웹소설 특화 분석 모듈 export
+export * from './koreanWebNovelAnalyzer';

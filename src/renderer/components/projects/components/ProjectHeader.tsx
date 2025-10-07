@@ -21,7 +21,9 @@ import {
   AlignJustify,
   List,
   ListOrdered,
-  ChevronDown
+  ChevronDown,
+  PanelRightOpen,
+  PanelRightClose
 } from 'lucide-react';
 import { Logger } from '../../../../shared/logger';
 import { useSettings } from '../../../app/settings/hooks/useSettings';
@@ -838,11 +840,11 @@ export const ProjectHeader = React.memo(function ProjectHeader({
                   : '사이드바 접기'
               }
             >
-              <div className="flex flex-col gap-0.5">
-                <div className="w-3 h-0.5 bg-current"></div>
-                <div className="w-3 h-0.5 bg-current"></div>
-                <div className="w-3 h-0.5 bg-current"></div>
-              </div>
+              {settings?.ui.sidebarCollapsed || sidebarCollapsed ? (
+                <PanelRightOpen size={16} />
+              ) : (
+                <PanelRightClose size={16} />
+              )}
             </button>
           </div>
         </>

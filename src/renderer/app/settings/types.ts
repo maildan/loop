@@ -41,6 +41,8 @@ export interface SettingsData {
     hideToolbars: boolean;
     minimalistMode: boolean;
     compactMode: boolean;
+    // 🔥 ShortcutHelp 표시 여부
+    showShortcutHelp: boolean;
   };
   readonly performance: {
     enableGPUAcceleration: boolean;

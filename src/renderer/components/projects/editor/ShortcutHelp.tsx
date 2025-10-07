@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { HelpCircle, X as XIcon, EyeOff } from 'lucide-react';
 import { getShortcutHelp } from '../modules/markdownEditor/services/EditorShortcuts';
+import { useSettings } from '../../../app/settings/hooks/useSettings';
+import { useDynamicFont } from '../../../hooks/useDynamicFont';
 
 // 🔥 단축키 도움말 스타일
 const HELP_STYLES = {
@@ -25,22 +27,15 @@ interface ShortcutHelpProps {
   isEditorView?: boolean; // 🔥 에디터 뷰인지 확인
 }
 
-// 정적 메서드: 숨겨진 가이드를 다시 표시
-export function resetShortcutHelpVisibility(): void {
-  localStorage.setItem('shortcutHelp.isVisible', 'true');
-}
+// 🔥 더 이상 localStorage 사용 안 함 - Settings 페이지에서 ui.showShortcutHelp 토글로 제공
 
 export function ShortcutHelp({ className = '', isWriterStatsOpen = false, isEditorView = false }: ShortcutHelpProps): React.ReactElement {
+  const { settings, updateSetting } = useSettings();
+  const { currentFont } = useDynamicFont();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isVisible, setIsVisible] = useState<boolean>(true);
 
-  // localStorage에서 가이드 표시 여부 상태 불러오기
-  useEffect(() => {
-    const savedVisibility = localStorage.getItem('shortcutHelp.isVisible');
-    if (savedVisibility !== null) {
-      setIsVisible(savedVisibility === 'true');
-    }
-  }, []);
+  // 🔥 Settings에서 가이드 표시 여부 상태 가져오기 (기본값: true)
+  const isVisible = settings?.ui?.showShortcutHelp !== false;
 
   const handleToggle = (): void => {
     setIsOpen(prev => !prev);
@@ -52,9 +47,9 @@ export function ShortcutHelp({ className = '', isWriterStatsOpen = false, isEdit
 
   const handleHideGuide = (): void => {
     if (confirm('단축키 가이드를 항상 숨기시겠습니까? 설정 페이지에서 다시 표시할 수 있습니다.')) {
-      setIsVisible(false);
       setIsOpen(false);
-      localStorage.setItem('shortcutHelp.isVisible', 'false');
+      // 🔥 Settings에 저장하여 앱 재시작 후에도 유지
+      updateSetting('ui', 'showShortcutHelp', false);
     }
   };
 
@@ -127,7 +122,7 @@ export function ShortcutHelp({ className = '', isWriterStatsOpen = false, isEdit
 
             {/* 🔥 도움말 내용 */}
             <div className={HELP_STYLES.content}>
-              <div className={HELP_STYLES.helpText}>
+              <div className={HELP_STYLES.helpText} style={{ fontFamily: currentFont }}>
                 {/* Render markdown-like shortcuts safely without using innerHTML */}
                 {getShortcutHelp().split('\n').map((line: string, idx: number) => {
                   if (line.startsWith('### ')) return <h3 key={idx} className="text-md font-bold mt-2 mb-1">{line.replace('### ', '')}</h3>;

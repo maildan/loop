@@ -64,12 +64,43 @@ export const calculateWriterStats = (
   };
 };
 
-// 🔥 시간 포맷팅 헬퍼
+// 🔥 시간 포맷팅 헬퍼 (HH:MM:SS 형식 - 전문 작가 도구 스타일)
 export const formatTime = (minutes: number): string => {
   if (minutes < 60) return `${minutes}분`;
   const hours = Math.floor(minutes / 60);
   const mins = minutes % 60;
   return `${hours}시간 ${mins ? `${mins}분` : ''}`;
+};
+
+// 🔥 세션 시간 포맷팅 (HH:MM:SS 형식)
+export const formatSessionTime = (milliseconds: number): string => {
+  const totalSeconds = Math.floor(milliseconds / 1000);
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+};
+
+// 🔥 완료 예상 시간 계산 (현재 속도 기준)
+export const estimateCompletionTime = (
+  currentWords: number,
+  goalWords: number,
+  currentWPM: number
+): string => {
+  if (currentWords >= goalWords) return '목표 달성!';
+  if (currentWPM === 0) return '계산 중...';
+  
+  const remainingWords = goalWords - currentWords;
+  const remainingMinutes = Math.ceil(remainingWords / currentWPM);
+  
+  if (remainingMinutes < 60) {
+    return `약 ${remainingMinutes}분 남음`;
+  }
+  
+  const hours = Math.floor(remainingMinutes / 60);
+  const mins = remainingMinutes % 60;
+  return `약 ${hours}시간 ${mins ? `${mins}분` : ''} 남음`;
 };
 
 // 🔥 마지막 저장 시간 포맷팅

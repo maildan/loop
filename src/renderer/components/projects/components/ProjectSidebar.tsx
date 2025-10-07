@@ -41,13 +41,13 @@ interface ProjectSidebarProps {
 // 🔥 Scrivener Binder + iA Writer 스타일 사이드바
 const SIDEBAR_STYLES = {
     // 기본 컨테이너 - 작가 친화적 디자인 (애니메이션 개선)
-    container: 'flex flex-col bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text)] border-r border-[color:var(--editor-border)] transition-all duration-300 ease-out h-full relative shadow-sm will-change-transform',
+    container: 'flex flex-col bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text)] border-r border-[color:var(--editor-border)] transition-all duration-300 ease-out h-full relative shadow-sm will-change-transform overflow-x-hidden',
     default: 'w-16', // 🔥 기본 상태: 아이콘만 표시 (미니멀)
     expanded: 'w-80', // 🔥 hover 시: 더 넓은 320px로 확장
     collapsed: 'w-0 overflow-hidden', // 🔥 완전 숨김
 
     // 🔥 Scrivener Binder 스타일: 부드러운 슬라이드 효과 (개선된 애니메이션)
-    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-80 bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text)] border-r border-[color:var(--editor-border)] shadow-2xl z-40 transform -translate-x-full transition-all duration-300 ease-out backdrop-blur-sm will-change-transform',
+    hoverable: 'absolute left-0 top-14 h-[calc(100%-3.5rem)] w-80 bg-[var(--editor-bg-secondary)] text-[color:var(--editor-text)] border-r border-[color:var(--editor-border)] shadow-2xl z-40 transform -translate-x-full transition-all duration-300 ease-out backdrop-blur-sm will-change-transform overflow-x-hidden',
     hoverVisible: 'transform translate-x-0 opacity-100',
     hoverHidden: 'transform -translate-x-full opacity-90',
 

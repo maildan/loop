@@ -563,37 +563,53 @@ export function WriterStatsPanel({
       {/* 통계 탭 */}
       {activeTab === 'stats' && (
         <div className="p-3 overflow-y-auto">
-          {/* 단어 수 진행률 */}
+          {/* 🔥 Goal Progress (전문 작가 도구 스타일) */}
           <div className={STATS_STYLES.statCard}>
-            <div className="flex justify-between items-center mb-1">
-              <span className={STATS_STYLES.statTitle}>단어 목표</span>
+            <div className="flex justify-between items-center mb-2">
+              <div className="flex items-center gap-2">
+                <Target className={STATS_STYLES.sectionIconAccent} />
+                <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">목표 진행률</span>
+              </div>
               <div className="flex items-center">
                 <button
                   className={STATS_STYLES.iconButton}
                   onClick={() => setWordGoal(Math.max(500, displayStats.wordGoal - 500))}
+                  title="목표 -500"
                 >
                   <Minus className="w-3 h-3" />
                 </button>
-                <span className="text-xs mx-1">{displayStats.wordGoal.toLocaleString()}</span>
+                <span className="text-xs mx-1 font-medium">{displayStats.wordGoal.toLocaleString()}</span>
                 <button
                   className={STATS_STYLES.iconButton}
                   onClick={() => setWordGoal(displayStats.wordGoal + 500)}
+                  title="목표 +500"
                 >
                   <Plus className="w-3 h-3" />
                 </button>
               </div>
             </div>
 
-            <div className="w-full bg-[color:hsl(var(--muted))]/70 rounded-full h-2 mb-2">
+            {/* 🔥 Progress Bar with Percentage */}
+            <div className="w-full bg-[color:hsl(var(--muted))]/70 rounded-full h-3 mb-2 relative overflow-hidden">
               <div
-                className="bg-[color:var(--accent-primary)] h-2 rounded-full transition-all duration-300 shadow-[var(--shadow-sm,0_6px_12px_rgba(37,99,235,0.35))]"
+                className="bg-gradient-to-r from-[color:var(--accent-primary)] to-[color:var(--accent-hover,#1d4ed8)] h-3 rounded-full transition-all duration-300 shadow-[var(--shadow-sm,0_6px_12px_rgba(37,99,235,0.35))] flex items-center justify-end pr-2"
                 style={{ width: `${Math.min(100, displayStats.progress)}%` }}
-              />
+              >
+                {displayStats.progress >= 20 && (
+                  <span className="text-[9px] font-bold text-white">{displayStats.progress}%</span>
+                )}
+              </div>
             </div>
 
-            <div className="flex justify-between text-xs text-[color:hsl(var(--muted-foreground))]">
-              <span>{displayStats.wordCount.toLocaleString()} 단어</span>
-              <span>{displayStats.progress}%</span>
+            {/* 🔥 Professional Stats Display */}
+            <div className="flex justify-between text-xs">
+              <span className="text-[color:hsl(var(--muted-foreground))]">
+                <span className="font-bold text-[color:hsl(var(--foreground))]">{displayStats.wordCount.toLocaleString()}</span>
+                {' / '}{displayStats.wordGoal.toLocaleString()} 단어
+              </span>
+              <span className="font-bold text-[color:var(--accent-primary)]">
+                {displayStats.progress}%
+              </span>
             </div>
           </div>
 
@@ -949,32 +965,48 @@ export function WriterStatsPanel({
 
               <div className="grid grid-cols-2 gap-2 text-xs">
                 <div className="bg-[color:hsl(var(--muted))]/30 p-2 rounded">
-                  <div className="text-[color:hsl(var(--muted-foreground))]">평균 단어/분</div>
-                  <div className="text-base font-bold text-[color:hsl(var(--foreground))]">
-                    {displayStats.wpm}
+                  <div className="text-[color:hsl(var(--muted-foreground))]">Words/Min</div>
+                  <div className="text-base font-bold text-[color:var(--accent-primary)]">
+                    {displayStats.wpm} <span className="text-xs font-normal text-[color:hsl(var(--muted-foreground))]">WPM</span>
                   </div>
                 </div>
                 <div className="bg-[color:hsl(var(--muted))]/30 p-2 rounded">
-                  <div className="text-[color:hsl(var(--muted-foreground))]">글자/분</div>
+                  <div className="text-[color:hsl(var(--muted-foreground))]">Chars/Min</div>
                   <div className="text-base font-bold text-[color:hsl(var(--foreground))]">
-                    {Math.round(displayStats.wpm * 5.5)}
+                    {Math.round(displayStats.wpm * 5.5)} <span className="text-xs font-normal text-[color:hsl(var(--muted-foreground))]">CPM</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* 시간 투자 분석 */}
+          {/* 🔥 Writing Time (전문 작가 도구 스타일) */}
           <div className={STATS_STYLES.statCard}>
             <div className="flex items-center gap-2 mb-3">
               <Clock className={STATS_STYLES.sectionIconAccent} />
-              <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">시간 투자</span>
+              <span className="text-sm font-semibold text-[color:hsl(var(--foreground))]">Writing Time</span>
             </div>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
                 <span className="text-[color:hsl(var(--muted-foreground))]">현재 세션</span>
-                <span className="font-medium text-[color:hsl(var(--foreground))]">
-                  {formatTime(Math.floor((Date.now() - sessionStartTime) / 1000 / 60))}
+                <span className="font-mono font-bold text-[color:hsl(var(--foreground))] text-base">
+                  {(() => {
+                    const elapsed = Date.now() - sessionStartTime;
+                    const formatSessionTime = (ms: number) => {
+                      const totalSeconds = Math.floor(ms / 1000);
+                      const hours = Math.floor(totalSeconds / 3600);
+                      const minutes = Math.floor((totalSeconds % 3600) / 60);
+                      const seconds = totalSeconds % 60;
+                      return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                    };
+                    return formatSessionTime(elapsed);
+                  })()}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-[color:hsl(var(--muted-foreground))]">Speed (WPM)</span>
+                <span className="font-bold text-[color:var(--accent-primary)] text-base">
+                  {displayStats.wpm > 0 ? `${displayStats.wpm} WPM` : '---'}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -982,17 +1014,14 @@ export function WriterStatsPanel({
                 <span className="font-medium text-[color:hsl(var(--foreground))]">
                   {(() => {
                     const remaining = displayStats.wordGoal - displayStats.wordCount;
-                    if (remaining <= 0) return '완료!';
+                    if (remaining <= 0) return '🎉 목표 달성!';
                     if (displayStats.wpm === 0) return '계산 중...';
                     const minutesLeft = Math.ceil(remaining / displayStats.wpm);
-                    return formatTime(minutesLeft * 60 * 1000);
+                    if (minutesLeft < 60) return `약 ${minutesLeft}분 남음`;
+                    const hours = Math.floor(minutesLeft / 60);
+                    const mins = minutesLeft % 60;
+                    return `약 ${hours}시간 ${mins ? `${mins}분` : ''} 남음`;
                   })()}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-[color:hsl(var(--muted-foreground))]">작성 효율</span>
-                <span className="font-medium text-[color:var(--accent-primary)]">
-                  {displayStats.wpm > 0 ? '활발' : '준비 중'}
                 </span>
               </div>
             </div>
