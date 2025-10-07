@@ -1,51 +1,151 @@
-# macOS 로컬 빌드 & Release 업로드 가이드
+# macOS 로컬 빌드 & GitHub Release 자동 업로드 가이드
 
-## 🍎 macOS 빌드 방법
+## 🍎 macOS DMG 빌드 + 자동 업로드
 
-### 1. 로컬에서 빌드
+이제 `pnpm dist:mac` 실행 시 자동으로 GitHub Release에 업로드됩니다!
+
+### 사전 준비: GitHub Token 설정 (최초 1회)
+
+#### 1. GitHub Personal Access Token 생성
+
+1. https://github.com/settings/tokens/new 접속
+2. 설정:
+   - **Note**: `Loop macOS Build Token`
+   - **Expiration**: `No expiration` (또는 원하는 기간)
+   - **권한**: ✅ `repo` (전체 체크)
+3. "Generate token" 클릭 → 토큰 복사 (다시 볼 수 없음!)
+
+#### 2. 환경변수 등록
+
+**방법 A: `.zshrc`에 영구 등록 (권장)**
 
 ```bash
-# 의존성 설치 (최초 1회)
-pnpm install
+echo 'export GH_TOKEN="ghp_your_token_here"' >> ~/.zshrc
+source ~/.zshrc
 
-# macOS 빌드 실행
-pnpm build:mac
+# 확인
+echo $GH_TOKEN
+```
 
-# 또는 전체 빌드
+**방법 B: 매번 실행 시 입력**
+
+```bash
+export GH_TOKEN="ghp_your_token_here"
 pnpm dist:mac
 ```
 
-**생성 파일 위치**: `release/` 디렉토리
-- `Loop-{version}.dmg` - macOS 설치 파일
-- `Loop-{version}-arm64.dmg` - Apple Silicon
-- `Loop-{version}-x64.dmg` - Intel Mac
+**방법 C: `.env.local` 파일**
+
+```bash
+echo 'GH_TOKEN=ghp_your_token_here' > .env.local
+# .gitignore에 포함되어 있어 안전
+```
 
 ---
 
-## 📦 GitHub Release에 업로드
+## 🚀 빌드 & 배포 프로세스
 
-### 2-1. GitHub CLI 사용 (권장)
+### 전체 워크플로우
 
 ```bash
-# GitHub CLI 설치 (최초 1회)
-brew install gh
+# 1. 버전 업데이트 (필요 시)
+vim package.json  # "version": "1.1.7"
 
-# 로그인 (최초 1회)
-gh auth login
+# 2. 변경사항 커밋 & 푸시
+git add .
+git commit -m "chore: bump version to 1.1.7"
+git push
 
-# Release에 DMG 업로드
-gh release upload v1.1.6 release/*.dmg
+# 3. 태그 생성 & 푸시
+git tag v1.1.7
+git push origin v1.1.7
 
-# 특정 파일만 업로드
-gh release upload v1.1.6 release/Loop-1.1.6-arm64.dmg
+# 4. DMG 빌드 & 자동 업로드 ✨
+pnpm dist:mac
 ```
 
-### 2-2. GitHub 웹 UI 사용
+### 생성되는 파일 (`release/` 디렉토리)
 
-1. https://github.com/maildan/loop/releases
-2. 해당 태그의 Release 편집
-3. "Assets" 섹션에 DMG 파일 드래그 & 드롭
-4. "Update release" 클릭
+- ✅ `Loop-1.1.7-x64.dmg` (~150-200MB, Intel Mac)
+- ✅ `Loop-1.1.7-arm64.dmg` (~150-200MB, Apple Silicon)
+- ✅ `Loop-1.1.7-mac.zip` (Universal 압축본)
+- ✅ `latest-mac.yml` (auto-update 메타데이터)
+
+**모두 자동으로 GitHub Release에 업로드됩니다!**
+
+---
+
+## 📊 확인 사항
+
+### 빌드 성공 로그
+
+```bash
+  • electron-builder  version=26.0.12
+  • loaded configuration  file=electron-builder.json
+  • building        target=macOS zip
+  • building        target=DMG
+  • building target platforms  arch=x64, arm64
+✔ Building macOS targets... done
+✔ Uploading artifacts to GitHub Releases... done  # 이 메시지 확인!
+```
+
+### GitHub Release 확인
+
+https://github.com/maildan/loop/releases/tag/v1.1.7
+
+**업로드 확인**:
+- ✅ Loop-1.1.7-x64.dmg
+- ✅ Loop-1.1.7-arm64.dmg  
+- ✅ Loop-1.1.7-mac.zip
+- ✅ latest-mac.yml
+
+---
+
+## 🛠 빌드만 하고 업로드 안 하기
+
+```bash
+# --publish 플래그 없이 빌드
+pnpm build:mac
+```
+
+---
+
+## ⚠️ 트러블슈팅
+
+### 1. "GH_TOKEN is not set" 에러
+
+```bash
+export GH_TOKEN="your_token"
+# 또는 ~/.zshrc 확인
+```
+
+### 2. "401 Unauthorized" 에러
+
+- 토큰 권한: `repo` 체크 확인
+- 토큰 만료: 재생성 필요
+
+### 3. "Release not found" 경고
+
+```bash
+# 태그를 먼저 푸시해야 함
+git tag v1.1.7
+git push origin v1.1.7
+```
+
+### 4. 빌드는 성공, 업로드 실패
+
+```bash
+# 수동 업로드 (GitHub CLI)
+gh release upload v1.1.7 release/*.dmg --clobber
+```
+
+---
+
+## 📝 참고
+
+- **Windows 빌드**: GitHub Actions 자동화 (태그 푸시 시)
+- **macOS 빌드**: 로컬에서 수동 실행 (이 가이드)
+- **서명/노타리제이션**: Phase 2 (Apple Developer $99/year 필요)
 
 ---
 

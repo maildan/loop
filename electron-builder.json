@@ -90,6 +90,7 @@
   },
   "dmg": {
     "background": null,
+    "sign": false,
     "window": {
       "width": 540,
       "height": 380
@@ -106,7 +107,8 @@
         "type": "link",
         "path": "/Applications"
       }
-    ]
+    ],
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
   },
   "win": {
     "icon": "public/assets/icon.png",

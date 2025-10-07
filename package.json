@@ -41,8 +41,8 @@
     "pack": "pnpm build && electron-builder --dir",
     "dist": "pnpm build && electron-builder",
     "dist:all": "pnpm build",
-    "dist:mac": "pnpm build && electron-builder --mac --x64 --arm64",
-    "dist:win": "pnpm build && electron-builder --win --x64",
+    "dist:mac": "pnpm build && electron-builder --mac --x64 --arm64 --publish always",
+    "dist:win": "pnpm build && electron-builder --win --x64 --publish always",
     "dist:linux": "pnpm build && electron-builder --linux",
     "publish": "pnpm build && electron-builder --publish=always",
     "clean": "rimraf out node_modules/.cache",
@@ -140,7 +140,7 @@
     "tsx": "^4.20.3",
     "typescript": "^5"
   },
-  "packageManager": "pnpm@10.18.0",
+  "packageManager": "pnpm@10.18.1",
   "pnpm": {
     "overrides": {
       "@types/react": "^19.0.0",

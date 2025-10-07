@@ -23,9 +23,8 @@
 
 /dist
 *loop-1.0.0.tgz
-*.github
 # Allow .github/workflows for CI/CD
-!.github/workflows/
+# (removed *.github pattern that was blocking workflows)
 
 # testing
 /coverage
