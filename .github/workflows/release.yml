@@ -8,7 +8,7 @@ on:
 permissions:
   contents: write # GitHub Release 생성 권한
 
-# 📝 필수 GitHub Secrets 설정 (총 30개):
+# � 필수 GitHub Secrets 설정 (총 28개):
 # Repository Settings > Secrets and variables > Actions 에서 다음 secrets 추가:
 #
 # 🔥 기본 환경
@@ -24,13 +24,12 @@ permissions:
 # - DEBUG: 디버그 모드 (true)
 # - VERBOSE_LOGGING: 상세 로깅 (true)
 #
-# 🔥 데이터베이스 (CI용 경로로 설정 필요!)
+# 🔥 데이터베이스 (CI용 절대 경로로 설정 필요!)
 # - DATABASE_URL: 데이터베이스 URL
 # - PRISMA_DATABASE_URL: Prisma 데이터베이스 URL
 #
-# 🔥 보안
-# - ELECTRON_ENABLE_SECURITY_WARNINGS: 보안 경고 (false)
-# - ELECTRON_DISABLE_SECURITY_WARNINGS: 보안 경고 비활성화 (true)
+# 🔥 보안 (ELECTRON_* 변수들은 .env에서 제거됨)
+# (보안 관련 환경변수 없음)
 #
 # 🔥 성능 모니터링
 # - ENABLE_PERFORMANCE_TRACKING: 성능 추적 (true)
@@ -75,7 +74,64 @@ permissions:
 # - MEASUREMENT_ID: Firebase 측정 ID
 #
 # 🔑 설정 방법: https://github.com/maildan/loop/settings/secrets/actions
-# ⚠️  DATABASE_URL과 PRISMA_DATABASE_URL은 CI 환경에 맞는 경로로 설정 필요!
+
+env:
+  # 🔥 기본 환경
+  NODE_ENV: ${{ secrets.NODE_ENV }}
+  STATIC_SERVER_ORIGIN: ${{ secrets.STATIC_SERVER_ORIGIN }}
+
+  # 🔥 URL 설정
+  NEXT_PUBLIC_SHARE_WEB_URL: ${{ secrets.NEXT_PUBLIC_SHARE_WEB_URL }}
+  NEXT_PUBLIC_SHARE_API_URL: ${{ secrets.NEXT_PUBLIC_SHARE_API_URL }}
+
+  # 🔥 로깅
+  LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
+  DEBUG: ${{ secrets.DEBUG }}
+  VERBOSE_LOGGING: ${{ secrets.VERBOSE_LOGGING }}
+
+  # 🔥 데이터베이스
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+
+  # 🔥 성능 모니터링
+  ENABLE_PERFORMANCE_TRACKING: ${{ secrets.ENABLE_PERFORMANCE_TRACKING }}
+  MEMORY_MONITORING: ${{ secrets.MEMORY_MONITORING }}
+
+
+
+  # 🔥 AI 기능
+  AI_ANALYSIS_ENABLED: ${{ secrets.AI_ANALYSIS_ENABLED }}
+  MOCK_AI_RESPONSES: ${{ secrets.MOCK_AI_RESPONSES }}
+
+  # 🔥 개발자 도구
+  REACT_DEVELOPER_TOOLS: ${{ secrets.REACT_DEVELOPER_TOOLS }}
+  REDUX_DEVTOOLS: ${{ secrets.REDUX_DEVTOOLS }}
+
+  # 🔥 Google OAuth
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+  GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+
+  # 🔥 암호화
+  ENCRYPT_SNAPSHOT_KEY: ${{ secrets.ENCRYPT_SNAPSHOT_KEY }}
+
+  # 🔥 Gemini AI
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
+  NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
+  NEXT_PUBLIC_GEMINI_MODEL: ${{ secrets.NEXT_PUBLIC_GEMINI_MODEL }}
+  GEMINI_MAX_TOKENS: ${{ secrets.GEMINI_MAX_TOKENS }}
+  GEMINI_TEMPERATURE: ${{ secrets.GEMINI_TEMPERATURE }}
+
+  # 🔥 Firebase
+  FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+  FIRE_AUTH_DOMAIN: ${{ secrets.FIRE_AUTH_DOMAIN }}
+  FIRE_PROJECT_ID: ${{ secrets.FIRE_PROJECT_ID }}
+  STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
+  MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
+  APP_ID: ${{ secrets.APP_ID }}
+  MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
 
 jobs:
   release-windows:
