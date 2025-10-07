@@ -15,7 +15,6 @@ import {
   Strikethrough,
   Type,
   Highlighter,
-  Link,
   AlignLeft,
   AlignCenter,
   AlignRight,
@@ -30,14 +29,14 @@ import { useDynamicFont } from '../../../hooks/useDynamicFont';
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
-  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex flex-wrap items-center px-3 gap-2 gap-y-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm overflow-visible',
-  section: 'flex items-center gap-1.5 shrink-0',
+  container: 'w-full h-14 bg-[var(--toolbar-bg)] border-b border-[color:var(--toolbar-border)] flex flex-wrap items-center px-3 gap-2 gap-y-2 text-[color:var(--toolbar-foreground)] text-xs md:text-sm overflow-visible !leading-none',
+  section: 'flex items-center gap-1.5 shrink-0 !leading-none',
   divider: 'w-px h-6 bg-[color:var(--toolbar-divider)] opacity-70 mx-2',
-  button: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-xs font-medium leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  buttonActive: 'h-8 px-2.5 rounded-md bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-xs font-semibold leading-none shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  dropdown: 'h-8 px-3 min-w-[11rem] rounded-md text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-between gap-1.5 text-xs font-medium border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 backdrop-blur-sm whitespace-nowrap shadow-sm',
-  backButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
-  colorButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-center relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  button: 'h-8 px-2.5 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center gap-1 text-xs font-medium !leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  buttonActive: 'h-8 px-2.5 rounded-md bg-[var(--button-active)] text-[color:var(--editor-accent)] hover:bg-[var(--button-active)] transition-colors flex items-center gap-1 text-xs font-semibold !leading-none shadow-inner focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  dropdown: 'h-8 px-3 min-w-[11rem] rounded-md text-[color:var(--toolbar-foreground)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-between gap-1.5 text-xs font-medium border border-[color:var(--toolbar-border)] bg-[var(--toolbar-bg)]/80 backdrop-blur-sm whitespace-nowrap shadow-sm !leading-none',
+  backButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] hover:text-[color:var(--toolbar-foreground)] transition-colors flex items-center justify-center !leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
+  colorButton: 'h-8 w-8 rounded-md text-[color:var(--toolbar-muted)] hover:bg-[var(--toolbar-hover-bg)] transition-colors flex items-center justify-center relative !leading-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--editor-accent)]/30 focus-visible:ring-offset-0',
 } as const;
 
 // 🎨 사용자 정의 폰트 크기 입력 범위
@@ -204,7 +203,6 @@ export const ProjectHeader = React.memo(function ProjectHeader({
       isUnderline: editor.isActive('underline'),
       isStrike: editor.isActive('strike'),
       isHighlight: editor.isActive('highlight'),
-      isLink: editor.isActive('link'),
       isLeftAlign: editor.isActive({ textAlign: 'left' }),
       isCenterAlign: editor.isActive({ textAlign: 'center' }),
       isRightAlign: editor.isActive({ textAlign: 'right' }),
@@ -261,18 +259,6 @@ export const ProjectHeader = React.memo(function ProjectHeader({
     }
     Logger.debug('WYSIWYG_TOOLBAR', 'Highlight toggled');
   }, [editor]);
-
-  const handleLink = useCallback(() => {
-    if (editorState.isLink) {
-      // 링크 제거
-      editor?.chain().focus().unsetMark('link').run();
-    } else {
-      // 링크 추가 - 간단한 기본 URL 사용
-      const url = 'https://example.com';
-      editor?.chain().focus().setMark('link', { href: url }).run();
-    }
-    Logger.debug('WYSIWYG_TOOLBAR', 'Link toggled');
-  }, [editor, editorState.isLink]);
 
   const handleAlign = useCallback((alignment: 'left' | 'center' | 'right' | 'justify') => {
     if (editor?.isActive({ textAlign: alignment })) {
@@ -772,14 +758,6 @@ export const ProjectHeader = React.memo(function ProjectHeader({
           title="형광펜"
         >
           <Highlighter size={16} />
-        </button>
-        <button
-          type="button"
-          onClick={handleLink}
-          className={editorState.isLink ? TOOLBAR_STYLES.buttonActive : TOOLBAR_STYLES.button}
-          title="링크"
-        >
-          <Link size={16} />
         </button>
       </div>
 
