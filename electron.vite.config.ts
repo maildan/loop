@@ -86,7 +86,12 @@ export default defineConfig(({ mode }) => {
       build: {
         rollupOptions: {
           // 외부 의존성 최적화
-          external: ['electron', 'ttf2woff2']
+          external: [
+            'electron',
+            'ttf2woff2',
+            '@prisma/client',
+            '.prisma/client'
+          ]
         }
       }
     },

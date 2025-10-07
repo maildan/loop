@@ -47,7 +47,7 @@ jobs:
         run: pnpm build
       
       - name: Package Windows application
-        run: pnpm dist:win
+        run: pnpm dist:win --publish always
         env:
           # GitHub 토큰 (electron-builder가 자동 업로드에 사용)
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,6 +58,7 @@ jobs:
           name: Loop-Windows
           path: |
             release/*.exe
+            release/*.nsis.7z
             release/*.exe.blockmap
             release/latest.yml
           retention-days: 7
@@ -68,6 +69,7 @@ jobs:
         with:
           files: |
             release/*.exe
+            release/*.nsis.7z
             release/*.exe.blockmap
             release/latest.yml
           draft: false
