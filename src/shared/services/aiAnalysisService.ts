@@ -23,7 +23,7 @@ interface AIAnalysisRecord {
 
 export interface AnalysisRequest {
     projectId: string;
-    type: 'timeline' | 'outline' | 'mindmap' | 'synopsis' | 'comprehensive';
+    type: 'timeline' | 'outline' | 'mindmap' | 'synopsis' | 'comprehensive' | 'korean';
     data: any;
     context?: {
         content?: string;
@@ -987,7 +987,91 @@ ${contextualInfo}
         }
     }
 
-    // 🔧 유틸리티 메서드들
+    // � 한국 웹소설 분석
+    async analyzeKoreanWebNovel(request: AnalysisRequest): Promise<AnalysisResponse<KoreanAnalysisResult>> {
+        const startTime = Date.now();
+        Logger.info('AI_ANALYSIS_SERVICE', 'Starting Korean web novel analysis', { projectId: request.projectId });
+
+        try {
+            // KoreanWebNovelAnalyzer import
+            const { KoreanWebNovelAnalyzer } = await import('../narrative/koreanWebNovelAnalyzer');
+
+            const { content, title, characters = [], totalWordCount = 50000 } = request.data;
+
+            // 1. 장르 감지
+            const detectedGenre = KoreanWebNovelAnalyzer.detectGenre(content, title);
+
+            // 2. 클리셰 탐지
+            const detectedCliches = KoreanWebNovelAnalyzer.detectCliches(content, detectedGenre);
+
+            // 3. 시놉시스 분석
+            const synopsisAnalysis = KoreanWebNovelAnalyzer.analyzeSynopsis(content, title);
+
+            // 4. 5막 구조 제안
+            const fiveActStructure = KoreanWebNovelAnalyzer.suggest5ActStructure(totalWordCount);
+
+            // 5. MBTI 추천 (캐릭터별)
+            const mbtiRecommendations: MBTICharacterProfile[] = [];
+            characters.forEach((char: any) => {
+                const desc = char.description || char.content || '';
+                const recommendations = KoreanWebNovelAnalyzer.recommendMBTI(desc);
+                if (recommendations.length > 0 && recommendations[0]) {
+                    mbtiRecommendations.push(recommendations[0]); // 가장 적합한 것만
+                }
+            });
+
+            // 6. 키워드 점수 계산
+            const keywordScore = synopsisAnalysis.keywordScore;
+
+            // 7. 장르 일관성 계산
+            const genreConsistency = synopsisAnalysis.genreConsistency;
+
+            // 8. 타겟 독자층
+            const targetAudience = synopsisAnalysis.targetAudience;
+
+            // 9. 개선 제안
+            const recommendations = synopsisAnalysis.recommendations;
+
+            const result: KoreanAnalysisResult = {
+                genre: detectedGenre,
+                genreConsistency,
+                detectedCliches,
+                keywordScore,
+                fiveActStructure,
+                mbtiRecommendations: mbtiRecommendations.slice(0, 5), // 최대 5개
+                targetAudience,
+                recommendations,
+                synopsisAnalysis
+            };
+
+            const response: AnalysisResponse<KoreanAnalysisResult> = {
+                id: this.generateAnalysisId(),
+                type: 'korean',
+                result,
+                confidence: (keywordScore + genreConsistency) / 200, // 0-1 scale
+                suggestions: recommendations,
+                metadata: {
+                    processingTime: Date.now() - startTime,
+                    model: 'korean-webnovel-analyzer-v1',
+                    timestamp: new Date().toISOString()
+                }
+            };
+
+            await this.saveAnalysisToDatabase(request, response);
+            Logger.info('AI_ANALYSIS_SERVICE', 'Korean web novel analysis completed', {
+                duration: Date.now() - startTime,
+                genre: detectedGenre,
+                clichesCount: detectedCliches.length
+            });
+
+            return response;
+        } catch (error) {
+            Logger.error('AI_ANALYSIS_SERVICE', 'Korean web novel analysis failed', error);
+            throw new Error(`한국 웹소설 분석 실패: ${error}`);
+        }
+    }
+
+    // �🔧 유틸리티 메서드들
     private convertTokenUsage(geminiUsage: any): { input: number; output: number; total: number } | undefined {
         if (!geminiUsage) return undefined;
 
@@ -1373,6 +1457,46 @@ export async function analyzeMindmap(projectId: string, mindmapData: any, contex
         projectId,
         type: 'mindmap',
         data: mindmapData,
+        context
+    });
+}
+
+// 🔥 Korean Web Novel Analysis Types
+import type {
+    KoreanWebNovelGenre,
+    FiveActStructure,
+    CliffhangerPoint,
+    MBTICharacterProfile,
+    SynopsisAnalysis
+} from '../narrative/koreanWebNovelAnalyzer';
+
+export interface KoreanAnalysisResult {
+    genre: KoreanWebNovelGenre;
+    genreConsistency: number; // 0-100
+    detectedCliches: string[];
+    keywordScore: number; // 0-100, 키워드 매력도
+    fiveActStructure: FiveActStructure;
+    mbtiRecommendations: MBTICharacterProfile[];
+    targetAudience: string;
+    recommendations: string[];
+    synopsisAnalysis: SynopsisAnalysis;
+}
+
+export async function analyzeKoreanWebNovel(
+    projectId: string,
+    data: {
+        content: string;
+        title?: string;
+        characters?: any[];
+        totalWordCount?: number;
+    },
+    context?: AnalysisRequest['context']
+): Promise<AnalysisResponse<KoreanAnalysisResult>> {
+    const service = getAIAnalysisService();
+    return service.analyzeKoreanWebNovel({
+        projectId,
+        type: 'korean',
+        data,
         context
     });
 }

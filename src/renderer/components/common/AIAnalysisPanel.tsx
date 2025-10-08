@@ -27,13 +27,14 @@ import type {
     TimelineAnalysisResult,
     OutlineAnalysisResult,
     OutlineStructureGap,
-    MindmapAnalysisResult
+    MindmapAnalysisResult,
+    KoreanAnalysisResult
 } from '../../../shared/services/aiAnalysisService';
 import { GeminiError, type GeminiEnvKey, type EnvStatus, getGeminiEnvDiagnostics } from '../../../shared/ai/geminiClient';
 
 export interface AIAnalysisPanelProps {
     projectId: string;
-    analysisType: 'timeline' | 'outline' | 'mindmap';
+    analysisType: 'timeline' | 'outline' | 'mindmap' | 'korean';
     data: any;
     context?: {
         content?: string;
@@ -113,6 +114,14 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                     result = await aiService.analyzeMindmap({
                         projectId,
                         type: 'mindmap',
+                        data,
+                        context
+                    });
+                    break;
+                case 'korean':
+                    result = await aiService.analyzeKoreanWebNovel({
+                        projectId,
+                        type: 'korean',
                         data,
                         context
                     });
@@ -231,6 +240,23 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                     }
                 ];
                 break;
+            case 'korean':
+                const koreanResult = result as KoreanAnalysisResult;
+                overviewItems = [
+                    {
+                        label: '장르 일관성',
+                        value: koreanResult.genreConsistency,
+                        description: '감지된 장르와의 일치도',
+                        color: koreanResult.genreConsistency > 80 ? 'bg-green-500' : koreanResult.genreConsistency > 60 ? 'bg-yellow-500' : 'bg-red-500'
+                    },
+                    {
+                        label: '키워드 매력도',
+                        value: koreanResult.keywordScore,
+                        description: '2025 웹소설 트렌드 키워드 매칭',
+                        color: koreanResult.keywordScore > 80 ? 'bg-green-500' : koreanResult.keywordScore > 60 ? 'bg-yellow-500' : 'bg-red-500'
+                    }
+                ];
+                break;
         }
 
         return (
@@ -267,6 +293,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                 {analysisType === 'timeline' && renderTimelineDetails()}
                 {analysisType === 'outline' && renderOutlineDetails()}
                 {analysisType === 'mindmap' && renderMindmapDetails()}
+                {analysisType === 'korean' && renderKoreanDetails()}
             </div>
         );
     };
@@ -453,6 +480,147 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                         ))}
                     </div>
                 </Card>
+            </div>
+        );
+    };
+
+    // 🔥 한국 웹소설 세부 분석
+    const renderKoreanDetails = () => {
+        const result = analysisResult!.result as KoreanAnalysisResult;
+
+        // 장르 매핑 (한글 표시)
+        const genreNames: Record<string, string> = {
+            'romance-fantasy': '로맨스 판타지',
+            'romance': '로맨스',
+            'bl': 'BL',
+            'modern-fantasy': '현대 판타지',
+            'hunter': '헌터물',
+            'fantasy': '판타지',
+            'martial-arts': '무협',
+            'historical': '사극',
+            'unknown': '미분류'
+        };
+
+        return (
+            <div className="space-y-4">
+                {/* 장르 감지 카드 */}
+                <Card className="p-4 border-purple-200 bg-purple-50">
+                    <div className="flex items-center gap-2 mb-3">
+                        <Sparkles className="w-5 h-5 text-purple-600" />
+                        <span className="font-semibold text-purple-800">감지된 장르</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Badge variant="default" className="text-base px-4 py-1">
+                            {genreNames[result.genre] || result.genre}
+                        </Badge>
+                        <span className="text-sm text-purple-700">
+                            일관성: {result.genreConsistency}%
+                        </span>
+                    </div>
+                </Card>
+
+                {/* 탐지된 클리셰 */}
+                {result.detectedCliches.length > 0 && (
+                    <Card className="p-4">
+                        <h4 className="font-semibold mb-3 flex items-center gap-2">
+                            <TrendingUp className="w-4 h-4" />
+                            탐지된 클리셰 ({result.detectedCliches.length}개)
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                            {result.detectedCliches.slice(0, 15).map((cliche, index) => (
+                                <Badge key={index} variant="outline" className="text-sm">
+                                    {cliche}
+                                </Badge>
+                            ))}
+                        </div>
+                    </Card>
+                )}
+
+                {/* 5막 구조 */}
+                <Card className="p-4">
+                    <h4 className="font-semibold mb-3">5막 구조 (도입-발단-전개-절정-결말)</h4>
+                    <div className="space-y-3">
+                        {[
+                            { label: '1막 (도입)', key: 'intro', color: 'bg-blue-500' },
+                            { label: '2막 (발단)', key: 'rising', color: 'bg-green-500' },
+                            { label: '3막 (전개)', key: 'development', color: 'bg-yellow-500' },
+                            { label: '4막 (절정)', key: 'climax', color: 'bg-red-500' },
+                            { label: '5막 (결말)', key: 'conclusion', color: 'bg-purple-500' }
+                        ].map(({ label, key, color }) => {
+                            const act = result.fiveActStructure[key as keyof typeof result.fiveActStructure];
+                            if (!act || typeof act === 'object' && !('start' in act)) return null;
+                            const actData = act as { start: number; end: number; description: string };
+                            const percentage = ((actData.end - actData.start) / 100) * 100;
+                            return (
+                                <div key={key}>
+                                    <div className="flex justify-between text-sm mb-1">
+                                        <span className="font-medium">{label}</span>
+                                        <span className="text-gray-600">{percentage.toFixed(0)}%</span>
+                                    </div>
+                                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                                        <div 
+                                            className={`h-full ${color} transition-all`}
+                                            style={{ width: `${percentage}%` }}
+                                        />
+                                    </div>
+                                    <p className="text-xs text-gray-600 mt-1">{actData.description}</p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </Card>
+
+                {/* 클리프행어 포인트 */}
+                {result.fiveActStructure.cliffhangers && result.fiveActStructure.cliffhangers.length > 0 && (
+                    <Card className="p-4">
+                        <h4 className="font-semibold mb-3">클리프행어 포인트</h4>
+                        <div className="space-y-2">
+                            {result.fiveActStructure.cliffhangers.slice(0, 5).map((cliffhanger, index) => {
+                                const typeColors: Record<string, string> = {
+                                    'revelation': 'bg-blue-100 text-blue-700',
+                                    'danger': 'bg-red-100 text-red-700',
+                                    'emotional': 'bg-purple-100 text-purple-700',
+                                    'mystery': 'bg-gray-100 text-gray-700'
+                                };
+                                return (
+                                    <div key={index} className="p-2 border rounded">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <Badge variant="outline" className={`text-xs ${typeColors[cliffhanger.type] || ''}`}>
+                                                {cliffhanger.type}
+                                            </Badge>
+                                            <span className="text-xs font-medium">강도: {cliffhanger.intensity}/10</span>
+                                        </div>
+                                        <p className="text-sm">{cliffhanger.description}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </Card>
+                )}
+
+                {/* MBTI 추천 캐릭터 */}
+                {result.mbtiRecommendations.length > 0 && (
+                    <Card className="p-4">
+                        <h4 className="font-semibold mb-3">MBTI 추천 캐릭터 프로필</h4>
+                        <div className="space-y-2">
+                            {result.mbtiRecommendations.slice(0, 3).map((profile, index) => (
+                                <div key={index} className="p-3 border rounded bg-gray-50">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <Badge variant="default" className="font-mono">
+                                            {profile.mbtiType}
+                                        </Badge>
+                                        <Badge variant="outline" className="text-xs">
+                                            {profile.idealRole}
+                                        </Badge>
+                                    </div>
+                                    <p className="text-sm mb-1"><strong>특성:</strong> {profile.coreTrait}</p>
+                                    <p className="text-sm mb-1"><strong>핵심 갈등:</strong> {profile.coreConflict}</p>
+                                    <p className="text-sm"><strong>성장 방향:</strong> {profile.growthPath}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </Card>
+                )}
             </div>
         );
     };

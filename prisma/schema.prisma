@@ -48,6 +48,7 @@ model Project {
   characters    ProjectCharacter[] // 🔥 등장인물 관계
   structure     ProjectStructure[] // 🔥 구조 관계
   notes         ProjectNote[] // 🔥 메모 관계
+  episodes      Episode[] // 🔥 회차 관계 (한국 웹소설)
   aiAnalyses    AIAnalysis[] // 🔥 AI 분석 관계
   aiWorkflows   AIWorkflow[] // 🔥 AI 워크플로우 관계
   aiEvaluations AIEvaluation[] // 🔥 AI 평가 관계
@@ -57,6 +58,37 @@ model Project {
   @@index([status])
   @@index([lastModified])
   @@map("projects")
+}
+
+// 📖 회차 모델 - 한국 웹소설 에피소드 관리
+model Episode {
+  id                   String    @id @default(cuid())
+  projectId            String
+  episodeNumber        Int // 회차 번호 (1, 2, 3...)
+  title                String // "1화: 회귀의 시작"
+  content              String // 실제 본문
+  wordCount            Int       @default(0) // 현재 단어 수
+  targetWordCount      Int       @default(5500) // 목표 단어 수 (5,000-5,500자)
+  status               String    @default("draft") // 'draft' | 'in-progress' | 'completed' | 'published'
+  act                  String? // 5막 구조: 'intro' | 'rising' | 'development' | 'climax' | 'conclusion'
+  cliffhangerType      String? // 클리프행어 유형: 'revelation' | 'danger' | 'emotional' | 'mystery'
+  cliffhangerIntensity Int? // 클리프행어 강도 (1-10)
+  notes                String? // 작가 메모
+  sortOrder            Int       @default(0) // 정렬 순서
+  isActive             Boolean   @default(true)
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  publishedAt          DateTime? // 발행 일시
+
+  // Relations
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, episodeNumber]) // 프로젝트 내 회차 번호는 고유
+  @@index([projectId])
+  @@index([episodeNumber])
+  @@index([status])
+  @@index([act])
+  @@map("episodes")
 }
 
 // 👥 프로젝트 등장인물 모델 - 작가용 캐릭터 관리
@@ -437,19 +469,19 @@ model AIUsageStats {
 
 // 📊 작가 통계 모델 - 글쓰기 세션 추적
 model WriterStats {
-  id               String   @id @default(cuid())
+  id               String    @id @default(cuid())
   projectId        String // 프로젝트 ID
   sessionStartTime DateTime // 세션 시작 시간
   sessionEndTime   DateTime? // 세션 종료 시간 (null이면 진행 중)
-  sessionDuration  Int      @default(0) // 세션 지속 시간 (분)
-  wordCount        Int      @default(0) // 작성한 단어 수
-  charCount        Int      @default(0) // 작성한 문자 수
-  paragraphCount   Int      @default(0) // 문단 수
-  wpm              Int      @default(0) // 분당 단어 수 (Words Per Minute)
-  wordGoal         Int      @default(0) // 목표 단어 수
-  goalAchieved     Boolean  @default(false) // 목표 달성 여부
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  sessionDuration  Int       @default(0) // 세션 지속 시간 (분)
+  wordCount        Int       @default(0) // 작성한 단어 수
+  charCount        Int       @default(0) // 작성한 문자 수
+  paragraphCount   Int       @default(0) // 문단 수
+  wpm              Int       @default(0) // 분당 단어 수 (Words Per Minute)
+  wordGoal         Int       @default(0) // 목표 단어 수
+  goalAchieved     Boolean   @default(false) // 목표 달성 여부
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   // Relations
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)

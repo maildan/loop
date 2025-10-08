@@ -7,6 +7,7 @@ import { AIAnalysisPanel } from '../../../common/AIAnalysisPanel';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
 import { GoogleGenAI } from "@google/genai";
+import { Logger } from '@/shared/logger';
 
 
 interface TimelinePanelProps {
@@ -29,6 +30,7 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
     onNavigateToChapter // 🔥 챕터 네비게이션 함수
 }) => {
     const [showAIAnalysis, setShowAIAnalysis] = useState(false);
+    const [showKoreanAnalysis, setShowKoreanAnalysis] = useState(false);
 
     return (
         <div className="flex-1 overflow-hidden flex flex-col">
@@ -47,6 +49,15 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                     >
                         <Brain className="w-4 h-4" />
                         {showAIAnalysis ? 'AI 분석 숨기기' : 'AI 분석'}
+                    </Button>
+                    <Button
+                        onClick={() => setShowKoreanAnalysis(!showKoreanAnalysis)}
+                        variant={showKoreanAnalysis ? "secondary" : "outline"}
+                        size="sm"
+                        className="flex items-center gap-2"
+                    >
+                        <Sparkles className="w-4 h-4" />
+                        {showKoreanAnalysis ? '한국 분석 숨기기' : '한국 웹소설 분석'}
                     </Button>
                 </div>
             </div>
@@ -176,6 +187,30 @@ export const TimelinePanel: React.FC<TimelinePanelProps> = ({
                                         contentLength: content?.length || 0,
                                         notesCount: notes?.length || 0
                                     });
+                                }}
+                            />
+                        </div>
+                    )}
+
+                    {/* 🇰🇷 한국 웹소설 분석 사이드바 */}
+                    {showKoreanAnalysis && (
+                        <div className="col-span-4 transition-all duration-300 overflow-y-auto h-full">
+                            <AIAnalysisPanel
+                                projectId={projectId}
+                                analysisType="korean"
+                                data={{
+                                    content: content || elements.map(e => e.content).join('\n'),
+                                    title: elements.find(e => e.type === 'main')?.title || '프로젝트',
+                                    characters: characters,
+                                    totalWordCount: elements.reduce((sum, e) => sum + (e.wordCount || 0), 0)
+                                }}
+                                context={{
+                                    content: content,
+                                    characters: characters,
+                                    notes: notes
+                                }}
+                                onAnalysisComplete={(result) => {
+                                    Logger.warn("result",'🇰🇷 한국 웹소설 분석 완료:', result);
                                 }}
                             />
                         </div>

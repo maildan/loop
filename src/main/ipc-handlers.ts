@@ -10,6 +10,7 @@ import { setupTrayIpcHandlers } from './handlers/trayIpcHandlers';
 import { setupProjectIpcHandlers } from './handlers/projectIpcHandlers';
 import { setupOAuthIpcHandlers } from './handlers/oauthIpcHandlers';
 import { setupAIIpcHandlers } from './handlers/aiIpcHandlers';
+import { setupEpisodeIpcHandlers } from './handlers/episodeIpcHandlers';
 
 // #DEBUG: IPC handlers entry point
 Logger.debug('IPC_HANDLERS', 'IPC handlers module loaded');
@@ -172,6 +173,13 @@ export async function setupAllIpcHandlers(): Promise<void> {
     //   registeredHandlers.add('ai');
     //   Logger.info('IPC_HANDLERS', 'AI IPC handlers setup complete');
     // }
+
+    // Episode IPC 핸들러
+    if (!registeredHandlers.has('episode')) {
+      setupEpisodeIpcHandlers();
+      registeredHandlers.add('episode');
+      Logger.info('IPC_HANDLERS', 'Episode IPC handlers setup complete');
+    }
 
     // OAuth IPC 핸들러
     if (!registeredHandlers.has('oauth')) {

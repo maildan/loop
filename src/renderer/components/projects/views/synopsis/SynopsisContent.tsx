@@ -1,16 +1,11 @@
 'use client';
 
 import React from 'react';
-import { ViewMode, SYNOPSIS_STYLES } from './types';
+import { SYNOPSIS_STYLES } from './types';
 import { ProjectAnalysis, ProjectElement } from '../../../../hooks/useProjectData';
-import { TimelinePanel } from './TimelinePanel';
-import { OutlinePanel } from './OutlinePanel';
-import { MindmapCanvas } from './MindmapCanvas';
-import { AnalysisPanel } from './AnalysisPanel';
+import { KoreanSynopsisView } from './KoreanSynopsisView';
 
 interface SynopsisContentProps {
-    viewMode: ViewMode;
-    showAnalysis: boolean;
     analysis: ProjectAnalysis;
     elements: ProjectElement[];
     projectId: string;
@@ -23,8 +18,6 @@ interface SynopsisContentProps {
 }
 
 export const SynopsisContent = React.memo(({
-    viewMode,
-    showAnalysis,
     analysis,
     elements,
     projectId,
@@ -37,43 +30,13 @@ export const SynopsisContent = React.memo(({
 }: SynopsisContentProps): React.ReactElement => {
     return (
         <div className={SYNOPSIS_STYLES.mainContent}>
-            {/* 뷰 패널 */}
-            {viewMode === 'timeline' && (
-                <TimelinePanel
-                    analysis={analysis}
-                    elements={elements}
-                    projectId={projectId}
-                    characters={characters}
-                    notes={notes}
-                    content={content}
-                />
-            )}
-            {viewMode === 'outline' && (
-                <OutlinePanel
-                    elements={elements}
-                    projectId={projectId}
-                    characters={characters}
-                    notes={notes}
-                    content={content}
-                />
-            )}
-            {viewMode === 'mindmap' && (
-                <MindmapCanvas
-                    elements={elements}
-                    analysis={analysis}
-                    onSelectElement={(element) => onSelectElement(element.id)}
-                />
-            )}
-
-            {/* 분석 사이드바 */}
-            {showAnalysis && (
-                <AnalysisPanel
-                    analysis={analysis}
-                    elements={elements}
-                    selectedElement={selectedElement}
-                    getRelatedElements={getRelatedElements}
-                />
-            )}
+            <KoreanSynopsisView
+                projectId={projectId}
+                elements={elements}
+                characters={characters}
+                notes={notes}
+                content={content}
+            />
         </div>
     );
 });

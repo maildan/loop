@@ -10,41 +10,19 @@ export interface SynopsisViewProps {
     content?: string;
 }
 
-export type ViewMode = 'timeline' | 'outline' | 'mindmap';
+// 🔥 새로운 한국 웹소설 Synopsis 탭 모드
+export type TabMode = 'dashboard' | 'episodes' | 'structure' | 'analysis';
 
-export interface TimelinePanelProps {
-    analysis: ProjectAnalysis;
+export interface DashboardViewProps {
+    projectId: string;
     elements: ProjectElement[];
-    projectId?: string;
-    characters?: ProjectCharacter[];
-    notes?: ProjectNote[];
-    content?: string;
-    onNavigateToChapter?: (chapterId: string) => void;
-}
-
-export interface OutlinePanelProps {
-    elements: ProjectElement[];
-    projectId?: string;
     characters?: ProjectCharacter[];
     notes?: ProjectNote[];
     content?: string;
 }
 
-export interface MindmapCanvasProps {
-    elements: ProjectElement[];
-    analysis: ProjectAnalysis;
-    onSelectElement: (element: ProjectElement) => void;
-}
-
-export interface AnalysisPanelProps {
-    analysis: ProjectAnalysis;
-    elements: ProjectElement[];
-    selectedElement: string | null;
-    getRelatedElements: (elementId: string) => ProjectElement[];
-}
-
-export interface ViewModeConfig {
-    id: ViewMode;
+export interface TabModeConfig {
+    id: TabMode;
     name: string;
     icon: React.ComponentType<{ className?: string }>;
 }

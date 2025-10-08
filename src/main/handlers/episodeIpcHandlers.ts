@@ -1,0 +1,153 @@
+/**
+ * 📖 Episode IPC 핸들러 - 한국 웹소설 회차 관리
+ *
+ * 메인 프로세스에서 EpisodeService를 호출하여 렌더러에 데이터 제공
+ */
+
+import { ipcMain } from 'electron';
+import type { IpcMainEvent } from 'electron';
+import { Logger } from '../../shared/logger';
+import { EpisodeService } from '../services/EpisodeService';
+
+const episodeService = new EpisodeService();
+
+/**
+ * Episode IPC 핸들러 설정
+ */
+export function setupEpisodeIpcHandlers(): void {
+  Logger.debug('EPISODE_IPC', 'Setting up episode IPC handlers');
+
+  // 회차 생성
+  ipcMain.handle('episode:create', async (event: IpcMainEvent, input: any) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Creating episode', { input });
+      const episode = await episodeService.createEpisode(input);
+      return { success: true, data: episode };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to create episode', { error, input });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 조회 (ID)
+  ipcMain.handle('episode:get', async (event: IpcMainEvent, id: string) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Getting episode', { id });
+      const episode = await episodeService.getEpisode(id);
+      return { success: true, data: episode };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to get episode', { error, id });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 조회 (프로젝트 + 회차 번호)
+  ipcMain.handle('episode:getByNumber', async (event: IpcMainEvent, projectId: string, episodeNumber: number) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Getting episode by number', { projectId, episodeNumber });
+      const episode = await episodeService.getEpisodeByNumber(projectId, episodeNumber);
+      return { success: true, data: episode };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to get episode by number', { error, projectId, episodeNumber });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 목록 조회
+  ipcMain.handle('episode:list', async (event: IpcMainEvent, projectId: string, filter?: any, sort?: any) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Listing episodes', { projectId, filter, sort });
+      const episodes = await episodeService.listEpisodes(projectId, filter, sort);
+      return { success: true, data: episodes };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to list episodes', { error, projectId, filter, sort });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 수정
+  ipcMain.handle('episode:update', async (event: IpcMainEvent, id: string, input: any) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Updating episode', { id, input });
+      const episode = await episodeService.updateEpisode(id, input);
+      return { success: true, data: episode };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to update episode', { error, id, input });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 삭제
+  ipcMain.handle('episode:delete', async (event: IpcMainEvent, id: string) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Deleting episode', { id });
+      await episodeService.deleteEpisode(id);
+      return { success: true };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to delete episode', { error, id });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 완전 삭제
+  ipcMain.handle('episode:hardDelete', async (event: IpcMainEvent, id: string) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Hard deleting episode', { id });
+      await episodeService.hardDeleteEpisode(id);
+      return { success: true };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to hard delete episode', { error, id });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 발행
+  ipcMain.handle('episode:publish', async (event: IpcMainEvent, id: string) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Publishing episode', { id });
+      const episode = await episodeService.publishEpisode(id);
+      return { success: true, data: episode };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to publish episode', { error, id });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 비축 현황 조회
+  ipcMain.handle('episode:getManuscriptReserves', async (event: IpcMainEvent, projectId: string) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Getting manuscript reserves', { projectId });
+      const reserves = await episodeService.getManuscriptReserves(projectId);
+      return { success: true, data: reserves };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to get manuscript reserves', { error, projectId });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 5막 구조 분석
+  ipcMain.handle('episode:analyzeFiveActStructure', async (event: IpcMainEvent, projectId: string) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Analyzing five-act structure', { projectId });
+      const analysis = await episodeService.analyzeFiveActStructure(projectId);
+      return { success: true, data: analysis };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to analyze five-act structure', { error, projectId });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  // 회차 통계 조회
+  ipcMain.handle('episode:getStats', async (event: IpcMainEvent, projectId: string) => {
+    try {
+      Logger.debug('EPISODE_IPC', 'Getting episode stats', { projectId });
+      const stats = await episodeService.getEpisodeStats(projectId);
+      return { success: true, data: stats };
+    } catch (error) {
+      Logger.error('EPISODE_IPC', 'Failed to get episode stats', { error, projectId });
+      return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+    }
+  });
+
+  Logger.info('EPISODE_IPC', 'Episode IPC handlers setup complete');
+}

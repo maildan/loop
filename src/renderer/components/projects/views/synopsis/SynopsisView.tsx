@@ -3,10 +3,8 @@
 import React, { useState, useMemo } from 'react';
 import { BarChart3 } from 'lucide-react';
 import { useIntegratedProjectData as useProjectData, ProjectElement } from '../../../../hooks/useProjectData';
-import { SynopsisViewProps, ViewMode, SYNOPSIS_STYLES } from './types';
-import { SynopsisHeader } from './SynopsisHeader';
+import { SynopsisViewProps, SYNOPSIS_STYLES } from './types';
 import { SynopsisContent } from './SynopsisContent';
-import { SynopsisStats } from './SynopsisStats';
 
 const SynopsisView = React.memo(({
     projectId,
@@ -17,9 +15,7 @@ const SynopsisView = React.memo(({
     content = ''
 }: SynopsisViewProps): React.ReactElement => {
     const { elements: structureElements, analysis, loading } = useProjectData(projectId);
-    const [viewMode, setViewMode] = useState<ViewMode>('timeline');
     const [selectedElement, setSelectedElement] = useState<string | null>(null);
-    const [showAnalysis, setShowAnalysis] = useState(true);
 
     // 🔥 main content를 ProjectElement로 변환하여 elements에 추가
     const elements = useMemo(() => {
@@ -90,18 +86,8 @@ const SynopsisView = React.memo(({
 
     return (
         <div className={SYNOPSIS_STYLES.container}>
-            {/* 헤더 */}
-            <SynopsisHeader
-                viewMode={viewMode}
-                onViewModeChange={setViewMode}
-                showAnalysis={showAnalysis}
-                onToggleAnalysis={() => setShowAnalysis(!showAnalysis)}
-            />
-
             {/* 메인 콘텐츠 */}
             <SynopsisContent
-                viewMode={viewMode}
-                showAnalysis={showAnalysis}
                 analysis={analysis}
                 elements={elements}
                 projectId={projectId}
@@ -112,9 +98,6 @@ const SynopsisView = React.memo(({
                 onSelectElement={handleSelectElement}
                 getRelatedElements={getRelatedElements}
             />
-
-            {/* 하단 통계 */}
-            <SynopsisStats analysis={analysis} />
         </div>
     );
 });
