@@ -425,7 +425,16 @@ export const ProjectEditor = memo(function ProjectEditor({
                 return (
                     <SynopsisView
                         projectId={projectId}
-                        elements={[]} // 🔥 TODO: projectData에서 elements 추출
+                        elements={(projectData?.structure || []).map(item => ({
+                            id: item.id,
+                            type: item.type as 'main' | 'chapter' | 'character' | 'memo' | 'idea' | 'note' | 'synopsis',
+                            title: item.title,
+                            content: item.content || '',
+                            createdAt: item.createdAt,
+                            updatedAt: item.updatedAt,
+                            order: item.sortOrder,
+                            wordCount: item.wordCount,
+                        }))}
                         characters={memoizedCharacters.map(char => ({
                             ...char,
                             color: char.color || '#3B82F6',

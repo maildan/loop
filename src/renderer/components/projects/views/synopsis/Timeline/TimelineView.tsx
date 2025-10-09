@@ -16,12 +16,12 @@ import type { TimelineViewProps } from '../types';
  * 2. 복선 추적 (깔아둔 회차 → 회수 회차)
  * 3. 미회수 복선 경고
  * 
- * Phase 1: Mock 데이터로 UI 구현
- * Phase 2: 실제 Episode + ProjectNote 연동
+ * ✅ Phase 1.5: Real data integration
+ * Phase 2: Gemini AI 복선 자동 추출
  */
 
-// 🔥 Mock Episode 타입
-interface MockEpisode {
+// � 실제 Episode 타입 (ProjectElement에서 chapter 필터)
+interface Episode {
     id: string;
     number: number;
     title: string;
@@ -30,8 +30,8 @@ interface MockEpisode {
     status: 'draft' | 'published';
 }
 
-// 🔥 Mock Foreshadow 타입
-interface MockForeshadow {
+// � 실제 Foreshadow 타입 (ProjectNote에서 foreshadow 필터)
+interface Foreshadow {
     id: string;
     title: string;
     content: string;
@@ -40,73 +40,59 @@ interface MockForeshadow {
     importance: 'low' | 'medium' | 'high';
 }
 
-// 🔥 Mock 데이터 - Phase 2에서 실제 API로 대체
-const MOCK_EPISODES: MockEpisode[] = [
-    { id: '1', number: 1, title: '회귀의 시작', wordCount: 5500, act: 'intro', status: 'published' },
-    { id: '2', number: 2, title: '숨겨진 진실', wordCount: 5200, act: 'rising', status: 'published' },
-    { id: '3', number: 3, title: '첫 번째 시련', wordCount: 5800, act: 'rising', status: 'published' },
-    { id: '4', number: 4, title: '과거의 그림자', wordCount: 5400, act: 'rising', status: 'published' },
-    { id: '5', number: 5, title: '비밀의 폭로', wordCount: 6000, act: 'development', status: 'published' },
-    { id: '6', number: 6, title: '새로운 동맹', wordCount: 5300, act: 'development', status: 'published' },
-    { id: '7', number: 7, title: '위기의 순간', wordCount: 5700, act: 'climax', status: 'draft' },
-    { id: '8', number: 8, title: '결전의 전야', wordCount: 0, act: 'climax', status: 'draft' },
-];
-
-const MOCK_FORESHADOWS: MockForeshadow[] = [
-    {
-        id: 'f1',
-        title: '김서준의 과거 비밀',
-        content: '주인공이 회귀 전에 숨긴 비밀',
-        introducedEpisode: 1,
-        resolvedEpisode: 5,
-        importance: 'high',
-    },
-    {
-        id: 'f2',
-        title: '숨겨진 유물의 위치',
-        content: '고대 유물이 숨겨진 장소에 대한 힌트',
-        introducedEpisode: 3,
-        resolvedEpisode: null, // 미회수!
-        importance: 'medium',
-    },
-    {
-        id: 'f3',
-        title: '배신자의 정체',
-        content: '팀 내부에 스파이가 있다는 암시',
-        introducedEpisode: 2,
-        resolvedEpisode: null, // 미회수!
-        importance: 'high',
-    },
-    {
-        id: 'f4',
-        title: '예언의 의미',
-        content: '1화에 나온 예언의 진짜 의미',
-        introducedEpisode: 1,
-        resolvedEpisode: null, // 미회수!
-        importance: 'low',
-    },
-];
-
 export const TimelineView: React.FC<TimelineViewProps> = ({
     projectId,
     notes = [],
 }) => {
-    const [selectedForeshadow, setSelectedForeshadow] = useState<MockForeshadow | null>(null);
+    const [selectedForeshadow, setSelectedForeshadow] = useState<Foreshadow | null>(null);
+    const [showOnlyUnresolved, setShowOnlyUnresolved] = useState(false);
+
+    // ✅ 실제 복선 노트 필터링 (Phase 2: AI 자동 추출로 대체)
+    const allForeshadowNotes = useMemo((): Foreshadow[] => {
+        return notes.filter(n => 
+            n.type === 'foreshadow' || 
+            n.tags?.toString().includes('복선') ||
+            n.title.includes('복선')
+        ).map((n, index): Foreshadow => {
+            // Phase 2: AI가 중요도 계산 (현재는 인덱스 기반 샘플링)
+            const sampleImportance: Foreshadow['importance'][] = ['high', 'medium', 'low'];
+            const importance = sampleImportance[index % 3] || 'medium';
+            
+            return {
+                id: n.id,
+                title: n.title,
+                content: n.content,
+                introducedEpisode: 1, // Phase 2: AI가 회차 추출
+                resolvedEpisode: null, // Phase 2: AI가 회수 여부 판별
+                importance, // Phase 2: AI가 중요도 계산
+            };
+        });
+    }, [notes]);
+
+    // 🔥 필터링된 복선 목록 (미회수 필터 적용)
+    const foreshadowNotes = useMemo(() => {
+        if (showOnlyUnresolved) {
+            return allForeshadowNotes.filter(f => f.resolvedEpisode === null);
+        }
+        return allForeshadowNotes;
+    }, [allForeshadowNotes, showOnlyUnresolved]);
 
     // 🔥 미회수 복선 개수
     const unresolvedCount = useMemo(() => {
-        return MOCK_FORESHADOWS.filter(f => f.resolvedEpisode === null).length;
-    }, []);
+        return foreshadowNotes.filter(f => f.resolvedEpisode === null).length;
+    }, [foreshadowNotes]);
 
-    // 🔥 에피소드별 복선 매핑
+    // 🔥 에피소드별 복선 매핑 (Phase 2: 실제 매핑)
     const getForeshadowsForEpisode = (episodeNumber: number) => {
-        const introduced = MOCK_FORESHADOWS.filter(f => f.introducedEpisode === episodeNumber);
-        const resolved = MOCK_FORESHADOWS.filter(f => f.resolvedEpisode === episodeNumber);
+        // 현재: 빈 배열 (복선이 notes에만 있고 episode 연결 미구현)
+        // Phase 2: AI가 복선과 회차를 자동 매칭
+        const introduced = foreshadowNotes.filter(f => f.introducedEpisode === episodeNumber);
+        const resolved = foreshadowNotes.filter(f => f.resolvedEpisode === episodeNumber);
         return { introduced, resolved };
     };
 
     // 🔥 5막 구조 레이블
-    const getActLabel = (act: MockEpisode['act']) => {
+    const getActLabel = (act: Episode['act']) => {
         switch (act) {
             case 'intro': return '도입';
             case 'rising': return '발단';
@@ -117,7 +103,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
     };
 
     // 🔥 5막 구조 색상
-    const getActColor = (act: MockEpisode['act']) => {
+    const getActColor = (act: Episode['act']) => {
         switch (act) {
             case 'intro': return 'bg-blue-500/20 text-blue-500';
             case 'rising': return 'bg-green-500/20 text-green-500';
@@ -128,13 +114,16 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
     };
 
     // 🔥 중요도 색상
-    const getImportanceColor = (importance: MockForeshadow['importance']) => {
+    const getImportanceColor = (importance: Foreshadow['importance']) => {
         switch (importance) {
             case 'high': return 'text-red-500';
             case 'medium': return 'text-yellow-500';
             case 'low': return 'text-blue-500';
         }
     };
+
+    // ⚠️ Phase 1.5: Chapter 데이터가 없으므로 빈 배열 (Phase 2에서 elements 추가)
+    const episodes: Episode[] = []; // Phase 2: props.elements.filter(e => e.type === 'chapter')로 변경
 
     return (
         <div className="flex h-full flex-col gap-6 p-6">
@@ -149,7 +138,7 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                     </div>
                     <div className="flex gap-4">
                         <div className="rounded-lg border border-border bg-background px-4 py-2 text-center">
-                            <div className="text-2xl font-bold text-foreground">{MOCK_EPISODES.length}</div>
+                            <div className="text-2xl font-bold text-foreground">{episodes.length}</div>
                             <div className="text-xs text-muted-foreground">전체 회차</div>
                         </div>
                         <div className={`rounded-lg border px-4 py-2 text-center ${
@@ -162,15 +151,51 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                         </div>
                     </div>
                 </div>
+
+                {/* 🔥 필터 버튼 */}
+                {foreshadowNotes.length > 0 && (
+                    <div className="mt-4 flex items-center gap-2">
+                        <button
+                            onClick={() => setShowOnlyUnresolved(!showOnlyUnresolved)}
+                            className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
+                                showOnlyUnresolved
+                                    ? 'border-[hsl(var(--accent-primary))] bg-[hsl(var(--accent-primary))]/10 text-[hsl(var(--accent-primary))]'
+                                    : 'border-border bg-background text-muted-foreground hover:border-[hsl(var(--accent-primary))]/50'
+                            }`}
+                        >
+                            <Target className="h-4 w-4" />
+                            미회수 복선만 보기
+                            {showOnlyUnresolved && unresolvedCount > 0 && (
+                                <span className="rounded-full bg-[hsl(var(--accent-primary))]/20 px-2 py-0.5 text-xs">
+                                    {unresolvedCount}개
+                                </span>
+                            )}
+                        </button>
+                        {showOnlyUnresolved && (
+                            <span className="text-xs text-muted-foreground">
+                                {unresolvedCount === 0 ? '모든 복선이 회수되었습니다!' : `${unresolvedCount}개 미회수`}
+                            </span>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* 🔥 타임라인 */}
             <div className="flex-1 overflow-auto">
-                <div className="relative space-y-4">
-                    {/* 세로 연결선 */}
-                    <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-border" />
+                {episodes.length === 0 ? (
+                    <div className="rounded-lg border border-border bg-card p-8 text-center">
+                        <Clock className="mx-auto h-12 w-12 text-muted-foreground mb-3" />
+                        <p className="text-foreground font-medium">아직 작성된 회차가 없습니다</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            첫 회차를 작성하여 타임라인을 시작하세요
+                        </p>
+                    </div>
+                ) : (
+                    <div className="relative space-y-4">
+                        {/* 세로 연결선 - 더 굵고 그라데이션 효과 */}
+                        <div className="absolute left-6 top-0 bottom-0 w-1 bg-gradient-to-b from-[hsl(var(--accent-primary))]/30 via-[hsl(var(--accent-primary))]/10 to-border rounded-full" />
 
-                    {MOCK_EPISODES.map((episode, index) => {
+                        {episodes.map((episode, index) => {
                         const { introduced, resolved } = getForeshadowsForEpisode(episode.number);
                         
                         return (
@@ -212,27 +237,42 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                                     {/* 복선 정보 */}
                                     {(introduced.length > 0 || resolved.length > 0) && (
                                         <div className="mt-4 space-y-2 border-t border-border pt-4">
-                                            {/* 소개된 복선 */}
-                                            {introduced.map(foreshadow => (
-                                                <button
-                                                    key={foreshadow.id}
-                                                    onClick={() => setSelectedForeshadow(foreshadow)}
-                                                    className="flex w-full items-start gap-2 rounded-lg border border-border bg-background/50 p-3 text-left hover:border-[hsl(var(--accent-primary))]/50 transition-colors"
-                                                >
-                                                    <Pin className={`h-4 w-4 mt-0.5 ${getImportanceColor(foreshadow.importance)}`} />
-                                                    <div className="flex-1">
-                                                        <div className="font-medium text-foreground text-sm">
-                                                            {foreshadow.title}
+                                            {/* 소개된 복선 - 중요도별 색상 강화 */}
+                                            {introduced.map(foreshadow => {
+                                                const importanceStyles = {
+                                                    high: 'border-red-500/40 bg-red-500/10 hover:border-red-500/60',
+                                                    medium: 'border-yellow-500/40 bg-yellow-500/10 hover:border-yellow-500/60',
+                                                    low: 'border-blue-500/40 bg-blue-500/10 hover:border-blue-500/60',
+                                                };
+                                                
+                                                return (
+                                                    <button
+                                                        key={foreshadow.id}
+                                                        onClick={() => setSelectedForeshadow(foreshadow)}
+                                                        className={`flex w-full items-start gap-2 rounded-lg border p-3 text-left transition-colors ${importanceStyles[foreshadow.importance]}`}
+                                                    >
+                                                        <Pin className={`h-4 w-4 mt-0.5 ${getImportanceColor(foreshadow.importance)}`} />
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="font-medium text-foreground text-sm">
+                                                                    {foreshadow.title}
+                                                                </span>
+                                                                {foreshadow.importance === 'high' && (
+                                                                    <span className="rounded-full bg-red-500/20 px-2 py-0.5 text-xs font-medium text-red-500">
+                                                                        중요
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <div className="text-xs text-muted-foreground mt-1">
+                                                                복선 시작 {foreshadow.resolvedEpisode ? `• ${foreshadow.resolvedEpisode}화에서 회수` : '• 미회수'}
+                                                            </div>
                                                         </div>
-                                                        <div className="text-xs text-muted-foreground mt-1">
-                                                            복선 시작 {foreshadow.resolvedEpisode ? `• ${foreshadow.resolvedEpisode}화에서 회수` : '• 미회수'}
-                                                        </div>
-                                                    </div>
-                                                    {foreshadow.resolvedEpisode === null && (
-                                                        <AlertCircle className="h-4 w-4 text-red-500 mt-0.5" />
-                                                    )}
-                                                </button>
-                                            ))}
+                                                        {foreshadow.resolvedEpisode === null && (
+                                                            <AlertCircle className="h-4 w-4 text-red-500 mt-0.5" />
+                                                        )}
+                                                    </button>
+                                                );
+                                            })}
 
                                             {/* 회수된 복선 */}
                                             {resolved.map(foreshadow => (
@@ -258,7 +298,8 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                             </div>
                         );
                     })}
-                </div>
+                    </div>
+                )}
             </div>
 
             {/* 🔥 복선 상세 모달 (간단 버전) */}

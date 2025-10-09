@@ -28,6 +28,7 @@ export interface ProjectEditorState {
     tabs: EditorTab[];
     activeTabId: string;
     nextTabOrder: number;
+    tabHistory: string[];  // 🔥 Chrome-style: MRU (Most Recently Used) 탭 히스토리
 }
 
 export interface ProjectEditorStateActions {
@@ -60,6 +61,22 @@ export interface ProjectEditorStateActions {
     setActiveTab: (tabId: string) => void;
     updateTab: (tabId: string, updates: Partial<EditorTab>) => void;
     markAllTabsAsSaved: () => void;
+}
+
+// 🔥 Chrome-style: 히스토리에서 다음 활성 탭 찾기
+function findNextActiveTab(history: string[], tabs: EditorTab[]): string {
+    // 1. 히스토리에서 존재하는 탭 찾기
+    for (const historyTabId of history) {
+        if (tabs.find(t => t.id === historyTabId)) {
+            Logger.debug('TAB_HISTORY', 'Found valid tab in history', { historyTabId });
+            return historyTabId;
+        }
+    }
+    
+    // 2. 히스토리에 없으면 첫 번째 탭 반환
+    const firstTabId = tabs[0]?.id || 'main';
+    Logger.debug('TAB_HISTORY', 'No valid history, using first tab', { firstTabId });
+    return firstTabId;
 }
 
 export class ProjectEditorStateService {
@@ -108,6 +125,7 @@ export class ProjectEditorStateService {
             ],
             activeTabId: 'main',
             nextTabOrder: 1,
+            tabHistory: [],  // 🔥 초기에는 히스토리 없음
         };
     }
 
@@ -224,30 +242,60 @@ export class ProjectEditorStateService {
                 setState(prev => {
                     const newTab: EditorTab = { ...tab, order: prev.nextTabOrder };
                     const newTabs = [...prev.tabs, newTab];
-                    Logger.debug('PROJECT_EDITOR_STATE', 'Tab added', { tab: newTab });
+                    
+                    // 🔥 Chrome-style: 새 탭 생성 시 현재 활성 탭을 히스토리에 추가
+                    let newHistory = prev.tabHistory.filter(id => id !== tab.id);
+                    if (prev.activeTabId && prev.activeTabId !== tab.id) {
+                        newHistory.unshift(prev.activeTabId);
+                    }
+                    newHistory = newHistory.slice(0, 10);
+
+                    Logger.debug('PROJECT_EDITOR_STATE', 'Tab added', { 
+                        tab: newTab,
+                        previousTab: prev.activeTabId,
+                        historyLength: newHistory.length 
+                    });
 
                     return {
                         ...prev,
                         tabs: newTabs,
                         nextTabOrder: prev.nextTabOrder + 1,
-                        activeTabId: tab.id
+                        activeTabId: tab.id,
+                        tabHistory: newHistory
                     };
                 });
             },
 
             removeTab: (tabId: string) => {
                 setState(prev => {
-                    const newTabs = prev.tabs.filter(tab => tab.id !== tabId);
-                    const newActiveTabId = prev.activeTabId === tabId
-                        ? (newTabs.length > 0 ? newTabs[0]?.id || 'main' : 'main')
-                        : prev.activeTabId;
+                    // 🔥 마지막 탭은 닫을 수 없음 (최소 1개 유지)
+                    if (prev.tabs.length <= 1) {
+                        Logger.warn('PROJECT_EDITOR_STATE', 'Cannot close last tab', { tabId });
+                        return prev;
+                    }
 
-                    Logger.debug('PROJECT_EDITOR_STATE', 'Tab removed', { tabId, newActiveTabId });
+                    const newTabs = prev.tabs.filter(tab => tab.id !== tabId);
+                    
+                    // 🔥 Chrome-style: 닫는 탭이 활성 탭이면 히스토리에서 다음 탭 찾기
+                    let newActiveTabId = prev.activeTabId;
+                    if (prev.activeTabId === tabId) {
+                        newActiveTabId = findNextActiveTab(prev.tabHistory, newTabs);
+                    }
+
+                    // 히스토리에서도 제거
+                    const newHistory = prev.tabHistory.filter(id => id !== tabId);
+
+                    Logger.debug('PROJECT_EDITOR_STATE', 'Tab removed', { 
+                        removedTabId: tabId, 
+                        newActiveTabId,
+                        historyLength: newHistory.length 
+                    });
 
                     return {
                         ...prev,
                         tabs: newTabs,
-                        activeTabId: newActiveTabId
+                        activeTabId: newActiveTabId,
+                        tabHistory: newHistory
                     };
                 });
             },
@@ -259,12 +307,25 @@ export class ProjectEditorStateService {
                         isActive: tab.id === tabId
                     }));
 
-                    Logger.debug('PROJECT_EDITOR_STATE', 'Active tab changed', { tabId });
+                    // 🔥 Chrome-style: 현재 활성 탭을 히스토리에 추가
+                    let newHistory = prev.tabHistory.filter(id => id !== tabId);
+                    if (prev.activeTabId && prev.activeTabId !== tabId) {
+                        newHistory.unshift(prev.activeTabId);
+                    }
+                    // 최대 10개까지만 보관
+                    newHistory = newHistory.slice(0, 10);
+
+                    Logger.debug('PROJECT_EDITOR_STATE', 'Active tab changed', { 
+                        tabId, 
+                        previousTab: prev.activeTabId,
+                        historyLength: newHistory.length 
+                    });
 
                     return {
                         ...prev,
                         tabs: updatedTabs,
-                        activeTabId: tabId
+                        activeTabId: tabId,
+                        tabHistory: newHistory
                     };
                 });
             },

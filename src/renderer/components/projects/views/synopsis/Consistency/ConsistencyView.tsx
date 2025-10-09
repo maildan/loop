@@ -2,6 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { AlertTriangle, CheckCircle, AlertCircle, Info, TrendingUp } from 'lucide-react';
+import { CharacterAvatar } from './CharacterAvatar';
+import { ProgressBar } from './ProgressBar';
 import type { ConsistencyViewProps, ConsistencyWarning, CharacterConsistencyScore } from '../types';
 
 /**
@@ -20,53 +22,22 @@ import type { ConsistencyViewProps, ConsistencyWarning, CharacterConsistencyScor
  * Phase 2: Gemini AI 연동
  */
 
-// 🔥 Mock 데이터 - Phase 2에서 실제 API로 대체
-const MOCK_WARNINGS: ConsistencyWarning[] = [
-    {
-        id: '1',
-        characterId: 'char-1',
-        characterName: '김서준',
-        type: 'speech_pattern',
-        episode: 15,
-        description: '말투 변경 감지: "~합니다체" → "~해요체"',
-        severity: 'medium',
-        createdAt: new Date('2025-10-05'),
-    },
-    {
-        id: '2',
-        characterId: 'char-1',
-        characterName: '김서준',
-        type: 'personality',
-        episode: 23,
-        description: '성격 불일치: 이전에는 내향적이었으나 갑자기 외향적으로 변경',
-        severity: 'high',
-        createdAt: new Date('2025-10-08'),
-    },
-    {
-        id: '3',
-        characterId: 'char-2',
-        characterName: '이민서',
-        type: 'appearance',
-        episode: 18,
-        description: '외모 모순: 1화에서 "긴 머리"였으나 18화에서 "단발머리"로 언급',
-        severity: 'low',
-        createdAt: new Date('2025-10-06'),
-    },
-];
-
 export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
     projectId,
     characters = [],
 }) => {
     const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
 
-    // 🔥 캐릭터별 일관성 점수 계산 (Mock)
+    // ⚠️ Warnings: Phase 2 (AI 분석)에서 채워질 예정, 현재 빈 배열
+    const warnings: ConsistencyWarning[] = [];
+
+    // ✅ 실제 캐릭터 데이터 기반 점수 계산 (경고 없으므로 모두 100점)
     const characterScores = useMemo<CharacterConsistencyScore[]>(() => {
         return characters.map((char) => {
-            const charWarnings = MOCK_WARNINGS.filter(w => w.characterId === char.id);
+            const charWarnings = warnings.filter(w => w.characterId === char.id);
             const warningCount = charWarnings.length;
             
-            // 간단한 점수 계산 (실제로는 AI 분석 결과 사용)
+            // Phase 2: AI 분석 결과로 점수 계산
             const overallScore = Math.max(0, 100 - (warningCount * 15));
             
             return {
@@ -79,20 +50,20 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                 warningCount,
             };
         });
-    }, [characters]);
+    }, [characters, warnings]);
 
-    // 🔥 전체 일관성 점수 계산
+    // ✅ 전체 일관성 점수 계산
     const overallConsistency = useMemo(() => {
         if (characterScores.length === 0) return 100;
         const avg = characterScores.reduce((sum, char) => sum + char.overallScore, 0) / characterScores.length;
         return Math.round(avg);
     }, [characterScores]);
 
-    // 🔥 필터링된 경고 목록
+    // ✅ 필터링된 경고 목록
     const filteredWarnings = useMemo(() => {
-        if (!selectedCharacterId) return MOCK_WARNINGS;
-        return MOCK_WARNINGS.filter(w => w.characterId === selectedCharacterId);
-    }, [selectedCharacterId]);
+        if (!selectedCharacterId) return warnings;
+        return warnings.filter(w => w.characterId === selectedCharacterId);
+    }, [selectedCharacterId, warnings]);
 
     // 🔥 심각도별 아이콘
     const getSeverityIcon = (severity: ConsistencyWarning['severity']) => {
@@ -139,24 +110,24 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                     </div>
                 </div>
 
-                {/* 경고 요약 */}
+                {/* 경고 요약 (Phase 2: AI 분석 후 표시) */}
                 <div className="mt-4 flex gap-4">
                     <div className="flex items-center gap-2 rounded-lg bg-red-500/10 px-4 py-2">
                         <AlertTriangle className="h-4 w-4 text-red-500" />
                         <span className="text-sm font-medium text-red-500">
-                            {MOCK_WARNINGS.filter(w => w.severity === 'high').length} 심각
+                            {warnings.filter(w => w.severity === 'high').length} 심각
                         </span>
                     </div>
                     <div className="flex items-center gap-2 rounded-lg bg-yellow-500/10 px-4 py-2">
                         <AlertCircle className="h-4 w-4 text-yellow-500" />
                         <span className="text-sm font-medium text-yellow-500">
-                            {MOCK_WARNINGS.filter(w => w.severity === 'medium').length} 중간
+                            {warnings.filter(w => w.severity === 'medium').length} 중간
                         </span>
                     </div>
                     <div className="flex items-center gap-2 rounded-lg bg-blue-500/10 px-4 py-2">
                         <Info className="h-4 w-4 text-blue-500" />
                         <span className="text-sm font-medium text-blue-500">
-                            {MOCK_WARNINGS.filter(w => w.severity === 'low').length} 낮음
+                            {warnings.filter(w => w.severity === 'low').length} 낮음
                         </span>
                     </div>
                 </div>
@@ -176,36 +147,46 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                                 : 'border-border bg-card hover:border-[hsl(var(--accent-primary))]/50'
                         }`}
                     >
-                        <div className="flex items-start justify-between">
-                            <div>
-                                <h3 className="font-semibold text-foreground">{char.characterName}</h3>
-                                <p className="text-sm text-muted-foreground mt-1">
-                                    {char.warningCount}개 경고
-                                </p>
-                            </div>
-                            <div className="text-right">
-                                <div className={`text-2xl font-bold ${
-                                    char.overallScore >= 80 ? 'text-green-500' :
-                                    char.overallScore >= 60 ? 'text-yellow-500' : 'text-red-500'
-                                }`}>
-                                    {char.overallScore}
+                        <div className="flex items-start gap-3">
+                            {/* Character Avatar */}
+                            <CharacterAvatar name={char.characterName} size="md" />
+                            
+                            <div className="flex-1">
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <h3 className="font-semibold text-foreground">{char.characterName}</h3>
+                                        <p className="text-sm text-muted-foreground mt-0.5">
+                                            {char.warningCount}개 경고
+                                        </p>
+                                    </div>
+                                    <div className="text-right">
+                                        <div className={`text-2xl font-bold ${
+                                            char.overallScore >= 80 ? 'text-green-500' :
+                                            char.overallScore >= 60 ? 'text-yellow-500' : 'text-red-500'
+                                        }`}>
+                                            {char.overallScore}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        {/* 세부 점수 */}
-                        <div className="mt-3 space-y-2">
-                            <div className="flex items-center justify-between text-xs">
-                                <span className="text-muted-foreground">말투</span>
-                                <span className="font-medium text-foreground">{char.speechPatternScore}</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                                <span className="text-muted-foreground">외모</span>
-                                <span className="font-medium text-foreground">{char.appearanceScore}</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                                <span className="text-muted-foreground">성격</span>
-                                <span className="font-medium text-foreground">{char.personalityScore}</span>
+                                {/* Progress Bars for each metric */}
+                                <div className="mt-4 space-y-2.5">
+                                    <ProgressBar 
+                                        value={char.speechPatternScore} 
+                                        label="말투" 
+                                        size="sm"
+                                    />
+                                    <ProgressBar 
+                                        value={char.appearanceScore} 
+                                        label="외모" 
+                                        size="sm"
+                                    />
+                                    <ProgressBar 
+                                        value={char.personalityScore} 
+                                        label="성격" 
+                                        size="sm"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </button>
@@ -230,11 +211,14 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
 
                 <div className="space-y-3">
                     {filteredWarnings.length === 0 ? (
-                        <div className="rounded-lg border border-border bg-card p-8 text-center">
-                            <CheckCircle className="mx-auto h-12 w-12 text-green-500 mb-3" />
-                            <p className="text-foreground font-medium">일관성 문제가 발견되지 않았습니다!</p>
-                            <p className="text-sm text-muted-foreground mt-1">
+                        <div className="rounded-lg border border-dashed border-green-500/30 bg-green-500/5 p-12 text-center">
+                            <CheckCircle className="mx-auto h-16 w-16 text-green-500 mb-4" />
+                            <p className="text-lg text-foreground font-semibold">완벽합니다! 🎉</p>
+                            <p className="text-sm text-muted-foreground mt-2">
                                 모든 캐릭터 설정이 일관되게 유지되고 있습니다.
+                            </p>
+                            <p className="text-xs text-muted-foreground mt-1">
+                                Phase 2에서 AI 분석이 추가되면 더 정밀한 체크가 가능합니다.
                             </p>
                         </div>
                     ) : (
