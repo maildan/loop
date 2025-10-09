@@ -26,6 +26,7 @@ import { IdeaView } from '../../views/idea';
 import { Logger } from '../../../../../shared/logger';
 import { ProjectStructure } from '../../../../../shared/types';
 import { useStructureStore } from '../../../../stores/useStructureStore';
+import { EditorTab } from '../../../../../shared/editor';
 
 // 🔥 모듈화된 hooks 및 services
 import { useProjectData } from '../../hooks/useProjectData';
@@ -229,30 +230,8 @@ export const ProjectEditor = memo(function ProjectEditor({
         }
     }, [sidebarCollapsed, state.collapsed, actions]);
 
-    // 🔥 Universal Tab System: 프로젝트 로드 시 기본 탭 생성
-    const tabsInitializedRef = useRef(false);
-    useEffect(() => {
-        if (projectId && !tabsInitializedRef.current && state.tabs.length === 1) {
-            // 기본 탭 (main)만 있을 때 추가 탭들을 생성
-            const defaultTabs = [
-                { id: 'synopsis', title: '시놉시스', type: 'synopsis' as const, content: '' },
-                { id: 'characters', title: '인물', type: 'characters' as const, content: '' },
-                { id: 'structure', title: '구조', type: 'structure' as const, content: '' },
-                { id: 'ideas', title: '아이디어', type: 'ideas' as const, content: '' },
-                { id: 'notes', title: '노트', type: 'notes' as const, content: '' },
-            ];
-
-            defaultTabs.forEach(tab => {
-                actions.addTab({ ...tab, isActive: false });
-            });
-
-            tabsInitializedRef.current = true;
-            Logger.info('PROJECT_EDITOR', 'Default tabs initialized', { 
-                projectId, 
-                totalTabs: state.tabs.length + defaultTabs.length 
-            });
-        }
-    }, [projectId, state.tabs.length, actions]);
+    // 🔥 Chrome 스타일: 초기에는 메인 탭만 표시
+    // 사용자가 사이드바에서 클릭할 때마다 해당 탭이 생성됨
 
     // 🎯 Phase 14-D: Performance optimization with useMemo
     // ✅ ALL hooks MUST be declared BEFORE conditional returns (React Hooks Rules)
@@ -495,25 +474,28 @@ export const ProjectEditor = memo(function ProjectEditor({
         <ProjectEditorLayout.Container className="relative overflow-x-hidden">
             {/* 🔥 헤더 + 탭바를 하나의 스티키 영역으로 구성하여 안정적인 레이어링 확보 */}
             <div className="sticky top-0 z-[1200] flex flex-col bg-[color:hsl(var(--card))] transition-colors duration-200 shadow-[var(--shadow-sm,0_10px_20px_rgba(15,23,42,0.08))]">
-                <ProjectEditorLayout.Header className="relative z-[1500] min-h-[3.5rem] shadow-none">
-                    <ProjectHeader
-                        title={projectData?.title || '프로젝트'}
-                        onTitleChange={(title) => {
-                            projectData?.setTitle(title);
-                            Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
-                        }}
-                        onBack={() => {
-                            Logger.debug('PROJECT_EDITOR', 'Back button clicked');
-                            // /projects로 이동
-                            if (typeof window !== 'undefined') {
-                                window.location.href = '/projects';
-                            }
-                        }}
-                        editor={editorInstance}
-                        sidebarCollapsed={isSidebarCollapsed}
-                        onToggleSidebar={toggleSidebar}
-                    />
-                </ProjectEditorLayout.Header>
+                {/* 🔥 ProjectHeader - 글쓰기 탭일 때만 표시 (Chrome 스타일) */}
+                {state.currentView === 'write' && (
+                    <ProjectEditorLayout.Header className="relative z-[1500] min-h-[3.5rem] shadow-none">
+                        <ProjectHeader
+                            title={projectData?.title || '프로젝트'}
+                            onTitleChange={(title) => {
+                                projectData?.setTitle(title);
+                                Logger.debug('PROJECT_EDITOR', 'Title changed', { title });
+                            }}
+                            onBack={() => {
+                                Logger.debug('PROJECT_EDITOR', 'Back button clicked');
+                                // /projects로 이동
+                                if (typeof window !== 'undefined') {
+                                    window.location.href = '/projects';
+                                }
+                            }}
+                            editor={editorInstance}
+                            sidebarCollapsed={isSidebarCollapsed}
+                            onToggleSidebar={toggleSidebar}
+                        />
+                    </ProjectEditorLayout.Header>
+                )}
 
                 {/* 🔥 EditorTabBar - 헤더 바로 아래에 배치하여 상단에서 항상 노출 (Universal Tab System) */}
                 <div className="relative overflow-hidden backdrop-blur-sm transition-all duration-200 border-b z-[1300] h-12 bg-[color:hsl(var(--muted))]/85 border-[color:hsl(var(--border))] opacity-100">
@@ -608,36 +590,65 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 projectId={projectId}
                                 currentView={state.currentView}
                                 onViewChange={(view) => {
-                                    // 🔥 Universal Tab System: hover sidebar도 탭 전환 지원
+                                    // 🔥 Chrome 스타일: hover sidebar에서도 탭 생성/활성화
                                     actions.setCurrentView(view);
                                     
                                     let targetTabId: string | undefined;
+                                    let tabTitle: string | undefined;
+                                    let tabType: EditorTab['type'] | undefined;
+                                    
                                     switch (view) {
                                         case 'write':
                                             targetTabId = 'main';
                                             break;
                                         case 'synopsis':
                                             targetTabId = 'synopsis';
+                                            tabTitle = '시놉시스';
+                                            tabType = 'synopsis';
                                             break;
                                         case 'characters':
                                             targetTabId = 'characters';
+                                            tabTitle = '인물';
+                                            tabType = 'characters';
                                             break;
                                         case 'structure':
                                             targetTabId = 'structure';
+                                            tabTitle = '구조';
+                                            tabType = 'structure';
                                             break;
                                         case 'notes':
                                             targetTabId = 'notes';
+                                            tabTitle = '노트';
+                                            tabType = 'notes';
                                             break;
                                         case 'idea':
                                             targetTabId = 'ideas';
+                                            tabTitle = '아이디어';
+                                            tabType = 'ideas';
                                             break;
                                     }
                                     
-                                    if (targetTabId && state.tabs.some(t => t.id === targetTabId)) {
+                                    if (!targetTabId) return;
+                                    
+                                    const existingTab = state.tabs.find(t => t.id === targetTabId);
+                                    if (existingTab) {
                                         actions.setActiveTab(targetTabId);
-                                        Logger.info('PROJECT_SIDEBAR_HOVER', 'View changed, tab activated', { 
+                                        Logger.info('PROJECT_SIDEBAR_HOVER', 'Existing tab activated', { 
                                             view, 
                                             targetTabId 
+                                        });
+                                    } else if (tabTitle && tabType) {
+                                        actions.addTab({
+                                            id: targetTabId,
+                                            title: tabTitle,
+                                            type: tabType,
+                                            isActive: true,
+                                            content: ''
+                                        });
+                                        Logger.info('PROJECT_SIDEBAR_HOVER', 'New tab created', { 
+                                            view, 
+                                            targetTabId,
+                                            tabTitle 
                                         });
                                     }
                                 }}
@@ -677,38 +688,69 @@ export const ProjectEditor = memo(function ProjectEditor({
                         projectId={projectId}
                         currentView={state.currentView}
                         onViewChange={(view) => {
-                            // 🔥 Universal Tab System: view 변경 시 해당 탭으로 전환
+                            // 🔥 Chrome 스타일: 탭이 없으면 생성, 있으면 활성화
                             actions.setCurrentView(view);
                             
-                            // 뷰에 맞는 탭 ID 찾기
+                            // 뷰에 맞는 탭 ID와 정보 정의
                             let targetTabId: string | undefined;
+                            let tabTitle: string | undefined;
+                            let tabType: EditorTab['type'] | undefined;
+                            
                             switch (view) {
                                 case 'write':
                                     targetTabId = 'main';
                                     break;
                                 case 'synopsis':
                                     targetTabId = 'synopsis';
+                                    tabTitle = '시놉시스';
+                                    tabType = 'synopsis';
                                     break;
                                 case 'characters':
                                     targetTabId = 'characters';
+                                    tabTitle = '인물';
+                                    tabType = 'characters';
                                     break;
                                 case 'structure':
                                     targetTabId = 'structure';
+                                    tabTitle = '구조';
+                                    tabType = 'structure';
                                     break;
                                 case 'notes':
                                     targetTabId = 'notes';
+                                    tabTitle = '노트';
+                                    tabType = 'notes';
                                     break;
                                 case 'idea':
                                     targetTabId = 'ideas';
+                                    tabTitle = '아이디어';
+                                    tabType = 'ideas';
                                     break;
                             }
                             
-                            // 탭이 존재하면 활성화
-                            if (targetTabId && state.tabs.some(t => t.id === targetTabId)) {
+                            if (!targetTabId) return;
+                            
+                            // 탭이 이미 존재하면 활성화
+                            const existingTab = state.tabs.find(t => t.id === targetTabId);
+                            if (existingTab) {
                                 actions.setActiveTab(targetTabId);
-                                Logger.info('PROJECT_SIDEBAR', 'View changed, tab activated', { 
+                                Logger.info('PROJECT_SIDEBAR', 'Existing tab activated', { 
                                     view, 
                                     targetTabId 
+                                });
+                            } 
+                            // 탭이 없으면 새로 생성
+                            else if (tabTitle && tabType) {
+                                actions.addTab({
+                                    id: targetTabId,
+                                    title: tabTitle,
+                                    type: tabType,
+                                    isActive: true,
+                                    content: ''
+                                });
+                                Logger.info('PROJECT_SIDEBAR', 'New tab created', { 
+                                    view, 
+                                    targetTabId,
+                                    tabTitle 
                                 });
                             }
                         }}

@@ -78,12 +78,14 @@ const SIDEBAR_STYLES = {
     scrollArea: 'flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar',
 } as const;
 
-// 🔥 메뉴 아이템 정의 (4개 탭으로 단순화)
+// 🔥 메뉴 아이템 정의 (Universal Tab System - Chrome 스타일)
 const MENU_ITEMS = [
     { id: 'write', label: '글쓰기', icon: Edit3 },
     { id: 'structure', label: '구조', icon: FileText },
     { id: 'characters', label: '인물', icon: Users },
+    { id: 'synopsis', label: '시놉시스', icon: Target },
     { id: 'idea', label: '아이디어', icon: Lightbulb },
+    { id: 'notes', label: '노트', icon: BookOpen },
 ];
 
 export const ProjectSidebar = memo(function ProjectSidebar({
