@@ -87,7 +87,6 @@ class PrismaService {
         // - process.resourcesPath는 Electron이 제공하는 신뢰할 수 있는 경로
         // - 사용자 입력이 개입하지 않는 고정된 패턴
         // nosemgrep: javascript.lang.security.audit.unsafe-dynamic-method-exec
-        // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
         const prismaModule = require(indexPath);
         PrismaClientConstructor = prismaModule.PrismaClient;
       } else {
