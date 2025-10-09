@@ -4,8 +4,9 @@ import React, { useState } from 'react';
 import type { DashboardViewProps, TabMode, TabModeConfig } from './types';
 import { DashboardView } from './Dashboard/DashboardView';
 import { ScheduleView } from './Schedule/ScheduleView';
+import { StatisticsView } from './Statistics/StatisticsView';
 import { QuickLogModal } from './QuickLogModal';
-import { LayoutDashboard, List, Network, Calendar, Brain, TrendingUp } from 'lucide-react';
+import { LayoutDashboard, List, Network, Calendar, TrendingUp } from 'lucide-react';
 
 /**
  * 🇰🇷 KoreanSynopsisView - 한국 웹소설 특화 시놉시스 뷰
@@ -92,23 +93,10 @@ export const KoreanSynopsisView: React.FC<DashboardViewProps> = ({
                 )}
 
                 {activeTab === 'statistics' && (
-                    <div className="flex h-full items-center justify-center text-center">
-                        <div>
-                            <TrendingUp className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                            <p className="text-lg font-semibold text-foreground mb-2">
-                                📊 플랫폼 성과 통계
-                            </p>
-                            <p className="text-sm text-muted-foreground mb-4">
-                                조회수, 수익, 순위 등 플랫폼별 성과를 한눈에 확인하세요.
-                            </p>
-                            <button
-                                onClick={() => setIsQuickLogOpen(true)}
-                                className="rounded-lg bg-[hsl(var(--accent-primary))] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
-                            >
-                                ⚡ Quick Log 시작하기
-                            </button>
-                        </div>
-                    </div>
+                    <StatisticsView
+                        projectId={projectId}
+                        onQuickLogClick={() => setIsQuickLogOpen(true)}
+                    />
                 )}
 
                 {activeTab === 'structure' && (
