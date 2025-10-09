@@ -83,6 +83,7 @@ export const DEFAULT_SETTINGS: SettingsSchema = {
     sidebarPosition: 'left',
     compactMode: false,
     showStatusBar: true,
+    showShortcutHelp: true, // 단축키 도움말 표시
 
     // 🔥 Zen Browser 스타일 UI 컨트롤 기본값
     sidebarCollapsed: false,

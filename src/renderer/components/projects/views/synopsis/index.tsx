@@ -2,7 +2,6 @@
 
 // 🔥 한국 웹소설 Synopsis 모듈 통합 export
 export { SynopsisView } from './SynopsisView';
-export { SynopsisHeader } from './SynopsisHeader';
 export { SynopsisContent } from './SynopsisContent';
 
 // 🔥 Korean Web Novel Synopsis View

@@ -1,9 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TabMode, TabModeConfig, DashboardViewProps } from './types';
-import { LayoutDashboard, List, Network, Sparkles } from 'lucide-react';
+import type { DashboardViewProps, TabMode, TabModeConfig } from './types';
 import { DashboardView } from './Dashboard/DashboardView';
+import { ScheduleView } from './Schedule/ScheduleView';
+import { QuickLogModal } from './QuickLogModal';
+import { LayoutDashboard, List, Network, Calendar, Brain, TrendingUp } from 'lucide-react';
 
 /**
  * 🇰🇷 KoreanSynopsisView - 한국 웹소설 특화 시놉시스 뷰
@@ -17,8 +19,9 @@ import { DashboardView } from './Dashboard/DashboardView';
 const TAB_CONFIGS: TabModeConfig[] = [
     { id: 'dashboard', name: '대시보드', icon: LayoutDashboard },
     { id: 'episodes', name: '회차 관리', icon: List },
+    { id: 'schedule', name: '연재 관리', icon: Calendar },
+    { id: 'statistics', name: '통계', icon: TrendingUp },
     { id: 'structure', name: '5막 구조', icon: Network },
-    { id: 'analysis', name: 'AI 분석', icon: Sparkles },
 ];
 
 export const KoreanSynopsisView: React.FC<DashboardViewProps> = ({
@@ -29,6 +32,7 @@ export const KoreanSynopsisView: React.FC<DashboardViewProps> = ({
     content = '',
 }) => {
     const [activeTab, setActiveTab] = useState<TabMode>('dashboard');
+    const [isQuickLogOpen, setIsQuickLogOpen] = useState(false);
 
     return (
         <div className="flex h-full flex-col bg-background text-foreground">
@@ -83,6 +87,30 @@ export const KoreanSynopsisView: React.FC<DashboardViewProps> = ({
                     </div>
                 )}
 
+                {activeTab === 'schedule' && (
+                    <ScheduleView projectId={projectId} />
+                )}
+
+                {activeTab === 'statistics' && (
+                    <div className="flex h-full items-center justify-center text-center">
+                        <div>
+                            <TrendingUp className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
+                            <p className="text-lg font-semibold text-foreground mb-2">
+                                📊 플랫폼 성과 통계
+                            </p>
+                            <p className="text-sm text-muted-foreground mb-4">
+                                조회수, 수익, 순위 등 플랫폼별 성과를 한눈에 확인하세요.
+                            </p>
+                            <button
+                                onClick={() => setIsQuickLogOpen(true)}
+                                className="rounded-lg bg-[hsl(var(--accent-primary))] px-4 py-2 text-sm font-medium text-white hover:opacity-90"
+                            >
+                                ⚡ Quick Log 시작하기
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 {activeTab === 'structure' && (
                     <div className="flex h-full items-center justify-center text-center">
                         <div>
@@ -96,21 +124,18 @@ export const KoreanSynopsisView: React.FC<DashboardViewProps> = ({
                         </div>
                     </div>
                 )}
-
-                {activeTab === 'analysis' && (
-                    <div className="flex h-full items-center justify-center text-center">
-                        <div>
-                            <Sparkles className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                            <p className="text-lg font-semibold text-foreground mb-2">
-                                ✨ AI 분석
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                AI 기반 스토리 분석 기능이 곧 추가됩니다.
-                            </p>
-                        </div>
-                    </div>
-                )}
             </div>
+
+            {/* QuickLogModal */}
+            <QuickLogModal
+                projectId={projectId}
+                isOpen={isQuickLogOpen}
+                onClose={() => setIsQuickLogOpen(false)}
+                onSuccess={() => {
+                    setIsQuickLogOpen(false);
+                    // TODO: 통계 데이터 새로고침
+                }}
+            />
         </div>
     );
 };

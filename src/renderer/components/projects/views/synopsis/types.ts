@@ -11,7 +11,7 @@ export interface SynopsisViewProps {
 }
 
 // 🔥 새로운 한국 웹소설 Synopsis 탭 모드
-export type TabMode = 'dashboard' | 'episodes' | 'structure' | 'analysis';
+export type TabMode = 'dashboard' | 'episodes' | 'schedule' | 'statistics' | 'structure';
 
 export interface DashboardViewProps {
     projectId: string;
@@ -19,6 +19,10 @@ export interface DashboardViewProps {
     characters?: ProjectCharacter[];
     notes?: ProjectNote[];
     content?: string;
+}
+
+export interface ScheduleViewProps {
+    projectId: string;
 }
 
 export interface TabModeConfig {

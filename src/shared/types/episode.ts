@@ -116,6 +116,10 @@ export interface EpisodeFilterOptions {
   hasCliffhanger?: boolean;
   minWordCount?: number;
   maxWordCount?: number;
+  publishedAfter?: Date;
+  publishedBefore?: Date;
+  limit?: number;
+  offset?: number;
 }
 
 /**
@@ -127,6 +131,8 @@ export type EpisodeSortOrder = 'asc' | 'desc';
 export interface EpisodeSortOptions {
   sortBy: EpisodeSortBy;
   order: EpisodeSortOrder;
+  field?: EpisodeSortBy; // legacy 호환성
+  direction?: EpisodeSortOrder; // legacy 호환성
 }
 
 /**

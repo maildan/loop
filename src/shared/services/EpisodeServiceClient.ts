@@ -1,7 +1,8 @@
 /**
- * 📖 Episode Service - 한국 웹소설 회차 관리 서비스 (렌더러 프로세스)
+ * 📖 Episode Service Client - 한국 웹소설 회차 관리 IPC 클라이언트 (렌더러 프로세스)
  *
  * IPC를 통해 메인 프로세스의 EpisodeService와 통신
+ * Renderer Process에서 사용하는 IPC 래퍼 클래스
  */
 
 import type {
@@ -20,9 +21,11 @@ import type {
 const electronAPI = (window as any).electronAPI;
 
 /**
- * 🔥 Episode Service Class (IPC 버전)
+ * 🔥 Episode Service Client Class (IPC 래퍼)
+ * 
+ * Main Process의 EpisodeService와 구분하기 위해 Client 접미사 사용
  */
-export class EpisodeService {
+export class EpisodeServiceClient {
   /**
    * 회차 생성
    */
@@ -182,5 +185,6 @@ export class EpisodeService {
 }
 
 // ===== INSTANCE EXPORT =====
+// Main Process의 EpisodeService와 구분되는 Client 인스턴스
 
-export const episodeService = new EpisodeService();
+export const episodeServiceClient = new EpisodeServiceClient();

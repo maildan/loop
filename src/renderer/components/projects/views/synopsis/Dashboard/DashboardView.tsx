@@ -5,7 +5,7 @@ import { GenreCard } from './GenreCard';
 import { FiveActProgress } from './FiveActProgress';
 import { StatsOverview } from './StatsOverview';
 import { Loader2 } from 'lucide-react';
-import { episodeService } from '../../../../../../shared/services/episodeService';
+import { episodeServiceClient } from '../../../../../../shared/services/EpisodeServiceClient';
 import { KoreanWebNovelAnalyzer } from '../../../../../../shared/narrative/koreanWebNovelAnalyzer';
 import type { FiveActAnalysis, ManuscriptReserves } from '../../../../../../shared/types/episode';
 import type { DashboardViewProps } from '../types';
@@ -38,11 +38,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         setGenreConsistency(synopsisAnalysis.genreConsistency);
 
         // 3. 5막 구조 분석
-        const fiveAct = await episodeService.analyzeFiveActStructure(projectId);
+        const fiveAct = await episodeServiceClient.analyzeFiveActStructure(projectId);
         setFiveActData(fiveAct);
 
         // 4. 비축 현황
-        const manuscriptReserves = await episodeService.getManuscriptReserves(projectId);
+        const manuscriptReserves = await episodeServiceClient.getManuscriptReserves(projectId);
         setReserves(manuscriptReserves);
       } catch (error) {
         console.error('Dashboard 데이터 로딩 실패:', error);

@@ -11,6 +11,7 @@ import { setupProjectIpcHandlers } from './projectIpcHandlers';
 import { setupAIIpcHandlers } from './aiIpcHandlers';
 import { setupFontIpcHandlers } from './fontIpcHandlers';
 import { setupAppIpcHandlers } from './appIpcHandlers';
+import { registerSynopsisStatsHandlers } from './synopsisStatsHandlers';
 
 // #DEBUG: Handlers index entry point
 Logger.debug('HANDLERS_INDEX', 'Handlers index module loaded');
@@ -135,6 +136,20 @@ export class HandlersManager {
           'app:get-user-data-path',
           'app:get-version',
           'app:get-name',
+        ]),
+        this.setupHandler('synopsis-stats', () => registerSynopsisStatsHandlers(), [
+          'synopsis-stats:get-publications',
+          'synopsis-stats:create-publication',
+          'synopsis-stats:delete-publication',
+          'synopsis-stats:create-metric',
+          'synopsis-stats:get-metrics',
+          'synopsis-stats:get-suggestions',
+          'synopsis-stats:get-comparison',
+          'synopsis-stats:get-insights',
+          'synopsis-stats:get-publishers',
+          'synopsis-stats:create-publisher',
+          'synopsis-stats:get-experiments',
+          'synopsis-stats:create-experiment',
         ]),
 
         // this.setupHandler('database', () => setupDatabaseIpcHandlers(), [...]),

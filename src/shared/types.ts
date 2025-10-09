@@ -199,6 +199,20 @@ export interface ElectronAPI {
     onSystemChange: (callback: (shouldUseDarkColors: boolean) => void) => () => void;
   };
 
+  // 📊 Synopsis Statistics API
+  'synopsis-stats:get-publications': (projectId: string) => Promise<any>;
+  'synopsis-stats:create-publication': (data: any) => Promise<any>;
+  'synopsis-stats:delete-publication': (id: string) => Promise<void>;
+  'synopsis-stats:create-metric': (data: any) => Promise<any>;
+  'synopsis-stats:get-metrics': (publicationId: string, dateRange?: any) => Promise<any[]>;
+  'synopsis-stats:get-suggestions': (publicationId: string) => Promise<any>;
+  'synopsis-stats:get-comparison': (projectId: string) => Promise<any[]>;
+  'synopsis-stats:get-insights': (projectId: string) => Promise<any[]>;
+  'synopsis-stats:get-publishers': (projectId: string) => Promise<any[]>;
+  'synopsis-stats:create-publisher': (data: any) => Promise<any>;
+  'synopsis-stats:get-experiments': (projectId: string) => Promise<any[]>;
+  'synopsis-stats:create-experiment': (data: any) => Promise<any>;
+
   // 🐚 Shell API (외부 링크 및 파일 탐색기)
   shell: {
     openExternal: (url: string) => Promise<IpcResponse<boolean>>;

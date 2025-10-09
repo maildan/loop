@@ -137,6 +137,20 @@ const electronAPI: ElectronAPI = {
     showTypingGoal: (progress: number) => ipcRenderer.invoke('notifications:show-typing-goal', progress),
   },
 
+  // 📊 Synopsis Statistics API
+  'synopsis-stats:get-publications': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-publications', projectId),
+  'synopsis-stats:create-publication': (data: any) => ipcRenderer.invoke('synopsis-stats:create-publication', data),
+  'synopsis-stats:delete-publication': (id: string) => ipcRenderer.invoke('synopsis-stats:delete-publication', id),
+  'synopsis-stats:create-metric': (data: any) => ipcRenderer.invoke('synopsis-stats:create-metric', data),
+  'synopsis-stats:get-metrics': (publicationId: string, dateRange?: any) => ipcRenderer.invoke('synopsis-stats:get-metrics', publicationId, dateRange),
+  'synopsis-stats:get-suggestions': (publicationId: string) => ipcRenderer.invoke('synopsis-stats:get-suggestions', publicationId),
+  'synopsis-stats:get-comparison': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-comparison', projectId),
+  'synopsis-stats:get-insights': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-insights', projectId),
+  'synopsis-stats:get-publishers': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-publishers', projectId),
+  'synopsis-stats:create-publisher': (data: any) => ipcRenderer.invoke('synopsis-stats:create-publisher', data),
+  'synopsis-stats:get-experiments': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-experiments', projectId),
+  'synopsis-stats:create-experiment': (data: any) => ipcRenderer.invoke('synopsis-stats:create-experiment', data),
+
   theme: {
     get: async () => {
       const fallbackTheme: Theme = 'light';

@@ -135,7 +135,7 @@ export class EpisodeService {
       skip: filter?.offset || 0,
     });
 
-    return episodes.map(episode => this.toPrismaEpisode(episode));
+    return episodes.map((episode: any) => this.toPrismaEpisode(episode));
   }
 
   /**
@@ -271,9 +271,9 @@ export class EpisodeService {
 
     for (const act of ['introduction', 'rising', 'development', 'climax', 'conclusion'] as FiveActType[]) {
       const range = actRanges[act];
-      const actEpisodes = episodes.filter(e => e.episodeNumber >= range.start && e.episodeNumber <= range.end);
+      const actEpisodes = episodes.filter((e: any) => e.episodeNumber >= range.start && e.episodeNumber <= range.end);
 
-      const currentWordCount = actEpisodes.reduce((sum, e) => sum + e.wordCount, 0);
+      const currentWordCount = actEpisodes.reduce((sum: number, e: any) => sum + e.wordCount, 0);
       const targetWordCount = range.targetPercentage * 0.01 * (totalEpisodes * 5500); // 5500: target word count per episode
       const currentPercentage = totalEpisodes > 0 ? (actEpisodes.length / totalEpisodes) * 100 : 0;
 
@@ -285,7 +285,7 @@ export class EpisodeService {
         currentPercentage,
         targetWordCount: Math.round(targetWordCount),
         currentWordCount,
-        episodes: actEpisodes.map(e => this.toPrismaEpisode(e)),
+        episodes: actEpisodes.map((e: any) => this.toPrismaEpisode(e)),
         isComplete: currentPercentage >= range.targetPercentage * 0.8, // 80% 이상이면 완료로 간주
       });
     }

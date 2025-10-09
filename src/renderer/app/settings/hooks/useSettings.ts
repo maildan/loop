@@ -77,6 +77,7 @@ export function useSettings(): UseSettingsReturn {
       sidebarCollapsed: false,
       showLineNumbers: true,
       showWordCount: true,
+      showShortcutHelp: true, // 단축키 도움말 표시
       // 🔥 Zen Browser 스타일 UI 컨트롤 기본값
       appSidebarCollapsed: false,
       zenMode: false,
