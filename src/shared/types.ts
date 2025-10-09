@@ -213,7 +213,20 @@ export interface ElectronAPI {
   'synopsis-stats:get-experiments': (projectId: string) => Promise<any[]>;
   'synopsis-stats:create-experiment': (data: any) => Promise<any>;
 
-  // 🐚 Shell API (외부 링크 및 파일 탐색기)
+  // � Episode Management API
+  'episode:create': (input: any) => Promise<any>;
+  'episode:get': (id: string) => Promise<any>;
+  'episode:getByNumber': (projectId: string, episodeNumber: number) => Promise<any>;
+  'episode:list': (projectId: string, options?: any) => Promise<any[]>;
+  'episode:update': (id: string, data: any) => Promise<any>;
+  'episode:delete': (id: string) => Promise<void>;
+  'episode:hardDelete': (id: string) => Promise<void>;
+  'episode:publish': (id: string, platforms: string[]) => Promise<any>;
+  'episode:getManuscriptReserves': (projectId: string) => Promise<any>;
+  'episode:analyzeFiveActStructure': (projectId: string) => Promise<any>;
+  'episode:getStats': (projectId: string) => Promise<any>;
+
+  // �🐚 Shell API (외부 링크 및 파일 탐색기)
   shell: {
     openExternal: (url: string) => Promise<IpcResponse<boolean>>;
     showItemInFolder: (fullPath: string) => Promise<IpcResponse<boolean>>;

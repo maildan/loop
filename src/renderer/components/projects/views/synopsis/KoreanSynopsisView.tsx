@@ -34,6 +34,46 @@ export const KoreanSynopsisView: React.FC<DashboardViewProps> = ({
 }) => {
     const [activeTab, setActiveTab] = useState<TabMode>('dashboard');
     const [isQuickLogOpen, setIsQuickLogOpen] = useState(false);
+    const [isProjectSaved, setIsProjectSaved] = useState(false);
+
+    // 🔥 프로젝트 DB 저장 확인 및 자동 저장
+    React.useEffect(() => {
+        const ensureProjectSaved = async () => {
+            try {
+                // 프로젝트 존재 여부 확인
+                const checkResult = await window.electronAPI.projects.getById(projectId);
+                
+                if (!checkResult.success || !checkResult.data) {
+                    console.warn('[Synopsis] Project not found in DB, creating...', projectId);
+                    
+                    // DB에 프로젝트 생성
+                    const createResult = await window.electronAPI.projects.create({
+                        title: '새 프로젝트',
+                        description: '시놉시스를 통해 생성된 프로젝트',
+                        content: content || '',
+                        genre: '기타',
+                        status: 'active',
+                        progress: 0,
+                        wordCount: 0,
+                        author: '사용자'
+                    });
+                    
+                    if (createResult.success) {
+                        console.log('[Synopsis] Project created in DB:', createResult.data);
+                        setIsProjectSaved(true);
+                    } else {
+                        console.error('[Synopsis] Failed to create project:', createResult.error);
+                    }
+                } else {
+                    setIsProjectSaved(true);
+                }
+            } catch (error) {
+                console.error('[Synopsis] Error ensuring project saved:', error);
+            }
+        };
+
+        ensureProjectSaved();
+    }, [projectId, content]);
 
     return (
         <div className="flex h-full flex-col bg-background text-foreground">

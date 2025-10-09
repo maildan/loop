@@ -45,6 +45,29 @@ export class SynopsisStatsService {
   }
 
   async createPublication(data: CreatePublicationDTO): Promise<Publication> {
+    // 프로젝트 존재 여부 확인
+    const projectExists = await this.prisma.project.findUnique({
+      where: { id: data.projectId }
+    });
+
+    if (!projectExists) {
+      throw new Error(`Project with id ${data.projectId} not found. Please save the project first.`);
+    }
+
+    // 중복 플랫폼 확인
+    const existingPub = await this.prisma.publication.findUnique({
+      where: {
+        projectId_platform: {
+          projectId: data.projectId,
+          platform: data.platform
+        }
+      }
+    });
+
+    if (existingPub) {
+      throw new Error(`${data.platform} is already added to this project.`);
+    }
+
     const pub = await this.prisma.publication.create({
       data: {
         projectId: data.projectId,

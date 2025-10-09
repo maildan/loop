@@ -30,7 +30,7 @@ export class EpisodeServiceClient {
    * 회차 생성
    */
   async createEpisode(input: CreateEpisodeInput): Promise<Episode> {
-    const result = await electronAPI.invoke('episode:create', input);
+    const result = await electronAPI['episode:create'](input);
     if (!result.success) {
       throw new Error(result.error || 'Failed to create episode');
     }
@@ -41,7 +41,7 @@ export class EpisodeServiceClient {
    * 회차 조회 (ID)
    */
   async getEpisode(id: string): Promise<Episode | null> {
-    const result = await electronAPI.invoke('episode:get', id);
+    const result = await electronAPI['episode:get'](id);
     if (!result.success) {
       throw new Error(result.error || 'Failed to get episode');
     }
@@ -52,7 +52,7 @@ export class EpisodeServiceClient {
    * 회차 조회 (프로젝트 + 회차 번호)
    */
   async getEpisodeByNumber(projectId: string, episodeNumber: number): Promise<Episode | null> {
-    const result = await electronAPI.invoke('episode:getByNumber', projectId, episodeNumber);
+    const result = await electronAPI['episode:getByNumber'](projectId, episodeNumber);
     if (!result.success) {
       throw new Error(result.error || 'Failed to get episode by number');
     }
@@ -67,7 +67,7 @@ export class EpisodeServiceClient {
     filter?: EpisodeFilterOptions,
     sort?: EpisodeSortOptions
   ): Promise<Episode[]> {
-    const result = await electronAPI.invoke('episode:list', projectId, filter, sort);
+    const result = await electronAPI['episode:list'](projectId, filter, sort);
     if (!result.success) {
       throw new Error(result.error || 'Failed to list episodes');
     }
@@ -78,7 +78,7 @@ export class EpisodeServiceClient {
    * 회차 수정
    */
   async updateEpisode(id: string, input: UpdateEpisodeInput): Promise<Episode> {
-    const result = await electronAPI.invoke('episode:update', id, input);
+    const result = await electronAPI['episode:update'](id, input);
     if (!result.success) {
       throw new Error(result.error || 'Failed to update episode');
     }
@@ -89,7 +89,7 @@ export class EpisodeServiceClient {
    * 회차 삭제 (소프트 삭제)
    */
   async deleteEpisode(id: string): Promise<void> {
-    const result = await electronAPI.invoke('episode:delete', id);
+    const result = await electronAPI['episode:delete'](id);
     if (!result.success) {
       throw new Error(result.error || 'Failed to delete episode');
     }
@@ -99,7 +99,7 @@ export class EpisodeServiceClient {
    * 회차 완전 삭제
    */
   async hardDeleteEpisode(id: string): Promise<void> {
-    const result = await electronAPI.invoke('episode:hardDelete', id);
+    const result = await electronAPI['episode:hardDelete'](id);
     if (!result.success) {
       throw new Error(result.error || 'Failed to hard delete episode');
     }
@@ -109,7 +109,7 @@ export class EpisodeServiceClient {
    * 회차 발행
    */
   async publishEpisode(id: string): Promise<Episode> {
-    const result = await electronAPI.invoke('episode:publish', id);
+    const result = await electronAPI['episode:publish'](id);
     if (!result.success) {
       throw new Error(result.error || 'Failed to publish episode');
     }
@@ -120,7 +120,7 @@ export class EpisodeServiceClient {
    * 비축 현황 조회
    */
   async getManuscriptReserves(projectId: string): Promise<ManuscriptReserves> {
-    const result = await electronAPI.invoke('episode:getManuscriptReserves', projectId);
+    const result = await electronAPI['episode:getManuscriptReserves'](projectId);
     if (!result.success) {
       throw new Error(result.error || 'Failed to get manuscript reserves');
     }
@@ -131,7 +131,7 @@ export class EpisodeServiceClient {
    * 5막 구조 분석
    */
   async analyzeFiveActStructure(projectId: string): Promise<FiveActAnalysis[]> {
-    const result = await electronAPI.invoke('episode:analyzeFiveActStructure', projectId);
+    const result = await electronAPI['episode:analyzeFiveActStructure'](projectId);
     if (!result.success) {
       throw new Error(result.error || 'Failed to analyze five-act structure');
     }
@@ -142,7 +142,7 @@ export class EpisodeServiceClient {
    * 회차 통계 조회
    */
   async getEpisodeStats(projectId: string): Promise<EpisodeStats> {
-    const result = await electronAPI.invoke('episode:getStats', projectId);
+    const result = await electronAPI['episode:getStats'](projectId);
     if (!result.success) {
       throw new Error(result.error || 'Failed to get episode stats');
     }

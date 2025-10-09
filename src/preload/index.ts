@@ -151,6 +151,19 @@ const electronAPI: ElectronAPI = {
   'synopsis-stats:get-experiments': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-experiments', projectId),
   'synopsis-stats:create-experiment': (data: any) => ipcRenderer.invoke('synopsis-stats:create-experiment', data),
 
+  // 📝 Episode Management API
+  'episode:create': (input: any) => ipcRenderer.invoke('episode:create', input),
+  'episode:get': (id: string) => ipcRenderer.invoke('episode:get', id),
+  'episode:getByNumber': (projectId: string, episodeNumber: number) => ipcRenderer.invoke('episode:getByNumber', projectId, episodeNumber),
+  'episode:list': (projectId: string, options?: any) => ipcRenderer.invoke('episode:list', projectId, options),
+  'episode:update': (id: string, data: any) => ipcRenderer.invoke('episode:update', id, data),
+  'episode:delete': (id: string) => ipcRenderer.invoke('episode:delete', id),
+  'episode:hardDelete': (id: string) => ipcRenderer.invoke('episode:hardDelete', id),
+  'episode:publish': (id: string, platforms: string[]) => ipcRenderer.invoke('episode:publish', id, platforms),
+  'episode:getManuscriptReserves': (projectId: string) => ipcRenderer.invoke('episode:getManuscriptReserves', projectId),
+  'episode:analyzeFiveActStructure': (projectId: string) => ipcRenderer.invoke('episode:analyzeFiveActStructure', projectId),
+  'episode:getStats': (projectId: string) => ipcRenderer.invoke('episode:getStats', projectId),
+
   theme: {
     get: async () => {
       const fallbackTheme: Theme = 'light';

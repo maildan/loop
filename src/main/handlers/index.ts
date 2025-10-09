@@ -12,6 +12,7 @@ import { setupAIIpcHandlers } from './aiIpcHandlers';
 import { setupFontIpcHandlers } from './fontIpcHandlers';
 import { setupAppIpcHandlers } from './appIpcHandlers';
 import { registerSynopsisStatsHandlers } from './synopsisStatsHandlers';
+import { setupEpisodeIpcHandlers } from './episodeIpcHandlers';
 
 // #DEBUG: Handlers index entry point
 Logger.debug('HANDLERS_INDEX', 'Handlers index module loaded');
@@ -148,6 +149,19 @@ export class HandlersManager {
           'synopsis-stats:get-insights',
           'synopsis-stats:get-publishers',
           'synopsis-stats:create-publisher',
+        ]),
+        this.setupHandler('episode', () => setupEpisodeIpcHandlers(), [
+          'episode:create',
+          'episode:get',
+          'episode:getByNumber',
+          'episode:list',
+          'episode:update',
+          'episode:delete',
+          'episode:hardDelete',
+          'episode:publish',
+          'episode:getManuscriptReserves',
+          'episode:analyzeFiveActStructure',
+          'episode:getStats',
           'synopsis-stats:get-experiments',
           'synopsis-stats:create-experiment',
         ]),

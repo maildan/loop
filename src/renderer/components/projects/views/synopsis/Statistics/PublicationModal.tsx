@@ -66,6 +66,11 @@ export const PublicationModal: React.FC<PublicationModalProps> = ({
       return;
     }
 
+    if (!projectId) {
+      alert('프로젝트 ID가 없습니다. 프로젝트를 먼저 생성해주세요.');
+      return;
+    }
+
     setLoading(true);
     try {
       await window.electronAPI['synopsis-stats:create-publication']({
@@ -82,7 +87,12 @@ export const PublicationModal: React.FC<PublicationModalProps> = ({
       onClose();
     } catch (error) {
       console.error('Failed to create publication:', error);
-      alert('플랫폼 추가 실패: ' + (error as Error).message);
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes('Foreign key constraint')) {
+        alert('프로젝트를 찾을 수 없습니다. 프로젝트를 먼저 생성하거나 저장해주세요.');
+      } else {
+        alert('플랫폼 추가 실패: ' + errorMessage);
+      }
     } finally {
       setLoading(false);
     }
