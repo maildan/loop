@@ -5,6 +5,7 @@ import type { DashboardViewProps, TabMode, TabModeConfig } from './types';
 import { DashboardView } from './Dashboard/DashboardView';
 import { ScheduleView } from './Schedule/ScheduleView';
 import { ConsistencyView } from './Consistency/ConsistencyView';
+import { TimelineView } from './Timeline/TimelineView';
 // ❌ StatisticsView, QuickLogModal removed - deprecated platform statistics
 import { LayoutDashboard, List, Network, Calendar, CheckCircle2, Clock } from 'lucide-react';
 
@@ -144,17 +145,10 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                 )}
 
                 {activeTab === 'timeline' && (
-                    <div className="flex h-full items-center justify-center text-center">
-                        <div>
-                            <Clock className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                            <p className="text-lg font-semibold text-foreground mb-2">
-                                📅 타임라인
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                에피소드 타임라인 및 복선 추적 기능이 곧 추가됩니다.
-                            </p>
-                        </div>
-                    </div>
+                    <TimelineView
+                        projectId={projectId}
+                        notes={notes}
+                    />
                 )}
 
                 {activeTab === 'structure' && (
