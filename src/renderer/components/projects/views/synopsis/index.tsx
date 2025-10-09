@@ -8,8 +8,6 @@ export { SynopsisContent } from './SynopsisContent';
 
 // 🔥 Dashboard 컴포넌트
 export { DashboardView } from './Dashboard/DashboardView';
-export { GenreCard } from './Dashboard/GenreCard';
-export { FiveActProgress } from './Dashboard/FiveActProgress';
 export { StatsOverview } from './Dashboard/StatsOverview';
 
 // 🔥 Consistency 컴포넌트 (Phase 1)

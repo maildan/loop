@@ -53,9 +53,7 @@ model Project {
   aiWorkflows   AIWorkflow[] // 🔥 AI 워크플로우 관계
   aiEvaluations AIEvaluation[] // 🔥 AI 평가 관계
   writerStats   WriterStats[] // 🔥 작가 통계 관계
-  publications  Publication[]        @relation("ProjectPublications") // 📊 플랫폼별 연재 정보
-  publishers    PublisherRelation[]  @relation("ProjectPublishers") // 🏢 출판사 관계
-  experiments   StrategyExperiment[] @relation("ProjectExperiments") // 🧪 전략 실험
+  publications  Publication[]        @relation("ProjectPublications") // 📊 플랫폼별 연재 정보 (간소화)
 
   @@index([userId])
   @@index([status])
@@ -96,23 +94,29 @@ model Episode {
 
 // 👥 프로젝트 등장인물 모델 - 작가용 캐릭터 관리
 model ProjectCharacter {
-  id          String   @id @default(cuid())
-  projectId   String
-  name        String
-  role        String // '주인공' | '조력자' | '적대자' | '엑스트라'
-  description String? // 캐릭터 설명
-  notes       String? // 작가 메모
-  appearance  String? // 외모 설명
-  personality String? // 성격
-  background  String? // 배경 이야기
-  goals       String? // 목표/동기
-  conflicts   String? // 갈등 요소
-  avatar      String? // 아바타 이미지 경로
-  color       String   @default("#3b82f6") // 캐릭터 테마 색상
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String   @id @default(cuid())
+  projectId        String
+  name             String
+  role             String // '주인공' | '조력자' | '적대자' | '엑스트라'
+  description      String? // 캐릭터 설명
+  notes            String? // 작가 메모
+  appearance       String? // 외모 설명
+  personality      String? // 성격
+  background       String? // 배경 이야기
+  goals            String? // 목표/동기
+  conflicts        String? // 갈등 요소
+  avatar           String? // 아바타 이미지 경로
+  color            String   @default("#3b82f6") // 캐릭터 테마 색상
+  sortOrder        Int      @default(0)
+  isActive         Boolean  @default(true)
+  
+  // 🔥 Synopsis 일관성 추적 필드
+  speechPattern    String? // 말투 패턴 ("~합니다체", "~해요체", "반말")
+  firstAppearance  Int? // 첫 등장 회차
+  appearances      Json? // 등장 회차 목록 [1, 5, 7, 12, ...]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   // Relations
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -157,12 +161,18 @@ model ProjectNote {
   projectId  String
   title      String
   content    String
-  type       String   @default("general") // 'general' | 'idea' | 'research' | 'plot' | 'dialogue'
+  type       String   @default("general") // 'general' | 'idea' | 'research' | 'plot' | 'dialogue' | 'foreshadow'
   tags       Json? // 태그 배열
   color      String   @default("#fbbf24") // 메모 색상
   isPinned   Boolean  @default(false)
   isArchived Boolean  @default(false)
   sortOrder  Int      @default(0)
+  
+  // 🔥 Synopsis 복선 추적 필드
+  introducedEpisode Int? // 복선이 소개된 회차
+  resolvedEpisode   Int? // 복선이 회수된 회차 (null = 미회수)
+  importance        String? // 'low' | 'medium' | 'high'
+  
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -495,7 +505,7 @@ model WriterStats {
   @@map("writer_stats")
 }
 
-// 📊 플랫폼별 연재 정보 - Synopsis 통계 핵심
+// 📊 플랫폼별 연재 정보 - Synopsis 간소화 (링크 관리만)
 model Publication {
   id           String    @id @default(cuid())
   projectId    String // 작품 ID
@@ -504,14 +514,12 @@ model Publication {
   startDate    DateTime? // 연재 시작일
   endDate      DateTime? // 연재 종료일
   status       String    @default("ongoing") // "ongoing" | "completed" | "hiatus" | "discontinued"
-  contractType String? // "exclusive" | "non-exclusive" | "revenue_share"
   note         String? // 메모 (플랫폼별 특이사항)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 
   // Relations
-  project Project          @relation("ProjectPublications", fields: [projectId], references: [id], onDelete: Cascade)
-  metrics PlatformMetric[]
+  project Project @relation("ProjectPublications", fields: [projectId], references: [id], onDelete: Cascade)
 
   @@unique([projectId, platform])
   @@index([projectId])
@@ -520,105 +528,10 @@ model Publication {
   @@map("publications")
 }
 
-// 📈 Quick Log 데이터 - 플랫폼 성과 메트릭
-model PlatformMetric {
-  id            String   @id @default(cuid())
-  publicationId String // Publication ID
-  date          DateTime // 측정 날짜
-  views         Int? // 조회수
-  revenue       Float? // 수익 (원화)
-  purchases     Int? // 구매수
-  rank          Int? // 순위
-  rankType      String? // "realtime" | "daily" | "weekly" | "genre"
-  episodeNumber Int? // 해당 회차 (선택적)
-  note          String? // Quick Log 메모
-  isEstimated   Boolean  @default(false) // 추정치 여부
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+// ❌ PlatformMetric 제거: 플랫폼 대시보드 중복, Loop는 창작 과정 관리에 집중
 
-  // Relations
-  publication Publication @relation(fields: [publicationId], references: [id], onDelete: Cascade)
+// ❌ PublisherRelation 제거: 출판사 CRM은 '투고하다' 플랫폼 영역
 
-  @@unique([publicationId, date])
-  @@index([publicationId])
-  @@index([date])
-  @@index([episodeNumber])
-  @@map("platform_metrics")
-}
+// ❌ PublisherFeedback 제거: 출판사 피드백은 '투고하다' 플랫폼 영역
 
-// 🏢 출판사 관계 관리 (CRM)
-model PublisherRelation {
-  id             String    @id @default(cuid())
-  projectId      String // 작품 ID
-  publisherName  String // 출판사명
-  publisherType  String    @default("publisher") // "publisher" | "agency" | "platform_editor"
-  contactDate    DateTime // 최초 컨택일
-  status         String    @default("contacted") // "contacted" | "negotiating" | "contracted" | "rejected" | "pending"
-  contractType   String? // "exclusive" | "non-exclusive" | "option"
-  contract       Json? // 계약 조건 상세
-  advance        Float? // 선인세 (원화)
-  royaltyRate    Float? // 인세율 (%)
-  nextActionDate DateTime? // 다음 액션 예정일
-  note           String? // 메모
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-
-  // Relations
-  project   Project             @relation("ProjectPublishers", fields: [projectId], references: [id], onDelete: Cascade)
-  feedbacks PublisherFeedback[]
-
-  @@index([projectId])
-  @@index([status])
-  @@index([nextActionDate])
-  @@map("publisher_relations")
-}
-
-// 💬 출판사 피드백
-model PublisherFeedback {
-  id         String   @id @default(cuid())
-  relationId String // PublisherRelation ID
-  date       DateTime // 피드백 날짜
-  type       String // "positive" | "negative" | "neutral" | "request"
-  content    String // 피드백 내용
-  actionItem String? // 액션 아이템 (수정 요청 등)
-  isResolved Boolean  @default(false) // 해결 여부
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  // Relations
-  relation PublisherRelation @relation(fields: [relationId], references: [id], onDelete: Cascade)
-
-  @@index([relationId])
-  @@index([date])
-  @@index([isResolved])
-  @@map("publisher_feedbacks")
-}
-
-// 🧪 전략 실험 추적
-model StrategyExperiment {
-  id          String    @id @default(cuid())
-  projectId   String // 작품 ID
-  type        String // "title_change" | "cover_change" | "schedule_change" | "break" | "genre_shift" | "promotion"
-  title       String // 실험 제목
-  description String // 실험 설명
-  hypothesis  String // 가설 ("제목을 바꾸면 유입이 증가할 것")
-  startDate   DateTime // 실험 시작일
-  endDate     DateTime? // 실험 종료일
-  status      String    @default("running") // "planned" | "running" | "completed" | "cancelled"
-  beforeData  Json? // 실험 전 데이터 (평균 조회수, 수익 등)
-  afterData   Json? // 실험 후 데이터
-  results     Json? // 결과 분석
-  conclusion  String? // 결론
-  isPublic    Boolean   @default(false) // 커뮤니티 공유 여부
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
-  // Relations
-  project Project @relation("ProjectExperiments", fields: [projectId], references: [id], onDelete: Cascade)
-
-  @@index([projectId])
-  @@index([type])
-  @@index([status])
-  @@index([startDate])
-  @@map("strategy_experiments")
-}
+// ❌ StrategyExperiment 제거: A/B 테스트는 플랫폼에서 수행

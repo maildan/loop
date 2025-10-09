@@ -11,7 +11,7 @@ export interface SynopsisViewProps {
 }
 
 // 🔥 Synopsis 탭 모드 - "연재 작가의 제2의 뇌"
-export type TabMode = 'dashboard' | 'episodes' | 'schedule' | 'consistency' | 'timeline' | 'structure';
+export type TabMode = 'dashboard' | 'episodes' | 'schedule' | 'consistency' | 'timeline';
 
 export interface DashboardViewProps {
     projectId: string;

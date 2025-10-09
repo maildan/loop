@@ -27,8 +27,7 @@ const TAB_CONFIGS: TabModeConfig[] = [
     { id: 'episodes', name: '회차 관리', icon: List },
     { id: 'schedule', name: '연재 관리', icon: Calendar },
     { id: 'consistency', name: '일관성 체크', icon: CheckCircle2 }, // ✅ Phase 1
-    { id: 'timeline', name: '타임라인', icon: Clock }, // 🔜 Phase 1
-    { id: 'structure', name: '5막 구조', icon: Network },
+    { id: 'timeline', name: '타임라인', icon: Clock }, // ✅ Phase 1
 ];
 
 export const SynopsisView: React.FC<DashboardViewProps> = ({
@@ -150,20 +149,6 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                         projectId={projectId}
                         notes={notes}
                     />
-                )}
-
-                {activeTab === 'structure' && (
-                    <div className="flex h-full items-center justify-center text-center">
-                        <div>
-                            <Network className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                            <p className="text-lg font-semibold text-foreground mb-2">
-                                🎬 5막 구조 시각화
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                도입 → 발단 → 전개 → 절정 → 결말 흐름 시각화가 곧 추가됩니다.
-                            </p>
-                        </div>
-                    </div>
                 )}
             </div>
 

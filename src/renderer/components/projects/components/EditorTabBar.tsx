@@ -191,11 +191,16 @@ export const EditorTabBar = memo(function EditorTabBar({
         onTabClose(tabId);
     }, [onTabClose]);
 
-    // 🔥 탭 타입에 따른 아이콘 반환
+    // 🔥 탭 타입에 따른 아이콘 반환 - Universal Tab System
     const getTabIcon = useCallback((type: EditorTab['type']) => {
         const iconMap: Record<EditorTab['type'], string> = {
             main: '📝',
-            chapter: '📖'
+            chapter: '📖',
+            synopsis: '📊',
+            characters: '👥',
+            structure: '🏗',
+            ideas: '💡',
+            notes: '📔'
         };
         return iconMap[type] || '📄';
     }, []);

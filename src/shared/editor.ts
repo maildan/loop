@@ -3,12 +3,13 @@
 export interface EditorTab {
   id: string;
   title: string;
-  type: 'main' | 'chapter';  // 글쓰기 에디터만 (구조, 인물 등 제외)
+  type: 'main' | 'chapter' | 'synopsis' | 'characters' | 'structure' | 'ideas' | 'notes';  // 🔥 Universal tab system - 모든 컨텐츠 타입 지원
   chapterId?: string; // chapter 타입일 때만 사용
   isActive: boolean;
   isDirty?: boolean; // 저장되지 않은 변경사항이 있는지
   order: number;
   content?: string; // 각 탭의 독립적인 컨텐츠
+  metadata?: Record<string, unknown>; // 🔥 탭 타입별 추가 데이터 (예: synopsis 탭의 활성 서브탭)
 }
 
 export interface ChapterData {

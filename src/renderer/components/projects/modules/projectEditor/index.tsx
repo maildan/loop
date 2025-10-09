@@ -229,6 +229,31 @@ export const ProjectEditor = memo(function ProjectEditor({
         }
     }, [sidebarCollapsed, state.collapsed, actions]);
 
+    // 🔥 Universal Tab System: 프로젝트 로드 시 기본 탭 생성
+    const tabsInitializedRef = useRef(false);
+    useEffect(() => {
+        if (projectId && !tabsInitializedRef.current && state.tabs.length === 1) {
+            // 기본 탭 (main)만 있을 때 추가 탭들을 생성
+            const defaultTabs = [
+                { id: 'synopsis', title: '시놉시스', type: 'synopsis' as const, content: '' },
+                { id: 'characters', title: '인물', type: 'characters' as const, content: '' },
+                { id: 'structure', title: '구조', type: 'structure' as const, content: '' },
+                { id: 'ideas', title: '아이디어', type: 'ideas' as const, content: '' },
+                { id: 'notes', title: '노트', type: 'notes' as const, content: '' },
+            ];
+
+            defaultTabs.forEach(tab => {
+                actions.addTab({ ...tab, isActive: false });
+            });
+
+            tabsInitializedRef.current = true;
+            Logger.info('PROJECT_EDITOR', 'Default tabs initialized', { 
+                projectId, 
+                totalTabs: state.tabs.length + defaultTabs.length 
+            });
+        }
+    }, [projectId, state.tabs.length, actions]);
+
     // 🎯 Phase 14-D: Performance optimization with useMemo
     // ✅ ALL hooks MUST be declared BEFORE conditional returns (React Hooks Rules)
     
@@ -421,7 +446,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                 return (
                     <SynopsisView
                         projectId={projectId}
-                        synopsisId="default" // 기본 시놉시스 ID
+                        elements={[]} // 🔥 TODO: projectData에서 elements 추출
                         characters={memoizedCharacters.map(char => ({
                             ...char,
                             color: char.color || '#3B82F6',
@@ -437,10 +462,6 @@ export const ProjectEditor = memo(function ProjectEditor({
                             sortOrder: note.sortOrder ?? 0
                         }))}
                         content={projectData?.content || ''}
-                        onBack={() => {
-                            Logger.info('PROJECT_EDITOR', 'Synopsis view back - returning to structure view');
-                            actions.setCurrentView('structure');
-                        }}
                     />
                 );
 
@@ -494,18 +515,45 @@ export const ProjectEditor = memo(function ProjectEditor({
                     />
                 </ProjectEditorLayout.Header>
 
-                {/* 🔥 EditorTabBar - 헤더 바로 아래에 배치하여 상단에서 항상 노출 (뷰 전환 시에도 DOM 안정성 유지) */}
-                <div
-                    aria-hidden={!isWriteView}
-                    className={`relative overflow-hidden backdrop-blur-sm transition-all duration-200 border-b ${isWriteView
-                        ? 'z-[1300] h-12 bg-[color:hsl(var(--muted))]/85 border-[color:hsl(var(--border))] opacity-100'
-                        : 'z-[1000] h-0 opacity-0 border-transparent pointer-events-none'
-                    }`}
-                >
+                {/* 🔥 EditorTabBar - 헤더 바로 아래에 배치하여 상단에서 항상 노출 (Universal Tab System) */}
+                <div className="relative overflow-hidden backdrop-blur-sm transition-all duration-200 border-b z-[1300] h-12 bg-[color:hsl(var(--muted))]/85 border-[color:hsl(var(--border))] opacity-100">
                     <EditorTabBar
                         tabs={state.tabs}
                         activeTabId={state.activeTabId}
-                        onTabClick={actions.setActiveTab}
+                        onTabClick={(tabId) => {
+                            actions.setActiveTab(tabId);
+                            
+                            // 🔥 탭 타입에 따라 currentView 동기화
+                            const tab = state.tabs.find(t => t.id === tabId);
+                            if (tab) {
+                                switch (tab.type) {
+                                    case 'main':
+                                    case 'chapter':
+                                        actions.setCurrentView('write');
+                                        break;
+                                    case 'synopsis':
+                                        actions.setCurrentView('synopsis');
+                                        break;
+                                    case 'characters':
+                                        actions.setCurrentView('characters');
+                                        break;
+                                    case 'structure':
+                                        actions.setCurrentView('structure');
+                                        break;
+                                    case 'notes':
+                                        actions.setCurrentView('notes');
+                                        break;
+                                    case 'ideas':
+                                        actions.setCurrentView('idea');
+                                        break;
+                                }
+                                Logger.info('EDITOR_TAB_BAR', 'Tab clicked, view synced', { 
+                                    tabId, 
+                                    tabType: tab.type, 
+                                    currentView: state.currentView 
+                                });
+                            }
+                        }}
                         onTabClose={actions.removeTab}
                         onNewTab={() => {
                             const newTab = {
@@ -559,7 +607,40 @@ export const ProjectEditor = memo(function ProjectEditor({
                             <ProjectSidebar
                                 projectId={projectId}
                                 currentView={state.currentView}
-                                onViewChange={actions.setCurrentView}
+                                onViewChange={(view) => {
+                                    // 🔥 Universal Tab System: hover sidebar도 탭 전환 지원
+                                    actions.setCurrentView(view);
+                                    
+                                    let targetTabId: string | undefined;
+                                    switch (view) {
+                                        case 'write':
+                                            targetTabId = 'main';
+                                            break;
+                                        case 'synopsis':
+                                            targetTabId = 'synopsis';
+                                            break;
+                                        case 'characters':
+                                            targetTabId = 'characters';
+                                            break;
+                                        case 'structure':
+                                            targetTabId = 'structure';
+                                            break;
+                                        case 'notes':
+                                            targetTabId = 'notes';
+                                            break;
+                                        case 'idea':
+                                            targetTabId = 'ideas';
+                                            break;
+                                    }
+                                    
+                                    if (targetTabId && state.tabs.some(t => t.id === targetTabId)) {
+                                        actions.setActiveTab(targetTabId);
+                                        Logger.info('PROJECT_SIDEBAR_HOVER', 'View changed, tab activated', { 
+                                            view, 
+                                            targetTabId 
+                                        });
+                                    }
+                                }}
                                 structure={projectData?.structure || []}
                                 characters={memoizedCharacters}
                                 collapsed={false}
@@ -595,7 +676,42 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <ProjectSidebar
                         projectId={projectId}
                         currentView={state.currentView}
-                        onViewChange={actions.setCurrentView}
+                        onViewChange={(view) => {
+                            // 🔥 Universal Tab System: view 변경 시 해당 탭으로 전환
+                            actions.setCurrentView(view);
+                            
+                            // 뷰에 맞는 탭 ID 찾기
+                            let targetTabId: string | undefined;
+                            switch (view) {
+                                case 'write':
+                                    targetTabId = 'main';
+                                    break;
+                                case 'synopsis':
+                                    targetTabId = 'synopsis';
+                                    break;
+                                case 'characters':
+                                    targetTabId = 'characters';
+                                    break;
+                                case 'structure':
+                                    targetTabId = 'structure';
+                                    break;
+                                case 'notes':
+                                    targetTabId = 'notes';
+                                    break;
+                                case 'idea':
+                                    targetTabId = 'ideas';
+                                    break;
+                            }
+                            
+                            // 탭이 존재하면 활성화
+                            if (targetTabId && state.tabs.some(t => t.id === targetTabId)) {
+                                actions.setActiveTab(targetTabId);
+                                Logger.info('PROJECT_SIDEBAR', 'View changed, tab activated', { 
+                                    view, 
+                                    targetTabId 
+                                });
+                            }
+                        }}
                         structure={projectData?.structure || []}
                         characters={memoizedCharacters}
                         collapsed={false}

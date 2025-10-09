@@ -11,7 +11,7 @@ import { setupProjectIpcHandlers } from './projectIpcHandlers';
 import { setupAIIpcHandlers } from './aiIpcHandlers';
 import { setupFontIpcHandlers } from './fontIpcHandlers';
 import { setupAppIpcHandlers } from './appIpcHandlers';
-import { registerSynopsisStatsHandlers } from './synopsisStatsHandlers';
+// ❌ registerSynopsisStatsHandlers removed - deprecated
 import { setupEpisodeIpcHandlers } from './episodeIpcHandlers';
 
 // #DEBUG: Handlers index entry point
@@ -138,18 +138,7 @@ export class HandlersManager {
           'app:get-version',
           'app:get-name',
         ]),
-        this.setupHandler('synopsis-stats', () => registerSynopsisStatsHandlers(), [
-          'synopsis-stats:get-publications',
-          'synopsis-stats:create-publication',
-          'synopsis-stats:delete-publication',
-          'synopsis-stats:create-metric',
-          'synopsis-stats:get-metrics',
-          'synopsis-stats:get-suggestions',
-          'synopsis-stats:get-comparison',
-          'synopsis-stats:get-insights',
-          'synopsis-stats:get-publishers',
-          'synopsis-stats:create-publisher',
-        ]),
+        // ❌ synopsis-stats removed - deprecated platform statistics dashboard
         this.setupHandler('episode', () => setupEpisodeIpcHandlers(), [
           'episode:create',
           'episode:get',
@@ -162,8 +151,6 @@ export class HandlersManager {
           'episode:getManuscriptReserves',
           'episode:analyzeFiveActStructure',
           'episode:getStats',
-          'synopsis-stats:get-experiments',
-          'synopsis-stats:create-experiment',
         ]),
 
         // this.setupHandler('database', () => setupDatabaseIpcHandlers(), [...]),
