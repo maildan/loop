@@ -10,8 +10,8 @@ export interface SynopsisViewProps {
     content?: string;
 }
 
-// 🔥 새로운 한국 웹소설 Synopsis 탭 모드
-export type TabMode = 'dashboard' | 'episodes' | 'schedule' | 'statistics' | 'structure';
+// 🔥 Synopsis 탭 모드 - "연재 작가의 제2의 뇌"
+export type TabMode = 'dashboard' | 'episodes' | 'schedule' | 'consistency' | 'timeline' | 'structure';
 
 export interface DashboardViewProps {
     projectId: string;
@@ -25,10 +25,42 @@ export interface ScheduleViewProps {
     projectId: string;
 }
 
+export interface ConsistencyViewProps {
+    projectId: string;
+    characters?: ProjectCharacter[];
+}
+
+export interface TimelineViewProps {
+    projectId: string;
+    notes?: ProjectNote[];
+}
+
 export interface TabModeConfig {
     id: TabMode;
     name: string;
     icon: React.ComponentType<{ className?: string }>;
+}
+
+// 🔥 Consistency 관련 타입
+export interface ConsistencyWarning {
+    id: string;
+    characterId?: string;
+    characterName?: string;
+    type: 'speech_pattern' | 'appearance' | 'personality' | 'location' | 'timeline' | 'other';
+    episode: number;
+    description: string;
+    severity: 'low' | 'medium' | 'high';
+    createdAt: Date;
+}
+
+export interface CharacterConsistencyScore {
+    characterId: string;
+    characterName: string;
+    overallScore: number; // 0-100
+    speechPatternScore: number;
+    appearanceScore: number;
+    personalityScore: number;
+    warningCount: number;
 }
 
 // Synopsis 스타일 상수

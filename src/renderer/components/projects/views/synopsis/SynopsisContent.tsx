@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { SYNOPSIS_STYLES } from './types';
 import { ProjectAnalysis, ProjectElement } from '../../../../hooks/useProjectData';
-import { KoreanSynopsisView } from './KoreanSynopsisView';
+import { SynopsisView } from './SynopsisView';
 import { AIAnalysisPanel } from '../../../common/AIAnalysisPanel';
 import { Brain } from 'lucide-react';
 import { Button } from '../../../ui/Button';
@@ -37,7 +37,7 @@ export const SynopsisContent = React.memo(({
         <div className="flex h-full overflow-hidden">
             {/* 메인 콘텐츠 */}
             <div className="flex-1 overflow-auto">
-                <KoreanSynopsisView
+                <SynopsisView
                     projectId={projectId}
                     elements={elements}
                     characters={characters}
