@@ -267,7 +267,7 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                                                 {warning.type === 'other' && '기타'}
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                {warning.createdAt.toLocaleDateString('ko-KR')}
+                                                {warning.createdAt ? warning.createdAt.toLocaleDateString('ko-KR') : 'Unknown'}
                                             </span>
                                         </div>
                                     </div>

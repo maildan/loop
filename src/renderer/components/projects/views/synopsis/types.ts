@@ -19,6 +19,7 @@ export interface DashboardViewProps {
     characters?: ProjectCharacter[];
     notes?: ProjectNote[];
     content?: string;
+    onTabChange?: (tab: TabMode) => void; // 탭 전환 핸들러
 }
 
 export interface ScheduleViewProps {
@@ -50,7 +51,7 @@ export interface ConsistencyWarning {
     episode: number;
     description: string;
     severity: 'low' | 'medium' | 'high';
-    createdAt: Date;
+    createdAt?: Date; // Optional for mock data
 }
 
 export interface CharacterConsistencyScore {

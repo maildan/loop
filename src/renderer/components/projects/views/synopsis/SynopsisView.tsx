@@ -116,6 +116,7 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                         characters={characters}
                         notes={notes}
                         content={content}
+                        onTabChange={setActiveTab}
                     />
                 )}
 
