@@ -100,6 +100,15 @@ const electronAPI: ElectronAPI = {
     deleteNote: (id: string) => ipcRenderer.invoke('projects:delete-note', id),
   },
 
+  // 📊 Synopsis Statistics API
+  synopsis: {
+    getWritingActivity: (projectId: string, days?: number) => ipcRenderer.invoke('synopsis:getWritingActivity', projectId, days),
+    getProgressTimeline: (projectId: string, days?: number) => ipcRenderer.invoke('synopsis:getProgressTimeline', projectId, days),
+    getEpisodeStats: (projectId: string) => ipcRenderer.invoke('synopsis:getEpisodeStats', projectId),
+    recordWritingActivity: (projectId: string, wordCount: number, duration: number, episodeId?: string) => 
+      ipcRenderer.invoke('synopsis:recordWritingActivity', projectId, wordCount, duration, episodeId),
+  },
+
   app: {
     getVersion: () => ipcRenderer.invoke(IPC_CHANNELS.APP.GET_VERSION),
     quit: () => ipcRenderer.invoke(IPC_CHANNELS.APP.QUIT),

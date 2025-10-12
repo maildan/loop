@@ -132,6 +132,14 @@ export interface ElectronAPI {
     deleteNote: (id: string) => Promise<IpcResponse<boolean>>;
   };
 
+  // 📊 Synopsis Statistics API
+  synopsis: {
+    getWritingActivity: (projectId: string, days?: number) => Promise<Array<{ date: string; words: number; duration: number }>>;
+    getProgressTimeline: (projectId: string, days?: number) => Promise<Array<{ date: string; words: number }>>;
+    getEpisodeStats: (projectId: string) => Promise<Array<{ act: string; count: number; avgWords: number; color: string }>>;
+    recordWritingActivity: (projectId: string, wordCount: number, duration: number, episodeId?: string) => Promise<{ success: boolean }>;
+  };
+
   // ⚙️ 설정 API
   settings: {
     get: (key: string) => Promise<IpcResponse<unknown>>;

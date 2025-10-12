@@ -104,7 +104,11 @@ export function cleanupAllIpcHandlers(): void {
       'oauth:get-google-documents',
       'oauth:import-google-doc',
       'oauth:get-auth-status',
-      'oauth:revoke-auth'
+      'oauth:revoke-auth',
+      'synopsis:getWritingActivity',
+      'synopsis:getProgressTimeline',
+      'synopsis:getEpisodeStats',
+      'synopsis:recordWritingActivity'
     ];
     
     handlersToClean.forEach(channel => {
@@ -179,6 +183,14 @@ export async function setupAllIpcHandlers(): Promise<void> {
       setupEpisodeIpcHandlers();
       registeredHandlers.add('episode');
       Logger.info('IPC_HANDLERS', 'Episode IPC handlers setup complete');
+    }
+
+    // Synopsis Stats IPC 핸들러
+    if (!registeredHandlers.has('synopsis-stats')) {
+      const { registerSynopsisStatsHandlers } = await import('./handlers/synopsis-stats');
+      registerSynopsisStatsHandlers();
+      registeredHandlers.add('synopsis-stats');
+      Logger.info('IPC_HANDLERS', 'Synopsis Stats IPC handlers setup complete');
     }
 
     // OAuth IPC 핸들러
