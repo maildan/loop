@@ -4,7 +4,7 @@
 export { SynopsisView } from './SynopsisView';
 export { SynopsisContent } from './SynopsisContent';
 
-// ❌ KoreanSynopsisView removed - renamed to SynopsisView
+
 
 // 🔥 Dashboard 컴포넌트
 export { DashboardView } from './Dashboard/DashboardView';

@@ -64,7 +64,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ projectId }) => {
             <div>
                 <h2 className="text-2xl font-bold text-foreground">연재 관리</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
-                    연재 일정, 조회수, 수익을 한눈에 관리하세요
+                    연재 일정을 한눈에 관리하세요
                 </p>
             </div>
 
