@@ -102,7 +102,7 @@
     "artifactName": "${productName}-${version}-${arch}.${ext}"
   },
   "win": {
-    "icon": "public/assets/icon.png",
+    "icon": "public/assets/icon.ico",
     "target": [
       {
         "target": "nsis",
@@ -159,8 +159,8 @@
     "createStartMenuShortcut": true,
     "shortcutName": "Loop",
     "differentialPackage": true,
-    "installerIcon": "public/assets/icon.png",
-    "uninstallerIcon": "public/assets/icon.png",
+    "installerIcon": "public/assets/icon.ico",
+    "uninstallerIcon": "public/assets/icon.ico",
     "installerSidebar": "build/installer-sidebar.bmp",
     "include": "build/installer.nsh",
     "license": null,
