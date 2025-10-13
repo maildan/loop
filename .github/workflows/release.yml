@@ -69,7 +69,7 @@ env:
   MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
 
 jobs:
-  release-windows:
+  release-windows-x64:
     runs-on: windows-latest
     
     steps:
@@ -132,6 +132,10 @@ jobs:
         env:
           # GitHub 토큰 (electron-builder가 자동 업로드에 사용)
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # 🔥 Windows 코드 서명
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
 
           # 🔥 기본 환경 설정
           NODE_ENV: production
@@ -274,3 +278,198 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-windows-arm64:
+    runs-on: windows-11-arm
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+      
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+      
+      - name: Setup pnpm cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Generate Prisma Client
+        run: pnpm prisma generate
+      
+      - name: Verify Prisma Client Generation
+        shell: bash
+        run: |
+          echo "🔍 Verifying Prisma client generation..."
+          
+          # pnpm 환경에서 @prisma/client import 가능 여부 테스트
+          if node -e "require('@prisma/client')" 2>/dev/null; then
+            echo "✅ @prisma/client package is available"
+          else
+            echo "❌ @prisma/client package NOT found or cannot be imported"
+            exit 1
+          fi
+          
+          # Prisma Client 타입 확인
+          if node -e "const { PrismaClient } = require('@prisma/client'); console.log('PrismaClient:', typeof PrismaClient)" 2>/dev/null; then
+            echo "✅ PrismaClient is properly exported"
+          else
+            echo "❌ PrismaClient export verification failed"
+            exit 1
+          fi
+      
+      - name: Build application
+        run: pnpm build
+      
+      - name: Package Windows ARM64 application
+        run: pnpm dist:win --publish always
+        env:
+          # GitHub 토큰 (electron-builder가 자동 업로드에 사용)
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+          # 🔥 Windows 코드 서명
+          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+
+          # 🔥 기본 환경 설정
+          NODE_ENV: production
+
+          # 🔥 electron-builder 디버깅
+          DEBUG: electron-builder
+
+          # 🔥 포트 설정 (CI에서는 자동 할당)
+          STATIC_SERVER_ORIGIN: ${{ secrets.STATIC_SERVER_ORIGIN }}
+
+          # 🔥 URL 설정 (프로덕션용)
+          NEXT_PUBLIC_SHARE_WEB_URL: ${{ secrets.NEXT_PUBLIC_SHARE_WEB_URL }}
+          NEXT_PUBLIC_SHARE_API_URL: ${{ secrets.NEXT_PUBLIC_SHARE_API_URL }}
+
+          # 🔥 Logger 설정
+          LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
+          VERBOSE_LOGGING: ${{ secrets.VERBOSE_LOGGING }}
+
+          # 🔥 데이터베이스 설정 (CI용 경로로 변경 필요)
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+
+          # 🔥 보안 설정
+          ELECTRON_ENABLE_SECURITY_WARNINGS: ${{ secrets.ELECTRON_ENABLE_SECURITY_WARNINGS }}
+          ELECTRON_DISABLE_SECURITY_WARNINGS: ${{ secrets.ELECTRON_DISABLE_SECURITY_WARNINGS }}
+
+          # 🔥 성능 모니터링
+          ENABLE_PERFORMANCE_TRACKING: ${{ secrets.ENABLE_PERFORMANCE_TRACKING }}
+          MEMORY_MONITORING: ${{ secrets.MEMORY_MONITORING }}
+
+          # 🔥 키보드 모니터링 설정
+          KEYBOARD_MONITORING_ENABLED: ${{ secrets.KEYBOARD_MONITORING_ENABLED }}
+          KEYBOARD_DEBUG_MODE: ${{ secrets.KEYBOARD_DEBUG_MODE }}
+
+          # 🔥 AI/분석 기능
+          AI_ANALYSIS_ENABLED: ${{ secrets.AI_ANALYSIS_ENABLED }}
+          MOCK_AI_RESPONSES: ${{ secrets.MOCK_AI_RESPONSES }}
+
+          # 🔥 개발자 도구 (프로덕션에서는 false)
+          REACT_DEVELOPER_TOOLS: ${{ secrets.REACT_DEVELOPER_TOOLS }}
+          REDUX_DEVTOOLS: ${{ secrets.REDUX_DEVTOOLS }}
+
+          # 🔥 Google OAuth 설정
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          GOOGLE_REDIRECT_URI: ${{ secrets.GOOGLE_REDIRECT_URI }}
+
+          # 🔥 암호화 키
+          ENCRYPT_SNAPSHOT_KEY: ${{ secrets.ENCRYPT_SNAPSHOT_KEY }}
+
+          # 🔥 Gemini AI 설정
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ secrets.GEMINI_MODEL }}
+          NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.NEXT_PUBLIC_GEMINI_API_KEY }}
+          NEXT_PUBLIC_GEMINI_MODEL: ${{ secrets.NEXT_PUBLIC_GEMINI_MODEL }}
+          GEMINI_MAX_TOKENS: ${{ secrets.GEMINI_MAX_TOKENS }}
+          GEMINI_TEMPERATURE: ${{ secrets.GEMINI_TEMPERATURE }}
+
+          # 🔥 Firebase 설정
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIRE_AUTH_DOMAIN: ${{ secrets.FIRE_AUTH_DOMAIN }}
+          FIRE_PROJECT_ID: ${{ secrets.FIRE_PROJECT_ID }}
+          STORAGE_BUCKET: ${{ secrets.STORAGE_BUCKET }}
+          MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
+          APP_ID: ${{ secrets.APP_ID }}
+          MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
+      
+      - name: Verify Windows ARM64 Build Artifacts
+        shell: bash
+        run: |
+          echo "🔍 Verifying Windows ARM64 build artifacts..."
+          
+          # release 디렉토리 구조 확인
+          echo "📂 Release directory contents:"
+          ls -lh release/ || echo "⚠️ No release directory"
+          
+          # NSIS 설치 파일 확인
+          if ls release/*.exe 1> /dev/null 2>&1; then
+            echo "✅ Windows ARM64 installer (.exe) found:"
+            ls -lh release/*.exe
+            
+            # 파일 크기 확인 (10MB 미만이면 문제일 가능성)
+            for file in release/*.exe; do
+              size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "0")
+              size_mb=$((size / 1024 / 1024))
+              if [ $size_mb -lt 10 ]; then
+                echo "⚠️ Warning: $file is only ${size_mb}MB (might be incomplete)"
+              else
+                echo "✅ $file size: ${size_mb}MB"
+              fi
+            done
+          else
+            echo "❌ No .exe installer found!"
+            exit 1
+          fi
+          
+          # NSIS 7z 아카이브 확인
+          if ls release/*.nsis.7z 1> /dev/null 2>&1; then
+            echo "✅ NSIS 7z archive found:"
+            ls -lh release/*.nsis.7z
+          fi
+          
+          # Blockmap 파일 확인
+          if ls release/*.blockmap 1> /dev/null 2>&1; then
+            echo "✅ Blockmap files found:"
+            ls -lh release/*.blockmap
+          fi
+          
+          # latest.yml 확인 (electron-updater용)
+          if [ -f "release/latest.yml" ]; then
+            echo "✅ latest.yml found:"
+            cat release/latest.yml
+          else
+            echo "⚠️ latest.yml not found (auto-update may not work)"
+          fi
+      
+      - name: Upload Windows ARM64 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Loop-Windows-ARM64
+          path: |
+            release/*.exe
+            release/*.nsis.7z
+            release/*.exe.blockmap
+            release/latest.yml
+          retention-days: 7
