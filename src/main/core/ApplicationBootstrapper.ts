@@ -114,14 +114,11 @@ export class ApplicationBootstrapper {
       // 🔥 앱 이름 설정 (Electron → Loop)
       this.setupAppName();
 
-      // 1. Electron 이벤트 설정
+      // 1. Electron 이벤트 설정 (프로토콜 핸들링은 onReady 내부에서)
       this.setupElectronEvents();
 
-      // 2. 프로토콜 기본 앱 설정 (OAuth 리다이렉트용)
-      this.setupProtocolHandling();
-
-      // 3. 앱 아이콘 설정
-      this.setupAppIcons();
+      // 2. 앱 아이콘 설정
+      await this.setupAppIcons();
 
       // 3. 핵심 시스템 초기화 (Database, Settings)
       await this.initializeCore();
@@ -255,9 +252,13 @@ export class ApplicationBootstrapper {
   private setupElectronEvents(): void {
     this.eventController.setupAppEvents({
       onReady: async () => {
-        // 🔥 onReady 이벤트가 발생했으므로, 여기서 프로토콜을 등록합니다.
+        // 🔥 1. 프로토콜 기본 앱 설정 (OAuth 리다이렉트용) - app.whenReady() 이후 실행
+        this.setupProtocolHandling();
+        
+        // 🔥 2. 커스텀 프로토콜 등록 (loop-avatar://, loop://, loop-font://)
         await this.setupCustomProtocols();
-        // 그 다음에 윈도우를 생성하는 기존 로직을 실행합니다.
+        
+        // 🔥 3. 윈도우 생성 및 URL 로딩
         await this.handleAppReady();
       },
       onShutdown: () => this.shutdownManager.shutdown(),
@@ -374,10 +375,10 @@ export class ApplicationBootstrapper {
   /**
    * 🔥 앱 아이콘 설정 (플랫폼별)
    */
-  private setupAppIcons(): void {
+  private async setupAppIcons(): Promise<void> {
     try {
       // 🔥 Use IconResolver for consistent icon path resolution
-      const iconPath = IconResolver.getTrayIconPath();
+      const iconPath = await IconResolver.getTrayIconPath();
       
       if (iconPath) {
         Logger.debug('BOOTSTRAPPER', 'Using icon from IconResolver', { iconPath });
