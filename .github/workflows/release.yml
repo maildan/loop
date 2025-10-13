@@ -23,9 +23,9 @@ env:
   DEBUG: ${{ secrets.DEBUG }}
   VERBOSE_LOGGING: ${{ secrets.VERBOSE_LOGGING }}
 
-  # 🔥 데이터베이스
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+  # 🔥 데이터베이스 (CI 빌드 전용 - Prisma generate를 위한 더미 값)
+  DATABASE_URL: "file:./prisma/loop.db"
+  PRISMA_DATABASE_URL: "file:./prisma/loop.db"
 
   # 🔥 성능 모니터링
   ENABLE_PERFORMANCE_TRACKING: ${{ secrets.ENABLE_PERFORMANCE_TRACKING }}
