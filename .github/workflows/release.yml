@@ -148,7 +148,6 @@ jobs:
 
           # 🔥 Logger 설정
           LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
-          DEBUG: ${{ secrets.DEBUG }}
           VERBOSE_LOGGING: ${{ secrets.VERBOSE_LOGGING }}
 
           # 🔥 데이터베이스 설정 (CI용 경로로 변경 필요)
