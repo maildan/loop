@@ -36,14 +36,7 @@
     "**/*.so",
     "node_modules/.prisma/**/*",
     "node_modules/@prisma/**/*",
-    "node_modules/.bin/prisma*",
-    "node_modules/pretendard/dist/web/static/woff2/**",
-    "node_modules/pretendard-jp/dist/web/static/woff2/**",
-    "node_modules/@fontsource/nanum-gothic/files/**",
-    "node_modules/@fontsource/noto-sans-kr/files/**",
-    "node_modules/@fontsource/noto-sans-jp/files/**",
-    "node_modules/@noonnu/gangwon-edu-otf-bold-a/fonts/**",
-    "node_modules/@noonnu/gangwon-edu-saeeum-otf-medium-a/fonts/**"
+    "node_modules/.bin/prisma*"
   ],
   "extraResources": [
     {
@@ -63,7 +56,7 @@
     "entitlementsInherit": "public/assets/entitlements.mac.plist",
     "gatekeeperAssess": false,
     "hardenedRuntime": true,
-    "asar": true,
+    "asar": false,
     "files": [
       "node_modules/node-mac-permissions/**"
     ],
@@ -108,6 +101,7 @@
   },
   "win": {
     "icon": "public/assets/icon.ico",
+    "asar": false,
     "target": [
       {
         "target": "nsis",
