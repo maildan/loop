@@ -3,9 +3,6 @@
 # Discord 스타일 커스터마이징
 # ================================
 
-# 사이드바 이미지 (164x314)
-!define MUI_WELCOMEFINISHPAGE_BITMAP "build\installer-sidebar.bmp"
-
 # 진행률 바 색상 (파란색)
 !define MUI_INSTFILESPAGE_PROGRESSBAR "colored"
 
