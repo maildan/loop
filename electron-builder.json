@@ -118,8 +118,6 @@
   "win": {
     "icon": "public/assets/icon.ico",
     "asar": true,
-    "certificateFile": "${env.WIN_CSC_LINK}",
-    "certificatePassword": "${env.WIN_CSC_KEY_PASSWORD}",
     "target": [
       {
         "target": "nsis",

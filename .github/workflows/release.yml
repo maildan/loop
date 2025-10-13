@@ -133,9 +133,9 @@ jobs:
           # GitHub 토큰 (electron-builder가 자동 업로드에 사용)
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          # 🔥 Windows 코드 서명
-          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          # 🔥 Windows 코드 서명 (electron-builder v26+ 표준 방식)
+          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
 
           # 🔥 기본 환경 설정
           NODE_ENV: production
@@ -343,9 +343,9 @@ jobs:
           # GitHub 토큰 (electron-builder가 자동 업로드에 사용)
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          # 🔥 Windows 코드 서명
-          WIN_CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
-          WIN_CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
+          # 🔥 Windows 코드 서명 (electron-builder v26+ 표준 방식)
+          CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
 
           # 🔥 기본 환경 설정
           NODE_ENV: production
