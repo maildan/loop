@@ -41,7 +41,7 @@ export function registerGetWritingActivityHandler() {
           wordCount: true,
           duration: true,
         },
-      });
+    });
 
       type ActivityData = { date: Date; wordCount: number; duration: number };
 
