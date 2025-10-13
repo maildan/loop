@@ -83,6 +83,71 @@ export default defineConfig(({ mode }) => {
             '.prisma/client'
           ]
         }
+      },
+      // 🔥 GIGA-CHAD: 빌드 타임 환경변수 주입 (CI/CD GitHub Secrets → process.env)
+      define: {
+        // 기본 환경
+        'process.env.NODE_ENV': JSON.stringify(readEnv('NODE_ENV', 'development')),
+        
+        // 포트 설정
+        'process.env.PORT': JSON.stringify(readEnv('PORT', '5173')),
+        'process.env.ELECTRON_PORT': JSON.stringify(readEnv('ELECTRON_PORT', '5173')),
+        'process.env.RENDERER_PORT': JSON.stringify(readEnv('RENDERER_PORT', '5173')),
+        'process.env.STATIC_SERVER_ORIGIN': JSON.stringify(readEnv('STATIC_SERVER_ORIGIN', '35821')),
+        
+        // URL 설정
+        'process.env.ELECTRON_RENDERER_URL': JSON.stringify(readEnv('ELECTRON_RENDERER_URL', 'http://localhost:5173')),
+        'process.env.VITE_DEV_SERVER_URL': JSON.stringify(readEnv('VITE_DEV_SERVER_URL', 'http://localhost:5173')),
+        'process.env.NEXT_PUBLIC_SHARE_WEB_URL': JSON.stringify(readEnv('NEXT_PUBLIC_SHARE_WEB_URL', 'https://eloop.kro.kr')),
+        'process.env.NEXT_PUBLIC_SHARE_API_URL': JSON.stringify(readEnv('NEXT_PUBLIC_SHARE_API_URL', 'https://api.eloop.kro.kr')),
+        
+        // Logger 설정
+        'process.env.LOG_LEVEL': JSON.stringify(readEnv('LOG_LEVEL', 'debug')),
+        'process.env.DEBUG': JSON.stringify(readEnv('DEBUG', 'true')),
+        'process.env.VERBOSE_LOGGING': JSON.stringify(readEnv('VERBOSE_LOGGING', 'true')),
+        
+        // 데이터베이스
+        'process.env.DATABASE_URL': JSON.stringify(readEnv('DATABASE_URL', 'file:../prisma/loop.db')),
+        
+        // 성능 모니터링
+        'process.env.ENABLE_PERFORMANCE_TRACKING': JSON.stringify(readEnv('ENABLE_PERFORMANCE_TRACKING', 'true')),
+        'process.env.MEMORY_MONITORING': JSON.stringify(readEnv('MEMORY_MONITORING', 'true')),
+        
+        // 키보드 모니터링
+        'process.env.KEYBOARD_MONITORING_ENABLED': JSON.stringify(readEnv('KEYBOARD_MONITORING_ENABLED', 'true')),
+        'process.env.KEYBOARD_DEBUG_MODE': JSON.stringify(readEnv('KEYBOARD_DEBUG_MODE', 'true')),
+        
+        // AI/분석 기능
+        'process.env.AI_ANALYSIS_ENABLED': JSON.stringify(readEnv('AI_ANALYSIS_ENABLED', 'true')),
+        'process.env.MOCK_AI_RESPONSES': JSON.stringify(readEnv('MOCK_AI_RESPONSES', 'true')),
+        
+        // 개발자 도구
+        'process.env.REACT_DEVELOPER_TOOLS': JSON.stringify(readEnv('REACT_DEVELOPER_TOOLS', 'true')),
+        'process.env.REDUX_DEVTOOLS': JSON.stringify(readEnv('REDUX_DEVTOOLS', 'true')),
+        
+        // 🔥 Google OAuth 설정 (CRITICAL for production)
+        'process.env.GOOGLE_CLIENT_ID': JSON.stringify(readEnv('GOOGLE_CLIENT_ID', '')),
+        'process.env.GOOGLE_CLIENT_SECRET': JSON.stringify(readEnv('GOOGLE_CLIENT_SECRET', '')),
+        'process.env.GOOGLE_API_KEY': JSON.stringify(readEnv('GOOGLE_API_KEY', '')),
+        'process.env.GOOGLE_REDIRECT_URI': JSON.stringify(readEnv('GOOGLE_REDIRECT_URI', 'http://localhost:35821/oauth/callback')),
+        
+        // 🔥 암호화 키
+        'process.env.ENCRYPT_SNAPSHOT_KEY': JSON.stringify(readEnv('ENCRYPT_SNAPSHOT_KEY', '')),
+        
+        // 🔥 Gemini AI 설정 (CRITICAL for AI features)
+        'process.env.GEMINI_API_KEY': JSON.stringify(readEnv('GEMINI_API_KEY', '')),
+        'process.env.GEMINI_MODEL': JSON.stringify(readEnv('GEMINI_MODEL', 'gemini-2.5-flash')),
+        'process.env.GEMINI_MAX_TOKENS': JSON.stringify(readEnv('GEMINI_MAX_TOKENS', '8192')),
+        'process.env.GEMINI_TEMPERATURE': JSON.stringify(readEnv('GEMINI_TEMPERATURE', '0.9')),
+        
+        // 🔥 Firebase 설정
+        'process.env.FIREBASE_API_KEY': JSON.stringify(readEnv('FIREBASE_API_KEY', '')),
+        'process.env.FIRE_AUTH_DOMAIN': JSON.stringify(readEnv('FIRE_AUTH_DOMAIN', '')),
+        'process.env.FIRE_PROJECT_ID': JSON.stringify(readEnv('FIRE_PROJECT_ID', '')),
+        'process.env.STORAGE_BUCKET': JSON.stringify(readEnv('STORAGE_BUCKET', '')),
+        'process.env.MESSAGING_SENDER_ID': JSON.stringify(readEnv('MESSAGING_SENDER_ID', '')),
+        'process.env.APP_ID': JSON.stringify(readEnv('APP_ID', '')),
+        'process.env.MEASUREMENT_ID': JSON.stringify(readEnv('MEASUREMENT_ID', ''))
       }
     },
     preload: {

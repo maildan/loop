@@ -136,6 +136,9 @@ jobs:
           # 🔥 기본 환경 설정
           NODE_ENV: production
 
+          # 🔥 electron-builder 디버깅
+          DEBUG: electron-builder
+
           # 🔥 포트 설정 (CI에서는 자동 할당)
           STATIC_SERVER_ORIGIN: ${{ secrets.STATIC_SERVER_ORIGIN }}
 

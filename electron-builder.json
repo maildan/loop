@@ -21,6 +21,7 @@
     "assets/**/*",
     "public/assets/fonts/**/*",
     "package.json",
+    "node_modules/highlight.js/styles/**/*.css",
     "!node_modules/**/*.md",
     "!node_modules/**/*.ts",
     "!node_modules/**/LICENSE*",
@@ -37,7 +38,9 @@
     "**/*.so",
     "node_modules/.prisma/**/*",
     "node_modules/@prisma/**/*",
-    "node_modules/.bin/prisma*"
+    "node_modules/.bin/prisma*",
+    "node_modules/keytar/**/*",
+    "node_modules/electron-updater/**/*"
   ],
   "extraResources": [
     {
@@ -47,6 +50,18 @@
     {
       "from": "prisma/loop.db",
       "to": "prisma/loop.db"
+    },
+    {
+      "from": "node_modules/.prisma/client",
+      "to": "prisma/client"
+    },
+    {
+      "from": "public/assets/fonts",
+      "to": "fonts"
+    },
+    {
+      "from": "public/assets",
+      "to": "public/assets"
     }
   ],
   "extraFiles": [],

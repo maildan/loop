@@ -21,6 +21,10 @@ export class GoogleOAuthService {
   private pendingPkce: Map<string, string> = new Map(); // state -> code_verifier
 
   private constructor() {
+    // 🔥 CRITICAL: 환경변수가 번들에 포함되지 않으므로 런타임 체크 필수
+    // CI/CD: GitHub Secrets → 환경변수 → electron-builder
+    // Local dev: .env 파일 → dotenv → process.env
+    // Production: 사용자는 Settings UI에서 입력 (향후 구현)
     this.config = {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
@@ -49,8 +53,19 @@ export class GoogleOAuthService {
    */
   async startAuthentication(): Promise<Result<string>> {
     try {
-      if (!this.config.clientId) {
-        throw new Error('Google Client ID가 설정되지 않았습니다');
+      if (!this.config.clientId || !this.config.clientSecret) {
+        Logger.warn(this.componentName, '⚠️ Google OAuth 설정 누락', {
+          hasClientId: !!this.config.clientId,
+          hasClientSecret: !!this.config.clientSecret
+        });
+        throw new Error(
+          'Google OAuth 설정이 완료되지 않았습니다.\n\n' +
+          '.env 파일에 다음을 추가하세요:\n' +
+          'GOOGLE_CLIENT_ID=your-client-id\n' +
+          'GOOGLE_CLIENT_SECRET=your-client-secret\n\n' +
+          '또는 Google Cloud Console에서\n' +
+          'OAuth 2.0 클라이언트 ID를 생성하세요.'
+        );
       }
 
       const state = this.generateState();

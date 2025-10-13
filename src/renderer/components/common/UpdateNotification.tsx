@@ -1,7 +1,5 @@
 // 🔥 UpdateNotification - Electron Auto-Updater 다운로드 진행률 표시
 
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import { Download, RefreshCw, X } from 'lucide-react';
 import { ProgressBar } from '../ui/ProgressBar';
@@ -32,9 +30,19 @@ export function UpdateNotification(): React.ReactElement | null {
   const [progress, setProgress] = useState<DownloadProgress | null>(null);
   const [downloaded, setDownloaded] = useState<UpdateInfo | null>(null);
   const [visible, setVisible] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // 🔥 Client-side only (SSR 방지)
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // 🔥 IPC 리스너 등록
+    if (!mounted || typeof window === 'undefined' || !window.electronAPI) {
+      return;
+    }
+
     const handleUpdateAvailable = (...args: unknown[]) => {
       const info = args[1] as UpdateInfo;
       setUpdateAvailable(info);
@@ -54,21 +62,17 @@ export function UpdateNotification(): React.ReactElement | null {
     };
 
     // IPC 리스너 등록 (window.electronAPI.on이 preload에서 노출됨)
-    if (typeof window !== 'undefined' && window.electronAPI) {
-      window.electronAPI.on('updater:available', handleUpdateAvailable);
-      window.electronAPI.on('updater:download-progress', handleDownloadProgress);
-      window.electronAPI.on('updater:downloaded', handleUpdateDownloaded);
-    }
+    window.electronAPI.on('updater:available', handleUpdateAvailable);
+    window.electronAPI.on('updater:download-progress', handleDownloadProgress);
+    window.electronAPI.on('updater:downloaded', handleUpdateDownloaded);
 
     // Cleanup
     return () => {
-      if (typeof window !== 'undefined' && window.electronAPI) {
-        window.electronAPI.removeListener('updater:available', handleUpdateAvailable);
-        window.electronAPI.removeListener('updater:download-progress', handleDownloadProgress);
-        window.electronAPI.removeListener('updater:downloaded', handleUpdateDownloaded);
-      }
+      window.electronAPI.removeListener('updater:available', handleUpdateAvailable);
+      window.electronAPI.removeListener('updater:download-progress', handleDownloadProgress);
+      window.electronAPI.removeListener('updater:downloaded', handleUpdateDownloaded);
     };
-  }, []);
+  }, [mounted]);
 
   // 🔥 닫기 핸들러
   const handleClose = () => {
@@ -86,7 +90,7 @@ export function UpdateNotification(): React.ReactElement | null {
   };
 
   // 🔥 표시 안 함
-  if (!visible) return null;
+  if (!mounted || !visible) return null;
 
   // 🔥 포맷팅 헬퍼
   const formatBytes = (bytes: number): string => {

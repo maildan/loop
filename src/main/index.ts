@@ -109,11 +109,14 @@ class LoopMain {
 // 🔥 전역 에러 처리
 process.on('uncaughtException', (error) => {
   Logger.error('MAIN', '💥 Uncaught exception', error);
-  process.exit(1);
+  console.error('💥 UNCAUGHT EXCEPTION:', error);
+  // 즉시 종료하지 말고 5초 대기 (로그 기록 시간 확보)
+  setTimeout(() => process.exit(1), 5000);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   Logger.error('MAIN', '💥 Unhandled rejection', { reason, promise });
+  console.error('💥 UNHANDLED REJECTION:', reason);
 });
 
 // 🔥 애플리케이션 시작
