@@ -39,8 +39,11 @@
     "node_modules/.bin/prisma*",
     "node_modules/pretendard/dist/web/static/woff2/**",
     "node_modules/pretendard-jp/dist/web/static/woff2/**",
-    "node_modules/@fontsource/*/files/*.woff2",
-    "node_modules/@noonnu/*/fonts/*.woff"
+    "node_modules/@fontsource/nanum-gothic/files/**",
+    "node_modules/@fontsource/noto-sans-kr/files/**",
+    "node_modules/@fontsource/noto-sans-jp/files/**",
+    "node_modules/@noonnu/gangwon-edu-otf-bold-a/fonts/**",
+    "node_modules/@noonnu/gangwon-edu-saeeum-otf-medium-a/fonts/**"
   ],
   "extraResources": [
     {
