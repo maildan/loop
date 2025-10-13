@@ -25,9 +25,12 @@ import {
   PanelRightOpen,
   PanelRightClose
 } from 'lucide-react';
-import { Logger } from '../../../../shared/logger';
+import { RendererLogger as Logger } from '../../../../shared/logger-renderer';
 import { useSettings } from '../../../app/settings/hooks/useSettings';
 import { useDynamicFont } from '../../../hooks/useDynamicFont';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const PROJECT_HEADER = Symbol.for('PROJECT_HEADER');
 
 // 🎨 스타일 정의
 const TOOLBAR_STYLES = {
@@ -330,45 +333,48 @@ export const ProjectHeader = React.memo(function ProjectHeader({
     }
 
     if (!editor) {
-      Logger.warn('ProjectHeader', 'No editor available for font family change');
+      Logger.warn(PROJECT_HEADER, 'No editor available for font family change');
       return;
     }
 
     try {
       // 🔍 디버깅: 에디터 확장 및 명령어 확인
-      console.log('🔍 Editor extensions:', editor.extensionManager.extensions.map(ext => ext.name));
-      console.log('🔍 Available commands:', Object.keys(editor.commands));
-      console.log('🔍 FontFamily command available:', !!editor.commands.setFontFamily);
+      Logger.debug(PROJECT_HEADER, 'Editor extensions', {
+        extensions: editor.extensionManager.extensions.map(ext => ext.name),
+        commands: Object.keys(editor.commands),
+        hasFontFamily: !!editor.commands.setFontFamily
+      });
       
       // 🎨 TipTap setFontFamily 명령어 - 선택 영역일 때만 인라인 적용
       const shouldApplyInline = editorFontScope === 'selection';
       if (shouldApplyInline && editor.commands.setFontFamily) {
-        Logger.debug('ProjectHeader', 'Applying fontFamily via TipTap setFontFamily command', { fontFamily });
+        Logger.debug(PROJECT_HEADER, 'Applying fontFamily via TipTap setFontFamily command', { fontFamily });
         const success = editor.commands.setFontFamily(fontFamily);
-        console.log('🎨 setFontFamily result:', success);
+        Logger.debug(PROJECT_HEADER, 'setFontFamily result', { success });
 
         if (success) {
-          Logger.info('ProjectHeader', 'Font family applied successfully via TipTap command', { fontFamily });
+          Logger.info(PROJECT_HEADER, 'Font family applied successfully via TipTap command', { fontFamily });
           editor.commands.removeEmptyTextStyle();
 
           setTimeout(() => {
-            console.log('🔍 Editor HTML after font change:', editor.getHTML());
+            Logger.debug(PROJECT_HEADER, 'Editor HTML after font change', { 
+              html: editor.getHTML().substring(0, 200) + '...' 
+            });
           }, 100);
 
-          Logger.info('ProjectHeader', 'Font family change completed', {
+          Logger.info(PROJECT_HEADER, 'Font family change completed', {
             fontFamily,
             simplifiedName: getSimplifiedFontName(fontFamily),
             success: true
           });
         } else {
-          Logger.warn('ProjectHeader', 'TipTap setFontFamily command failed', { fontFamily });
+          Logger.warn(PROJECT_HEADER, 'TipTap setFontFamily command failed', { fontFamily });
         }
       } else if (shouldApplyInline && !editor.commands.setFontFamily) {
-        Logger.error('ProjectHeader', 'setFontFamily command not available - FontFamily extension may not be loaded');
-        console.error('❌ FontFamily extension not properly loaded!');
+        Logger.error(PROJECT_HEADER, 'setFontFamily command not available - FontFamily extension may not be loaded');
       }
     } catch (error) {
-      Logger.error('ProjectHeader', 'Font family change failed', {
+      Logger.error(PROJECT_HEADER, 'Font family change failed', {
         error: String(error),
         fontFamily
       });

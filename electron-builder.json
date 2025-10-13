@@ -37,7 +37,8 @@
     "**/*.dylib",
     "**/*.so",
     "node_modules/.prisma/**/*",
-    "node_modules/@prisma/**/*"
+    "node_modules/@prisma/**/*",
+    "node_modules/.bin/prisma*"
   ],
   "extraResources": [
     {
@@ -150,12 +151,19 @@
     ]
   },
   "nsis": {
-    "oneClick": false,
-    "allowToChangeInstallationDirectory": true,
+    "oneClick": true,
+    "perMachine": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": false,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
     "shortcutName": "Loop",
-    "differentialPackage": true
+    "differentialPackage": true,
+    "installerIcon": "public/assets/icon.png",
+    "uninstallerIcon": "public/assets/icon.png",
+    "license": null,
+    "runAfterFinish": true,
+    "deleteAppDataOnUninstall": false
   },
   "nsisWeb": {
     "artifactName": "${productName} Web Setup ${version}.${ext}"

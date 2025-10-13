@@ -2,6 +2,10 @@
 
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { RendererLogger as Logger } from '../../../shared/logger-renderer';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const OAUTH_CALLBACK = Symbol.for('OAUTH_CALLBACK');
 
 export default function OAuthCallback(): React.ReactElement {
   const navigate = useNavigate();
@@ -13,14 +17,14 @@ export default function OAuthCallback(): React.ReactElement {
     const error = searchParams.get('error');
 
     if (error) {
-      console.error('OAuth error:', error);
+      Logger.error(OAUTH_CALLBACK, 'OAuth error', { error });
       navigate('/');
       return;
     }
 
     if (code && state) {
       // Handle OAuth callback
-      console.log('OAuth callback received:', { code, state });
+      Logger.debug(OAUTH_CALLBACK, 'OAuth callback received', { code, state });
       // Process OAuth callback via IPC
       navigate('/');
     }

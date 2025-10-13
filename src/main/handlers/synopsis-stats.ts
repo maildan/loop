@@ -9,6 +9,10 @@
 
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { prismaService } from '../services/PrismaService';
+import { Logger } from '../../shared/logger';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const SYNOPSIS_STATS_HANDLER = Symbol.for('SYNOPSIS_STATS_HANDLER');
 
 /**
  * 최근 N일 작성 활동 가져오기
@@ -39,14 +43,16 @@ export function registerGetWritingActivityHandler() {
         },
       });
 
+      type ActivityData = { date: Date; wordCount: number; duration: number };
+
       // 날짜별 데이터 형식 변환
-      return activities.map((activity: any) => ({
+      return activities.map((activity: ActivityData) => ({
         date: activity.date.toISOString().split('T')[0], // YYYY-MM-DD
         words: activity.wordCount,
         duration: activity.duration,
       }));
     } catch (error) {
-      console.error('Error fetching writing activity:', error);
+      Logger.error(SYNOPSIS_STATS_HANDLER, 'Error fetching writing activity', { projectId, days, error });
       throw error;
     }
   });
@@ -80,9 +86,11 @@ export function registerGetProgressTimelineHandler() {
         },
       });
 
+      type ProgressData = { date: Date; wordCount: number };
+
       // 누적 계산
       let cumulative = 0;
-      return activities.map((activity: any) => {
+      return activities.map((activity: ProgressData) => {
         cumulative += activity.wordCount;
         return {
           date: `${activity.date.getMonth() + 1}/${activity.date.getDate()}`,
@@ -90,7 +98,7 @@ export function registerGetProgressTimelineHandler() {
         };
       });
     } catch (error) {
-      console.error('Error fetching progress timeline:', error);
+      Logger.error(SYNOPSIS_STATS_HANDLER, 'Error fetching progress timeline', { projectId, days, error });
       throw error;
     }
   });
@@ -115,15 +123,17 @@ export function registerGetEpisodeStatsHandler() {
         },
       });
 
+      type EpisodeData = { act: string | null; wordCount: number };
+
       // 5막 구조별 그룹화
       const acts = ['intro', 'rising', 'development', 'climax', 'conclusion'];
       const actLabels = { intro: '도입', rising: '발단', development: '전개', climax: '절정', conclusion: '결말' };
       const actColors = { intro: '#3b82f6', rising: '#10b981', development: '#eab308', climax: '#ef4444', conclusion: '#8b5cf6' };
 
       return acts.map(act => {
-        const actEpisodes = episodes.filter((ep: any) => ep.act === act);
+        const actEpisodes = episodes.filter((ep: EpisodeData) => ep.act === act);
         const count = actEpisodes.length;
-        const avgWords = count > 0 ? Math.round(actEpisodes.reduce((sum: number, ep: any) => sum + ep.wordCount, 0) / count) : 0;
+        const avgWords = count > 0 ? Math.round(actEpisodes.reduce((sum: number, ep: EpisodeData) => sum + ep.wordCount, 0) / count) : 0;
 
         return {
           act: actLabels[act as keyof typeof actLabels],
@@ -133,7 +143,7 @@ export function registerGetEpisodeStatsHandler() {
         };
       });
     } catch (error) {
-      console.error('Error fetching episode stats:', error);
+      Logger.error(SYNOPSIS_STATS_HANDLER, 'Error fetching episode stats', { projectId, error });
       throw error;
     }
   });
@@ -182,7 +192,7 @@ export function registerRecordWritingActivityHandler() {
 
       return { success: true };
     } catch (error) {
-      console.error('Error recording writing activity:', error);
+      Logger.error(SYNOPSIS_STATS_HANDLER, 'Error recording writing activity', { projectId, wordCount, duration, episodeId, error });
       throw error;
     }
   });
@@ -197,5 +207,5 @@ export function registerSynopsisStatsHandlers() {
   registerGetEpisodeStatsHandler();
   registerRecordWritingActivityHandler();
   
-  console.log('✅ Synopsis Stats IPC handlers registered');
+  Logger.info(SYNOPSIS_STATS_HANDLER, 'Synopsis Stats IPC handlers registered');
 }

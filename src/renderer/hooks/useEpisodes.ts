@@ -9,30 +9,18 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { RendererLogger as Logger } from '../../shared/logger-renderer';
+import type { Episode, CreateEpisodeInput, UpdateEpisodeInput, EpisodeFilterOptions, EpisodeSortOptions } from '../../shared/types/episode';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const USE_EPISODES_HOOK = Symbol.for('USE_EPISODES_HOOK');
 
 // ============================================
-// Types
+// Exported Types
 // ============================================
 
-export interface Episode {
-  id: string;
-  projectId: string;
-  episodeNumber: number;
-  title: string;
-  content: string;
-  wordCount: number;
-  targetWordCount: number;
-  status: 'draft' | 'in-progress' | 'completed' | 'published';
-  act?: 'intro' | 'rising' | 'development' | 'climax' | 'conclusion';
-  cliffhangerType?: 'revelation' | 'danger' | 'emotional' | 'mystery';
-  cliffhangerIntensity?: number;
-  notes?: string;
-  sortOrder: number;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  publishedAt?: Date;
-}
+// Episode 타입은 shared/types/episode.ts에서 import하고 re-export
+export type { Episode };
 
 export interface EpisodeFilter {
   status?: Episode['status'] | 'all';
@@ -50,6 +38,10 @@ export interface EpisodeSort {
 // ============================================
 
 export function useEpisodes(projectId: string) {
+  // ============================================
+  // State
+  // ============================================
+
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -70,7 +62,17 @@ export function useEpisodes(projectId: string) {
       setLoading(true);
       setError(null);
 
-      const result = await window.electronAPI['episode:list'](projectId, { filter, sort });
+      // Convert internal filter/sort to shared types
+      const options: EpisodeFilterOptions & EpisodeSortOptions = {
+        // Filter options
+        ...(filter.status && filter.status !== 'all' && { status: filter.status }),
+        ...(filter.act && filter.act !== 'all' && { act: filter.act }),
+        // Sort options
+        sortBy: sort.field as any, // Type assertion needed due to internal vs shared type mismatch
+        order: sort.direction,
+      };
+
+      const result = await window.electronAPI['episode:list'](projectId, options);
       
       if (Array.isArray(result)) {
         setEpisodes(result);
@@ -78,7 +80,7 @@ export function useEpisodes(projectId: string) {
         setEpisodes([]);
       }
     } catch (err) {
-      console.error('Error fetching episodes:', err);
+            Logger.error(USE_EPISODES_HOOK, 'Error loading episodes:', err);
       setError(err instanceof Error ? err : new Error('Failed to fetch episodes'));
     } finally {
       setLoading(false);
@@ -93,28 +95,29 @@ export function useEpisodes(projectId: string) {
   // CRUD Operations
   // ============================================
 
-  const createEpisode = useCallback(async (input: Partial<Episode>) => {
+  const createEpisode = useCallback(async (input: Omit<CreateEpisodeInput, 'projectId'>) => {
     try {
-      const result = await window.electronAPI['episode:create']({
+      const createInput: CreateEpisodeInput = {
         ...input,
         projectId,
-      });
+      };
+      const result = await window.electronAPI['episode:create'](createInput);
       
       await fetchEpisodes(); // Refresh list
       return result;
     } catch (err) {
-      console.error('Error creating episode:', err);
+      Logger.error(USE_EPISODES_HOOK, 'Error creating episode', err);
       throw err;
     }
   }, [projectId, fetchEpisodes]);
 
-  const updateEpisode = useCallback(async (id: string, updates: Partial<Episode>) => {
+  const updateEpisode = useCallback(async (id: string, updates: UpdateEpisodeInput) => {
     try {
       const result = await window.electronAPI['episode:update'](id, updates);
       await fetchEpisodes(); // Refresh list
       return result;
     } catch (err) {
-      console.error('Error updating episode:', err);
+      Logger.error(USE_EPISODES_HOOK, 'Error updating episode', err);
       throw err;
     }
   }, [fetchEpisodes]);
@@ -128,7 +131,7 @@ export function useEpisodes(projectId: string) {
       }
       await fetchEpisodes(); // Refresh list
     } catch (err) {
-      console.error('Error deleting episode:', err);
+      Logger.error(USE_EPISODES_HOOK, 'Error deleting episode', err);
       throw err;
     }
   }, [fetchEpisodes]);
@@ -139,7 +142,7 @@ export function useEpisodes(projectId: string) {
       await fetchEpisodes(); // Refresh list
       return result;
     } catch (err) {
-      console.error('Error publishing episode:', err);
+      Logger.error(USE_EPISODES_HOOK, 'Error publishing episode', err);
       throw err;
     }
   }, [fetchEpisodes]);
@@ -154,7 +157,7 @@ export function useEpisodes(projectId: string) {
         episodeIds.map(id => updateEpisode(id, { status }))
       );
     } catch (err) {
-      console.error('Error bulk updating status:', err);
+      Logger.error(USE_EPISODES_HOOK, 'Error bulk updating status', err);
       throw err;
     }
   }, [updateEpisode]);
@@ -165,7 +168,7 @@ export function useEpisodes(projectId: string) {
         episodeIds.map(id => deleteEpisode(id, false))
       );
     } catch (err) {
-      console.error('Error bulk deleting:', err);
+      Logger.error(USE_EPISODES_HOOK, 'Error bulk deleting episodes', err);
       throw err;
     }
   }, [deleteEpisode]);
@@ -183,7 +186,7 @@ export function useEpisodes(projectId: string) {
         )
       );
     } catch (err) {
-      console.error('Error reordering episodes:', err);
+      Logger.error(USE_EPISODES_HOOK, 'Error reordering episodes', err);
       throw err;
     }
   }, [updateEpisode]);

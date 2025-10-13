@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { RendererLogger as Logger } from '../../../../../../shared/logger-renderer';
+const SCHEDULE_VIEW = Symbol.for('SCHEDULE_VIEW');
+
 import { Calendar, TrendingUp, DollarSign, Clock } from 'lucide-react';
 import { Card } from '../../../../ui/Card';
 import { episodeServiceClient } from '../../../../../../shared/services/EpisodeServiceClient';
@@ -41,7 +44,7 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ projectId }) => {
             );
             setScheduledEpisodes(scheduled);
         } catch (error) {
-            console.error('연재 관리 데이터 로드 실패:', error);
+            Logger.error(SCHEDULE_VIEW, '연재 관리 데이터 로드 실패', { error });
         } finally {
             setLoading(false);
         }

@@ -5,6 +5,7 @@
  */
 
 import { prismaService } from './PrismaService';
+import type { Prisma, Episode as PrismaEpisodeModel } from '@prisma/client';
 import type {
   Episode,
   EpisodeStatus,
@@ -87,7 +88,7 @@ export class EpisodeService {
     sort?: EpisodeSortOptions
   ): Promise<Episode[]> {
     const prisma = await this.prismaService.getClient();
-    const where: any = {
+    const where: Prisma.EpisodeWhereInput = {
       projectId,
       isActive: true,
     };
@@ -109,7 +110,10 @@ export class EpisodeService {
     }
 
     if (filter?.maxWordCount !== undefined) {
-      where.wordCount = { ...where.wordCount, lte: filter.maxWordCount };
+      where.wordCount = { 
+        ...(typeof where.wordCount === 'object' ? where.wordCount : {}), 
+        lte: filter.maxWordCount 
+      };
     }
 
     if (filter?.publishedAfter) {
@@ -117,10 +121,13 @@ export class EpisodeService {
     }
 
     if (filter?.publishedBefore) {
-      where.publishedAt = { ...where.publishedAt, lte: filter.publishedBefore };
+      where.publishedAt = { 
+        ...(typeof where.publishedAt === 'object' ? where.publishedAt : {}), 
+        lte: filter.publishedBefore 
+      };
     }
 
-    let orderBy: any = { episodeNumber: 'asc' };
+    let orderBy: Prisma.EpisodeOrderByWithRelationInput = { episodeNumber: 'asc' };
 
     if (sort?.field) {
       orderBy = {
@@ -135,7 +142,8 @@ export class EpisodeService {
       skip: filter?.offset || 0,
     });
 
-    return episodes.map((episode: any) => this.toPrismaEpisode(episode));
+    type ListEpisode = typeof episodes[0];
+    return episodes.map((episode: ListEpisode) => this.toPrismaEpisode(episode));
   }
 
   /**
@@ -143,7 +151,7 @@ export class EpisodeService {
    */
   async updateEpisode(id: string, input: UpdateEpisodeInput): Promise<Episode> {
     const prisma = await this.prismaService.getClient();
-    const updateData: any = {};
+    const updateData: Prisma.EpisodeUpdateInput = {};
 
     if (input.title !== undefined) updateData.title = input.title;
     if (input.content !== undefined) {
@@ -220,19 +228,21 @@ export class EpisodeService {
       },
     });
 
+    type ReserveEpisode = typeof episodes[0];
+
     const totalEpisodes = episodes.length;
-    const draftEpisodes = episodes.filter((e: any) => e.status === 'draft').length;
-    const inProgressEpisodes = episodes.filter((e: any) => e.status === 'in-progress').length;
-    const completedEpisodes = episodes.filter((e: any) => e.status === 'completed').length;
-    const publishedEpisodes = episodes.filter((e: any) => e.status === 'published').length;
+    const draftEpisodes = episodes.filter((e: ReserveEpisode) => e.status === 'draft').length;
+    const inProgressEpisodes = episodes.filter((e: ReserveEpisode) => e.status === 'in-progress').length;
+    const completedEpisodes = episodes.filter((e: ReserveEpisode) => e.status === 'completed').length;
+    const publishedEpisodes = episodes.filter((e: ReserveEpisode) => e.status === 'published').length;
     const reserveCount = completedEpisodes - publishedEpisodes;
 
-    const totalWordCount = episodes.reduce((sum: number, e: any) => sum + e.wordCount, 0);
+    const totalWordCount = episodes.reduce((sum: number, e: ReserveEpisode) => sum + e.wordCount, 0);
     const averageWordCount = totalEpisodes > 0 ? Math.round(totalWordCount / totalEpisodes) : 0;
 
     const lastPublishedEpisode = episodes
-      .filter((e: any) => e.publishedAt)
-      .sort((a: any, b: any) => (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0))[0];
+      .filter((e: ReserveEpisode) => e.publishedAt)
+      .sort((a: ReserveEpisode, b: ReserveEpisode) => (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0))[0];
 
     return {
       totalEpisodes,
@@ -261,6 +271,8 @@ export class EpisodeService {
       orderBy: { episodeNumber: 'asc' },
     });
 
+    type PrismaEpisode = typeof episodes[0];
+
     const totalEpisodes = episodes.length;
     if (totalEpisodes === 0) {
       return this.getEmptyFiveActAnalysis();
@@ -271,9 +283,9 @@ export class EpisodeService {
 
     for (const act of ['introduction', 'rising', 'development', 'climax', 'conclusion'] as FiveActType[]) {
       const range = actRanges[act];
-      const actEpisodes = episodes.filter((e: any) => e.episodeNumber >= range.start && e.episodeNumber <= range.end);
+      const actEpisodes = episodes.filter((e: PrismaEpisode) => e.episodeNumber >= range.start && e.episodeNumber <= range.end);
 
-      const currentWordCount = actEpisodes.reduce((sum: number, e: any) => sum + e.wordCount, 0);
+      const currentWordCount = actEpisodes.reduce((sum: number, e: PrismaEpisode) => sum + e.wordCount, 0);
       const targetWordCount = range.targetPercentage * 0.01 * (totalEpisodes * 5500); // 5500: target word count per episode
       const currentPercentage = totalEpisodes > 0 ? (actEpisodes.length / totalEpisodes) * 100 : 0;
 
@@ -285,7 +297,7 @@ export class EpisodeService {
         currentPercentage,
         targetWordCount: Math.round(targetWordCount),
         currentWordCount,
-        episodes: actEpisodes.map((e: any) => this.toPrismaEpisode(e)),
+        episodes: actEpisodes.map((e: PrismaEpisode) => this.toPrismaEpisode(e)),
         isComplete: currentPercentage >= range.targetPercentage * 0.8, // 80% 이상이면 완료로 간주
       });
     }
@@ -305,6 +317,8 @@ export class EpisodeService {
       },
     });
 
+    type StatsEpisode = typeof episodes[0];
+
     if (episodes.length === 0) {
       return {
         totalEpisodes: 0,
@@ -318,30 +332,30 @@ export class EpisodeService {
       };
     }
 
-    const sortedByWordCount = [...episodes].sort((a: any, b: any) => b.wordCount - a.wordCount);
+    const sortedByWordCount = [...episodes].sort((a: StatsEpisode, b: StatsEpisode) => b.wordCount - a.wordCount);
     const longest = sortedByWordCount[0];
     const shortest = sortedByWordCount[sortedByWordCount.length - 1];
 
-    const publishedEpisodes = episodes.filter((e: any) => e.publishedAt).sort((a: any, b: any) =>
+    const publishedEpisodes = episodes.filter((e: StatsEpisode) => e.publishedAt).sort((a: StatsEpisode, b: StatsEpisode) =>
       (b.publishedAt?.getTime() || 0) - (a.publishedAt?.getTime() || 0)
     );
 
     return {
       totalEpisodes: episodes.length,
       byStatus: {
-        draft: episodes.filter((e: any) => e.status === 'draft').length,
-        'in-progress': episodes.filter((e: any) => e.status === 'in-progress').length,
-        completed: episodes.filter((e: any) => e.status === 'completed').length,
-        published: episodes.filter((e: any) => e.status === 'published').length,
+        draft: episodes.filter((e: StatsEpisode) => e.status === 'draft').length,
+        'in-progress': episodes.filter((e: StatsEpisode) => e.status === 'in-progress').length,
+        completed: episodes.filter((e: StatsEpisode) => e.status === 'completed').length,
+        published: episodes.filter((e: StatsEpisode) => e.status === 'published').length,
       },
-      byAct: episodes.reduce((acc: any, e: any) => {
+      byAct: episodes.reduce((acc: Record<string, number>, e: StatsEpisode) => {
         if (e.act) {
           acc[e.act] = (acc[e.act] || 0) + 1;
         }
         return acc;
       }, {}),
-      totalWordCount: episodes.reduce((sum: number, e: any) => sum + e.wordCount, 0),
-      averageWordCount: Math.round(episodes.reduce((sum: number, e: any) => sum + e.wordCount, 0) / episodes.length),
+      totalWordCount: episodes.reduce((sum: number, e: StatsEpisode) => sum + e.wordCount, 0),
+      averageWordCount: Math.round(episodes.reduce((sum: number, e: StatsEpisode) => sum + e.wordCount, 0) / episodes.length),
       longestEpisode: longest ? {
         episodeNumber: longest.episodeNumber,
         wordCount: longest.wordCount,
@@ -350,7 +364,7 @@ export class EpisodeService {
         episodeNumber: shortest.episodeNumber,
         wordCount: shortest.wordCount,
       } : null,
-      withCliffhangers: episodes.filter((e: any) => e.cliffhangerType).length,
+      withCliffhangers: episodes.filter((e: StatsEpisode) => e.cliffhangerType).length,
     };
   }
 
@@ -381,7 +395,7 @@ export class EpisodeService {
     return words.length;
   }
 
-  private toPrismaEpisode(prismaEpisode: any): Episode {
+  private toPrismaEpisode(prismaEpisode: PrismaEpisodeModel): Episode {
     return {
       id: prismaEpisode.id,
       projectId: prismaEpisode.projectId,
@@ -392,7 +406,7 @@ export class EpisodeService {
       targetWordCount: prismaEpisode.targetWordCount,
       status: prismaEpisode.status as EpisodeStatus,
       act: prismaEpisode.act as FiveActType | null,
-      cliffhangerType: prismaEpisode.cliffhangerType,
+      cliffhangerType: prismaEpisode.cliffhangerType as Episode['cliffhangerType'],
       cliffhangerIntensity: prismaEpisode.cliffhangerIntensity,
       notes: prismaEpisode.notes,
       sortOrder: prismaEpisode.sortOrder,

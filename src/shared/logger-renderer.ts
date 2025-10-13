@@ -1,143 +1,149 @@
-// 🔥 Renderer 전용 로거 시스템 (Node.js globals 미사용)
+// 🔥 기가차드 렌더러 로거 (logger.ts와 동일 기능 수준)
+import { getComponentName } from './logger-utils';
+
 export enum LogLevel {
-    DEBUG = 0,
-    INFO = 1,
-    WARN = 2,
-    ERROR = 3,
+  DEBUG = 0,
+  INFO = 1,
+  WARN = 2,
+  ERROR = 3,
 }
 
-export interface LogEntry {
-    level: LogLevel;
-    component: string;
-    message: string;
-    data?: unknown;
-    timestamp: Date;
+interface LogEntry {
+  level: LogLevel;
+  component: string;
+  message: string;
+  data?: unknown;
+  timestamp: Date;
 }
 
 class RendererLoggerService {
-    private logLevel: LogLevel = LogLevel.DEBUG;
-    private logs: LogEntry[] = [];
-    private maxLogs = 1000;
-    private timers: Map<string, number> = new Map();
+  private logLevel: LogLevel = LogLevel.DEBUG;
+  private logs: LogEntry[] = [];
+  private maxLogs = 1000;
+  private timers: Map<string, number> = new Map();
 
-    constructor() {
-        // 🔥 renderer 환경에서는 고정된 DEBUG 레벨 사용
-        // process.env 접근 불가하므로 기본값으로 설정
-        this.logLevel = LogLevel.DEBUG;
+  constructor() {
+    // 🔥 렌더러 환경에서는 DEBUG 레벨 기본값 (process.env 접근 불가)
+    this.logLevel = LogLevel.DEBUG;
+  }
+
+  private log(level: LogLevel, component: string | symbol, message: string, data?: unknown): void {
+    if (level < this.logLevel) return;
+
+    const componentName = getComponentName(component);
+
+    const entry: LogEntry = {
+      level,
+      component: componentName,
+      message,
+      data,
+      timestamp: new Date(),
+    };
+
+    this.logs.push(entry);
+    if (this.logs.length > this.maxLogs) {
+      this.logs.shift();
     }
 
-    private shouldLog(level: LogLevel): boolean {
-        return level >= this.logLevel;
+    // 🔥 렌더러 환경 감지 (window.location, localStorage)
+    const isDevelopment =
+      typeof window !== 'undefined' &&
+      window.location &&
+      (window.location.hostname === 'localhost' || window.location.hostname.startsWith('127.0.0.1'));
+
+    // 🔥 Verbose 모드 체크 (localStorage 안전 접근)
+    let verboseMode = false;
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        verboseMode = window.localStorage.getItem('VERBOSE_LOGGING') === 'true';
+      }
+    } catch {
+      // localStorage 차단된 경우 무시
     }
 
-    private formatMessage(level: LogLevel, component: string, message: string, data?: unknown): string {
-        const timestamp = new Date().toISOString();
-        const levelStr = LogLevel[level];
-        const dataStr = data ? ` ${JSON.stringify(data)}` : '';
-        return `[${timestamp}] ${levelStr} [${component}] ${message}${dataStr}`;
+    // 🔥 강제 출력: 개발 모드에서는 DEBUG도 표시
+    const forceOutput = isDevelopment;
+
+    if (level >= this.logLevel || forceOutput) {
+      const timestamp = entry.timestamp.toISOString();
+      const levelName = LogLevel[level];
+      const prefix = `[${timestamp}] ${levelName} [${componentName}]`;
+
+      // 🔥 Emoji 아이콘 출력 (logger.ts와 동일)
+      switch (level) {
+        case LogLevel.DEBUG:
+          console.debug(`🔍 ${prefix}`, message, verboseMode && data ? data : '');
+          break;
+        case LogLevel.INFO:
+          console.info(`ℹ️ ${prefix}`, message, verboseMode && data ? data : '');
+          break;
+        case LogLevel.WARN:
+          console.warn(`⚠️ ${prefix}`, message, verboseMode && data ? data : '');
+          break;
+        case LogLevel.ERROR:
+          console.error(`❌ ${prefix}`, message, verboseMode && data ? data : '');
+          break;
+      }
+    }
+  }
+
+  debug(component: string | symbol, message: string, data?: unknown): void {
+    this.log(LogLevel.DEBUG, component, message, data);
+  }
+
+  info(component: string | symbol, message: string, data?: unknown): void {
+    this.log(LogLevel.INFO, component, message, data);
+  }
+
+  warn(component: string | symbol, message: string, data?: unknown): void {
+    this.log(LogLevel.WARN, component, message, data);
+  }
+
+  error(component: string | symbol, message: string, data?: unknown): void {
+    this.log(LogLevel.ERROR, component, message, data);
+  }
+
+  // 🔥 타이머 유틸 (logger.ts와 동일)
+  startTimer(component: string | symbol, label: string): void {
+    const componentName = getComponentName(component);
+    const key = `${componentName}:${label}`;
+    this.timers.set(key, Date.now());
+    this.debug(component, `⏱️ Timer started: ${label}`);
+  }
+
+  endTimer(component: string | symbol, label: string): number {
+    const componentName = getComponentName(component);
+    const key = `${componentName}:${label}`;
+    const start = this.timers.get(key);
+    if (!start) {
+      this.warn(component, `⏱️ Timer not found: ${label}`);
+      return 0;
     }
 
-    private addLog(level: LogLevel, component: string, message: string, data?: unknown): void {
-        if (!this.shouldLog(level)) return;
+    const duration = Date.now() - start;
+    this.timers.delete(key);
+    this.info(component, `⏱️ Timer ended: ${label}`, { duration });
+    return duration;
+  }
 
-        const entry: LogEntry = {
-            level,
-            component,
-            message,
-            data,
-            timestamp: new Date(),
-        };
+  getLogs(): LogEntry[] {
+    return [...this.logs];
+  }
 
-        this.logs.push(entry);
+  clearLogs(): void {
+    this.logs = [];
+  }
 
-        // 로그 수 제한
-        if (this.logs.length > this.maxLogs) {
-            this.logs.shift();
-        }
-
-        // 콘솔 출력
-        const formattedMessage = this.formatMessage(level, component, message, data);
-
-        switch (level) {
-            case LogLevel.DEBUG:
-                console.debug(formattedMessage);
-                break;
-            case LogLevel.INFO:
-                console.info(formattedMessage);
-                break;
-            case LogLevel.WARN:
-                console.warn(formattedMessage);
-                break;
-            case LogLevel.ERROR:
-                console.error(formattedMessage);
-                break;
-        }
-    }
-
-    public debug(component: string, message: string, data?: unknown): void {
-        this.addLog(LogLevel.DEBUG, component, message, data);
-    }
-
-    public info(component: string, message: string, data?: unknown): void {
-        this.addLog(LogLevel.INFO, component, message, data);
-    }
-
-    public warn(component: string, message: string, data?: unknown): void {
-        this.addLog(LogLevel.WARN, component, message, data);
-    }
-
-    public error(component: string, message: string, data?: unknown): void {
-        this.addLog(LogLevel.ERROR, component, message, data);
-    }
-
-    // 🔥 Timer 기능 (성능 측정용)
-    public startTimer(name: string): void {
-        this.timers.set(name, performance.now());
-        this.debug('TIMER', `Timer started: ${name}`);
-    }
-
-    public endTimer(name: string): void {
-        const startTime = this.timers.get(name);
-        if (startTime !== undefined) {
-            const duration = performance.now() - startTime;
-            this.timers.delete(name);
-            this.info('TIMER', `Timer completed: ${name}`, { duration: `${duration.toFixed(3)}ms` });
-        } else {
-            this.warn('TIMER', `Timer ${name} was not found`);
-        }
-    }
-
-    public getLogs(): LogEntry[] {
-        return [...this.logs];
-    }
-
-    public clearLogs(): void {
-        this.logs = [];
-    }
-
-    public setLevel(level: LogLevel): void {
-        this.logLevel = level;
-    }
+  setLevel(level: LogLevel): void {
+    this.logLevel = level;
+  }
 }
 
-// 싱글톤 인스턴스 생성
+// 🔥 싱글톤 인스턴스
 const rendererLoggerInstance = new RendererLoggerService();
 
-// 🔥 기존 Logger와 호환되는 인터페이스 제공
-export const RendererLogger = {
-    debug: (component: string, message: string, data?: unknown) =>
-        rendererLoggerInstance.debug(component, message, data),
-    info: (component: string, message: string, data?: unknown) =>
-        rendererLoggerInstance.info(component, message, data),
-    warn: (component: string, message: string, data?: unknown) =>
-        rendererLoggerInstance.warn(component, message, data),
-    error: (component: string, message: string, data?: unknown) =>
-        rendererLoggerInstance.error(component, message, data),
-    startTimer: (name: string) => rendererLoggerInstance.startTimer(name),
-    endTimer: (name: string) => rendererLoggerInstance.endTimer(name),
-    getLogs: () => rendererLoggerInstance.getLogs(),
-    clearLogs: () => rendererLoggerInstance.clearLogs(),
-    setLevel: (level: LogLevel) => rendererLoggerInstance.setLevel(level),
-};
+// 🔥 logger.ts와 호환되는 export (RendererLogger + Logger alias)
+export const RendererLogger = rendererLoggerInstance;
+export const Logger = rendererLoggerInstance;
 
 export default RendererLogger;

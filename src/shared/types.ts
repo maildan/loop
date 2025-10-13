@@ -6,8 +6,21 @@ import type { FontOption, FontVariantManifestEntry } from './fonts/types';
 // 🎭 프로젝트 관련 타입은 types/project.ts에서 import하여 사용
 import type { ProjectCharacter, ProjectStructure, ProjectNote, Project } from './types/project';
 
+// 🎭 에피소드 관련 타입 - types/episode.ts에서 import
+import type {
+  Episode,
+  CreateEpisodeInput,
+  UpdateEpisodeInput,
+  EpisodeFilterOptions,
+  EpisodeSortOptions,
+  ManuscriptReserves,
+  FiveActAnalysis,
+  EpisodeStats
+} from './types/episode';
+
 // Re-export for convenience
 export type { ProjectCharacter, ProjectStructure, ProjectNote, Project };
+export type { Episode, CreateEpisodeInput, UpdateEpisodeInput, EpisodeFilterOptions, EpisodeSortOptions, ManuscriptReserves, FiveActAnalysis, EpisodeStats };
 
 // 🔥 Result 타입 - 함수 결과 래핑
 export interface Result<TData = unknown> {
@@ -222,18 +235,18 @@ export interface ElectronAPI {
   'synopsis-stats:get-experiments': (projectId: string) => Promise<any[]>;
   'synopsis-stats:create-experiment': (data: any) => Promise<any>;
 
-  // � Episode Management API
-  'episode:create': (input: any) => Promise<any>;
-  'episode:get': (id: string) => Promise<any>;
-  'episode:getByNumber': (projectId: string, episodeNumber: number) => Promise<any>;
-  'episode:list': (projectId: string, options?: any) => Promise<any[]>;
-  'episode:update': (id: string, data: any) => Promise<any>;
+  // 📺 Episode Management API
+  'episode:create': (input: CreateEpisodeInput) => Promise<IpcResponse<Episode>>;
+  'episode:get': (id: string) => Promise<IpcResponse<Episode>>;
+  'episode:getByNumber': (projectId: string, episodeNumber: number) => Promise<IpcResponse<Episode>>;
+  'episode:list': (projectId: string, options?: EpisodeFilterOptions & EpisodeSortOptions) => Promise<IpcResponse<Episode[]>>;
+  'episode:update': (id: string, data: UpdateEpisodeInput) => Promise<IpcResponse<Episode>>;
   'episode:delete': (id: string) => Promise<void>;
   'episode:hardDelete': (id: string) => Promise<void>;
-  'episode:publish': (id: string, platforms: string[]) => Promise<any>;
-  'episode:getManuscriptReserves': (projectId: string) => Promise<any>;
-  'episode:analyzeFiveActStructure': (projectId: string) => Promise<any>;
-  'episode:getStats': (projectId: string) => Promise<any>;
+  'episode:publish': (id: string, platforms: string[]) => Promise<IpcResponse<Episode>>;
+  'episode:getManuscriptReserves': (projectId: string) => Promise<IpcResponse<ManuscriptReserves>>;
+  'episode:analyzeFiveActStructure': (projectId: string) => Promise<IpcResponse<FiveActAnalysis>>;
+  'episode:getStats': (projectId: string) => Promise<IpcResponse<EpisodeStats>>;
 
   // �🐚 Shell API (외부 링크 및 파일 탐색기)
   shell: {

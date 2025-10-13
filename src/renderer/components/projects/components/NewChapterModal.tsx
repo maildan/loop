@@ -3,6 +3,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import { RendererLogger as Logger } from '../../../../shared/logger-renderer';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const NEW_CHAPTER_MODAL = Symbol.for('NEW_CHAPTER_MODAL');
 
 interface NewChapterModalProps {
     isOpen: boolean;
@@ -32,6 +36,7 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
     useEffect(() => {
         if (isOpen) {
             setTitle(defaultTitle);
+            Logger.debug(NEW_CHAPTER_MODAL, 'Modal opened', { isOpen });
             // 모달이 열릴 때 입력 필드에 포커스
             setTimeout(() => {
                 inputRef.current?.focus();
@@ -55,9 +60,6 @@ export function NewChapterModal({ isOpen, onClose, onConfirm, defaultTitle = '' 
     };
 
     if (!isOpen) return null;
-
-    // 🔥 디버깅: 모달이 렌더링되는지 확인
-    console.log('🔍 NewChapterModal rendering with isOpen:', isOpen);
 
     const modalContent = (
         <div

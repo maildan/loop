@@ -23,10 +23,13 @@ import { CharactersView } from '../../views/CharactersView';
 import { NotesView } from '../../views/notes';
 import { SynopsisView } from '../../views/synopsis';
 import { IdeaView } from '../../views/idea';
-import { Logger } from '../../../../../shared/logger';
+import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
 import { ProjectStructure } from '../../../../../shared/types';
 import { useStructureStore } from '../../../../stores/useStructureStore';
 import { EditorTab } from '../../../../../shared/editor';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const PROJECT_EDITOR = Symbol.for('PROJECT_EDITOR');
 
 // 🔥 모듈화된 hooks 및 services
 import { useProjectData } from '../../hooks/useProjectData';
@@ -43,7 +46,7 @@ export interface ProjectEditorProps {
 export const ProjectEditor = memo(function ProjectEditor({
     projectId
 }: ProjectEditorProps): React.ReactElement {
-    Logger.info('PROJECT_EDITOR', 'ProjectEditor render started', { projectId });
+    Logger.info(PROJECT_EDITOR, 'ProjectEditor render started', { projectId });
 
     // 🔥 모듈화된 상태 관리
     const { isLoading, error, ...projectData } = useProjectData(projectId);
@@ -59,13 +62,19 @@ export const ProjectEditor = memo(function ProjectEditor({
     // 🔥 프로젝트 변경 시 DB에서 구조 데이터 로드
     useEffect(() => {
         if (projectId) {
-            console.log('🔄 [ProjectEditor] Loading structures from DB for project:', projectId);
+            Logger.debug(PROJECT_EDITOR, 'Loading structures from DB for project', { projectId });
             loadStructuresFromDB(projectId).catch(error => {
-                console.error('❌ [ProjectEditor] Failed to load structures from DB:', error);
-                Logger.error('PROJECT_EDITOR', 'Failed to load structures from DB', { projectId, error });
+                Logger.error(PROJECT_EDITOR, 'Failed to load structures from DB', { projectId, error });
             });
         }
     }, [projectId, loadStructuresFromDB]);
+
+    // 🔥 NewChapterModal 상태 디버깅
+    useEffect(() => {
+        Logger.debug(PROJECT_EDITOR, 'NewChapterModal state changed', { 
+            showNewChapterModal: state.showNewChapterModal 
+        });
+    }, [state.showNewChapterModal]);
 
     // NOTE: error/loading rendering handled later after hooks are declared
 
@@ -90,7 +99,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     const isSidebarCollapsed = state.collapsed;
 
     // 🔥 디버깅: 사이드바 상태 확인 
-    Logger.debug('PROJECT_EDITOR', 'Sidebar States', {
+    Logger.debug(PROJECT_EDITOR, 'Sidebar States', {
         isSidebarCollapsed: isSidebarCollapsed,
         mainCollapsed: state.collapsed,
         settingsCollapsed: sidebarCollapsed,
@@ -98,7 +107,7 @@ export const ProjectEditor = memo(function ProjectEditor({
     });    // 🔥 저장 성공 처리
     const handleSaveSuccess = () => {
         actions.markAllTabsAsSaved();
-        Logger.info('PROJECT_EDITOR', 'All tabs marked as saved');
+        Logger.info(PROJECT_EDITOR, 'All tabs marked as saved');
     };
 
     // 🔥 actions 안정적 참조를 위한 ref
@@ -111,7 +120,7 @@ export const ProjectEditor = memo(function ProjectEditor({
         if (projectData.saveStatus === 'saved' && saveStatusRef.current !== 'saved') {
             saveStatusRef.current = 'saved';
             actionsRef.current.markAllTabsAsSaved();
-            Logger.debug('PROJECT_EDITOR', 'Auto save completed - tabs updated');
+            Logger.debug(PROJECT_EDITOR, 'Auto save completed - tabs updated');
         } else if (projectData.saveStatus !== 'saved') {
             saveStatusRef.current = projectData.saveStatus;
         }
@@ -290,7 +299,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 <MarkdownEditor
                                     content={activeTab?.content || ''}
                                     onChange={(content) => {
-                                        console.log('🔥 [ProjectEditor] MarkdownEditor onChange:', {
+                                        Logger.debug(PROJECT_EDITOR, 'MarkdownEditor onChange', {
                                             activeTabId: activeTab?.id,
                                             activeTabType: activeTab?.type,
                                             contentLength: content.length,
@@ -307,11 +316,11 @@ export const ProjectEditor = memo(function ProjectEditor({
                                             // 🔥 탭 타입에 따라 다른 저장 로직
                                             if (activeTab.type === 'main') {
                                                 // 메인 탭: 프로젝트 메인 content에 저장
-                                                console.log('🔥 [ProjectEditor] Saving to MAIN project content');
+                                                Logger.debug(PROJECT_EDITOR, 'Saving to MAIN project content');
                                                 projectData.setContent(content);
                                             } else if (activeTab.type === 'chapter') {
                                                 // 챕터 탭: 해당 챕터 구조체에 저장
-                                                console.log('🔥 [ProjectEditor] Saving to CHAPTER:', activeTab.title);
+                                                Logger.debug(PROJECT_EDITOR, 'Saving to CHAPTER', { title: activeTab.title });
 
                                                 // 탭 ID에서 구조체 ID 추출 (탭 ID 형식: 'chapter-{structureId}' 또는 구조체 ID 자체)
                                                 const structureId = activeTab.id.startsWith('chapter-')
@@ -322,20 +331,20 @@ export const ProjectEditor = memo(function ProjectEditor({
                                                 updateStructureItem(projectId, structureId, {
                                                     content: content
                                                 }).then(() => {
-                                                    console.log('✅ [ProjectEditor] Chapter saved successfully:', structureId);
+                                                    Logger.info(PROJECT_EDITOR, 'Chapter saved successfully', { structureId });
                                                 }).catch((error) => {
-                                                    console.error('❌ [ProjectEditor] Failed to save chapter:', error);
+                                                    Logger.error(PROJECT_EDITOR, 'Failed to save chapter', { error });
                                                 });
                                             } else {
                                                 // 기타 탭: 탭 자체에만 저장 (임시)
-                                                console.log('🔥 [ProjectEditor] Saving to TAB only:', activeTab.type);
+                                                Logger.debug(PROJECT_EDITOR, 'Saving to TAB only', { type: activeTab.type });
                                             }
                                         }
                                     }}
                                     isFocusMode={uiState?.isFocusMode || false}
                                     onEditorReady={(editor) => {
                                         setEditorInstance(editor);
-                                        Logger.debug('PROJECT_EDITOR', 'Editor instance received', { hasEditor: !!editor });
+                                        Logger.debug(PROJECT_EDITOR, 'Editor instance received', { hasEditor: !!editor });
                                     }}
                                 />
                             </div>
@@ -846,8 +855,6 @@ export const ProjectEditor = memo(function ProjectEditor({
 
             {state.showNewChapterModal && (
                 <>
-                    {/* 🔥 디버깅: 모달 렌더링 확인 */}
-                    {console.log('🔍 Rendering NewChapterModal, state:', state.showNewChapterModal)}
                     <NewChapterModal
                         isOpen={state.showNewChapterModal}
                         onClose={actions.closeNewChapterModal}

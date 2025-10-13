@@ -4,6 +4,12 @@
  * 기능:
  * - 회차 제목/내용 편집
  * - 5막 구조 선택
+import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
+const EPISODE_DETAIL_MODAL = Symbol.for('EPISODE_DETAIL_MODAL');
+
+import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
+const EPISODE_DETAIL_MODAL = Symbol.for('EPISODE_DETAIL_MODAL');
+
  * - 상태 변경 (draft/in-progress/completed)
  * - 클리프행어 설정
  * - 작가 메모
@@ -15,6 +21,7 @@
 import React, { useState } from 'react';
 import { X, Save, Loader2 } from 'lucide-react';
 import type { Episode } from '../../../../../hooks/useEpisodes';
+import { Logger } from '../../../../../../shared/logger-renderer';
 
 export interface EpisodeDetailModalProps {
   episode: Episode | null;
@@ -77,7 +84,7 @@ export const EpisodeDetailModal: React.FC<EpisodeDetailModalProps> = ({
       await onSave(episode.id, formData);
       onClose();
     } catch (error) {
-      console.error('Error saving episode:', error);
+      Logger.error('EPISODE_DETAIL_MODAL', 'Error saving episode', { error });
     } finally {
       setSaving(false);
     }

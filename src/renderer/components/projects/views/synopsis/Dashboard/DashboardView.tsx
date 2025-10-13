@@ -1,5 +1,6 @@
 'use client';
 
+
 import React, { useMemo } from 'react';
 import { StatusOverview } from './StatusOverview';
 import { QuickActions } from './QuickActions';
@@ -13,6 +14,10 @@ import type { DashboardViewProps } from '../types';
 import type { ConsistencyWarning } from '../types';
 import type { ManuscriptReserves } from '../../../../../../shared/types/episode';
 import { useSynopsisStats } from '../../../../../hooks/useSynopsisStats';
+
+
+const DASHBOARD_VIEW = Symbol.for('DASHBOARD_VIEW');
+import { RendererLogger as Logger } from '../../../../../../shared/logger-renderer';
 
 export const DashboardView: React.FC<DashboardViewProps> = ({
   projectId,
@@ -109,7 +114,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const handleNewEpisode = () => {
     // Phase 2: IPC 호출로 새 회차 작성 모달 열기
-    console.log('새 회차 작성 (Phase 2 구현 예정)');
+    Logger.debug(DASHBOARD_VIEW, '새 회차 작성 (Phase 2 구현 예정)');
   };
 
   const handleViewAllWarnings = () => {

@@ -61,30 +61,40 @@ class PrismaService {
 
       // Prisma 클라이언트 동적 로딩 (databaseService와 동일한 패턴)
       const { app } = require('electron');
+      const path = require('path');
       let PrismaClientConstructor;
       
       if (app.isPackaged) {
-        // 패키지 앱: extraResources/prisma/client/index.js를 직접 require (default.js의 exports condition 우회)
-        const path = require('path');
-        const prismaClientDir = safePathJoin(process.resourcesPath || '', 'prisma', 'client');
+        // 🔥 패키지 앱: app.asar.unpacked/node_modules/.prisma/client에서 로드
+        // electron-builder의 asarUnpack이 Prisma를 app.asar.unpacked로 추출함
+        const appPath = app.getAppPath(); // app.asar 경로
+        const unpackedPath = appPath.replace('app.asar', 'app.asar.unpacked');
         
-        if (!prismaClientDir) {
-          Logger.error('PRISMA_SERVICE', 'Failed to create secure Prisma client directory path');
-          throw new Error('Failed to create secure Prisma client directory path');
+        // Prisma 클라이언트 경로 (asarUnpack으로 추출된 위치)
+        const prismaClientPath = safePathJoin(unpackedPath, 'node_modules', '.prisma', 'client');
+        
+        if (!prismaClientPath) {
+          Logger.error('PRISMA_SERVICE', 'Failed to create secure Prisma client path');
+          throw new Error('Failed to create secure Prisma client path');
         }
         
-        // default.js 대신 index.js 직접 로드
-        const indexPath = safePathJoin(prismaClientDir, 'index.js');
+        // index.js (CommonJS 진입점) 로드
+        const indexPath = safePathJoin(prismaClientPath, 'index.js');
         if (!indexPath) {
           Logger.error('PRISMA_SERVICE', 'Failed to create secure Prisma index path');
           throw new Error('Failed to create secure Prisma index path');
         }
         
-        Logger.info('PRISMA_SERVICE', 'Loading Prisma client from extraResources', { indexPath });
+        Logger.info('PRISMA_SERVICE', '🔍 Loading Prisma client from app.asar.unpacked', { 
+          appPath, 
+          unpackedPath,
+          prismaClientPath,
+          indexPath 
+        });
         
         // 🔒 보안: 동적 require는 일반적으로 위험하지만, 이 경우는 안전함
-        // - indexPath는 safePathJoin으로 검증된 경로 (process.resourcesPath + 'prisma/client/index.js')
-        // - process.resourcesPath는 Electron이 제공하는 신뢰할 수 있는 경로
+        // - indexPath는 safePathJoin으로 검증된 경로 (app.asar.unpacked + 'node_modules/.prisma/client/index.js')
+        // - app.getAppPath()는 Electron이 제공하는 신뢰할 수 있는 경로
         // - 사용자 입력이 개입하지 않는 고정된 패턴
         // nosemgrep: javascript.lang.security.audit.unsafe-dynamic-method-exec
         const prismaModule = require(indexPath);

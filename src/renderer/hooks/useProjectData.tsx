@@ -5,9 +5,12 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { useStructureStore } from '../stores/useStructureStore';
-import { Logger } from '../../shared/logger';
+import { RendererLogger as Logger } from '../../shared/logger-renderer';
 // 🔥 AI 분석 시스템 import (더미 데이터 제거)
 import { AIEnhancedNCPAnalyzer, type AIEnhancedAnalysisResult, performAIStoryAnalysis } from '../../shared/narrative/aiEnhancedAnalyzer';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const USE_PROJECT_DATA = Symbol.for('USE_PROJECT_DATA');
 
 // 🔥 플롯 관련성 계산 함수
 function calculatePlotRelevance(content: string, type: string): number {
@@ -185,7 +188,7 @@ export function useIntegratedProjectData(projectId: string) {
             try {
                 content = typeof item.content === 'string' ? item.content : JSON.stringify(item.content);
             } catch (e) {
-                console.warn(`⚠️ [processStructureItems] Failed to parse content for item ${item.id}:`, e);
+                Logger.warn(USE_PROJECT_DATA, 'Failed to parse content for item', { itemId: item.id, error: e });
                 content = String(item.content || '');
             }
 

@@ -10,6 +10,10 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { RendererLogger as Logger } from '../../shared/logger-renderer';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const USE_SYNOPSIS_STATS = Symbol.for('USE_SYNOPSIS_STATS');
 
 // ============================================
 // Types
@@ -70,7 +74,7 @@ export function useWritingActivity(projectId: string, days: number = 7) {
 
       setData(result);
     } catch (err) {
-      console.error('Error fetching writing activity:', err);
+      Logger.error(USE_SYNOPSIS_STATS, 'Error fetching writing activity:', err);
       setError(err instanceof Error ? err : new Error('Failed to fetch writing activity'));
     } finally {
       setLoading(false);
@@ -115,7 +119,7 @@ export function useProgressTimeline(projectId: string, days: number = 30) {
 
       setData(result);
     } catch (err) {
-      console.error('Error fetching progress timeline:', err);
+      Logger.error(USE_SYNOPSIS_STATS, 'Error fetching progress timeline:', err);
       setError(err instanceof Error ? err : new Error('Failed to fetch progress timeline'));
     } finally {
       setLoading(false);
@@ -158,7 +162,7 @@ export function useEpisodeStats(projectId: string) {
 
       setData(result);
     } catch (err) {
-      console.error('Error fetching episode stats:', err);
+      Logger.error(USE_SYNOPSIS_STATS, 'Error fetching episode stats:', err);
       setError(err instanceof Error ? err : new Error('Failed to fetch episode stats'));
     } finally {
       setLoading(false);
@@ -235,7 +239,7 @@ export function useRecordActivity() {
           episodeId
         );
       } catch (err) {
-        console.error('Error recording writing activity:', err);
+        Logger.error(USE_SYNOPSIS_STATS, 'Error recording writing activity:', err);
         setError(err instanceof Error ? err : new Error('Failed to record activity'));
         throw err;
       } finally {

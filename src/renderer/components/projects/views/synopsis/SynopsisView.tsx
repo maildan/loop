@@ -8,6 +8,10 @@ import { ScheduleView } from './Schedule/ScheduleView';
 import { ConsistencyView } from './Consistency/ConsistencyView';
 import { TimelineView } from './Timeline/TimelineView';
 import { LayoutDashboard, List, Network, Calendar, CheckCircle2, Clock } from 'lucide-react';
+import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const SYNOPSIS_VIEW = Symbol.for('SYNOPSIS_VIEW');
 
 /**
  * 📖 SynopsisView - 연재 작가의 제2의 뇌
@@ -48,7 +52,7 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                 const checkResult = await window.electronAPI.projects.getById(projectId);
                 
                 if (!checkResult.success || !checkResult.data) {
-                    console.warn('[Synopsis] Project not found in DB, creating...', projectId);
+                    Logger.warn(SYNOPSIS_VIEW, 'Project not found in DB, creating...', { projectId });
                     
                     // DB에 프로젝트 생성
                     const createResult = await window.electronAPI.projects.create({
@@ -63,16 +67,16 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                     });
                     
                     if (createResult.success) {
-                        console.log('[Synopsis] Project created in DB:', createResult.data);
+                        Logger.info(SYNOPSIS_VIEW, 'Project created in DB', { data: createResult.data });
                         setIsProjectSaved(true);
                     } else {
-                        console.error('[Synopsis] Failed to create project:', createResult.error);
+                        Logger.error(SYNOPSIS_VIEW, 'Failed to create project', { error: createResult.error });
                     }
                 } else {
                     setIsProjectSaved(true);
                 }
             } catch (error) {
-                console.error('[Synopsis] Error ensuring project saved:', error);
+                Logger.error(SYNOPSIS_VIEW, 'Error ensuring project saved', { projectId, error });
             }
         };
 

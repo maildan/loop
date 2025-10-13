@@ -8,6 +8,7 @@ import { ipcMain } from 'electron';
 import type { IpcMainEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { EpisodeService } from '../services/EpisodeService';
+import type { CreateEpisodeInput, UpdateEpisodeInput, EpisodeFilterOptions, EpisodeSortOptions } from '../../shared/types/episode';
 
 const episodeService = new EpisodeService();
 
@@ -18,7 +19,7 @@ export function setupEpisodeIpcHandlers(): void {
   Logger.debug('EPISODE_IPC', 'Setting up episode IPC handlers');
 
   // 회차 생성
-  ipcMain.handle('episode:create', async (event: IpcMainEvent, input: any) => {
+  ipcMain.handle('episode:create', async (event: IpcMainEvent, input: CreateEpisodeInput) => {
     try {
       Logger.debug('EPISODE_IPC', 'Creating episode', { input });
       const episode = await episodeService.createEpisode(input);
@@ -54,7 +55,7 @@ export function setupEpisodeIpcHandlers(): void {
   });
 
   // 회차 목록 조회
-  ipcMain.handle('episode:list', async (event: IpcMainEvent, projectId: string, filter?: any, sort?: any) => {
+  ipcMain.handle('episode:list', async (event: IpcMainEvent, projectId: string, filter?: EpisodeFilterOptions, sort?: EpisodeSortOptions) => {
     try {
       Logger.debug('EPISODE_IPC', 'Listing episodes', { projectId, filter, sort });
       const episodes = await episodeService.listEpisodes(projectId, filter, sort);
@@ -66,7 +67,7 @@ export function setupEpisodeIpcHandlers(): void {
   });
 
   // 회차 수정
-  ipcMain.handle('episode:update', async (event: IpcMainEvent, id: string, input: any) => {
+  ipcMain.handle('episode:update', async (event: IpcMainEvent, id: string, input: UpdateEpisodeInput) => {
     try {
       Logger.debug('EPISODE_IPC', 'Updating episode', { id, input });
       const episode = await episodeService.updateEpisode(id, input);

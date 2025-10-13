@@ -1,4 +1,6 @@
 // 🔥 기가차드 로거 시스템
+import { getComponentName } from './logger-utils';
+
 export enum LogLevel {
   DEBUG = 0,
   INFO = 1,
@@ -46,12 +48,14 @@ class LoggerService {
     this.logLevel = level;
   }
 
-  private log(level: LogLevel, component: string, message: string, data?: unknown): void {
+  private log(level: LogLevel, component: string | symbol, message: string, data?: unknown): void {
     if (level < this.logLevel) return;
+
+    const componentName = getComponentName(component);
 
     const entry: LogEntry = {
       level,
-      component,
+      component: componentName,
       message,
       data,
       timestamp: new Date(),
@@ -67,7 +71,7 @@ class LoggerService {
     // 🔥 콘솔 출력 - 환경변수 기반 + 강제 출력 모드 (렌더러 호환)
     const timestamp = entry.timestamp.toISOString();
     const levelName = LogLevel[level];
-    const prefix = `[${timestamp}] ${levelName} [${component}]`;
+    const prefix = `[${timestamp}] ${levelName} [${componentName}]`;
     const safeEnvLocal = (typeof process !== 'undefined' && process.env ? process.env : {}) as Record<string, string | undefined>;
     const verboseMode = safeEnvLocal.VERBOSE_LOGGING === 'true';
 
@@ -92,19 +96,19 @@ class LoggerService {
     }
   }
 
-  debug(component: string, message: string, data?: unknown): void {
+  debug(component: string | symbol, message: string, data?: unknown): void {
     this.log(LogLevel.DEBUG, component, message, data);
   }
 
-  info(component: string, message: string, data?: unknown): void {
+  info(component: string | symbol, message: string, data?: unknown): void {
     this.log(LogLevel.INFO, component, message, data);
   }
 
-  warn(component: string, message: string, data?: unknown): void {
+  warn(component: string | symbol, message: string, data?: unknown): void {
     this.log(LogLevel.WARN, component, message, data);
   }
 
-  error(component: string, message: string, data?: unknown): void {
+  error(component: string | symbol, message: string, data?: unknown): void {
     this.log(LogLevel.ERROR, component, message, data);
   }
 
