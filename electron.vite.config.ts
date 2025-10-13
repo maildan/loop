@@ -77,6 +77,7 @@ export default defineConfig(({ mode }) => {
           // 외부 의존성 최적화
           external: [
             'electron',
+            'electron-updater',
             'ttf2woff2',
             '@prisma/client',
             '.prisma/client'

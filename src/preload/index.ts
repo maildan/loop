@@ -357,6 +357,11 @@ const electronAPI: ElectronAPI = {
     reload: () => ipcRenderer.invoke('font:reload'),
   },
 
+  // 🔥 Updater API (electron-updater 통합)
+  updater: {
+    checkForUpdates: () => ipcRenderer.invoke('updater:check-for-updates'),
+    restartAndInstall: () => ipcRenderer.invoke('updater:restart-and-install'),
+  },
 
 };
 

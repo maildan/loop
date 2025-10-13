@@ -126,31 +126,41 @@ export class UpdaterManager {
         'UPDATER',
         `⬇️  다운로드: ${percent}% | ${mbTransferred}/${mbTotal} MB | ${speedMBps} MB/s`
       );
+
+      // 🔥 Taskbar/Dock에 진행률 표시 (0.0 ~ 1.0)
+      const mainWindow = windowManager.getWindow('main');
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.setProgressBar(progressObj.percent / 100);
+
+        // 🔥 Renderer로 진행률 전송 (UI 업데이트용)
+        mainWindow.webContents.send('updater:download-progress', {
+          percent: progressObj.percent,
+          transferred: progressObj.transferred,
+          total: progressObj.total,
+          bytesPerSecond: progressObj.bytesPerSecond,
+        });
+      }
     });
 
     // 다운로드 완료
     autoUpdater.on('update-downloaded', (info) => {
       Logger.info('UPDATER', '✅ 업데이트 다운로드 완료', { version: info.version });
 
-      // 사용자에게 알림 (restart 선택권 제공)
-      dialog
-        .showMessageBox({
-          type: 'info',
-          title: '업데이트 준비 완료',
-          message: `Loop ${info.version} 업데이트가 준비되었습니다.`,
-          detail: '지금 다시 시작하시겠습니까? (아니면 다음 실행 시 자동 적용)',
-          buttons: ['지금 재시작', '나중에'],
-          defaultId: 0,
-          cancelId: 1,
-        })
-        .then((result: MessageBoxReturnValue) => {
-          if (result.response === 0) {
-            Logger.info('UPDATER', '사용자가 즉시 재시작 선택');
-            autoUpdater.quitAndInstall();
-          } else {
-            Logger.info('UPDATER', '사용자가 나중에 재시작 선택 (앱 종료 시 자동 설치)');
-          }
+      // 🔥 진행률 표시 초기화 (완료)
+      const mainWindow = windowManager.getWindow('main');
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.setProgressBar(-1); // -1 = 진행률 제거
+
+        // 🔥 Renderer로 다운로드 완료 알림 (UpdateNotification.tsx에서 처리)
+        mainWindow.webContents.send('updater:downloaded', {
+          version: info.version,
+          releaseDate: info.releaseDate,
         });
+      }
+
+      // 🔥 Native dialog 제거: Renderer UI (UpdateNotification.tsx)에서 처리
+      // autoInstallOnAppQuit=true이므로 앱 종료 시 자동 설치됨
+      Logger.info('UPDATER', 'UpdateNotification UI에서 재시작 버튼 표시 대기 중...');
     });
 
     // 에러 처리

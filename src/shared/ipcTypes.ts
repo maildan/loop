@@ -18,6 +18,16 @@ export type IPCPayloads = {
 
   'app:get-version': undefined;
   'app:quit': undefined;
+
+  // 🔥 Updater 관련 IPC 채널
+  'updater:available': { version: string; releaseDate: string };
+  'updater:download-progress': {
+    percent: number;
+    transferred: number;
+    total: number;
+    bytesPerSecond: number;
+  };
+  'updater:downloaded': { version: string; releaseDate: string };
 };
 
 export type IPCResponseMap = {

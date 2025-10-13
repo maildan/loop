@@ -273,6 +273,12 @@ export interface ElectronAPI {
     getFontFamily: (familyName: string) => Promise<{ name: string; displayName: string; category: string; variants: FontVariantManifestEntry[]; cssFamily: string } | null>;
     reload: () => Promise<{ success: boolean; error?: string }>;
   };
+
+  // 🔥 Updater API (electron-updater 통합)
+  updater: {
+    checkForUpdates: () => Promise<IpcResponse<boolean>>;
+    restartAndInstall: () => Promise<IpcResponse<boolean>>;
+  };
 }
 
 // 🔥 기가차드 키보드 이벤트 인터페이스 (최종 통합 버전)

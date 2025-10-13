@@ -13,6 +13,7 @@ import Settings from './routes/Settings';
 import AI from './routes/AI';
 import OAuthCallback from './routes/OAuthCallback';
 import NotFound from './routes/NotFound';
+import { UpdateNotification } from '../components/common/UpdateNotification';
 import '../styles/index.css';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
@@ -116,6 +117,8 @@ export default function App(): React.ReactElement {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </ClientLayout>
+        {/* 🔥 Auto-updater 알림 (전역 표시) */}
+        <UpdateNotification />
       </BrowserRouter>
     </div>
   );
