@@ -1,6 +1,7 @@
 // 🔥 기가차드 Performance Optimizer - V8 & 메모리 최적화 (크로스 플랫폼)
 
 import { app, BrowserWindow } from 'electron';
+import { spawn } from 'child_process';
 import { Logger } from '../../shared/logger';
 import { Platform } from '../utils/platform';
 
@@ -83,7 +84,7 @@ export class PerformanceOptimizer {
     const baseV8Flags = [
       '--max-old-space-size=4096',        // 4GB 힙 크기
       '--max-new-space-size=1024',        // 1GB 새로운 공간
-      '--optimize-for-size',              // 메모리 최적화 우선
+      // REMOVED: '--optimize-for-size' (deprecated in V8)
       '--gc-interval=100',                // GC 간격 최적화
       '--expose-gc',                      // GC 수동 제어 활성화
     ];
@@ -117,13 +118,13 @@ export class PerformanceOptimizer {
     switch (platform) {
       case 'darwin': // macOS
         return [
-          '--use-idle-notification',      // 유휴 알림 사용
+          // REMOVED: '--use-idle-notification' (deprecated in V8)
           '--optimize-for-memory',        // 메모리 최적화
         ];
         
       case 'win32': // Windows
         return [
-          '--experimental-wasm-threads',  // WASM 스레드 지원
+          '--wasm-threads',               // WASM 스레드 지원 (now stable, removed experimental prefix)
           '--concurrent-marking',         // 동시 마킹
         ];
         
@@ -146,7 +147,7 @@ export class PerformanceOptimizer {
       '--disable-background-timer-throttling',  // 백그라운드 스로틀링 비활성화
       '--disable-backgrounding-occluded-windows', // 가려진 윈도우 백그라운드 처리 비활성화
       '--disable-renderer-backgrounding',       // 렌더러 백그라운드 처리 비활성화
-      '--enable-features=VaapiVideoDecoder',    // 하드웨어 비디오 디코딩
+      // MOVED: VaapiVideoDecoder to Linux-only section (not cross-platform)
     ];
 
     // 개발 모드 플래그
@@ -184,6 +185,7 @@ export class PerformanceOptimizer {
         return [
           '--enable-accelerated-2d-canvas', // 2D 캔버스 가속
           '--enable-gpu-memory-buffer-video-frames', // GPU 메모리 버퍼
+          '--enable-features=VaapiVideoDecoder', // Linux-only hardware video decoding
         ];
         
       default:
@@ -196,12 +198,7 @@ export class PerformanceOptimizer {
    */
   private optimizeV8Engine(): void {
     try {
-      // V8 플래그 적용
-      this.performanceConfig.v8Flags.forEach(flag => {
-        app.commandLine.appendSwitch('js-flags', flag);
-      });
-
-      // 추가 V8 최적화
+      // V8 플래그 적용 (FIXED: single call with space-separated flags, no duplicate)
       app.commandLine.appendSwitch('js-flags', 
         this.performanceConfig.v8Flags.join(' ')
       );
@@ -257,16 +254,16 @@ export class PerformanceOptimizer {
       } else if (Platform.isLinux()) {
         // Linux: 조건부 GPU 가속
         app.commandLine.appendSwitch('enable-accelerated-2d-canvas');
-        app.commandLine.appendSwitch('ignore-gpu-blacklist');
+        // REMOVED: 'ignore-gpu-blacklist' (dangerous, can cause crashes)
       }
 
-      // 공통 하드웨어 최적화
-      app.commandLine.appendSwitch('enable-features', 'VaapiVideoDecoder,CanvasOopRasterization');
+      // 공통 하드웨어 최적화 (FIXED: grouped feature flags)
+      app.commandLine.appendSwitch('enable-features', 'CanvasOopRasterization');
       app.commandLine.appendSwitch('disable-features', 'UseChromeOSDirectVideoDecoder');
 
       // WebGL 최적화
       app.commandLine.appendSwitch('enable-webgl2-compute-context');
-      app.commandLine.appendSwitch('enable-unsafe-webgpu');
+      // REMOVED: 'enable-unsafe-webgpu' (security risk in production)
 
       Logger.info(this.componentName, '🎮 Hardware acceleration optimized', {
         platform: process.platform,
@@ -300,8 +297,7 @@ export class PerformanceOptimizer {
    * 🔥 macOS 최적화
    */
   private optimizeMacOS(): void {
-    // Metal 렌더링 활성화
-    app.commandLine.appendSwitch('enable-metal');
+    // REMOVED: 'enable-metal' (enabled by default in Electron 38)
     
     // 고해상도 디스플레이 최적화
     app.commandLine.appendSwitch('force-device-scale-factor', '1');
@@ -317,8 +313,7 @@ export class PerformanceOptimizer {
     // DirectWrite 최적화
     app.commandLine.appendSwitch('enable-direct-write');
     
-    // D3D11 활성화
-    app.commandLine.appendSwitch('enable-d3d11');
+    // REMOVED: 'enable-d3d11' (enabled by default in Electron 38)
     
     // Windows 특화 GPU 최적화
     app.commandLine.appendSwitch('enable-direct-composition');
@@ -330,7 +325,8 @@ export class PerformanceOptimizer {
   private optimizeLinux(): void {
     // X11/Wayland 최적화
     app.commandLine.appendSwitch('enable-features', 'UseOzonePlatform');
-    app.commandLine.appendSwitch('ozone-platform', 'wayland');
+    // REMOVED: 'ozone-platform=wayland' (breaks X11 users in Electron 38, use auto detection)
+    // Users can set XDG_SESSION_TYPE=wayland environment variable if needed
     
     // 리눅스 특화 렌더링 최적화
     app.commandLine.appendSwitch('enable-gpu-sandbox');
@@ -359,7 +355,6 @@ export class PerformanceOptimizer {
         try {
           // Windows에서만 프로세스 우선순위 설정 시도
           // Use spawn with argument array to avoid shell interpolation
-          const { spawn } = require('child_process');
           const whereArg = `processid=${process.pid}`;
           const wm = spawn('wmic', ['process', 'where', whereArg, 'CALL', 'setpriority', 'high priority']);
           wm.on('error', () => { /* ignore errors */ });
