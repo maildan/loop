@@ -106,19 +106,20 @@ jobs:
         shell: bash
         run: |
           echo "🔍 Verifying Prisma client generation..."
-          if [ -d "node_modules/.prisma/client" ]; then
-            echo "✅ Prisma client directory exists"
-            ls -la node_modules/.prisma/client/ | head -20
+          
+          # pnpm 환경에서 @prisma/client import 가능 여부 테스트
+          if node -e "require('@prisma/client')" 2>/dev/null; then
+            echo "✅ @prisma/client package is available"
           else
-            echo "❌ Prisma client directory NOT found"
+            echo "❌ @prisma/client package NOT found or cannot be imported"
             exit 1
           fi
           
-          if [ -d "node_modules/@prisma/engines" ]; then
-            echo "✅ Prisma engines directory exists"
-            ls -la node_modules/@prisma/engines/ | head -20
+          # Prisma Client 타입 확인
+          if node -e "const { PrismaClient } = require('@prisma/client'); console.log('PrismaClient:', typeof PrismaClient)" 2>/dev/null; then
+            echo "✅ PrismaClient is properly exported"
           else
-            echo "❌ Prisma engines directory NOT found"
+            echo "❌ PrismaClient export verification failed"
             exit 1
           fi
       
