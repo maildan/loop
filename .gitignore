@@ -15,8 +15,6 @@
 *release
 /release
 /debug-scripts
-/assets
-/public
 /resources
 
 
@@ -42,7 +40,7 @@
 
 
 # production
-/build
+# /build  # 주석 처리: NSIS installer 커스터마이징 파일 포함 필요
 
 # misc
 .DS_Store

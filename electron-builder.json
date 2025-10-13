@@ -151,16 +151,18 @@
     ]
   },
   "nsis": {
-    "oneClick": true,
+    "oneClick": false,
     "perMachine": false,
     "allowElevation": true,
-    "allowToChangeInstallationDirectory": false,
+    "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
     "createStartMenuShortcut": true,
     "shortcutName": "Loop",
     "differentialPackage": true,
     "installerIcon": "public/assets/icon.png",
     "uninstallerIcon": "public/assets/icon.png",
+    "installerSidebar": "build/installer-sidebar.bmp",
+    "include": "build/installer.nsh",
     "license": null,
     "runAfterFinish": true,
     "deleteAppDataOnUninstall": false

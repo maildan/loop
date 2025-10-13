@@ -3,6 +3,7 @@
 import { app, dialog, MessageBoxReturnValue } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import { Logger } from '../../shared/logger';
+import { windowManager } from '../core/window';
 
 /**
  * UpdaterManager
@@ -98,6 +99,15 @@ export class UpdaterManager {
         version: info.version,
         releaseDate: info.releaseDate,
       });
+
+      // Main window에 알림 전송 (향후 UI 활용 가능)
+      const mainWindow = windowManager.getWindow('main');
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('updater:available', {
+          version: info.version,
+          releaseDate: info.releaseDate,
+        });
+      }
     });
 
     // 업데이트 없음
@@ -107,12 +117,15 @@ export class UpdaterManager {
 
     // 다운로드 진행률
     autoUpdater.on('download-progress', (progressObj) => {
-      const percent = progressObj.percent.toFixed(2);
-      Logger.debug('UPDATER', `다운로드 진행: ${percent}%`, {
-        transferred: progressObj.transferred,
-        total: progressObj.total,
-        bytesPerSecond: progressObj.bytesPerSecond,
-      });
+      const percent = progressObj.percent.toFixed(1);
+      const mbTransferred = (progressObj.transferred / 1024 / 1024).toFixed(2);
+      const mbTotal = (progressObj.total / 1024 / 1024).toFixed(2);
+      const speedMBps = (progressObj.bytesPerSecond / 1024 / 1024).toFixed(2);
+
+      Logger.info(
+        'UPDATER',
+        `⬇️  다운로드: ${percent}% | ${mbTransferred}/${mbTotal} MB | ${speedMBps} MB/s`
+      );
     });
 
     // 다운로드 완료
