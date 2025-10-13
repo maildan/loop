@@ -19,6 +19,7 @@
     "out/preload/**/*",
     "out/renderer/**/*",
     "assets/**/*",
+    "public/assets/fonts/**/*",
     "package.json",
     "!node_modules/**/*.md",
     "!node_modules/**/*.ts",
@@ -56,7 +57,7 @@
     "entitlementsInherit": "public/assets/entitlements.mac.plist",
     "gatekeeperAssess": false,
     "hardenedRuntime": true,
-    "asar": false,
+    "asar": true,
     "files": [
       "node_modules/node-mac-permissions/**"
     ],
@@ -101,10 +102,17 @@
   },
   "win": {
     "icon": "public/assets/icon.ico",
-    "asar": false,
+    "asar": true,
     "target": [
       {
         "target": "nsis",
+        "arch": [
+          "x64",
+          "arm64"
+        ]
+      },
+      {
+        "target": "nsis-web",
         "arch": [
           "x64",
           "arm64"

@@ -305,7 +305,17 @@ export class WindowManager {
             nodeEnv: process.env.NODE_ENV
           });
         } else {
-          throw new Error('❌ 정적 파일을 찾을 수 없습니다. 먼저 빌드를 실행하세요.');
+          Logger.error('WINDOW', '❌ StaticServer health check failed - trying direct file load');
+          // Fallback: asar 내부 파일 직접 로드
+          const rendererPath = join(__dirname, '..', 'renderer', 'index.html');
+          try {
+            await window.loadFile(rendererPath);
+            Logger.info('WINDOW', '✅ Fallback: loaded renderer via loadFile', { rendererPath });
+            return; // 성공하면 여기서 종료
+          } catch (fallbackError) {
+            Logger.error('WINDOW', '💥 Fallback loadFile failed', { fallbackError, rendererPath });
+            throw new Error('❌ 정적 파일을 찾을 수 없습니다. 먼저 빌드를 실행하세요.');
+          }
         }
       }
 
@@ -329,7 +339,16 @@ export class WindowManager {
             }
           }, 5000);
         } else {
-          throw error; // 프로덕션에서는 여전히 에러 던지기
+          // 프로덕션에서도 fallback 시도
+          Logger.warn('WINDOW', '🔄 Production loadURL failed - trying loadFile fallback');
+          const rendererPath = join(__dirname, '..', 'renderer', 'index.html');
+          try {
+            await window.loadFile(rendererPath);
+            Logger.info('WINDOW', '✅ Fallback success via loadFile', { rendererPath });
+          } catch (fallbackError) {
+            Logger.error('WINDOW', '💥 All load methods failed', { originalError: error, fallbackError });
+            throw error;
+          }
         }
       }
 
