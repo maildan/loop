@@ -20,8 +20,6 @@
     "out/renderer/**/*",
     "assets/**/*",
     "package.json",
-    "!node_modules/pretendard-jp/**",
-    "!node_modules/pretendard/**",
     "!node_modules/**/*.md",
     "!node_modules/**/*.ts",
     "!node_modules/**/LICENSE*",
@@ -38,7 +36,11 @@
     "**/*.so",
     "node_modules/.prisma/**/*",
     "node_modules/@prisma/**/*",
-    "node_modules/.bin/prisma*"
+    "node_modules/.bin/prisma*",
+    "node_modules/pretendard/dist/web/static/woff2/**",
+    "node_modules/pretendard-jp/dist/web/static/woff2/**",
+    "node_modules/@fontsource/*/files/*.woff2",
+    "node_modules/@noonnu/*/fonts/*.woff"
   ],
   "extraResources": [
     {
