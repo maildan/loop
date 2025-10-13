@@ -16,7 +16,7 @@ export function setupTrayIpcHandlers(): void {
   ipcMain.handle('tray:get-info', async () => {
     try {
       const trayManager = getTrayManager();
-      const info = trayManager.getTrayInfo();
+      const info = await trayManager.getTrayInfo();
       
       Logger.debug(componentName, 'Tray info retrieved', info);
       return {
@@ -32,51 +32,11 @@ export function setupTrayIpcHandlers(): void {
     }
   });
 
-  // 🔥 키보드 모니터링 상태 업데이트
-  ipcMain.handle('tray:set-monitoring-status', async (_: IpcMainInvokeEvent, isMonitoring: boolean) => {
-    try {
-      const trayManager = getTrayManager();
-      trayManager.setKeyboardMonitoringStatus(isMonitoring);
-      
-      Logger.debug(componentName, 'Keyboard monitoring status updated', { isMonitoring });
-      return {
-        success: true,
-        data: { isMonitoring }
-      };
-    } catch (error) {
-      Logger.error(componentName, 'Failed to set monitoring status', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
-    }
-  });
-
-  // 🔥 통계 업데이트
-  ipcMain.handle('tray:update-stats', async (_: IpcMainInvokeEvent, stats: { wpm: number; accuracy: number; sessionTime: number }) => {
-    try {
-      const trayManager = getTrayManager();
-      trayManager.updateStats(stats);
-      
-      Logger.debug(componentName, 'Tray stats updated', stats);
-      return {
-        success: true,
-        data: stats
-      };
-    } catch (error) {
-      Logger.error(componentName, 'Failed to update tray stats', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      };
-    }
-  });
-
   // 🔥 성공 알림 표시
   ipcMain.handle('tray:show-success', async (_: IpcMainInvokeEvent, message: string) => {
     try {
       const trayManager = getTrayManager();
-      trayManager.showSuccessNotification(message);
+      await trayManager.showSuccessNotification(message);
       
       Logger.debug(componentName, 'Success notification sent', { message });
       return {
@@ -96,7 +56,7 @@ export function setupTrayIpcHandlers(): void {
   ipcMain.handle('tray:show-error', async (_: IpcMainInvokeEvent, errorMessage: string) => {
     try {
       const trayManager = getTrayManager();
-      trayManager.showErrorStatus(errorMessage);
+      await trayManager.showErrorStatus(errorMessage);
       
       Logger.debug(componentName, 'Error status sent', { errorMessage });
       return {
@@ -118,7 +78,7 @@ export function setupTrayIpcHandlers(): void {
       const trayManager = getTrayManager();
       await trayManager.toggleTrayVisibility();
       
-      const info = trayManager.getTrayInfo();
+      const info = await trayManager.getTrayInfo();
       Logger.debug(componentName, 'Tray visibility toggled', info);
       return {
         success: true,
@@ -139,7 +99,7 @@ export function setupTrayIpcHandlers(): void {
       const trayManager = getTrayManager();
       await trayManager.testTray();
       
-      const info = trayManager.getTrayInfo();
+      const info = await trayManager.getTrayInfo();
       Logger.info(componentName, 'Tray test completed', info);
       return {
         success: true,
@@ -166,8 +126,6 @@ export function cleanupTrayIpcHandlers(): void {
   // 모든 tray 관련 IPC 핸들러 제거
   const trayChannels = [
     'tray:get-info',
-    'tray:set-monitoring-status',
-    'tray:update-stats',
     'tray:show-success',
     'tray:show-error',
     'tray:toggle-visibility',

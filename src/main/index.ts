@@ -35,7 +35,6 @@ const safeEnv = {
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ? 'set' : 'missing',
   GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI || 'not set',
   GEMINI_API_KEY: process.env.GEMINI_API_KEY ? 'set' : 'missing',
-  NEXT_PUBLIC_GEMINI_API_KEY: process.env.NEXT_PUBLIC_GEMINI_API_KEY ? 'set' : 'missing',
   GEMINI_MODEL: process.env.GEMINI_MODEL || 'not set',
 };
 

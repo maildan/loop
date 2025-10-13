@@ -735,7 +735,7 @@ export const AIAnalysisPanel: React.FC<AIAnalysisPanelProps> = ({
                                     ))}
                                 </ul>
                                 <p className="text-xs text-gray-500 leading-relaxed">
-                                    .env 파일에 <code className="font-mono">GEMINI_API_KEY</code> 또는 <code className="font-mono">NEXT_PUBLIC_GEMINI_API_KEY</code>를 추가한 뒤 앱을 다시 시작하세요.
+                                    .env 파일에 <code className="font-mono">GEMINI_API_KEY</code>를 추가한 뒤 앱을 다시 시작하세요.
                                     {geminiEnvSource && (
                                         <span className="block mt-1">현재 감지된 키 소스: <strong>{geminiEnvSource}</strong></span>
                                     )}

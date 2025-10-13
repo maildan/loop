@@ -63,11 +63,12 @@ export function setupSettingsIpcHandlers(): void {
   });
 
   // 🔥 설정 저장하기 (dot notation 지원)
+  // 🔥 ASYNC: setDeep now async for avatar file operations
   ipcMain.handle('settings:set', async (_event: IpcMainInvokeEvent, keyPath: string, value: unknown): Promise<IpcResponse<boolean>> => {
     try {
       Logger.debug(componentName, 'Setting value', { keyPath, value });
 
-      const success = settingsManager.setDeep(keyPath, value);
+      const success = await settingsManager.setDeep(keyPath, value);
       // broadcast change to all renderer windows so they can update immediately
       try {
         const allWindows = BrowserWindow.getAllWindows();

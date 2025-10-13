@@ -138,7 +138,15 @@ export class HandlersManager {
           'app:get-version',
           'app:get-name',
         ]),
-        // ❌ synopsis-stats removed - deprecated platform statistics dashboard
+        this.setupHandler('synopsis-stats', async () => {
+          const { registerSynopsisStatsHandlers } = await import('./synopsis-stats');
+          registerSynopsisStatsHandlers();
+        }, [
+          'synopsis:getWritingActivity',
+          'synopsis:getProgressTimeline',
+          'synopsis:getEpisodeStats',
+          'synopsis:recordWritingActivity',
+        ]),
         this.setupHandler('episode', () => setupEpisodeIpcHandlers(), [
           'episode:create',
           'episode:get',

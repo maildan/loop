@@ -464,6 +464,69 @@ export function setupAIIpcHandlers(): void {
     }
   });
 
+  // 🔥 AI 분석 히스토리 조회
+  ipcMain.handle('ai:get-analysis-history', async (_event: IpcMainInvokeEvent, projectId: string, analysisType?: string) => {
+    try {
+      Logger.debug('AI_IPC_HANDLERS', 'AI analysis history requested', {
+        projectId,
+        analysisType,
+      });
+
+      const dbService = DatabaseService.getInstance();
+      const initResult = await dbService.initialize();
+      
+      if (!initResult.success) {
+        Logger.error('AI_IPC_HANDLERS', 'Database initialization failed', initResult.error);
+        return {
+          success: false,
+          error: '데이터베이스 초기화 실패',
+          timestamp: new Date(),
+        };
+      }
+
+      const prisma = (dbService as any).prisma;
+      if (!prisma) {
+        Logger.error('AI_IPC_HANDLERS', 'Prisma client not available');
+        return {
+          success: false,
+          error: '데이터베이스 연결 실패',
+          timestamp: new Date(),
+        };
+      }
+
+      // 🔥 분석 타입 필터링
+      const where: any = { projectId };
+      if (analysisType) {
+        where.analysisType = analysisType;
+      }
+
+      const analyses = await prisma.aIAnalysis.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        take: 50, // 최근 50개만
+      });
+
+      Logger.info('AI_IPC_HANDLERS', 'AI analysis history retrieved', {
+        projectId,
+        count: analyses.length,
+      });
+
+      return {
+        success: true,
+        data: analyses,
+        timestamp: new Date(),
+      };
+
+    } catch (error) {
+      Logger.error('AI_IPC_HANDLERS', 'AI analysis history retrieval failed', error);
+      return {
+        success: false,
+        error: 'AI 분석 히스토리 조회 중 오류가 발생했습니다',
+        timestamp: new Date(),
+      };
+    }
+  });
+
   Logger.info('AI_IPC_HANDLERS', '✅ AI IPC handlers setup completed');
 }
 

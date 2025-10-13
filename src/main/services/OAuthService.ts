@@ -6,7 +6,8 @@ import { GOOGLE_OAUTH_CONFIG } from '../types/oauth';
 import { shell } from 'electron';
 import { createHash, randomBytes, createCipheriv } from 'crypto';
 import axios, { AxiosResponse, AxiosError } from 'axios';
-import * as fs from 'fs';
+import { promises as fsPromises, existsSync, readFileSync, unlinkSync } from 'fs';
+const { writeFile } = fsPromises;
 import * as path from 'path';
 import { safePathJoin } from '../../shared/utils/pathSecurity';
 import { PORTS } from '../constants';
@@ -761,8 +762,8 @@ export class OAuthService extends BaseManager {
             // ignore
           }
           const filePath = safePathJoin(baseDir, '.auth_snapshot.json');
-          if (filePath && fs.existsSync(filePath)) {
-            try { fs.unlinkSync(filePath); Logger.debug(this.componentName, 'Removed auth snapshot file'); } catch (e) { /* ignore */ }
+          if (filePath && existsSync(filePath)) {
+            try { unlinkSync(filePath); Logger.debug(this.componentName, 'Removed auth snapshot file'); } catch (e) { /* ignore */ }
           }
         } catch (e) {
           // ignore
@@ -896,15 +897,15 @@ export class OAuthService extends BaseManager {
           const encrypted = Buffer.concat([cipher.update(data), cipher.final()]);
           const tag = cipher.getAuthTag();
           const payload = Buffer.concat([iv, tag, encrypted]).toString('base64');
-          fs.writeFileSync(filePath, payload, { encoding: 'utf-8', mode: 0o600 });
+          await writeFile(filePath, payload, { encoding: 'utf-8', mode: 0o600 });
           Logger.debug(this.componentName, 'Encrypted auth snapshot written to file');
         } catch (e) {
           Logger.warn(this.componentName, 'Failed to encrypt auth snapshot - falling back to plaintext file', e);
-          fs.writeFileSync(filePath, JSON.stringify(snapshot), { encoding: 'utf-8', mode: 0o600 });
+          await writeFile(filePath, JSON.stringify(snapshot), { encoding: 'utf-8', mode: 0o600 });
         }
       } else {
         // write with restrictive permissions
-        fs.writeFileSync(filePath, JSON.stringify(snapshot), { encoding: 'utf-8', mode: 0o600 });
+        await writeFile(filePath, JSON.stringify(snapshot), { encoding: 'utf-8', mode: 0o600 });
       }
       try {
         // schedule background task to migrate file to keychain if adapter becomes available
@@ -912,7 +913,7 @@ export class OAuthService extends BaseManager {
           try {
             // try to migrate to keychain and remove file
             await keychainAdapter.setPassword('loop-auth', 'snapshot', JSON.stringify(snapshot));
-            try { fs.unlinkSync(filePath); } catch (e) { /* ignore */ }
+            try { unlinkSync(filePath); } catch (e) { /* ignore */ }
             Logger.debug(this.componentName, 'Auth snapshot migrated to keychain and file removed');
           } catch (e) {
             // ignore

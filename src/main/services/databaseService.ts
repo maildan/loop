@@ -80,12 +80,13 @@ export class DatabaseService {
   }
 
   // 🔥 데이터베이스 초기화
+  // 🔥 ASYNC: ensureDatabaseUrl now async
   public async initialize(): Promise<Result<boolean>> {
     try {
       // #DEBUG: Initializing database
       Logger.debug('DATABASE', 'Initializing database connection');
 
-      const { dbPath, databaseUrl } = ensureDatabaseUrl();
+      const { dbPath, databaseUrl } = await ensureDatabaseUrl();
       this.config.databaseUrl = databaseUrl;
       Logger.info('DATABASE', 'Resolved Prisma database path', { dbPath, databaseUrl });
 

@@ -13,7 +13,8 @@ import { FILE_PATHS } from '../constants';
 import { safePathResolve, validatePathSafety } from '../../shared/utils/pathSecurity';
 
 // Helper: resolve + whitelist + containment checks to avoid path traversal
-function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFilenames?: string[]): string | null {
+// 🔥 ASYNC: fs.existsSync → fsPromises.access for non-blocking I/O
+async function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFilenames?: string[]): Promise<string | null> {
   try {
     if (!filePath) return null;
   const resolvedCandidate = safePathResolve(iconsDir, filePath);
@@ -30,17 +31,23 @@ function resolveAndValidate(filePath: string | null, iconsDir: string, allowedFi
       if (!allowedFilenames.includes(basename)) return null;
     }
 
-  if (fs.existsSync(resolvedCandidate)) return resolvedCandidate;
-    return null;
+    // 🔥 SECURITY FIX: Async file existence check (eliminates Semgrep warning)
+    try {
+      await fsPromises.access(resolvedCandidate);
+      return resolvedCandidate;
+    } catch {
+      return null;
+    }
   } catch (e) {
     return null;
   }
 }
 
 // Helper: safely read file content for validated paths
-function readValidatedFile(validatedPath: string): string | null {
+// 🔥 ASYNC: fs.readFileSync → fsPromises.readFile for non-blocking I/O
+async function readValidatedFile(validatedPath: string): Promise<string | null> {
   try {
-    return fs.readFileSync(validatedPath, 'utf-8');
+    return await fsPromises.readFile(validatedPath, 'utf-8');
   } catch (e) {
     return null;
   }
@@ -49,12 +56,11 @@ function readValidatedFile(validatedPath: string): string | null {
 /**
  * 🔥 기가차드 트레이 매니저
  * 시스템 트레이 아이콘, 컨텍스트 메뉴, 상태 표시 관리
+ * 🔥 REFACTORED: Removed keyboard monitoring features (not applicable for writer app)
  */
 export class TrayManager extends BaseManager {
   private readonly componentName = 'TRAY_MANAGER';
   private tray: Tray | null = null;
-  private isKeyboardMonitoring = false;
-  private lastStats = { wpm: 0, accuracy: 0, sessionTime: 0 };
   private settingsUnwatchers: Array<() => void> = [];
 
   constructor() {
@@ -133,20 +139,19 @@ export class TrayManager extends BaseManager {
 
   /**
    * 🔥 트레이 아이콘 생성
+   * 🔥 ASYNC: All path validation and icon loading now use async I/O
    */
   private async createTrayIcon(): Promise<void> {
     try {
       // 🔥 플랫폼별 기본 아이콘 생성
       let defaultIcon: Electron.NativeImage;
 
-  // fs is imported at top-level
-
       // 플랫폼별 아이콘 경로 얻기
       const isDev = process.env.NODE_ENV === 'development';
       const iconsDir = isDev ? path.join(process.cwd(), 'public', 'icon') : path.join(process.resourcesPath, 'public', 'icon');
-      const iconPath = this.getTrayIconPath();
+      const iconPath = await this.getTrayIconPath();
 
-      const validatedIconPath = resolveAndValidate(iconPath, iconsDir);
+      const validatedIconPath = await resolveAndValidate(iconPath, iconsDir);
       if (validatedIconPath) {
         // 파일이 실제로 존재하는 경우에만 아이콘 생성
         Logger.info(this.componentName, '✅ Using tray icon from verified path', { iconPath: validatedIconPath });
@@ -159,7 +164,7 @@ export class TrayManager extends BaseManager {
             Logger.warn(this.componentName, '⚠️ Icon is empty despite file existing, using fallback');
 
             // 대체 아이콘: 앱 기본 아이콘 사용
-            const appIconPath = resolveAndValidate(path.join(process.cwd(), 'assets', 'icon.png'), iconsDir);
+            const appIconPath = await resolveAndValidate(path.join(process.cwd(), 'assets', 'icon.png'), iconsDir);
             if (appIconPath) {
               defaultIcon = nativeImage.createFromPath(appIconPath);
             } else {
@@ -177,7 +182,7 @@ export class TrayManager extends BaseManager {
         Logger.warn(this.componentName, '⚠️ Icon file not found, using fallback icon', { iconPath });
 
         // 앱 기본 아이콘 시도
-        const appIconPath = resolveAndValidate(path.join(process.cwd(), 'assets', 'icon.png'), iconsDir);
+        const appIconPath = await resolveAndValidate(path.join(process.cwd(), 'assets', 'icon.png'), iconsDir);
         if (appIconPath) {
           defaultIcon = nativeImage.createFromPath(appIconPath);
         } else {
@@ -202,10 +207,10 @@ export class TrayManager extends BaseManager {
             let retinaCandidate: string | null = null;
             if (validatedIconPath) {
               const candidate = path.join(path.dirname(validatedIconPath), 'icon_16x16@2x.png');
-              retinaCandidate = resolveAndValidate(candidate, iconsDir);
+              retinaCandidate = await resolveAndValidate(candidate, iconsDir);
             }
             if (!retinaCandidate) {
-              retinaCandidate = resolveAndValidate(path.join(iconsDir, 'icon.iconset', 'icon_16x16@2x.png'), iconsDir);
+              retinaCandidate = await resolveAndValidate(path.join(iconsDir, 'icon.iconset', 'icon_16x16@2x.png'), iconsDir);
             }
             if (retinaCandidate) {
               const retinaIcon = nativeImage.createFromPath(retinaCandidate);
@@ -236,10 +241,46 @@ export class TrayManager extends BaseManager {
   }
 
   /**
+   * 🔥 최근 프로젝트 조회 (최대 5개)
+   */
+  private async getRecentProjects(): Promise<Array<{ id: string; title: string }>> {
+    try {
+      const mainWindow = this.getMainWindow();
+      if (!mainWindow) return [];
+
+      // IPC를 통해 프로젝트 목록 가져오기
+      const response = await mainWindow.webContents.executeJavaScript(`
+        window.electronAPI?.projects?.getAll()
+          .then(res => res.success ? res.data : [])
+          .catch(() => [])
+      `);
+
+      if (!Array.isArray(response)) return [];
+
+      // 최근 수정 순으로 정렬하여 상위 5개 반환
+      return response
+        .sort((a: any, b: any) => {
+          const dateA = new Date(a.lastModified || a.updatedAt || 0).getTime();
+          const dateB = new Date(b.lastModified || b.updatedAt || 0).getTime();
+          return dateB - dateA;
+        })
+        .slice(0, 5)
+        .map((p: any) => ({ id: p.id, title: p.title }));
+    } catch (error) {
+      Logger.error(this.componentName, 'Failed to get recent projects', error);
+      return [];
+    }
+  }
+
+  /**
    * 🔥 트레이 메뉴 생성
+   * 🔥 REFACTORED: Removed keyboard monitoring, added project management
    */
   private async createTrayMenu(): Promise<void> {
     if (!this.tray) return;
+
+    // 최근 프로젝트 가져오기
+    const recentProjects = await this.getRecentProjects();
 
     const template: MenuItemConstructorOptions[] = [
       {
@@ -248,16 +289,17 @@ export class TrayManager extends BaseManager {
       },
       { type: 'separator' },
       {
-        label: this.isKeyboardMonitoring ? '⏸️ 모니터링 중지' : '▶️ 모니터링 시작',
-        click: () => this.toggleKeyboardMonitoring()
+        label: '📝 새 프로젝트',
+        click: () => this.createNewProject()
       },
       {
-        label: '📈 현재 통계',
-        submenu: [
-          { label: `WPM: ${this.lastStats.wpm}`, enabled: false },
-          { label: `정확도: ${this.lastStats.accuracy}%`, enabled: false },
-          { label: `세션 시간: ${this.formatTime(this.lastStats.sessionTime)}`, enabled: false }
-        ]
+        label: '� 최근 프로젝트',
+        submenu: recentProjects.length > 0 
+          ? recentProjects.map(p => ({
+              label: p.title,
+              click: () => this.openProject(p.id)
+            }))
+          : [{ label: '프로젝트 없음', enabled: false }]
       },
       { type: 'separator' },
       {
@@ -279,7 +321,50 @@ export class TrayManager extends BaseManager {
     const contextMenu = Menu.buildFromTemplate(template);
     this.tray.setContextMenu(contextMenu);
 
-    Logger.debug(this.componentName, 'Tray context menu created');
+    Logger.debug(this.componentName, 'Tray context menu created with recent projects');
+  }
+
+  /**
+   * 🔥 새 프로젝트 생성
+   */
+  private createNewProject(): void {
+    try {
+      const mainWindow = this.getMainWindow();
+      if (mainWindow) {
+        mainWindow.webContents.send('tray-action', {
+          action: 'new-project',
+          timestamp: Date.now()
+        });
+        this.showMainWindow();
+      }
+
+      Logger.info(this.componentName, 'New project requested from tray');
+
+    } catch (error) {
+      Logger.error(this.componentName, 'Failed to create new project', error);
+    }
+  }
+
+  /**
+   * 🔥 프로젝트 열기
+   */
+  private openProject(projectId: string): void {
+    try {
+      const mainWindow = this.getMainWindow();
+      if (mainWindow) {
+        mainWindow.webContents.send('tray-action', {
+          action: 'open-project',
+          projectId,
+          timestamp: Date.now()
+        });
+        this.showMainWindow();
+      }
+
+      Logger.info(this.componentName, 'Project open requested from tray', { projectId });
+
+    } catch (error) {
+      Logger.error(this.componentName, 'Failed to open project', error);
+    }
   }
 
   /**
@@ -338,24 +423,8 @@ export class TrayManager extends BaseManager {
         }
       });
 
-      // ⌨️ 키보드 설정 변경 감지 (모니터링 상태 등)
-      const keyboardUnwatcher = settingsManager.watch('keyboard', (event) => {
-        Logger.debug(this.componentName, 'Keyboard settings changed', {
-          key: event.key,
-          enabled: event.newValue?.enabled
-        });
-
-        // 키보드 모니터링 상태가 변경되면 트레이 업데이트
-        if (event.oldValue?.enabled !== event.newValue?.enabled) {
-          this.setKeyboardMonitoringStatus(event.newValue?.enabled || false);
-        }
-      });
-
-      // 🔔 알림 설정은 SimpleSettingsSchema에 없으므로 제거
-      // const notificationsUnwatcher = settingsManager.watch('notifications', ...);
-
-      // unwatcher 함수들 저장 (notifications 제외)
-      this.settingsUnwatchers = [uiUnwatcher, appUnwatcher, keyboardUnwatcher];
+      // unwatcher 함수들 저장
+      this.settingsUnwatchers = [uiUnwatcher, appUnwatcher];
 
       Logger.debug(this.componentName, 'Settings watchers setup complete');
 
@@ -386,8 +455,9 @@ export class TrayManager extends BaseManager {
 
   /**
    * 🔥 플랫폼별 트레이 아이콘 경로 반환
+   * 🔥 ASYNC: All file operations now use fsPromises for non-blocking I/O
    */
-  private getTrayIconPath(): string | null {
+  private async getTrayIconPath(): Promise<string | null> {
     try {
       // 🔥 개발 환경과 프로덕션 환경 구분
       const isDev = !app.isPackaged && process.env.NODE_ENV !== 'production';
@@ -409,9 +479,6 @@ export class TrayManager extends BaseManager {
         iconsDir = path.join(process.cwd(), 'public', 'assets');
       }
 
-      // 🔥 아이콘 경로 존재 여부 미리 확인
-  // fs is imported at top-level
-
       Logger.info(this.componentName, '🔄 Resolving tray icon path', {
         iconsDir,
         isDev,
@@ -422,15 +489,15 @@ export class TrayManager extends BaseManager {
         // 🔥 macOS - icon_16x16.png (메뉴바에 최적화된 사이즈)
         // In production, prefer an explicit manifest file that lists allowed icon paths.
         if (!isDev) {
-          const manifestPath = resolveAndValidate(path.join(iconsDir, 'icon-manifest.json'), iconsDir);
+          const manifestPath = await resolveAndValidate(path.join(iconsDir, 'icon-manifest.json'), iconsDir);
           try {
             if (manifestPath) {
-              const raw = readValidatedFile(manifestPath);
+              const raw = await readValidatedFile(manifestPath);
               if (!raw) throw new Error('Failed to read manifest file');
               const manifest = JSON.parse(raw) as Record<string, string[]>;
               const candidates = manifest.mac || manifest.default || [];
               for (const rel of candidates) {
-                const candidate = resolveAndValidate(path.join(iconsDir, rel), iconsDir);
+                const candidate = await resolveAndValidate(path.join(iconsDir, rel), iconsDir);
                 if (candidate) return candidate;
               }
             }
@@ -449,8 +516,8 @@ export class TrayManager extends BaseManager {
         ];
 
         for (const candidate of candidates) {
-          const iconPath = path.join(iconsDir, candidate);
-          if (fs.existsSync(iconPath)) {
+          const iconPath = await resolveAndValidate(path.join(iconsDir, candidate), iconsDir);
+          if (iconPath) {
             Logger.info(this.componentName, '🍎 macOS tray icon found', { iconPath });
             return iconPath;
           }
@@ -461,15 +528,15 @@ export class TrayManager extends BaseManager {
       } else if (Platform.isWindows()) {
         // Windows - ICO 파일
         if (!isDev) {
-          const manifestPath = resolveAndValidate(path.join(iconsDir, 'icon-manifest.json'), iconsDir);
+          const manifestPath = await resolveAndValidate(path.join(iconsDir, 'icon-manifest.json'), iconsDir);
           try {
             if (manifestPath) {
-              const raw = readValidatedFile(manifestPath);
+              const raw = await readValidatedFile(manifestPath);
               if (!raw) throw new Error('Failed to read manifest file');
               const manifest = JSON.parse(raw) as Record<string, string[]>;
               const candidates = manifest.windows || manifest.default || [];
               for (const rel of candidates) {
-                const candidate = resolveAndValidate(path.join(iconsDir, rel), iconsDir);
+                const candidate = await resolveAndValidate(path.join(iconsDir, rel), iconsDir);
                 if (candidate) return candidate;
               }
             }
@@ -486,8 +553,8 @@ export class TrayManager extends BaseManager {
         ];
 
         for (const candidate of windowsCandidates) {
-          const iconPath = path.join(iconsDir, candidate);
-          if (fs.existsSync(iconPath)) {
+          const iconPath = await resolveAndValidate(path.join(iconsDir, candidate), iconsDir);
+          if (iconPath) {
             Logger.info(this.componentName, '🪟 Windows tray icon found', { iconPath });
             return iconPath;
           }
@@ -498,15 +565,15 @@ export class TrayManager extends BaseManager {
       } else if (Platform.isLinux()) {
         // Linux - PNG 파일
         if (!isDev) {
-          const manifestPath = resolveAndValidate(path.join(iconsDir, 'icon-manifest.json'), iconsDir);
+          const manifestPath = await resolveAndValidate(path.join(iconsDir, 'icon-manifest.json'), iconsDir);
           try {
             if (manifestPath) {
-              const raw = readValidatedFile(manifestPath);
+              const raw = await readValidatedFile(manifestPath);
               if (!raw) throw new Error('Failed to read manifest file');
               const manifest = JSON.parse(raw) as Record<string, string[]>;
               const candidates = manifest.linux || manifest.default || [];
               for (const rel of candidates) {
-                const candidate = resolveAndValidate(path.join(iconsDir, rel), iconsDir);
+                const candidate = await resolveAndValidate(path.join(iconsDir, rel), iconsDir);
                 if (candidate) return candidate;
               }
             }
@@ -515,7 +582,7 @@ export class TrayManager extends BaseManager {
           }
         }
 
-        const iconPathCandidateLinux = resolveAndValidate(path.join(iconsDir, 'icon.png'), iconsDir);
+        const iconPathCandidateLinux = await resolveAndValidate(path.join(iconsDir, 'icon.png'), iconsDir);
         if (iconPathCandidateLinux) {
           Logger.info(this.componentName, '🐧 Linux tray icon path resolved', { iconPath: iconPathCandidateLinux });
           return iconPathCandidateLinux;
@@ -534,19 +601,18 @@ export class TrayManager extends BaseManager {
 
   /**
    * 🔥 트레이 상태 업데이트
+   * 🔥 ASYNC: Icon and menu updates now use async operations
    */
-  public updateTrayStatus(): void {
+  public async updateTrayStatus(): Promise<void> {
     if (!this.tray) return;
 
     try {
       // 상태에 따른 아이콘 업데이트
-      this.updateTrayIcon();
+      await this.updateTrayIcon();
       this.updateTrayTooltip();
-      this.createTrayMenu(); // 메뉴 업데이트
+      await this.createTrayMenu(); // 메뉴 업데이트
 
-      Logger.debug(this.componentName, 'Tray status updated', {
-        isMonitoring: this.isKeyboardMonitoring
-      });
+      Logger.debug(this.componentName, 'Tray status updated');
 
     } catch (error) {
       Logger.error(this.componentName, 'Failed to update tray status', error);
@@ -555,13 +621,22 @@ export class TrayManager extends BaseManager {
 
   /**
    * 🔥 트레이 아이콘 업데이트 (상태별)
+   * 🔥 ASYNC: Icon path resolution now uses async I/O
+   * 🔥 NULL SAFE: Guards against race conditions during async operations
    */
-  private updateTrayIcon(): void {
+  private async updateTrayIcon(): Promise<void> {
     if (!this.tray) return;
 
     try {
       // 기본 아이콘 경로 (항상 동일)
-      const iconPath = this.getTrayIconPath();
+      const iconPath = await this.getTrayIconPath();
+      
+      // 🔥 NULL GUARD: Tray may be destroyed during async operation
+      if (!this.tray) {
+        Logger.warn(this.componentName, 'Tray destroyed during icon path resolution');
+        return;
+      }
+      
       if (!iconPath) {
         Logger.warn(this.componentName, 'Icon path not available for update');
         return;
@@ -569,6 +644,13 @@ export class TrayManager extends BaseManager {
 
       // 아이콘 이미지 생성
       const icon = nativeImage.createFromPath(iconPath);
+      
+      // 🔥 NULL GUARD: Check again before accessing tray
+      if (!this.tray) {
+        Logger.warn(this.componentName, 'Tray destroyed during icon creation');
+        return;
+      }
+      
       if (icon.isEmpty()) {
         Logger.warn(this.componentName, 'Failed to create icon for update', { iconPath });
         return;
@@ -578,18 +660,27 @@ export class TrayManager extends BaseManager {
       if (Platform.isMacOS()) {
         const templateIcon = nativeImage.createFromPath(iconPath);
         templateIcon.setTemplateImage(true);
+        
+        // 🔥 NULL GUARD: Final check before setImage
+        if (!this.tray) {
+          Logger.warn(this.componentName, 'Tray destroyed before setting macOS template icon');
+          return;
+        }
+        
         this.tray.setImage(templateIcon);
-
         Logger.debug(this.componentName, 'macOS template icon updated', { iconPath });
       } else {
+        // 🔥 NULL GUARD: Final check before setImage
+        if (!this.tray) {
+          Logger.warn(this.componentName, 'Tray destroyed before setting standard icon');
+          return;
+        }
+        
         this.tray.setImage(icon);
         Logger.debug(this.componentName, 'Standard icon updated', { iconPath });
       }
 
-      Logger.debug(this.componentName, 'Tray icon updated', {
-        iconPath,
-        isMonitoring: this.isKeyboardMonitoring
-      });
+      Logger.debug(this.componentName, 'Tray icon updated', { iconPath });
 
     } catch (error) {
       Logger.error(this.componentName, 'Failed to update tray icon', error);
@@ -598,41 +689,23 @@ export class TrayManager extends BaseManager {
 
   /**
    * 🔥 트레이 툴팁 업데이트
+   * 🔥 SIMPLIFIED: Removed monitoring status
    */
   private updateTrayTooltip(): void {
     if (!this.tray) return;
 
-    const status = this.isKeyboardMonitoring ? '모니터링 중' : '대기 중';
-    const tooltip = `Loop Typing Analytics - ${status}`;
+    const tooltip = `Loop - Writer's Workspace`;
 
     this.tray.setToolTip(tooltip);
     Logger.debug(this.componentName, 'Tray tooltip updated', { tooltip });
   }
 
   /**
-   * 🔥 통계 업데이트
-   */
-  public updateStats(stats: { wpm: number; accuracy: number; sessionTime: number }): void {
-    this.lastStats = { ...stats };
-    this.updateTrayStatus();
-
-    Logger.debug(this.componentName, 'Stats updated', stats);
-  }
-
-  /**
-   * 🔥 키보드 모니터링 상태 업데이트
-   */
-  public setKeyboardMonitoringStatus(isMonitoring: boolean): void {
-    this.isKeyboardMonitoring = isMonitoring;
-    this.updateTrayStatus();
-
-    Logger.info(this.componentName, 'Keyboard monitoring status updated', { isMonitoring });
-  }
-
-  /**
    * 🔥 에러 상태 표시
+   * 🔥 ASYNC: Icon path resolution uses async I/O
+   * 🔥 NULL SAFE: Guards against race conditions
    */
-  public showErrorStatus(errorMessage: string): void {
+  public async showErrorStatus(errorMessage: string): Promise<void> {
     if (!this.tray) return;
 
     try {
@@ -641,10 +714,18 @@ export class TrayManager extends BaseManager {
 
       // 에러 알림 (Windows/Linux에서만 지원)
       if (!Platform.isMacOS()) {
+        const iconPath = await this.getTrayIconPath();
+        
+        // 🔥 NULL GUARD: Check after async operation
+        if (!this.tray) {
+          Logger.warn(this.componentName, 'Tray destroyed during error status display');
+          return;
+        }
+        
         this.tray.displayBalloon({
           title: 'Loop Typing Analytics',
           content: `오류가 발생했습니다: ${errorMessage}`,
-          icon: this.getTrayIconPath() || ''
+          icon: iconPath || ''
         });
       }
 
@@ -657,16 +738,26 @@ export class TrayManager extends BaseManager {
 
   /**
    * 🔥 성공 알림 표시
+   * 🔥 ASYNC: Icon path resolution uses async I/O
+   * 🔥 NULL SAFE: Guards against race conditions
    */
-  public showSuccessNotification(message: string): void {
+  public async showSuccessNotification(message: string): Promise<void> {
     if (!this.tray) return;
 
     try {
       if (!Platform.isMacOS()) {
+        const iconPath = await this.getTrayIconPath();
+        
+        // 🔥 NULL GUARD: Check after async operation
+        if (!this.tray) {
+          Logger.warn(this.componentName, 'Tray destroyed during success notification');
+          return;
+        }
+        
         this.tray.displayBalloon({
           title: 'Loop Typing Analytics',
           content: message,
-          icon: this.getTrayIconPath() || ''
+          icon: iconPath || ''
         });
       }
 
@@ -694,26 +785,6 @@ export class TrayManager extends BaseManager {
       }
     } catch (error) {
       Logger.error(this.componentName, 'Failed to show main window', error);
-    }
-  }
-
-  /**
-   * 🔥 키보드 모니터링 토글
-   */
-  private async toggleKeyboardMonitoring(): Promise<void> {
-    try {
-      const mainWindow = this.getMainWindow();
-      if (mainWindow) {
-        mainWindow.webContents.send('tray-action', {
-          action: 'toggle-keyboard-monitoring',
-          timestamp: Date.now()
-        });
-      }
-
-      Logger.info(this.componentName, 'Keyboard monitoring toggle requested from tray');
-
-    } catch (error) {
-      Logger.error(this.componentName, 'Failed to toggle keyboard monitoring', error);
     }
   }
 
@@ -774,16 +845,6 @@ export class TrayManager extends BaseManager {
       return null;
     }
   }
-
-  /**
-   * 🔥 시간 포맷팅 (초 -> MM:SS)
-   */
-  private formatTime(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-  }
-
   /**
    * 🔥 트레이 표시/숨기기 (설정 기반)
    */
@@ -814,40 +875,39 @@ export class TrayManager extends BaseManager {
 
   /**
    * 🔥 트레이 상태 정보 가져오기 (디버깅용)
+   * 🔥 ASYNC: Icon path resolution uses async I/O
+   * 🔥 SIMPLIFIED: Removed keyboard monitoring stats
    */
-  public getTrayInfo(): {
+  public async getTrayInfo(): Promise<{
     isVisible: boolean;
-    isMonitoring: boolean;
-    lastStats: { wpm: number; accuracy: number; sessionTime: number };
     iconPath: string | null;
-  } {
+  }> {
     return {
       isVisible: this.tray !== null && !this.tray.isDestroyed(),
-      isMonitoring: this.isKeyboardMonitoring,
-      lastStats: { ...this.lastStats },
-      iconPath: this.getTrayIconPath()
+      iconPath: await this.getTrayIconPath()
     };
   }
 
   /**
    * 🔥 트레이 테스트 (개발용)
+   * 🔥 SIMPLIFIED: Removed keyboard monitoring tests
    */
   public async testTray(): Promise<void> {
     try {
       Logger.info(this.componentName, 'Testing tray functionality');
 
-      // 상태 업데이트 테스트
-      this.updateStats({ wpm: 75, accuracy: 98, sessionTime: 300 });
-      this.setKeyboardMonitoringStatus(true);
+      // 메뉴 업데이트 테스트
+      await this.createTrayMenu();
 
       // 성공 알림 테스트
-      this.showSuccessNotification('트레이 테스트가 성공적으로 완료되었습니다!');
+      await this.showSuccessNotification('트레이 테스트가 성공적으로 완료되었습니다!');
 
-      Logger.info(this.componentName, 'Tray test completed', this.getTrayInfo());
+      const info = await this.getTrayInfo();
+      Logger.info(this.componentName, 'Tray test completed', info);
 
     } catch (error) {
       Logger.error(this.componentName, 'Tray test failed', error);
-      this.showErrorStatus('트레이 테스트 실패');
+      await this.showErrorStatus('트레이 테스트 실패');
     }
   }
 }

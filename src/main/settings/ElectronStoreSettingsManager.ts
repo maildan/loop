@@ -4,6 +4,7 @@ import Store from 'electron-store';
 import { Logger } from '../../shared/logger';
 import type { Theme } from '../../shared/types/theme';
 import fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import path from 'path';
 import crypto from 'crypto';
 import { gzipSync } from 'zlib';
@@ -268,8 +269,9 @@ export class ElectronStoreSettingsManager {
 
   /**
    * 🔥 dot notation으로 깊은 값 설정하기
+   * 🔥 ASYNC: File operations for avatar storage use fsPromises
    */
-  setDeep(keyPath: string, value: unknown): boolean {
+  async setDeep(keyPath: string, value: unknown): Promise<boolean> {
     try {
       // Special handling for account.avatar: accept data URLs and save to disk
       if (keyPath === 'account.avatar' && typeof value === 'string' && value.startsWith('data:')) {
@@ -277,16 +279,18 @@ export class ElectronStoreSettingsManager {
         const match = value.match(/^data:(image\/[^;]+);base64,(.+)$/);
         if (!match) throw new Error('Invalid data URL');
 
-        const mime = match[1] || '';
-        const base64 = match[2] || '';
+        // Explicit type narrowing for match groups
+        const [, mime, base64Data] = match;
+        if (!mime || !base64Data) {
+          throw new Error('Invalid data URL format: missing mime type or base64 data');
+        }
 
-        // Allow GIF as requested; enforce 5MB limit on decoded binary
-        const buffer = Buffer.from(String(base64), 'base64');
-        const sizeBytes = buffer.length;
-        const maxBytes = 5 * 1024 * 1024; // 5MB
-        if (sizeBytes > maxBytes) {
-          Logger.warn(this.componentName, 'Avatar exceeds size limit', { sizeBytes });
-          throw new Error('Avatar exceeds 5MB size limit');
+        const buffer = Buffer.from(base64Data, 'base64');
+
+        // validate size (max 5MB)
+        if (buffer.length > 5 * 1024 * 1024) {
+          Logger.error(this.componentName, 'Avatar image too large (max 5MB)');
+          return false;
         }
 
         // determine extension
@@ -299,7 +303,13 @@ export class ElectronStoreSettingsManager {
           Logger.error(this.componentName, 'Failed to create secure avatars directory path');
           return false;
         }
-        if (!fs.existsSync(avatarsDir)) fs.mkdirSync(avatarsDir, { recursive: true });
+        
+        // 🔥 ASYNC: Directory existence check and creation
+        try {
+          await fsPromises.access(avatarsDir);
+        } catch {
+          await fsPromises.mkdir(avatarsDir, { recursive: true });
+        }
 
         // file name by hash
         const hash = crypto.createHash('sha256').update(buffer).digest('hex').slice(0, 32);
@@ -310,13 +320,13 @@ export class ElectronStoreSettingsManager {
           return false;
         }
 
-        // write image file
-        fs.writeFileSync(filePath, buffer);
+        // 🔥 ASYNC: Write image file
+        await fsPromises.writeFile(filePath, buffer);
 
-        // write gzipped copy for storage/backup
+        // 🔥 ASYNC: Write gzipped copy for storage/backup
         try {
           const gz = gzipSync(buffer, { level: 9 });
-          fs.writeFileSync(`${filePath}.gz`, gz);
+          await fsPromises.writeFile(`${filePath}.gz`, gz);
         } catch (e) {
           Logger.warn(this.componentName, 'Failed to gzip avatar', e);
         }
@@ -329,6 +339,7 @@ export class ElectronStoreSettingsManager {
         return true;
       }
 
+      // Default handling
       this.store.set(keyPath as any, value);
       Logger.debug(this.componentName, `Deep setting updated: ${keyPath}`, { value });
       return true;

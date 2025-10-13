@@ -22,7 +22,30 @@ CREATE TABLE "projects" (
     "userId" TEXT,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "lastModified" DATETIME NOT NULL,
+    "chapters" TEXT,
     CONSTRAINT "projects_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "episodes" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "episodeNumber" INTEGER NOT NULL,
+    "title" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "wordCount" INTEGER NOT NULL DEFAULT 0,
+    "targetWordCount" INTEGER NOT NULL DEFAULT 5500,
+    "status" TEXT NOT NULL DEFAULT 'draft',
+    "act" TEXT,
+    "cliffhangerType" TEXT,
+    "cliffhangerIntensity" INTEGER,
+    "notes" TEXT,
+    "sortOrder" INTEGER NOT NULL DEFAULT 0,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "publishedAt" DATETIME,
+    CONSTRAINT "episodes_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -44,6 +67,9 @@ CREATE TABLE "project_characters" (
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
+    "appearances" JSONB,
+    "firstAppearance" INTEGER,
+    "speechPattern" TEXT,
     CONSTRAINT "project_characters_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -64,8 +90,8 @@ CREATE TABLE "project_structure" (
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "project_structure_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "project_structure_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "project_structure" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    CONSTRAINT "project_structure_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "project_structure" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "project_structure_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -82,6 +108,9 @@ CREATE TABLE "project_notes" (
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
+    "importance" TEXT,
+    "introducedEpisode" INTEGER,
+    "resolvedEpisode" INTEGER,
     CONSTRAINT "project_notes_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -202,6 +231,147 @@ CREATE TABLE "search_history" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- CreateTable
+CREATE TABLE "ai_analyses" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "analysisType" TEXT NOT NULL,
+    "inputData" TEXT NOT NULL,
+    "prompt" TEXT NOT NULL,
+    "response" TEXT NOT NULL,
+    "metadata" JSONB,
+    "confidence" REAL,
+    "status" TEXT NOT NULL DEFAULT 'completed',
+    "error" TEXT,
+    "version" TEXT NOT NULL DEFAULT '1.0',
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "ai_analyses_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ai_workflows" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "workflowName" TEXT NOT NULL,
+    "configYaml" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'pending',
+    "currentStep" TEXT,
+    "totalSteps" INTEGER NOT NULL DEFAULT 1,
+    "completedSteps" INTEGER NOT NULL DEFAULT 0,
+    "results" JSONB,
+    "error" TEXT,
+    "startedAt" DATETIME,
+    "completedAt" DATETIME,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "ai_workflows_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ai_workflow_steps" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "workflowId" TEXT NOT NULL,
+    "stepName" TEXT NOT NULL,
+    "stepOrder" INTEGER NOT NULL,
+    "analysisType" TEXT NOT NULL,
+    "inputData" TEXT,
+    "outputData" TEXT,
+    "prompt" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'pending',
+    "duration" INTEGER,
+    "retryCount" INTEGER NOT NULL DEFAULT 0,
+    "error" TEXT,
+    "startedAt" DATETIME,
+    "completedAt" DATETIME,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "ai_workflow_steps_workflowId_fkey" FOREIGN KEY ("workflowId") REFERENCES "ai_workflows" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ai_evaluations" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "analysisId" TEXT,
+    "evaluationType" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "score" REAL NOT NULL,
+    "maxScore" REAL NOT NULL DEFAULT 100,
+    "criteria" JSONB NOT NULL,
+    "feedback" TEXT,
+    "suggestions" JSONB,
+    "strengths" JSONB,
+    "weaknesses" JSONB,
+    "version" TEXT NOT NULL DEFAULT '1.0',
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "ai_evaluations_analysisId_fkey" FOREIGN KEY ("analysisId") REFERENCES "ai_analyses" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT "ai_evaluations_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "ai_usage_stats" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "userId" TEXT,
+    "date" DATETIME NOT NULL,
+    "apiProvider" TEXT NOT NULL,
+    "analysisType" TEXT NOT NULL,
+    "requestCount" INTEGER NOT NULL DEFAULT 0,
+    "tokenUsed" INTEGER NOT NULL DEFAULT 0,
+    "cost" REAL NOT NULL DEFAULT 0,
+    "successCount" INTEGER NOT NULL DEFAULT 0,
+    "failureCount" INTEGER NOT NULL DEFAULT 0,
+    "avgResponseTime" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "writer_stats" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "sessionStartTime" DATETIME NOT NULL,
+    "sessionEndTime" DATETIME,
+    "sessionDuration" INTEGER NOT NULL DEFAULT 0,
+    "wordCount" INTEGER NOT NULL DEFAULT 0,
+    "charCount" INTEGER NOT NULL DEFAULT 0,
+    "paragraphCount" INTEGER NOT NULL DEFAULT 0,
+    "wpm" INTEGER NOT NULL DEFAULT 0,
+    "wordGoal" INTEGER NOT NULL DEFAULT 0,
+    "goalAchieved" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "writer_stats_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "publications" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "platform" TEXT NOT NULL,
+    "platformUrl" TEXT,
+    "startDate" DATETIME,
+    "endDate" DATETIME,
+    "status" TEXT NOT NULL DEFAULT 'ongoing',
+    "note" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "publications_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "writing_activities" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "date" DATETIME NOT NULL,
+    "wordCount" INTEGER NOT NULL DEFAULT 0,
+    "duration" INTEGER NOT NULL DEFAULT 0,
+    "episodeId" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "writing_activities_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
@@ -216,6 +386,21 @@ CREATE INDEX "projects_status_idx" ON "projects"("status");
 
 -- CreateIndex
 CREATE INDEX "projects_lastModified_idx" ON "projects"("lastModified");
+
+-- CreateIndex
+CREATE INDEX "episodes_projectId_idx" ON "episodes"("projectId");
+
+-- CreateIndex
+CREATE INDEX "episodes_episodeNumber_idx" ON "episodes"("episodeNumber");
+
+-- CreateIndex
+CREATE INDEX "episodes_status_idx" ON "episodes"("status");
+
+-- CreateIndex
+CREATE INDEX "episodes_act_idx" ON "episodes"("act");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "episodes_projectId_episodeNumber_key" ON "episodes"("projectId", "episodeNumber");
 
 -- CreateIndex
 CREATE INDEX "project_characters_projectId_idx" ON "project_characters"("projectId");
@@ -297,3 +482,90 @@ CREATE INDEX "search_history_userId_idx" ON "search_history"("userId");
 
 -- CreateIndex
 CREATE INDEX "search_history_createdAt_idx" ON "search_history"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "ai_analyses_projectId_idx" ON "ai_analyses"("projectId");
+
+-- CreateIndex
+CREATE INDEX "ai_analyses_analysisType_idx" ON "ai_analyses"("analysisType");
+
+-- CreateIndex
+CREATE INDEX "ai_analyses_createdAt_idx" ON "ai_analyses"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "ai_analyses_status_idx" ON "ai_analyses"("status");
+
+-- CreateIndex
+CREATE INDEX "ai_workflows_projectId_idx" ON "ai_workflows"("projectId");
+
+-- CreateIndex
+CREATE INDEX "ai_workflows_status_idx" ON "ai_workflows"("status");
+
+-- CreateIndex
+CREATE INDEX "ai_workflows_createdAt_idx" ON "ai_workflows"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "ai_workflow_steps_workflowId_idx" ON "ai_workflow_steps"("workflowId");
+
+-- CreateIndex
+CREATE INDEX "ai_workflow_steps_stepOrder_idx" ON "ai_workflow_steps"("stepOrder");
+
+-- CreateIndex
+CREATE INDEX "ai_workflow_steps_status_idx" ON "ai_workflow_steps"("status");
+
+-- CreateIndex
+CREATE INDEX "ai_evaluations_projectId_idx" ON "ai_evaluations"("projectId");
+
+-- CreateIndex
+CREATE INDEX "ai_evaluations_evaluationType_idx" ON "ai_evaluations"("evaluationType");
+
+-- CreateIndex
+CREATE INDEX "ai_evaluations_category_idx" ON "ai_evaluations"("category");
+
+-- CreateIndex
+CREATE INDEX "ai_evaluations_score_idx" ON "ai_evaluations"("score");
+
+-- CreateIndex
+CREATE INDEX "ai_evaluations_createdAt_idx" ON "ai_evaluations"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "ai_usage_stats_date_idx" ON "ai_usage_stats"("date");
+
+-- CreateIndex
+CREATE INDEX "ai_usage_stats_userId_idx" ON "ai_usage_stats"("userId");
+
+-- CreateIndex
+CREATE INDEX "ai_usage_stats_apiProvider_idx" ON "ai_usage_stats"("apiProvider");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "ai_usage_stats_date_userId_apiProvider_analysisType_key" ON "ai_usage_stats"("date", "userId", "apiProvider", "analysisType");
+
+-- CreateIndex
+CREATE INDEX "writer_stats_projectId_idx" ON "writer_stats"("projectId");
+
+-- CreateIndex
+CREATE INDEX "writer_stats_sessionStartTime_idx" ON "writer_stats"("sessionStartTime");
+
+-- CreateIndex
+CREATE INDEX "writer_stats_createdAt_idx" ON "writer_stats"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "publications_projectId_idx" ON "publications"("projectId");
+
+-- CreateIndex
+CREATE INDEX "publications_platform_idx" ON "publications"("platform");
+
+-- CreateIndex
+CREATE INDEX "publications_status_idx" ON "publications"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "publications_projectId_platform_key" ON "publications"("projectId", "platform");
+
+-- CreateIndex
+CREATE INDEX "writing_activities_projectId_idx" ON "writing_activities"("projectId");
+
+-- CreateIndex
+CREATE INDEX "writing_activities_date_idx" ON "writing_activities"("date");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "writing_activities_projectId_date_key" ON "writing_activities"("projectId", "date");

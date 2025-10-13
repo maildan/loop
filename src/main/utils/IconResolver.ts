@@ -6,7 +6,7 @@
  */
 
 import * as path from 'path';
-import * as fs from 'fs';
+import { promises as fsPromises } from 'fs';
 import { app } from 'electron';
 import { Logger } from '../../shared/logger';
 import { Platform } from './platform';
@@ -16,9 +16,9 @@ export class IconResolver {
   private static readonly componentName = 'ICON_RESOLVER';
 
   /**
-   * 🔥 트레이 아이콘 경로 찾기
+   * 🔥 ASYNC: 트레이 아이콘 경로 찾기
    */
-  public static getTrayIconPath(): string | null {
+  public static async getTrayIconPath(): Promise<string | null> {
     try {
       // 🔥 개발 환경과 프로덕션 환경 구분
       const isDev = process.env.NODE_ENV === 'development';
@@ -86,15 +86,14 @@ export class IconResolver {
         searchPathsCount: searchPaths.length
       });
       
-      // 검색 경로에서 존재하는 첫 번째 아이콘 반환
+      // 🔥 ASYNC: 검색 경로에서 존재하는 첫 번째 아이콘 반환
       for (const iconPath of searchPaths) {
         try {
-          if (fs.existsSync(iconPath)) {
-            Logger.info(this.componentName, '✅ Found icon at', { iconPath });
-            return iconPath;
-          }
-        } catch (err) {
-          // 오류 무시하고 다음 경로 시도
+          await fsPromises.access(iconPath);
+          Logger.info(this.componentName, '✅ Found icon at', { iconPath });
+          return iconPath;
+        } catch {
+          // Ignore error, try next path
         }
       }
       
@@ -112,9 +111,14 @@ export class IconResolver {
         Logger.warn(this.componentName, '⚠️ Linux icon not found, using default icon', { defaultIconPath });
       }
       
-      // 기본 아이콘 존재 여부 확인
-      if (defaultIconPath && fs.existsSync(defaultIconPath)) {
-        return defaultIconPath;
+      // 🔥 ASYNC: 기본 아이콘 존재 여부 확인
+      if (defaultIconPath) {
+        try {
+          await fsPromises.access(defaultIconPath);
+          return defaultIconPath;
+        } catch {
+          // Default icon doesn't exist
+        }
       }
       
       // 최종적으로 아이콘을 찾지 못한 경우

@@ -4,11 +4,14 @@ import { resolve } from 'path'
 import { existsSync, readFileSync } from 'fs'
 import { parse } from 'dotenv'
 
+// 🔥 GIGA-CHAD 보안 강화: NEXT_PUBLIC_* 환경변수 제거
+// API 키는 main process에서만 관리, renderer는 IPC를 통해서만 접근
 const PUBLIC_RENDERER_ENV_KEYS = [
-  'NEXT_PUBLIC_GEMINI_API_KEY',
-  'NEXT_PUBLIC_GEMINI_MODEL',
-  'NEXT_PUBLIC_GEMINI_MAX_TOKENS',
-  'NEXT_PUBLIC_GEMINI_TEMPERATURE'
+  // NEXT_PUBLIC_GEMINI_* 제거 - 보안 위험
+  // 'NEXT_PUBLIC_GEMINI_API_KEY', // ❌ REMOVED: 보안 취약점
+  // 'NEXT_PUBLIC_GEMINI_MODEL', // ❌ REMOVED
+  // 'NEXT_PUBLIC_GEMINI_MAX_TOKENS', // ❌ REMOVED
+  // 'NEXT_PUBLIC_GEMINI_TEMPERATURE' // ❌ REMOVED
 ] as const
 
 type PublicRendererEnvKey = (typeof PUBLIC_RENDERER_ENV_KEYS)[number]
@@ -58,26 +61,12 @@ export default defineConfig(({ mode }) => {
     rendererEnvDefinition[key] = JSON.stringify(readEnv(key, fallback))
   }
 
-  const publicRendererEnv: Partial<Record<PublicRendererEnvKey, string>> = {}
-  for (const key of PUBLIC_RENDERER_ENV_KEYS) {
-    const value = readEnv(key)
-    rendererEnvDefinition[key] = JSON.stringify(value)
-    if (value) {
-      publicRendererEnv[key] = value
-    }
-  }
-
+  // 🔥 GIGA-CHAD: PUBLIC_RENDERER_ENV_KEYS가 비어있으므로 Gemini API 키 체크 제거
+  // Gemini API 키는 main process에서만 관리, renderer는 IPC를 통해서만 접근
   const privateGeminiApiKey = readEnv('GEMINI_API_KEY')
-  const hasPublicGeminiApiKey = !!publicRendererEnv.NEXT_PUBLIC_GEMINI_API_KEY
 
-  if (!hasPublicGeminiApiKey && privateGeminiApiKey && mode !== 'production') {
-    rendererEnvDefinition.NEXT_PUBLIC_GEMINI_API_KEY = JSON.stringify(privateGeminiApiKey)
-    publicRendererEnv.NEXT_PUBLIC_GEMINI_API_KEY = privateGeminiApiKey
-    console.warn('[Loop][env] NEXT_PUBLIC_GEMINI_API_KEY가 설정되지 않아 개발 모드에서 GEMINI_API_KEY를 임시로 노출합니다. 프로덕션에서는 NEXT_PUBLIC_GEMINI_API_KEY를 명시적으로 설정하세요.')
-  }
-
-  if (!hasPublicGeminiApiKey && !privateGeminiApiKey) {
-    console.warn('[Loop][env] Gemini API 키가 설정되지 않았습니다. AI 분석 기능이 비활성화됩니다. .env 파일을 확인하세요.')
+  if (!privateGeminiApiKey && mode !== 'production') {
+    console.warn('[Loop][env] GEMINI_API_KEY가 설정되지 않았습니다. AI 분석 기능이 비활성화됩니다. .env 파일을 확인하세요.')
   }
 
   return {
@@ -137,8 +126,9 @@ export default defineConfig(({ mode }) => {
       },
 
       define: {
-        'process.env': rendererEnvDefinition,
-        __LOOP_RENDERER_PUBLIC_ENV__: JSON.stringify(publicRendererEnv)
+        'process.env': rendererEnvDefinition
+        // 🔥 GIGA-CHAD: __LOOP_RENDERER_PUBLIC_ENV__ 제거 (NEXT_PUBLIC_* 없음)
+        // renderer는 IPC를 통해서만 API 키 접근
       },
       server: {
         port: parseInt(readEnv('RENDERER_PORT', '4000')),

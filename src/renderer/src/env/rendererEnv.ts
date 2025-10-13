@@ -1,8 +1,11 @@
+// 🔥 GIGA-CHAD 보안 강화: renderer에서 API 키 완전 제거
+// Gemini API 키는 main process에서만 관리, renderer는 IPC를 통해서만 접근
 const PUBLIC_ENV_KEYS = [
-  'NEXT_PUBLIC_GEMINI_API_KEY',
-  'NEXT_PUBLIC_GEMINI_MODEL',
-  'NEXT_PUBLIC_GEMINI_MAX_TOKENS',
-  'NEXT_PUBLIC_GEMINI_TEMPERATURE'
+  // NEXT_PUBLIC_GEMINI_* 제거 - 보안 위험
+  // 'NEXT_PUBLIC_GEMINI_API_KEY', // ❌ REMOVED
+  // 'NEXT_PUBLIC_GEMINI_MODEL', // ❌ REMOVED
+  // 'NEXT_PUBLIC_GEMINI_MAX_TOKENS', // ❌ REMOVED
+  // 'NEXT_PUBLIC_GEMINI_TEMPERATURE' // ❌ REMOVED
 ] as const
 
 type PublicEnvKey = (typeof PUBLIC_ENV_KEYS)[number]
@@ -29,27 +32,13 @@ const ensureProcessEnv = (key: PublicEnvKey, value: string | undefined) => {
 }
 
 const bootstrapRendererEnv = () => {
-  const envSource = typeof __LOOP_RENDERER_PUBLIC_ENV__ === 'object' ? __LOOP_RENDERER_PUBLIC_ENV__ : undefined
-  const resolvedEnv: Partial<Record<PublicEnvKey, string>> = {}
-
-  for (const key of PUBLIC_ENV_KEYS) {
-    const value = envSource?.[key]
-    if (typeof value === 'string' && value.trim().length > 0) {
-      const trimmed = value.trim()
-      resolvedEnv[key] = trimmed
-      ensureProcessEnv(key, trimmed)
-    }
-  }
-
-  if (!resolvedEnv.NEXT_PUBLIC_GEMINI_API_KEY) {
-    Logger.warn('RENDERER_ENV', 'NEXT_PUBLIC_GEMINI_API_KEY가 설정되지 않았습니다. Gemini 기반 기능이 제한될 수 있습니다.');
-  }
-
+  // 🔥 GIGA-CHAD: PUBLIC_ENV_KEYS가 비어있으므로 환경변수 bootstrap 불필요
+  // renderer는 IPC를 통해서만 API 키 접근
   const globalObject = globalThis as { __LOOP_RENDERER_ENV__?: Record<string, string> }
   globalObject.__LOOP_RENDERER_ENV__ = {
-    ...(globalObject.__LOOP_RENDERER_ENV__ ?? {}),
-    ...resolvedEnv
+    ...(globalObject.__LOOP_RENDERER_ENV__ ?? {})
   }
 }
 
 bootstrapRendererEnv()
+

@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import type { DashboardViewProps, TabMode, TabModeConfig } from './types';
 import { DashboardView } from './Dashboard/DashboardView';
+import { EpisodesView } from './Episodes/EpisodesView';
 import { ScheduleView } from './Schedule/ScheduleView';
 import { ConsistencyView } from './Consistency/ConsistencyView';
 import { TimelineView } from './Timeline/TimelineView';
-// ❌ StatisticsView, QuickLogModal removed - deprecated platform statistics
 import { LayoutDashboard, List, Network, Calendar, CheckCircle2, Clock } from 'lucide-react';
 
 /**
@@ -120,17 +120,7 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                 )}
 
                 {activeTab === 'episodes' && (
-                    <div className="flex h-full items-center justify-center text-center">
-                        <div>
-                            <List className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-                            <p className="text-lg font-semibold text-foreground mb-2">
-                                📝 회차 관리
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                                에피소드별 관리 기능이 곧 추가됩니다.
-                            </p>
-                        </div>
-                    </div>
+                    <EpisodesView projectId={projectId} />
                 )}
 
                 {activeTab === 'schedule' && (

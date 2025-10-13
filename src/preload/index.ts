@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer, nativeTheme, IpcRendererEvent } from 'electron';
-import * as fs from 'fs';
+import { existsSync, readFileSync } from 'fs';
+import { readFile } from 'fs/promises';
 import * as path from 'path';
 import * as crypto from 'crypto';
 import { safePathJoin } from '../shared/utils/pathSecurity';
@@ -139,6 +140,7 @@ const electronAPI: ElectronAPI = {
     continueWriting: (text: string, context?: string) => ipcRenderer.invoke('ai:continue-writing', text, context),
     summarizeText: (text: string) => ipcRenderer.invoke('ai:summarize-text', text),
     saveAnalysisResult: (analysisData: any) => ipcRenderer.invoke('ai:save-analysis-result', analysisData),
+    getAnalysisHistory: (projectId: string, analysisType?: string) => ipcRenderer.invoke('ai:get-analysis-history', projectId, analysisType),
   },
 
   notifications: {
@@ -414,11 +416,12 @@ const readLoopSnapshotFromFile = async (): Promise<unknown | null> => {
     const basePath = typeof userDataPath === 'string' && userDataPath.length > 0 ? userDataPath : process.cwd();
     const filePath = safePathJoin(basePath, '.auth_snapshot.json');
 
-    if (!filePath || !fs.existsSync(filePath)) {
+    if (!filePath || !existsSync(filePath)) {
       return null;
     }
 
-    const raw = fs.readFileSync(filePath, { encoding: 'utf-8' });
+    // 🔥 GIGA-CHAD: 비동기 I/O로 변환 (성능 개선)
+    const raw = await readFile(filePath, { encoding: 'utf-8' });
     return JSON.parse(raw);
   } catch (error) {
     // ignore file system errors
@@ -557,8 +560,11 @@ contextBridge.exposeInMainWorld('loopSnapshot', {
         // This should be handled via IPC if userData path is needed
         // For now, using safe fallback to current working directory
 
-        if (snapPath && fs.existsSync(snapPath)) {
-          const raw = fs.readFileSync(snapPath, { encoding: 'utf-8' });
+        if (snapPath && existsSync(snapPath)) {
+          // 🔥 GIGA-CHAD: 동기 I/O 유지 (preload context 제약)
+          // Note: preload의 동기 context에서는 readFileSync 필요
+          // TODO: 이 레거시 로직을 IPC로 마이그레이션하여 완전 비동기화
+          const raw = readFileSync(snapPath, { encoding: 'utf-8' });
           interface AuthData {
             isAuthenticated?: boolean;
             userEmail?: string;

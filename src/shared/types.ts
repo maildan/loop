@@ -191,6 +191,7 @@ export interface ElectronAPI {
       confidence?: number;
       status?: string;
     }) => Promise<IpcResponse<any>>;
+    getAnalysisHistory: (projectId: string, analysisType?: string) => Promise<IpcResponse<any[]>>;
   };
 
   // 🔔 알림 API

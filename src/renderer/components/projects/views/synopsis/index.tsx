@@ -10,6 +10,11 @@ export { SynopsisContent } from './SynopsisContent';
 export { DashboardView } from './Dashboard/DashboardView';
 export { StatsOverview } from './Dashboard/StatsOverview';
 
+// 🔥 Episodes 컴포넌트 (Phase 6)
+export { EpisodesView } from './Episodes/EpisodesView';
+export { EpisodeCard } from './Episodes/EpisodeCard';
+export { EpisodeDetailModal } from './Episodes/EpisodeDetailModal';
+
 // 🔥 Consistency 컴포넌트 (Phase 1)
 export { ConsistencyView } from './Consistency/ConsistencyView';
 

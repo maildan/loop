@@ -39,7 +39,7 @@ export interface IGeminiError {
     retryable: boolean;
 }
 
-const GEMINI_ENV_KEYS = ['GEMINI_API_KEY', 'NEXT_PUBLIC_GEMINI_API_KEY'] as const;
+const GEMINI_ENV_KEYS = ['GEMINI_API_KEY'] as const;
 export type GeminiEnvKey = (typeof GEMINI_ENV_KEYS)[number];
 export type EnvStatus = 'set' | 'missing';
 
@@ -435,11 +435,10 @@ export function getGeminiClient(): GeminiClient {
         if (!apiKey) {
             const diagnosticMessage = [
                 'Gemini API 키를 찾을 수 없습니다.',
-                '환경변수 GEMINI_API_KEY (권장) 또는 NEXT_PUBLIC_GEMINI_API_KEY 중 하나를 설정해주세요.',
+                '환경변수 GEMINI_API_KEY를 설정해주세요.',
                 '',
                 `현재 상태:
-  - GEMINI_API_KEY: ${statuses.GEMINI_API_KEY}
-  - NEXT_PUBLIC_GEMINI_API_KEY: ${statuses.NEXT_PUBLIC_GEMINI_API_KEY}`,
+  - GEMINI_API_KEY: ${statuses.GEMINI_API_KEY}`,
                 '',
                 '자세한 설정 방법은 docs/ENVIRONMENT_VARIABLES.md 파일을 참고하세요.'
             ].join('\n');
@@ -447,11 +446,7 @@ export function getGeminiClient(): GeminiClient {
             throw new GeminiError('MISSING_API_KEY', diagnosticMessage, { env: statuses }, false);
         }
 
-        if (source === 'NEXT_PUBLIC_GEMINI_API_KEY') {
-            Logger.warn('GEMINI_CLIENT', 'Falling back to NEXT_PUBLIC_GEMINI_API_KEY. Consider setting GEMINI_API_KEY to keep the key private.');
-        }
-
-        const model = getEnvValue('GEMINI_MODEL') || getEnvValue('NEXT_PUBLIC_GEMINI_MODEL') || 'gemini-2.5-flash';
+        const model = getEnvValue('GEMINI_MODEL') || 'gemini-2.5-flash';
         const maxTokens = parseInteger(getEnvValue('GEMINI_MAX_TOKENS'), 4096);
         const temperature = parseFloatSafe(getEnvValue('GEMINI_TEMPERATURE'), 0.7);
 

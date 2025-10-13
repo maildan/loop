@@ -51,7 +51,7 @@ class PrismaService {
       this.isConnecting = true;
       Logger.debug('PRISMA_SERVICE', 'Creating new Prisma client');
 
-      const { dbPath, databaseUrl } = ensureDatabaseUrl();
+      const { dbPath, databaseUrl } = await ensureDatabaseUrl();
       Logger.info('PRISMA_SERVICE', '🔍 Prisma database resolved', {
         dbPath,
         databaseUrl,

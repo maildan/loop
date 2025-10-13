@@ -19,8 +19,8 @@ Every contributor must follow these instructions to ensure **stability, reproduc
 
 - **Node.js**: LTS (current project uses Node 20.x).  
 - **Electron**: 38 LTS (main process).  
-- **Next.js**: 15 (renderer, App Router).  
-- **TailwindCSS**: v4.  
+- **VITE** ( renderer process ).
+- **TailwindCSS**: v3
 - **TypeScript**: strict mode.  
 
 Install Node via [nvm](https://github.com/nvm-sh/nvm) or fnm to ensure consistent versioning.  

@@ -57,6 +57,7 @@ import { Logger } from '../../shared/logger';
 import { BaseManager } from '../common/BaseManager';
 import { Result, TypingSession, TypingStats, UserPreferences } from '../../shared/types';
 import { existsSync, copyFileSync, statSync, mkdirSync, readFileSync } from 'fs';
+import { promises as fsPromises } from 'fs';
 import { join, dirname } from 'path';
 import { createHash } from 'crypto';
 import { app } from 'electron';
@@ -478,6 +479,7 @@ export class DatabaseManager extends BaseManager {
 
   /**
    * 데이터베이스 백업
+   * 🔥 ASYNC: All file operations use fsPromises for non-blocking I/O
    */
   public async createBackup(): Promise<Result<BackupInfo>> {
     try {
@@ -485,8 +487,10 @@ export class DatabaseManager extends BaseManager {
       const userDataPath = app.getPath('userData');
       const backupDir = join(userDataPath, 'backups');
       
-      if (!existsSync(backupDir)) {
-        mkdirSync(backupDir, { recursive: true });
+      try {
+        await fsPromises.access(backupDir);
+      } catch {
+        await fsPromises.mkdir(backupDir, { recursive: true });
       }
 
       // 데이터베이스 파일 경로 (SQLite 파일 경로를 가정)
@@ -496,7 +500,9 @@ export class DatabaseManager extends BaseManager {
       const backupPath = join(backupDir, backupFileName);
 
       // 데이터베이스 파일이 존재하는지 확인
-      if (!existsSync(dbPath)) {
+      try {
+        await fsPromises.access(dbPath);
+      } catch {
         Logger.warn(this.componentName, 'Database file not found for backup', { dbPath });
         return { 
           success: false, 
@@ -505,11 +511,11 @@ export class DatabaseManager extends BaseManager {
       }
 
       // 파일 복사
-      copyFileSync(dbPath, backupPath);
+      await fsPromises.copyFile(dbPath, backupPath);
 
       // 백업 파일 정보 수집
-      const stats = statSync(backupPath);
-      const backupData = readFileSync(backupPath);
+      const stats = await fsPromises.stat(backupPath);
+      const backupData = await fsPromises.readFile(backupPath);
       const checksum = createHash('sha256').update(backupData).digest('hex');
 
       const backupInfo: BackupInfo = {

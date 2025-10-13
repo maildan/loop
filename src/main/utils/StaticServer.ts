@@ -1,6 +1,6 @@
-import { createServer } from 'http';
+import { Server, createServer, IncomingMessage, ServerResponse } from 'http';
 import { join } from 'path';
-import { existsSync } from 'fs';
+import { promises as fsPromises } from 'fs';
 import { Logger } from '../../shared/logger';
 import { PORTS } from '../constants';
 
@@ -40,11 +40,19 @@ export class StaticServer {
   public getMainUrl(): string { return `http://localhost:${this.port}`; }
 
   /**
-   * Check whether static build exists and ensure the HTTP server is started in production.
+   * 🔥 ASYNC: Check whether static build exists and ensure the HTTP server is started in production.
    */
   public async checkHealth(): Promise<boolean> {
     const indexPath = join(this.staticPath, 'index.html');
-    const indexExists = existsSync(indexPath);
+    
+    // 🔥 ASYNC: Check if index.html exists
+    let indexExists = false;
+    try {
+      await fsPromises.access(indexPath);
+      indexExists = true;
+    } catch {
+      indexExists = false;
+    }
     
     Logger.info('STATIC_SERVER', '🔍 checkHealth called', { 
       staticPath: this.staticPath,
