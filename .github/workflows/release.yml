@@ -102,6 +102,26 @@ jobs:
       - name: Generate Prisma Client
         run: pnpm prisma generate
       
+      - name: Verify Prisma Client Generation
+        shell: bash
+        run: |
+          echo "🔍 Verifying Prisma client generation..."
+          if [ -d "node_modules/.prisma/client" ]; then
+            echo "✅ Prisma client directory exists"
+            ls -la node_modules/.prisma/client/ | head -20
+          else
+            echo "❌ Prisma client directory NOT found"
+            exit 1
+          fi
+          
+          if [ -d "node_modules/@prisma/engines" ]; then
+            echo "✅ Prisma engines directory exists"
+            ls -la node_modules/@prisma/engines/ | head -20
+          else
+            echo "❌ Prisma engines directory NOT found"
+            exit 1
+          fi
+      
       - name: Build application
         run: pnpm build
       
@@ -175,6 +195,55 @@ jobs:
           MESSAGING_SENDER_ID: ${{ secrets.MESSAGING_SENDER_ID }}
           APP_ID: ${{ secrets.APP_ID }}
           MEASUREMENT_ID: ${{ secrets.MEASUREMENT_ID }}
+      
+      - name: Verify Windows Build Artifacts
+        shell: bash
+        run: |
+          echo "🔍 Verifying Windows build artifacts..."
+          
+          # release 디렉토리 구조 확인
+          echo "📂 Release directory contents:"
+          ls -lh release/ || echo "⚠️ No release directory"
+          
+          # NSIS 설치 파일 확인
+          if ls release/*.exe 1> /dev/null 2>&1; then
+            echo "✅ Windows installer (.exe) found:"
+            ls -lh release/*.exe
+            
+            # 파일 크기 확인 (10MB 미만이면 문제일 가능성)
+            for file in release/*.exe; do
+              size=$(stat -f%z "$file" 2>/dev/null || stat -c%s "$file" 2>/dev/null || echo "0")
+              size_mb=$((size / 1024 / 1024))
+              if [ $size_mb -lt 10 ]; then
+                echo "⚠️ Warning: $file is only ${size_mb}MB (might be incomplete)"
+              else
+                echo "✅ $file size: ${size_mb}MB"
+              fi
+            done
+          else
+            echo "❌ No .exe installer found!"
+            exit 1
+          fi
+          
+          # NSIS 7z 아카이브 확인
+          if ls release/*.nsis.7z 1> /dev/null 2>&1; then
+            echo "✅ NSIS 7z archive found:"
+            ls -lh release/*.nsis.7z
+          fi
+          
+          # Blockmap 파일 확인
+          if ls release/*.blockmap 1> /dev/null 2>&1; then
+            echo "✅ Blockmap files found:"
+            ls -lh release/*.blockmap
+          fi
+          
+          # latest.yml 확인 (electron-updater용)
+          if [ -f "release/latest.yml" ]; then
+            echo "✅ latest.yml found:"
+            cat release/latest.yml
+          else
+            echo "⚠️ latest.yml not found (auto-update may not work)"
+          fi
       
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4

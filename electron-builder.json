@@ -105,7 +105,7 @@
     "icon": "public/assets/icon.png",
     "target": [
       {
-        "target": "nsis-web",
+        "target": "nsis",
         "arch": [
           "x64",
           "arm64"
@@ -152,7 +152,7 @@
   },
   "nsis": {
     "oneClick": false,
-    "perMachine": false,
+    "perMachine": true,
     "allowElevation": true,
     "allowToChangeInstallationDirectory": true,
     "createDesktopShortcut": true,
@@ -166,9 +166,6 @@
     "license": null,
     "runAfterFinish": true,
     "deleteAppDataOnUninstall": false
-  },
-  "nsisWeb": {
-    "artifactName": "${productName} Web Setup ${version}.${ext}"
   },
   "publish": {
     "provider": "github",

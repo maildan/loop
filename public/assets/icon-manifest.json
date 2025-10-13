@@ -1,0 +1,19 @@
+{
+    "default": [
+        "icon.iconset/icon_16x16.png",
+        "icon.iconset/icon_16x16@2x.png",
+        "icon.png"
+    ],
+    "mac": [
+        "icon.iconset/icon_16x16.png",
+        "icon.iconset/icon_16x16@2x.png",
+        "icon.icns"
+    ],
+    "windows": [
+        "icon.ico",
+        "icon.png"
+    ],
+    "linux": [
+        "icon.png"
+    ]
+}
