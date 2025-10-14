@@ -16,13 +16,29 @@
   },
   "files": [
     "out/main/**/*",
+    "!.codacy**",
     "out/preload/**/*",
     "out/renderer/**/*",
     "assets/**/*",
     "public/assets/fonts/**/*",
+    "!scripts/**/*",
+    "!coverage/**/*",
     "package.json",
     "node_modules/highlight.js/styles/**/*.css",
-    "!node_modules/**/*.ts"
+    "!node_modules/**/*.ts",
+    "!node_modules/**/LICENSE*",
+    "!node_modules/**/*.map",
+    "!node_modules/**/README*",
+    "!node_modules/**/*.md",
+    "!node_modules/**/test/**",
+    "!node_modules/**/tests/**",
+    "!node_modules/**/__tests__/**",
+    "!node_modules/**/.github/**",
+    "!node_modules/**/examples/**",
+    "!node_modules/**/*.d.ts",
+    "node_modules/.prisma/**/*",
+    "node_modules/@prisma/client/**/*",
+    "node_modules/.pnpm/@prisma+client@*/node_modules/.prisma/**/*"
   ],
   "asarUnpack": [
     "**/*.node",
@@ -36,6 +52,14 @@
     "node_modules/electron-updater/**/*"
   ],
   "extraResources": [
+    {
+      "from": "node_modules",
+      "to": "node_modules",
+      "filter": [
+        ".prisma/**/*",
+        "@prisma/client/**/*"
+      ]
+    },
     {
       "from": "prisma/schema.prisma",
       "to": "prisma/schema.prisma"

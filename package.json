@@ -1,7 +1,7 @@
 {
   "name": "loop",
   "productName": "Loop",
-  "version": "1.3.9",
+  "version": "1.4.1",
   "description": "Loop",
   "author": "Loop",
   "private": true,
@@ -9,7 +9,7 @@
   "homepage": "./",
   "scripts": {
     "dev": "electron-vite dev",
-    "prebuild": "node scripts/prepare-fonts.js",
+    "prebuild": "pnpm db:generate && node scripts/prepare-fonts.js",
     "build": "electron-vite build",
     "build:prod": "cross-env NODE_ENV=production electron-vite build",
     "preview": "electron-vite preview",
@@ -18,8 +18,8 @@
     "build:optimize": "pnpm build:strip-debug && pnpm build:cleanup",
     "build:strip-debug": "cross-env NODE_ENV=production node scripts/optimize-bundle.js || true",
     "build:cleanup": "rimraf dist/**/*.map dist/**/*.d.ts dist/**/*.js.map || true",
-    "build:win": "pnpm build:prod && electron-builder --win --x64 --config.productName=Loop",
-    "build:mac": "pnpm build:prod && electron-builder --mac --x64 --config.productName=Loop",
+    "build:win": "pnpm build:prod && electron-builder --win --arch x64,arm64 --config.productName=Loop",
+    "build:mac": "pnpm build:prod && electron-builder --mac --arch x64,arm64 --config.productName=Loop",
     "start": "cross-env NODE_ENV=production electron .",
     "start:prod": "cross-env NODE_ENV=production electron .",
     "test": "jest",

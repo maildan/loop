@@ -90,97 +90,23 @@ export class DatabaseService {
       this.config.databaseUrl = databaseUrl;
       Logger.info('DATABASE', 'Resolved Prisma database path', { dbPath, databaseUrl });
 
-      // Prisma 클라이언트 동적 로딩
-      // 패키지 앱에서는 extraResources에서, 개발 환경에서는 node_modules에서 로드
-      const { app } = require('electron');
-      let PrismaClientConstructor;
-      let queryEnginePath: string | undefined;
-      
-      if (app.isPackaged) {
-        // 패키지 앱: extraResources/prisma/client/index.js를 직접 require (default.js의 exports condition 우회)
-        const path = require('path');
-        const fs = require('fs');
-        const prismaClientDir = safePathJoin(process.resourcesPath || '', 'prisma', 'client');
-        
-        if (!prismaClientDir) {
-          Logger.error('DATABASE', 'Failed to create secure Prisma client directory path');
-          throw new Error('Failed to create secure Prisma client directory path');
-        }
-        
-        // default.js 대신 index.js 직접 로드
-        const indexPath = safePathJoin(prismaClientDir, 'index.js');
-        if (!indexPath) {
-          Logger.error('DATABASE', 'Failed to create secure Prisma index path');
-          throw new Error('Failed to create secure Prisma index path');
-        }
-        
-        Logger.info('DATABASE', 'Loading Prisma client from extraResources', { indexPath });
-        
-        // 🔒 보안: 동적 require는 일반적으로 위험하지만, 이 경우는 안전함
-        // - indexPath는 safePathJoin으로 검증된 경로 (process.resourcesPath + 'prisma/client/index.js')
-        // - process.resourcesPath는 Electron이 제공하는 신뢰할 수 있는 경로
-        // - 사용자 입력이 개입하지 않는 고정된 패턴
-        // nosemgrep: javascript.lang.security.audit.unsafe-dynamic-method-exec
-        // eslint-disable-next-line @typescript-eslint/no-var-requires, security/detect-non-literal-require
-        const prismaModule = require(indexPath);
-        PrismaClientConstructor = prismaModule.PrismaClient;
-        
-        // 🔥 Query engine binary 경로 찾기 (app.asar.unpacked 내부)
-        const unpackedPath = app.getAppPath().replace('app.asar', 'app.asar.unpacked');
-        const nodeModulesPath = safePathJoin(unpackedPath, 'node_modules', '.prisma', 'client');
-        
-        if (!nodeModulesPath) {
-          Logger.error('DATABASE', 'Failed to create secure node_modules path');
-          throw new Error('Failed to create secure node_modules path');
-        }
-        
-        // Query engine 파일 찾기
-        try {
-          const files = fs.readdirSync(nodeModulesPath);
-          const queryEngineFile = files.find((f: string) => f.startsWith('libquery_engine') || f.startsWith('query_engine'));
-          
-          if (queryEngineFile) {
-            queryEnginePath = path.join(nodeModulesPath, queryEngineFile);
-            Logger.info('DATABASE', 'Found query engine binary', { queryEnginePath });
-          } else {
-            Logger.warn('DATABASE', 'Query engine binary not found, will try default paths', { nodeModulesPath, files });
-          }
-        } catch (err) {
-          Logger.warn('DATABASE', 'Failed to read query engine directory', { nodeModulesPath, error: err });
-        }
-      } else {
-        // 개발 환경: 일반 node_modules에서 로드
-        Logger.info('DATABASE', 'Loading Prisma client from node_modules');
-        const prismaModule = await import('@prisma/client');
-        PrismaClientConstructor = (prismaModule as unknown as { PrismaClient: new (...args: unknown[]) => PrismaClient }).PrismaClient ||
-          (prismaModule as unknown as { default: { PrismaClient: new (...args: unknown[]) => PrismaClient } }).default?.PrismaClient;
-      }
+      // 🔥 Prisma 클라이언트 로딩 - @prisma/client 사용 (asarUnpack으로 보장됨)
+      Logger.info('DATABASE', 'Loading Prisma client from @prisma/client');
+      const { PrismaClient } = await import('@prisma/client');
+      const PrismaClientConstructor = PrismaClient;
 
       if (!PrismaClientConstructor) {
         throw new Error('PrismaClient not found in module');
       }
 
-      // Prisma Client 설정 객체 생성
-      const prismaConfig: Record<string, unknown> = {
+      this.prisma = new PrismaClientConstructor({
         datasources: {
           db: {
             url: this.config.databaseUrl,
           },
         },
         log: this.config.enableLogging ? ['query', 'info', 'warn', 'error'] : [],
-      };
-
-      // 🔥 Production 환경에서 query engine 경로 명시적으로 지정
-      if (app.isPackaged && queryEnginePath) {
-        (prismaConfig as Record<string, unknown>).__internal = {
-          engine: {
-            binaryPath: queryEnginePath
-          }
-        };
-        Logger.info('DATABASE', 'Using custom query engine path', { queryEnginePath });
-      }
-
-      this.prisma = new PrismaClientConstructor(prismaConfig) as PrismaClient;
+      }) as any as PrismaClient;
 
       // 데이터베이스 연결
       await this.prisma.$connect();
@@ -189,7 +115,6 @@ export class DatabaseService {
       Logger.info('DATABASE', 'Database initialized successfully', {
         url: this.config.databaseUrl,
         logging: this.config.enableLogging,
-        queryEngine: queryEnginePath || 'default',
       });
 
       return createSuccess(true);
