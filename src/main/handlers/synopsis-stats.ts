@@ -10,6 +10,7 @@
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { prismaService } from '../services/PrismaService';
 import { Logger } from '../../shared/logger';
+import { formatDateISO, formatDateShort, getDaysAgo } from '../../shared/utils/date';
 
 // 🔥 Symbol 기반 컴포넌트 이름
 const SYNOPSIS_STATS_HANDLER = Symbol.for('SYNOPSIS_STATS_HANDLER');
@@ -22,9 +23,7 @@ export function registerGetWritingActivityHandler() {
   ipcMain.handle('synopsis:getWritingActivity', async (_event: IpcMainInvokeEvent, projectId: string, days: number = 7) => {
     try {
       const prisma = await prismaService.getClient();
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - days);
-      startDate.setHours(0, 0, 0, 0);
+      const startDate = getDaysAgo(days);
 
       const activities = await prisma.writingActivity.findMany({
         where: {
@@ -47,7 +46,7 @@ export function registerGetWritingActivityHandler() {
 
       // 날짜별 데이터 형식 변환
       return activities.map((activity: ActivityData) => ({
-        date: activity.date.toISOString().split('T')[0], // YYYY-MM-DD
+        date: formatDateISO(activity.date),
         words: activity.wordCount,
         duration: activity.duration,
       }));
@@ -66,9 +65,7 @@ export function registerGetProgressTimelineHandler() {
   ipcMain.handle('synopsis:getProgressTimeline', async (_event: IpcMainInvokeEvent, projectId: string, days: number = 30) => {
     try {
       const prisma = await prismaService.getClient();
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - days);
-      startDate.setHours(0, 0, 0, 0);
+      const startDate = getDaysAgo(days);
 
       const activities = await prisma.writingActivity.findMany({
         where: {
@@ -88,15 +85,11 @@ export function registerGetProgressTimelineHandler() {
 
       type ProgressData = { date: Date; wordCount: number };
 
-      // 누적 계산
-      let cumulative = 0;
-      return activities.map((activity: ProgressData) => {
-        cumulative += activity.wordCount;
-        return {
-          date: `${activity.date.getMonth() + 1}/${activity.date.getDate()}`,
-          words: cumulative,
-        };
-      });
+      // 일별 작성량 반환 (누적 제거 - WritingActivity.wordCount가 이미 하루 총합)
+      return activities.map((activity: ProgressData) => ({
+        date: formatDateShort(activity.date),
+        words: activity.wordCount, // 일별 총합 (누적 X)
+      }));
     } catch (error) {
       Logger.error(SYNOPSIS_STATS_HANDLER, 'Error fetching progress timeline', { projectId, days, error });
       throw error;
@@ -106,24 +99,42 @@ export function registerGetProgressTimelineHandler() {
 
 /**
  * 5막 구조별 회차 통계
+ * 🔥 ProjectStructure (type='chapter') 기반으로 변경
  * @returns { act, count, avgWords }[]
  */
 export function registerGetEpisodeStatsHandler() {
   ipcMain.handle('synopsis:getEpisodeStats', async (_event: IpcMainInvokeEvent, projectId: string) => {
     try {
       const prisma = await prismaService.getClient();
-      const episodes = await prisma.episode.findMany({
+      
+      // 🔥 Episode 대신 ProjectStructure의 type='chapter' 조회
+      const chapters = await prisma.projectStructure.findMany({
         where: {
           projectId,
+          type: 'chapter',
           isActive: true,
         },
         select: {
-          act: true,
+          status: true, // act 대신 status 사용
           wordCount: true,
         },
       });
 
-      type EpisodeData = { act: string | null; wordCount: number };
+      type ChapterData = { status: string; wordCount: number };
+
+      // 🔥 status를 5막 구조로 매핑 (기본값: 'development')
+      const statusToAct: Record<string, string> = {
+        planned: 'intro',
+        planning: 'intro',
+        'in-progress': 'rising',
+        in_progress: 'rising',
+        drafting: 'development',
+        draft: 'development',
+        completed: 'climax',
+        finished: 'climax',
+        published: 'conclusion',
+        released: 'conclusion',
+      };
 
       // 5막 구조별 그룹화
       const acts = ['intro', 'rising', 'development', 'climax', 'conclusion'];
@@ -131,9 +142,9 @@ export function registerGetEpisodeStatsHandler() {
       const actColors = { intro: '#3b82f6', rising: '#10b981', development: '#eab308', climax: '#ef4444', conclusion: '#8b5cf6' };
 
       return acts.map(act => {
-        const actEpisodes = episodes.filter((ep: EpisodeData) => ep.act === act);
-        const count = actEpisodes.length;
-        const avgWords = count > 0 ? Math.round(actEpisodes.reduce((sum: number, ep: EpisodeData) => sum + ep.wordCount, 0) / count) : 0;
+        const actChapters = chapters.filter((ch: ChapterData) => statusToAct[ch.status] === act);
+        const count = actChapters.length;
+        const avgWords = count > 0 ? Math.round(actChapters.reduce((sum: number, ch: ChapterData) => sum + ch.wordCount, 0) / count) : 0;
 
         return {
           act: actLabels[act as keyof typeof actLabels],

@@ -73,9 +73,12 @@ export function useEpisodes(projectId: string) {
       };
 
       const result = await window.electronAPI['episode:list'](projectId, options);
-      
+
       if (Array.isArray(result)) {
         setEpisodes(result);
+      } else if (result && typeof result === 'object' && 'success' in result) {
+        const response = result as { success: boolean; data?: Episode[] };
+        setEpisodes(response.success && Array.isArray(response.data) ? response.data : []);
       } else {
         setEpisodes([]);
       }

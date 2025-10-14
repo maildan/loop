@@ -196,7 +196,7 @@ export function useSynopsisStats(projectId: string) {
     writingActivity.refetch();
     progressTimeline.refetch();
     episodeStats.refetch();
-  }, [writingActivity, progressTimeline, episodeStats]);
+  }, [writingActivity.refetch, progressTimeline.refetch, episodeStats.refetch]);
 
   return {
     data: {
