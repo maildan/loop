@@ -11,8 +11,9 @@ export class OAuthSuccessPage {
      * - global.css 색상 시스템 적용
      * - 자동 앱 열기 (VS Code 스타일)
      * - 향상된 UX (로딩 애니메이션, 상태 메시지)
+     * @param nonce - CSP nonce for inline scripts
      */
-    public static generateSuccessHtml(): string {
+    public static generateSuccessHtml(nonce: string): string {
         Logger.info('OAUTH_SUCCESS', 'Generating OAuth success page with app launch capability');
 
         return `<!DOCTYPE html>
@@ -211,7 +212,7 @@ export class OAuthSuccessPage {
     </p>
   </div>
 
-  <script>
+  <script nonce="${nonce}">
     let countdown = 3;
     const countdownElement = document.getElementById('countdown');
     
@@ -221,7 +222,7 @@ export class OAuthSuccessPage {
         // Loop 앱 커스텀 프로토콜 시도
         window.location.href = 'loop://oauth-success';
       } catch (e) {
-        Logger.debug('OAUTH_SUCCESS_PAGE', 'Direct app launch failed, continuing with window close');
+        console.debug('Direct app launch failed, continuing with window close');
       }
     }
     
@@ -268,8 +269,10 @@ export class OAuthSuccessPage {
 
     /**
      * 🔥 에러 발생 시 표시할 HTML 페이지
+     * @param nonce - CSP nonce for inline scripts
+     * @param error - Optional error message to display
      */
-    public static generateErrorHtml(error?: string): string {
+    public static generateErrorHtml(nonce: string, error?: string): string {
         Logger.warn('OAUTH_SUCCESS', 'Generating OAuth error page', { error });
 
         return `<!DOCTYPE html>
@@ -356,7 +359,7 @@ export class OAuthSuccessPage {
     <p>잠시 후 창이 자동으로 닫힙니다.</p>
   </div>
 
-  <script>
+  <script nonce="${nonce}">
     setTimeout(() => window.close(), 3000);
   </script>
 </body>

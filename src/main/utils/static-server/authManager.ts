@@ -18,7 +18,7 @@ export class OAuthManager {
      *   redirected to http://localhost:{port}{state} (port will be extracted from req.socket.localPort).
      * - Otherwise, the window will be closed by returning a small HTML page.
      */
-    public async processCallback(url: URL, req: IncomingMessage): Promise<{ redirectTo?: string; html?: string }> {
+    public async processCallback(url: URL, req: IncomingMessage, nonce: string): Promise<{ redirectTo?: string; html?: string }> {
         const code = url.searchParams.get('code') || '';
         const state = url.searchParams.get('state') || '';
 
@@ -42,7 +42,7 @@ export class OAuthManager {
             // If state is exactly '/' or empty, do not redirect to root; show enhanced OAuth success page
             const trimmedState = state.trim();
             if (trimmedState === '/' || trimmedState === '') {
-                const html = OAuthSuccessPage.generateSuccessHtml();
+                const html = OAuthSuccessPage.generateSuccessHtml(nonce);
                 return { html };
             }
             // try absolute URL
@@ -60,7 +60,7 @@ export class OAuthManager {
         }
 
         // default: enhanced OAuth success page with auto app launch
-        const html = OAuthSuccessPage.generateSuccessHtml();
+        const html = OAuthSuccessPage.generateSuccessHtml(nonce);
         return { html };
     }
 }

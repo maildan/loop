@@ -75,27 +75,41 @@ class KeychainAdapter implements KeytarLike {
   private async doInitialize(): Promise<void> {
     // Try native keytar first
     try {
-      const keytar = await import('keytar');
-      if (keytar && typeof keytar.getPassword === 'function') {
-        // Validate by attempting a test operation
+      const keytarModule = await import('keytar');
+      
+      // Handle CommonJS default export properly (Electron + Vite bundles CJS modules with .default)
+      const keytarCandidate = 'default' in keytarModule 
+        ? (keytarModule as { default: KeytarLike }).default 
+        : (keytarModule as unknown as KeytarLike);
+      
+      // Verify keytar has the required methods
+      if (
+        keytarCandidate &&
+        typeof keytarCandidate.setPassword === 'function' &&
+        typeof keytarCandidate.getPassword === 'function' &&
+        typeof keytarCandidate.deletePassword === 'function'
+      ) {
+        // Validate by attempting a test operation (some platforms may have keytar installed but non-functional)
         try {
-          await keytar.getPassword('loop-test-service', 'loop-test-account');
-          this.backend = keytar;
+          await keytarCandidate.getPassword('loop-test-service', 'loop-test-account');
+          this.backend = keytarCandidate;
           this.backendType = 'keytar';
           Logger.info(componentName, '✅ Using native keytar for secure credential storage');
           return;
-        } catch (e) {
+        } catch (testError) {
           // If test call fails, fall through to electron-store
           Logger.debug(componentName, 'keytar test operation failed, falling back to electron-store');
         }
+      } else {
+        Logger.debug(componentName, 'keytar module loaded but methods not available');
       }
-    } catch (e) {
+    } catch (importError) {
       // Suppress noisy dlopen errors - this is expected on some platforms
-      const errMsg = e instanceof Error ? e.message : String(e);
+      const errMsg = importError instanceof Error ? importError.message : String(importError);
       if (errMsg.includes('dlopen') || errMsg.includes('ERR_DLOPEN_FAILED')) {
         Logger.debug(componentName, 'Native keytar unavailable (expected on some platforms)');
       } else {
-        Logger.debug(componentName, 'keytar import failed, using electron-store fallback', e);
+        Logger.debug(componentName, 'keytar import failed, using electron-store fallback', importError);
       }
     }
 

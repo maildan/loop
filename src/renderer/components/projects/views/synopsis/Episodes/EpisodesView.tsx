@@ -14,6 +14,7 @@
 import React, { useState } from 'react';
 import { Search, Filter, Grid, List, Plus, Loader2, AlertTriangle, FileText } from 'lucide-react';
 import { useEpisodes, type Episode } from '../../../../../hooks/useEpisodes';
+import type { UpdateEpisodeInput } from '@/shared/types/episode';
 import { EpisodeCard } from './EpisodeCard';
 import { EpisodeDetailModal } from './EpisodeDetailModal';
 
@@ -96,7 +97,12 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({ projectId }) => {
   };
 
   const handleSave = async (id: string, updates: Partial<Episode>) => {
-    await updateEpisode(id, updates);
+    // Filter out null values to match UpdateEpisodeInput type expectations
+    const filteredUpdates: UpdateEpisodeInput = Object.fromEntries(
+      Object.entries(updates).filter(([_, v]) => v !== null)
+    ) as UpdateEpisodeInput;
+    
+    await updateEpisode(id, filteredUpdates);
     setIsModalOpen(false);
     setEditingEpisode(null);
   };

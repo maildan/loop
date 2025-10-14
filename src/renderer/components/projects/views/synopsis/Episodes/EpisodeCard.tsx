@@ -13,6 +13,7 @@
 import React from 'react';
 import { Edit, Trash2, MoreVertical, FileText, Calendar, Target } from 'lucide-react';
 import type { Episode } from '../../../../../hooks/useEpisodes';
+import type { FiveActType } from '@/shared/types/episode';
 
 export interface EpisodeCardProps {
   episode: Episode;
@@ -37,16 +38,16 @@ const statusLabels = {
   published: '발행됨',
 };
 
-const actColors = {
-  intro: 'bg-blue-500/10 text-blue-500',
+const actColors: Record<FiveActType, string> = {
+  introduction: 'bg-blue-500/10 text-blue-500',
   rising: 'bg-green-500/10 text-green-500',
   development: 'bg-yellow-500/10 text-yellow-500',
   climax: 'bg-red-500/10 text-red-500',
   conclusion: 'bg-purple-500/10 text-purple-500',
 };
 
-const actLabels = {
-  intro: '도입',
+const actLabels: Record<FiveActType, string> = {
+  introduction: '도입',
   rising: '발단',
   development: '전개',
   climax: '절정',

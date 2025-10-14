@@ -1,8 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'http';
+import { randomBytes } from 'crypto';
 import { Logger } from '../../../shared/logger';
 import { buildDefaultHeaders } from './headers';
 import { OAuthManager } from './authManager';
 import { PORTS } from '../../constants';
+import { OAuthSuccessPage } from './oauthSuccessPage';
 
 export class OAuthCallbackHandler {
     private manager: OAuthManager;
@@ -18,7 +20,8 @@ export class OAuthCallbackHandler {
 
             Logger.info('OAUTH_CALLBACK', 'Callback received', { rawUrl: url.toString() });
 
-            const result = await this.manager.processCallback(url, req);
+            const nonce = randomBytes(16).toString('base64');
+            const result = await this.manager.processCallback(url, req, nonce);
 
             if (result.redirectTo) {
                 const headers = buildDefaultHeaders('text/plain');
@@ -27,8 +30,10 @@ export class OAuthCallbackHandler {
                 return;
             }
 
-            const html = result.html || '<html><body><h1>Auth complete</h1><script>setTimeout(()=>window.close(),1200)</script></body></html>';
-            const headers = buildDefaultHeaders('text/html; charset=utf-8');
+            const html = result.html || OAuthSuccessPage.generateSuccessHtml(nonce);
+            const headers = buildDefaultHeaders('text/html; charset=utf-8', {
+                cspTransform: policy => appendNonce(policy, nonce)
+            });
             res.writeHead(200, headers);
             res.end(html);
         } catch (error) {
@@ -42,4 +47,22 @@ export class OAuthCallbackHandler {
             }
         }
     }
+}
+
+function appendNonce(policy: string, nonce: string): string {
+    const directives = policy
+        .split(';')
+        .map(part => part.trim())
+        .filter(Boolean)
+        .map(part => {
+            if (part.startsWith('script-src')) {
+                if (part.includes(`'nonce-${nonce}'`)) {
+                    return part;
+                }
+                return `${part} 'nonce-${nonce}'`;
+            }
+            return part;
+        });
+
+    return directives.join('; ');
 }

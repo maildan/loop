@@ -89,7 +89,7 @@ export const ensureDatabaseUrl = async (): Promise<{ dbPath: string; databaseUrl
 
   if (process.env.DATABASE_URL !== databaseUrl) {
     Logger.info(COMPONENT, 'Setting DATABASE_URL for Prisma', { databaseUrl });
-    process.env.DATABASE_URL = databaseUrl;
+    Reflect.set(process.env as Record<string, unknown>, 'DATABASE_URL', databaseUrl);
   }
 
   return { dbPath, databaseUrl };

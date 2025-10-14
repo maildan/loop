@@ -1,6 +1,7 @@
 // 🔥 기가차드 Application Bootstrapper - 메인 오케스트레이터
 
 import { app, protocol, net, BrowserWindow, nativeImage } from 'electron';
+import type { Event as ElectronEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { ManagerCoordinator } from './ManagerCoordinator';
 import { EventController } from './EventController';
@@ -156,12 +157,12 @@ export class ApplicationBootstrapper {
       // loop:// 프로토콜을 이 앱의 기본 핸들러로 설정
       if (!app.isDefaultProtocolClient('loop')) {
         let result: boolean;
+        let devArgs: string[] | undefined;
         if (!isPackaged) {
           // 🔥 개발 모드: electron CLI 경로와 진입점 경로를 명시해야 함
           // 모든 플랫폼(macOS, Windows, Linux)에서 동일하게 처리
-          result = app.setAsDefaultProtocolClient('loop', process.execPath, [
-            path.resolve(process.argv[1])
-          ]);
+          devArgs = this.getDevProtocolArgs();
+          result = app.setAsDefaultProtocolClient('loop', process.execPath, devArgs);
         } else {
           // 🔥 프로덕션 빌드: 추가 인자 없이 등록
           result = app.setAsDefaultProtocolClient('loop');
@@ -172,7 +173,7 @@ export class ApplicationBootstrapper {
           isPackaged,
           platform: process.platform,
           execPath: !isPackaged ? process.execPath : 'N/A',
-          argv1: !isPackaged ? process.argv[1] : 'N/A'
+          devArgs: !isPackaged ? devArgs : undefined
         });
       } else {
         Logger.info('BOOTSTRAPPER', '🔗 Already registered as default protocol handler for loop://');
@@ -181,10 +182,10 @@ export class ApplicationBootstrapper {
       // APP_IDENTITY.PROTOCOL 프로토콜도 등록 (com.loop.app)
       if (!app.isDefaultProtocolClient(APP_IDENTITY.PROTOCOL)) {
         let result: boolean;
+        let devArgs: string[] | undefined;
         if (!isPackaged) {
-          result = app.setAsDefaultProtocolClient(APP_IDENTITY.PROTOCOL, process.execPath, [
-            path.resolve(process.argv[1])
-          ]);
+          devArgs = this.getDevProtocolArgs();
+          result = app.setAsDefaultProtocolClient(APP_IDENTITY.PROTOCOL, process.execPath, devArgs);
         } else {
           result = app.setAsDefaultProtocolClient(APP_IDENTITY.PROTOCOL);
         }
@@ -192,7 +193,8 @@ export class ApplicationBootstrapper {
           protocol: APP_IDENTITY.PROTOCOL,
           success: result,
           isPackaged,
-          platform: process.platform
+          platform: process.platform,
+          devArgs: !isPackaged ? devArgs : undefined
         });
       } else {
         Logger.info('BOOTSTRAPPER', `🔗 Already registered as default protocol handler for ${APP_IDENTITY.PROTOCOL}://`);
@@ -296,7 +298,7 @@ export class ApplicationBootstrapper {
     }
 
     // 🔥 두 번째 인스턴스 시도 시 (프로토콜 URL 클릭 시)
-    app.on('second-instance', (_event, commandLine, _workingDirectory) => {
+  app.on('second-instance', (_event: ElectronEvent, commandLine: string[], _workingDirectory: string) => {
       Logger.info('BOOTSTRAPPER', '🔗 Second instance detected (protocol URL)', {
         commandLine
       });
@@ -318,6 +320,24 @@ export class ApplicationBootstrapper {
     });
 
     Logger.info('BOOTSTRAPPER', '🔒 Single instance lock acquired');
+  }
+
+  /**
+   * 🔥 개발 모드에서 프로토콜 핸들링을 위한 추가 인자 계산
+   */
+  private getDevProtocolArgs(): string[] {
+    const normalizedArgs = process.argv
+      .slice(1)
+      .filter((arg): arg is string => typeof arg === 'string' && arg.length > 0)
+      .map(arg => path.resolve(arg));
+
+    if (normalizedArgs.length > 0) {
+      return normalizedArgs;
+    }
+
+    // electron-vite 기본 빌드 결과 경로를 안전한 기본값으로 사용
+    const fallbackEntry = path.resolve(process.cwd(), 'out/main/index.js');
+    return [fallbackEntry];
   }
 
   /**
