@@ -298,18 +298,18 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       Logger.info('PROJECT_CREATOR', 'Google Docs 목록 조회 시작');
 
       // 🔥 문서 목록 조회 전 인증 상태 재확인
-      const authCheck = await window.electronAPI?.oauth?.getAuthStatus();
-      if (!authCheck || !authCheck.success || !authCheck.data || !authCheck.data.isAuthenticated) {
+      const authCheck = await window.electronAPI?.googleOAuth?.checkConnection();
+      if (!authCheck || !authCheck.success || !authCheck.data?.isConnected) {
         Logger.warn('PROJECT_CREATOR', '인증 상태 확인 실패:', authCheck);
         alert('Google 인증이 만료되었습니다. 다시 로그인해주세요.');
         return;
       }
 
       Logger.info('PROJECT_CREATOR', '✅ 인증 확인됨, 문서 목록 조회 중...', {
-        userEmail: authCheck.data.userEmail
+        email: authCheck.data.email
       });
 
-      const docsResult = await window.electronAPI?.oauth?.getGoogleDocuments();
+      const docsResult = await window.electronAPI?.googleOAuth?.listDocuments();
 
       Logger.info('PROJECT_CREATOR', 'Google Docs 목록 조회 결과:', docsResult);
 
@@ -365,11 +365,13 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       title: docName 
     });
 
-    // 🔥 문서 내용 가져오기 시도
-    if (doc?.id && window.electronAPI?.oauth?.importGoogleDoc) {
+    // 🔥 문서 내용 가져오기 시도 (임시 비활성화 - googleOAuth API에 아직 구현되지 않음)
+    // TODO: googleOAuth API에 문서 내용 가져오기 메서드 추가 시 활성화
+    /*
+    if (doc?.id && window.electronAPI?.googleOAuth?.getDocumentContent) {
       try {
         Logger.info('PROJECT_CREATOR', 'Google Docs 내용 가져오는 중...', { documentId: doc.id });
-        const result = await window.electronAPI.oauth.importGoogleDoc(doc.id);
+        const result = await window.electronAPI.googleOAuth.getDocumentContent(doc.id);
 
         if (result.success && result.data?.content) {
           Logger.info('PROJECT_CREATOR', 'Google Docs 내용 가져오기 성공', {
@@ -401,6 +403,10 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
         Logger.error('PROJECT_CREATOR', 'Google Docs 내용 가져오기 중 오류', error);
       }
     }
+    */
+
+    // 🎉 사용자에게 성공 피드백 제공
+    alert(`✅ Google Docs 문서가 선택되었습니다!\n\n📄 문서: ${docName}\n\n이제 "프로젝트 생성" 버튼을 클릭하여 Loop에서 편집을 시작하세요.`);
   }; const handleCreate = async (): Promise<void> => {
     // 🔥 방어적 코딩: undefined 값에 대한 안전한 처리
     const safeTitle = title || '';

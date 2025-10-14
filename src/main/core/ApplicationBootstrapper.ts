@@ -114,6 +114,9 @@ export class ApplicationBootstrapper {
       // 🔥 앱 이름 설정 (Electron → Loop)
       this.setupAppName();
 
+      // 🔥 Windows/Linux: Single instance lock 설정 (프로토콜 URL 처리를 위해)
+      this.setupSingleInstanceLock();
+
       // 1. Electron 이벤트 설정 (프로토콜 핸들링은 onReady 내부에서)
       this.setupElectronEvents();
 
@@ -145,23 +148,51 @@ export class ApplicationBootstrapper {
    */
   private setupProtocolHandling(): void {
     try {
+      // 🔥 packaged 여부 확인 (dev 모드 vs 프로덕션 빌드)
+      // app.isPackaged = false: `electron .` 또는 `pnpm dev` 실행 중
+      // app.isPackaged = true: `pnpm start` 또는 실제 설치된 앱 (.dmg, .exe 등)
+      const isPackaged = app.isPackaged;
+      
       // loop:// 프로토콜을 이 앱의 기본 핸들러로 설정
       if (!app.isDefaultProtocolClient('loop')) {
-        const result = app.setAsDefaultProtocolClient('loop');
+        let result: boolean;
+        if (!isPackaged) {
+          // 🔥 개발 모드: electron CLI 경로와 진입점 경로를 명시해야 함
+          // 모든 플랫폼(macOS, Windows, Linux)에서 동일하게 처리
+          result = app.setAsDefaultProtocolClient('loop', process.execPath, [
+            path.resolve(process.argv[1])
+          ]);
+        } else {
+          // 🔥 프로덕션 빌드: 추가 인자 없이 등록
+          result = app.setAsDefaultProtocolClient('loop');
+        }
         Logger.info('BOOTSTRAPPER', '🔗 Protocol handler registration result', {
           protocol: 'loop',
-          success: result
+          success: result,
+          isPackaged,
+          platform: process.platform,
+          execPath: !isPackaged ? process.execPath : 'N/A',
+          argv1: !isPackaged ? process.argv[1] : 'N/A'
         });
       } else {
         Logger.info('BOOTSTRAPPER', '🔗 Already registered as default protocol handler for loop://');
       }
 
-      // APP_IDENTITY.PROTOCOL 프로토콜도 등록
+      // APP_IDENTITY.PROTOCOL 프로토콜도 등록 (com.loop.app)
       if (!app.isDefaultProtocolClient(APP_IDENTITY.PROTOCOL)) {
-        const result = app.setAsDefaultProtocolClient(APP_IDENTITY.PROTOCOL);
+        let result: boolean;
+        if (!isPackaged) {
+          result = app.setAsDefaultProtocolClient(APP_IDENTITY.PROTOCOL, process.execPath, [
+            path.resolve(process.argv[1])
+          ]);
+        } else {
+          result = app.setAsDefaultProtocolClient(APP_IDENTITY.PROTOCOL);
+        }
         Logger.info('BOOTSTRAPPER', '🔗 Custom protocol handler registration result', {
           protocol: APP_IDENTITY.PROTOCOL,
-          success: result
+          success: result,
+          isPackaged,
+          platform: process.platform
         });
       } else {
         Logger.info('BOOTSTRAPPER', `🔗 Already registered as default protocol handler for ${APP_IDENTITY.PROTOCOL}://`);
@@ -247,6 +278,72 @@ export class ApplicationBootstrapper {
   }
 
   /**
+   * 🔥 Windows/Linux: Single instance lock 설정
+   * macOS는 open-url 이벤트로 처리하지만, Windows/Linux는 second-instance로 처리
+   */
+  private setupSingleInstanceLock(): void {
+    // macOS는 자동으로 single instance 처리되므로 skip
+    if (process.platform === 'darwin') {
+      return;
+    }
+
+    const gotTheLock = app.requestSingleInstanceLock();
+
+    if (!gotTheLock) {
+      Logger.info('BOOTSTRAPPER', '🔒 Another instance is already running, quitting...');
+      app.quit();
+      return;
+    }
+
+    // 🔥 두 번째 인스턴스 시도 시 (프로토콜 URL 클릭 시)
+    app.on('second-instance', (_event, commandLine, _workingDirectory) => {
+      Logger.info('BOOTSTRAPPER', '🔗 Second instance detected (protocol URL)', {
+        commandLine
+      });
+
+      // Windows/Linux에서는 commandLine 마지막 인자에 프로토콜 URL이 전달됨
+      const protocolUrl = commandLine.find(arg => 
+        arg.startsWith('loop://') || arg.startsWith(`${APP_IDENTITY.PROTOCOL}://`)
+      );
+
+      if (protocolUrl) {
+        Logger.info('BOOTSTRAPPER', '🔗 Protocol URL detected in second instance', { protocolUrl });
+        this.handleProtocolUrl(protocolUrl);
+      }
+
+      // 기존 윈도우 포커스
+      if (windowManager) {
+        windowManager.focusMainWindow();
+      }
+    });
+
+    Logger.info('BOOTSTRAPPER', '🔒 Single instance lock acquired');
+  }
+
+  /**
+   * 🔥 프로토콜 URL 처리 (Windows/Linux용)
+   */
+  private handleProtocolUrl(url: string): void {
+    try {
+      const urlObj = new URL(url);
+      Logger.info('BOOTSTRAPPER', '🔗 Processing protocol URL', {
+        protocol: urlObj.protocol,
+        hostname: urlObj.hostname
+      });
+
+      // OAuth 성공 콜백
+      if (urlObj.hostname === 'oauth-success') {
+        Logger.info('BOOTSTRAPPER', '✅ OAuth success - focusing main window');
+        if (windowManager) {
+          windowManager.focusMainWindow();
+        }
+      }
+    } catch (error) {
+      Logger.error('BOOTSTRAPPER', '❌ Failed to process protocol URL', { url, error });
+    }
+  }
+
+  /**
    * 🔥 Electron 이벤트 설정 (EventController 활용)
    */
   private setupElectronEvents(): void {
@@ -263,7 +360,9 @@ export class ApplicationBootstrapper {
       },
       onShutdown: () => this.shutdownManager.shutdown(),
       onActivate: () => this.handleAppActivate(),
-      onWindowAllClosed: () => this.handleWindowAllClosed()
+      onWindowAllClosed: () => this.handleWindowAllClosed(),
+      // 🔥 macOS open-url 이벤트 핸들러
+      onProtocolUrl: (url: string) => this.handleProtocolUrl(url)
     });
 
     Logger.info('BOOTSTRAPPER', 'Electron events configured');

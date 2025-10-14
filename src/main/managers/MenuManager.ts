@@ -520,9 +520,9 @@ export class MenuManager extends BaseManager {
       });
 
       this.applicationMenu = Menu.buildFromTemplate(template);
-      Menu.setApplicationMenu(this.applicationMenu);
+      // 🔥 중복 제거: doStart()에서 이미 setApplicationMenu 호출하므로 여기서는 빌드만
       
-      Logger.info(this.componentName, '✅ Basic fallback menu created and set successfully');
+      Logger.info(this.componentName, '✅ Basic fallback menu created (not set - will be set by doStart)');
     } catch (error) {
       Logger.error(this.componentName, '❌ Failed to create basic menu', error);
     }

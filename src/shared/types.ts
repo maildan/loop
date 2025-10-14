@@ -97,6 +97,17 @@ export interface ElectronAPI {
   on: (channel: string, listener: (...args: unknown[]) => void) => void;
   removeListener: (channel: string, listener: (...args: unknown[]) => void) => void;
 
+  // 🔐 Google OAuth API
+  googleOAuth?: {
+    startAuth: () => Promise<IpcResponse<{ url: string }>>;
+    handleCallback: (code: string, state?: string) => Promise<IpcResponse<boolean>>;
+    checkConnection: () => Promise<IpcResponse<{ isConnected: boolean; email?: string }>>;
+    getUserInfo: () => Promise<IpcResponse<{ name: string; email: string }>>;
+    listDocuments: () => Promise<IpcResponse<Array<{ id: string; name: string; webViewLink: string }>>>;
+    createDocument: (title: string, content?: string) => Promise<IpcResponse<{ id: string; name: string; webViewLink: string }>>;
+    updateDocument: (documentId: string, content: string) => Promise<IpcResponse<boolean>>;
+  };
+
   // ⌨️ 키보드 API
   keyboard: {
     startMonitoring: () => Promise<IpcResponse<boolean>>;

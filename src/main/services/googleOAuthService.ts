@@ -348,6 +348,11 @@ export class GoogleOAuthService {
       params['code_challenge_method'] = 'S256';
     }
 
+    Logger.info(this.componentName, '🔑 Building auth URL with redirect_uri:', {
+      redirect_uri: this.config.redirectUri,
+      client_id: this.config.clientId.substring(0, 20) + '...'
+    });
+
     const qs = new URLSearchParams(params).toString();
     return `${this.config.authUrl}?${qs}`;
   }
@@ -371,6 +376,12 @@ export class GoogleOAuthService {
         bodyParams['code_verifier'] = codeVerifier;
       }
 
+      Logger.info(this.componentName, '🔑 Exchanging code for tokens with redirect_uri:', {
+        redirect_uri: this.config.redirectUri,
+        code: code.substring(0, 20) + '...',
+        has_verifier: !!codeVerifier
+      });
+
       const response = await fetch(this.config.tokenUrl, {
         method: 'POST',
         headers: {
@@ -380,7 +391,13 @@ export class GoogleOAuthService {
       });
 
       if (!response.ok) {
-        throw new Error(`Token exchange failed: ${response.status}`);
+        const errorBody = await response.text();
+        Logger.error(this.componentName, `❌ Token exchange failed: ${response.status}`, {
+          status: response.status,
+          statusText: response.statusText,
+          errorBody
+        });
+        throw new Error(`Token exchange failed: ${response.status} - ${errorBody}`);
       }
 
       const tokens: OAuthTokens = await response.json();

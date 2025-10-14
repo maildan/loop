@@ -238,7 +238,13 @@ function ProjectsPageContent(): React.ReactElement {
         if (result.success) {
           Logger.info('PROJECTS_PAGE', '✅ File imported successfully', result.data);
           // 프로젝트 목록 새로고침
-          loadProjects();
+          await loadProjects();
+          
+          // 🔥 생성된 프로젝트로 리다이렉트
+          if (result.data && result.data.id) {
+            Logger.info('PROJECTS_PAGE', '🔄 Redirecting to imported project', { id: result.data.id });
+            navigate(`/projects/${result.data.id}`);
+          }
         } else {
           Logger.error('PROJECTS_PAGE', '❌ File import failed', result.error);
           setError(result.error || '파일 가져오기에 실패했습니다.');
@@ -258,15 +264,80 @@ function ProjectsPageContent(): React.ReactElement {
       Logger.info('PROJECTS_PAGE', '📄 Starting Google Docs import');
       
       if (typeof window !== 'undefined' && window.electronAPI) {
-        // TODO: Google Docs 가져오기 API 구현 필요
-        setError('Google Docs 가져오기 기능은 아직 구현 중입니다.');
-        Logger.warn('PROJECTS_PAGE', 'Google Docs import not implemented yet');
+        // 1️⃣ OAuth 연결 상태 확인
+        const connectionStatus = await window.electronAPI.googleOAuth?.checkConnection();
+        
+        if (!connectionStatus?.success || !connectionStatus.data?.isConnected) {
+          Logger.info('PROJECTS_PAGE', '🔐 Not connected to Google - starting OAuth');
+          
+          // OAuth 인증 시작
+          const authResult = await window.electronAPI.googleOAuth?.startAuth();
+          if (!authResult?.success) {
+            setError('Google 로그인에 실패했습니다. 다시 시도해주세요.');
+            return;
+          }
+          
+          Logger.info('PROJECTS_PAGE', '✅ Google OAuth authentication completed');
+        }
+        
+        // 2️⃣ Google Docs 문서 목록 조회
+        const docsResult = await window.electronAPI.googleOAuth?.listDocuments();
+        
+        if (!docsResult?.success || !docsResult.data || docsResult.data.length === 0) {
+          setError('Google Docs 문서를 찾을 수 없습니다.');
+          return;
+        }
+        
+        // 3️⃣ 첫 번째 문서 선택 (임시 - 나중에 선택 UI 추가)
+        const selectedDoc = docsResult.data[0];
+        
+        // 🔥 Null check 추가
+        if (!selectedDoc || !selectedDoc.id || !selectedDoc.name) {
+          setError('선택한 Google Docs 문서 정보가 올바르지 않습니다.');
+          return;
+        }
+        
+        Logger.info('PROJECTS_PAGE', `📝 Selected Google Doc: ${selectedDoc.name} (${selectedDoc.id})`);
+        
+        // 4️⃣ 프로젝트 생성 데이터 준비
+        const projectData = {
+          title: selectedDoc.name,
+          description: `[Google Docs 연동 정보: ${JSON.stringify({
+            googleDocId: selectedDoc.id,
+            googleDocUrl: selectedDoc.webViewLink || '',
+            originalDescription: '',
+            isGoogleDocsProject: true
+          })}]`,
+          genre: '',
+          platform: 'google-docs',
+          content: '',
+          progress: 0,
+          status: 'draft' as const,
+          wordCount: 0,
+          author: connectionStatus?.data?.email || 'Unknown',
+        };
+        
+        // 5️⃣ 프로젝트 생성
+        const createResult = await window.electronAPI.projects?.create(projectData);
+        
+        if (!createResult?.success || !createResult.data) {
+          setError('프로젝트 생성에 실패했습니다.');
+          return;
+        }
+        
+        Logger.info('PROJECTS_PAGE', `✅ Project created from Google Doc: ${createResult.data.id}`);
+        
+        // 6️⃣ 프로젝트 목록 새로고침
+        await loadProjects();
+        
+        // 7️⃣ 새 프로젝트 상세 페이지로 리다이렉트 (마치 새 프로젝트처럼)
+        navigate(`/projects/${createResult.data.id}`);
       }
     } catch (err) {
       Logger.error('PROJECTS_PAGE', '❌ Google Docs import error', err);
       setError('Google Docs 가져오기 중 오류가 발생했습니다.');
     }
-  }, []);
+  }, [navigate]);
 
   // 🔥 로딩 상태
   if (loading) {

@@ -148,7 +148,18 @@ const electronAPI: ElectronAPI = {
     showTypingGoal: (progress: number) => ipcRenderer.invoke('notifications:show-typing-goal', progress),
   },
 
-  // 📊 Synopsis Statistics API
+  // � Google OAuth API
+  googleOAuth: {
+    startAuth: () => ipcRenderer.invoke('google-oauth:start-auth'),
+    handleCallback: (code: string, state?: string) => ipcRenderer.invoke('google-oauth:handle-callback', code, state),
+    checkConnection: () => ipcRenderer.invoke('google-oauth:check-connection'),
+    getUserInfo: () => ipcRenderer.invoke('google-oauth:get-user-info'),
+    listDocuments: () => ipcRenderer.invoke('google-docs:list-documents'),
+    createDocument: (title: string, content?: string) => ipcRenderer.invoke('google-docs:create-document', title, content),
+    updateDocument: (documentId: string, content: string) => ipcRenderer.invoke('google-docs:update-document', documentId, content),
+  },
+
+  // �📊 Synopsis Statistics API
   'synopsis-stats:get-publications': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-publications', projectId),
   'synopsis-stats:create-publication': (data: any) => ipcRenderer.invoke('synopsis-stats:create-publication', data),
   'synopsis-stats:delete-publication': (id: string) => ipcRenderer.invoke('synopsis-stats:delete-publication', id),

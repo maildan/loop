@@ -13,6 +13,7 @@ import { setupFontIpcHandlers } from './fontIpcHandlers';
 import { setupAppIpcHandlers } from './appIpcHandlers';
 // ❌ registerSynopsisStatsHandlers removed - deprecated
 import { setupEpisodeIpcHandlers } from './episodeIpcHandlers';
+import { setupGoogleOAuthIpcHandlers } from './googleOAuthIpcHandlers';
 
 // #DEBUG: Handlers index entry point
 Logger.debug('HANDLERS_INDEX', 'Handlers index module loaded');
@@ -87,6 +88,15 @@ export class HandlersManager {
           'oauth:google:create-document',
           'oauth:google:disconnect',
           'oauth:config',
+        ]),
+        this.setupHandler('google-oauth', () => setupGoogleOAuthIpcHandlers(), [
+          'google-oauth:start-auth',
+          'google-oauth:handle-callback',
+          'google-oauth:check-connection',
+          'google-oauth:get-user-info',
+          'google-docs:list-documents',
+          'google-docs:create-document',
+          'google-docs:update-document',
         ]),
         this.setupHandler('projects', () => setupProjectIpcHandlers(), [
           'projects:get-all',
