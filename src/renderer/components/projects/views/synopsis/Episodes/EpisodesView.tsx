@@ -14,7 +14,7 @@
 import React, { useState } from 'react';
 import { Search, Filter, Grid, List, Plus, Loader2, AlertTriangle, FileText } from 'lucide-react';
 import { useEpisodes, type Episode } from '../../../../../hooks/useEpisodes';
-import type { UpdateEpisodeInput } from '@/shared/types/episode';
+import type { UpdateEpisodeInput } from '../../../../../../shared/types/episode';
 import { EpisodeCard } from './EpisodeCard';
 import { EpisodeDetailModal } from './EpisodeDetailModal';
 

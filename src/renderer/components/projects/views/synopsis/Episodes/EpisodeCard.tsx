@@ -13,7 +13,7 @@
 import React from 'react';
 import { Edit, Trash2, MoreVertical, FileText, Calendar, Target } from 'lucide-react';
 import type { Episode } from '../../../../../hooks/useEpisodes';
-import type { FiveActType } from '@/shared/types/episode';
+import type { FiveActType } from '../../../../../../shared/types/episode';
 
 export interface EpisodeCardProps {
   episode: Episode;
