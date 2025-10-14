@@ -67,11 +67,11 @@ class PrismaService {
       if (app.isPackaged) {
         // 🔥 패키지 앱: app.asar.unpacked/node_modules/.prisma/client에서 로드
         // electron-builder의 asarUnpack이 Prisma를 app.asar.unpacked로 추출함
-        const appPath = app.getAppPath(); // app.asar 경로
-        const unpackedPath = appPath.replace('app.asar', 'app.asar.unpacked');
+        const resourcesPath = process.resourcesPath; // Resources 폴더 경로
+        const appAsarUnpackedPath = path.join(resourcesPath, 'app.asar.unpacked');
         
         // Prisma 클라이언트 경로 (asarUnpack으로 추출된 위치)
-        const prismaClientPath = safePathJoin(unpackedPath, 'node_modules', '.prisma', 'client');
+        const prismaClientPath = safePathJoin(appAsarUnpackedPath, 'node_modules', '.prisma', 'client');
         
         if (!prismaClientPath) {
           Logger.error('PRISMA_SERVICE', 'Failed to create secure Prisma client path');
@@ -86,15 +86,15 @@ class PrismaService {
         }
         
         Logger.info('PRISMA_SERVICE', '🔍 Loading Prisma client from app.asar.unpacked', { 
-          appPath, 
-          unpackedPath,
+          resourcesPath, 
+          appAsarUnpackedPath,
           prismaClientPath,
           indexPath 
         });
         
         // 🔒 보안: 동적 require는 일반적으로 위험하지만, 이 경우는 안전함
         // - indexPath는 safePathJoin으로 검증된 경로 (app.asar.unpacked + 'node_modules/.prisma/client/index.js')
-        // - app.getAppPath()는 Electron이 제공하는 신뢰할 수 있는 경로
+        // - process.resourcesPath는 Electron이 제공하는 신뢰할 수 있는 경로
         // - 사용자 입력이 개입하지 않는 고정된 패턴
         // nosemgrep: javascript.lang.security.audit.unsafe-dynamic-method-exec
         const prismaModule = require(indexPath);

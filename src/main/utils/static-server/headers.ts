@@ -3,8 +3,8 @@ import { CSP_POLICIES } from '../../constants';
 
 export function buildDefaultHeaders(contentType = 'text/html; charset=utf-8') {
     // 🔥 환경에 따라 적절한 CSP 선택 (constants에서 관리)
-    const isDev = !app.isPackaged;
-    const cspPolicy = isDev ? CSP_POLICIES.DEVELOPMENT : CSP_POLICIES.PRODUCTION;
+    const isProd = app.isPackaged || process.env.NODE_ENV === 'production';
+    const cspPolicy = isProd ? CSP_POLICIES.PRODUCTION : CSP_POLICIES.DEVELOPMENT;
 
     return {
         'Content-Type': contentType,

@@ -52,6 +52,10 @@ export default defineConfig(({ mode }) => {
   const env = loadEnvironmentVariables(mode)
 
   const readEnv = (key: string, fallback = ''): string => {
+    // 🔥 NODE_ENV는 process.env를 우선으로 (cross-env 지원)
+    if (key === 'NODE_ENV' && process.env.NODE_ENV) {
+      return process.env.NODE_ENV
+    }
     const value = env[key] ?? process.env[key]
     return typeof value === 'string' && value.length > 0 ? value : fallback
   }

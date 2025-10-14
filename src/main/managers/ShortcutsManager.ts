@@ -180,15 +180,15 @@ export class ShortcutsManager extends BaseManager {
         accelerator: Platform.getModifierKey() + '+R',
         description: '앱 새로고침',
         action: () => this.reloadApp(),
-        enabled: true, // 항상 활성화
-        global: true // 🔥 글로벌 단축키로 설정!
+        enabled: true,
+        global: false // 🔥 Menu와 충돌 방지 - 로컬 단축키로 변경
       },
       'dev.devtools': {
-        accelerator: Platform.isMacOS() ? 'Cmd+Option+I' : 'F12', // Option으로 변경
+        accelerator: Platform.isMacOS() ? 'Cmd+Option+I' : 'Shift+Ctrl+I',
         description: '개발자 도구',
         action: () => this.toggleDevTools(),
-        enabled: true, // 항상 활성화
-        global: true // 🔥 글로벌 단축키로 설정!
+        enabled: false, // 🔥 Menu에서 처리하므로 비활성화
+        global: false
       }
     };
 
@@ -390,9 +390,27 @@ export class ShortcutsManager extends BaseManager {
           Logger.info(this.componentName, 'Closing DevTools...');
           mainWindow.webContents.closeDevTools();
         } else {
-          Logger.info(this.componentName, 'Opening DevTools in detached mode...');
-          mainWindow.webContents.openDevTools({ mode: 'detach' });
-          Logger.info(this.componentName, '✅ DevTools openDevTools() call completed');
+          try {
+            Logger.info(this.componentName, 'Opening DevTools (right dock) and focusing window...');
+            // Ensure window is visible and focused before opening DevTools
+            if (mainWindow.isMinimized()) mainWindow.restore();
+            mainWindow.show();
+            mainWindow.focus();
+            // Open DevTools docked to the right for better UX in packaged app
+            mainWindow.webContents.openDevTools({ mode: 'right' });
+            // Small delay then focus DevTools
+            setTimeout(() => {
+              try {
+                // some Electron builds need a focus call
+                mainWindow.webContents.focus();
+                Logger.info(this.componentName, '✅ DevTools opened and focused');
+              } catch (e) {
+                Logger.warn(this.componentName, 'DevTools focus failed', e);
+              }
+            }, 120);
+          } catch (e) {
+            Logger.error(this.componentName, 'Failed to open DevTools', e);
+          }
         }
       } else {
         Logger.error(this.componentName, '❌ No main window found for DevTools toggle');

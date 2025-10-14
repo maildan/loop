@@ -74,18 +74,12 @@ export class MenuManager extends BaseManager {
     try {
       Logger.debug(this.componentName, 'Starting menu manager...');
       
-      // 🔥 플랫폼별 메뉴 설정
-      if (Platform.isWindows() || Platform.isLinux()) {
-        // 윈도우/리눅스에서는 메뉴바 완전 제거
-        Menu.setApplicationMenu(null);
-        Logger.info(this.componentName, '✅ Menu bar completely hidden on Windows/Linux');
-      } else if (this.applicationMenu) {
-        // macOS에서만 최소 메뉴 설정
+      // 애플리케이션 메뉴 설정 (모든 플랫폼)
+      if (this.applicationMenu) {
         Menu.setApplicationMenu(this.applicationMenu);
-        Logger.info(this.componentName, '✅ Minimal macOS menu set successfully');
+        Logger.info(this.componentName, '✅ Application menu set successfully');
       } else {
-        Logger.error(this.componentName, '❌ macOS menu is null!');
-        // macOS에서 메뉴가 없으면 기본 메뉴라도 생성
+        Logger.error(this.componentName, '❌ Application menu is null!');
         this.createBasicMenu();
       }
 
@@ -175,7 +169,7 @@ export class MenuManager extends BaseManager {
     const template: MenuItemConstructorOptions[] = [];
 
     if (Platform.isMacOS()) {
-      // macOS 앱 메뉴 (최소한만 유지)
+      // macOS 앱 메뉴
       template.push({
         label: app.getName(),
         submenu: [
@@ -184,23 +178,77 @@ export class MenuManager extends BaseManager {
             click: () => this.handleAbout()
           },
           { type: 'separator' },
+          { role: 'hide' },
+          { role: 'hideOthers' },
+          { role: 'unhide' },
+          { type: 'separator' },
           { role: 'quit' }
         ]
       });
-    } else {
-      // 🔥 Windows/Linux - 메뉴 완전 제거 (빈 템플릿)
-      // 아무것도 추가하지 않음으로써 메뉴바 완전 숨김
-      Logger.info(this.componentName, 'Windows/Linux menu completely hidden');
     }
 
-    // 🔥 윈도우에서는 null로 설정하여 메뉴바 완전 제거
-    if (Platform.isWindows() || Platform.isLinux()) {
-      this.applicationMenu = null;
-      Logger.info(this.componentName, 'Menu bar completely hidden on Windows/Linux');
-    } else {
-      this.applicationMenu = Menu.buildFromTemplate(template);
-      Logger.info(this.componentName, 'Minimal macOS menu created');
-    }
+    // Edit 메뉴 (macOS/Windows/Linux 공통)
+    template.push({
+      label: 'Edit',
+      submenu: [
+        { role: 'undo' },
+        { role: 'redo' },
+        { type: 'separator' },
+        { role: 'cut' },
+        { role: 'copy' },
+        { role: 'paste' },
+        { role: 'pasteAndMatchStyle' },
+        { role: 'delete' },
+        { role: 'selectAll' }
+      ]
+    });
+
+    // View 메뉴
+    template.push({
+      label: 'View',
+      submenu: [
+        { role: 'reload' },
+        { role: 'forceReload' },
+        { type: 'separator' },
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        { role: 'togglefullscreen' },
+        { type: 'separator' },
+        { 
+          label: 'Developer Tools',
+          accelerator: Platform.isMacOS() ? 'Cmd+Option+I' : 'Shift+Ctrl+I',
+          click: (_item: Electron.MenuItem, focusedWindow?: BrowserWindow) => {
+            if (focusedWindow) {
+              if (focusedWindow.webContents.isDevToolsOpened()) {
+                focusedWindow.webContents.closeDevTools();
+              } else {
+                focusedWindow.webContents.openDevTools({ mode: 'right' });
+              }
+            }
+          }
+        }
+      ]
+    });
+
+    // Window 메뉴
+    template.push({
+      label: 'Window',
+      submenu: [
+        { role: 'minimize' },
+        { role: 'zoom' },
+        ...(Platform.isMacOS() ? [
+          { type: 'separator' as const },
+          { role: 'front' as const }
+        ] : [
+          { role: 'close' as const }
+        ])
+      ]
+    });
+
+    this.applicationMenu = Menu.buildFromTemplate(template);
+    Logger.info(this.componentName, 'Application menu created with Edit, View, Window menus');
   }
 
   /**

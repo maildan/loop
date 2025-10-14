@@ -64,13 +64,11 @@ export class WindowManager {
           sandbox: false,
           preload: join(__dirname, '../preload/index.js'),
           webSecurity: true,
-          // 🔥 보안 강화: enableBlinkFeatures 제거하고 다른 방식으로 클립보드 지원
-          // enableBlinkFeatures: 'ClipboardApi', // 보안 경고 제거
           allowRunningInsecureContent: false,
-          experimentalFeatures: false, // 🔥 실험적 기능 비활성화
-          // 🔥 CSP는 StaticServer 헤더에서 처리 (Electron 38 호환성)
-          // 🔥 Suppress eval warning in development (CSP already configured in headers.ts)
-          devTools: !app.isPackaged, // DevTools only in development
+          experimentalFeatures: false,
+          // 🔥 DevTools 설정: 항상 활성화하되 자동 오픈은 하지 않음.
+          // 요청에 따라 단축키로만 열리게 허용 (사용자 요청)
+          devTools: true,
         },
         icon: iconPath,
         // macOS 전용 설정
@@ -99,6 +97,12 @@ export class WindowManager {
 
       // 윈도우 이벤트 설정
       this.setupWindowEvents(window, windowId);
+
+      // 🔥 메뉴 단축키 활성화 (Cmd+C, Cmd+V 등)
+      window.webContents.on('before-input-event', (event, input) => {
+        // Ctrl/Cmd가 눌렸을 때만 메뉴 단축키 허용
+        window.webContents.setIgnoreMenuShortcuts(!input.control && !input.meta);
+      });
 
       // 윈도우 맵에 추가
       this.windows.set(windowId, window);
@@ -274,26 +278,10 @@ export class WindowManager {
 
       if (url) {
         targetUrl = url;
-      } else if (!app.isPackaged && process.env.NODE_ENV !== 'production') {
-        // 개발 환경: electron-vite 개발 서버 사용 (환경 변수 우선, 기본 5173)
-        const rendererUrl = process.env.ELECTRON_RENDERER_URL || process.env.VITE_DEV_SERVER_URL;
-        if (rendererUrl && rendererUrl.startsWith('http')) {
-          targetUrl = rendererUrl;
-        } else if (rendererUrl) {
-          targetUrl = `http://localhost:${rendererUrl}`;
-        } else {
-          // 환경 변수가 없으면 기본 포트 5173 사용
-          targetUrl = 'http://localhost:5173';
-        }
-        Logger.info('WINDOW', '🔧 개발 모드 - electron-vite 개발 서버 사용', { 
-          url: targetUrl,
-          electronRendererUrl: process.env.ELECTRON_RENDERER_URL,
-          viteUrl: process.env.VITE_DEV_SERVER_URL,
-          isPackaged: app.isPackaged,
-          nodeEnv: process.env.NODE_ENV
-        });
-      } else {
-        // 프로덕션 환경: 정적 빌드 파일 사용 (packaged app 또는 NODE_ENV=production)
+      } else if (process.env.NODE_ENV === 'production' || app.isPackaged) {
+        // 🔥 프로덕션 환경: 정적 빌드 파일 사용
+        // - app.isPackaged: 패키지된 앱 (electron-builder로 빌드된 .app, .exe 등)
+        // - NODE_ENV=production: 패키지되지 않았지만 프로덕션 모드 (pnpm start)
         const staticServer = StaticServer.getInstance();
         const isHealthy = await staticServer.checkHealth();
 
@@ -317,6 +305,26 @@ export class WindowManager {
             throw new Error('❌ 정적 파일을 찾을 수 없습니다. 먼저 빌드를 실행하세요.');
           }
         }
+      } else {
+        // 🔥 개발 환경: electron-vite 개발 서버 사용
+        // - !app.isPackaged && NODE_ENV !== 'production'
+        const rendererUrl = process.env.ELECTRON_RENDERER_URL || process.env.VITE_DEV_SERVER_URL;
+        if (rendererUrl && rendererUrl.startsWith('http')) {
+          targetUrl = rendererUrl;
+        } else if (rendererUrl) {
+          targetUrl = `http://localhost:${rendererUrl}`;
+        } else {
+          // 환경 변수가 없으면 기본 포트 5173 사용 (electron-vite 기본값)
+          targetUrl = 'http://localhost:5173';
+        }
+        Logger.info('WINDOW', '🔧 개발 모드 - electron-vite 개발 서버 연결 시도', { 
+          url: targetUrl,
+          electronRendererUrl: process.env.ELECTRON_RENDERER_URL,
+          viteUrl: process.env.VITE_DEV_SERVER_URL,
+          isPackaged: app.isPackaged,
+          nodeEnv: process.env.NODE_ENV,
+          tip: 'Vite 서버가 실행 중인지 확인하세요 (pnpm dev)'
+        });
       }
 
       try {

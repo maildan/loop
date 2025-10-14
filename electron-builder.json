@@ -52,10 +52,6 @@
       "to": "prisma/loop.db"
     },
     {
-      "from": "node_modules/.prisma/client",
-      "to": "prisma/client"
-    },
-    {
       "from": "public/assets/fonts",
       "to": "fonts"
     },
