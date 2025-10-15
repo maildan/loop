@@ -14,6 +14,7 @@ import { setupAppIpcHandlers } from './appIpcHandlers';
 // ❌ registerSynopsisStatsHandlers removed - deprecated
 import { setupEpisodeIpcHandlers } from './episodeIpcHandlers';
 import { setupGoogleOAuthIpcHandlers } from './googleOAuthIpcHandlers';
+import { setupGeminiIpcHandlers } from './geminiIpcHandlers';
 
 // #DEBUG: Handlers index entry point
 Logger.debug('HANDLERS_INDEX', 'Handlers index module loaded');
@@ -147,6 +148,10 @@ export class HandlersManager {
           'app:get-user-data-path',
           'app:get-version',
           'app:get-name',
+        ]),
+        this.setupHandler('gemini', () => setupGeminiIpcHandlers(), [
+          'gemini:get-project-context',
+          'gemini:send-message',
         ]),
         this.setupHandler('synopsis-stats', async () => {
           const { registerSynopsisStatsHandlers } = await import('./synopsis-stats');

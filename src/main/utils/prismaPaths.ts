@@ -1,5 +1,5 @@
 import { app } from 'electron';
-import { promises as fsPromises, existsSync, mkdirSync, copyFileSync, writeFileSync, statSync } from 'fs';
+import { promises as fsPromises, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { Logger } from '../../shared/logger';
 
@@ -17,6 +17,66 @@ const ensureDirectory = async (directory: string): Promise<void> => {
     await fsPromises.mkdir(directory, { recursive: true });
     Logger.info(COMPONENT, 'Created directory', { directory });
   }
+};
+
+const ENGINE_FILE_MAP: Record<string, string[]> = {
+  'win32-x64': ['query_engine-windows.dll.node'],
+  'win32-arm64': ['query_engine-windows-arm64.dll.node', 'query_engine-windows.dll.node'],
+  'darwin-arm64': ['libquery_engine-darwin-arm64.dylib.node', 'libquery_engine-darwin.dylib.node'],
+  'darwin-x64': ['libquery_engine-darwin.dylib.node'],
+  'linux-arm64': ['libquery_engine-linux-arm64-openssl-3.0.x.so.node'],
+  'linux-x64': ['libquery_engine-debian-openssl-3.0.x.so.node'],
+};
+
+const resolveEngineSearchPaths = (): string[] => {
+  const resourcesPath = process.resourcesPath ? String(process.resourcesPath) : '';
+  let appPath = process.cwd();
+
+  try {
+    appPath = app.getAppPath();
+  } catch (error) {
+    Logger.debug(COMPONENT, 'app.getAppPath unavailable, falling back to cwd', { error });
+  }
+
+  const candidates = [
+    resourcesPath ? join(resourcesPath, 'app.asar.unpacked', 'node_modules', '.prisma', 'client') : null,
+    resourcesPath ? join(resourcesPath, 'node_modules', '.prisma', 'client') : null,
+  join(appPath, '..', 'node_modules', '.prisma', 'client'),
+  join(appPath, 'node_modules', '.prisma', 'client'),
+  join(process.cwd(), 'node_modules', '.prisma', 'client'),
+  join(dirname(__dirname), '..', '..', 'node_modules', '.prisma', 'client'),
+  ];
+
+  return Array.from(new Set(candidates.filter((value): value is string => Boolean(value))));
+};
+
+const setPrismaEngineEnvironment = (): void => {
+  const platformKey = `${process.platform}-${process.arch}`;
+  const fallbackKey = `${process.platform}-x64`;
+  const engineCandidates = ENGINE_FILE_MAP[platformKey] ?? ENGINE_FILE_MAP[fallbackKey] ?? [];
+
+  if (engineCandidates.length === 0) {
+    Logger.warn(COMPONENT, 'No Prisma engine candidates mapped for platform', { platform: process.platform, arch: process.arch });
+    return;
+  }
+
+  const searchPaths = resolveEngineSearchPaths();
+
+  for (const fileName of engineCandidates) {
+    for (const basePath of searchPaths) {
+      const fullPath = join(basePath, fileName);
+      if (existsSync(fullPath)) {
+        if (process.env.PRISMA_QUERY_ENGINE_LIBRARY !== fullPath) {
+          Reflect.set(process.env as Record<string, unknown>, 'PRISMA_QUERY_ENGINE_LIBRARY', fullPath);
+          Logger.info(COMPONENT, 'Resolved Prisma engine library', { fullPath });
+        }
+        Reflect.set(process.env as Record<string, unknown>, 'PRISMA_QUERY_ENGINE_TYPE', 'library');
+        return;
+      }
+    }
+  }
+
+  Logger.warn(COMPONENT, 'Failed to resolve Prisma engine library', { platform: process.platform, arch: process.arch, searchPaths, engineCandidates });
 };
 
 /**
@@ -91,6 +151,8 @@ export const ensureDatabaseUrl = async (): Promise<{ dbPath: string; databaseUrl
     Logger.info(COMPONENT, 'Setting DATABASE_URL for Prisma', { databaseUrl });
     Reflect.set(process.env as Record<string, unknown>, 'DATABASE_URL', databaseUrl);
   }
+
+  setPrismaEngineEnvironment();
 
   return { dbPath, databaseUrl };
 };

@@ -14,6 +14,7 @@ interface EditorTabBarProps {
     onTabReorder?: (fromIndex: number, toIndex: number) => void;
     onToggleAISidebar?: () => void; // 🔥 AI 사이드바 토글 함수
     isAISidebarOpen?: boolean; // 🔥 AI 사이드바 열림 상태
+    currentView: 'write' | 'synopsis' | 'characters' | 'structure' | 'notes' | 'idea';
 }
 
 interface ContextMenuState {
@@ -52,6 +53,7 @@ export const EditorTabBar = memo(function EditorTabBar({
     onTabReorder,
     onToggleAISidebar,
     isAISidebarOpen = false,
+    currentView,
 }: EditorTabBarProps): React.ReactElement {
     const [draggedTabId, setDraggedTabId] = useState<string | null>(null);
     const [dragOverTabId, setDragOverTabId] = useState<string | null>(null);
@@ -285,10 +287,12 @@ export const EditorTabBar = memo(function EditorTabBar({
                     type="button"
                     className={`${TAB_STYLES.aiButton} ${isAISidebarOpen ? TAB_STYLES.aiButtonActive : ''}`}
                     onClick={onToggleAISidebar}
-                    title="AI 어시스턴트"
+                    title={currentView === 'synopsis' ? 'Gemini 시놉시스 어시스턴트' : 'AI 어시스턴트'}
                 >
                     <Sparkles size={16} />
-                    <span className="text-xs font-medium">AI</span>
+                    <span className="text-xs font-medium">
+                        {currentView === 'synopsis' ? 'Gemini' : 'AI'}
+                    </span>
                 </button>
             )}
 

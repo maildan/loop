@@ -293,6 +293,21 @@ export interface ElectronAPI {
     checkForUpdates: () => Promise<IpcResponse<boolean>>;
     restartAndInstall: () => Promise<IpcResponse<boolean>>;
   };
+
+  // 🤖 Gemini AI Assistant API (시놉시스 뷰 전용)
+  'gemini:get-project-context': (projectId: string) => Promise<IpcResponse<{
+    projectTitle: string;
+    totalEpisodes: number;
+    totalWords: number;
+    characters: Array<{ name: string; role: string; description?: string }>;
+    aiInsights: string[];
+  }>>;
+  'gemini:send-message': (params: {
+    projectId: string;
+    message: string;
+    history: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>;
+    systemContext?: string;
+  }) => Promise<IpcResponse<{ response: string }>>;
 }
 
 // 🔥 기가차드 키보드 이벤트 인터페이스 (최종 통합 버전)

@@ -22,6 +22,7 @@ import { StructureView } from '../../views/StructureView';
 import { CharactersView } from '../../views/CharactersView';
 import { NotesView } from '../../views/notes';
 import { SynopsisView } from '../../views/synopsis';
+import { GeminiSynopsisAgent } from '../../views/synopsis/AI/GeminiSynopsisAgent';
 import { IdeaView } from '../../views/idea';
 import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
 import { ProjectStructure } from '../../../../../shared/types';
@@ -41,6 +42,9 @@ import ProjectEditorLayout from './components/ProjectEditorLayout';
 export interface ProjectEditorProps {
     projectId: string;
 }
+
+type ProjectEditorView = 'write' | 'synopsis' | 'characters' | 'structure' | 'notes' | 'idea';
+const PROJECT_EDITOR_VIEWS: readonly ProjectEditorView[] = ['write', 'synopsis', 'characters', 'structure', 'notes', 'idea'] as const;
 
 // 🔥 React.memo로 무한 리렌더링 방지
 export const ProjectEditor = memo(function ProjectEditor({
@@ -486,7 +490,11 @@ export const ProjectEditor = memo(function ProjectEditor({
         tabsCount: state.tabs.length
     });
 
-    const isWriteView = state.currentView === 'write';
+    const normalizedCurrentView = PROJECT_EDITOR_VIEWS.includes(state.currentView as ProjectEditorView)
+        ? (state.currentView as ProjectEditorView)
+        : 'write';
+
+    const isWriteView = normalizedCurrentView === 'write';
 
     return (
         <ProjectEditorLayout.Container className="relative overflow-x-hidden">
@@ -520,6 +528,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                     <EditorTabBar
                         tabs={state.tabs}
                         activeTabId={state.activeTabId}
+                        currentView={normalizedCurrentView}
                         onTabClick={(tabId) => {
                             actions.setActiveTab(tabId);
                             
@@ -807,27 +816,34 @@ export const ProjectEditor = memo(function ProjectEditor({
 
                 {/* 오른쪽 사이드바 (AI 패널) */}
                 {state.showRightSidebar && (
-                    <WriterStatsPanel
-                        showRightSidebar={state.showRightSidebar}
-                        toggleRightSidebar={actions.toggleRightSidebar}
-                        writerStats={projectData?.writerStats || {
-                            wordCount: 0,
-                            charCount: 0,
-                            paragraphCount: 0,
-                            readingTime: 0,
-                            wordGoal: 1000,
-                            progress: 0,
-                            sessionTime: 0,
-                            wpm: 0,
-                            headingCount: 0,
-                            listItemCount: 0
-                        }}
-                        setWordGoal={(goal) => {
-                            projectData?.setWordGoal(goal);
-                        }}
-                        currentText={activeTab?.content || ''}
-                        projectId={projectId}
-                    />
+                    normalizedCurrentView === 'synopsis' ? (
+                        <GeminiSynopsisAgent
+                            projectId={projectId}
+                            onClose={actions.toggleRightSidebar}
+                        />
+                    ) : (
+                        <WriterStatsPanel
+                            showRightSidebar={state.showRightSidebar}
+                            toggleRightSidebar={actions.toggleRightSidebar}
+                            writerStats={projectData?.writerStats || {
+                                wordCount: 0,
+                                charCount: 0,
+                                paragraphCount: 0,
+                                readingTime: 0,
+                                wordGoal: 1000,
+                                progress: 0,
+                                sessionTime: 0,
+                                wpm: 0,
+                                headingCount: 0,
+                                listItemCount: 0
+                            }}
+                            setWordGoal={(goal) => {
+                                projectData?.setWordGoal(goal);
+                            }}
+                            currentText={activeTab?.content || ''}
+                            projectId={projectId}
+                        />
+                    )
                 )}
             </ProjectEditorLayout.Main>
 

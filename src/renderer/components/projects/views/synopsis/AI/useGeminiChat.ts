@@ -1,0 +1,273 @@
+/**
+ * 🤖 useGeminiChat - Gemini AI 채팅 관리 Hook
+ * 
+ * 프로젝트 분석 기반 AI 어시스턴트
+ * - 메시지 히스토리 관리
+ * - 스트리밍 응답 처리
+ * - 프로젝트 컨텍스트 전달
+ */
+
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { RendererLogger as Logger } from '../../../../../../shared/logger-renderer';
+
+const USE_GEMINI_CHAT = Symbol.for('USE_GEMINI_CHAT');
+
+export interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp: Date;
+  isStreaming?: boolean;
+}
+
+export interface ProjectContext {
+  projectTitle: string;
+  totalEpisodes: number;
+  totalWords: number;
+  characters: Array<{
+    name: string;
+    role: string;
+    description?: string;
+  }>;
+  aiInsights: string[];
+  wordCount: number;
+  characterCount: number;
+}
+
+interface UseGeminiChatOptions {
+  projectId: string;
+  onError?: (error: Error) => void;
+}
+
+export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [projectContext, setProjectContext] = useState<ProjectContext | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const currentStreamId = useRef<string | null>(null);
+  const errorHandlerRef = useRef(onError);
+  const isContextLoadingRef = useRef(false);
+  const lastLoadedProjectRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    errorHandlerRef.current = onError;
+  }, [onError]);
+
+  // 🔥 자동 스크롤
+  const scrollToBottom = useCallback(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, scrollToBottom]);
+
+  // 🔥 프로젝트 컨텍스트 로드
+  const loadProjectContext = useCallback(async ({ force = false } = {}) => {
+    if (!projectId) return;
+
+    if (!force) {
+      if (isContextLoadingRef.current) {
+        Logger.debug(USE_GEMINI_CHAT, 'Context load skipped - already in flight', { projectId });
+        return;
+      }
+
+      if (lastLoadedProjectRef.current === projectId) {
+        Logger.debug(USE_GEMINI_CHAT, 'Context load skipped - already loaded', { projectId });
+        return;
+      }
+    }
+
+    isContextLoadingRef.current = true;
+    try {
+      Logger.debug(USE_GEMINI_CHAT, 'Loading project context', { projectId });
+
+      // IPC를 통해 프로젝트 분석 데이터 가져오기
+      const response = await window.electronAPI['gemini:get-project-context'](projectId);
+      
+      if (response.success && response.data) {
+        const contextData = response.data;
+        const context: ProjectContext = {
+          projectTitle: contextData.projectTitle,
+          totalEpisodes: contextData.totalEpisodes,
+          totalWords: contextData.totalWords,
+          characters: contextData.characters,
+          aiInsights: contextData.aiInsights,
+          wordCount: contextData.totalWords,
+          characterCount: contextData.characters.length
+        };
+        setProjectContext(context);
+        
+        Logger.info(USE_GEMINI_CHAT, 'Project context loaded', {
+          projectId,
+          wordCount: context.wordCount,
+          characterCount: context.characters.length
+        });
+
+        lastLoadedProjectRef.current = projectId;
+      }
+    } catch (error) {
+      Logger.error(USE_GEMINI_CHAT, 'Failed to load project context', error);
+      errorHandlerRef.current?.(error instanceof Error ? error : new Error('Failed to load context'));
+    } finally {
+      isContextLoadingRef.current = false;
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    void loadProjectContext();
+  }, [loadProjectContext]);
+
+  const reloadProjectContext = useCallback(() => loadProjectContext({ force: true }), [loadProjectContext]);
+
+  // 🔥 시스템 프롬프트 생성
+  const buildSystemPrompt = useCallback((): string => {
+    if (!projectContext) {
+      return '당신은 한국 웹소설 작가를 돕는 전문 AI 어시스턴트입니다. 작가의 창작을 돕고, 스토리 개선 제안을 제공합니다.';
+    }
+
+    const { projectTitle, totalWords, totalEpisodes, characters, aiInsights } = projectContext;
+
+    let prompt = `당신은 한국 웹소설 작가를 돕는 전문 AI 어시스턴트입니다.\n\n`;
+    prompt += `**현재 프로젝트 정보:**\n`;
+    prompt += `- 제목: ${projectTitle}\n`;
+    prompt += `- 총 단어 수: ${totalWords.toLocaleString()}자\n`;
+    prompt += `- 총 회차: ${totalEpisodes}개\n`;
+
+    if (characters.length > 0) {
+      prompt += `\n**등장인물:**\n`;
+      characters.slice(0, 5).forEach(char => {
+        prompt += `- ${char.name} (${char.role})`;
+        if (char.description) prompt += `: ${char.description.substring(0, 100)}`;
+        prompt += `\n`;
+      });
+      if (characters.length > 5) {
+        prompt += `... 외 ${characters.length - 5}명\n`;
+      }
+    }
+
+    if (aiInsights && aiInsights.length > 0) {
+      prompt += `\n**분석 인사이트:**\n`;
+      aiInsights.slice(0, 5).forEach(insight => {
+        prompt += `- ${insight}\n`;
+      });
+    }
+
+    prompt += `\n작가의 질문에 구체적이고 실용적인 답변을 제공하세요. 프로젝트 데이터를 기반으로 한 맞춤형 조언을 우선하세요.`;
+
+    return prompt;
+  }, [projectContext]);
+
+  // 🔥 메시지 전송 (스트리밍)
+  const sendMessage = useCallback(async (userMessage: string) => {
+    if (!userMessage.trim() || isLoading) return;
+
+    const userMsgId = `user-${Date.now()}`;
+    const assistantMsgId = `assistant-${Date.now()}`;
+
+    // 사용자 메시지 추가
+    const newUserMessage: ChatMessage = {
+      id: userMsgId,
+      role: 'user',
+      content: userMessage.trim(),
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, newUserMessage]);
+    setIsLoading(true);
+    currentStreamId.current = assistantMsgId;
+
+    // 어시스턴트 메시지 placeholder
+    const assistantMessage: ChatMessage = {
+      id: assistantMsgId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+      isStreaming: true,
+    };
+
+    setMessages(prev => [...prev, assistantMessage]);
+
+    try {
+      Logger.debug(USE_GEMINI_CHAT, 'Sending message to Gemini', {
+        projectId,
+        messageLength: userMessage.length
+      });
+
+      const systemPrompt = buildSystemPrompt();
+
+      // Gemini API 형식에 맞게 히스토리 변환
+      const geminiHistory = messages
+        .filter(msg => msg.role !== 'system')
+        .map(msg => ({
+          role: msg.role === 'assistant' ? ('model' as const) : ('user' as const),
+          parts: [{ text: msg.content }]
+        }));
+
+      // IPC를 통해 Gemini에게 메시지 전송
+      const response = await window.electronAPI['gemini:send-message']({
+        projectId,
+        message: userMessage,
+        history: geminiHistory,
+        systemContext: systemPrompt
+      });
+
+      if (response.success && response.data) {
+        const accumulatedContent = response.data.response;
+
+        setMessages(prev => 
+          prev.map(msg => 
+            msg.id === assistantMsgId
+              ? { ...msg, content: accumulatedContent, isStreaming: false }
+              : msg
+          )
+        );
+
+        Logger.info(USE_GEMINI_CHAT, 'Message sent successfully', {
+          assistantMsgId,
+          contentLength: accumulatedContent.length
+        });
+      } else {
+        throw new Error(response.error || 'Failed to get response from Gemini');
+      }
+
+    } catch (error) {
+      Logger.error(USE_GEMINI_CHAT, 'Failed to send message', error);
+      
+      // 에러 메시지로 교체
+      setMessages(prev =>
+        prev.map(msg =>
+          msg.id === assistantMsgId
+            ? {
+                ...msg,
+                content: '죄송합니다. 응답을 생성하는 중 오류가 발생했습니다. 다시 시도해 주세요.',
+                isStreaming: false
+              }
+            : msg
+        )
+      );
+
+      errorHandlerRef.current?.(error instanceof Error ? error : new Error('Failed to send message'));
+    } finally {
+      setIsLoading(false);
+      currentStreamId.current = null;
+    }
+  }, [projectId, messages, isLoading, buildSystemPrompt]);
+
+  // 🔥 대화 초기화
+  const clearMessages = useCallback(() => {
+    setMessages([]);
+    currentStreamId.current = null;
+    Logger.info(USE_GEMINI_CHAT, 'Messages cleared');
+  }, []);
+
+  return {
+    messages,
+    isLoading,
+    projectContext,
+    messagesEndRef,
+    sendMessage,
+    clearMessages,
+    reloadContext: reloadProjectContext,
+  };
+}

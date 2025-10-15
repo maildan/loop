@@ -375,6 +375,10 @@ const electronAPI: ElectronAPI = {
     restartAndInstall: () => ipcRenderer.invoke('updater:restart-and-install'),
   },
 
+  // 🔥 Gemini AI API (시놉시스 어시스턴트)
+  'gemini:get-project-context': (projectId: string) => ipcRenderer.invoke('gemini:get-project-context', projectId),
+  'gemini:send-message': (params: any) => ipcRenderer.invoke('gemini:send-message', params),
+
 };
 
 // ============================================================
