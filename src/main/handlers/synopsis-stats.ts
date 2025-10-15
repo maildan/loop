@@ -13,6 +13,7 @@ import { prismaService } from '../services/PrismaService';
 import { Logger } from '../../shared/logger';
 import { formatDateISO, formatDateShort, getTodayStart } from '../../shared/utils/date';
 import { recordDailyWritingActivity } from '../utils/writingActivity';
+import { calculateWordCount } from '../../shared/utils/text';
 import type { DashboardSummary, ForeshadowSummary, TimelineEpisodeSummary } from '../../shared/types';
 
 // 🔥 Symbol 기반 컴포넌트 이름
@@ -36,6 +37,7 @@ type ChapterStatsRecord = {
 type EpisodeStatsRecord = {
   status: string | null;
   wordCount: number | null;
+  content?: string | null;
 };
 
 type ChapterOverviewRecord = {
@@ -55,6 +57,7 @@ type EpisodeOverviewRecord = {
   episodeNumber: number | null;
   status: string | null;
   updatedAt: Date;
+  content?: string | null;
 };
 
 type WordCountStatsRecord = {
@@ -240,12 +243,13 @@ export function registerGetEpisodeStatsHandler() {
           select: {
             status: true,
             wordCount: true,
+            content: true,
           },
         }) as EpisodeStatsRecord[];
 
         statsSource = episodes.map((episode: EpisodeStatsRecord): WordCountStatsRecord => ({
           status: (episode.status ?? 'draft').toLowerCase(),
-          wordCount: episode.wordCount ?? 0,
+          wordCount: resolveWordCount(episode.wordCount, episode.content),
         }));
       }
 
@@ -342,6 +346,7 @@ export function registerGetDashboardSummaryHandler() {
             id: true,
             title: true,
             wordCount: true,
+            content: true,
             sortOrder: true,
             episodeNumber: true,
             status: true,
@@ -385,7 +390,7 @@ export function registerGetDashboardSummaryHandler() {
       const episodeSnapshots = (episodes as EpisodeOverviewRecord[]).map((episode: EpisodeOverviewRecord, index: number): ChapterSnapshot => ({
         id: episode.id,
         title: episode.title,
-        wordCount: episode.wordCount,
+        wordCount: resolveWordCount(episode.wordCount, episode.content),
         sortOrder: episode.sortOrder ?? episode.episodeNumber ?? index,
         status: episode.status,
         updatedAt: episode.updatedAt,
@@ -625,6 +630,21 @@ function computeConsistencyScore(params: { totalEpisodes: number; completedEpiso
   return Math.max(0, Math.min(100, Math.round(score)));
 }
 
+function resolveWordCount(explicit: number | null | undefined, content: string | null | undefined): number {
+  if (explicit && explicit > 0) {
+    return explicit;
+  }
+
+  if (content) {
+    const normalized = content.trim();
+    if (normalized.length > 0) {
+      return calculateWordCount(normalized);
+    }
+  }
+
+  return explicit ?? 0;
+}
+
 function mapHasPositiveWords(map: Map<string, { words: number; duration: number }>): boolean {
   for (const metrics of map.values()) {
     if (metrics.words > 0) {
@@ -652,8 +672,16 @@ function snapshotsHaveMeaningfulData(snapshots: ChapterSnapshot[]): boolean {
 }
 
 function chooseChapterSnapshots(chapterSnapshots: ChapterSnapshot[], episodeSnapshots: ChapterSnapshot[]): ChapterSnapshot[] {
+  const chapterTotal = chapterSnapshots.reduce((sum: number, snapshot) => sum + (snapshot.wordCount ?? 0), 0);
+  const episodeTotal = episodeSnapshots.reduce((sum: number, snapshot) => sum + (snapshot.wordCount ?? 0), 0);
+
   if (snapshotsHaveMeaningfulData(chapterSnapshots)) {
-    return chapterSnapshots;
+    if (!snapshotsHaveMeaningfulData(episodeSnapshots)) {
+      return chapterSnapshots;
+    }
+    if (chapterTotal >= episodeTotal) {
+      return chapterSnapshots;
+    }
   }
 
   if (snapshotsHaveMeaningfulData(episodeSnapshots)) {
@@ -677,6 +705,7 @@ async function buildEpisodeWordMaps(prisma: PrismaClient, projectId: string, dat
       id: true,
       wordCount: true,
       updatedAt: true,
+      content: true,
     },
   });
 
@@ -685,7 +714,7 @@ async function buildEpisodeWordMaps(prisma: PrismaClient, projectId: string, dat
 
   for (const episode of episodes) {
     const key = formatDateISO(episode.updatedAt);
-    const words = episode.wordCount ?? 0;
+    const words = resolveWordCount(episode.wordCount, episode.content);
     daily.set(key, (daily.get(key) ?? 0) + words);
     totals.set(episode.id, words);
   }

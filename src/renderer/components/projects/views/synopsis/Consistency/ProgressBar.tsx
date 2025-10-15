@@ -8,6 +8,7 @@ interface ProgressBarProps {
     showValue?: boolean;
     size?: 'sm' | 'md';
     className?: string;
+    tooltip?: string;
 }
 
 /**
@@ -25,6 +26,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     showValue = true,
     size = 'md',
     className = '',
+    tooltip,
 }) => {
     // 값 정규화 (0-100)
     const normalizedValue = Math.min(100, Math.max(0, value));
@@ -40,7 +42,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     const heightClass = size === 'sm' ? 'h-1.5' : 'h-2';
 
     return (
-        <div className={`space-y-1 ${className}`}>
+        <div className={`space-y-1 ${className}`} title={tooltip}>
             {/* 라벨 + 값 */}
             <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">{label}</span>

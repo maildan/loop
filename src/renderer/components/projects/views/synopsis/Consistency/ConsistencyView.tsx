@@ -6,6 +6,100 @@ import { CharacterAvatar } from './CharacterAvatar';
 import { ProgressBar } from './ProgressBar';
 import type { ConsistencyViewProps, ConsistencyWarning, CharacterConsistencyScore } from '../types';
 
+const SPEECH_PATTERN_KEYWORDS = ['~다', '~요', '…', '?!', '!?', '말투', '톤', '사투리', '평소', '특유'];
+const APPEARANCE_KEYWORDS = ['눈', '머리', '머릿결', '피부', '체형', '키', '옷', '복장', '색', '빛', '향'];
+const PERSONALITY_KEYWORDS = ['성격', '습관', '가치관', '목표', '불안', '욕망', '강박', '미덕', '결점', '갈등'];
+
+type ScoreDetail = {
+    score: number;
+    reason: string;
+};
+
+type CharacterAnalysis = {
+    characterId: string;
+    characterName: string;
+    overallScore: number;
+    scores: {
+        speech: ScoreDetail;
+        appearance: ScoreDetail;
+        personality: ScoreDetail;
+    };
+    warnings: ConsistencyWarning[];
+};
+
+type CharacterScoreCard = CharacterConsistencyScore & {
+    speechReason: string;
+    appearanceReason: string;
+    personalityReason: string;
+};
+
+const clampScore = (value: number): number => Math.max(0, Math.min(100, Math.round(value)));
+
+const collapseWhitespace = (text: string): string => text.replace(/\s+/g, ' ').trim();
+
+const evaluateNarrativeField = (
+    fieldLabel: string,
+    sources: Array<string | undefined | null>,
+    thresholds: { minimum: number; adequate: number; excellent: number; keywords?: string[] }
+): ScoreDetail => {
+    const combined = collapseWhitespace(
+        sources
+            .filter((source): source is string => typeof source === 'string' && source.trim().length > 0)
+            .join(' ')
+    );
+
+    if (combined.length === 0) {
+        return {
+            score: 20,
+            reason: `${fieldLabel} 설명이 비어 있습니다. 짧더라도 핵심 습관이나 특징을 작성해 주세요.`,
+        };
+    }
+
+    const length = combined.length;
+    let base = 35;
+
+    if (length >= thresholds.excellent) {
+        base = 94 + Math.min(6, (length - thresholds.excellent) / 40);
+    } else if (length >= thresholds.adequate) {
+        base = 78 + ((length - thresholds.adequate) / (thresholds.excellent - thresholds.adequate)) * 16;
+    } else if (length >= thresholds.minimum) {
+        base = 58 + ((length - thresholds.minimum) / (thresholds.adequate - thresholds.minimum)) * 20;
+    } else {
+        base = 35 + (length / Math.max(thresholds.minimum, 1)) * 18;
+    }
+
+    const keywords = thresholds.keywords ?? [];
+    const keywordMatches = keywords.filter(keyword => combined.includes(keyword)).length;
+    let keywordImpact = '';
+
+    if (keywords.length > 0) {
+        if (keywordMatches === 0) {
+            base -= 8;
+            keywordImpact = `${fieldLabel} 핵심 어휘가 부족합니다`;
+        } else {
+            base += Math.min(12, keywordMatches * 3);
+            keywordImpact = `${keywordMatches}개의 핵심 어휘 확인`;
+        }
+    }
+
+    const qualitative = base >= 85
+        ? '한국 연재 기준으로도 안정적인 묘사 길이입니다'
+        : base >= 65
+            ? '뼈대는 있지만 구체 사례를 더하면 좋습니다'
+            : '감각적인 예시나 사건 묘사를 추가하면 독자가 기억하기 쉽습니다';
+
+    const reasonParts = [
+        `${fieldLabel} 서술 ${length.toLocaleString('ko-KR')}자`,
+        keywordImpact || '핵심 어휘가 확인되지 않았습니다',
+        qualitative,
+    ];
+
+    return {
+        score: clampScore(base),
+        reason: reasonParts.filter(Boolean).join(' · '),
+    };
+};
+
 /**
  * 📊 ConsistencyView - 캐릭터 일관성 체크
  * 
@@ -31,8 +125,93 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
     const { data: statsData } = synopsisStats;
     const summary = statsData.summary;
 
-    // ⚠️ 복선 미회수 데이터를 기반으로 경고 생성 (Phase 2에서 AI 분석으로 확장 예정)
-    const warnings: ConsistencyWarning[] = useMemo(() => {
+    const characterAnalyses = useMemo<CharacterAnalysis[]>(() => {
+        if (!characters || characters.length === 0) {
+            return [];
+        }
+
+        return characters.map<CharacterAnalysis>((char) => {
+            const speech = evaluateNarrativeField('말투', [char.notes, char.personality, char.description], {
+                minimum: 80,
+                adequate: 160,
+                excellent: 260,
+                keywords: SPEECH_PATTERN_KEYWORDS,
+            });
+
+            const appearance = evaluateNarrativeField('외모', [char.appearance, char.description], {
+                minimum: 70,
+                adequate: 140,
+                excellent: 220,
+                keywords: APPEARANCE_KEYWORDS,
+            });
+
+            const personality = evaluateNarrativeField('성격', [char.personality, char.background, char.conflicts], {
+                minimum: 90,
+                adequate: 180,
+                excellent: 280,
+                keywords: PERSONALITY_KEYWORDS,
+            });
+
+            const overallScore = clampScore(
+                speech.score * 0.4 + appearance.score * 0.25 + personality.score * 0.35
+            );
+
+            const warnings: ConsistencyWarning[] = [];
+
+            if (speech.score < 55) {
+                warnings.push({
+                    id: `speech-${char.id}`,
+                    characterId: char.id,
+                    characterName: char.name,
+                    type: 'speech_pattern',
+                    episode: 0,
+                    description: `${char.name}의 말투 묘사가 짧습니다. 대표 대사나 억양을 기록해 주세요.`,
+                    severity: speech.score < 40 ? 'high' : 'medium',
+                    createdAt: char.updatedAt ? new Date(char.updatedAt) : undefined,
+                });
+            }
+
+            if (appearance.score < 60) {
+                warnings.push({
+                    id: `appearance-${char.id}`,
+                    characterId: char.id,
+                    characterName: char.name,
+                    type: 'appearance',
+                    episode: 0,
+                    description: `${char.name}의 외모 정보가 부족합니다. 색감·실루엣 등을 더해 주세요.`,
+                    severity: appearance.score < 45 ? 'high' : 'medium',
+                    createdAt: char.updatedAt ? new Date(char.updatedAt) : undefined,
+                });
+            }
+
+            if (personality.score < 60) {
+                warnings.push({
+                    id: `personality-${char.id}`,
+                    characterId: char.id,
+                    characterName: char.name,
+                    type: 'personality',
+                    episode: 0,
+                    description: `${char.name}의 성격·동기가 뚜렷하지 않습니다. 갈등이나 목표를 추가해 주세요.`,
+                    severity: personality.score < 45 ? 'high' : 'medium',
+                    createdAt: char.updatedAt ? new Date(char.updatedAt) : undefined,
+                });
+            }
+
+            return {
+                characterId: char.id,
+                characterName: char.name,
+                overallScore,
+                scores: {
+                    speech,
+                    appearance,
+                    personality,
+                },
+                warnings,
+            };
+        });
+    }, [characters]);
+
+    const timelineWarnings = useMemo<ConsistencyWarning[]>(() => {
         if (!summary) {
             return [];
         }
@@ -45,29 +224,41 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                 description: `복선 "${foreshadow.title}"이 아직 회수되지 않았습니다.`,
                 severity: 'medium',
                 episode: foreshadow.introducedEpisode ?? 0,
+                characterName: '스토리 구조',
             }));
     }, [summary]);
 
-    // ✅ 실제 캐릭터 데이터 기반 점수 계산 (경고 없으므로 모두 100점)
-    const characterScores = useMemo<CharacterConsistencyScore[]>(() => {
-        return characters.map((char) => {
-            const charWarnings = warnings.filter(w => w.characterId === char.id);
-            const warningCount = charWarnings.length;
-            
-            // Phase 2: AI 분석 결과로 점수 계산
-            const overallScore = Math.max(0, 100 - (warningCount * 15));
-            
+    const characterGeneratedWarnings = useMemo<ConsistencyWarning[]>(() =>
+        characterAnalyses.flatMap(analysis => analysis.warnings),
+    [characterAnalyses]);
+
+    const warnings: ConsistencyWarning[] = useMemo(() => [
+        ...timelineWarnings,
+        ...characterGeneratedWarnings,
+    ], [timelineWarnings, characterGeneratedWarnings]);
+
+    const characterScores = useMemo<CharacterScoreCard[]>(() => {
+        if (characterAnalyses.length === 0) {
+            return [];
+        }
+
+        return characterAnalyses.map<CharacterScoreCard>((analysis) => {
+            const characterWarnings = warnings.filter(w => w.characterId === analysis.characterId);
+
             return {
-                characterId: char.id,
-                characterName: char.name,
-                overallScore,
-                speechPatternScore: Math.max(0, 100 - (charWarnings.filter(w => w.type === 'speech_pattern').length * 20)),
-                appearanceScore: Math.max(0, 100 - (charWarnings.filter(w => w.type === 'appearance').length * 20)),
-                personalityScore: Math.max(0, 100 - (charWarnings.filter(w => w.type === 'personality').length * 20)),
-                warningCount,
+                characterId: analysis.characterId,
+                characterName: analysis.characterName,
+                overallScore: analysis.overallScore,
+                speechPatternScore: analysis.scores.speech.score,
+                appearanceScore: analysis.scores.appearance.score,
+                personalityScore: analysis.scores.personality.score,
+                warningCount: characterWarnings.length,
+                speechReason: analysis.scores.speech.reason,
+                appearanceReason: analysis.scores.appearance.reason,
+                personalityReason: analysis.scores.personality.reason,
             };
         });
-    }, [characters, warnings]);
+    }, [characterAnalyses, warnings]);
 
     // ✅ 전체 일관성 점수 계산
     const overallConsistency = useMemo(() => {
@@ -196,16 +387,19 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                                         value={char.speechPatternScore} 
                                         label="말투" 
                                         size="sm"
+                                        tooltip={char.speechReason}
                                     />
                                     <ProgressBar 
                                         value={char.appearanceScore} 
                                         label="외모" 
                                         size="sm"
+                                        tooltip={char.appearanceReason}
                                     />
                                     <ProgressBar 
                                         value={char.personalityScore} 
                                         label="성격" 
                                         size="sm"
+                                        tooltip={char.personalityReason}
                                     />
                                 </div>
                             </div>
@@ -256,7 +450,7 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                                                 {warning.characterName}
                                             </span>
                                             <span className="text-xs text-muted-foreground">
-                                                • {warning.episode}화
+                                                • {warning.episode && warning.episode > 0 ? `${warning.episode}화` : '회차 정보 없음'}
                                             </span>
                                         </div>
                                         <p className="text-sm text-foreground mt-1">
