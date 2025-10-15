@@ -171,17 +171,6 @@ export class EpisodeServiceClient {
     return 'introduction'; // fallback
   }
 
-  // ===== PRIVATE METHODS =====
-
-  private calculateWordCount(content: string): number {
-    if (!content) return 0;
-
-    // 한글, 영어, 숫자, 공백을 제외한 모든 문자를 제거하고 단어 수 계산
-    const cleanContent = content.replace(/[^\w\s가-힣]/g, '');
-    const words = cleanContent.split(/\s+/).filter(word => word.trim().length > 0);
-
-    return words.length;
-  }
 }
 
 // ===== INSTANCE EXPORT =====

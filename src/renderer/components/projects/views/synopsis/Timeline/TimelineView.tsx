@@ -43,18 +43,41 @@ interface Foreshadow {
 export const TimelineView: React.FC<TimelineViewProps> = ({
     projectId,
     notes = [],
+    synopsisStats,
 }) => {
     const [selectedForeshadow, setSelectedForeshadow] = useState<Foreshadow | null>(null);
     const [showOnlyUnresolved, setShowOnlyUnresolved] = useState(false);
+    const { data: statsData } = synopsisStats;
+    const summary = statsData.summary;
 
     // ✅ 실제 복선 노트 필터링 (Phase 2: AI 자동 추출로 대체)
     const allForeshadowNotes = useMemo((): Foreshadow[] => {
+        if (summary) {
+            return summary.foreshadows.map((foreshadow): Foreshadow => {
+                const normalizedImportance = ((): Foreshadow['importance'] => {
+                    const importance = (foreshadow.importance ?? 'medium').toLowerCase();
+                    if (importance === 'high' || importance === 'low' || importance === 'medium') {
+                        return importance;
+                    }
+                    return 'medium';
+                })();
+
+                return {
+                    id: foreshadow.id,
+                    title: foreshadow.title,
+                    content: '',
+                    introducedEpisode: foreshadow.introducedEpisode ?? 0,
+                    resolvedEpisode: foreshadow.resolvedEpisode ?? null,
+                    importance: normalizedImportance,
+                };
+            });
+        }
+
         return notes.filter(n => 
             n.type === 'foreshadow' || 
             n.tags?.toString().includes('복선') ||
             n.title.includes('복선')
         ).map((n, index): Foreshadow => {
-            // Phase 2: AI가 중요도 계산 (현재는 인덱스 기반 샘플링)
             const sampleImportance: Foreshadow['importance'][] = ['high', 'medium', 'low'];
             const importance = sampleImportance[index % 3] || 'medium';
             
@@ -62,12 +85,12 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
                 id: n.id,
                 title: n.title,
                 content: n.content,
-                introducedEpisode: 1, // Phase 2: AI가 회차 추출
-                resolvedEpisode: null, // Phase 2: AI가 회수 여부 판별
-                importance, // Phase 2: AI가 중요도 계산
+                introducedEpisode: 1,
+                resolvedEpisode: null,
+                importance,
             };
         });
-    }, [notes]);
+    }, [notes, summary]);
 
     // 🔥 필터링된 복선 목록 (미회수 필터 적용)
     const foreshadowNotes = useMemo(() => {
@@ -123,7 +146,35 @@ export const TimelineView: React.FC<TimelineViewProps> = ({
     };
 
     // ⚠️ Phase 1.5: Chapter 데이터가 없으므로 빈 배열 (Phase 2에서 elements 추가)
-    const episodes: Episode[] = []; // Phase 2: props.elements.filter(e => e.type === 'chapter')로 변경
+    const episodes: Episode[] = useMemo(() => {
+        if (!summary) {
+            return [];
+        }
+
+        return summary.timelineEpisodes
+            .map<Episode>((episode) => {
+                const status = episode.status.includes('publish') || episode.status.includes('release')
+                    ? 'published'
+                    : 'draft';
+                const normalizedAct = ((): Episode['act'] => {
+                    const act = (episode.act ?? '').toLowerCase();
+                    if (act === 'intro' || act === 'rising' || act === 'development' || act === 'climax' || act === 'conclusion') {
+                        return act;
+                    }
+                    return 'development';
+                })();
+
+                return {
+                    id: episode.id,
+                    number: episode.episodeNumber,
+                    title: episode.title,
+                    wordCount: episode.wordCount,
+                    act: normalizedAct,
+                    status,
+                };
+            })
+            .sort((a, b) => a.number - b.number);
+    }, [summary]);
 
     return (
         <div className="flex h-full flex-col gap-6 p-6">

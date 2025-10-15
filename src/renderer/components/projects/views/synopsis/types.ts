@@ -1,10 +1,12 @@
-import { ProjectAnalysis, ProjectElement } from '../../../../hooks/useProjectData';
+import { ProjectElement } from '../../../../hooks/useProjectData';
+import type { SynopsisStatsResult } from '../../../../hooks/useSynopsisStats';
 import { ProjectCharacter, ProjectNote } from '../../../../../shared/types/project';
 
 export interface SynopsisViewProps {
     projectId: string;
     synopsisId?: string;
     onBack?: () => void;
+    elements: ProjectElement[];
     characters?: ProjectCharacter[];
     notes?: ProjectNote[];
     content?: string;
@@ -19,6 +21,7 @@ export interface DashboardViewProps {
     characters?: ProjectCharacter[];
     notes?: ProjectNote[];
     content?: string;
+    synopsisStats: SynopsisStatsResult;
     onTabChange?: (tab: TabMode) => void; // 탭 전환 핸들러
 }
 
@@ -29,11 +32,13 @@ export interface ScheduleViewProps {
 export interface ConsistencyViewProps {
     projectId: string;
     characters?: ProjectCharacter[];
+    synopsisStats: SynopsisStatsResult;
 }
 
 export interface TimelineViewProps {
     projectId: string;
     notes?: ProjectNote[];
+    synopsisStats: SynopsisStatsResult;
 }
 
 export interface TabModeConfig {

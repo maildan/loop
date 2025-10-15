@@ -5,6 +5,7 @@ import type { FontOption, FontVariantManifestEntry } from './fonts/types';
 
 // 🎭 프로젝트 관련 타입은 types/project.ts에서 import하여 사용
 import type { ProjectCharacter, ProjectStructure, ProjectNote, Project } from './types/project';
+import type { DashboardSummary, ForeshadowSummary, TimelineEpisodeSummary } from './types/synopsis';
 
 // 🎭 에피소드 관련 타입 - types/episode.ts에서 import
 import type {
@@ -21,6 +22,7 @@ import type {
 // Re-export for convenience
 export type { ProjectCharacter, ProjectStructure, ProjectNote, Project };
 export type { Episode, CreateEpisodeInput, UpdateEpisodeInput, EpisodeFilterOptions, EpisodeSortOptions, ManuscriptReserves, FiveActAnalysis, EpisodeStats };
+export type { DashboardSummary, ForeshadowSummary, TimelineEpisodeSummary };
 
 // 🔥 Result 타입 - 함수 결과 래핑
 export interface Result<TData = unknown> {
@@ -162,6 +164,7 @@ export interface ElectronAPI {
     getProgressTimeline: (projectId: string, days?: number) => Promise<Array<{ date: string; words: number }>>;
     getEpisodeStats: (projectId: string) => Promise<Array<{ act: string; count: number; avgWords: number; color: string }>>;
     recordWritingActivity: (projectId: string, wordCount: number, duration: number, episodeId?: string) => Promise<{ success: boolean }>;
+    getDashboardSummary: (projectId: string) => Promise<DashboardSummary>;
   };
 
   // ⚙️ 설정 API

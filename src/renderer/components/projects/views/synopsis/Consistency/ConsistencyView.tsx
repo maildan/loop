@@ -25,11 +25,28 @@ import type { ConsistencyViewProps, ConsistencyWarning, CharacterConsistencyScor
 export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
     projectId,
     characters = [],
+    synopsisStats,
 }) => {
     const [selectedCharacterId, setSelectedCharacterId] = useState<string | null>(null);
+    const { data: statsData } = synopsisStats;
+    const summary = statsData.summary;
 
-    // ⚠️ Warnings: Phase 2 (AI 분석)에서 채워질 예정, 현재 빈 배열
-    const warnings: ConsistencyWarning[] = [];
+    // ⚠️ 복선 미회수 데이터를 기반으로 경고 생성 (Phase 2에서 AI 분석으로 확장 예정)
+    const warnings: ConsistencyWarning[] = useMemo(() => {
+        if (!summary) {
+            return [];
+        }
+
+        return summary.foreshadows
+            .filter(foreshadow => foreshadow.resolvedEpisode == null)
+            .map<ConsistencyWarning>((foreshadow) => ({
+                id: `foreshadow-${foreshadow.id}`,
+                type: 'timeline',
+                description: `복선 "${foreshadow.title}"이 아직 회수되지 않았습니다.`,
+                severity: 'medium',
+                episode: foreshadow.introducedEpisode ?? 0,
+            }));
+    }, [summary]);
 
     // ✅ 실제 캐릭터 데이터 기반 점수 계산 (경고 없으므로 모두 100점)
     const characterScores = useMemo<CharacterConsistencyScore[]>(() => {
@@ -54,10 +71,14 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
 
     // ✅ 전체 일관성 점수 계산
     const overallConsistency = useMemo(() => {
+        if (summary?.consistencyScore != null) {
+            return Math.round(summary.consistencyScore);
+        }
+
         if (characterScores.length === 0) return 100;
         const avg = characterScores.reduce((sum, char) => sum + char.overallScore, 0) / characterScores.length;
         return Math.round(avg);
-    }, [characterScores]);
+    }, [characterScores, summary?.consistencyScore]);
 
     // ✅ 필터링된 경고 목록
     const filteredWarnings = useMemo(() => {

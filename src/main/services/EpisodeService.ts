@@ -18,6 +18,8 @@ import type {
   EpisodeSortOptions,
   EpisodeStats
 } from '../../shared/types/episode';
+import { calculateWordCount } from '../../shared/utils/text';
+import { recordDailyWritingActivity } from '../utils/writingActivity';
 
 /**
  * 🔥 Episode Service Class (메인 프로세스용)
@@ -30,22 +32,35 @@ export class EpisodeService {
    */
   async createEpisode(input: CreateEpisodeInput): Promise<Episode> {
     const prisma = await this.prismaService.getClient();
-    const wordCount = input.content ? this.calculateWordCount(input.content) : 0;
+    const episode = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+       const computedWordCount = calculateWordCount(input.content);
 
-    const episode = await prisma.episode.create({
-      data: {
-        projectId: input.projectId,
-        episodeNumber: input.episodeNumber,
-        title: input.title,
-        content: input.content || '',
-        wordCount,
-        targetWordCount: input.targetWordCount || 5500,
-        status: input.status || 'draft',
-        act: input.act || null,
-        notes: input.notes || null,
-        sortOrder: input.episodeNumber, // 기본값: episodeNumber와 동일
-      },
-    });
+       const created = await tx.episode.create({
+         data: {
+           projectId: input.projectId,
+           episodeNumber: input.episodeNumber,
+           title: input.title,
+           content: input.content || '',
+           wordCount: computedWordCount,
+           targetWordCount: input.targetWordCount || 5500,
+           status: input.status || 'draft',
+           act: input.act || null,
+           notes: input.notes || null,
+           sortOrder: input.episodeNumber,
+         },
+       });
+
+       if (computedWordCount !== 0) {
+         await tx.project.update({
+           where: { id: input.projectId },
+           data: { wordCount: { increment: computedWordCount } },
+         });
+
+         await recordDailyWritingActivity(tx, input.projectId, computedWordCount, 0, created.updatedAt, created.id);
+       }
+
+       return created;
+     });
 
     return this.toPrismaEpisode(episode);
   }
@@ -151,26 +166,53 @@ export class EpisodeService {
    */
   async updateEpisode(id: string, input: UpdateEpisodeInput): Promise<Episode> {
     const prisma = await this.prismaService.getClient();
-    const updateData: Prisma.EpisodeUpdateInput = {};
+    const episode = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+       const existing = await tx.episode.findUnique({ where: { id } });
+       if (!existing) {
+         throw new Error('Episode not found');
+       }
 
-    if (input.title !== undefined) updateData.title = input.title;
-    if (input.content !== undefined) {
-      updateData.content = input.content;
-      updateData.wordCount = this.calculateWordCount(input.content);
-    }
-    if (input.targetWordCount !== undefined) updateData.targetWordCount = input.targetWordCount;
-    if (input.status !== undefined) updateData.status = input.status;
-    if (input.act !== undefined) updateData.act = input.act;
-    if (input.cliffhangerType !== undefined) updateData.cliffhangerType = input.cliffhangerType;
-    if (input.cliffhangerIntensity !== undefined) updateData.cliffhangerIntensity = input.cliffhangerIntensity;
-    if (input.notes !== undefined) updateData.notes = input.notes;
+       const updateData: Prisma.EpisodeUpdateInput = {};
 
-    updateData.updatedAt = new Date();
+       if (input.title !== undefined) updateData.title = input.title;
+       if (input.content !== undefined) {
+         updateData.content = input.content;
+         updateData.wordCount = calculateWordCount(input.content);
+       }
+       if (input.wordCount !== undefined) {
+         updateData.wordCount = input.wordCount;
+       }
+       if (input.targetWordCount !== undefined) updateData.targetWordCount = input.targetWordCount;
+       if (input.status !== undefined) updateData.status = input.status;
+       if (input.act !== undefined) updateData.act = input.act;
+       if (input.cliffhangerType !== undefined) updateData.cliffhangerType = input.cliffhangerType;
+       if (input.cliffhangerIntensity !== undefined) updateData.cliffhangerIntensity = input.cliffhangerIntensity;
+       if (input.notes !== undefined) updateData.notes = input.notes;
 
-    const episode = await prisma.episode.update({
-      where: { id },
-      data: updateData,
-    });
+       updateData.updatedAt = new Date();
+
+       const updated = await tx.episode.update({
+         where: { id },
+         data: updateData,
+       });
+
+       const previousWordCount = existing.wordCount ?? 0;
+       const newWordCount = updated.wordCount ?? previousWordCount;
+       const delta = newWordCount - previousWordCount;
+
+       if (delta !== 0) {
+         await tx.project.update({
+           where: { id: updated.projectId },
+           data: { wordCount: { increment: delta } },
+         });
+
+         if (delta > 0) {
+           await recordDailyWritingActivity(tx, updated.projectId, delta, 0, updated.updatedAt, updated.id);
+         }
+       }
+
+       return updated;
+     });
 
     return this.toPrismaEpisode(episode);
   }
@@ -384,16 +426,6 @@ export class EpisodeService {
   }
 
   // ===== PRIVATE METHODS =====
-
-  private calculateWordCount(content: string): number {
-    if (!content) return 0;
-
-    // 한글, 영어, 숫자, 공백을 제외한 모든 문자를 제거하고 단어 수 계산
-    const cleanContent = content.replace(/[^\w\s가-힣]/g, '');
-    const words = cleanContent.split(/\s+/).filter(word => word.trim().length > 0);
-
-    return words.length;
-  }
 
   private toPrismaEpisode(prismaEpisode: PrismaEpisodeModel): Episode {
     return {

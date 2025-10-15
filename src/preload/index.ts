@@ -108,6 +108,7 @@ const electronAPI: ElectronAPI = {
     getEpisodeStats: (projectId: string) => ipcRenderer.invoke('synopsis:getEpisodeStats', projectId),
     recordWritingActivity: (projectId: string, wordCount: number, duration: number, episodeId?: string) => 
       ipcRenderer.invoke('synopsis:recordWritingActivity', projectId, wordCount, duration, episodeId),
+    getDashboardSummary: (projectId: string) => ipcRenderer.invoke('synopsis:getDashboardSummary', projectId),
   },
 
   app: {

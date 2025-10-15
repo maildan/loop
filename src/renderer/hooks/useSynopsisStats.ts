@@ -11,9 +11,11 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { RendererLogger as Logger } from '../../shared/logger-renderer';
+import type { DashboardSummary } from '../../shared/types';
 
 // 🔥 Symbol 기반 컴포넌트 이름
 const USE_SYNOPSIS_STATS = Symbol.for('USE_SYNOPSIS_STATS');
+const SYNOPSIS_STATS_REFRESH_EVENT = 'synopsis-stats:refresh';
 
 // ============================================
 // Types
@@ -41,6 +43,14 @@ export interface SynopsisStats {
   writingActivity: WritingActivity[];
   progressTimeline: ProgressTimelineData[];
   episodeStats: EpisodeStatsData[];
+  summary: DashboardSummary | null;
+}
+
+export interface SynopsisStatsResult {
+  data: SynopsisStats;
+  loading: boolean;
+  error: Error | null;
+  refetch: () => void;
 }
 
 // ============================================
@@ -177,6 +187,60 @@ export function useEpisodeStats(projectId: string) {
 }
 
 // ============================================
+// Hook: useDashboardSummary
+// ============================================
+
+function useDashboardSummary(projectId: string) {
+  const [data, setData] = useState<DashboardSummary | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchData = useCallback(async () => {
+    if (!projectId) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const result = await window.electronAPI.synopsis.getDashboardSummary(projectId);
+      setData(result);
+    } catch (err) {
+      Logger.error(USE_SYNOPSIS_STATS, 'Error fetching dashboard summary:', err);
+      setError(err instanceof Error ? err : new Error('Failed to fetch dashboard summary'));
+    } finally {
+      setLoading(false);
+    }
+  }, [projectId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const handler = (event: Event) => {
+      const custom = event as CustomEvent<{ projectId?: string }>;
+      if (!custom.detail || !custom.detail.projectId || custom.detail.projectId === projectId) {
+        fetchData();
+      }
+    };
+
+    window.addEventListener(SYNOPSIS_STATS_REFRESH_EVENT, handler as EventListener);
+    return () => {
+      window.removeEventListener(SYNOPSIS_STATS_REFRESH_EVENT, handler as EventListener);
+    };
+  }, [fetchData, projectId]);
+
+  return { data, loading, error, refetch: fetchData };
+}
+
+// ============================================
 // Hook: useSynopsisStats (통합)
 // ============================================
 
@@ -184,25 +248,28 @@ export function useEpisodeStats(projectId: string) {
  * Dashboard용 통합 통계 데이터
  * @param projectId 프로젝트 ID
  */
-export function useSynopsisStats(projectId: string) {
+export function useSynopsisStats(projectId: string): SynopsisStatsResult {
   const writingActivity = useWritingActivity(projectId, 7);
   const progressTimeline = useProgressTimeline(projectId, 30);
   const episodeStats = useEpisodeStats(projectId);
+  const dashboardSummary = useDashboardSummary(projectId);
 
-  const loading = writingActivity.loading || progressTimeline.loading || episodeStats.loading;
-  const error = writingActivity.error || progressTimeline.error || episodeStats.error;
+  const loading = writingActivity.loading || progressTimeline.loading || episodeStats.loading || dashboardSummary.loading;
+  const error = writingActivity.error || progressTimeline.error || episodeStats.error || dashboardSummary.error;
 
   const refetchAll = useCallback(() => {
     writingActivity.refetch();
     progressTimeline.refetch();
     episodeStats.refetch();
-  }, [writingActivity.refetch, progressTimeline.refetch, episodeStats.refetch]);
+    dashboardSummary.refetch();
+  }, [writingActivity.refetch, progressTimeline.refetch, episodeStats.refetch, dashboardSummary.refetch]);
 
   return {
     data: {
       writingActivity: writingActivity.data,
       progressTimeline: progressTimeline.data,
       episodeStats: episodeStats.data,
+      summary: dashboardSummary.data,
     },
     loading,
     error,

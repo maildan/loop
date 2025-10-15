@@ -13,7 +13,6 @@ import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 import type { DashboardViewProps } from '../types';
 import type { ConsistencyWarning } from '../types';
 import type { ManuscriptReserves } from '../../../../../../shared/types/episode';
-import { useSynopsisStats } from '../../../../../hooks/useSynopsisStats';
 
 
 const DASHBOARD_VIEW = Symbol.for('DASHBOARD_VIEW');
@@ -25,27 +24,33 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   characters,
   notes,
   onTabChange,
+  synopsisStats,
 }) => {
   // ✅ 실제 데이터 기반 계산
   const chapters = elements.filter(e => e.type === 'chapter');
-  const totalEpisodes = chapters.length;
+  const { data: statsData, loading: statsLoading, error: statsError } = synopsisStats;
+  const summary = statsData.summary;
+
+  const fallbackTotalEpisodes = chapters.length;
   const completedChapters = chapters.filter(ch => (ch.wordCount || 0) >= 500); // 500자 이상 완성으로 간주
-  const reserveCount = completedChapters.length - 5; // 임시: 5개 발행 가정, Phase 2에서 실제 publishedEpisodes 사용
-  const totalWordCount = chapters.reduce((sum, ch) => sum + (ch.wordCount || 0), 0);
-  const averageWordCount = totalEpisodes > 0 ? Math.round(totalWordCount / totalEpisodes) : 0;
+  const fallbackTotalWordCount = chapters.reduce((sum, ch) => sum + (ch.wordCount || 0), 0);
+  const fallbackAverageWordCount = fallbackTotalEpisodes > 0 ? Math.round(fallbackTotalWordCount / fallbackTotalEpisodes) : 0;
+  const fallbackReserveCount = completedChapters.length - 5; // 임시: 5개 발행 가정, Phase 2에서 실제 publishedEpisodes 사용
+
+  const totalEpisodes = summary?.totalEpisodes ?? fallbackTotalEpisodes;
+  const totalWordCount = summary?.totalWordCount ?? fallbackTotalWordCount;
+  const averageWordCount = summary?.averageWordCount ?? fallbackAverageWordCount;
+  const reserveCount = summary?.reserves?.reserveCount ?? fallbackReserveCount;
 
   // ⚠️ Warnings: Phase 2 (AI 분석)에서 채워질 예정, 현재 빈 배열
   const warnings: ConsistencyWarning[] = [];
 
   // 📌 복선 추적: notes에서 foreshadow 타입 필터링 (Phase 2에서 AI 자동 추출)
   const foreshadowNotes = notes?.filter(n => n.type === 'foreshadow' || n.tags?.toString().includes('복선')) || [];
-  const unresolvedForeshadows = foreshadowNotes.length; // Phase 2: 미회수 여부 판별 로직 추가
+  const unresolvedForeshadows = summary?.unresolvedForeshadows ?? foreshadowNotes.length; // Phase 2: 미회수 여부 판별 로직 추가
 
-  // 일관성 점수: Phase 2 (AI 분석)에서 계산, 현재 기본값
-  const consistencyScore = warnings.length === 0 ? 100 : Math.max(0, 100 - warnings.length * 5);
-
-  // 📊 실제 DB 데이터: useSynopsisStats 훅 사용
-  const { data: statsData, loading: statsLoading, error: statsError } = useSynopsisStats(projectId);
+  // 일관성 점수: Phase 2 (AI 분석)에서 계산, 현재 기본값 또는 summary 활용
+  const consistencyScore = summary?.consistencyScore ?? (warnings.length === 0 ? 100 : Math.max(0, 100 - warnings.length * 5));
 
   // 📊 Progress Timeline (30일 누적 글자 수)
   const progressTimelineData = useMemo(() => {
@@ -90,18 +95,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     return statsData.episodeStats;
   }, [statsData.episodeStats]);
 
-  const reserves: ManuscriptReserves = {
+  const fallbackReserves: ManuscriptReserves = {
     totalEpisodes,
     draftEpisodes: totalEpisodes - completedChapters.length,
     inProgressEpisodes: 0, // Phase 2: status 필드 활용
-    completedEpisodes: completedChapters.length,
-    publishedEpisodes: 5, // Phase 2: 실제 발행 데이터 연동
+    completedEpisodes: summary?.completedEpisodes ?? completedChapters.length,
+    publishedEpisodes: summary?.publishedEpisodes ?? 5, // Phase 2: 실제 발행 데이터 연동
     reserveCount: Math.max(0, reserveCount),
-    lastPublishedDate: new Date(), // Phase 2: 실제 발행일
-    nextScheduledPublish: new Date(), // Phase 2: 다음 예약일
+    lastPublishedDate: summary?.reserves?.lastPublishedDate ?? null,
+    nextScheduledPublish: summary?.reserves?.nextScheduledPublish ?? null,
     totalWordCount,
     averageWordCount,
   };
+
+  const reserves: ManuscriptReserves = summary?.reserves ?? fallbackReserves;
 
   // 탭 전환 핸들러
   const handleConsistencyCheck = () => {
@@ -178,6 +185,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       return priorityOrder[a.priority] - priorityOrder[b.priority];
     });
   }, [reserveCount, warnings.length, unresolvedForeshadows]);
+
+  if (statsLoading && !summary) {
+    return (
+      <div className="flex h-full items-center justify-center p-6">
+        <p className="text-sm text-muted-foreground">대시보드 데이터를 불러오는 중입니다…</p>
+      </div>
+    );
+  }
+
+  if (statsError && !summary) {
+    return (
+      <div className="flex h-full items-center justify-center p-6">
+        <p className="text-sm text-red-500">대시보드 데이터를 불러오지 못했습니다.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6 max-w-[1600px] mx-auto">

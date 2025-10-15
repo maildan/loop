@@ -306,7 +306,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                             contentPreview: content.substring(0, 100) + '...'
                                         });
 
-                                        if (activeTab) {
+                                            if (activeTab) {
                                             // 탭 업데이트
                                             actions.updateTab(activeTab.id, {
                                                 content,

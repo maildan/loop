@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { DashboardViewProps, TabMode, TabModeConfig } from './types';
+import type { SynopsisViewProps, TabMode, TabModeConfig } from './types';
 import { DashboardView } from './Dashboard/DashboardView';
 import { EpisodesView } from './Episodes/EpisodesView';
 import { ScheduleView } from './Schedule/ScheduleView';
@@ -9,6 +9,7 @@ import { ConsistencyView } from './Consistency/ConsistencyView';
 import { TimelineView } from './Timeline/TimelineView';
 import { LayoutDashboard, List, Network, Calendar, CheckCircle2, Clock } from 'lucide-react';
 import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
+import { useSynopsisStats } from '../../../../hooks/useSynopsisStats';
 
 // 🔥 Symbol 기반 컴포넌트 이름
 const SYNOPSIS_VIEW = Symbol.for('SYNOPSIS_VIEW');
@@ -34,7 +35,7 @@ const TAB_CONFIGS: TabModeConfig[] = [
     { id: 'timeline', name: '타임라인', icon: Clock }, // ✅ Phase 1
 ];
 
-export const SynopsisView: React.FC<DashboardViewProps> = ({
+export const SynopsisView: React.FC<SynopsisViewProps> = ({
     projectId,
     elements,
     characters = [],
@@ -43,6 +44,7 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
 }) => {
     const [activeTab, setActiveTab] = useState<TabMode>('dashboard');
     const [isProjectSaved, setIsProjectSaved] = useState(false);
+    const synopsisStats = useSynopsisStats(projectId);
 
     // 🔥 프로젝트 DB 저장 확인 및 자동 저장
     React.useEffect(() => {
@@ -119,6 +121,7 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                         characters={characters}
                         notes={notes}
                         content={content}
+                        synopsisStats={synopsisStats}
                         onTabChange={setActiveTab}
                     />
                 )}
@@ -135,6 +138,7 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                     <ConsistencyView
                         projectId={projectId}
                         characters={characters}
+                        synopsisStats={synopsisStats}
                     />
                 )}
 
@@ -142,6 +146,7 @@ export const SynopsisView: React.FC<DashboardViewProps> = ({
                     <TimelineView
                         projectId={projectId}
                         notes={notes}
+                        synopsisStats={synopsisStats}
                     />
                 )}
             </div>
