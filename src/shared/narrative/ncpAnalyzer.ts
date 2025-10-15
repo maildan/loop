@@ -3,6 +3,11 @@
 
 import { DummyDataFilter } from '../services/dummyDataFilter';
 import { Logger } from '../logger';
+import {
+    analyzeNarrativeKeywords,
+    buildKeywordInsightPrompt,
+    type NarrativeKeywordInsight,
+} from './keywordSets';
 
 // 🔥 기본 타입 정의 (any 타입 제거)
 export interface PlotPoint {

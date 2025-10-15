@@ -5,10 +5,19 @@ import { AlertTriangle, CheckCircle, AlertCircle, Info, TrendingUp } from 'lucid
 import { CharacterAvatar } from './CharacterAvatar';
 import { ProgressBar } from './ProgressBar';
 import type { ConsistencyViewProps, ConsistencyWarning, CharacterConsistencyScore } from '../types';
+import {
+    analyzeNarrativeKeywords,
+    getNarrativeKeywordDefinition,
+    type NarrativeKeywordCategory,
+    type NarrativeKeywordInsight,
+} from '../../../../../../shared/narrative/keywordSets';
 
-const SPEECH_PATTERN_KEYWORDS = ['~다', '~요', '…', '?!', '!?', '말투', '톤', '사투리', '평소', '특유'];
-const APPEARANCE_KEYWORDS = ['눈', '머리', '머릿결', '피부', '체형', '키', '옷', '복장', '색', '빛', '향'];
-const PERSONALITY_KEYWORDS = ['성격', '습관', '가치관', '목표', '불안', '욕망', '강박', '미덕', '결점', '갈등'];
+const SPEECH_KEYWORD_DEFINITION = getNarrativeKeywordDefinition('speechPattern');
+const APPEARANCE_KEYWORD_DEFINITION = getNarrativeKeywordDefinition('appearance');
+const PERSONALITY_KEYWORD_DEFINITION = getNarrativeKeywordDefinition('personality');
+const SPEECH_PATTERN_KEYWORDS = SPEECH_KEYWORD_DEFINITION.keywords;
+const APPEARANCE_KEYWORDS = APPEARANCE_KEYWORD_DEFINITION.keywords;
+const PERSONALITY_KEYWORDS = PERSONALITY_KEYWORD_DEFINITION.keywords;
 
 type ScoreDetail = {
     score: number;
@@ -40,7 +49,7 @@ const collapseWhitespace = (text: string): string => text.replace(/\s+/g, ' ').t
 const evaluateNarrativeField = (
     fieldLabel: string,
     sources: Array<string | undefined | null>,
-    thresholds: { minimum: number; adequate: number; excellent: number; keywords?: string[] }
+    thresholds: { minimum: number; adequate: number; excellent: number; keywords?: string[]; keywordCategory?: NarrativeKeywordCategory }
 ): ScoreDetail => {
     const combined = collapseWhitespace(
         sources
@@ -68,17 +77,36 @@ const evaluateNarrativeField = (
         base = 35 + (length / Math.max(thresholds.minimum, 1)) * 18;
     }
 
-    const keywords = thresholds.keywords ?? [];
-    const keywordMatches = keywords.filter(keyword => combined.includes(keyword)).length;
-    let keywordImpact = '';
+    let keywordInsight: NarrativeKeywordInsight | null = null;
+    let keywordMessage = '핵심 어휘가 확인되지 않았습니다';
 
-    if (keywords.length > 0) {
-        if (keywordMatches === 0) {
+    if (thresholds.keywordCategory) {
+        const insights = analyzeNarrativeKeywords([combined], [thresholds.keywordCategory]);
+        const insight = insights[0];
+
+        if (insight) {
+            keywordInsight = insight;
+            const totalKeywords = getNarrativeKeywordDefinition(thresholds.keywordCategory).keywords.length;
+
+            if (insight.coverageRate === 0) {
+                base -= 8;
+                keywordMessage = `${fieldLabel} 핵심 어휘가 부족합니다`;
+            } else {
+                base += Math.min(12, insight.matchedKeywords.length * 3);
+                const matchedLabel = insight.matchedKeywords.slice(0, 3).join(', ');
+                keywordMessage = insight.matchedKeywords.length >= totalKeywords
+                    ? `${fieldLabel} 핵심 어휘가 모두 확인되었습니다`
+                    : `${insight.matchedKeywords.length}개의 핵심 어휘 확인${matchedLabel ? ` (${matchedLabel})` : ''}`;
+            }
+        }
+    } else if (thresholds.keywords && thresholds.keywords.length > 0) {
+        const matches = thresholds.keywords.filter(keyword => combined.includes(keyword)).length;
+        if (matches === 0) {
             base -= 8;
-            keywordImpact = `${fieldLabel} 핵심 어휘가 부족합니다`;
+            keywordMessage = `${fieldLabel} 핵심 어휘가 부족합니다`;
         } else {
-            base += Math.min(12, keywordMatches * 3);
-            keywordImpact = `${keywordMatches}개의 핵심 어휘 확인`;
+            base += Math.min(12, matches * 3);
+            keywordMessage = `${matches}개의 핵심 어휘 확인`;
         }
     }
 
@@ -90,9 +118,13 @@ const evaluateNarrativeField = (
 
     const reasonParts = [
         `${fieldLabel} 서술 ${length.toLocaleString('ko-KR')}자`,
-        keywordImpact || '핵심 어휘가 확인되지 않았습니다',
+        keywordMessage,
         qualitative,
     ];
+
+    if (keywordInsight) {
+        reasonParts.push(keywordInsight.guidance);
+    }
 
     return {
         score: clampScore(base),
@@ -136,6 +168,7 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                 adequate: 160,
                 excellent: 260,
                 keywords: SPEECH_PATTERN_KEYWORDS,
+                keywordCategory: 'speechPattern',
             });
 
             const appearance = evaluateNarrativeField('외모', [char.appearance, char.description], {
@@ -143,6 +176,7 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                 adequate: 140,
                 excellent: 220,
                 keywords: APPEARANCE_KEYWORDS,
+                keywordCategory: 'appearance',
             });
 
             const personality = evaluateNarrativeField('성격', [char.personality, char.background, char.conflicts], {
@@ -150,6 +184,7 @@ export const ConsistencyView: React.FC<ConsistencyViewProps> = ({
                 adequate: 180,
                 excellent: 280,
                 keywords: PERSONALITY_KEYWORDS,
+                keywordCategory: 'personality',
             });
 
             const overallScore = clampScore(

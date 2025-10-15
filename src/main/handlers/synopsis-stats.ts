@@ -32,6 +32,7 @@ type ChapterSnapshot = {
 type ChapterStatsRecord = {
   status: string | null;
   wordCount: number | null;
+  content?: string | null;
 };
 
 type EpisodeStatsRecord = {
@@ -47,6 +48,7 @@ type ChapterOverviewRecord = {
   sortOrder: number | null;
   status: string | null;
   updatedAt: Date;
+  content?: string | null;
 };
 
 type EpisodeOverviewRecord = {
@@ -226,12 +228,13 @@ export function registerGetEpisodeStatsHandler() {
         select: {
           status: true,
           wordCount: true,
+          content: true,
         },
       }) as ChapterStatsRecord[];
 
       let statsSource: WordCountStatsRecord[] = chapterRecords.map((record: ChapterStatsRecord): WordCountStatsRecord => ({
         status: (record.status ?? 'planned').toLowerCase(),
-        wordCount: record.wordCount ?? 0,
+        wordCount: resolveWordCount(record.wordCount, record.content),
       }));
 
       if (!hasMeaningfulWordData(statsSource)) {
@@ -334,6 +337,7 @@ export function registerGetDashboardSummaryHandler() {
             sortOrder: true,
             status: true,
             updatedAt: true,
+            content: true,
           },
           orderBy: [{ sortOrder: 'asc' }, { updatedAt: 'asc' }],
         }),
@@ -380,7 +384,7 @@ export function registerGetDashboardSummaryHandler() {
       const chapterSnapshots = (chapters as ChapterOverviewRecord[]).map((chapter: ChapterOverviewRecord, index: number): ChapterSnapshot => ({
         id: chapter.id,
         title: chapter.title,
-        wordCount: chapter.wordCount,
+        wordCount: resolveWordCount(chapter.wordCount, chapter.content),
         sortOrder: chapter.sortOrder ?? index,
         status: chapter.status,
         updatedAt: chapter.updatedAt,
@@ -451,30 +455,33 @@ async function aggregateChapterWordCounts(
     select: {
       updatedAt: true,
       wordCount: true,
+      content: true,
     },
   });
 
   const dailyWords = new Map<string, number>();
 
-  chapters.forEach((chapter: { updatedAt: Date; wordCount: number | null }) => {
+  chapters.forEach((chapter: { updatedAt: Date; wordCount: number | null; content?: string | null }) => {
     const key = formatDateISO(chapter.updatedAt);
     const current = dailyWords.get(key) ?? 0;
-    dailyWords.set(key, current + (chapter.wordCount ?? 0));
+    dailyWords.set(key, current + resolveWordCount(chapter.wordCount, chapter.content));
   });
 
   if (dailyWords.size === 0) {
-    const aggregate = await prisma.projectStructure.aggregate({
+    const fallbackChapters = await prisma.projectStructure.findMany({
       where: {
         projectId,
         type: 'chapter',
         isActive: true,
       },
-      _sum: {
+      select: {
+        updatedAt: true,
         wordCount: true,
+        content: true,
       },
     });
 
-    const total = aggregate._sum.wordCount ?? 0;
+    const total = fallbackChapters.reduce((sum: number, chapter) => sum + resolveWordCount(chapter.wordCount, chapter.content), 0);
     if (total > 0) {
       dailyWords.set(formatDateISO(getTodayStart()), total);
     }

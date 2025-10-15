@@ -9,6 +9,7 @@ import type { IpcMainEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { EpisodeService } from '../services/EpisodeService';
 import { prismaService } from '../services/PrismaService';
+import { calculateWordCount } from '../../shared/utils/text';
 import type {
   CreateEpisodeInput,
   UpdateEpisodeInput,
@@ -197,6 +198,22 @@ export function setupEpisodeIpcHandlers(): void {
 
       const filteredChapters = paginate(applySorting(applyFilters(chapters)));
 
+      // 🔥 Helper: content 기반 wordCount 재계산
+      const resolveWordCount = (explicit: number | null | undefined, content: string | null | undefined): number => {
+        if (explicit && explicit > 0) {
+          return explicit;
+        }
+
+        if (content) {
+          const normalized = content.trim();
+          if (normalized.length > 0) {
+            return calculateWordCount(normalized);
+          }
+        }
+
+        return 0;
+      };
+
       const episodes: Episode[] = filteredChapters.map((chapter, index) => {
         const normalized = normalizeStatus(chapter.status);
         const mappedStatus = statusToEpisodeStatus[normalized] ?? 'draft';
@@ -210,7 +227,7 @@ export function setupEpisodeIpcHandlers(): void {
           episodeNumber: episodeNumber + 1,
           title: chapter.title || `Chapter ${episodeNumber + 1}`,
           content: chapter.content ?? '',
-          wordCount: chapter.wordCount ?? 0,
+          wordCount: resolveWordCount(chapter.wordCount, chapter.content),
           targetWordCount: 5500,
           status: mappedStatus,
           act: mappedAct,

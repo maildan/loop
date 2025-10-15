@@ -2,6 +2,11 @@
 // 2025년 웹소설 시장 트렌드 및 장르별 특성 기반
 
 import { Logger } from '../logger';
+import {
+    analyzeNarrativeKeywords,
+    buildKeywordInsightPrompt,
+    type NarrativeKeywordInsight,
+} from './keywordSets';
 
 /**
  * 🔥 한국 웹소설 장르 타입
@@ -77,6 +82,8 @@ export interface SynopsisAnalysis {
     targetAudience: string; // 주 타겟 독자층
     recommendations: string[]; // 개선 제안
     genreConsistency: number; // 장르 일관성 (0-100)
+    narrativeInsights: NarrativeKeywordInsight[];
+    keywordGuidance: string;
 }
 
 /**
@@ -422,6 +429,8 @@ export class KoreanWebNovelAnalyzer {
         const genre = this.detectGenre(synopsis, title);
         const detectedCliches = this.detectCliches(synopsis, genre);
         const genreData = this.GENRE_DATABASE.find(g => g.genre === genre);
+        const narrativeInsights = analyzeNarrativeKeywords([synopsis, title]);
+        const keywordGuidance = buildKeywordInsightPrompt(narrativeInsights);
 
         // 누락된 필수 요소 체크
         const missingElements: string[] = [];
@@ -446,6 +455,11 @@ export class KoreanWebNovelAnalyzer {
         if (synopsis.length < 200) {
             recommendations.push('시놉시스를 200자 이상으로 확장하여 스토리를 더 명확히 전달하세요');
         }
+        narrativeInsights.forEach((insight: NarrativeKeywordInsight) => {
+            if (insight.coverageRate < 40) {
+                recommendations.push(`${insight.label} 묘사가 부족합니다. ${insight.guidance}`);
+            }
+        });
 
         return {
             genre,
@@ -454,7 +468,9 @@ export class KoreanWebNovelAnalyzer {
             keywordScore,
             targetAudience: genreData?.targetAudience || '미분류',
             recommendations,
-            genreConsistency
+            genreConsistency,
+            narrativeInsights,
+            keywordGuidance,
         };
     }
 

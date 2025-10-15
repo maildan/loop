@@ -20,7 +20,7 @@
     "build:cleanup": "rimraf dist/**/*.map dist/**/*.d.ts dist/**/*.js.map || true",
     "build:win": "pnpm build:prod && electron-builder --win --arch x64,arm64 --config.productName=Loop",
     "build:mac": "pnpm build:prod && electron-builder --mac --arch x64,arm64 --config.productName=Loop",
-    "start": "cross-env NODE_ENV=production electron .",
+    "start": "pnpm build &&cross-env NODE_ENV=production electron .",
     "start:prod": "cross-env NODE_ENV=production electron .",
     "test": "jest",
     "test:unit": "jest --testPathPattern=unit",
