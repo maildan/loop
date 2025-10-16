@@ -55,9 +55,9 @@ export const getDashboardTutorial = (): Tutorial => ({
         title: '🚀 Loop만의 특별한 기능',
         description:
           '• 웹소설 연재 전용 플랫폼\n' +
-          '• 실시간 타이핑 활동 분석\n' +
-          '• 회차별 정확한 통계 추적\n' +
-          '• 창작 패턴 자동 분석\n\n' +
+          '• 시놉시스 뷰로 작품의 일관성 증가\n' +
+          '• 내장된 AI로 분석과 대화를 한번에\n' +
+          '• Google Docs 연동으로 빠르고 유연한 작업 환경\n\n' +
           '이제 대시보드를 둘러봅시다!',
         side: 'top',
         align: 'center',
