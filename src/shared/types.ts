@@ -135,6 +135,9 @@ export interface ElectronAPI {
     listDocuments: () => Promise<IpcResponse<Array<{ id: string; name: string; webViewLink: string }>>>;
     createDocument: (title: string, content?: string) => Promise<IpcResponse<{ id: string; name: string; webViewLink: string }>>;
     updateDocument: (documentId: string, content: string) => Promise<IpcResponse<boolean>>;
+    
+    // 🆕 OAuth 성공 콜백 핸들러 (StaticServer 콜백 페이지용)
+    onOAuthSuccess?: (callback: () => void) => void;
   };
 
   // ⌨️ 키보드 API

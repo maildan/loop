@@ -33,9 +33,11 @@ export class TokenStorageService {
       }
 
       const key = this.keyName(service, account);
+      Logger.debug(this.componentName, `🔑 Keytar 저장 시작: key=${key}, account=${account}, hasTokens=${!!tokens.access_token}`);
+      
       await keytar.setPassword(key, account, JSON.stringify(tokens));
 
-      Logger.info(this.componentName, `✅ ${service} 토큰 keytar 저장 완료`);
+      Logger.info(this.componentName, `✅ ${service} 토큰 keytar 저장 완료 (key=${key})`);
       return true;
     } catch (error) {
       Logger.error(this.componentName, `❌ ${service} 토큰 저장 실패`, error);
@@ -46,19 +48,26 @@ export class TokenStorageService {
   async getTokens(service: 'google' | 'hancom', account = 'default'): Promise<OAuthTokens | null> {
     try {
       const key = this.keyName(service, account);
+      Logger.debug(this.componentName, `🔑 Keytar 조회 시작: key=${key}, account=${account}`);
+      
       const raw = await keytar.getPassword(key, account);
+      
       if (!raw) {
-        Logger.warn(this.componentName, `⚠️ ${service} 토큰이 없습니다`);
+        Logger.warn(this.componentName, `⚠️ ${service} 토큰이 없습니다 (key=${key})`);
         return null;
       }
+
+      Logger.debug(this.componentName, `✅ Keytar에서 raw 데이터 수신: length=${raw.length}`);
 
       const tokens: OAuthTokens = JSON.parse(raw);
+      Logger.debug(this.componentName, `✅ JSON 파싱 완료: hasAccess=${!!tokens.access_token}, hasRefresh=${!!tokens.refresh_token}, scopes=${tokens.scope}`);
+      
       if (tokens.expires_at && tokens.expires_at < Date.now()) {
-        Logger.warn(this.componentName, `⚠️ ${service} 토큰이 만료됨`);
+        Logger.warn(this.componentName, `⚠️ ${service} 토큰이 만료됨 (expiresAt=${new Date(tokens.expires_at).toISOString()})`);
         return null;
       }
 
-      Logger.info(this.componentName, `✅ ${service} 토큰 조회 완료`);
+      Logger.info(this.componentName, `✅ ${service} 토큰 조회 완료 (key=${key})`);
       return tokens;
     } catch (error) {
       Logger.error(this.componentName, `❌ ${service} 토큰 조회 실패`, error);

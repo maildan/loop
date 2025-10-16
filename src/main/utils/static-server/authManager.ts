@@ -29,12 +29,49 @@ export class OAuthManager {
 
         // Delegate token exchange or other side-effects to the ipc handler
         try {
-            const { handleCallbackDirect } = await import('../../handlers/oauthIpcHandlers');
-            if (typeof handleCallbackDirect === 'function') {
-                await handleCallbackDirect(code);
+            // 🔥 우선: GoogleOAuthService 사용 (신규, End User 토큰)
+            Logger.info('OAUTH_MANAGER', '🔥 Google OAuth 핸들러 import 시작');
+            const googleOAuthModule = await import('../../handlers/googleOAuthIpcHandlers');
+            const { handleGoogleOAuthCallbackDirect } = googleOAuthModule;
+            Logger.info('OAUTH_MANAGER', '✅ Google OAuth 핸들러 import 완료', { hasFn: typeof handleGoogleOAuthCallbackDirect });
+            
+            if (typeof handleGoogleOAuthCallbackDirect === 'function') {
+                Logger.info('OAUTH_MANAGER', '🔄 GoogleOAuthService 콜백 처리 시작', { code, state });
+                const result = await handleGoogleOAuthCallbackDirect(code, state);
+                Logger.info('OAUTH_MANAGER', '✅ GoogleOAuthService 콜백 처리 완료', { result });
+                
+                // 🔥 토큰 저장 성공 여부 검증
+                if (!result.success) {
+                    Logger.warn('OAUTH_MANAGER', '⚠️ GoogleOAuth 콜백 처리 실패', { error: result.error });
+                    // 에러 페이지 반환 (3초 후 app 포커스)
+                    const errorHtml = OAuthSuccessPage.generateErrorHtml(nonce, result.error || 'Authentication failed');
+                    return { html: errorHtml };
+                }
+                
+                Logger.info('OAUTH_MANAGER', '🔐 토큰 Keychain 저장 완료');
+            } else {
+                throw new Error('handleGoogleOAuthCallbackDirect is not a function');
             }
         } catch (e) {
-            Logger.error('OAUTH_MANAGER', 'Delegated callback handler failed', e);
+            Logger.error('OAUTH_MANAGER', '❌ GoogleOAuth callback failed', e);
+            // 🔥 폴백: OAuthService (구형)
+            try {
+                Logger.info('OAUTH_MANAGER', '🔥 Fallback: OAuthService import 시작');
+                const { handleCallbackDirect } = await import('../../handlers/oauthIpcHandlers');
+                if (typeof handleCallbackDirect === 'function') {
+                    Logger.info('OAUTH_MANAGER', '🔄 OAuthService fallback 콜백 처리');
+                    const fallbackResult = await handleCallbackDirect(code, state);
+                    if (!fallbackResult.success) {
+                        Logger.warn('OAUTH_MANAGER', '⚠️ OAuthService 콜백도 실패', { error: fallbackResult.error });
+                        const errorHtml = OAuthSuccessPage.generateErrorHtml(nonce, fallbackResult.error || 'Authentication failed');
+                        return { html: errorHtml };
+                    }
+                }
+            } catch (fallbackError) {
+                Logger.error('OAUTH_MANAGER', 'Both OAuth handlers failed', fallbackError);
+                const errorHtml = OAuthSuccessPage.generateErrorHtml(nonce, 'Both authentication methods failed');
+                return { html: errorHtml };
+            }
         }
 
         // Decide browser response based on state

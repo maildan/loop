@@ -310,13 +310,24 @@ export class OAuthSuccessPage {
        */
       function launchApp() {
         try {
+          // 1️⃣ IPC 신호 전송: renderer의 ProjectCreator에 토큰 재검증 요청
+          if (window.electronAPI?.onOAuthSuccess) {
+            window.electronAPI.onOAuthSuccess();
+            console.log('[OAuth Success] IPC signal sent to renderer');
+          }
+        } catch (e) {
+          console.warn('[OAuth Success] IPC signal failed:', e);
+        }
+        
+        try {
+          // 2️⃣ 커스텀 프로토콜로 앱 전환
           window.location.href = 'loop://oauth-success';
           console.log('[OAuth Success] App launch initiated via loop:// protocol');
         } catch (e) {
           console.warn('[OAuth Success] Protocol handler failed:', e);
         }
         
-        // Schedule window close after short delay
+        // 3️⃣ 짧은 지연 후 창 종료
         setTimeout(function() {
           try {
             window.close();
@@ -636,3 +647,4 @@ export class OAuthSuccessPage {
 </html>`;
     }
 }
+

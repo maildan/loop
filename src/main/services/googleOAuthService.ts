@@ -130,7 +130,9 @@ export class GoogleOAuthService {
 
       Logger.info(this.componentName, '✅ OAuth 인증 완료', {
         userEmail: userInfo.email,
-        scopes: tokens.scope
+        scopes: tokens.scope,
+        hasAccessToken: !!tokens.access_token,
+        hasRefreshToken: !!tokens.refresh_token,
       });
 
       return createSuccess(result);
@@ -142,10 +144,12 @@ export class GoogleOAuthService {
   }
 
   /**
-   * 🔥 현재 연결 상태 확인
+   * 🔥 현재 연결 상태 확인 (End User 토큰 포함) - 재시도 로직 포함
    */
-  async getConnectionStatus(): Promise<Result<boolean>> {
+  async getConnectionStatus(): Promise<Result<{ isConnected: boolean; email?: string }>> {
     try {
+      Logger.debug(this.componentName, '🔍 getConnectionStatus() 호출됨');
+      
       // 1) ENV 우선 사용 (있으면 부트스트랩)
       const envAccess = process.env.GOOGLE_ACCESS_TOKEN;
       const envRefresh = process.env.GOOGLE_REFRESH_TOKEN;
@@ -163,18 +167,44 @@ export class GoogleOAuthService {
       }
 
       const tokens = await tokenStorage.getTokens('google');
+      Logger.debug(this.componentName, `📦 tokenStorage.getTokens() 반환: ${tokens ? 'tokens exist' : 'null'}`);
 
       if (!tokens) {
-        return createSuccess(false);
+        Logger.warn(this.componentName, '❌ tokenStorage에서 토큰을 찾지 못함');
+        return createSuccess({ isConnected: false });
       }
 
-      // 토큰 유효성 검사
-      const isValid = await this.validateTokens(tokens);
-      return createSuccess(isValid);
+      Logger.debug(this.componentName, `🔐 토큰 정보: hasAccess=${!!tokens.access_token}, hasRefresh=${!!tokens.refresh_token}`);
+
+      // 🔥 토큰 유효성 검사 + 사용자 정보 조회 (재시도 로직 포함)
+      Logger.info(this.componentName, '🔄 validateTokensWithRetry 시작...');
+      const isValid = await this.validateTokensWithRetry(tokens, 2);
+      Logger.debug(this.componentName, `🔍 validateTokensWithRetry() 결과: isValid=${isValid}`);
+      
+      if (!isValid) {
+        Logger.warn(this.componentName, '❌ 토큰 유효성 검사 실패 (모든 재시도 소진)');
+        return createSuccess({ isConnected: false });
+      }
+
+      // 🔥 사용자 정보 조회 (이메일)
+      let email: string | undefined;
+      try {
+        const userInfo = await this.getUserInfo(tokens.access_token);
+        email = userInfo?.email;
+        Logger.debug(this.componentName, `✅ 사용자 정보 조회 성공: ${email}`);
+      } catch (e) {
+        Logger.warn(this.componentName, '사용자 정보 조회 실패 (하지만 토큰은 유효함)', e);
+      }
+
+      Logger.info(this.componentName, '✅ 연결 상태 확인 완료', { isConnected: true, email });
+      return createSuccess({ isConnected: true, email });
 
     } catch (error) {
-      Logger.error(this.componentName, '❌ 연결 상태 확인 실패', error);
-      return createSuccess(false);
+      Logger.error(this.componentName, '❌ 연결 상태 확인 실패 (예외 발생)', {
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorType: error?.constructor?.name
+      });
+      return createSuccess({ isConnected: false });
     }
   }
 
@@ -435,29 +465,123 @@ export class GoogleOAuthService {
     }
   }
 
+  /**
+   * 🔥 Token validation with detailed error logging
+   */
   private async validateTokens(tokens: OAuthTokens): Promise<boolean> {
     try {
+      Logger.debug(this.componentName, `🔐 validateTokens() 시작: hasAccess=${!!tokens.access_token}`);
+      
       // 만료 시간 체크
       if (tokens.expires_at && tokens.expires_at < Date.now()) {
+        Logger.warn(this.componentName, '⏰ 토큰 만료됨 - 갱신 시도', {
+          expiresAt: new Date(tokens.expires_at).toISOString(),
+          now: new Date().toISOString()
+        });
         // 토큰 갱신 시도
         const refreshed = await tokenStorage.refreshTokens('google');
         if (!refreshed) {
           // Refresh failed -> must re-authenticate
-          Logger.warn(this.componentName, 'Token refresh failed, re-authentication required');
+          Logger.warn(this.componentName, '❌ Token refresh failed, re-authentication required');
           return false;
         }
+        Logger.debug(this.componentName, '✅ 토큰 갱신 완료');
         // continue with refreshed tokens
         tokens = refreshed;
       }
 
-      // 토큰으로 사용자 정보 조회 테스트
+      // 토큰으로 사용자 정보 조회 테스트 (재시도 로직 포함)
+      Logger.debug(this.componentName, `🔍 getUserInfo() 호출 직전`, {
+        tokenLength: tokens.access_token.length,
+        tokenPrefix: tokens.access_token.substring(0, 10) + '...'
+      });
+      
       const userInfo = await this.getUserInfo(tokens.access_token);
-      return !!userInfo;
+      
+      Logger.debug(this.componentName, `🔍 getUserInfo() 호출 성공`, {
+        hasUserInfo: !!userInfo,
+        email: userInfo?.email,
+        name: userInfo?.name
+      });
+      
+      const isValid = !!userInfo;
+      Logger.info(this.componentName, `✅ validateTokens() 완료`, {
+        isValid,
+        userEmail: userInfo?.email || 'null'
+      });
+      return isValid;
 
     } catch (error) {
-      Logger.error(this.componentName, 'Token validation failed', error);
+      Logger.error(this.componentName, '❌ validateTokens 실패', {
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorType: error?.constructor?.name,
+        statusCode: (error as any)?.response?.status,
+        responseData: (error as any)?.response?.data,
+        hasTokens: !!tokens.access_token
+      });
       return false;
     }
+  }
+
+  /**
+   * 🔥 Token validation with automatic retry on failure
+   */
+  private async validateTokensWithRetry(
+    tokens: OAuthTokens,
+    maxRetries = 2
+  ): Promise<boolean> {
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        Logger.debug(this.componentName, `🔄 validateTokens 시도 ${attempt + 1}/${maxRetries + 1}`, {
+          hasAccess: !!tokens.access_token
+        });
+        
+        // 만료 시간 체크
+        if (tokens.expires_at && tokens.expires_at < Date.now()) {
+          Logger.warn(this.componentName, `⏰ [시도 ${attempt + 1}] 토큰 만료됨 - 갱신 시도`);
+          const refreshed = await tokenStorage.refreshTokens('google');
+          if (!refreshed) {
+            Logger.warn(this.componentName, `❌ [시도 ${attempt + 1}] Token refresh failed`);
+            if (attempt < maxRetries) {
+              const delay = Math.pow(3, attempt) * 100;
+              Logger.debug(this.componentName, `⏳ ${delay}ms 후 재시도...`);
+              await new Promise(r => setTimeout(r, delay));
+              continue;
+            }
+            return false;
+          }
+          tokens = refreshed;
+        }
+
+        Logger.debug(this.componentName, `🔍 [시도 ${attempt + 1}] getUserInfo() 호출 중...`);
+        const userInfo = await this.getUserInfo(tokens.access_token);
+        
+        Logger.info(this.componentName, `✅ validateTokens 성공 (시도 ${attempt + 1})`, {
+          email: userInfo?.email,
+          attempt: attempt + 1
+        });
+        
+        return !!userInfo;
+        
+      } catch (error) {
+        Logger.warn(this.componentName, `⚠️ validateTokens 실패 (시도 ${attempt + 1})`, {
+          errorMessage: error instanceof Error ? error.message : String(error),
+          statusCode: (error as any)?.response?.status,
+          attempt: attempt + 1,
+          maxRetries
+        });
+        
+        if (attempt < maxRetries) {
+          // exponential backoff: 100ms, 300ms, 900ms
+          const delay = Math.pow(3, attempt) * 100;
+          Logger.debug(this.componentName, `⏳ ${delay}ms 후 재시도합니다...`);
+          await new Promise(r => setTimeout(r, delay));
+        }
+      }
+    }
+    
+    Logger.error(this.componentName, `❌ validateTokens 최종 실패 (모든 ${maxRetries + 1}회 재시도 소진)`);
+    return false;
   }
 
   /**

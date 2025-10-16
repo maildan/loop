@@ -4,6 +4,7 @@ import { readFile } from 'fs/promises';
 import * as path from 'path';
 import * as crypto from 'crypto';
 import { safePathJoin } from '../shared/utils/pathSecurity';
+import { Logger } from '../shared/logger';
 import {
   IPC_CHANNELS,
   IpcResponse,
@@ -19,7 +20,6 @@ import {
 } from '../shared/types';
 import type { Theme } from '../shared/types/theme';
 import { isValidTheme } from '../shared/types/theme';
-import { Logger } from '../shared/logger';
 import type {
   SettingsSchema,
   SettingsResult,
@@ -149,7 +149,7 @@ const electronAPI: ElectronAPI = {
     showTypingGoal: (progress: number) => ipcRenderer.invoke('notifications:show-typing-goal', progress),
   },
 
-  // � Google OAuth API
+  // 🔥 Google OAuth API
   googleOAuth: {
     startAuth: () => ipcRenderer.invoke('google-oauth:start-auth'),
     handleCallback: (code: string, state?: string) => ipcRenderer.invoke('google-oauth:handle-callback', code, state),
@@ -158,7 +158,16 @@ const electronAPI: ElectronAPI = {
     listDocuments: () => ipcRenderer.invoke('google-docs:list-documents'),
     createDocument: (title: string, content?: string) => ipcRenderer.invoke('google-docs:create-document', title, content),
     updateDocument: (documentId: string, content: string) => ipcRenderer.invoke('google-docs:update-document', documentId, content),
+    
+    // 🆕 OAuth 성공 콜백 (StaticServer 콜백 페이지 → renderer)
+    onOAuthSuccess: () => {
+      Logger.debug('PRELOAD', '🔥 OAuth 성공 신호 수신, renderer로 발송');
+      // renderer에 oauth-success 이벤트 발생
+      ipcRenderer.send('oauth-success');
+    },
   },
+
+  // 📊 Synopsis Statistics API
 
   // �📊 Synopsis Statistics API
   'synopsis-stats:get-publications': (projectId: string) => ipcRenderer.invoke('synopsis-stats:get-publications', projectId),
@@ -536,10 +545,51 @@ try {
 }
 
 // ============================================================
+// OAuth 성공 콜백 전역 핸들러
+// ============================================================
+// StaticServer의 콜백 페이지에서 window.electronAPI?.onOAuthSuccess?.() 호출 가능
+let oauthSuccessCallbacks: (() => void)[] = [];
+
+contextBridge.exposeInMainWorld('electronAPI', {
+  ...electronAPIFinal,
+  // 🔥 Method 1: IPC 신호 즉시 발송 (OAuth 콜백 페이지용)
+  onOAuthSuccess: () => {
+    Logger.debug('PRELOAD', '🔥 OAuth 성공 신호 수신, renderer로 IPC 발송');
+    // renderer에 oauth-success 이벤트 발생
+    ipcRenderer.send('oauth-success');
+    
+    // 등록된 콜백도 실행 (있으면)
+    oauthSuccessCallbacks.forEach(cb => {
+      try {
+        cb();
+      } catch (e) {
+        Logger.error('PRELOAD', 'OAuth success callback failed', e);
+      }
+    });
+  },
+  // 🔥 Method 2: 콜백 등록 (다른 용도에서 필요하면 사용)
+  registerOAuthSuccessCallback: (callback: () => void) => {
+    oauthSuccessCallbacks.push(callback);
+  },
+});
+
+// 🎯 Renderer 프로세스에서 호출할 수 있는 전역 함수
+// StaticServer 콜백 페이지에서: window.electronAPI?.triggerOAuthSuccess?.()
+(globalThis as any).__triggerOAuthSuccess = () => {
+  oauthSuccessCallbacks.forEach(cb => {
+    try {
+      cb();
+    } catch (e) {
+      Logger.warn('oauth-callback', 'Error in OAuth success callback', e);
+    }
+  });
+};
+
+// ============================================================
 // Expose API to Renderer via contextBridge
 // ============================================================
 
-contextBridge.exposeInMainWorld('electronAPI', electronAPIFinal);
+// ✅ 이미 위에서 exposeInMainWorld('electronAPI', ...) 호출함
 
 // 🔥 클립보드 API 추가 - 복사/붙여넣기 활성화
 contextBridge.exposeInMainWorld('clipboard', {

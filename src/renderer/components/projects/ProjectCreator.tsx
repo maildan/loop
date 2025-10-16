@@ -201,26 +201,27 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
 
   if (!isOpen) return null;
 
-  // 🔥 Google Docs 연동 처리 (강화된 인증 상태 확인)
+  // 🔥 Google Docs 연동 처리 - End User 토큰 기반 (보안 강화)
+  // googleOAuthService를 통해 사용자 토큰만 사용 (.env 토큰 미사용)
   const handleGoogleDocsIntegration = async () => {
     try {
-      Logger.info('PROJECT_CREATOR', 'Google Docs 연동 시작');
+      Logger.info('PROJECT_CREATOR', '🔥 Google Docs 연동 시작 (End User 토큰 사용)');
 
       if (!window.electronAPI) {
         alert('데스크톱 앱에서만 사용 가능합니다');
         return;
       }
 
-      // 🔥 먼저 현재 인증 상태 확인 (개선된 getAuthStatus 활용)
+      // 🔥 End User 토큰 확인 (googleOAuthService 사용)
       Logger.info('PROJECT_CREATOR', '현재 인증 상태 확인 중...');
-      const authStatus = await window.electronAPI?.oauth?.getAuthStatus();
+      const connectionStatus = await window.electronAPI?.googleOAuth?.checkConnection();
 
-      Logger.info('PROJECT_CREATOR', '인증 상태 결과:', authStatus);
+      Logger.info('PROJECT_CREATOR', '📊 Google OAuth 연결 상태:', connectionStatus);
 
-      if (authStatus && authStatus.success && authStatus.data && authStatus.data.isAuthenticated) {
+      if (connectionStatus?.success && connectionStatus?.data?.isConnected) {
         // 🔥 이미 인증된 경우 바로 문서 목록 표시
         Logger.info('PROJECT_CREATOR', '✅ 이미 인증됨 - 문서 목록 표시', {
-          userEmail: authStatus.data.userEmail
+          userEmail: connectionStatus.data.email
         });
         await showGoogleDocsList();
         return;
@@ -229,22 +230,21 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       // 🔥 인증이 필요한 경우 OAuth 브라우저 인증 시작
       Logger.info('PROJECT_CREATOR', '❌ 인증 필요 - OAuth 시작');
       try {
-        // optional login hint from localStorage to suggest account
-        const preferred = typeof window !== 'undefined' ? localStorage.getItem('preferredGoogleEmail') : null;
-        const authResult = await window.electronAPI?.oauth?.startGoogleAuth(preferred || undefined);
-        Logger.info('PROJECT_CREATOR', 'OAuth 시작 결과:', authResult);
+        const authResult = await window.electronAPI?.googleOAuth?.startAuth();
+        Logger.info('PROJECT_CREATOR', '🔐 OAuth 시작 결과:', authResult);
 
-        if (authResult && authResult.success) {
+        if (authResult?.success) {
           alert('브라우저에서 Google 계정으로 로그인해주세요.\n로그인 완료 후 자동으로 문서 목록이 표시됩니다.');
+          // OAuth 완료 후 자동으로 showGoogleDocsList 호출됨 (이벤트 리스너)
         } else {
           throw new Error(authResult?.error || 'OAuth 시작 실패');
         }
       } catch (authError) {
-        Logger.error('PROJECT_CREATOR', 'OAuth 시작 실패:', authError);
+        Logger.error('PROJECT_CREATOR', '❌ OAuth 시작 실패:', authError);
         alert(`Google 인증 시작 실패: ${authError instanceof Error ? authError.message : '알 수 없는 오류'}`);
       }
     } catch (error) {
-      Logger.error('PROJECT_CREATOR', 'Google Docs 연동 실패:', error);
+      Logger.error('PROJECT_CREATOR', '❌ Google Docs 연동 실패:', error);
       alert(`Google Docs 연동 실패: ${error instanceof Error ? error.message : '알 수 없는 오류'}`);
     }
   };
@@ -299,43 +299,59 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
 
       // 🔥 문서 목록 조회 전 인증 상태 재확인
       const authCheck = await window.electronAPI?.googleOAuth?.checkConnection();
-      if (!authCheck || !authCheck.success || !authCheck.data?.isConnected) {
-        Logger.warn('PROJECT_CREATOR', '인증 상태 확인 실패:', authCheck);
+      
+      // 🔥 응답 구조 상세 로깅
+      Logger.debug('PROJECT_CREATOR', '📊 checkConnection() 응답 상세 로깅', {
+        authCheckExists: !!authCheck,
+        success: authCheck?.success,
+        successType: typeof authCheck?.success,
+        data: authCheck?.data,
+        dataType: typeof authCheck?.data,
+        isConnected: authCheck?.data?.isConnected,
+        isConnectedType: typeof authCheck?.data?.isConnected,
+        email: authCheck?.data?.email,
+        fullResponse: JSON.stringify(authCheck, null, 2)
+      });
+      
+      // ✅ 고정: 이중 래핑 제거 후 올바른 조건문
+      if (authCheck?.success && authCheck?.data?.isConnected) {
+        Logger.info('PROJECT_CREATOR', '✅ 인증 확인됨, 문서 목록 조회 중...', {
+          email: authCheck.data.email
+        });
+
+        const docsResult = await window.electronAPI?.googleOAuth?.listDocuments();
+
+        Logger.info('PROJECT_CREATOR', 'Google Docs 목록 조회 결과:', docsResult);
+
+        if (docsResult && docsResult.success && docsResult.data) {
+          const docs = docsResult.data;
+
+          Logger.info('PROJECT_CREATOR', `✅ ${docs.length}개 문서 발견`);
+
+          if (docs.length === 0) {
+            alert('Google Docs에서 문서를 찾을 수 없습니다.\n\nGoogle Drive에 문서를 만들고 다시 시도해주세요.');
+            return;
+          }
+
+          // 🔥 React 모달로 문서 선택 UI 표시
+          setGoogleDocs(docs);
+          setShowGoogleDocsModal(true);
+        } else {
+          Logger.error('PROJECT_CREATOR', 'Google Docs 목록 조회 실패:', docsResult);
+
+          // 401 오류 등 인증 관련 오류인 경우 재인증 안내
+          const errorMsg = docsResult?.error || '문서 목록을 가져올 수 없습니다';
+          if (errorMsg.includes('인증') || errorMsg.includes('401')) {
+            alert('Google 인증이 만료되었습니다. 다시 로그인해주세요.');
+          } else {
+            alert(`문서 목록 조회 실패: ${errorMsg}`);
+          }
+        }
+      } else {
+        Logger.warn('PROJECT_CREATOR', '❌ 인증 상태 확인 실패:', authCheck);
+        Logger.info('PROJECT_CREATOR', '❌ 인증 필요 - OAuth 시작');
         alert('Google 인증이 만료되었습니다. 다시 로그인해주세요.');
         return;
-      }
-
-      Logger.info('PROJECT_CREATOR', '✅ 인증 확인됨, 문서 목록 조회 중...', {
-        email: authCheck.data.email
-      });
-
-      const docsResult = await window.electronAPI?.googleOAuth?.listDocuments();
-
-      Logger.info('PROJECT_CREATOR', 'Google Docs 목록 조회 결과:', docsResult);
-
-      if (docsResult && docsResult.success && docsResult.data) {
-        const docs = docsResult.data;
-
-        Logger.info('PROJECT_CREATOR', `✅ ${docs.length}개 문서 발견`);
-
-        if (docs.length === 0) {
-          alert('Google Docs에서 문서를 찾을 수 없습니다.\n\nGoogle Drive에 문서를 만들고 다시 시도해주세요.');
-          return;
-        }
-
-        // 🔥 React 모달로 문서 선택 UI 표시
-        setGoogleDocs(docs);
-        setShowGoogleDocsModal(true);
-      } else {
-        Logger.error('PROJECT_CREATOR', 'Google Docs 목록 조회 실패:', docsResult);
-
-        // 401 오류 등 인증 관련 오류인 경우 재인증 안내
-        const errorMsg = docsResult?.error || '문서 목록을 가져올 수 없습니다';
-        if (errorMsg.includes('인증') || errorMsg.includes('401')) {
-          alert('Google 인증이 만료되었습니다. 다시 로그인해주세요.');
-        } else {
-          alert(`문서 목록 조회 실패: ${errorMsg}`);
-        }
       }
     } catch (error) {
       Logger.error('PROJECT_CREATOR', 'Google Docs 목록 조회 중 예외 발생:', error);

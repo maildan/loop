@@ -149,7 +149,19 @@ export function AuthProvider({ children, initialAuth }: { children: React.ReactN
                 loadAuthStatus();
             };
             window.electronAPI.on('auth-status-changed', handler);
-            window.electronAPI.on('oauth-success', handler);
+            
+            // 🔥 OAuth 성공 이벤트 - 강화된 핸들러 (즉시 재검증)
+            const oauthSuccessHandler = (payload?: any) => {
+                Logger.info('AUTH_CONTEXT', '🔥 oauth-success 이벤트 수신 - 인증 상태 즉시 재검증', payload);
+                
+                // 토큰 저장 완료 대기 후 인증 상태 재로드
+                setTimeout(() => {
+                    Logger.debug('AUTH_CONTEXT', '📊 500ms 대기 후 loadAuthStatus() 호출');
+                    loadAuthStatus();
+                }, 500);
+            };
+            window.electronAPI.on('oauth-success', oauthSuccessHandler);
+            
             const loginRequiredHandler = () => {
                 Logger.info('AUTH_CONTEXT', 'oauth:login-required received - clearing auth and notifying user');
                 clearAuth();
@@ -164,7 +176,7 @@ export function AuthProvider({ children, initialAuth }: { children: React.ReactN
             window.electronAPI.on('oauth:login-required', loginRequiredHandler);
             return () => {
                 window.electronAPI?.removeListener('auth-status-changed', handler);
-                window.electronAPI?.removeListener('oauth-success', handler);
+                window.electronAPI?.removeListener('oauth-success', oauthSuccessHandler);
                 window.electronAPI?.removeListener('oauth:login-required', loginRequiredHandler);
             };
         }

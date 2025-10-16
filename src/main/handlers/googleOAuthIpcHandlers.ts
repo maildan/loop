@@ -29,7 +29,14 @@ export function setupGoogleOAuthIpcHandlers(): void {
             Logger.error(componentName, '❌ Google OAuth 인증 시작 실패', result.error);
           }
 
-          return result;
+          // startAuthentication()도 Result를 반환하므로 data만 추출
+          if (result.success && result.data) {
+            return result.data;
+          }
+          if (!result.success) {
+            throw new Error(result.error || '인증 시작 실패');
+          }
+          throw new Error('인증 시작 실패');
         },
         componentName,
         'Start Google OAuth authentication'
@@ -78,7 +85,18 @@ export function setupGoogleOAuthIpcHandlers(): void {
         async () => {
           Logger.debug(componentName, '🔍 Google OAuth 연결 상태 확인');
           const result = await googleOAuthService.getConnectionStatus();
-          return result;
+          // 주의: getConnectionStatus()는 이미 Result 객체를 반환함
+          // 따라서 래퍼가 이중 래핑하지 않도록 data 필드만 추출해서 반환
+          if (result.success && result.data) {
+            return {
+              isConnected: result.data.isConnected,
+              email: result.data.email,
+            };
+          }
+          if (!result.success) {
+            throw new Error(result.error || '연결 상태 확인 실패');
+          }
+          throw new Error('연결 상태 확인 실패');
         },
         componentName,
         'Check Google OAuth connection status'
@@ -142,7 +160,15 @@ export function setupGoogleOAuthIpcHandlers(): void {
         async () => {
           Logger.info(componentName, '📚 Google Docs 문서 목록 조회');
           const result = await googleOAuthService.listDocuments();
-          return result;
+          // listDocuments()는 이미 Result 객체를 반환하므로
+          // 래퍼가 이중 래핑하지 않도록 data만 추출해서 반환
+          if (result.success && result.data) {
+            return result.data;  // 배열을 직접 반환
+          }
+          if (!result.success) {
+            throw new Error(result.error || '문서 목록 조회 실패');
+          }
+          throw new Error('문서 목록 조회 실패');
         },
         componentName,
         'List Google Docs documents'
@@ -163,7 +189,14 @@ export function setupGoogleOAuthIpcHandlers(): void {
             Logger.error(componentName, '❌ Google OAuth 연결 해제 실패', result.error);
           }
 
-          return result;
+          // disconnect()도 Result를 반환하므로 data만 추출 (boolean 성공 여부)
+          if (result.success && result.data !== undefined) {
+            return result.data;
+          }
+          if (!result.success) {
+            throw new Error(result.error || '연결 해제 실패');
+          }
+          return true;  // 성공
         },
         componentName,
         'Disconnect Google OAuth'
@@ -175,5 +208,20 @@ export function setupGoogleOAuthIpcHandlers(): void {
   } catch (error) {
     Logger.error(componentName, '❌ Google OAuth IPC 핸들러 설정 실패', error);
     throw error;
+  }
+}
+
+/**
+ * 🔥 Directly handle callback from StaticServer (OAuth 콜백 → 토큰 저장)
+ */
+export async function handleGoogleOAuthCallbackDirect(code: string, state?: string | null): Promise<any> {
+  try {
+    Logger.debug(componentName, '🔄 Google OAuth 콜백 처리 (StaticServer에서 호출)');
+    const result = await googleOAuthService.handleCallback(code, state || '');
+    Logger.debug(componentName, 'handleGoogleOAuthCallbackDirect result', { success: result.success });
+    return result;
+  } catch (error) {
+    Logger.error(componentName, 'Direct handleGoogleOAuthCallback failed', error);
+    return { success: false, error: 'Google OAuth callback handling failed' };
   }
 }
