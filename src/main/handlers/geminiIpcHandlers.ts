@@ -10,6 +10,7 @@ import { Logger } from '../../shared/logger';
 import { prismaService } from '../services/PrismaService';
 import { getGeminiClient } from '../../shared/ai/geminiClient';
 import { analyzeNarrativeKeywords } from '../../shared/narrative/keywordSets';
+import type { GeminiChatRole, GeminiChatMessageDTO, GeminiChatSessionDTO } from '../../shared/types';
 
 /**
  * 🔥 프로젝트 컨텍스트 인터페이스
@@ -34,20 +35,96 @@ interface ProjectContext {
     plotSuggestions?: string[];
     narrativeKeywords?: string[];
   };
+  recentMessages?: Array<{
+    role: GeminiChatRole;
+    content: string;
+    createdAt: Date;
+  }>;
 }
 
 /**
  * 🔥 Gemini 메시지 전송 파라미터
  */
+interface GeminiHistoryEntry {
+  id: string;
+  role: GeminiChatRole;
+  content: string;
+}
+
 interface GeminiMessageParams {
   projectId: string;
+  sessionId?: string;
   message: string;
   systemPrompt: string;
-  history: Array<{
-    role: 'user' | 'assistant' | 'system';
-    content: string;
-  }>;
+  history: GeminiHistoryEntry[];
 }
+
+interface GeminiHistoryRequest {
+  projectId: string;
+  sessionId?: string;
+  limit?: number;
+}
+
+async function ensureGeminiSession(prisma: any, projectId: string, sessionId?: string) {
+  if (sessionId) {
+    const existing = await prisma.geminiChatSession.findFirst({
+      where: {
+        id: sessionId,
+        projectId,
+      },
+    });
+
+    if (existing) {
+      return existing;
+    }
+  }
+
+  const latest = await prisma.geminiChatSession.findFirst({
+    where: { projectId },
+    orderBy: { lastInteraction: 'desc' },
+  });
+
+  if (latest) {
+    return latest;
+  }
+
+  return prisma.geminiChatSession.create({
+    data: {
+      projectId,
+      title: '기본 대화',
+    },
+  });
+}
+
+function mapSessionToDTO(session: any): GeminiChatSessionDTO {
+  return {
+    id: session.id,
+    projectId: session.projectId,
+    title: session.title,
+    summary: session.summary,
+    metadata: session.metadata,
+    lastInteraction: session.lastInteraction,
+    createdAt: session.createdAt,
+    updatedAt: session.updatedAt,
+  };
+}
+
+function mapMessageToDTO(message: any, projectId: string): GeminiChatMessageDTO {
+  return {
+    id: message.id,
+    sessionId: message.sessionId,
+    projectId,
+    role: message.role,
+    content: message.content,
+    isStreaming: message.isStreaming ?? undefined,
+    tokenUsage: message.tokenUsage ?? undefined,
+    metadata: message.metadata ?? undefined,
+    createdAt: message.createdAt,
+    updatedAt: message.updatedAt,
+  };
+}
+
+const toGeminiRequestRole = (role: GeminiChatRole): 'user' | 'model' => (role === 'assistant' ? 'model' : 'user');
 
 /**
  * Gemini IPC 핸들러 설정
@@ -189,6 +266,29 @@ export function setupGeminiIpcHandlers(): void {
         narrativeKeywords.push(`성격: ${personalityInsights.matchedKeywords.slice(0, 3).join(', ')}`);
       }
 
+      const recentMessageRecords = await prisma.geminiChatMessage.findMany({
+        where: {
+          session: {
+            projectId,
+          },
+        },
+        orderBy: { createdAt: 'desc' },
+        take: 6,
+        select: {
+          role: true,
+          content: true,
+          createdAt: true,
+        },
+      });
+
+      const recentMessages = recentMessageRecords
+        .reverse()
+        .map((message: { role: string; content: string; createdAt: Date }) => ({
+          role: message.role as GeminiChatRole,
+          content: message.content,
+          createdAt: message.createdAt,
+        }));
+
       const context = {
         projectTitle: project.title,
         totalEpisodes: totalChapters,
@@ -203,12 +303,14 @@ export function setupGeminiIpcHandlers(): void {
           ...plotSuggestions.map(p => `플롯 제안: ${p}`),
           ...narrativeKeywords,
         ],
+        recentMessages,
       };
 
       Logger.info('GEMINI_IPC', 'Project context retrieved', {
         projectId,
         characterCount: characters.length,
         wordCount: totalWords,
+        recentMessages: recentMessages.length,
       });
 
       return { success: true, data: context };
@@ -219,56 +321,222 @@ export function setupGeminiIpcHandlers(): void {
     }
   });
 
-  // 🔥 Gemini에게 메시지 전송 (스트리밍)
-  ipcMain.handle('gemini:send-message', async (event: IpcMainEvent, params: GeminiMessageParams) => {
+  ipcMain.handle('gemini:get-chat-history', async (_event: IpcMainEvent, params: GeminiHistoryRequest) => {
     try {
-      Logger.debug('GEMINI_IPC', 'Sending message to Gemini', {
-        projectId: params.projectId,
-        messageLength: params.message.length,
+      if (!params?.projectId) {
+        throw new Error('projectId가 필요합니다.');
+      }
+
+      const prisma = await prismaService.getClient();
+      const session = await ensureGeminiSession(prisma, params.projectId, params.sessionId);
+      const limit = Math.min(Math.max(params.limit ?? 200, 1), 500);
+
+      const messages = await prisma.geminiChatMessage.findMany({
+        where: { sessionId: session.id },
+        orderBy: { createdAt: 'asc' },
+        take: limit,
       });
+
+      return {
+        success: true,
+        data: {
+          session: mapSessionToDTO(session),
+          messages: messages.map((message: any) => mapMessageToDTO(message, session.projectId)),
+        },
+      };
+    } catch (error) {
+      Logger.error('GEMINI_IPC', 'Failed to load chat history', {
+        error,
+        projectId: params?.projectId,
+        sessionId: params?.sessionId,
+      });
+
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      };
+    }
+  });
+
+  //  스트리밍 응답 (웹컨텐츠를 통해 청크 전송)
+  ipcMain.handle('gemini:send-message', async (event: IpcMainEvent, params: GeminiMessageParams) => {
+    let prisma: any | null = null;
+    let session: any | null = null;
+    let assistantMessageId: string | null = null;
+    const trimmedMessage = params.message?.trim();
+
+    try {
+      if (!trimmedMessage) {
+        throw new Error('메시지를 입력해주세요.');
+      }
+
+      Logger.debug('GEMINI_IPC', 'Sending message to Gemini (streaming)', {
+        projectId: params.projectId,
+        messageLength: trimmedMessage.length,
+      });
+
+      prisma = await prismaService.getClient();
+      session = await ensureGeminiSession(prisma, params.projectId, params.sessionId);
+
+      await prisma.geminiChatSession.update({
+        where: { id: session.id },
+        data: { lastInteraction: new Date() },
+      }).catch(() => undefined);
+
+      await prisma.geminiChatMessage.create({
+        data: {
+          sessionId: session.id,
+          role: 'user',
+          content: trimmedMessage,
+        },
+      });
+
+      const assistantMessage = await prisma.geminiChatMessage.create({
+        data: {
+          sessionId: session.id,
+          role: 'assistant',
+          content: '',
+          isStreaming: true,
+        },
+      });
+
+      assistantMessageId = assistantMessage.id;
 
       const geminiClient = getGeminiClient();
+      const model = geminiClient.getModel();
 
-      // 대화 히스토리 구성
-      let fullPrompt = `${params.systemPrompt}\n\n`;
-      
-      // 히스토리 추가 (최근 5턴만)
-      const recentHistory = params.history.slice(-10); // 최대 10개 메시지 (5턴)
-      recentHistory.forEach(msg => {
-        if (msg.role === 'user') {
-          fullPrompt += `사용자: ${msg.content}\n\n`;
-        } else if (msg.role === 'assistant') {
-          fullPrompt += `어시스턴트: ${msg.content}\n\n`;
+      if (!model) {
+        throw new Error('Gemini model not initialized');
+      }
+
+      const sanitizedHistory = (params.history ?? []).filter((item) => item.role !== 'system');
+      const contents = sanitizedHistory.map((msg) => ({
+        role: toGeminiRequestRole(msg.role),
+        parts: [{ text: msg.content }],
+      }));
+
+      contents.push({
+        role: 'user',
+        parts: [{ text: trimmedMessage }],
+      });
+
+      let accumulatedText = '';
+      let lastPersistAt = Date.now();
+
+      const streamResult = await model.generateContentStream({
+        contents,
+        systemInstruction: params.systemPrompt,
+        generationConfig: {
+          maxOutputTokens: 4082,
+          temperature: 0.7,
+        },
+      });
+
+      for await (const chunk of streamResult.stream) {
+        const chunkText = chunk.text();
+        if (!chunkText) {
+          continue;
         }
+
+        accumulatedText += chunkText;
+
+        event.sender.send('gemini:stream-chunk', {
+          projectId: params.projectId,
+          sessionId: session.id,
+          messageId: assistantMessageId,
+          chunk: chunkText,
+          accumulated: accumulatedText,
+        });
+
+        const now = Date.now();
+        if (now - lastPersistAt >= 400) {
+          await prisma.geminiChatMessage.update({
+            where: { id: assistantMessageId },
+            data: {
+              content: accumulatedText,
+              updatedAt: new Date(),
+            },
+          }).catch(() => undefined);
+
+          lastPersistAt = now;
+        }
+      }
+
+      let finalResponse: any = null;
+      if (streamResult && 'response' in streamResult && typeof (streamResult as { response?: Promise<unknown> }).response?.then === 'function') {
+        finalResponse = await (streamResult as { response?: Promise<any> }).response?.catch(() => null);
+      }
+
+      const tokenUsage = finalResponse?.usageMetadata
+        ? {
+            promptTokens: finalResponse.usageMetadata.promptTokenCount ?? 0,
+            responseTokens: finalResponse.usageMetadata.candidatesTokenCount ?? 0,
+            totalTokens: finalResponse.usageMetadata.totalTokenCount ?? 0,
+          }
+        : undefined;
+
+      await prisma.geminiChatMessage.update({
+        where: { id: assistantMessageId },
+        data: {
+          content: accumulatedText,
+          isStreaming: false,
+          tokenUsage,
+        },
       });
 
-      // 현재 메시지
-      fullPrompt += `사용자: ${params.message}\n\n`;
-      fullPrompt += `어시스턴트: `;
+      await prisma.geminiChatSession.update({
+        where: { id: session.id },
+        data: { lastInteraction: new Date() },
+      }).catch(() => undefined);
 
-      // 🔥 Gemini API 호출 (스트리밍)
-      const response = await geminiClient.generateText({
-        prompt: fullPrompt,
-        maxTokens: 2048,
-        temperature: 0.7,
-      });
-
-      Logger.info('GEMINI_IPC', 'Message sent successfully', {
+      Logger.info('GEMINI_IPC', 'Message sent successfully (streaming)', {
         projectId: params.projectId,
-        contentLength: response.content.length,
+        sessionId: session.id,
+        assistantMessageId,
+        contentLength: accumulatedText.length,
       });
 
-      // 🔥 IpcResponse 형태로 반환
-      return { 
-        success: true, 
-        data: { response: response.content } 
+      return {
+        success: true,
+        data: { response: accumulatedText, sessionId: session.id },
       };
 
     } catch (error) {
-      Logger.error('GEMINI_IPC', 'Failed to send message', { error, projectId: params.projectId });
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Unknown error' 
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      Logger.error('GEMINI_IPC', 'Failed to send message', {
+        error,
+        projectId: params.projectId,
+        sessionId: session?.id,
+        assistantMessageId,
+      });
+
+      if (assistantMessageId && prisma) {
+        await prisma.geminiChatMessage.update({
+          where: { id: assistantMessageId },
+          data: {
+            content: `오류 발생: ${errorMessage}`,
+            isStreaming: false,
+          },
+        }).catch(() => undefined);
+      }
+
+      if (session && prisma) {
+        await prisma.geminiChatSession.update({
+          where: { id: session.id },
+          data: { lastInteraction: new Date() },
+        }).catch(() => undefined);
+      }
+
+      event.sender.send('gemini:stream-error', {
+        projectId: params.projectId,
+        sessionId: session?.id,
+        messageId: assistantMessageId,
+        error: errorMessage,
+      });
+
+      return {
+        success: false,
+        error: errorMessage,
       };
     }
   });

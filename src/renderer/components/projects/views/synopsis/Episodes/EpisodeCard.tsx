@@ -5,6 +5,7 @@
  * - 회차 번호, 제목, 상태
  * - 5막 구조 뱃지
  * - 글자 수 진행 바
+ * - 🔥 Phase 2: 플랫폼 배지 + 충족률 Progress Bar
  * - Quick Actions (편집/삭제)
  */
 
@@ -14,6 +15,14 @@ import React from 'react';
 import { Edit, Trash2, MoreVertical, FileText, Calendar, Target } from 'lucide-react';
 import type { Episode } from '../../../../../hooks/useEpisodes';
 import type { FiveActType } from '../../../../../../shared/types/episode';
+import {
+  calculateCompletionRate,
+  getCompletionStatus,
+  getProgressColor,
+  PLATFORM_NAMES,
+  PLATFORM_COLORS,
+  type PlatformType,
+} from '../../../../../../shared/constants/platform-requirements';
 
 export interface EpisodeCardProps {
   episode: Episode;
@@ -65,6 +74,11 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({
   const progress = (episode.wordCount / episode.targetWordCount) * 100;
   const isOverTarget = progress > 100;
 
+  // 🔥 Phase 2: 플랫폼별 충족률 계산
+  const completionRate = calculateCompletionRate(episode.wordCount, episode.platform);
+  const completionStatus = getCompletionStatus(completionRate);
+  const progressColor = getProgressColor(completionRate);
+
   if (viewMode === 'list') {
     return (
       <div
@@ -91,10 +105,18 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({
 
         {/* Title & Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-lg font-semibold text-foreground truncate">
-            {episode.title}
-          </h3>
-          <div className="flex items-center gap-3 mt-1">
+          <div className="flex items-center gap-2 mb-1">
+            <h3 className="text-lg font-semibold text-foreground truncate">
+              {episode.title}
+            </h3>
+            {/* 🔥 Phase 2: 플랫폼 배지 */}
+            {episode.platform && (
+              <span className={`px-2 py-0.5 rounded text-xs font-medium ${PLATFORM_COLORS[episode.platform as PlatformType]}`}>
+                {PLATFORM_NAMES[episode.platform as PlatformType]}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
             {/* Status */}
             <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${statusColors[episode.status]}`}>
               {statusLabels[episode.status]}
@@ -115,20 +137,46 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({
           </div>
         </div>
 
-        {/* Progress Bar */}
-        <div className="flex-shrink-0 w-32">
-          <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
-            <span>진행률</span>
-            <span className={isOverTarget ? 'text-green-500 font-medium' : ''}>
-              {Math.min(progress, 100).toFixed(0)}%
-            </span>
-          </div>
-          <div className="h-2 bg-muted rounded-full overflow-hidden">
-            <div
-              className={`h-full transition-all ${isOverTarget ? 'bg-green-500' : 'bg-accent-primary'}`}
-              style={{ width: `${Math.min(progress, 100)}%` }}
-            />
-          </div>
+        {/* 🔥 Phase 2: 플랫폼 충족률 Progress Bar */}
+        <div className="flex-shrink-0 w-40">
+          {episode.platform ? (
+            <>
+              <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                <span>충족률</span>
+                <span className={`font-medium ${
+                  completionStatus === 'success' ? 'text-green-600' :
+                  completionStatus === 'warning' ? 'text-yellow-600' :
+                  'text-red-600'
+                }`}>
+                  {completionRate.toFixed(1)}%
+                </span>
+              </div>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all ${progressColor}`}
+                  style={{ width: `${Math.min(completionRate, 100)}%` }}
+                />
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">
+                {episode.wordCount.toLocaleString()}자 / {PLATFORM_NAMES[episode.platform as PlatformType]}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="flex items-center justify-between text-xs text-muted-foreground mb-1">
+                <span>진행률</span>
+                <span className={isOverTarget ? 'text-green-500 font-medium' : ''}>
+                  {Math.min(progress, 100).toFixed(0)}%
+                </span>
+              </div>
+              <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className={`h-full transition-all ${isOverTarget ? 'bg-green-500' : 'bg-accent-primary'}`}
+                  style={{ width: `${Math.min(progress, 100)}%` }}
+                />
+              </div>
+            </>
+          )}
         </div>
 
         {/* Actions */}
@@ -183,6 +231,12 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({
           <span className={`px-2 py-0.5 rounded-full text-xs font-medium border ${statusColors[episode.status]}`}>
             {statusLabels[episode.status]}
           </span>
+          {/* 🔥 Phase 2: 플랫폼 배지 */}
+          {episode.platform && (
+            <span className={`px-2 py-0.5 rounded text-xs font-medium ${PLATFORM_COLORS[episode.platform as PlatformType]}`}>
+              {PLATFORM_NAMES[episode.platform as PlatformType]}
+            </span>
+          )}
         </div>
 
         {/* Actions (Hover) */}
@@ -250,23 +304,52 @@ export const EpisodeCard: React.FC<EpisodeCardProps> = ({
         </div>
       </div>
 
-      {/* Progress Bar */}
+      {/* 🔥 Phase 2: 플랫폼 충족률 Progress Bar */}
       <div>
-        <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
-          <span className="flex items-center gap-1">
-            <Target className="h-3 w-3" />
-            진행률
-          </span>
-          <span className={isOverTarget ? 'text-green-500 font-medium' : ''}>
-            {Math.min(progress, 100).toFixed(0)}%
-          </span>
-        </div>
-        <div className="h-2 bg-muted rounded-full overflow-hidden">
-          <div
-            className={`h-full transition-all ${isOverTarget ? 'bg-green-500' : 'bg-accent-primary'}`}
-            style={{ width: `${Math.min(progress, 100)}%` }}
-          />
-        </div>
+        {episode.platform ? (
+          <>
+            <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+              <span className="flex items-center gap-1">
+                <Target className="h-3 w-3" />
+                충족률
+              </span>
+              <span className={`font-medium ${
+                completionStatus === 'success' ? 'text-green-600' :
+                completionStatus === 'warning' ? 'text-yellow-600' :
+                'text-red-600'
+              }`}>
+                {completionRate.toFixed(1)}%
+              </span>
+            </div>
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className={`h-full transition-all ${progressColor}`}
+                style={{ width: `${Math.min(completionRate, 100)}%` }}
+              />
+            </div>
+            <div className="text-xs text-muted-foreground mt-1.5 text-center">
+              {episode.wordCount.toLocaleString()}자 · {PLATFORM_NAMES[episode.platform as PlatformType]}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center justify-between text-xs text-muted-foreground mb-1.5">
+              <span className="flex items-center gap-1">
+                <Target className="h-3 w-3" />
+                진행률
+              </span>
+              <span className={isOverTarget ? 'text-green-500 font-medium' : ''}>
+                {Math.min(progress, 100).toFixed(0)}%
+              </span>
+            </div>
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
+              <div
+                className={`h-full transition-all ${isOverTarget ? 'bg-green-500' : 'bg-accent-primary'}`}
+                style={{ width: `${Math.min(progress, 100)}%` }}
+              />
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

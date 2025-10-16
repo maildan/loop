@@ -357,7 +357,12 @@ ${chapters.map((ch, idx) => `${idx + 1}. ${ch.title}: ${ch.content?.substring(0,
         });
     }
 
-    // 📊 사용량 및 상태 확인
+    // � GenerativeModel 인스턴스 접근 (Streaming 용)
+    getModel(): GenerativeModel {
+        return this.model;
+    }
+
+    // �📊 사용량 및 상태 확인
     async checkStatus(): Promise<{ status: string; model: string; available: boolean }> {
         try {
             // 간단한 테스트 요청

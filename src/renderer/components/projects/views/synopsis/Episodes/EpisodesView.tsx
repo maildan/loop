@@ -12,17 +12,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, Filter, Grid, List, Plus, Loader2, AlertTriangle, FileText } from 'lucide-react';
+import { Search, Filter, Grid, List, Plus, Loader2, AlertTriangle, FileText, BarChart3 } from 'lucide-react';
 import { useEpisodes, type Episode } from '../../../../../hooks/useEpisodes';
 import type { UpdateEpisodeInput } from '../../../../../../shared/types/episode';
 import { EpisodeCard } from './EpisodeCard';
 import { EpisodeDetailModal } from './EpisodeDetailModal';
+import { EpisodeHeatmap } from './EpisodeHeatmap';
 
 export interface EpisodesViewProps {
   projectId: string;
 }
 
-type ViewMode = 'grid' | 'list';
+type ViewMode = 'grid' | 'list' | 'heatmap';
 type FilterStatus = 'all' | 'draft' | 'in-progress' | 'completed' | 'published';
 
 /**
@@ -221,6 +222,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({ projectId }) => {
               className={`p-2 rounded-md transition-colors ${
                 viewMode === 'grid' ? 'bg-background shadow-sm' : 'hover:bg-background/50'
               }`}
+              title="그리드 뷰"
             >
               <Grid className="h-4 w-4" />
             </button>
@@ -229,8 +231,18 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({ projectId }) => {
               className={`p-2 rounded-md transition-colors ${
                 viewMode === 'list' ? 'bg-background shadow-sm' : 'hover:bg-background/50'
               }`}
+              title="리스트 뷰"
             >
               <List className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() => setViewMode('heatmap')}
+              className={`p-2 rounded-md transition-colors ${
+                viewMode === 'heatmap' ? 'bg-background shadow-sm' : 'hover:bg-background/50'
+              }`}
+              title="히트맵 뷰"
+            >
+              <BarChart3 className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -325,6 +337,11 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({ projectId }) => {
             </button>
           </div>
         </div>
+      ) : viewMode === 'heatmap' ? (
+        <EpisodeHeatmap
+          episodes={episodes}
+          onEpisodeClick={handleEdit}
+        />
       ) : (
         <div
           className={
@@ -337,7 +354,7 @@ export const EpisodesView: React.FC<EpisodesViewProps> = ({ projectId }) => {
             <EpisodeCard
               key={episode.id}
               episode={episode}
-              viewMode={viewMode}
+              viewMode={viewMode as 'grid' | 'list'}
               isSelected={selectedEpisodes.has(episode.id)}
               onSelect={handleSelectEpisode}
               onEdit={handleEdit}

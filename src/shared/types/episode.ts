@@ -4,6 +4,8 @@
  * Prisma Episode 모델과 동기화된 TypeScript 타입 정의
  */
 
+import type { PlatformType } from '../constants/platform-requirements';
+
 /**
  * 🔥 회차 상태
  */
@@ -40,6 +42,7 @@ export interface Episode {
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null; // 발행 일시
+  platform: PlatformType | null; // 🔥 Phase 2: 연재 플랫폼 (카카오/네이버/문피아 등)
 }
 
 /**
@@ -54,6 +57,7 @@ export interface CreateEpisodeInput {
   status?: EpisodeStatus;
   act?: FiveActType;
   notes?: string;
+  platform?: PlatformType | null; // 🔥 Phase 2: 연재 플랫폼
 }
 
 /**
@@ -70,6 +74,7 @@ export interface UpdateEpisodeInput {
   cliffhangerIntensity?: number;
   notes?: string;
   sortOrder?: number;
+  platform?: PlatformType | null; // 🔥 Phase 2: 플랫폼 변경
 }
 
 /**
@@ -146,5 +151,23 @@ export interface EpisodeStats {
   averageWordCount: number;
   longestEpisode: { episodeNumber: number; wordCount: number } | null;
   shortestEpisode: { episodeNumber: number; wordCount: number } | null;
-  withCliffhangers: number;
+  withCliffhanger: number;
+}
+
+/**
+ * 🔥 Phase 2: 플랫폼별 충족률 계산을 위한 확장 타입
+ * 
+ * Episode 데이터에 계산 속성을 추가한 유틸리티 타입
+ */
+export interface EpisodeWithCompletion extends Episode {
+  /**
+   * 플랫폼 기준 대비 충족률 (0-100+, 소수점 1자리)
+   * platform이 null이면 0
+   */
+  completionRate: number;
+  
+  /**
+   * 충족 상태 ('success' | 'warning' | 'danger')
+   */
+  completionStatus: 'success' | 'warning' | 'danger';
 }

@@ -377,7 +377,8 @@ const electronAPI: ElectronAPI = {
 
   // 🔥 Gemini AI API (시놉시스 어시스턴트)
   'gemini:get-project-context': (projectId: string) => ipcRenderer.invoke('gemini:get-project-context', projectId),
-  'gemini:send-message': (params: any) => ipcRenderer.invoke('gemini:send-message', params),
+  'gemini:send-message': (params) => ipcRenderer.invoke('gemini:send-message', params),
+  'gemini:get-chat-history': (params) => ipcRenderer.invoke('gemini:get-chat-history', params),
 
 };
 

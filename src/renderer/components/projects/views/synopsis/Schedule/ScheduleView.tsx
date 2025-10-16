@@ -9,6 +9,7 @@ import { Card } from '../../../../ui/Card';
 import { episodeServiceClient } from '../../../../../../shared/services/EpisodeServiceClient';
 import type { Episode, ManuscriptReserves } from '../../../../../../shared/types/episode';
 import { ScheduleCalendar } from './ScheduleCalendar';
+import { ReserveHeatmap } from './ReserveHeatmap';
 import { RevenueChart } from './RevenueChart';
 import { ViewsChart } from './ViewsChart';
 
@@ -125,6 +126,13 @@ export const ScheduleView: React.FC<ScheduleViewProps> = ({ projectId }) => {
                     </div>
                 </Card>
             </div>
+
+            {/* 비축 히트맵 */}
+            {reserves && (
+                <Card className="p-6">
+                    <ReserveHeatmap reserves={reserves} publishFrequency={3} />
+                </Card>
+            )}
 
             {/* 연재 캘린더 */}
             <Card className="p-6">

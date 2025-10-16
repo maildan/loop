@@ -85,7 +85,6 @@ const MENU_ITEMS = [
     { id: 'characters', label: '인물', icon: Users },
     { id: 'synopsis', label: '시놉시스', icon: Target },
     { id: 'idea', label: '아이디어', icon: Lightbulb },
-    { id: 'notes', label: '노트', icon: BookOpen },
 ];
 
 export const ProjectSidebar = memo(function ProjectSidebar({

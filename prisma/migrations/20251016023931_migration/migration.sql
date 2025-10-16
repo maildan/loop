@@ -40,6 +40,7 @@ CREATE TABLE "episodes" (
     "cliffhangerType" TEXT,
     "cliffhangerIntensity" INTEGER,
     "notes" TEXT,
+    "platform" TEXT,
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -90,8 +91,8 @@ CREATE TABLE "project_structure" (
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "project_structure_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "project_structure" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT "project_structure_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "project_structure_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "project_structure_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "project_structure" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -306,8 +307,8 @@ CREATE TABLE "ai_evaluations" (
     "version" TEXT NOT NULL DEFAULT '1.0',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
-    CONSTRAINT "ai_evaluations_analysisId_fkey" FOREIGN KEY ("analysisId") REFERENCES "ai_analyses" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
-    CONSTRAINT "ai_evaluations_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT "ai_evaluations_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "ai_evaluations_analysisId_fkey" FOREIGN KEY ("analysisId") REFERENCES "ai_analyses" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -343,6 +344,33 @@ CREATE TABLE "writer_stats" (
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" DATETIME NOT NULL,
     CONSTRAINT "writer_stats_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "gemini_chat_sessions" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "projectId" TEXT NOT NULL,
+    "title" TEXT,
+    "summary" TEXT,
+    "metadata" JSONB,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "lastInteraction" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "gemini_chat_sessions_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "gemini_chat_messages" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "sessionId" TEXT NOT NULL,
+    "role" TEXT NOT NULL,
+    "content" TEXT NOT NULL,
+    "tokenUsage" JSONB,
+    "isStreaming" BOOLEAN NOT NULL DEFAULT false,
+    "metadata" JSONB,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    CONSTRAINT "gemini_chat_messages_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "gemini_chat_sessions" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -548,6 +576,18 @@ CREATE INDEX "writer_stats_sessionStartTime_idx" ON "writer_stats"("sessionStart
 
 -- CreateIndex
 CREATE INDEX "writer_stats_createdAt_idx" ON "writer_stats"("createdAt");
+
+-- CreateIndex
+CREATE INDEX "gemini_chat_sessions_projectId_idx" ON "gemini_chat_sessions"("projectId");
+
+-- CreateIndex
+CREATE INDEX "gemini_chat_sessions_lastInteraction_idx" ON "gemini_chat_sessions"("lastInteraction");
+
+-- CreateIndex
+CREATE INDEX "gemini_chat_messages_sessionId_idx" ON "gemini_chat_messages"("sessionId");
+
+-- CreateIndex
+CREATE INDEX "gemini_chat_messages_createdAt_idx" ON "gemini_chat_messages"("createdAt");
 
 -- CreateIndex
 CREATE INDEX "publications_projectId_idx" ON "publications"("projectId");

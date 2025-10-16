@@ -39,6 +39,33 @@ export interface IpcResponse<TData = unknown> {
   timestamp: Date;
 }
 
+// 🤖 Gemini 채팅 타입
+export type GeminiChatRole = 'user' | 'assistant' | 'system';
+
+export interface GeminiChatMessageDTO {
+  id: string;
+  sessionId: string;
+  projectId: string;
+  role: GeminiChatRole;
+  content: string;
+  isStreaming?: boolean;
+  tokenUsage?: Record<string, unknown> | null;
+  metadata?: Record<string, unknown> | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface GeminiChatSessionDTO {
+  id: string;
+  projectId: string;
+  title?: string | null;
+  summary?: string | null;
+  metadata?: Record<string, unknown> | null;
+  lastInteraction: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 // 🎯 키보드 모니터링 상태 - Main ↔ Renderer 공통
 export interface MonitoringStatus {
   isActive: boolean;
@@ -304,10 +331,19 @@ export interface ElectronAPI {
   }>>;
   'gemini:send-message': (params: {
     projectId: string;
+    sessionId?: string;
     message: string;
-    history: Array<{ role: 'user' | 'model'; parts: Array<{ text: string }> }>;
-    systemContext?: string;
-  }) => Promise<IpcResponse<{ response: string }>>;
+    history: Array<{ id: string; role: GeminiChatRole; content: string }>;
+    systemPrompt: string;
+  }) => Promise<IpcResponse<{ response: string; sessionId: string }>>;
+  'gemini:get-chat-history': (params: {
+    projectId: string;
+    sessionId?: string;
+    limit?: number;
+  }) => Promise<IpcResponse<{
+    session: GeminiChatSessionDTO;
+    messages: GeminiChatMessageDTO[];
+  }>>;
 }
 
 // 🔥 기가차드 키보드 이벤트 인터페이스 (최종 통합 버전)

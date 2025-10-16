@@ -22,6 +22,7 @@ import React, { useState } from 'react';
 import { X, Save, Loader2 } from 'lucide-react';
 import type { Episode } from '../../../../../hooks/useEpisodes';
 import { Logger } from '../../../../../../shared/logger-renderer';
+import { PLATFORM_NAMES, type PlatformType } from '../../../../../../shared/constants/platform-requirements';
 
 export interface EpisodeDetailModalProps {
   episode: Episode | null;
@@ -52,6 +53,14 @@ const cliffhangerTypes = [
   { value: 'mystery', label: '미스터리' },
 ];
 
+const platformOptions: Array<{ value: PlatformType; label: string }> = [
+  { value: 'kakao', label: PLATFORM_NAMES.kakao },
+  { value: 'naver', label: PLATFORM_NAMES.naver },
+  { value: 'munpia', label: PLATFORM_NAMES.munpia },
+  { value: 'joara', label: PLATFORM_NAMES.joara },
+  { value: 'novelpia', label: PLATFORM_NAMES.novelpia },
+];
+
 export const EpisodeDetailModal: React.FC<EpisodeDetailModalProps> = ({
   episode,
   isOpen,
@@ -72,6 +81,7 @@ export const EpisodeDetailModal: React.FC<EpisodeDetailModalProps> = ({
         cliffhangerType: episode.cliffhangerType,
         cliffhangerIntensity: episode.cliffhangerIntensity,
         notes: episode.notes,
+        platform: episode.platform,
       });
     }
   }, [episode]);
@@ -129,8 +139,8 @@ export const EpisodeDetailModal: React.FC<EpisodeDetailModalProps> = ({
             />
           </div>
 
-          {/* Status + Act */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Status + Act + Platform */}
+          <div className="grid grid-cols-3 gap-4">
             {/* Status */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-2">
@@ -161,6 +171,25 @@ export const EpisodeDetailModal: React.FC<EpisodeDetailModalProps> = ({
               >
                 <option value="">선택 안 함</option>
                 {actOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Platform */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                연재 플랫폼
+              </label>
+              <select
+                value={formData.platform || ''}
+                onChange={(e) => setFormData({ ...formData, platform: (e.target.value || null) as PlatformType | null })}
+                className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:ring-2 focus:ring-accent-primary focus:border-transparent"
+              >
+                <option value="">선택 안 함</option>
+                {platformOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
                     {opt.label}
                   </option>

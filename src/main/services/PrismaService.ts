@@ -288,6 +288,108 @@ class PrismaService {
       throw error;
     }
   }
+
+  /**
+   * 🔥 데이터베이스 마이그레이션 실행
+   * Production 환경에서 DB 스키마를 최신 상태로 유지
+   */
+  public async runMigrations(): Promise<void> {
+    try {
+      Logger.info('PRISMA_SERVICE', 'Starting database migrations');
+      
+      const { dbPath, databaseUrl } = await ensureDatabaseUrl();
+      Logger.info('PRISMA_SERVICE', 'Database path resolved', { dbPath, databaseUrl });
+
+      // Prisma migrate deploy 실행 (Production용)
+      // Prisma v6에서는 programmatic migration을 지원하지 않으므로
+      // 대신 $queryRaw로 직접 마이그레이션 SQL을 실행할 수 있음
+      
+      const client = await this.getClient();
+      
+      // 💡 GeminiChatSession 테이블 생성 확인
+      try {
+        const tables = await client.$queryRaw`
+          SELECT name FROM sqlite_master 
+          WHERE type='table' AND name='gemini_chat_sessions'
+        `;
+        
+        if (!tables || tables.length === 0) {
+          Logger.warn('PRISMA_SERVICE', 'GeminiChatSession table not found, attempting to create');
+          
+          // 테이블이 없으면 생성
+          await client.$queryRaw`
+            CREATE TABLE IF NOT EXISTS "gemini_chat_sessions" (
+              "id" TEXT NOT NULL PRIMARY KEY,
+              "projectId" TEXT NOT NULL,
+              "title" TEXT,
+              "summary" TEXT,
+              "metadata" TEXT,
+              "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "updatedAt" DATETIME NOT NULL,
+              "lastInteraction" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              CONSTRAINT "gemini_chat_sessions_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE CASCADE
+            )
+          `;
+          
+          await client.$queryRaw`
+            CREATE INDEX "gemini_chat_sessions_projectId_idx" ON "gemini_chat_sessions"("projectId")
+          `;
+          
+          await client.$queryRaw`
+            CREATE INDEX "gemini_chat_sessions_lastInteraction_idx" ON "gemini_chat_sessions"("lastInteraction")
+          `;
+          
+          Logger.info('PRISMA_SERVICE', 'GeminiChatSession table created');
+        }
+      } catch (tableError) {
+        Logger.warn('PRISMA_SERVICE', 'Table check/creation attempt', tableError);
+      }
+
+      // 💡 GeminiChatMessage 테이블 생성 확인
+      try {
+        const messages = await client.$queryRaw`
+          SELECT name FROM sqlite_master 
+          WHERE type='table' AND name='gemini_chat_messages'
+        `;
+        
+        if (!messages || messages.length === 0) {
+          Logger.warn('PRISMA_SERVICE', 'GeminiChatMessage table not found, attempting to create');
+          
+          await client.$queryRaw`
+            CREATE TABLE IF NOT EXISTS "gemini_chat_messages" (
+              "id" TEXT NOT NULL PRIMARY KEY,
+              "sessionId" TEXT NOT NULL,
+              "role" TEXT NOT NULL CHECK(role IN ('user', 'assistant', 'system')),
+              "content" TEXT NOT NULL,
+              "tokenUsage" TEXT,
+              "isStreaming" BOOLEAN NOT NULL DEFAULT 0,
+              "metadata" TEXT,
+              "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              "updatedAt" DATETIME NOT NULL,
+              CONSTRAINT "gemini_chat_messages_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "gemini_chat_sessions" ("id") ON DELETE CASCADE
+            )
+          `;
+          
+          await client.$queryRaw`
+            CREATE INDEX "gemini_chat_messages_sessionId_idx" ON "gemini_chat_messages"("sessionId")
+          `;
+          
+          await client.$queryRaw`
+            CREATE INDEX "gemini_chat_messages_createdAt_idx" ON "gemini_chat_messages"("createdAt")
+          `;
+          
+          Logger.info('PRISMA_SERVICE', 'GeminiChatMessage table created');
+        }
+      } catch (tableError) {
+        Logger.warn('PRISMA_SERVICE', 'Message table check/creation attempt', tableError);
+      }
+
+      Logger.info('PRISMA_SERVICE', '✅ Database migrations completed');
+    } catch (error) {
+      Logger.error('PRISMA_SERVICE', '❌ Migration failed', error);
+      throw error;
+    }
+  }
 }
 
 // 🔥 싱글톤 인스턴스 내보내기

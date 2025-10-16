@@ -59,6 +59,9 @@ export class ManagerCoordinator {
     try {
       Logger.info(this.componentName, '핵심 시스템 초기화 시작');
 
+      // 0. 환경변수 (최우선 - DB 및 API 호출보다 먼저)
+      await this.initializeEnvironment();
+
       // 1. 데이터베이스 (최우선)
       await this.initializeDatabase();
 
@@ -225,10 +228,41 @@ export class ManagerCoordinator {
   }
 
   /**
+   * 🔥 환경변수 초기화 (최우선)
+   */
+  private async initializeEnvironment(): Promise<void> {
+    try {
+      const { EnvironmentService } = await import('../services/EnvironmentService');
+      await EnvironmentService.initialize();
+      this.initializedManagers.add('environment');
+      Logger.info(this.componentName, '✅ EnvironmentService 초기화 완료');
+      
+      // Gemini API 키 검증
+      const hasGeminiKey = await EnvironmentService.ensureGeminiApiKey();
+      if (!hasGeminiKey) {
+        Logger.warn(this.componentName, '⚠️ Gemini API key not configured');
+      }
+    } catch (error) {
+      Logger.error(this.componentName, '❌ 환경변수 초기화 실패', error);
+      throw error;
+    }
+  }
+
+  /**
    * 🔥 데이터베이스 초기화
    */
   private async initializeDatabase(): Promise<void> {
     try {
+      // 🔥 Prisma 마이그레이션 먼저 실행 (DB 스키마 동기화)
+      const { prismaService } = await import('../services/PrismaService');
+      try {
+        await prismaService.runMigrations();
+        Logger.info(this.componentName, '✅ Prisma migrations 실행 완료');
+      } catch (migrationError) {
+        Logger.warn(this.componentName, '⚠️ Prisma migration 중 일부 오류 발생 (table exists일 수 있음)', migrationError);
+        // Migration 오류는 warning으로 처리 (테이블이 이미 존재할 수 있음)
+      }
+
       // DatabaseManager 사용 (기존)
       if (databaseManager && !this.initializedManagers.has('database')) {
         await databaseManager.initialize();

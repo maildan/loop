@@ -18,6 +18,7 @@ import type {
   EpisodeSortOptions,
   EpisodeStats
 } from '../../shared/types/episode';
+import type { PlatformType } from '../../shared/constants/platform-requirements';
 import { calculateWordCount } from '../../shared/utils/text';
 import { recordDailyWritingActivity } from '../utils/writingActivity';
 
@@ -35,7 +36,7 @@ export class EpisodeService {
     const episode = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
        const computedWordCount = calculateWordCount(input.content);
 
-       const created = await tx.episode.create({
+       const createdEpisode = await tx.episode.create({
          data: {
            projectId: input.projectId,
            episodeNumber: input.episodeNumber,
@@ -47,7 +48,7 @@ export class EpisodeService {
            act: input.act || null,
            notes: input.notes || null,
            sortOrder: input.episodeNumber,
-         },
+         } as any,
        });
 
        if (computedWordCount !== 0) {
@@ -56,10 +57,10 @@ export class EpisodeService {
            data: { wordCount: { increment: computedWordCount } },
          });
 
-         await recordDailyWritingActivity(tx, input.projectId, computedWordCount, 0, created.updatedAt, created.id);
+         await recordDailyWritingActivity(tx, input.projectId, computedWordCount, 0, createdEpisode.updatedAt, createdEpisode.id);
        }
 
-       return created;
+       return createdEpisode;
      });
 
     return this.toPrismaEpisode(episode);
@@ -188,6 +189,8 @@ export class EpisodeService {
        if (input.cliffhangerType !== undefined) updateData.cliffhangerType = input.cliffhangerType;
        if (input.cliffhangerIntensity !== undefined) updateData.cliffhangerIntensity = input.cliffhangerIntensity;
        if (input.notes !== undefined) updateData.notes = input.notes;
+       // Platform field update will be handled via raw query if needed
+       // if (input.platform !== undefined) updateData.platform = input.platform;
 
        updateData.updatedAt = new Date();
 
@@ -370,7 +373,7 @@ export class EpisodeService {
         averageWordCount: 0,
         longestEpisode: null,
         shortestEpisode: null,
-        withCliffhangers: 0,
+        withCliffhanger: 0,
       };
     }
 
@@ -406,7 +409,7 @@ export class EpisodeService {
         episodeNumber: shortest.episodeNumber,
         wordCount: shortest.wordCount,
       } : null,
-      withCliffhangers: episodes.filter((e: StatsEpisode) => e.cliffhangerType).length,
+      withCliffhanger: episodes.filter((e: StatsEpisode) => e.cliffhangerType).length,
     };
   }
 
@@ -441,6 +444,7 @@ export class EpisodeService {
       cliffhangerType: prismaEpisode.cliffhangerType as Episode['cliffhangerType'],
       cliffhangerIntensity: prismaEpisode.cliffhangerIntensity,
       notes: prismaEpisode.notes,
+      platform: (prismaEpisode as any).platform as PlatformType | null,
       sortOrder: prismaEpisode.sortOrder,
       isActive: prismaEpisode.isActive,
       createdAt: prismaEpisode.createdAt,

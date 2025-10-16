@@ -9,6 +9,7 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { RendererLogger as Logger } from '../../../../../../shared/logger-renderer';
+import type { GeminiChatRole } from '../../../../../../shared/types';
 
 const USE_GEMINI_CHAT = Symbol.for('USE_GEMINI_CHAT');
 
@@ -32,6 +33,11 @@ export interface ProjectContext {
   aiInsights: string[];
   wordCount: number;
   characterCount: number;
+  recentMessages?: Array<{
+    role: GeminiChatRole;
+    content: string;
+    createdAt: Date;
+  }>;
 }
 
 interface UseGeminiChatOptions {
@@ -43,11 +49,13 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [projectContext, setProjectContext] = useState<ProjectContext | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const currentStreamId = useRef<string | null>(null);
   const errorHandlerRef = useRef(onError);
   const isContextLoadingRef = useRef(false);
   const lastLoadedProjectRef = useRef<string | null>(null);
+  const isHistoryLoadingRef = useRef(false);
 
   useEffect(() => {
     errorHandlerRef.current = onError;
@@ -61,6 +69,61 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
+
+  const loadChatHistory = useCallback(async () => {
+    if (!projectId) {
+      return;
+    }
+
+    if (isHistoryLoadingRef.current) {
+      return;
+    }
+
+    isHistoryLoadingRef.current = true;
+
+    try {
+      Logger.debug(USE_GEMINI_CHAT, 'Loading Gemini chat history', { projectId, sessionId });
+
+      const response = await window.electronAPI['gemini:get-chat-history']({
+        projectId,
+        sessionId: sessionId ?? undefined,
+      });
+
+      if (response.success && response.data) {
+        const remoteSessionId = response.data.session.id;
+        const historyMessages = response.data.messages.map(message => ({
+          id: message.id,
+          role: message.role,
+          content: message.content,
+          timestamp: new Date(message.createdAt),
+          isStreaming: Boolean(message.isStreaming),
+        } satisfies ChatMessage));
+
+        setSessionId(remoteSessionId);
+        setMessages(historyMessages);
+
+        Logger.info(USE_GEMINI_CHAT, 'Chat history synced', {
+          projectId,
+          sessionId: remoteSessionId,
+          messageCount: historyMessages.length,
+        });
+      }
+    } catch (error) {
+      Logger.error(USE_GEMINI_CHAT, 'Failed to load Gemini chat history', error);
+      errorHandlerRef.current?.(error instanceof Error ? error : new Error('Failed to load chat history'));
+    } finally {
+      isHistoryLoadingRef.current = false;
+    }
+  }, [projectId, sessionId]);
+
+  useEffect(() => {
+    void loadChatHistory();
+  }, [loadChatHistory]);
+
+  useEffect(() => {
+    setSessionId(null);
+    setMessages([]);
+  }, [projectId]);
 
   // 🔥 프로젝트 컨텍스트 로드
   const loadProjectContext = useCallback(async ({ force = false } = {}) => {
@@ -87,6 +150,10 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
       
       if (response.success && response.data) {
         const contextData = response.data;
+        const rawRecentMessages = Array.isArray((contextData as { recentMessages?: unknown }).recentMessages)
+          ? (contextData as { recentMessages?: Array<{ role: GeminiChatRole; content: string; createdAt: string | Date }> }).recentMessages ?? []
+          : [];
+
         const context: ProjectContext = {
           projectTitle: contextData.projectTitle,
           totalEpisodes: contextData.totalEpisodes,
@@ -94,7 +161,12 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
           characters: contextData.characters,
           aiInsights: contextData.aiInsights,
           wordCount: contextData.totalWords,
-          characterCount: contextData.characters.length
+          characterCount: contextData.characters.length,
+          recentMessages: rawRecentMessages.map(message => ({
+            role: message.role,
+            content: message.content,
+            createdAt: new Date(message.createdAt),
+          })),
         };
         setProjectContext(context);
         
@@ -153,6 +225,15 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
       });
     }
 
+    if (projectContext.recentMessages && projectContext.recentMessages.length > 0) {
+      prompt += `\n**최근 대화:**\n`;
+      projectContext.recentMessages.slice(-3).forEach(message => {
+        const speaker = message.role === 'assistant' ? 'AI' : '작가';
+        const excerpt = message.content.length > 120 ? `${message.content.slice(0, 120)}...` : message.content;
+        prompt += `- ${speaker}: ${excerpt}\n`;
+      });
+    }
+
     prompt += `\n작가의 질문에 구체적이고 실용적인 답변을 제공하세요. 프로젝트 데이터를 기반으로 한 맞춤형 조언을 우선하세요.`;
 
     return prompt;
@@ -188,6 +269,9 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
 
     setMessages(prev => [...prev, assistantMessage]);
 
+    let handleStreamChunk: ((...args: unknown[]) => void) | null = null;
+    let handleStreamError: ((...args: unknown[]) => void) | null = null;
+
     try {
       Logger.debug(USE_GEMINI_CHAT, 'Sending message to Gemini', {
         projectId,
@@ -196,48 +280,129 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
 
       const systemPrompt = buildSystemPrompt();
 
-      // Gemini API 형식에 맞게 히스토리 변환
-      const geminiHistory = messages
+      const historyPayload = messages
         .filter(msg => msg.role !== 'system')
         .map(msg => ({
-          role: msg.role === 'assistant' ? ('model' as const) : ('user' as const),
-          parts: [{ text: msg.content }]
+          id: msg.id,
+          role: msg.role,
+          content: msg.content,
         }));
 
-      // IPC를 통해 Gemini에게 메시지 전송
+      handleStreamChunk = (...args: unknown[]) => {
+        const data = args[0] as {
+          projectId?: string;
+          sessionId?: string;
+          messageId?: string;
+          chunk: string;
+          accumulated: string;
+        };
+
+        if (!data || (data.projectId && data.projectId !== projectId)) {
+          return;
+        }
+
+        if (data.sessionId && sessionId !== data.sessionId) {
+          setSessionId(data.sessionId);
+        }
+
+        const targetId = currentStreamId.current ?? assistantMsgId;
+        const messageId = data.messageId ?? targetId;
+
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === targetId || msg.id === messageId
+              ? {
+                  ...msg,
+                  id: messageId,
+                  content: data.accumulated,
+                  isStreaming: true,
+                }
+              : msg
+          )
+        );
+
+        currentStreamId.current = messageId;
+      };
+
+      handleStreamError = (...args: unknown[]) => {
+        const data = args[0] as {
+          projectId?: string;
+          sessionId?: string;
+          messageId?: string;
+          error?: string;
+        };
+
+        if (!data || (data.projectId && data.projectId !== projectId)) {
+          return;
+        }
+
+        const targetId = data.messageId ?? currentStreamId.current ?? assistantMsgId;
+
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === targetId
+              ? {
+                  ...msg,
+                  content: data.error ?? '죄송합니다. 응답을 생성하는 중 오류가 발생했습니다. 다시 시도해 주세요.',
+                  isStreaming: false,
+                }
+              : msg
+          )
+        );
+
+        if (data.sessionId && sessionId !== data.sessionId) {
+          setSessionId(data.sessionId);
+        }
+      };
+
+      // Listener 등록
+      window.electronAPI.on('gemini:stream-chunk', handleStreamChunk);
+  window.electronAPI.on('gemini:stream-error', handleStreamError);
+
+      // IPC를 통해 Gemini에게 메시지 전송 (streaming)
       const response = await window.electronAPI['gemini:send-message']({
         projectId,
+        sessionId: sessionId ?? undefined,
         message: userMessage,
-        history: geminiHistory,
-        systemContext: systemPrompt
+        history: historyPayload,
+        systemPrompt,
       });
 
       if (response.success && response.data) {
-        const accumulatedContent = response.data.response;
+        const finalContent = response.data.response;
+        const resolvedSessionId = response.data.sessionId ?? sessionId ?? undefined;
+        if (resolvedSessionId) {
+          setSessionId(resolvedSessionId);
+        }
+
+        const resolvedAssistantId = currentStreamId.current ?? assistantMsgId;
 
         setMessages(prev => 
           prev.map(msg => 
-            msg.id === assistantMsgId
-              ? { ...msg, content: accumulatedContent, isStreaming: false }
+            msg.id === resolvedAssistantId
+              ? { ...msg, content: finalContent, isStreaming: false }
               : msg
           )
         );
 
         Logger.info(USE_GEMINI_CHAT, 'Message sent successfully', {
-          assistantMsgId,
-          contentLength: accumulatedContent.length
+          assistantMsgId: resolvedAssistantId,
+          contentLength: finalContent.length
         });
+
+        void loadChatHistory();
       } else {
         throw new Error(response.error || 'Failed to get response from Gemini');
       }
 
     } catch (error) {
       Logger.error(USE_GEMINI_CHAT, 'Failed to send message', error);
-      
+      const targetId = currentStreamId.current ?? assistantMsgId;
+
       // 에러 메시지로 교체
       setMessages(prev =>
         prev.map(msg =>
-          msg.id === assistantMsgId
+          msg.id === targetId
             ? {
                 ...msg,
                 content: '죄송합니다. 응답을 생성하는 중 오류가 발생했습니다. 다시 시도해 주세요.',
@@ -248,11 +413,18 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
       );
 
       errorHandlerRef.current?.(error instanceof Error ? error : new Error('Failed to send message'));
+      void loadChatHistory();
     } finally {
+      if (handleStreamChunk) {
+        window.electronAPI.removeListener('gemini:stream-chunk', handleStreamChunk);
+      }
+      if (handleStreamError) {
+        window.electronAPI.removeListener('gemini:stream-error', handleStreamError);
+      }
       setIsLoading(false);
       currentStreamId.current = null;
     }
-  }, [projectId, messages, isLoading, buildSystemPrompt]);
+  }, [projectId, messages, isLoading, buildSystemPrompt, sessionId, loadChatHistory]);
 
   // 🔥 대화 초기화
   const clearMessages = useCallback(() => {

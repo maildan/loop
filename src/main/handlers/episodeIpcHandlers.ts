@@ -234,6 +234,7 @@ export function setupEpisodeIpcHandlers(): void {
           cliffhangerType: null,
           cliffhangerIntensity: null,
           notes: null,
+          platform: null,
           sortOrder: chapter.sortOrder ?? episodeNumber,
           isActive: chapter.isActive,
           createdAt: chapter.createdAt,

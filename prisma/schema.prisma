@@ -47,6 +47,7 @@ model Project {
   user              Users?             @relation(fields: [userId], references: [id])
   publications      Publication[]      @relation("ProjectPublications")
   writerStats       WriterStats[]
+  geminiChatSessions GeminiChatSession[]
   writingActivities WritingActivity[]
 
   @@index([userId])
@@ -68,6 +69,7 @@ model Episode {
   cliffhangerType      String?
   cliffhangerIntensity Int?
   notes                String?
+  platform             String?
   sortOrder            Int       @default(0)
   isActive             Boolean   @default(true)
   createdAt            DateTime  @default(now())
@@ -127,9 +129,9 @@ model ProjectStructure {
   isActive    Boolean            @default(true)
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+  project     Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
   parent      ProjectStructure?  @relation("StructureHierarchy", fields: [parentId], references: [id])
   children    ProjectStructure[] @relation("StructureHierarchy")
-  project     Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@index([projectId])
   @@index([sortOrder])
@@ -394,8 +396,8 @@ model AIEvaluation {
   version        String      @default("1.0")
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
-  analysis       AIAnalysis? @relation(fields: [analysisId], references: [id])
   project        Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  analysis       AIAnalysis? @relation(fields: [analysisId], references: [id])
 
   @@index([projectId])
   @@index([evaluationType])
@@ -447,6 +449,46 @@ model WriterStats {
   @@index([sessionStartTime])
   @@index([createdAt])
   @@map("writer_stats")
+}
+
+enum GeminiChatRole {
+  user
+  assistant
+  system
+}
+
+model GeminiChatSession {
+  id              String               @id @default(cuid())
+  projectId       String
+  title           String?
+  summary         String?
+  metadata        Json?
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  lastInteraction DateTime             @default(now())
+  messages        GeminiChatMessage[]
+  project         Project              @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+  @@index([lastInteraction])
+  @@map("gemini_chat_sessions")
+}
+
+model GeminiChatMessage {
+  id          String             @id @default(cuid())
+  sessionId   String
+  role        GeminiChatRole
+  content     String
+  tokenUsage  Json?
+  isStreaming Boolean            @default(false)
+  metadata    Json?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  session     GeminiChatSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@index([createdAt])
+  @@map("gemini_chat_messages")
 }
 
 model Publication {

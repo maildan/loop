@@ -151,6 +151,7 @@ export class HandlersManager {
         ]),
         this.setupHandler('gemini', () => setupGeminiIpcHandlers(), [
           'gemini:get-project-context',
+          'gemini:get-chat-history',
           'gemini:send-message',
         ]),
         this.setupHandler('synopsis-stats', async () => {

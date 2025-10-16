@@ -15,6 +15,11 @@ env:
   NODE_ENV: ${{ secrets.NODE_ENV }}
   STATIC_SERVER_ORIGIN: ${{ secrets.STATIC_SERVER_ORIGIN }}
 
+  # 더미 데이터베이스 경로 ( CI 빌드용 )
+  DATABASE_URL: "file:./prisma/loop.db"
+  PRISMA_DATABASE_URL: "file:./prisma/loop.db"
+
+
   # 🔥 URL 설정
   NEXT_PUBLIC_SHARE_WEB_URL: ${{ secrets.NEXT_PUBLIC_SHARE_WEB_URL }}
   NEXT_PUBLIC_SHARE_API_URL: ${{ secrets.NEXT_PUBLIC_SHARE_API_URL }}
@@ -23,10 +28,6 @@ env:
   LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
   DEBUG: ${{ secrets.DEBUG }}
   VERBOSE_LOGGING: ${{ secrets.VERBOSE_LOGGING }}
-
-  # 🔥 데이터베이스 (CI 빌드 전용 - Prisma generate를 위한 더미 값)
-  DATABASE_URL: "file:./prisma/loop.db"
-  PRISMA_DATABASE_URL: "file:./prisma/loop.db"
 
   # 🔥 성능 모니터링
   ENABLE_PERFORMANCE_TRACKING: ${{ secrets.ENABLE_PERFORMANCE_TRACKING }}
@@ -155,8 +156,8 @@ jobs:
           VERBOSE_LOGGING: ${{ secrets.VERBOSE_LOGGING }}
 
           # 🔥 데이터베이스 설정 (CI용 경로로 변경 필요)
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+          DATABASE_URL: "file:./prisma/loop.db"
+          PRISMA_DATABASE_URL: "file:./prisma/loop.db"
 
           # 🔥 보안 설정
           ELECTRON_ENABLE_SECURITY_WARNINGS: ${{ secrets.ELECTRON_ENABLE_SECURITY_WARNINGS }}
@@ -364,9 +365,7 @@ jobs:
           LOG_LEVEL: ${{ secrets.LOG_LEVEL }}
           VERBOSE_LOGGING: ${{ secrets.VERBOSE_LOGGING }}
 
-          # 🔥 데이터베이스 설정 (CI용 경로로 변경 필요)
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          PRISMA_DATABASE_URL: ${{ secrets.PRISMA_DATABASE_URL }}
+
 
           # 🔥 보안 설정
           ELECTRON_ENABLE_SECURITY_WARNINGS: ${{ secrets.ELECTRON_ENABLE_SECURITY_WARNINGS }}
