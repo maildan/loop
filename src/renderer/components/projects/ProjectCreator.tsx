@@ -8,6 +8,7 @@ import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
 import { Badge } from '../ui/Badge';
 import { Logger } from '../../../shared/logger';
+import { markdownToHtml } from '../../utils/markdownToHtml';
 import {
   FileText,
   Globe,
@@ -436,12 +437,20 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
             try {
               Logger.info('PROJECT_CREATOR', '🚀 자동 프로젝트 생성 중...');
               
+              // 🔥 마크다운 → HTML 변환 (Google Docs 콘텐츠)
+              const htmlContent = markdownToHtml(responseData.content);
+              Logger.debug('PROJECT_CREATOR', '✨ 마크다운 → HTML 변환 완료', {
+                markdownLength: responseData.content.length,
+                htmlLength: htmlContent.length,
+                preview: htmlContent.substring(0, 100),
+              });
+              
               const projectData: ProjectCreationData = {
                 title: finalTitle.trim() || docName,
                 description: `Google Docs에서 가져온 문서`,
                 genre: 'fantasy', // 기본 장르
                 platform: 'google-docs',
-                content: responseData.content,
+                content: htmlContent,  // 🔥 마크다운을 HTML로 변환하여 저장
                 targetWords: 50000,
                 deadline: undefined,
                 googleDocId: doc.id,

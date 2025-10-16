@@ -377,6 +377,41 @@ export class GoogleOAuthService {
       let paragraphCount = 0;
       let tableCount = 0;
 
+      // 🔥 텍스트 포맷팅 적용 헬퍼 함수
+      const applyTextFormatting = (text: string, textStyle: any): string => {
+        let formatted = text;
+        
+        if (textStyle?.bold) {
+          formatted = `**${formatted}**`;
+        }
+        if (textStyle?.italic) {
+          formatted = `*${formatted}*`;
+        }
+        if (textStyle?.strikethrough) {
+          formatted = `~~${formatted}~~`;
+        }
+        if (textStyle?.underline) {
+          formatted = `<u>${formatted}</u>`;
+        }
+        
+        return formatted;
+      };
+
+      // 🔥 Paragraph 스타일에 따른 마크다운 prefix 결정
+      const getParagraphPrefix = (paragraphStyle: any): string => {
+        const namedStyleType = paragraphStyle?.namedStyleType;
+        
+        switch (namedStyleType) {
+          case 'HEADING_1': return '# ';
+          case 'HEADING_2': return '## ';
+          case 'HEADING_3': return '### ';
+          case 'HEADING_4': return '#### ';
+          case 'HEADING_5': return '##### ';
+          case 'HEADING_6': return '###### ';
+          default: return '';
+        }
+      };
+
       // 재귀적으로 구조 요소 파싱
       const parseStructuralElements = (elements: any[], depth: number = 0): void => {
         if (!elements) {
@@ -391,13 +426,25 @@ export class GoogleOAuthService {
           if (element.paragraph) {
             paragraphCount++;
             const paragraphElements = element.paragraph.elements || [];
-            Logger.debug(this.componentName, `  📝 단락 #${paragraphCount}: ${paragraphElements.length}개 요소`);
+            const paragraphStyle = element.paragraph?.paragraphStyle;
+            
+            // 🔥 Heading 처리
+            const headingPrefix = getParagraphPrefix(paragraphStyle);
+            if (headingPrefix) {
+              contentParts.push(headingPrefix);
+            }
+            
+            Logger.debug(this.componentName, `  📝 단락 #${paragraphCount}: ${paragraphElements.length}개 요소${headingPrefix ? ` [${headingPrefix.trim()}]` : ''}`);
             
             for (const paraElem of paragraphElements) {
-              // 텍스트 실행 처리
+              // 텍스트 실행 처리 - 🔥 스타일 적용
               if (paraElem.textRun?.content) {
-                contentParts.push(paraElem.textRun.content);
-                Logger.debug(this.componentName, `    ✍️ 텍스트: "${paraElem.textRun.content.substring(0, 50)}..."`);
+                const formattedText = applyTextFormatting(
+                  paraElem.textRun.content,
+                  paraElem.textRun?.textStyle
+                );
+                contentParts.push(formattedText);
+                Logger.debug(this.componentName, `    ✍️ 텍스트: "${paraElem.textRun.content.substring(0, 50)}..." [스타일: ${JSON.stringify(Object.keys(paraElem.textRun.textStyle || {}))}]`);
               }
               // 인라인 이미지 처리
               if (paraElem.inlineObjectProperties?.inlineObjectId) {
@@ -409,6 +456,7 @@ export class GoogleOAuthService {
                     url: imageUrl,
                     alt: paraElem.textRun?.content || '이미지',
                   });
+                  contentParts.push(`\n![${paraElem.textRun?.content || '이미지'}](${imageUrl})\n`);
                   Logger.debug(this.componentName, `    🖼️ 이미지: ${imageUrl.substring(0, 60)}...`);
                 }
               }
@@ -416,22 +464,71 @@ export class GoogleOAuthService {
             // 단락 구분자 추가
             contentParts.push('\n');
           }
-          // 표 처리
+          // 표 처리 - 🔥 마크다운 테이블로 변환
           else if (element.table) {
             tableCount++;
             const rows = element.table.tableRows || [];
             Logger.debug(this.componentName, `  📊 표 #${tableCount}: ${rows.length}행`);
             
-            for (const row of rows) {
-              const cells = row.tableCells || [];
-              for (let i = 0; i < cells.length; i++) {
-                const cellContent = cells[i].content || [];
-                parseStructuralElements(cellContent, depth + 1);
-                if (i < cells.length - 1) {
-                  contentParts.push('\t');
+            if (rows.length > 0) {
+              contentParts.push('\n'); // 테이블 전 줄바꿈
+              
+              // 첫 번째 행 (헤더)
+              const headerCells: string[] = [];
+              const firstRow = rows[0];
+              const firstRowCells = firstRow.tableCells || [];
+              
+              for (const cell of firstRowCells) {
+                const cellTextParts: string[] = [];
+                const cellContent = cell.content || [];
+                
+                for (const elem of cellContent) {
+                  if (elem.paragraph?.elements) {
+                    for (const textElem of elem.paragraph.elements) {
+                      if (textElem.textRun?.content) {
+                        cellTextParts.push(textElem.textRun.content.trim());
+                      }
+                    }
+                  }
                 }
+                
+                headerCells.push(cellTextParts.join(' ') || ' ');
               }
-              contentParts.push('\n');
+              
+              // 헤더 행 추가
+              contentParts.push(`| ${headerCells.join(' | ')} |\n`);
+              
+              // 구분선 추가
+              const separatorCells = headerCells.map(() => '---');
+              contentParts.push(`| ${separatorCells.join(' | ')} |\n`);
+              
+              // 나머지 행 추가
+              for (let rowIdx = 1; rowIdx < rows.length; rowIdx++) {
+                const row = rows[rowIdx];
+                const cells = row.tableCells || [];
+                const rowCells: string[] = [];
+                
+                for (const cell of cells) {
+                  const cellTextParts: string[] = [];
+                  const cellContent = cell.content || [];
+                  
+                  for (const elem of cellContent) {
+                    if (elem.paragraph?.elements) {
+                      for (const textElem of elem.paragraph.elements) {
+                        if (textElem.textRun?.content) {
+                          cellTextParts.push(textElem.textRun.content.trim());
+                        }
+                      }
+                    }
+                  }
+                  
+                  rowCells.push(cellTextParts.join(' ') || ' ');
+                }
+                
+                contentParts.push(`| ${rowCells.join(' | ')} |\n`);
+              }
+              
+              contentParts.push('\n'); // 테이블 후 줄바꿈
             }
           }
           // 목차 처리
