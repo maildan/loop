@@ -213,6 +213,9 @@ export interface ElectronAPI {
     minimize: () => Promise<IpcResponse<boolean>>;
     maximize: () => Promise<IpcResponse<boolean>>;
     isMaximized: () => Promise<IpcResponse<boolean>>;
+    restart: () => Promise<IpcResponse<boolean>>;
+    getUserDataPath: () => Promise<IpcResponse<string>>;
+    getName: () => Promise<IpcResponse<string>>;
   };
 
   // 💾 데이터베이스 API
@@ -319,10 +322,11 @@ export interface ElectronAPI {
     reload: () => Promise<{ success: boolean; error?: string }>;
   };
 
-  // 🔥 Updater API (electron-updater 통합)
+  // 🔥 Updater API (electron-updater 통합 + 플랫폼별 재시작 지원)
   updater: {
     checkForUpdates: () => Promise<IpcResponse<boolean>>;
     restartAndInstall: () => Promise<IpcResponse<boolean>>;
+    quitAndInstall: () => Promise<IpcResponse<boolean>>;
   };
 
   // 🤖 Gemini AI Assistant API (시놉시스 뷰 전용)

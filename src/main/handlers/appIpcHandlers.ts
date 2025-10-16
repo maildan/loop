@@ -74,18 +74,90 @@ export function setupAppIpcHandlers(): boolean {
             }
         });
 
-        // 🔥 Updater: 재시작 및 업데이트 설치
+        // 🔥 Updater: 재시작 및 업데이트 설치 (모든 플랫폼 지원)
         ipcMain.handle('updater:restart-and-install', async () => {
             try {
-                Logger.info('UPDATER_IPC', '사용자가 재시작 및 설치 요청');
-                autoUpdater.quitAndInstall(false, true); // (isSilent, isForceRunAfter)
+                const platform = process.platform;
+                Logger.info('UPDATER_IPC', '🔄 업데이트 재시작 요청', { platform });
+
+                // 🔥 Method 1: electron-updater의 quitAndInstall (권장)
+                try {
+                    Logger.debug('UPDATER_IPC', '📡 Method 1: autoUpdater.quitAndInstall() 시도');
+                    autoUpdater.quitAndInstall(false, true); // (isSilent, isForceRunAfter)
+                    Logger.info('UPDATER_IPC', '✅ quitAndInstall 완료');
+                    return {
+                        success: true,
+                        data: true,
+                        timestamp: new Date(),
+                    };
+                } catch (quitError) {
+                    Logger.warn('UPDATER_IPC', '⚠️ quitAndInstall 실패, fallback 시도', quitError);
+                }
+
+                // 🔥 Method 2: app.relaunch() + app.exit() (fallback for all platforms)
+                try {
+                    Logger.debug('UPDATER_IPC', '📡 Method 2: app.relaunch() + app.exit() 시도');
+                    app.relaunch();
+                    app.exit(0);
+                    Logger.info('UPDATER_IPC', '✅ app.relaunch() 완료');
+                    return {
+                        success: true,
+                        data: true,
+                        timestamp: new Date(),
+                    };
+                } catch (relaunhError) {
+                    Logger.warn('UPDATER_IPC', '⚠️ app.relaunch() 실패, final fallback 시도', relaunhError);
+                }
+
+                // 🔥 Method 3: 직접 프로세스 종료 (최후의 수단)
+                Logger.debug('UPDATER_IPC', '📡 Method 3: process.exit(0) 시도');
+                process.exit(0);
+                
+            } catch (error) {
+                Logger.error('UPDATER_IPC', '❌ 모든 재시작 방법 실패', { error: error instanceof Error ? error.message : String(error), platform: process.platform });
+                return {
+                    success: false,
+                    data: false,
+                    error: error instanceof Error ? error.message : 'Unknown error',
+                    timestamp: new Date(),
+                };
+            }
+        });
+
+        // 🔥 Updater: quitAndInstall 직접 호출 (추가 옵션)
+        ipcMain.handle('updater:quit-and-install', async () => {
+            try {
+                Logger.info('UPDATER_IPC', '🔄 quitAndInstall 직접 호출');
+                autoUpdater.quitAndInstall(false, true);
                 return {
                     success: true,
                     data: true,
                     timestamp: new Date(),
                 };
             } catch (error) {
-                Logger.error('UPDATER_IPC', '재시작 실패', error);
+                Logger.error('UPDATER_IPC', '❌ quitAndInstall 실패', error);
+                return {
+                    success: false,
+                    data: false,
+                    error: error instanceof Error ? error.message : 'Unknown error',
+                    timestamp: new Date(),
+                };
+            }
+        });
+
+        // 🔥 App: 재시작 (일반 앱 재시작)
+        ipcMain.handle('app:restart', async () => {
+            try {
+                Logger.info('APP_IPC', '🔄 앱 재시작 요청', { platform: process.platform });
+                app.relaunch();
+                app.exit(0);
+                return {
+                    success: true,
+                    data: true,
+                    timestamp: new Date(),
+                };
+            } catch (error) {
+                Logger.error('APP_IPC', '❌ 앱 재시작 실패', error);
                 return {
                     success: false,
                     data: false,

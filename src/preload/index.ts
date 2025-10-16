@@ -117,6 +117,9 @@ const electronAPI: ElectronAPI = {
     minimize: () => ipcRenderer.invoke(IPC_CHANNELS.APP.MINIMIZE),
     maximize: () => ipcRenderer.invoke(IPC_CHANNELS.APP.MAXIMIZE),
     isMaximized: () => ipcRenderer.invoke(IPC_CHANNELS.APP.IS_MAXIMIZED),
+    restart: () => ipcRenderer.invoke('app:restart'),
+    getUserDataPath: () => ipcRenderer.invoke('app:get-user-data-path'),
+    getName: () => ipcRenderer.invoke('app:get-name'),
   },
 
   database: {
@@ -379,10 +382,11 @@ const electronAPI: ElectronAPI = {
     reload: () => ipcRenderer.invoke('font:reload'),
   },
 
-  // 🔥 Updater API (electron-updater 통합)
+  // 🔥 Updater API (electron-updater 통합 + 플랫폼별 재시작 지원)
   updater: {
     checkForUpdates: () => ipcRenderer.invoke('updater:check-for-updates'),
     restartAndInstall: () => ipcRenderer.invoke('updater:restart-and-install'),
+    quitAndInstall: () => ipcRenderer.invoke('updater:quit-and-install'),
   },
 
   // 🔥 Gemini AI API (시놉시스 어시스턴트)
