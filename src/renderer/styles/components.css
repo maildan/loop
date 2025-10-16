@@ -556,10 +556,23 @@ header {
 
 .driver-popover[data-loop-popover-side='top'] {
   transform-origin: bottom center;
+  animation: driver-popover-emerge 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .driver-popover[data-loop-popover-side='bottom'] {
   transform-origin: top center;
+  animation: driver-popover-emerge 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes driver-popover-emerge {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .driver-popover::after {
@@ -606,21 +619,27 @@ header {
 
 .driver-popover .driver-popover-close-btn {
   all: unset;
-  width: 2rem;
-  height: 2rem;
-  display: grid;
-  place-items: center;
-  border-radius: 0.5rem;
-  color: hsl(var(--muted-foreground));
-  cursor: pointer;
-  transition: color 0.2s ease, background-color 0.2s ease;
+  position: absolute !important;
+  top: 1rem !important;
+  right: 1rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 0.5rem !important;
+  color: hsl(var(--muted-foreground)) !important;
+  cursor: pointer !important;
+  transition: color 0.2s ease, background-color 0.2s ease !important;
+  font-size: 1.5rem !important;
+  font-weight: 300 !important;
+  line-height: 1 !important;
 }
 
 .driver-popover .driver-popover-close-btn:hover,
 .driver-popover .driver-popover-close-btn:focus-visible {
-  color: hsl(var(--foreground));
-  background-color: hsl(var(--muted) / 0.3);
-  outline: none;
+  color: hsl(var(--foreground)) !important;
+  background-color: hsl(var(--muted) / 0.4) !important;
+  outline: none !important;
 }
 
 .driver-popover button {
@@ -743,4 +762,18 @@ header {
   .driver-popover .driver-popover-description {
     font-size: 0.9rem;
   }
+
+  .driver-popover .driver-popover-close-btn {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.25rem;
+  }
+}
+
+/* 🔥 Spotlight 배경 효과 - 튜토리얼 활성 시 배경 섹션 강조 */
+[data-tour="quick-start-card"].driver-highlighted,
+[data-tour="active-projects-section"].driver-highlighted,
+[data-tour="recent-files-section"].driver-highlighted {
+  position: relative;
+  z-index: 999999998; /* Popover 바로 아래 */
 }

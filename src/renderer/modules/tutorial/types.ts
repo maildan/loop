@@ -77,6 +77,46 @@ export interface Tutorial {
    * 선택적: 튜토리얼 스킵 시 콜백
    */
   readonly onSkip?: () => void | Promise<void>;
+
+  /**
+   * 선택적: 튜토리얼 메타 정보 (자동 진행 등)
+   */
+  readonly meta?: {
+    /**
+     * 자동 진행 여부 (버튼 없이 일정 시간마다 자동으로 다음 단계)
+     */
+    readonly autoProgress?: boolean;
+
+    /**
+     * 자동 진행 딜레이 (밀리초)
+     * @default 3000
+     */
+    readonly autoProgressDelay?: number;
+
+    /**
+     * 다음 튜토리얼 ID (링크된 튜토리얼)
+     * @example 'project-creator' (대시보드 → 프로젝트 생성)
+     */
+    readonly nextTutorialId?: string;
+
+    /**
+     * 다음 튜토리얼에서 시작할 스텝 ID
+     * @default 첫 번째 스텝
+     */
+    readonly nextStepId?: string;
+
+    /**
+     * 이 튜토리얼 완료 후 복귀할 튜토리얼 ID
+     * @example 'dashboard-intro' (프로젝트 생성 완료 후)
+     */
+    readonly returnTutorialId?: string;
+
+    /**
+     * 복귀할 튜토리얼의 스텝 ID
+     * @example 'action-import'
+     */
+    readonly returnStepId?: string;
+  };
 }
 
 /**

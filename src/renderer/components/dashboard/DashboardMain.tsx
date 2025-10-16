@@ -408,7 +408,7 @@ export function DashboardMain(): React.ReactElement {
         {/* 메인 그리드 */}
         <div className={DASHBOARD_STYLES.mainGrid}>
           {/* 활성 프로젝트 */}
-          <Card>
+          <Card data-tour="active-projects-section">
             <div className="flex items-center gap-2 mb-4">
               <Target className="w-5 h-5 text-[hsl(var(--accent-primary))]" />
               <h3 className="font-semibold text-[hsl(var(--foreground))]">활성 프로젝트</h3>
@@ -465,7 +465,7 @@ export function DashboardMain(): React.ReactElement {
           </Card>
 
           {/* 최근 파일 */}
-          <Card>
+          <Card data-tour="recent-files-section">
             <div className="flex items-center gap-2 mb-4">
               <Clock className="w-5 h-5 text-[var(--success)]" />
               <h3 className="font-semibold text-[hsl(var(--foreground))]">최근 파일</h3>

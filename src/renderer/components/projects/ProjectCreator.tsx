@@ -9,6 +9,7 @@ import { Textarea } from '../ui/Textarea';
 import { Badge } from '../ui/Badge';
 import { Logger } from '../../../shared/logger';
 import { markdownToHtml } from '../../utils/markdownToHtml';
+import { useTutorial, useTutorialState } from '../../modules/tutorial/useTutorial';
 import {
   FileText,
   Globe,
@@ -136,12 +137,24 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
   const [deadline, setDeadline] = useState<string>(''); // 🔥 완료 목표 날짜
   const [isCreating, setIsCreating] = useState<boolean>(false);
 
+  // 🔥 튜토리얼 Hook - 여기서만 호출 (Hook 규칙 준수)
+  const { startTutorial, closeTutorial } = useTutorial();
+  const { currentTutorialId } = useTutorialState();
+
   // 🔥 Google Docs 선택 모달
   const [showGoogleDocsModal, setShowGoogleDocsModal] = useState<boolean>(false);
   const [googleDocs, setGoogleDocs] = useState<any[]>([]);
 
   // 🔥 선택된 Google Docs 문서 정보
   const [selectedGoogleDoc, setSelectedGoogleDoc] = useState<any>(null);
+
+  // 🔥 ProjectCreator 모달이 열릴 때 튜토리얼 자동 시작
+  useEffect(() => {
+    if (isOpen && currentTutorialId === 'project-creator') {
+      Logger.info('PROJECT_CREATOR', '🚀 Starting project-creator tutorial');
+      startTutorial('project-creator');
+    }
+  }, [isOpen, currentTutorialId, startTutorial]);
 
   // 🔥 OAuth 성공 이벤트 리스너 설정 (강화된 다중 채널 지원)
   useEffect(() => {
@@ -650,14 +663,24 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
   return (
     <>
       <div className={PROJECT_CREATOR_STYLES.overlay} onClick={onClose}>
-        <div className={PROJECT_CREATOR_STYLES.modal} onClick={e => e.stopPropagation()}>
+        <div className={PROJECT_CREATOR_STYLES.modal} onClick={e => e.stopPropagation()} data-tour="project-creator-container">
           {/* 헤더 */}
           <div className={PROJECT_CREATOR_STYLES.header}>
             <h2 className={PROJECT_CREATOR_STYLES.title}>새 프로젝트 만들기</h2>
             <button
-              onClick={onClose}
+              onClick={() => {
+                // 🔥 튜토리얼 중이면 closeTutorial, 아니면 onClose
+                if (currentTutorialId === 'project-creator') {
+                  // closeTutorial 호출 시 TutorialContext의 nextStep으로 복귀
+                  // (getProjectCreatorTutorial의 returnTutorialId가 처리)
+                  closeTutorial();
+                } else {
+                  onClose();
+                }
+              }}
               className={PROJECT_CREATOR_STYLES.closeButton}
               aria-label="닫기"
+              data-tour="project-creator-close-btn"
             >
               <X className="w-6 h-6" />
             </button>
@@ -733,7 +756,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
             )}
 
             {/* 프로젝트 정보 */}
-            <div className={PROJECT_CREATOR_STYLES.formSection}>
+            <div className={PROJECT_CREATOR_STYLES.formSection} data-tour="project-details-section">
               <h3 className={PROJECT_CREATOR_STYLES.sectionTitle}>프로젝트 정보</h3>
 
               <div className={PROJECT_CREATOR_STYLES.inputGroup}>

@@ -3,6 +3,7 @@
  */
 
 import { getDashboardTutorial } from './getDashboardTutorial';
+import { getProjectCreatorTutorial } from './getProjectCreatorTutorial';
 import { registerTutorial } from '../TutorialContext';
 
 /**
@@ -10,8 +11,8 @@ import { registerTutorial } from '../TutorialContext';
  */
 export function initializeTutorials(): void {
   registerTutorial(getDashboardTutorial());
+  registerTutorial(getProjectCreatorTutorial());
   // TODO: 나중에 추가할 튜토리얼
-  // registerTutorial(getProjectCreationTutorial());
   // registerTutorial(getAnalysisTutorial());
 }
 

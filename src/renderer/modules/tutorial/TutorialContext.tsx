@@ -118,13 +118,14 @@ export function TutorialProvider({ children }: TutorialProviderProps): React.Rea
     try {
       Logger.info('TUTORIAL_CONTEXT', `🚀 Starting tutorial: ${tutorialId}`);
       
-      // 저장된 진행도 복구
+      // 저장된 진행도 복구 (범위 검증)
       const savedProgress = state.tutorialProgress[tutorialId] ?? 0;
+      const validStepIndex = Math.min(Math.max(0, savedProgress), tutorial.steps.length - 1);
 
       setState(prev => ({
         ...prev,
         currentTutorialId: tutorialId,
-        currentStepIndex: savedProgress,
+        currentStepIndex: validStepIndex,
         isActive: true,
       }));
 
@@ -133,7 +134,7 @@ export function TutorialProvider({ children }: TutorialProviderProps): React.Rea
         await tutorial.onStart();
       }
 
-      Logger.info('TUTORIAL_CONTEXT', `✅ Tutorial started at step ${savedProgress}`);
+      Logger.info('TUTORIAL_CONTEXT', `✅ Tutorial started at step ${validStepIndex}`);
     } catch (error) {
       Logger.error('TUTORIAL_CONTEXT', `❌ Failed to start tutorial: ${tutorialId}`, error);
     }
@@ -153,7 +154,32 @@ export function TutorialProvider({ children }: TutorialProviderProps): React.Rea
       const isLastStep = nextIndex >= tutorial.steps.length;
 
       if (isLastStep) {
-        // 마지막 단계 → 완료로 자동 이동
+        // 🔥 마지막 단계: returnTutorialId가 있으면 그 튜토리얼로 전환
+        if (tutorial.meta?.returnTutorialId) {
+          const returnTutorial = getTutorial(tutorial.meta.returnTutorialId);
+          if (returnTutorial) {
+            // 복귀할 튜토리얼의 특정 스텝으로 이동
+            const returnStepId = tutorial.meta.returnStepId;
+            const returnStepIndex = returnStepId
+              ? returnTutorial.steps.findIndex(s => s.stepId === returnStepId)
+              : 0;
+            const validReturnStep = Math.max(0, returnStepIndex);
+
+            Logger.info(
+              'TUTORIAL_CONTEXT',
+              `🔄 Returning from ${prev.currentTutorialId} to ${tutorial.meta.returnTutorialId} at step ${validReturnStep}`
+            );
+
+            return {
+              ...prev,
+              currentTutorialId: tutorial.meta.returnTutorialId,
+              currentStepIndex: validReturnStep,
+              isActive: true,
+            };
+          }
+        }
+
+        // 복귀 튜토리얼이 없으면 튜토리얼 완료
         return {
           ...prev,
           currentStepIndex: nextIndex,

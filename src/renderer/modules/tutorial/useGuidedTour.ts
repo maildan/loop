@@ -84,6 +84,9 @@ export function useGuidedTour(): Driver | null {
       }
 
       // Driver.js 설정
+      const autoProgressDelay = tutorial.meta?.autoProgressDelay ?? 3000;
+      const isAutoProgress = tutorial.meta?.autoProgress ?? false;
+
       driverRef.current = driver({
         ...DRIVER_STYLES,
         steps: tutorial.steps.map((step, index) => ({
@@ -107,7 +110,39 @@ export function useGuidedTour(): Driver | null {
         // 네비게이션 핸들러
         onNextClick: async () => {
           Logger.debug('useGuidedTour', `→ Next button clicked (step ${currentStepIndex})`);
+          
+          // 🔥 Step 3-3 (action-create)에서 "다음" 클릭 시 자동으로 action-create 버튼 클릭
+          const currentStep = tutorial.steps[currentStepIndex];
+          if (currentStep?.stepId === 'action-create') {
+            Logger.info('useGuidedTour', '🚀 Auto-clicking action-create button');
+            const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
+            if (actionCreateBtn) {
+              actionCreateBtn.click();
+              // 모달이 열릴 시간 대기 후 다음 튜토리얼 시작
+              setTimeout(() => {
+                startTutorial('project-creator');
+              }, 300);
+              return;
+            }
+          }
+          
           await nextStep();
+          
+          // 🔥 nextStep 후 상태 업데이트 확인 (비동기 처리)
+          setTimeout(async () => {
+            // 현재 튜토리얼이 마지막 스텝인지 확인
+            const isLastStep = currentStepIndex + 1 >= tutorial.steps.length;
+            
+            if (isLastStep && tutorial.meta?.nextTutorialId) {
+              Logger.info(
+                'useGuidedTour',
+                `🔄 Transitioning to next tutorial: ${tutorial.meta.nextTutorialId}`
+              );
+              
+              // 다음 튜토리얼로 자동 전환
+              await startTutorial(tutorial.meta.nextTutorialId);
+            }
+          }, 100); // 상태 업데이트 대기
         },
 
         onPrevClick: async () => {
@@ -118,6 +153,24 @@ export function useGuidedTour(): Driver | null {
         onCloseClick: async () => {
           Logger.info('useGuidedTour', '✖️ Tutorial closed');
           closeTutorial();
+        },
+
+        // 🔥 자동 진행 콜백
+        onPopoverRender: (popover) => {
+          if (isAutoProgress && currentStepIndex < tutorial.steps.length - 1) {
+            Logger.debug(
+              'useGuidedTour',
+              `⏱️ Auto-progress scheduled for step ${currentStepIndex} (${autoProgressDelay}ms)`
+            );
+            const timeoutId = setTimeout(() => {
+              nextStep().catch(err =>
+                Logger.error('useGuidedTour', 'Error in auto-progress', err)
+              );
+            }, autoProgressDelay);
+
+            // Cleanup 함수 (popover 제거 시)
+            return () => clearTimeout(timeoutId);
+          }
         },
 
         // 튜토리얼 완료 시

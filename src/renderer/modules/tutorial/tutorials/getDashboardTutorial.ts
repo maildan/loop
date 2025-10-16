@@ -128,12 +128,13 @@ export const getDashboardTutorial = (): Tutorial => ({
           '새로운 창작물 프로젝트를 시작하세요!\n\n' +
           '웹소설이나 장편 창작물을 등록하고\n' +
           'Loop에서 실시간으로 활동을 분석받을 수 있습니다.\n\n' +
-          '프로젝트마다 독립적인 통계를 관리합니다.',
+          '프로젝트마다 독립적인 통계를 관리합니다.\n' +
+          '한번 직접 들어가서 어떻게 만드는지 볼까요?',
         side: 'top',
         align: 'center',
         showButtons: ['previous', 'next', 'close'],
         prevBtnText: '← 이전',
-        nextBtnText: '다음 →',
+        nextBtnText: '직접 해보기 →',
         showProgress: true,
       },
       disableActiveInteraction: false,
@@ -209,18 +210,20 @@ export const getDashboardTutorial = (): Tutorial => ({
         showProgress: true,
       },
       disableActiveInteraction: false,
-    },    // ============================================================
-    // Step 3-2: QuickStart - 새 프로젝트
+    },
+
+    // ============================================================
+    // Step 4: 활성 프로젝트 섹션
     // ============================================================
     {
-      stepId: 'quickstart-intro',
-      element: '[data-tour="quick-start-card"]',
+      stepId: 'active-projects',
+      element: '[data-tour="active-projects-section"]',
       popover: {
-        title: '⚡ 빠른 시작',
+        title: '� 활성 프로젝트',
         description:
-          '여기에서 새로운 프로젝트를 시작하거나\n' +
-          '기존 파일을 가져올 수 있습니다.\n\n' +
-          '각 옵션을 살펴봅시다!',
+          '현재 진행 중인 프로젝트들이 여기 표시됩니다.\n\n' +
+          '프로젝트를 클릭하면 에디터로 이동합니다.\n\n' +
+          '프로젝트가 많아지면 이 섹션에서 관리하세요!',
         side: 'bottom',
         align: 'center',
         showButtons: ['previous', 'next', 'close'],
@@ -232,18 +235,19 @@ export const getDashboardTutorial = (): Tutorial => ({
     },
 
     // ============================================================
-    // Step 3-3: QuickStart - 새 프로젝트
+    // Step 5: 최근 파일 섹션
     // ============================================================
     {
-      stepId: 'action-create',
-      element: '[data-tour="action-create"]',
+      stepId: 'recent-files',
+      element: '[data-tour="recent-files-section"]',
       popover: {
-        title: '📝 새 프로젝트 만들기',
+        title: '⏱️ 최근 파일',
         description:
-          '여기를 클릭해서 새로운 프로젝트를 생성하세요.\n\n' +
-          '작가님의 웹소설이나 창작물을 Loop에 등록하고\n' +
-          '실시간으로 창작 활동을 분석할 수 있습니다!',
-        side: 'top',
+          '가장 최근에 편집한 프로젝트들이 여기 표시됩니다.\n\n' +
+          '빠르게 이전 작업물로 복귀할 수 있습니다.\n' +
+          '이 목록은 자동으로 업데이트됩니다.\n\n' +
+          '자주 사용하는 프로젝트는 여기서 한번에 접근하세요!',
+        side: 'bottom',
         align: 'center',
         showButtons: ['previous', 'next', 'close'],
         prevBtnText: '← 이전',
@@ -254,75 +258,7 @@ export const getDashboardTutorial = (): Tutorial => ({
     },
 
     // ============================================================
-    // Step 3-4: QuickStart - 프로젝트 가져오기
-    // ============================================================
-    {
-      stepId: 'action-import',
-      element: '[data-tour="action-import"]',
-      popover: {
-        title: '📂 프로젝트 가져오기',
-        description:
-          '로컬 컴퓨터의 파일을 Loop으로 가져올 수 있습니다.\n\n' +
-          '• .txt 파일\n' +
-          '• Word 문서\n' +
-          '• 다양한 형식의 문서\n\n' +
-          '기존 창작물을 Loop에서 분석해보세요!',
-        side: 'top',
-        align: 'center',
-        showButtons: ['previous', 'next', 'close'],
-        prevBtnText: '← 이전',
-        nextBtnText: '다음 →',
-        showProgress: true,
-      },
-      disableActiveInteraction: false,
-    },
-
-    // ============================================================
-    // Step 3-5: QuickStart - 샘플 보기
-    // ============================================================
-    {
-      stepId: 'action-sample',
-      element: '[data-tour="action-sample"]',
-      popover: {
-        title: '🎬 샘플 프로젝트',
-        description:
-          'Loop의 기능을 체험할 수 있는 샘플 프로젝트를\n' +
-          '확인해보세요.\n\n' +
-          '어떤 기능들이 있는지 미리 알아볼 수 있습니다!',
-        side: 'top',
-        align: 'center',
-        showButtons: ['previous', 'next', 'close'],
-        prevBtnText: '← 이전',
-        nextBtnText: '다음 →',
-        showProgress: true,
-      },
-      disableActiveInteraction: false,
-    },
-
-    // ============================================================
-    // Step 3-6: QuickStart - 사용법 보기
-    // ============================================================
-    {
-      stepId: 'action-docs',
-      element: '[data-tour="action-docs"]',
-      popover: {
-        title: '❓ 사용법 보기',
-        description:
-          '이 버튼을 다시 클릭하면 언제든지\n' +
-          '이 튜토리얼을 다시 볼 수 있습니다.\n\n' +
-          '궁금한 점이 있을 때마다 사용하세요!',
-        side: 'top',
-        align: 'center',
-        showButtons: ['previous', 'next', 'close'],
-        prevBtnText: '← 이전',
-        nextBtnText: '다음 →',
-        showProgress: true,
-      },
-      disableActiveInteraction: false,
-    },
-
-    // ============================================================
-    // Step 4: 완료 (나중에 메인 그리드 설명 추가)
+    // Step 6: 완료 (메인 그리드 설명 추가)
     // ============================================================
     {
       stepId: 'dashboard-complete',
@@ -334,9 +270,9 @@ export const getDashboardTutorial = (): Tutorial => ({
           '✅ 창작 통계 대시보드로 활동 추적\n' +
           '✅ 새 프로젝트 빠르게 생성\n' +
           '✅ 기존 파일 Loop에 가져오기\n' +
-          '✅ 샘플로 기능 미리 체험\n\n' +
+          '✅ 활성 프로젝트 및 최근 파일 관리\n\n' +
           '이제 당신의 창작 여정을 시작해봅시다!\n' +
-          '행운의 창작을 기원합니다. �✨',
+          '행운의 창작을 기원합니다. ✨',
         side: 'top',
         align: 'center',
         showButtons: ['previous', 'close'],
@@ -362,5 +298,13 @@ export const getDashboardTutorial = (): Tutorial => ({
   // 튜토리얼 스킵 콜백
   onSkip: async () => {
     Logger.info('getDashboardTutorial', '⏭️ Dashboard tutorial skipped');
+  },
+
+  // 메타 정보: Step 3-3 (action-create)에서 ProjectCreator 튜토리얼로 전환
+  meta: {
+    nextTutorialId: 'project-creator',
+    nextStepId: 'create-method-intro',
+    returnTutorialId: 'dashboard-intro',
+    returnStepId: 'action-import',
   },
 });
