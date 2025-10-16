@@ -8,6 +8,10 @@
 
 import { Logger } from '../../shared/logger';
 import { keychainAdapter } from '../utils/keychainAdapter';
+import { app } from 'electron';
+import { join, resolve } from 'path';
+import { existsSync, readFileSync } from 'fs';
+import { parse } from 'dotenv';
 
 const COMPONENT = 'ENV_SERVICE';
 
@@ -38,20 +42,47 @@ class EnvironmentServiceClass {
     if (isDev) {
       // Dev: .env 파일이 이미 로드됨 (main/index.ts의 dotenv/config)
       await this.loadFromProcessEnv();
+      
+      // 🔥 Dev 모드에서 Gemini API 키 검증
+      if (!this.config.GEMINI_API_KEY) {
+        Logger.warn(COMPONENT, '⚠️ GEMINI_API_KEY가 설정되지 않았습니다');
+        Logger.warn(COMPONENT, '📝 개발 환경에서 Gemini 기능을 사용하려면:');
+        Logger.warn(COMPONENT, '   1. .env.example을 참고하여 .env 파일 생성');
+        Logger.warn(COMPONENT, '   2. https://aistudio.google.com/app/apikey 에서 API 키 발급');
+        Logger.warn(COMPONENT, '   3. GEMINI_API_KEY=your-key-here 설정 후 앱 재시작');
+        Logger.warn(COMPONENT, '');
+        Logger.warn(COMPONENT, '📦 Production/CI 환경:');
+        Logger.warn(COMPONENT, '   - GitHub Secrets에서 GEMINI_API_KEY 자동 주입됨');
+        Logger.warn(COMPONENT, '   - vite 빌드 시점에 환경변수가 코드에 포함됨');
+        Logger.warn(COMPONENT, '   - .env 파일은 번들에 포함되지 않음 (보안)');
+        Logger.warn(COMPONENT, '');
+        Logger.warn(COMPONENT, '� Packaged 상태에서는:');
+        Logger.warn(COMPONENT, '   - 앱 상위 디렉토리, 프로젝트 루트, userData에서 .env를 찾아 로드');
+        Logger.warn(COMPONENT, '');
+        Logger.warn(COMPONENT, '�📖 자세한 정보는 docs/ENVIRONMENT_VARIABLES.md 참고');
+      }
     } else {
-      // Production: Keychain에서 로드
-      await this.loadFromKeychain();
+      // Production: 먼저 process.env에서 시도 (Vite define 주입 또는 packaged .env)
+      await this.loadFromProcessEnv();
+      
+      // 아직 로드되지 않았다면 Keychain 시도
+      if (!this.config.GEMINI_API_KEY) {
+        Logger.info(COMPONENT, 'GEMINI_API_KEY not found in process.env, trying Keychain...');
+        await this.loadFromKeychain();
+      }
     }
 
     this.loaded = true;
     Logger.info(COMPONENT, '✅ Environment initialized', {
       hasGeminiKey: Boolean(this.config.GEMINI_API_KEY),
-      hasGoogleAuth: Boolean(this.config.GOOGLE_CLIENT_ID)
+      hasGoogleAuth: Boolean(this.config.GOOGLE_CLIENT_ID),
+      environment: isDev ? 'development' : 'production'
     });
   }
 
   /**
    * 📁 process.env에서 로드 (Dev)
+   * 🔥 Packaged 상태에서는 .env 파일을 명시적으로 재로드
    */
   private async loadFromProcessEnv(): Promise<void> {
     this.config = {
@@ -65,6 +96,58 @@ class EnvironmentServiceClass {
     Logger.debug(COMPONENT, 'Loaded from process.env', {
       keysLoaded: Object.keys(this.config).filter(k => this.config[k as keyof EnvironmentConfig])
     });
+
+    // 🔥 Packaged 상태에서 .env 파일이 process.env에 로드되지 않았다면, 명시적으로 찾아서 로드
+    if (!this.config.GEMINI_API_KEY) {
+      const envPath = this.findEnvFile();
+      if (envPath) {
+        try {
+          const parsed = parse(readFileSync(envPath));
+          this.config.GEMINI_API_KEY = parsed.GEMINI_API_KEY || '';
+          this.config.GEMINI_MODEL = parsed.GEMINI_MODEL || this.config.GEMINI_MODEL;
+          this.config.GOOGLE_CLIENT_ID = parsed.GOOGLE_CLIENT_ID || this.config.GOOGLE_CLIENT_ID;
+          this.config.GOOGLE_CLIENT_SECRET = parsed.GOOGLE_CLIENT_SECRET || this.config.GOOGLE_CLIENT_SECRET;
+          this.config.GOOGLE_REDIRECT_URI = parsed.GOOGLE_REDIRECT_URI || this.config.GOOGLE_REDIRECT_URI;
+
+          Logger.info(COMPONENT, '🔥 .env 파일을 명시적으로 로드 (Packaged 상태)', { envPath });
+        } catch (error) {
+          Logger.warn(COMPONENT, '.env 파일 로드 실패', { envPath, error });
+        }
+      }
+    }
+  }
+
+  /**
+   * 🔍 Packaged 상태에서 .env 파일 찾기
+   * 우선순위:
+   * 1. app.getAppPath()의 상위 디렉토리 (asar 외부)
+   * 2. process.cwd() (현재 작업 디렉토리)
+   * 3. app.getPath('userData') (사용자 데이터 폴더)
+   */
+  private findEnvFile(): string | null {
+    const candidates = [
+      // asar 외부 .env (번들 직상위)
+      join(app.getAppPath(), '..', '.env'),
+      // 프로젝트 루트 .env
+      join(process.cwd(), '.env'),
+      // userData/.env (사용자 설정 폴더)
+      join(app.getPath('userData'), '.env'),
+    ];
+
+    for (const candidate of candidates) {
+      try {
+        if (existsSync(candidate)) {
+          const resolvedPath = resolve(candidate);
+          Logger.debug(COMPONENT, '✓ .env 파일 발견', { path: resolvedPath });
+          return resolvedPath;
+        }
+      } catch (error) {
+        Logger.debug(COMPONENT, '.env 파일 확인 실패', { candidate, error });
+      }
+    }
+
+    Logger.debug(COMPONENT, '.env 파일을 찾을 수 없음. 후보:', { candidates });
+    return null;
   }
 
   /**

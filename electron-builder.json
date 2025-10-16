@@ -35,31 +35,14 @@
     "!node_modules/**/__tests__/**",
     "!node_modules/**/.github/**",
     "!node_modules/**/examples/**",
-    "!node_modules/**/*.d.ts",
-    "node_modules/.prisma/**/*",
-    "node_modules/@prisma/client/**/*",
-    "node_modules/.pnpm/@prisma+client@*/node_modules/.prisma/**/*"
+    "!node_modules/**/*.d.ts"
   ],
   "asarUnpack": [
-    "**/*.node",
-    "**/*.dll",
-    "**/*.dylib",
-    "**/*.so",
-    "node_modules/.prisma/**/*",
-    "node_modules/@prisma/**/*",
-    "node_modules/.bin/prisma*",
-    "node_modules/keytar/**/*",
-    "node_modules/electron-updater/**/*"
+    "**/.prisma/query-engine*.node",
+    "node_modules/keytar/build/**/*.node",
+    "node_modules/electron-updater/node_modules/bufferutil/build/**/*.node"
   ],
   "extraResources": [
-    {
-      "from": "node_modules",
-      "to": "node_modules",
-      "filter": [
-        ".prisma/**/*",
-        "@prisma/client/**/*"
-      ]
-    },
     {
       "from": "prisma/schema.prisma",
       "to": "prisma/schema.prisma"
