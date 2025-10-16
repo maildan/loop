@@ -74,14 +74,6 @@ const SIDEBAR_ITEMS: readonly SidebarItem[] = [
     ariaLabel: '분석으로 이동'
   },
   {
-    id: 'ai',
-    icon: Sparkles,
-    label: 'AI 어시스턴트',
-    href: '/ai',
-    badge: 3,
-    ariaLabel: 'AI 어시스턴트로 이동'
-  },
-  {
     id: 'settings',
     icon: Settings,
     label: '설정',

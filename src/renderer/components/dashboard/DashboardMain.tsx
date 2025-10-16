@@ -27,7 +27,7 @@ import { QuickStartCard } from './QuickStartCard';
 import { DashboardSkeleton } from './DashboardSkeleton';
 import { HydrationGuard } from '../ui/HydrationGuard';
 import { Logger } from '../../../shared/logger';
-// 모니터링 기능 제거됨 - 기획 변경으로 불필요
+import { useGuidedTour, useTutorial } from '../../modules/tutorial';
 
 // 🔥 작가 친화적 스타일 상수 - 미니멀하고 집중할 수 있는 디자인
 const DASHBOARD_STYLES = {
@@ -102,6 +102,9 @@ function formatTime(seconds: number): string {
 
 export function DashboardMain(): React.ReactElement {
   const navigate = useNavigate(); // 🔥 Navigation 훅 추가
+  
+  // 🔥 튜토리얼 시스템 초기화
+  useGuidedTour();
   // 모니터링 기능 제거됨 - 기획 변경으로 불필요
 
   // 모니터링 데이터 상태 제거됨 - 모니터링 기능 불필요
@@ -333,9 +336,9 @@ export function DashboardMain(): React.ReactElement {
   // 모니터링 및 AI 토글 함수 제거됨 - 기능 불필요
 
   return (
-    <div className={DASHBOARD_STYLES.container}>
+    <div className={DASHBOARD_STYLES.container} data-tour="dashboard-container">
       {/* 헤더 */}
-      <div className={DASHBOARD_STYLES.header}>
+      <div className={DASHBOARD_STYLES.header} data-tour="dashboard-header">
         <div className={DASHBOARD_STYLES.headerContent}>
           <div>
             <h1 className={DASHBOARD_STYLES.headerTitle}>대시보드</h1>
@@ -354,7 +357,7 @@ export function DashboardMain(): React.ReactElement {
         {loadingStates.kpi ? (
           <DashboardSkeleton showKpi showProjects={false} showRecentFiles={false} />
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" data-tour="kpi-section">
             {kpiData.map((kpi, index) => (
               <KpiCard key={index} {...kpi} />
             ))}

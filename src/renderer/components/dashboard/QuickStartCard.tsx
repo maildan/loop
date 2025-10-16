@@ -5,6 +5,7 @@ import { Plus, FileText, Download, BookOpen, type LucideIcon } from 'lucide-reac
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Logger } from '../../../shared/logger';
+import { useTutorial } from '../../modules/tutorial';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수 - 작가 친화적 다크모드
 const QUICK_START_STYLES = {
@@ -47,10 +48,19 @@ export function QuickStartCard({
   onViewDocs,
   showActions = true
 }: QuickStartCardProps): React.ReactElement {
+  // 🔥 튜토리얼 시스템
+  const { startTutorial } = useTutorial();
 
   const handleAction = (actionId: string, callback?: () => void): void => {
     Logger.info('QUICK_START', `Quick action triggered: ${actionId}`);
     callback?.();
+  };
+
+  const handleViewDocs = async (): Promise<void> => {
+    // 튜토리얼 시작
+    await startTutorial('dashboard-intro');
+    // onViewDocs 콜백도 호출 (있으면)
+    onViewDocs?.();
   };
 
   const quickActions: readonly QuickAction[] = [
@@ -83,13 +93,13 @@ export function QuickStartCard({
       label: '사용법 보기',
       icon: BookOpen,
       variant: 'outline',
-      onClick: () => handleAction('docs', onViewDocs),
+      onClick: () => handleAction('docs', handleViewDocs),
       ariaLabel: '사용 가이드 보기'
     }
   ] as const;
 
   return (
-    <Card className={QUICK_START_STYLES.container} role="region" aria-label="빠른 시작">
+    <Card className={QUICK_START_STYLES.container} role="region" aria-label="빠른 시작" data-tour="quick-start-card">
       <div className={QUICK_START_STYLES.content}>
         <h3 className={QUICK_START_STYLES.title}>{title}</h3>
         <p className={QUICK_START_STYLES.description}>{description}</p>
@@ -105,6 +115,7 @@ export function QuickStartCard({
                   className={QUICK_START_STYLES.actionButton}
                   onClick={action.onClick}
                   aria-label={action.ariaLabel}
+                  data-tour={`action-${action.id}`}
                 >
                   <Icon className={QUICK_START_STYLES.icon} aria-hidden="true" />
                   {action.label}

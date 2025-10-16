@@ -14,6 +14,7 @@ import AI from './routes/AI';
 import OAuthCallback from './routes/OAuthCallback';
 import NotFound from './routes/NotFound';
 import { UpdateNotification } from '../components/common/UpdateNotification';
+import { TutorialProvider } from '../modules/tutorial';
 import '../styles/index.css';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
@@ -98,27 +99,29 @@ export default function App(): React.ReactElement {
   return (
     <div className={LAYOUT_STYLES.container}>
       <BrowserRouter>
-        <TrayActionHandler />
-        <ClientLayout initialAuth={initialAuth}>
-          <Routes>
-            {/* Main routes */}
-            <Route path="/" element={<Home />} />
-            <Route path="/dashboard" element={<Navigate to="/" replace />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/projects/:id" element={<ProjectDetail />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/ai" element={<AI />} />
-            
-            {/* OAuth callback */}
-            <Route path="/oauth/callback" element={<OAuthCallback />} />
-            
-            {/* 404 fallback */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </ClientLayout>
-        {/* 🔥 Auto-updater 알림 (전역 표시) */}
-        <UpdateNotification />
+        <TutorialProvider>
+          <TrayActionHandler />
+          <ClientLayout initialAuth={initialAuth}>
+            <Routes>
+              {/* Main routes */}
+              <Route path="/" element={<Home />} />
+              <Route path="/dashboard" element={<Navigate to="/" replace />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:id" element={<ProjectDetail />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/ai" element={<AI />} />
+              
+              {/* OAuth callback */}
+              <Route path="/oauth/callback" element={<OAuthCallback />} />
+              
+              {/* 404 fallback */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ClientLayout>
+          {/* 🔥 Auto-updater 알림 (전역 표시) */}
+          <UpdateNotification />
+        </TutorialProvider>
       </BrowserRouter>
     </div>
   );
