@@ -209,6 +209,40 @@ export class GoogleOAuthService {
   }
 
   /**
+   * 🔥 Google 사용자 프로필 조회 (이름, 이메일, 프로필 이미지)
+   */
+  async getUserProfile(): Promise<Result<{ name?: string; email?: string; picture?: string }>> {
+    try {
+      Logger.debug(this.componentName, '👤 Google 사용자 프로필 조회');
+      
+      const tokens = await tokenStorage.getTokens('google');
+      if (!tokens) {
+        return createError('인증 토큰이 없습니다. 다시 로그인해주세요.');
+      }
+
+      const userInfo = await this.getUserInfo(tokens.access_token);
+      if (!userInfo) {
+        return createError('사용자 정보를 조회할 수 없습니다');
+      }
+
+      Logger.info(this.componentName, '✅ 사용자 프로필 조회 완료', {
+        name: userInfo.name,
+        email: userInfo.email,
+        picture: !!userInfo.picture,
+      });
+
+      return createSuccess({
+        name: userInfo.name,
+        email: userInfo.email,
+        picture: userInfo.picture,
+      });
+    } catch (error) {
+      Logger.error(this.componentName, '❌ 사용자 프로필 조회 실패', error);
+      return createError(error instanceof Error ? error.message : '사용자 프로필 조회 실패');
+    }
+  }
+
+  /**
    * 🔥 Google Docs 문서 생성
    */
   async createDocument(title: string, content: string): Promise<Result<{ documentId: string; webViewLink: string }>> {
@@ -297,6 +331,159 @@ export class GoogleOAuthService {
     } catch (error) {
       Logger.error(this.componentName, '❌ Google Docs 목록 조회 실패', error);
       return createError(error instanceof Error ? error.message : 'List documents failed');
+    }
+  }
+
+  /**
+   * 🔥 Google Docs 문서 콘텐츠 조회 (텍스트, 이미지 등)
+   */
+  async getDocumentContent(documentId: string): Promise<Result<{ 
+    title: string; 
+    content: string; 
+    images: Array<{ url: string; alt?: string }>;
+    metadata: { createdTime?: string; modifiedTime?: string };
+  }>> {
+    try {
+      Logger.debug(this.componentName, `📄 Google Docs 문서 콘텐츠 조회: ${documentId}`);
+      
+      const tokens = await tokenStorage.getTokens('google');
+      if (!tokens) {
+        return createError('인증 토큰이 없습니다. 다시 로그인해주세요.');
+      }
+
+      const client = this.getOAuth2Client(tokens) as OAuth2Client;
+      const docs = google.docs({ version: 'v1', auth: client });
+
+      // Google Docs API - 문서 전체 콘텐츠 조회 (모든 탭 포함)
+      Logger.debug(this.componentName, '🌐 Google Docs API 호출 중...', { documentId });
+      const response = await docs.documents.get({
+        documentId,
+        includeTabsContent: true,
+      } as any);
+
+      const document = response.data;
+      Logger.debug(this.componentName, '📦 API 응답 수신', {
+        hasBody: !!document.body,
+        bodyContentLength: document.body?.content?.length || 0,
+        tabsCount: document.tabs?.length || 0,
+        hasInlineObjects: !!document.inlineObjects,
+      });
+
+      const title = document.title || '제목 없음';
+      const images: Array<{ url: string; alt?: string }> = [];
+      
+      // 구조 요소에서 텍스트와 이미지 추출
+      const contentParts: string[] = [];
+      let paragraphCount = 0;
+      let tableCount = 0;
+
+      // 재귀적으로 구조 요소 파싱
+      const parseStructuralElements = (elements: any[], depth: number = 0): void => {
+        if (!elements) {
+          Logger.debug(this.componentName, `🔍 파싱 깊이 ${depth}: elements 없음`);
+          return;
+        }
+
+        Logger.debug(this.componentName, `🔍 파싱 깊이 ${depth}: ${elements.length}개 요소`);
+
+        for (const element of elements) {
+          // 단락 처리
+          if (element.paragraph) {
+            paragraphCount++;
+            const paragraphElements = element.paragraph.elements || [];
+            Logger.debug(this.componentName, `  📝 단락 #${paragraphCount}: ${paragraphElements.length}개 요소`);
+            
+            for (const paraElem of paragraphElements) {
+              // 텍스트 실행 처리
+              if (paraElem.textRun?.content) {
+                contentParts.push(paraElem.textRun.content);
+                Logger.debug(this.componentName, `    ✍️ 텍스트: "${paraElem.textRun.content.substring(0, 50)}..."`);
+              }
+              // 인라인 이미지 처리
+              if (paraElem.inlineObjectProperties?.inlineObjectId) {
+                const objId = paraElem.inlineObjectProperties.inlineObjectId;
+                const inlineObj = (document.inlineObjects as any)?.[objId];
+                if (inlineObj?.inlineProperties?.embeddedObject?.imageProperties?.contentUri) {
+                  const imageUrl = inlineObj.inlineProperties.embeddedObject.imageProperties.contentUri;
+                  images.push({
+                    url: imageUrl,
+                    alt: paraElem.textRun?.content || '이미지',
+                  });
+                  Logger.debug(this.componentName, `    🖼️ 이미지: ${imageUrl.substring(0, 60)}...`);
+                }
+              }
+            }
+            // 단락 구분자 추가
+            contentParts.push('\n');
+          }
+          // 표 처리
+          else if (element.table) {
+            tableCount++;
+            const rows = element.table.tableRows || [];
+            Logger.debug(this.componentName, `  📊 표 #${tableCount}: ${rows.length}행`);
+            
+            for (const row of rows) {
+              const cells = row.tableCells || [];
+              for (let i = 0; i < cells.length; i++) {
+                const cellContent = cells[i].content || [];
+                parseStructuralElements(cellContent, depth + 1);
+                if (i < cells.length - 1) {
+                  contentParts.push('\t');
+                }
+              }
+              contentParts.push('\n');
+            }
+          }
+          // 목차 처리
+          else if (element.tableOfContents) {
+            const tocContent = element.tableOfContents.content || [];
+            Logger.debug(this.componentName, `  📑 목차: ${tocContent.length}개 항목`);
+            parseStructuralElements(tocContent, depth + 1);
+          }
+        }
+      };
+
+      // 모든 탭의 콘텐츠 파싱
+      if (document.tabs && document.tabs.length > 0) {
+        Logger.debug(this.componentName, `🗂️ ${document.tabs.length}개 탭 파싱 중...`);
+        for (const tab of document.tabs) {
+          const documentTab = tab.documentTab;
+          if (documentTab?.body?.content) {
+            Logger.debug(this.componentName, `   탭 파싱: ${documentTab.body.content.length}개 최상위 요소`);
+            parseStructuralElements(documentTab.body.content);
+          }
+        }
+      } else if (document.body?.content) {
+        // 탭이 없으면 기본 body 사용
+        Logger.debug(this.componentName, `📄 기본 body 파싱: ${document.body.content.length}개 최상위 요소`);
+        parseStructuralElements(document.body.content);
+      } else {
+        Logger.warn(this.componentName, '⚠️ 파싱할 콘텐츠 없음 (tabs도 없고 body도 없음)');
+      }
+
+      const content = contentParts.join('').trim();
+
+      Logger.info(this.componentName, `✅ 문서 콘텐츠 추출 완료`, {
+        title,
+        contentLength: content.length,
+        paragraphCount,
+        tableCount,
+        imageCount: images.length,
+        contentPreview: content.substring(0, 100).replace(/\n/g, '\\n'),
+      });
+
+      return createSuccess({
+        title,
+        content,
+        images,
+        metadata: {
+          createdTime: (document as any).createdTime,
+          modifiedTime: (document as any).modifiedTime,
+        },
+      });
+    } catch (error) {
+      Logger.error(this.componentName, '❌ 문서 콘텐츠 조회 실패', error);
+      return createError(error instanceof Error ? error.message : '문서 콘텐츠 조회 실패');
     }
   }
 

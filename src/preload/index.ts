@@ -158,6 +158,7 @@ const electronAPI: ElectronAPI = {
     listDocuments: () => ipcRenderer.invoke('google-docs:list-documents'),
     createDocument: (title: string, content?: string) => ipcRenderer.invoke('google-docs:create-document', title, content),
     updateDocument: (documentId: string, content: string) => ipcRenderer.invoke('google-docs:update-document', documentId, content),
+    getDocumentContent: (documentId: string) => ipcRenderer.invoke('google-docs:get-content', documentId),
     
     // 🆕 OAuth 성공 콜백 (StaticServer 콜백 페이지 → renderer)
     onOAuthSuccess: () => {

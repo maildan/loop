@@ -103,16 +103,21 @@ export function setupGoogleOAuthIpcHandlers(): void {
       )
     );
 
-    // 🔥 사용자 정보 조회 (임시 비활성화)
+    // 🔥 사용자 정보 조회 (이름, 이메일, 프로필 이미지)
     ipcMain.handle(
       'google-oauth:get-user-info',
       createSafeAsyncIpcHandler(
         async () => {
-          Logger.info(componentName, '👤 Google 사용자 정보 조회 (임시 비활성화)');
-          return {
-            success: false,
-            error: '아직 구현되지 않음'
-          };
+          Logger.info(componentName, '👤 Google 사용자 정보 조회');
+          const result = await googleOAuthService.getUserProfile();
+          // getUserProfile()는 이미 Result를 반환하므로 data만 추출
+          if (result.success && result.data) {
+            return result.data;
+          }
+          if (!result.success) {
+            throw new Error(result.error || '사용자 정보 조회 실패');
+          }
+          throw new Error('사용자 정보 조회 실패');
         },
         componentName,
         'Get Google user information'
@@ -172,6 +177,46 @@ export function setupGoogleOAuthIpcHandlers(): void {
         },
         componentName,
         'List Google Docs documents'
+      )
+    );
+
+    // 🔥 Google Docs 문서 콘텐츠 조회 (텍스트, 이미지 등)
+    ipcMain.handle(
+      'google-docs:get-content',
+      createSafeAsyncIpcHandler(
+        async (...args: unknown[]) => {
+          const [, documentId] = args;
+          if (!documentId || typeof documentId !== 'string') {
+            throw new Error('문서 ID가 필요합니다');
+          }
+          Logger.info(componentName, `📄 Google Docs 콘텐츠 조회 요청: ${documentId}`);
+          
+          const result = await googleOAuthService.getDocumentContent(documentId);
+          
+          // getDocumentContent()는 이미 Result를 반환하므로 data만 추출
+          Logger.debug(componentName, '🔄 IPC 응답 처리', {
+            success: result.success,
+            dataKeys: result.success && result.data ? Object.keys(result.data) : [],
+            contentLength: result.success && result.data?.content ? result.data.content.length : 0,
+          });
+
+          if (result.success && result.data) {
+            Logger.info(componentName, `✅ Google Docs 콘텐츠 조회 성공 (IPC)`, {
+              title: result.data.title,
+              contentLength: result.data.content.length,
+              imageCount: result.data.images?.length || 0,
+            });
+            return result.data;  // 🔥 { title, content, images, metadata }를 직접 반환
+          }
+          
+          if (!result.success) {
+            Logger.error(componentName, `❌ Google Docs 콘텐츠 조회 실패`);
+            throw new Error(result.error || '콘텐츠 조회 실패');
+          }
+          throw new Error('콘텐츠 조회 실패');
+        },
+        componentName,
+        'Get Google Docs content'
       )
     );
 

@@ -60,16 +60,90 @@ export function AuthProvider({ children, initialAuth }: { children: React.ReactN
             if (requestId !== latestLoadId.current) return;
 
             if (res && res.success && res.data && res.data.isAuthenticated) {
-                const email = res.data.userEmail;
-                const picture = res.data.userPicture || (email ? `https://ui-avatars.com/api/?name=${encodeURIComponent(email)}&background=4f46e5&color=fff&size=64` : undefined);
+                let email = res.data.userEmail;
+                let userName = res.data.userName || (email ? email.split('@')[0] : 'Google 사용자');
+                let picture = res.data.userPicture;
+
+                Logger.debug('AUTH_CONTEXT', '📋 Auth 상태 로드됨', {
+                  email,
+                  userName,
+                  hasPicture: !!picture,
+                });
+
+                // 🔥 Google 사용자 정보 추가 조회 (이름, 프로필 이미지)
+                if (window.electronAPI?.googleOAuth?.getUserInfo) {
+                  try {
+                    Logger.debug('AUTH_CONTEXT', '👤 Google 사용자 정보 조회 중...');
+                    const googleUserRes = await (window.electronAPI.googleOAuth as any).getUserInfo();
+                    
+                    Logger.debug('AUTH_CONTEXT', '📦 Google 사용자 정보 응답 구조', {
+                      isObject: typeof googleUserRes === 'object',
+                      keys: googleUserRes ? Object.keys(googleUserRes) : [],
+                      hasSuccess: 'success' in (googleUserRes || {}),
+                      hasData: 'data' in (googleUserRes || {}),
+                    });
+
+                    // 🔥 새로운 응답 구조: googleUserRes = { name, email, picture } (직접 객체)
+                    // 또는 이전 구조: googleUserRes = { success, data: { name, email, picture } }
+                    if (googleUserRes) {
+                      // 직접 객체 구조 (구글 정보 직접)
+                      if ((googleUserRes as any).name !== undefined || (googleUserRes as any).email !== undefined) {
+                        Logger.debug('AUTH_CONTEXT', '✅ 직접 Google 데이터 수신');
+                        if ((googleUserRes as any).name) {
+                          userName = (googleUserRes as any).name;
+                          Logger.info('AUTH_CONTEXT', '✅ Google 이름 적용', { name: userName });
+                        }
+                        if ((googleUserRes as any).picture) {
+                          picture = (googleUserRes as any).picture;
+                          Logger.info('AUTH_CONTEXT', '✅ Google 프로필 이미지 적용');
+                        }
+                        if ((googleUserRes as any).email && !email) {
+                          email = (googleUserRes as any).email;
+                        }
+                      }
+                      // 래핑된 구조 (Result 포맷)
+                      else if ((googleUserRes as any).success && (googleUserRes as any).data) {
+                        Logger.debug('AUTH_CONTEXT', '✅ 래핑된 Google 데이터 수신');
+                        const googleData = (googleUserRes as any).data;
+                        if (googleData.name) {
+                          userName = googleData.name;
+                          Logger.info('AUTH_CONTEXT', '✅ Google 이름 적용', { name: userName });
+                        }
+                        if (googleData.picture) {
+                          picture = googleData.picture;
+                          Logger.info('AUTH_CONTEXT', '✅ Google 프로필 이미지 적용');
+                        }
+                        if (googleData.email && !email) {
+                          email = googleData.email;
+                        }
+                      } else {
+                        Logger.warn('AUTH_CONTEXT', '⚠️ 예상치 못한 Google 응답 구조', googleUserRes);
+                      }
+                    }
+                  } catch (error) {
+                    Logger.warn('AUTH_CONTEXT', 'Google 사용자 정보 조회 실패 (계속 진행)', error);
+                  }
+                }
+
+                // 프로필 이미지가 없으면 생성
+                if (!picture && email) {
+                  picture = `https://ui-avatars.com/api/?name=${encodeURIComponent(email)}&background=4f46e5&color=fff&size=64`;
+                  Logger.debug('AUTH_CONTEXT', '🎨 기본 아바타 생성됨');
+                }
+
                 setAuthState({
                     isAuthenticated: true,
                     userEmail: email,
-                    userName: email ? email.split('@')[0] : res.data.userName || 'Google 사용자',
+                    userName,
                     userPicture: picture,
                 });
-                Logger.info('AUTH_CONTEXT', 'Auth status loaded', { userEmail: email });
+                Logger.info('AUTH_CONTEXT', '✅ Auth 상태 업데이트 완료', {
+                  userEmail: email,
+                  userName,
+                  hasPicture: !!picture,
+                });
             } else {
+                Logger.debug('AUTH_CONTEXT', '❌ 인증되지 않음');
                 setAuthState(getDefaultAuth());
             }
         } catch (error) {

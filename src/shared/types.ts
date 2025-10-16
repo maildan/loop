@@ -126,7 +126,7 @@ export interface ElectronAPI {
   on: (channel: string, listener: (...args: unknown[]) => void) => void;
   removeListener: (channel: string, listener: (...args: unknown[]) => void) => void;
 
-  // 🔐 Google OAuth API
+  // � Google OAuth API
   googleOAuth?: {
     startAuth: () => Promise<IpcResponse<{ url: string }>>;
     handleCallback: (code: string, state?: string) => Promise<IpcResponse<boolean>>;
@@ -135,6 +135,7 @@ export interface ElectronAPI {
     listDocuments: () => Promise<IpcResponse<Array<{ id: string; name: string; webViewLink: string }>>>;
     createDocument: (title: string, content?: string) => Promise<IpcResponse<{ id: string; name: string; webViewLink: string }>>;
     updateDocument: (documentId: string, content: string) => Promise<IpcResponse<boolean>>;
+    getDocumentContent: (documentId: string) => Promise<{ title: string; content: string; images: Array<{ url: string; alt?: string }>; metadata: { createdTime?: string; modifiedTime?: string } }>;
     
     // 🆕 OAuth 성공 콜백 핸들러 (StaticServer 콜백 페이지용)
     onOAuthSuccess?: (callback: () => void) => void;

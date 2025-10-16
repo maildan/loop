@@ -381,48 +381,164 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       title: docName 
     });
 
-    // 🔥 문서 내용 가져오기 시도 (임시 비활성화 - googleOAuth API에 아직 구현되지 않음)
-    // TODO: googleOAuth API에 문서 내용 가져오기 메서드 추가 시 활성화
-    /*
-    if (doc?.id && window.electronAPI?.googleOAuth?.getDocumentContent) {
+    // 🔥 문서 내용 가져오기 (이제 구현됨!)
+    const googleOAuthApi = (window.electronAPI?.googleOAuth as any);
+    if (doc?.id && googleOAuthApi?.getDocumentContent) {
       try {
-        Logger.info('PROJECT_CREATOR', 'Google Docs 내용 가져오는 중...', { documentId: doc.id });
-        const result = await window.electronAPI.googleOAuth.getDocumentContent(doc.id);
+        Logger.info('PROJECT_CREATOR', '📥 Google Docs 내용 가져오는 중...', { documentId: doc.id });
+        const result = await googleOAuthApi.getDocumentContent(doc.id);
 
-        if (result.success && result.data?.content) {
-          Logger.info('PROJECT_CREATOR', 'Google Docs 내용 가져오기 성공', {
-            contentLength: result.data.content.length
+        // 🔥 IPC 응답은 이미 unwrap되어 { title, content, images, metadata }
+        // result.success/result.data ❌ → result.title/result.content ✅
+        // 🔥 전체 응답 구조 상세 로깅
+        Logger.debug('PROJECT_CREATOR', '📊 IPC 응답 구조 (전체):', result);
+        Logger.debug('PROJECT_CREATOR', '📊 IPC 응답 구조 (keys):', Object.keys(result || {}));
+        Logger.debug('PROJECT_CREATOR', '📊 IPC 응답 구조 (분석):', {
+          hasContent: !!result?.content,
+          contentType: typeof result?.content,
+          contentLength: result?.content?.length || 0,
+          imageCount: result?.images?.length || 0,
+          title: result?.title || 'N/A',
+          hasSuccess: 'success' in (result || {}),
+          hasData: 'data' in (result || {}),
+          success: (result as any)?.success,
+        });
+
+        // 🔥 래핑된 응답 구조 확인: { success, data: { title, content, images, metadata } }
+        const responseData = (result as any)?.data || result;
+        
+        if (responseData && responseData.content && typeof responseData.content === 'string') {
+          Logger.info('PROJECT_CREATOR', '✅ Google Docs 내용 가져오기 성공', {
+            contentLength: responseData.content.length,
+            imageCount: responseData.images?.length || 0,
+            title: responseData.title
           });
           
           // 가져온 내용은 selectedGoogleDoc에 저장하여 나중에 프로젝트 생성 시 사용
-          setSelectedGoogleDoc({
+          const updatedGoogleDoc = {
             ...doc,
-            content: result.data.content,
-            title: result.data.title || doc.name || docName
-          });
+            content: responseData.content,
+            images: responseData.images || [],
+            title: responseData.title || doc.name || docName
+          };
+          setSelectedGoogleDoc(updatedGoogleDoc);
 
-          // 🎉 사용자에게 성공 피드백 제공
-          alert(`✅ Google Docs 문서가 성공적으로 가져와졌습니다!\n\n📄 문서: ${docName}\n📝 내용: ${result.data.content.length}자\n\n이제 "프로젝트 생성" 버튼을 클릭하여 Loop에서 편집을 시작하세요.`);
-          
           // 제목과 설명을 자동으로 채우기
-          if (result.data.title && !title) {
-            setTitle(result.data.title);
-          }
+          const finalTitle = responseData.title || title || docName;
+          setTitle(finalTitle);
           if (!description) {
-            setDescription(`Google Docs에서 가져온 문서: ${docName}`);
+            setDescription(`Google Docs에서 가져온 문서`);
           }
+
+          // 🔥 자동 프로젝트 생성 시작 (약간의 지연으로 상태 업데이트 보장)
+          Logger.info('PROJECT_CREATOR', '⏳ 1초 후 자동 프로젝트 생성 시작...');
+          setTimeout(async () => {
+            try {
+              Logger.info('PROJECT_CREATOR', '🚀 자동 프로젝트 생성 중...');
+              
+              const projectData: ProjectCreationData = {
+                title: finalTitle.trim() || docName,
+                description: `Google Docs에서 가져온 문서`,
+                genre: 'fantasy', // 기본 장르
+                platform: 'google-docs',
+                content: responseData.content,
+                targetWords: 50000,
+                deadline: undefined,
+                googleDocId: doc.id,
+                googleDocUrl: doc.webViewLink,
+              };
+
+              Logger.info('PROJECT_CREATOR', '✅ 자동 프로젝트 생성 데이터 준비 완료', {
+                title: projectData.title,
+                contentLength: projectData.content?.length,
+              });
+
+              setIsCreating(true);
+              await onCreate(projectData);
+
+              Logger.info('PROJECT_CREATOR', '🎉 프로젝트 생성 완료 - Editor로 이동 중...');
+              // onCreate 콜백이 onClose를 호출하여 자동으로 팝업이 닫히고 Editor로 이동
+            } catch (error) {
+              Logger.error('PROJECT_CREATOR', '❌ 자동 프로젝트 생성 실패', error);
+              setIsCreating(false);
+              alert(`⚠️ 프로젝트 생성에 실패했습니다.\n\n오류: ${error instanceof Error ? error.message : '알 수 없는 오류'}\n\n수동으로 "프로젝트 생성" 버튼을 클릭해주세요.`);
+            }
+          }, 1000);
         } else {
-          Logger.warn('PROJECT_CREATOR', 'Google Docs 내용 가져오기 실패', result.error);
-          alert(`❌ Google Docs 내용을 가져오는데 실패했습니다.\n\n오류: ${result.error || '알 수 없는 오류'}\n\n문서 정보는 저장되었으니 프로젝트를 생성하면 Google Docs 연동 정보가 포함됩니다.`);
+          Logger.warn('PROJECT_CREATOR', 'Google Docs 내용 가져오기 실패 (문서 정보로 계속)', (result as any)?.error);
+          // ❌ alert 제거 → 문서 정보로 계속 진행 (콘텐츠 없이 생성)
+          
+          // 🔥 콘텐츠 없이 자동 프로젝트 생성
+          Logger.info('PROJECT_CREATOR', '⏳ 1초 후 자동 프로젝트 생성 시작 (콘텐츠 없음)...');
+          setTimeout(async () => {
+            try {
+              Logger.info('PROJECT_CREATOR', '🚀 자동 프로젝트 생성 중 (콘텐츠 없음)...');
+              
+              const projectData: ProjectCreationData = {
+                title: docName,
+                description: `Google Docs에서 가져온 문서`,
+                genre: 'fantasy', // 기본 장르
+                platform: 'google-docs',
+                content: undefined, // 콘텐츠 없음
+                targetWords: 50000,
+                deadline: undefined,
+                googleDocId: doc.id,
+                googleDocUrl: doc.webViewLink,
+              };
+
+              Logger.info('PROJECT_CREATOR', '✅ 자동 프로젝트 생성 데이터 준비 완료', {
+                title: projectData.title,
+              });
+
+              setIsCreating(true);
+              await onCreate(projectData);
+
+              Logger.info('PROJECT_CREATOR', '🎉 프로젝트 생성 완료 - Editor로 이동 중...');
+            } catch (error) {
+              Logger.error('PROJECT_CREATOR', '❌ 자동 프로젝트 생성 실패', error);
+              setIsCreating(false);
+              // 실패해도 alert 안 함 → 조용히 로그만 기록
+            }
+          }, 1000);
         }
       } catch (error) {
         Logger.error('PROJECT_CREATOR', 'Google Docs 내용 가져오기 중 오류', error);
+        // ❌ alert 제거 → 문서 정보로 자동 생성 진행
+        
+        // 🔥 오류 발생해도 문서 정보로 자동 프로젝트 생성
+        Logger.info('PROJECT_CREATOR', '⏳ 1초 후 자동 프로젝트 생성 시작 (오류 무시)...');
+        setTimeout(async () => {
+          try {
+            Logger.info('PROJECT_CREATOR', '🚀 자동 프로젝트 생성 중 (오류 무시)...');
+            
+            const projectData: ProjectCreationData = {
+              title: docName,
+              description: `Google Docs에서 가져온 문서`,
+              genre: 'fantasy', // 기본 장르
+              platform: 'google-docs',
+              content: undefined, // 콘텐츠 없음
+              targetWords: 50000,
+              deadline: undefined,
+              googleDocId: doc.id,
+              googleDocUrl: doc.webViewLink,
+            };
+
+            Logger.info('PROJECT_CREATOR', '✅ 자동 프로젝트 생성 데이터 준비 완료', {
+              title: projectData.title,
+            });
+
+            setIsCreating(true);
+            await onCreate(projectData);
+
+            Logger.info('PROJECT_CREATOR', '🎉 프로젝트 생성 완료 - Editor로 이동 중...');
+          } catch (error) {
+            Logger.error('PROJECT_CREATOR', '❌ 자동 프로젝트 생성 실패', error);
+            setIsCreating(false);
+            // 실패해도 alert 안 함 → 조용히 로그만 기록
+          }
+        }, 1000);
       }
     }
-    */
-
-    // 🎉 사용자에게 성공 피드백 제공
-    alert(`✅ Google Docs 문서가 선택되었습니다!\n\n📄 문서: ${docName}\n\n이제 "프로젝트 생성" 버튼을 클릭하여 Loop에서 편집을 시작하세요.`);
   }; const handleCreate = async (): Promise<void> => {
     // 🔥 방어적 코딩: undefined 값에 대한 안전한 처리
     const safeTitle = title || '';
