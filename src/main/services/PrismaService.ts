@@ -59,12 +59,12 @@ class PrismaService {
         dirname: __dirname,
       });
 
-      // 🔥 Prisma 클라이언트 로딩 - @prisma/client 사용 (asarUnpack으로 보장됨)
+      // 🔥 Prisma 클라이언트 로딩 - CommonJS require 방식 (안정적)
       Logger.info('PRISMA_SERVICE', 'Loading Prisma client from @prisma/client');
-      const { PrismaClient } = await import('@prisma/client');
-      const PrismaClientConstructor = PrismaClient;
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { PrismaClient } = require('@prisma/client');
 
-      this.client = new PrismaClientConstructor({
+      this.client = new PrismaClient({
         datasources: {
           db: {
             url: databaseUrl,

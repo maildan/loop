@@ -5,6 +5,7 @@
   "description": "Loop",
   "author": "Loop",
   "private": true,
+  "type": "commonjs",
   "main": "out/main/index.js",
   "homepage": "./",
   "scripts": {
