@@ -37,21 +37,23 @@
     "!node_modules/**/examples/**",
     "!node_modules/**/*.d.ts",
     "!**/**/*.md",
-    "node_modules/.prisma",
-    "node_modules/.prisma/client",
-    "node_modules/.prisma/client/**/*",
-    "node_modules/@prisma",
-    "node_modules/@prisma/client",
-    "node_modules/@prisma/client/**/*"
+    "node_modules/@prisma/client/**/*",
+    "node_modules/.prisma/client/**/*"
     
   ],
   "asarUnpack": [
-    "node_modules/.prisma/**/*",
-    "node_modules/@prisma/**/*",
     "node_modules/keytar/build/**/*.node",
     "node_modules/electron-updater/node_modules/bufferutil/build/**/*.node"
   ],
   "extraResources": [
+    {
+      "from": "node_modules/.prisma",
+      "to": "node_modules/.prisma"
+    },
+    {
+      "from": "node_modules/@prisma",
+      "to": "node_modules/@prisma"
+    },
     {
       "from": "prisma/schema.prisma",
       "to": "prisma/schema.prisma"
