@@ -59,17 +59,20 @@ class PrismaService {
         dirname: __dirname,
       });
 
-      // 🔥 Prisma 클라이언트 로딩 - CommonJS require 방식 (안정적)
-      Logger.info('PRISMA_SERVICE', 'Loading Prisma client from @prisma/client');
+      // 🔥 Prisma 클라이언트 로딩 - Adapter 방식 (Prisma 6 No-Rust Engine)
+      Logger.info('PRISMA_SERVICE', 'Loading Prisma client from @prisma/client with SQLite adapter');
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { PrismaClient } = require('@prisma/client');
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { PrismaBetterSQLite3 } = require('@prisma/adapter-better-sqlite3');
+
+      // 🔥 SQLite adapter 생성 (파일 경로 지정)
+      const adapter = new PrismaBetterSQLite3({
+        url: `file:${dbPath}`,
+      });
 
       this.client = new PrismaClient({
-        datasources: {
-          db: {
-            url: databaseUrl,
-          },
-        },
+        adapter,
         log: ['error', 'warn'],
       });
 
