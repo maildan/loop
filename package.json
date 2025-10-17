@@ -111,7 +111,6 @@
     "@fontsource/noto-sans-kr": "^5.2.8",
     "@noonnu/gangwon-edu-otf-bold-a": "^0.1.0",
     "@noonnu/gangwon-edu-saeeum-otf-medium-a": "^0.1.0",
-    "@prisma/adapter-better-sqlite3": "^6.17.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",

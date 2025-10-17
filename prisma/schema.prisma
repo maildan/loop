@@ -1,7 +1,9 @@
 generator client {
-  provider   = "prisma-client-js"
-  output     = "../node_modules/.prisma/client"
-  engineType = "client"
+  provider      = "prisma-client-js"
+  output        = "../node_modules/.prisma/client"
+  // 🔥 명시적 플랫폼 타겟: macOS, Windows 배포용
+  // native 제거 - 빌드 환경 일관성 보장
+  binaryTargets = ["darwin", "darwin-arm64", "windows"]
 }
 
 datasource db {

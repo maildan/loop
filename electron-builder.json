@@ -26,7 +26,7 @@
     "package.json",
     "node_modules/highlight.js/styles/**/*.css",
     "node_modules/.prisma/**/*",
-    "node_modules/@prisma/**/*",
+    "node_modules/@prisma/client/**/*",
     "!node_modules/**/*.ts",
     "!node_modules/**/LICENSE*",
     "!node_modules/**/*.map",
@@ -41,6 +41,11 @@
     "!**/**/*.md"
   ],
   "asarUnpack": [
+    "node_modules/.prisma/client/libquery_engine*.node",
+    "node_modules/.prisma/client/libquery_engine*.dylib.node",
+    "node_modules/.prisma/client/query_engine*.dll.node",
+    "node_modules/.prisma/client/query_engine*.exe.node",
+    "node_modules/.prisma/client/schema.prisma",
     "node_modules/keytar/build/**/*.node",
     "node_modules/electron-updater/node_modules/bufferutil/build/**/*.node"
   ],

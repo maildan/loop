@@ -90,20 +90,17 @@ export class DatabaseService {
       this.config.databaseUrl = databaseUrl;
       Logger.info('DATABASE', 'Resolved Prisma database path', { dbPath, databaseUrl });
 
-      // 🔥 Prisma 클라이언트 로딩 - Adapter 방식 (Prisma 6 No-Rust Engine)
-      Logger.info('DATABASE', 'Loading Prisma client from @prisma/client with SQLite adapter');
+      // 🔥 Prisma 클라이언트 로딩 - CommonJS require 방식 (안정적)
+      Logger.info('DATABASE', 'Loading Prisma client from @prisma/client');
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { PrismaClient } = require('@prisma/client');
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { PrismaBetterSQLite3 } = require('@prisma/adapter-better-sqlite3');
-
-      // 🔥 SQLite adapter 생성 (파일 경로 지정)
-      const adapter = new PrismaBetterSQLite3({
-        url: `file:${dbPath}`,
-      });
 
       this.prisma = new PrismaClient({
-        adapter,
+        datasources: {
+          db: {
+            url: this.config.databaseUrl,
+          },
+        },
         log: this.config.enableLogging ? ['query', 'info', 'warn', 'error'] : [],
       }) as any as PrismaClient;      // 데이터베이스 연결
       await this.prisma.$connect();

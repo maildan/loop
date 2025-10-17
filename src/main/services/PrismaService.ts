@@ -57,22 +57,41 @@ class PrismaService {
         databaseUrl,
         cwd: process.cwd(),
         dirname: __dirname,
+        // 🔥 electron-builder asar unpacking 검증
+        resourcesPath: process.resourcesPath || 'undefined',
+        appPath: process.env.ELECTRON_APP_PATH || 'undefined',
       });
 
-      // 🔥 Prisma 클라이언트 로딩 - Adapter 방식 (Prisma 6 No-Rust Engine)
-      Logger.info('PRISMA_SERVICE', 'Loading Prisma client from @prisma/client with SQLite adapter');
+      // 🔥 Prisma 바이너리 경로 디버깅 (Electron asar 관련)
+      if (process.env.DEBUG_PRISMA) {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          const fs = require('fs');
+          const path = require('path');
+          const prismaBinPath = path.join(
+            __dirname,
+            '../../node_modules/.prisma/client'
+          );
+          if (fs.existsSync(prismaBinPath)) {
+            const files = fs.readdirSync(prismaBinPath);
+            Logger.debug('PRISMA_SERVICE', '📁 .prisma/client contents:', files.filter((f: string) => f.endsWith('.node')));
+          }
+        } catch (err) {
+          Logger.warn('PRISMA_SERVICE', 'Could not inspect prisma binary path', err);
+        }
+      }
+
+      // 🔥 Prisma 클라이언트 로딩 - CommonJS require 방식 (안정적)
+      Logger.info('PRISMA_SERVICE', 'Loading Prisma client from @prisma/client');
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const { PrismaClient } = require('@prisma/client');
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { PrismaBetterSQLite3 } = require('@prisma/adapter-better-sqlite3');
-
-      // 🔥 SQLite adapter 생성 (파일 경로 지정)
-      const adapter = new PrismaBetterSQLite3({
-        url: `file:${dbPath}`,
-      });
 
       this.client = new PrismaClient({
-        adapter,
+        datasources: {
+          db: {
+            url: databaseUrl,
+          },
+        },
         log: ['error', 'warn'],
       });
 
