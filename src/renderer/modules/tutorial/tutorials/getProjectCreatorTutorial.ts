@@ -1,26 +1,28 @@
 /**
- * 🔥 getProjectCreatorTutorial - 프로젝트 생성 상세 가이드
+ * 🔥 getProjectCreatorTutorial - 프로젝트 생성 상세 가이드 (9-STEP VERSION)
+ * 
+ * 구조:
+ * Step 1-3: 작성 플랫폼 선택 (개별 spotlight)
+ * Step 4-7: 프로젝트 상세 정보 (scroll with animation)
+ * Step 8: 완료 (돌아가기)
  * 
  * 특수 기능:
- * - 자동 진행 (이전/다음 버튼 없음)
- * - onPopoverRender에서 setTimeout으로 3초마다 자동으로 다음 단계로
- * - 이 섹션에서만 이 방식 사용
- * 
- * Step 1: 프로젝트 만드는 방법 (3가지)
- * Step 2: 프로젝트 상세 정보 설정
- * Step 3: 돌아가기 (X 버튼)
+ * - 자동 진행 (4.5초 간격, smooth scroll)
+ * - close + next 버튼 제공 (사용자도 수동으로 진행 가능)
+ * - Smooth scroll 애니메이션 (detail section으로)
  */
 
 import type { Tutorial } from '../types';
 import { Logger } from '../../../../shared/logger';
 
 /**
- * 프로젝트 생성 튜토리얼 정의
+ * 프로젝트 생성 튜토리얼 (9-Step 버전)
  * 
  * 특징:
- * - 자동 진행 모드 (getAutoProgressTutorial 래퍼 사용)
- * - 이전/다음 버튼 없음
- * - close 버튼만 제공
+ * - 작성 플랫폼을 하나씩 spotlight
+ * - 상세 정보 섹션을 scroll로 보여주기
+ * - 4.5초 자동 진행 + smooth scroll animation
+ * - X 버튼 클릭 시 completeTutorial() → Projects로 이동
  */
 export const getProjectCreatorTutorial = (): Tutorial => ({
   id: 'project-creator',
@@ -29,7 +31,7 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
 
   steps: [
     // ============================================================
-    // Step 1: 프로젝트 생성 방법
+    // Step 1: 프로젝트 생성 방법 소개
     // ============================================================
     {
       stepId: 'create-method-intro',
@@ -38,45 +40,195 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
         title: '📝 프로젝트를 만드는 방법',
         description:
           '프로젝트를 만드는 방법은 3가지입니다!\n\n' +
-          '🎯 Loop Editor: Loop 내에서 바로 작성\n' +
-          '📄 Google Docs: Google Docs에서 가져오기\n' +
-          '💾 파일 불러오기: 컴퓨터의 파일 가져오기\n\n' +
+          '각 방법에 대해 자세히 알아보겠습니다.\n' +
           '(자동으로 다음 단계로 진행됩니다...)',
         side: 'bottom',
         align: 'center',
-        showButtons: ['close'],
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
         doneBtnText: '건너뛰기',
-        showProgress: false, // 자동 진행이므로 진행률 표시 안함
+        showProgress: true,
+        progressText: '{{current}} / 9',
       },
       disableActiveInteraction: true,
     },
 
     // ============================================================
-    // Step 2: 프로젝트 상세 정보
+    // Step 2: Loop Editor 플랫폼
     // ============================================================
     {
-      stepId: 'create-details',
-      element: '[data-tour="project-details-section"]',
+      stepId: 'create-platform-loop',
+      element: '[data-tour="platform-option-loop"]',
       popover: {
-        title: '🎨 프로젝트 상세 정보',
+        title: '🎯 Loop Editor',
         description:
-          '프로젝트 정보를 구성할 수 있습니다!\n\n' +
-          '📌 기본: 제목 / 설명\n' +
-          '🏷️ 장르: 웹소설 장르 선택\n' +
-          '🎯 세부 목표: 연재 주기, 목표 글자 수 등\n\n' +
-          '모든 정보는 언제든지 수정할 수 있습니다!\n' +
-          '(자동으로 다음 단계로 진행됩니다...)',
+          'Loop 에디터에서 바로 작성할 수 있습니다!\n\n' +
+          '✨ 특징:\n' +
+          '• 타이핑 분석 및 통계\n' +
+          '• 실시간 글자 수 계산\n' +
+          '• 창작 흐름 최적화\n\n' +
+          '가장 추천하는 방법입니다! �',
         side: 'bottom',
         align: 'center',
-        showButtons: ['close'],
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
         doneBtnText: '건너뛰기',
-        showProgress: false,
+        showProgress: true,
+        progressText: '{{current}} / 9',
       },
       disableActiveInteraction: false,
     },
 
     // ============================================================
-    // Step 3: 돌아가기
+    // Step 3: Google Docs 플랫폼
+    // ============================================================
+    {
+      stepId: 'create-platform-google-docs',
+      element: '[data-tour="platform-option-google-docs"]',
+      popover: {
+        title: '�📄 Google Docs',
+        description:
+          'Google Docs의 문서를 Loop로 가져올 수 있습니다!\n\n' +
+          '✨ 특징:\n' +
+          '• 실시간 협업 가능\n' +
+          '• 클라우드 동기화\n' +
+          '• 여러 기기에서 작성\n\n' +
+          '협업 작업에 최적입니다! 🤝',
+        side: 'bottom',
+        align: 'center',
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
+        doneBtnText: '건너뛰기',
+        showProgress: true,
+        progressText: '{{current}} / 9',
+      },
+      disableActiveInteraction: false,
+    },
+
+    // ============================================================
+    // Step 4: 파일 불러오기 플랫폼
+    // ============================================================
+    {
+      stepId: 'create-platform-import',
+      element: '[data-tour="platform-option-import"]',
+      popover: {
+        title: '💾 파일 불러오기',
+        description:
+          '컴퓨터의 파일에서 프로젝트를 생성할 수 있습니다!\n\n' +
+          '✨ 지원 형식:\n' +
+          '• Word (.docx)\n' +
+          '• 텍스트 (.txt)\n' +
+          '• PDF (.pdf)\n\n' +
+          '기존 작품을 Loop로 옮길 때 유용합니다! 📂',
+        side: 'bottom',
+        align: 'center',
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
+        doneBtnText: '건너뛰기',
+        showProgress: true,
+        progressText: '{{current}} / 9',
+      },
+      disableActiveInteraction: false,
+    },
+
+    // ============================================================
+    // Step 5: 프로젝트 상세 정보 소개
+    // ============================================================
+    {
+      stepId: 'create-details-intro',
+      element: '[data-tour="project-details-section"]',
+      popover: {
+        title: '🎨 프로젝트 상세 정보',
+        description:
+          '이제 프로젝트의 상세 정보를 설정해봅시다!\n\n' +
+          '제목, 장르, 목표 등을 입력할 수 있습니다.\n' +
+          '(자동으로 다음 단계로 진행됩니다...)',
+        side: 'bottom',
+        align: 'center',
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
+        doneBtnText: '건너뛰기',
+        showProgress: true,
+        progressText: '{{current}} / 9',
+      },
+      disableActiveInteraction: false,
+    },
+
+    // ============================================================
+    // Step 6: 프로젝트 제목 입력
+    // ============================================================
+    {
+      stepId: 'create-details-title',
+      element: '[data-tour="project-input-title"]',
+      popover: {
+        title: '📌 프로젝트 제목',
+        description:
+          '프로젝트의 제목을 입력하세요!\n\n' +
+          '• 최대 100자\n' +
+          '• 나중에 변경 가능\n' +
+          '• 한글, 영문, 숫자 모두 가능',
+        side: 'bottom',
+        align: 'center',
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
+        doneBtnText: '건너뛰기',
+        showProgress: true,
+        progressText: '{{current}} / 9',
+      },
+      disableActiveInteraction: false,
+    },
+
+    // ============================================================
+    // Step 7: 장르 선택
+    // ============================================================
+    {
+      stepId: 'create-details-genre',
+      element: '[data-tour="project-select-genre"]',
+      popover: {
+        title: '🏷️ 장르 선택',
+        description:
+          '창작물의 장르를 선택하세요!\n\n' +
+          '• 소설, 에세이, 블로그\n' +
+          '• 시, 대본, 기술 문서\n' +
+          '• 기타 장르 선택 가능',
+        side: 'bottom',
+        align: 'center',
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
+        doneBtnText: '건너뛰기',
+        showProgress: true,
+        progressText: '{{current}} / 9',
+      },
+      disableActiveInteraction: false,
+    },
+
+    // ============================================================
+    // Step 8: 목표 설정89
+    // ============================================================
+    {
+      stepId: 'create-details-goal',
+      element: '[data-tour="project-input-target-words"]',
+      popover: {
+        title: '🎯 목표 설정',
+        description:
+          '글자 수 목표를 설정할 수 있습니다!\n\n' +
+          '• 목표 글자 수 (예: 100,000자)\n' +
+          '• 완료 목표 날짜\n' +
+          '• 진행도 추적\n\n' +
+          '모든 항목은 선택사항입니다! 📊',
+        side: 'bottom',
+        align: 'center',
+        showButtons: ['close', 'next'],
+        nextBtnText: '다음',
+        doneBtnText: '건너뛰기',
+        showProgress: true,
+        progressText: '{{current}} / 9',
+      },
+      disableActiveInteraction: false,
+    },
+
+    // ============================================================
+    // Step 9: 완료 및 돌아가기
     // ============================================================
     {
       stepId: 'create-finish',
@@ -84,16 +236,16 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
       popover: {
         title: '✨ 완료!',
         description:
-          '프로젝트 생성 방법을 모두 알아봤습니다!\n\n' +
-          '계속 가볼까요? 📚\n\n' +
-          '위의 X 버튼을 누르면 대시보드의 다른 기능들을\n' +
-          '소개하는 가이드로 돌아갑니다.\n\n' +
-          '프로젝트를 지금 생성하려면 "생성" 버튼을 클릭하세요! 🚀',
+          '프로젝트 생성 방법을 모두 알아봤습니다! 🎉\n\n' +
+          '이제 프로젝트를 만들 준비가 됐습니다!\n\n' +
+          '💡 팁: X 버튼을 누르면 프로젝트 목록으로 돌아갑니다.\n' +
+          '또는 "생성" 버튼을 클릭해서 바로 작성을 시작하세요! 🚀',
         side: 'top',
         align: 'center',
         showButtons: ['close'],
-        doneBtnText: '돌아가기 →',
-        showProgress: false,
+        doneBtnText: '완료',
+        showProgress: true,
+        progressText: '{{current}} / 9',
       },
       disableActiveInteraction: false,
     },
@@ -115,14 +267,19 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
   },
 
   /**
-   * 🔥 자동 진행 플래그
+   * 🔥 자동 진행 플래그 (5.5초 이상 간격)
    * useGuidedTour에서 이 플래그를 감지하여
-   * popoverRender 시 setTimeout으로 자동 진행
+   * onPopoverRender 시 setTimeout으로 자동 진행
+   * + smooth scroll 애니메이션
+   * 
+   * ✅ returnStepId: 'action-import' → Dashboard Step 5 (index 4)
+   * 이를 통해 ProjectCreator 완료 후 Dashboard의 'action-import'로 복귀
+   * (action-create로 복귀하면 무한루프)
    */
   meta: {
     autoProgress: true,
-    autoProgressDelay: 3000, // 3초마다 자동으로 다음 단계
+    autoProgressDelay: 5500, // 5.5초마다 자동으로 다음 단계 (충분한 이해 시간)
     returnTutorialId: 'dashboard-intro', // 이 튜토리얼 완료 후 대시보드로 복귀
-    returnStepId: 'action-import', // 복귀할 스텝
+    returnStepId: 'action-import', // ✅ 복귀할 스텝: action-import (step 5, index 4)
   },
 });

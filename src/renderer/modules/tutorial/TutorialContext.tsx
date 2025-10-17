@@ -249,6 +249,79 @@ export function TutorialProvider({ children }: TutorialProviderProps): React.Rea
       // 완료 목록에 추가
       const newCompleted = Array.from(new Set([...completedTutorials, currentTutorialId]));
 
+      Logger.info('TUTORIAL_CONTEXT', `✅ Tutorial completed: ${currentTutorialId}`);
+      
+      // 🔥 returnTutorialId가 있으면 그곳으로 자동 복귀
+      if (tutorial.meta?.returnTutorialId) {
+        Logger.info(
+          'TUTORIAL_CONTEXT',
+          `🔄 Returning to tutorial: ${tutorial.meta.returnTutorialId} at step ${tutorial.meta.returnStepId || 'default'}`
+        );
+        
+        // 현재 튜토리얼은 완료 상태로 표시
+        setState(prev => ({
+          ...prev,
+          completedTutorials: newCompleted,
+          currentTutorialId: null,
+          currentStepIndex: 0,
+          isActive: false,
+        }));
+
+        // localStorage에 저장
+        saveStateToStorage({
+          completedTutorials: newCompleted,
+          tutorialProgress: {
+            ...tutorialProgress,
+            [currentTutorialId]: 0, // 진행도 초기화
+          },
+        });
+
+        // 튜토리얼 완료 콜백
+        if (tutorial.onComplete) {
+          await tutorial.onComplete();
+        }
+
+        // 🔥 returnTutorialId로 자동 복귀
+        // 약간의 지연 후 복귀 (상태 업데이트 완료 대기)
+        setTimeout(async () => {
+          const returnTutorialId = tutorial.meta!.returnTutorialId!;
+          const returnTutorial = getTutorial(returnTutorialId);
+          
+          if (returnTutorial) {
+            // returnStepId를 사용해서 정확한 step으로 이동
+            const returnStepId = tutorial.meta!.returnStepId;
+            const returnStepIndex = returnStepId
+              ? returnTutorial.steps.findIndex(s => s.stepId === returnStepId)
+              : 0;
+            const validReturnStep = Math.max(0, returnStepIndex);
+
+            Logger.info(
+              'TUTORIAL_CONTEXT',
+              `🔄 Returning to ${returnTutorialId} at step ${validReturnStep} (${returnStepId})`
+            );
+
+            // 상태 직접 설정 (step index 지정)
+            setState(prev => ({
+              ...prev,
+              currentTutorialId: returnTutorialId,
+              currentStepIndex: validReturnStep,
+              isActive: true,
+            }));
+
+            // 진행도 저장
+            saveStateToStorage({
+              tutorialProgress: {
+                ...tutorialProgress,
+                [returnTutorialId]: validReturnStep,
+              },
+            });
+          }
+        }, 300);
+        
+        return;
+      }
+
+      // 🔥 returnTutorialId가 없으면 기존 로직 (튜토리얼 종료)
       setState(prev => ({
         ...prev,
         currentTutorialId: null,
@@ -270,12 +343,10 @@ export function TutorialProvider({ children }: TutorialProviderProps): React.Rea
       if (tutorial.onComplete) {
         await tutorial.onComplete();
       }
-
-      Logger.info('TUTORIAL_CONTEXT', `✅ Tutorial completed: ${currentTutorialId}`);
     } catch (error) {
       Logger.error('TUTORIAL_CONTEXT', '❌ Failed to complete tutorial', error);
     }
-  }, [state]);
+  }, [state, startTutorial]);
 
   /**
    * 튜토리얼 스킵

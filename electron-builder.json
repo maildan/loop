@@ -25,6 +25,7 @@
     "!coverage/**/*",
     "package.json",
     "node_modules/highlight.js/styles/**/*.css",
+    "node_modules/.prisma/client/**/*",
     "!node_modules/**/*.ts",
     "!node_modules/**/LICENSE*",
     "!node_modules/**/*.map",
@@ -39,7 +40,8 @@
     "!**/**/*.md"
   ],
   "asarUnpack": [
-    "**/.prisma/query-engine*.node",
+    "**/.prisma/**/*",
+    "node_modules/.prisma/**/*",
     "node_modules/keytar/build/**/*.node",
     "node_modules/electron-updater/node_modules/bufferutil/build/**/*.node"
   ],

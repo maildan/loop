@@ -3,6 +3,7 @@
 // 프로젝트 생성
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
@@ -137,9 +138,12 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
   const [deadline, setDeadline] = useState<string>(''); // 🔥 완료 목표 날짜
   const [isCreating, setIsCreating] = useState<boolean>(false);
 
+  // 🔥 Navigation Hook
+  const navigate = useNavigate();
+
   // 🔥 튜토리얼 Hook - 여기서만 호출 (Hook 규칙 준수)
-  const { startTutorial, closeTutorial } = useTutorial();
-  const { currentTutorialId } = useTutorialState();
+  const { startTutorial, closeTutorial, completeTutorial } = useTutorial();
+  const { currentTutorialId, isActive } = useTutorialState();
 
   // 🔥 Google Docs 선택 모달
   const [showGoogleDocsModal, setShowGoogleDocsModal] = useState<boolean>(false);
@@ -669,12 +673,17 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
             <h2 className={PROJECT_CREATOR_STYLES.title}>새 프로젝트 만들기</h2>
             <button
               onClick={() => {
-                // 🔥 튜토리얼 중이면 closeTutorial, 아니면 onClose
-                if (currentTutorialId === 'project-creator') {
-                  // closeTutorial 호출 시 TutorialContext의 nextStep으로 복귀
-                  // (getProjectCreatorTutorial의 returnTutorialId가 처리)
-                  closeTutorial();
+                // 🔥 **중요**: 튜토리얼 상태일 때만 completeTutorial() 호출
+                // 조건: currentTutorialId === 'project-creator' AND isActive === true
+                if (currentTutorialId === 'project-creator' && isActive) {
+                  Logger.info('ProjectCreator', '🎬 X button: completeTutorial() → Dashboard');
+                  completeTutorial().catch(err => {
+                    Logger.error('ProjectCreator', 'Error completing tutorial', err);
+                    onClose();
+                  });
                 } else {
+                  // 비튜토리얼 상태: 그냥 모달 닫기
+                  Logger.info('ProjectCreator', '❌ X button: onClose()');
                   onClose();
                 }
               }}
@@ -697,6 +706,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                   return (
                     <div
                       key={platform.id}
+                      data-tour={`platform-option-${platform.id}`}
                       className={`${PROJECT_CREATOR_STYLES.platformCard} ${selectedPlatform === platform.id
                         ? PROJECT_CREATOR_STYLES.platformCardSelected
                         : PROJECT_CREATOR_STYLES.platformCardDefault
@@ -765,6 +775,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                 </label>
                 <Input
                   id="project-title"
+                  data-tour="project-input-title"
                   type="text"
                   placeholder="예: 나의 첫 번째 소설"
                   value={title}
@@ -789,7 +800,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
 
               <div className={PROJECT_CREATOR_STYLES.inputGroup}>
                 <label className={PROJECT_CREATOR_STYLES.label}>장르</label>
-                <div className={PROJECT_CREATOR_STYLES.genreGrid}>
+                <div className={PROJECT_CREATOR_STYLES.genreGrid} data-tour="project-select-genre">
                   {GENRE_OPTIONS.map((genre) => {
                     const Icon = genre.icon;
                     return (
@@ -822,6 +833,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                   <div className="flex items-center space-x-2">
                     <Input
                       id="target-words"
+                      data-tour="project-input-target-words"
                       type="number"
                       placeholder="10000"
                       value={targetWords}

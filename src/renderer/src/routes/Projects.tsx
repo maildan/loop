@@ -8,6 +8,7 @@ import { ProjectEditorModal } from '../../components/projects/ProjectEditorModal
 import { ConfirmDeleteDialog } from '../../components/projects/components/ConfirmDeleteDialog';
 import { type ProjectData } from '../../components/projects/ProjectCard';
 import { Logger } from '../../../shared/logger';
+import { useGuidedTour } from '../../modules/tutorial/useGuidedTour';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const PROJECTS_PAGE_STYLES = {
@@ -27,6 +28,10 @@ const DEFAULT_PROJECTS: readonly ProjectData[] = [] as const;
 function ProjectsPageContent(): React.ReactElement {
   const navigate = useNavigate(); // 🔥 Navigation 훅 추가
   const [searchParams] = useSearchParams(); // 🔥 URL 쿼리 파라미터 감지
+  
+  // 🔥 튜토리얼 시스템 (Projects 페이지에서도 필요!)
+  useGuidedTour();
+  
   const [projects, setProjects] = useState<readonly ProjectData[]>(DEFAULT_PROJECTS);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

@@ -50,6 +50,8 @@ export function useGuidedTour(): Driver | null {
   const { currentTutorialId, currentStepIndex, isActive } = useTutorialState();
   const driverRef = useRef<Driver | null>(null);
   const isInitializingRef = useRef(false);
+  const autoProgressTimeoutRef = useRef<NodeJS.Timeout | null>(null); // 🔥 중복 타이머 방지
+  const renderCountRef = useRef(0); // 🔥 onPopoverRender 호출 횟수 추적 (디버깅)
 
   /**
    * Driver.js 초기화 및 실행
@@ -155,21 +157,80 @@ export function useGuidedTour(): Driver | null {
           closeTutorial();
         },
 
-        // 🔥 자동 진행 콜백
+        // 🔥 자동 진행 콜백 + Smooth scroll 감지
         onPopoverRender: (popover) => {
+          renderCountRef.current++;
+          const renderCount = renderCountRef.current;
+          
+          Logger.debug(
+            'useGuidedTour',
+            `📍 onPopoverRender called (count: ${renderCount}, step: ${currentStepIndex})`
+          );
+
+          // 🔥 이전 타이머 정리 (중복 방지) - 더 엄격한 확인
+          if (autoProgressTimeoutRef.current !== null) {
+            clearTimeout(autoProgressTimeoutRef.current);
+            autoProgressTimeoutRef.current = null;
+            Logger.debug('useGuidedTour', '🧹 Cleared previous auto-progress timer');
+          }
+
+          // 🔥 Scroll to element if needed
+          try {
+            const currentStep = tutorial.steps[currentStepIndex];
+            if (currentStep?.element && typeof currentStep.element === 'string') {
+              const element = document.querySelector(currentStep.element) as HTMLElement;
+              if (element) {
+                // 요소가 뷰포트 아래에 있으면 smooth scroll
+                const rect = element.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+                
+                if (rect.bottom > viewportHeight) {
+                  Logger.debug(
+                    'useGuidedTour',
+                    `📜 Scrolling to element (bottom: ${rect.bottom}, viewport: ${viewportHeight})`
+                  );
+                  element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                  });
+                  
+                  // Scroll 후 popover 위치 재계산 (300ms 대기)
+                  setTimeout(() => {
+                    if (driverRef.current?.refresh) {
+                      driverRef.current.refresh();
+                    }
+                  }, 300);
+                }
+              }
+            }
+          } catch (error) {
+            Logger.error('useGuidedTour', 'Error in scroll detection', error);
+          }
+
+          // 🔥 자동 진행 타이머 (마지막 step이 아닐 때만)
           if (isAutoProgress && currentStepIndex < tutorial.steps.length - 1) {
-            Logger.debug(
+            Logger.info(
               'useGuidedTour',
-              `⏱️ Auto-progress scheduled for step ${currentStepIndex} (${autoProgressDelay}ms)`
+              `⏱️ Auto-progress scheduled for step ${currentStepIndex} after ${autoProgressDelay}ms (render #${renderCount})`
             );
-            const timeoutId = setTimeout(() => {
+            
+            autoProgressTimeoutRef.current = setTimeout(() => {
+              // 타이머 실행 시점에 다시 체크 (상태가 변경되었을 수 있음)
+              if (autoProgressTimeoutRef.current === null) {
+                Logger.debug('useGuidedTour', '⏭️ Auto-progress timer already cleared, skipping nextStep');
+                return;
+              }
+              
+              autoProgressTimeoutRef.current = null;
+              Logger.info('useGuidedTour', `→ Auto-progress executing for step ${currentStepIndex}`);
               nextStep().catch(err =>
                 Logger.error('useGuidedTour', 'Error in auto-progress', err)
               );
             }, autoProgressDelay);
-
-            // Cleanup 함수 (popover 제거 시)
-            return () => clearTimeout(timeoutId);
+          } else if (!isAutoProgress) {
+            Logger.debug('useGuidedTour', '⏸️ Auto-progress disabled for this step');
+          } else if (currentStepIndex >= tutorial.steps.length - 1) {
+            Logger.info('useGuidedTour', '✅ Last step reached, no auto-progress scheduled');
           }
         },
 
@@ -294,13 +355,40 @@ export function useGuidedTour(): Driver | null {
   }, [currentStepIndex, isActive]);
 
   /**
+   * 🔥 isActive가 false되면 즉시 driver destroy
+   * 이를 통해 completeTutorial() 후 popover DOM 정리
+   */
+  useEffect(() => {
+    if (!isActive && driverRef.current) {
+      Logger.info(
+        'useGuidedTour',
+        '🛑 isActive=false detected → destroying driver immediately'
+      );
+      try {
+        driverRef.current.destroy();
+      } catch (error) {
+        Logger.error('useGuidedTour', 'Error destroying driver on isActive change', error);
+      }
+      driverRef.current = null;
+    }
+  }, [isActive]);
+
+  /**
    * 컴포넌트 언마운트 시 정리
    */
   useEffect(() => {
     return () => {
+      // 🔥 타이머 정리
+      if (autoProgressTimeoutRef.current) {
+        clearTimeout(autoProgressTimeoutRef.current);
+        autoProgressTimeoutRef.current = null;
+        Logger.debug('useGuidedTour', '⏱️ Auto-progress timer cleared on unmount');
+      }
+      
       if (driverRef.current) {
         try {
           driverRef.current.destroy();
+          Logger.debug('useGuidedTour', '🗑️ Driver destroyed on unmount');
         } catch {
           // 이미 destroy된 경우 무시
         }
