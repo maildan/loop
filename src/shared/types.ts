@@ -66,6 +66,23 @@ export interface GeminiChatSessionDTO {
   updatedAt: Date;
 }
 
+export type EnvironmentStatusValue = 'set' | 'missing';
+
+export type EnvironmentStatusKey =
+  | 'GEMINI_API_KEY'
+  | 'GEMINI_MODEL'
+  | 'GOOGLE_CLIENT_ID'
+  | 'GOOGLE_CLIENT_SECRET'
+  | 'GOOGLE_REDIRECT_URI';
+
+export type EnvironmentStatusMap = Record<EnvironmentStatusKey, EnvironmentStatusValue>;
+
+export interface GeminiEnvironmentStatus {
+  available: boolean;
+  status: EnvironmentStatusMap;
+  message?: string;
+}
+
 // 🎯 키보드 모니터링 상태 - Main ↔ Renderer 공통
 export interface MonitoringStatus {
   isActive: boolean;
@@ -330,6 +347,7 @@ export interface ElectronAPI {
   };
 
   // 🤖 Gemini AI Assistant API (시놉시스 뷰 전용)
+  'gemini:get-status': () => Promise<IpcResponse<GeminiEnvironmentStatus>>;
   'gemini:get-project-context': (projectId: string) => Promise<IpcResponse<{
     projectTitle: string;
     totalEpisodes: number;

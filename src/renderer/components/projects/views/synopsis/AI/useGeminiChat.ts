@@ -9,9 +9,17 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { RendererLogger as Logger } from '../../../../../../shared/logger-renderer';
-import type { GeminiChatRole } from '../../../../../../shared/types';
+import type { GeminiChatRole, GeminiEnvironmentStatus } from '../../../../../../shared/types';
 
 const USE_GEMINI_CHAT = Symbol.for('USE_GEMINI_CHAT');
+
+const FALLBACK_ENV_STATUS: GeminiEnvironmentStatus['status'] = {
+  GEMINI_API_KEY: 'missing',
+  GEMINI_MODEL: 'missing',
+  GOOGLE_CLIENT_ID: 'missing',
+  GOOGLE_CLIENT_SECRET: 'missing',
+  GOOGLE_REDIRECT_URI: 'missing',
+};
 
 export interface ChatMessage {
   id: string;
@@ -50,6 +58,8 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
   const [isLoading, setIsLoading] = useState(false);
   const [projectContext, setProjectContext] = useState<ProjectContext | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [serviceStatus, setServiceStatus] = useState<GeminiEnvironmentStatus | null>(null);
+  const [statusChecked, setStatusChecked] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const currentStreamId = useRef<string | null>(null);
   const errorHandlerRef = useRef(onError);
@@ -60,6 +70,49 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
   useEffect(() => {
     errorHandlerRef.current = onError;
   }, [onError]);
+
+  const refreshGeminiStatus = useCallback(async () => {
+    setStatusChecked(false);
+
+    try {
+      const response = await window.electronAPI['gemini:get-status']();
+
+      if (response.success && response.data) {
+        setServiceStatus(response.data);
+
+        if (!response.data.available) {
+          const message = response.data.message ?? 'Gemini 기능을 사용하려면 환경변수 GEMINI_API_KEY를 설정해야 합니다.';
+          errorHandlerRef.current?.(new Error(message));
+        }
+      } else {
+        const message = response.error ?? 'Gemini 환경 상태를 확인하지 못했습니다.';
+        setServiceStatus({ available: false, status: FALLBACK_ENV_STATUS, message });
+        errorHandlerRef.current?.(new Error(message));
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Gemini 환경 상태를 확인하지 못했습니다.';
+      setServiceStatus({ available: false, status: FALLBACK_ENV_STATUS, message });
+      errorHandlerRef.current?.(error instanceof Error ? error : new Error(message));
+    } finally {
+      setStatusChecked(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refreshGeminiStatus();
+  }, [refreshGeminiStatus]);
+
+  useEffect(() => {
+    if (!statusChecked) {
+      return;
+    }
+
+    if (serviceStatus?.available === false) {
+      setProjectContext(null);
+      setMessages([]);
+      setSessionId(null);
+    }
+  }, [serviceStatus, statusChecked]);
 
   // 🔥 자동 스크롤
   const scrollToBottom = useCallback(() => {
@@ -76,6 +129,16 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
     }
 
     if (isHistoryLoadingRef.current) {
+      return;
+    }
+
+    if (!statusChecked) {
+      Logger.debug(USE_GEMINI_CHAT, 'Skipping chat history load until status resolves');
+      return;
+    }
+
+    if (serviceStatus?.available === false) {
+      Logger.debug(USE_GEMINI_CHAT, 'Skipping chat history load - Gemini unavailable');
       return;
     }
 
@@ -114,7 +177,7 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
     } finally {
       isHistoryLoadingRef.current = false;
     }
-  }, [projectId, sessionId]);
+  }, [projectId, sessionId, serviceStatus?.available, statusChecked]);
 
   useEffect(() => {
     void loadChatHistory();
@@ -128,6 +191,16 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
   // 🔥 프로젝트 컨텍스트 로드
   const loadProjectContext = useCallback(async ({ force = false } = {}) => {
     if (!projectId) return;
+
+    if (!statusChecked) {
+      Logger.debug(USE_GEMINI_CHAT, 'Skipping context load until status resolves', { projectId });
+      return;
+    }
+
+    if (serviceStatus?.available === false) {
+      Logger.debug(USE_GEMINI_CHAT, 'Skipping context load - Gemini unavailable', { projectId });
+      return;
+    }
 
     if (!force) {
       if (isContextLoadingRef.current) {
@@ -184,7 +257,7 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
     } finally {
       isContextLoadingRef.current = false;
     }
-  }, [projectId]);
+  }, [projectId, serviceStatus?.available, statusChecked]);
 
   useEffect(() => {
     void loadProjectContext();
@@ -241,6 +314,17 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
 
   // 🔥 메시지 전송 (스트리밍)
   const sendMessage = useCallback(async (userMessage: string) => {
+    if (!statusChecked) {
+      errorHandlerRef.current?.(new Error('Gemini 상태를 확인하는 중입니다. 잠시 후 다시 시도해 주세요.'));
+      return;
+    }
+
+    if (serviceStatus?.available === false) {
+      const message = serviceStatus.message ?? 'Gemini 기능을 사용하려면 환경변수 GEMINI_API_KEY를 설정해야 합니다.';
+      errorHandlerRef.current?.(new Error(message));
+      return;
+    }
+
     if (!userMessage.trim() || isLoading) return;
 
     const userMsgId = `user-${Date.now()}`;
@@ -357,7 +441,7 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
 
       // Listener 등록
       window.electronAPI.on('gemini:stream-chunk', handleStreamChunk);
-  window.electronAPI.on('gemini:stream-error', handleStreamError);
+      window.electronAPI.on('gemini:stream-error', handleStreamError);
 
       // IPC를 통해 Gemini에게 메시지 전송 (streaming)
       const response = await window.electronAPI['gemini:send-message']({
@@ -424,7 +508,7 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
       setIsLoading(false);
       currentStreamId.current = null;
     }
-  }, [projectId, messages, isLoading, buildSystemPrompt, sessionId, loadChatHistory]);
+  }, [projectId, messages, isLoading, buildSystemPrompt, sessionId, loadChatHistory, serviceStatus, statusChecked]);
 
   // 🔥 대화 초기화
   const clearMessages = useCallback(() => {
@@ -441,5 +525,8 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
     sendMessage,
     clearMessages,
     reloadContext: reloadProjectContext,
+    status: serviceStatus,
+    statusChecked,
+    refreshStatus: refreshGeminiStatus,
   };
 }

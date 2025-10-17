@@ -132,6 +132,34 @@ const toGeminiRequestRole = (role: GeminiChatRole): 'user' | 'model' => (role ==
 export function setupGeminiIpcHandlers(): void {
   Logger.debug('GEMINI_IPC', 'Setting up Gemini IPC handlers');
 
+  ipcMain.handle('gemini:get-status', async () => {
+    try {
+      const { EnvironmentService } = await import('../services/EnvironmentService');
+      await EnvironmentService.initialize();
+      const status = EnvironmentService.getStatus();
+      const available = status.GEMINI_API_KEY === 'set';
+
+      return {
+        success: true,
+        data: {
+          available,
+          status,
+          message: available
+            ? 'Gemini API 키가 구성되어 있습니다.'
+            : 'Gemini 기능을 사용하려면 환경변수 GEMINI_API_KEY를 설정해야 합니다.',
+        },
+        timestamp: new Date(),
+      };
+    } catch (error) {
+      Logger.error('GEMINI_IPC', 'Failed to resolve Gemini availability', error);
+      return {
+        success: false,
+        error: 'Gemini 환경 상태를 확인하지 못했습니다.',
+        timestamp: new Date(),
+      };
+    }
+  });
+
   // 🔥 프로젝트 컨텍스트 가져오기
   ipcMain.handle('gemini:get-project-context', async (event: IpcMainEvent, projectId: string) => {
     try {

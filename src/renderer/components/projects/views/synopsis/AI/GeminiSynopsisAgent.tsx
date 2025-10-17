@@ -11,7 +11,7 @@
 'use client';
 
 import React, { useState, useCallback, useEffect, useMemo } from 'react';
-import { Send, Sparkles, RotateCcw, TrendingUp, Users, BookOpen, Lightbulb, X } from 'lucide-react';
+import { Send, Sparkles, RotateCcw, TrendingUp, Users, BookOpen, Lightbulb, X, AlertTriangle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useGeminiChat, type ProjectContext } from './useGeminiChat';
@@ -29,6 +29,7 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
 }) => {
   const [input, setInput] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [persistentError, setPersistentError] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   // 🔥 테마 및 폰트 훅
@@ -48,13 +49,61 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
     sendMessage,
     clearMessages,
     reloadContext,
+    status,
+    statusChecked,
+    refreshStatus,
   } = useGeminiChat({
     projectId,
     onError: (err) => {
+      setPersistentError(false);
       setError(err.message);
-      setTimeout(() => setError(null), 5000);
     },
   });
+
+  useEffect(() => {
+    if (!statusChecked) {
+      return;
+    }
+
+    if (status?.available === false) {
+      setPersistentError(true);
+      setError(status.message ?? 'Gemini 기능을 사용하려면 환경변수 GEMINI_API_KEY를 설정해야 합니다.');
+    } else if (persistentError) {
+      setPersistentError(false);
+      setError(null);
+    }
+  }, [status, statusChecked, persistentError]);
+
+  useEffect(() => {
+    if (!error || persistentError) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setError(null);
+    }, 5000);
+
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [error, persistentError]);
+
+  const isGeminiAvailable = status?.available !== false;
+
+  const missingEnvironmentKeys = useMemo(() => {
+    if (!status?.status) {
+      return [] as string[];
+    }
+
+    return Object.entries(status.status)
+      .filter(([, value]) => value === 'missing')
+      .map(([key]) => key);
+  }, [status]);
+
+  const handleDismissError = useCallback(() => {
+    setError(null);
+    setPersistentError(false);
+  }, []);
 
   // 🔥 테마 기반 스타일 계산
   const isDarkMode = useMemo(() => {
@@ -106,17 +155,17 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
   // 🔥 메시지 전송 핸들러
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !statusChecked || !isGeminiAvailable) return;
 
     await sendMessage(input);
     setInput('');
-  }, [input, isLoading, sendMessage]);
+  }, [input, isLoading, sendMessage, statusChecked, isGeminiAvailable]);
 
   // 🔥 Enter로 전송, Shift+Enter로 줄바꿈
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e as unknown as React.FormEvent);
+      void handleSubmit(e as unknown as React.FormEvent);
     }
   }, [handleSubmit]);
 
@@ -162,8 +211,14 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={reloadContext}
-            className={`p-2 hover:bg-accent/20 rounded-lg transition-colors text-muted-foreground`}
+            onClick={() => {
+              if (!statusChecked || !isGeminiAvailable) {
+                return;
+              }
+              reloadContext();
+            }}
+            disabled={!statusChecked || !isGeminiAvailable}
+            className={`p-2 hover:bg-accent/20 rounded-lg transition-colors text-muted-foreground disabled:opacity-40 disabled:cursor-not-allowed`}
             title="컨텍스트 새로고침"
           >
             <RotateCcw className="h-4 w-4" />
@@ -172,7 +227,8 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
             <button
               type="button"
               onClick={clearMessages}
-              className="px-3 py-1.5 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+              disabled={!isGeminiAvailable}
+              className="px-3 py-1.5 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               대화 초기화
             </button>
@@ -217,7 +273,49 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
 
       {/* 메시지 영역 - 독립적인 스크롤 영역 */}
       <div className={`overflow-y-auto p-4 space-y-4 bg-background`}>
-        {messages.length === 0 ? (
+        {!statusChecked ? (
+          <div className="flex flex-col items-center justify-center h-full text-center px-4 py-8">
+            <div className={`w-10 h-10 rounded-full border-2 ${colorScheme.loadingSpinner} animate-spin`} />
+            <p className="text-sm text-muted-foreground mt-4">Gemini 환경 상태를 확인하는 중입니다...</p>
+          </div>
+        ) : !isGeminiAvailable ? (
+          <div className="flex flex-col gap-4 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-left">
+            <div className="flex items-start gap-3 text-destructive">
+              <AlertTriangle className="h-5 w-5 mt-0.5" />
+              <div>
+                <p className="text-base font-semibold">Gemini 기능을 사용할 수 없습니다</p>
+                <p className="text-sm text-destructive/80 mt-1">
+                  {status?.message ?? 'Gemini 기능을 사용하려면 GEMINI_API_KEY 환경변수를 설정한 뒤 앱을 다시 시작하세요.'}
+                </p>
+              </div>
+            </div>
+
+            {missingEnvironmentKeys.length > 0 && (
+              <div>
+                <p className="text-sm font-medium text-destructive/80">누락된 환경 변수</p>
+                <ul className="mt-2 list-disc list-inside space-y-1 text-sm text-destructive/70">
+                  {missingEnvironmentKeys.map((key) => (
+                    <li key={key}>{key}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <p className="text-sm text-muted-foreground">
+              앱 루트의 <code className="px-1 py-0.5 rounded bg-background border border-border">.env</code> 파일이나 macOS Keychain에 Gemini API 키를 저장한 뒤, 아래 버튼을 눌러 상태를 다시 확인하세요. 자세한 안내는 <code className="px-1 py-0.5 rounded bg-background border border-border">docs/ENVIRONMENT_VARIABLES.md</code> 를 참고하세요.
+            </p>
+
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => { void refreshStatus(); }}
+                className="px-4 py-2 text-sm font-medium rounded-lg border border-border bg-card text-card-foreground hover:bg-accent/10 transition-colors"
+              >
+                상태 다시 확인
+              </button>
+            </div>
+          </div>
+        ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4 py-8">
             <Sparkles className={`h-12 w-12 ${colorScheme.contextText} mb-4 opacity-60`} />
             <h3 className={`text-lg font-semibold ${colorScheme.headerText} mb-2`}>
@@ -234,7 +332,8 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
                   key={idx}
                   type="button"
                   onClick={() => handleSuggestedQuestion(q.text)}
-                  className={`flex items-center gap-3 p-3 text-left ${colorScheme.suggestionBtn} border rounded-lg transition-colors group`}
+                  disabled={!isGeminiAvailable}
+                  className={`flex items-center gap-3 p-3 text-left ${colorScheme.suggestionBtn} border rounded-lg transition-colors group disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                   <q.icon className={`h-5 w-5 ${q.color} flex-shrink-0`} />
                   <span className={`text-sm ${colorScheme.headerText} group-hover:text-accent-primary transition-colors`}>
@@ -306,8 +405,18 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
       {/* 에러 메시지 & 입력 영역 */}
       <div className={`border-t ${colorScheme.border} ${colorScheme.header}`}>
         {error && (
-          <div className="mx-4 mt-2 px-4 py-2 bg-destructive/15 border border-destructive/30 rounded-lg">
-            <p className="text-sm text-destructive">{error}</p>
+          <div className="mx-4 mt-2 px-4 py-2 bg-destructive/15 border border-destructive/30 rounded-lg flex items-start gap-3">
+            <div className="flex-1">
+              <p className="text-sm text-destructive">{error}</p>
+            </div>
+            <button
+              type="button"
+              onClick={handleDismissError}
+              className="text-destructive/70 hover:text-destructive"
+              aria-label="에러 메시지 닫기"
+            >
+              <X className="h-4 w-4" />
+            </button>
           </div>
         )}
 
@@ -320,7 +429,7 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="질문을 입력하세요... (Enter: 전송, Shift+Enter: 줄바꿈)"
-                disabled={isLoading}
+                disabled={isLoading || !isGeminiAvailable || !statusChecked}
                 rows={2}
                 className={`w-full px-4 py-3 ${colorScheme.input} rounded-lg 
                          text-sm focus:outline-none focus:ring-2 focus:ring-accent-primary focus:border-transparent
@@ -339,7 +448,7 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
             </div>
             <button
               type="submit"
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !input.trim() || !isGeminiAvailable || !statusChecked}
               className={`px-5 py-3 ${colorScheme.sendBtn} rounded-lg 
                        active:opacity-90 transition-colors
                        disabled:opacity-50 disabled:cursor-not-allowed
