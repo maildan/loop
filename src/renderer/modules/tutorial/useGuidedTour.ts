@@ -91,24 +91,50 @@ export function useGuidedTour(): Driver | null {
       const firstStep = tutorial.steps[0];
       if (firstStep?.element) {
         let firstElement: Element | null = null;
-        if (typeof firstStep.element === 'string') {
-          firstElement = document.querySelector(firstStep.element);
-        } else if (typeof firstStep.element === 'function') {
-          try {
-            const result = firstStep.element();
-            firstElement = result as Element | null;
-          } catch (e) {
-            Logger.warn('useGuidedTour', `⚠️ Error calling element function: ${e}`);
+        let retryCount = 0;
+        const maxRetries = 30;  // 20 → 30 (더 많은 재시도, Projects.tsx와 동기화)
+        const retryDelay = 150; // 100 → 150 (더 긴 대기 시간)
+
+        // 🔥 재시도 로직: element가 로드될 때까지 대기
+        // (Dashboard/ProjectCreator 컴포넌트 렌더링 완료 대기)
+        while (!firstElement && retryCount < maxRetries) {
+          if (typeof firstStep.element === 'string') {
+            firstElement = document.querySelector(firstStep.element);
+          } else if (typeof firstStep.element === 'function') {
+            try {
+              const result = firstStep.element();
+              firstElement = result as Element | null;
+            } catch (e) {
+              Logger.debug('useGuidedTour', `Debug: Retry ${retryCount + 1} - element function call failed`);
+            }
+          }
+
+          // element 찾으면 루프 탈출
+          if (firstElement) {
+            if (retryCount > 0) {
+              Logger.info(
+                'useGuidedTour',
+                `✅ Element found after ${retryCount} retries (${retryCount * retryDelay}ms)`
+              );
+            }
+            break;
+          }
+
+          // element 못 찾으면 재시도
+          retryCount++;
+          if (retryCount < maxRetries) {
+            await new Promise(resolve => setTimeout(resolve, retryDelay));
+            Logger.debug('useGuidedTour', `⏳ Retry ${retryCount}/${maxRetries}: Waiting for element...`);
           }
         }
 
         if (!firstElement) {
           Logger.warn(
             'useGuidedTour',
-            `⚠️ Tutorial "${currentTutorialId}" element not found. ` +
-            `Modal may be closed or not yet mounted. Skipping driver initialization.`
+            `⚠️ Tutorial "${currentTutorialId}" element not found after ${maxRetries} retries (${maxRetries * retryDelay}ms total). ` +
+            `Component may not be mounted. Skipping driver initialization.`
           );
-          // 요소가 없으면 튜토리얼을 강제로 종료 (무한 재시도 방지)
+          // 요소를 찾지 못하면 튜토리얼을 강제로 종료 (무한 재시도 방지)
           await closeTutorial();
           return;
         }
@@ -154,18 +180,33 @@ export function useGuidedTour(): Driver | null {
           
           Logger.debug('useGuidedTour', `→ Next button clicked (step ${stepIdx})`);
           
-          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭 후 프로젝트 생성 튜토리얼 전환
+          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭 후 Projects 페이지로 이동
           if (currentStep?.stepId === 'action-create') {
-            Logger.info('useGuidedTour', '🎯 Detected action-create step → auto-triggering modal');
+            Logger.info('useGuidedTour', '🎯 action-create detected → starting ProjectCreator tutorial flow');
             const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
             if (actionCreateBtn) {
-              actionCreateBtn.click();
-              Logger.debug('useGuidedTour', '⏳ Waiting for modal to open before starting project-creator tutorial');
+              // 🔥 localStorage 플래그 설정
+              localStorage.setItem('tutorial_open_project_creator', 'true');
+              Logger.info('useGuidedTour', '💾 localStorage flag set');
               
-              // 모달 오픈 애니메이션 완료 대기
-              setTimeout(() => {
+              // 🔥 버튼 클릭 → navigate 발동
+              Logger.info('useGuidedTour', '🚀 Clicking action-create button');
+              actionCreateBtn.click();
+              
+              // 🔥 적절한 지연 후:
+              // 1. Dashboard 튜토리얼 완료
+              // 2. 즉시 project-creator 튜토리얼 시작 (Projects 페이지 로드 여부와 무관)
+              setTimeout(async () => {
+                Logger.info('useGuidedTour', '⏸️ Completing dashboard tutorial');
+                await completeTutorial();
+                Logger.info('useGuidedTour', '🎬 Starting project-creator tutorial immediately');
+                
+                // 🔥 Projects.tsx 대기 없이 바로 project-creator 시작
+                // Projects 페이지가 로드되지 않아도 상관없음
+                // useGuidedTour 내의 element 검색 로직이 처리함
                 startTutorial('project-creator');
-              }, 500);
+              }, 100);
+              
               return;
             } else {
               Logger.warn('useGuidedTour', '⚠️ action-create button not found');
@@ -361,6 +402,7 @@ export function useGuidedTour(): Driver | null {
    * 🔧 개선사항:
    * 1. requestAnimationFrame으로 DOM 렌더링 완료 대기
    * 2. CSS 변수 로드 대기 추가
+   * 3. 초기화 이전에 첫 step element 존재 확인
    */
   useEffect(() => {
     if (!isActive || !currentTutorialId) {
@@ -381,7 +423,7 @@ export function useGuidedTour(): Driver | null {
       // 한 번 더 기다려서 CSS도 적용되도록 함
       setTimeout(() => {
         initializeDriver();
-      }, 10);
+      }, 50); // 10 → 50ms (더 긴 대기 시간)
     });
 
     return () => {

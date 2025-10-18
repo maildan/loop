@@ -300,10 +300,9 @@ export const getDashboardTutorial = (): Tutorial => ({
     Logger.info('getDashboardTutorial', '⏭️ Dashboard tutorial skipped');
   },
 
-  // 메타 정보: Step 3-3 (action-create)에서 ProjectCreator 튜토리얼로 전환
+  // 메타 정보: ProjectCreator 튜토리얼로 반환 시 사용
+  // nextTutorialId는 제거 (Projects.tsx에서 로드 후 수동으로 시작)
   meta: {
-    nextTutorialId: 'project-creator',
-    nextStepId: 'create-method-intro',
     returnTutorialId: 'dashboard-intro',
     returnStepId: 'action-import',
   },

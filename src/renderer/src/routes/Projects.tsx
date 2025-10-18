@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ProjectGrid } from '../../components/projects/ProjectGrid';
 import { ProjectCreator, type ProjectCreationData } from '../../components/projects/ProjectCreator';
@@ -9,6 +9,7 @@ import { ConfirmDeleteDialog } from '../../components/projects/components/Confir
 import { type ProjectData } from '../../components/projects/ProjectCard';
 import { Logger } from '../../../shared/logger';
 import { useGuidedTour } from '../../modules/tutorial/useGuidedTour';
+import { useTutorial, useTutorialState } from '../../modules/tutorial/useTutorial';
 import type { KoreanWebNovelGenre, ProjectStatus } from '../../../shared/constants/enums';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
@@ -30,8 +31,14 @@ function ProjectsPageContent(): React.ReactElement {
   const navigate = useNavigate(); // 🔥 Navigation 훅 추가
   const [searchParams] = useSearchParams(); // 🔥 URL 쿼리 파라미터 감지
   
+  // 🔥 매우 명확한 초기 로그 (여러 번 출력되는지 확인)
+  Logger.info('PROJECTS_PAGE', '✅ ✅ ✅ Projects.tsx RENDERED ✅ ✅ ✅');
+  
   // 🔥 튜토리얼 시스템 (Projects 페이지에서도 필요!)
   useGuidedTour();
+  const { startTutorial } = useTutorial();
+  const { currentTutorialId } = useTutorialState();
+  const pendingTutorialRef = useRef<boolean>(false);
   
   const [projects, setProjects] = useState<readonly ProjectData[]>(DEFAULT_PROJECTS);
   const [loading, setLoading] = useState<boolean>(true);
@@ -40,19 +47,96 @@ function ProjectsPageContent(): React.ReactElement {
   const [editingProject, setEditingProject] = useState<ProjectData | null>(null);
   const [deletingProject, setDeletingProject] = useState<ProjectData | null>(null);
 
-  // 🔥 URL 쿼리 파라미터에서 create=true 감지 시 자동으로 생성 다이얼로그 열기
+    // 🔥 URL 쿼리 파라미터에서 create=true 감지 시 자동으로 생성 다이얼로그 열기
   useEffect(() => {
+    Logger.info('PROJECTS_PAGE', '📍 ProjectsPageContent mounted');
+    
     const shouldCreate = searchParams.get('create') === 'true';
+    
     if (shouldCreate) {
-      Logger.info('PROJECTS_PAGE', '🚀 Auto-opening project creator from URL parameter');
+      Logger.info('PROJECTS_PAGE', '✅ Opening ProjectCreator modal');
       setShowCreator(true);
-
-      // URL에서 쿼리 파라미터 제거 (깔끔한 URL 유지)
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete('create');
-      window.history.replaceState({}, '', newUrl.pathname);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    // 🔥 초기 디버그 로그
+    Logger.debug('PROJECTS_PAGE', `Tutorial handler effect triggered`, {
+      showCreator,
+      pendingTutorial: pendingTutorialRef.current,
+      currentTutorialId,
+    });
+
+    if (!showCreator || !pendingTutorialRef.current) {
+      Logger.debug('PROJECTS_PAGE', `Tutorial handler early return`, {
+        reason: !showCreator ? 'showCreator is false' : 'pendingTutorialRef is false',
+      });
+      return;
+    }
+
+    Logger.info('PROJECTS_PAGE', '🔍 Tutorial handler: Starting element search');
+
+    let cancelled = false;
+    let retries = 0;
+    const maxRetries = 30;
+    const retryDelay = 150;
+
+    const tryStart = () => {
+      if (cancelled) {
+        Logger.debug('PROJECTS_PAGE', '⏹️ Tutorial start attempt cancelled');
+        return;
+      }
+
+      const container = document.querySelector('[data-tour="project-creator-container"]');
+      Logger.debug('PROJECTS_PAGE', `🔍 Element search attempt ${retries + 1}`, {
+        found: !!container,
+        selector: '[data-tour="project-creator-container"]',
+      });
+
+      if (container) {
+        Logger.info(
+          'PROJECTS_PAGE',
+          `✅ Project creator container found (after ${retries} retries, ${retries * retryDelay}ms)`,
+          { foundElement: !!container }
+        );
+        
+        if (currentTutorialId !== 'project-creator') {
+          Logger.info('PROJECTS_PAGE', '🎬 Starting project-creator tutorial after modal mount');
+          startTutorial('project-creator');
+        } else {
+          Logger.debug('PROJECTS_PAGE', '💡 project-creator tutorial already active');
+        }
+        pendingTutorialRef.current = false;
+        return;
+      }
+
+      retries += 1;
+      if (retries < maxRetries) {
+        Logger.debug(
+          'PROJECTS_PAGE',
+          `⏳ Waiting for project creator container (retry ${retries}/${maxRetries}, elapsed ${retries * retryDelay}ms)`
+        );
+        setTimeout(tryStart, retryDelay);
+      } else {
+        Logger.warn(
+          'PROJECTS_PAGE',
+          `⚠️ Project creator container not found after ${maxRetries} retries (${maxRetries * retryDelay}ms). Modal may not be rendering.`
+        );
+        pendingTutorialRef.current = false;
+      }
+    };
+
+    // 약간의 초기 딜레이 (setState 완료 대기)
+    const initialDelay = setTimeout(() => {
+      Logger.debug('PROJECTS_PAGE', '🔍 Starting element search for project creator container');
+      tryStart();
+    }, 200);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(initialDelay);
+    };
+  }, [showCreator]); // 🔥 의존성 최소화 - showCreator만 감시
 
   // 🔥 기가차드 규칙: 이펙트로 데이터 로딩
   useEffect(() => {
