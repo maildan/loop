@@ -46,7 +46,7 @@ const DRIVER_STYLES = {
  * ```
  */
 export function useGuidedTour(): Driver | null {
-  const { startTutorial, nextStep, previousStep, closeTutorial } = useTutorial();
+  const { startTutorial, nextStep, previousStep, closeTutorial, completeTutorial } = useTutorial();
   const { currentTutorialId, currentStepIndex, isActive } = useTutorialState();
   const driverRef = useRef<Driver | null>(null);
   const isInitializingRef = useRef(false);
@@ -85,6 +85,34 @@ export function useGuidedTour(): Driver | null {
       }
 
       Logger.info('useGuidedTour', `🎬 Initializing Driver.js for ${currentTutorialId}`);
+
+      // 🔥 안전성 검증: 첫 번째 step의 element가 존재하는지 확인
+      // 이 검사가 없으면 element를 못 찾을 때 무한 재시도 루프 발생 (무한루프 버그)
+      const firstStep = tutorial.steps[0];
+      if (firstStep?.element) {
+        let firstElement: Element | null = null;
+        if (typeof firstStep.element === 'string') {
+          firstElement = document.querySelector(firstStep.element);
+        } else if (typeof firstStep.element === 'function') {
+          try {
+            const result = firstStep.element();
+            firstElement = result as Element | null;
+          } catch (e) {
+            Logger.warn('useGuidedTour', `⚠️ Error calling element function: ${e}`);
+          }
+        }
+
+        if (!firstElement) {
+          Logger.warn(
+            'useGuidedTour',
+            `⚠️ Tutorial "${currentTutorialId}" element not found. ` +
+            `Modal may be closed or not yet mounted. Skipping driver initialization.`
+          );
+          // 요소가 없으면 튜토리얼을 강제로 종료 (무한 재시도 방지)
+          await closeTutorial();
+          return;
+        }
+      }
 
       // 기존 인스턴스 정리
       if (driverRef.current) {
@@ -156,6 +184,7 @@ export function useGuidedTour(): Driver | null {
             // 마지막 스텝에 도달했는지 확인
             const isNowLastStep = driverRef.current.isLastStep?.();
             
+            // ✅ 해결책: 마지막 스텝이고 다음 튜토리얼이 있으면 그곳으로 전환
             if (isNowLastStep && tutorial.meta?.nextTutorialId) {
               Logger.info(
                 'useGuidedTour',
@@ -164,6 +193,18 @@ export function useGuidedTour(): Driver | null {
               
               // 다음 튜토리얼로 자동 전환 (지연 없음)
               await startTutorial(tutorial.meta.nextTutorialId);
+            }
+            // ✅ 핵심 수정: 마지막 스텝이고 다음 튜토리얼이 없으면 튜토리얼 완료 처리
+            else if (isNowLastStep) {
+              Logger.info(
+                'useGuidedTour',
+                `🎉 Tutorial completed (last step) → completeTutorial()`
+              );
+              
+              // TutorialContext의 completeTutorial() 호출
+              // 이를 통해 returnTutorialId가 있으면 그곳으로 복귀
+              // 없으면 isActive = false로 설정
+              await completeTutorial();
             }
           } catch (error) {
             Logger.error('useGuidedTour', 'Error checking last step status', error);

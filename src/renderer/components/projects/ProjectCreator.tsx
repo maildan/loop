@@ -157,6 +157,25 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
     }
   }, [isOpen, currentTutorialId, startTutorial]);
 
+  // 🔥 튜토리얼 완료 감지: isActive가 false로 변하면 모달 자동 종료 (무한루프 방지)
+  // 상황: ProjectCreator 튜토리얼의 마지막 step에서 completeTutorial() 호출
+  // → currentTutorialId = 'project-creator'에서 'dashboard-intro'로 변경
+  // → isActive = false (튜토리얼 완료)
+  // → 이때 ProjectCreator 모달을 닫아야 dashboard 튜토리얼이 시작됨
+  useEffect(() => {
+    if (isOpen && !isActive && currentTutorialId === 'dashboard-intro') {
+      Logger.info(
+        'PROJECT_CREATOR',
+        '🎉 Tutorial completed and isActive=false → Auto-closing ProjectCreator modal'
+      );
+      // 약간의 딜레이 후 모달 닫기 (driver.js 정리 완료 대기)
+      setTimeout(() => {
+        onClose();
+        Logger.info('PROJECT_CREATOR', '✅ Modal closed, dashboard tutorial ready to start');
+      }, 300);
+    }
+  }, [isOpen, isActive, currentTutorialId, onClose]);
+
   // 🔥 OAuth 성공 이벤트 리스너 설정 (강화된 다중 채널 지원)
   useEffect(() => {
     const handleOAuthSuccess = (payload?: any) => {
