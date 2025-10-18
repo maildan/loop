@@ -122,48 +122,64 @@ export function useGuidedTour(): Driver | null {
         // 네비게이션 핸들러
         onNextClick: async () => {
           const stepIdx = currentStepIndexRef.current;
+          const currentStep = tutorial.steps[stepIdx];
+          
           Logger.debug('useGuidedTour', `→ Next button clicked (step ${stepIdx})`);
           
-          // 🔥 Step 3-3 (action-create)에서 "다음" 클릭 시 자동으로 action-create 버튼 클릭
-          const currentStep = tutorial.steps[stepIdx];
+          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭 후 프로젝트 생성 튜토리얼 전환
           if (currentStep?.stepId === 'action-create') {
-            Logger.info('useGuidedTour', '🚀 Auto-clicking action-create button');
+            Logger.info('useGuidedTour', '🎯 Detected action-create step → auto-triggering modal');
             const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
             if (actionCreateBtn) {
               actionCreateBtn.click();
-              // 모달이 열릴 시간 대기 후 다음 튜토리얼 시작
+              Logger.debug('useGuidedTour', '⏳ Waiting for modal to open before starting project-creator tutorial');
+              
+              // 모달 오픈 애니메이션 완료 대기
               setTimeout(() => {
                 startTutorial('project-creator');
-              }, 300);
+              }, 500);
               return;
+            } else {
+              Logger.warn('useGuidedTour', '⚠️ action-create button not found');
             }
           }
           
-          // 🔥 State 변경만 함 (driver.moveTo는 useEffect에서 자동 처리)
+          // 🔥 일반 다음 버튼: Context state 업데이트 (driver.moveTo는 useEffect에서 자동 처리)
           await nextStep();
           
-          // 🔥 nextStep 후 상태 업데이트 확인 (비동기 처리)
-          setTimeout(async () => {
-            // 현재 튜토리얼이 마지막 스텝인지 확인
-            const isLastStep = currentStepIndexRef.current + 1 >= tutorial.steps.length;
+          // 🔥 개선: driver.js API를 사용해 마지막 스텝 여부 확인 (더 정확함)
+          // nextStep() 직후 driver가 이미 새로운 step으로 이동했으므로
+          // driver.isLastStep()를 사용하면 비동기 지연 없이 즉시 확인 가능
+          if (!driverRef.current) return;
+          
+          try {
+            // 마지막 스텝에 도달했는지 확인
+            const isNowLastStep = driverRef.current.isLastStep?.();
             
-            if (isLastStep && tutorial.meta?.nextTutorialId) {
+            if (isNowLastStep && tutorial.meta?.nextTutorialId) {
               Logger.info(
                 'useGuidedTour',
-                `🔄 Transitioning to next tutorial: ${tutorial.meta.nextTutorialId}`
+                `🔄 Last step completed → Transitioning to next tutorial: ${tutorial.meta.nextTutorialId}`
               );
               
-              // 다음 튜토리얼로 자동 전환
+              // 다음 튜토리얼로 자동 전환 (지연 없음)
               await startTutorial(tutorial.meta.nextTutorialId);
             }
-          }, 100); // 상태 업데이트 대기
+          } catch (error) {
+            Logger.error('useGuidedTour', 'Error checking last step status', error);
+          }
         },
 
         onPrevClick: async () => {
           const stepIdx = currentStepIndexRef.current;
           Logger.debug('useGuidedTour', `← Previous button clicked (step ${stepIdx})`);
-          // 🔥 State 변경만 함 (driver.moveTo는 useEffect에서 자동 처리)
-          await previousStep();
+          
+          // Context state 업데이트 (driver.moveTo는 useEffect에서 자동 처리)
+          try {
+            await previousStep();
+          } catch (error) {
+            Logger.error('useGuidedTour', 'Error in previousStep', error);
+          }
         },
 
         onCloseClick: async () => {
@@ -209,12 +225,13 @@ export function useGuidedTour(): Driver | null {
                     block: 'center',
                   });
                   
-                  // Scroll 후 popover 위치 재계산 (300ms 대기)
+                  // Scroll 후 popover 위치 재계산 (400ms 대기 - 애니메이션 완료 확인)
                   setTimeout(() => {
                     if (driverRef.current?.refresh) {
                       driverRef.current.refresh();
+                      Logger.debug('useGuidedTour', '🔄 Driver refreshed after scroll');
                     }
-                  }, 300);
+                  }, 400);
                 }
               }
             }

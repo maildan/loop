@@ -9,6 +9,7 @@ import { ConfirmDeleteDialog } from '../../components/projects/components/Confir
 import { type ProjectData } from '../../components/projects/ProjectCard';
 import { Logger } from '../../../shared/logger';
 import { useGuidedTour } from '../../modules/tutorial/useGuidedTour';
+import type { KoreanWebNovelGenre, ProjectStatus } from '../../../shared/constants/enums';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
 const PROJECTS_PAGE_STYLES = {
@@ -127,10 +128,10 @@ function ProjectsPageContent(): React.ReactElement {
       const projectData = {
         title: data.title,
         description: data.description,
-        genre: data.genre,
+        genre: (data.genre || 'unknown') as KoreanWebNovelGenre,
         platform: data.platform,
         content: data.content || '',
-        status: 'active' as const,
+        status: 'active' as ProjectStatus,
         progress: 0,
         wordCount: 0,
         author: 'Unknown', // 🔥 필수 필드 추가 (추후 유저 정보로 대체)
@@ -313,11 +314,11 @@ function ProjectsPageContent(): React.ReactElement {
             originalDescription: '',
             isGoogleDocsProject: true
           })}]`,
-          genre: '',
+          genre: 'unknown' as KoreanWebNovelGenre,
           platform: 'google-docs',
           content: '',
           progress: 0,
-          status: 'draft' as const,
+          status: 'active' as ProjectStatus,
           wordCount: 0,
           author: connectionStatus?.data?.email || 'Unknown',
         };
@@ -394,7 +395,7 @@ function ProjectsPageContent(): React.ReactElement {
             id: editingProject.id,
             title: editingProject.title,
             description: editingProject.description,
-            genre: editingProject.genre || 'novel'
+            genre: (editingProject.genre || 'unknown') as KoreanWebNovelGenre
           }}
           onClose={() => setEditingProject(null)}
           onUpdated={handleUpdateProject}

@@ -143,7 +143,10 @@ export function AuthProvider({ children, initialAuth }: { children: React.ReactN
                   hasPicture: !!picture,
                 });
             } else {
-                Logger.debug('AUTH_CONTEXT', '❌ 인증되지 않음');
+                // 개발 환경에서 Google OAuth 미설정 시 로그 억제 (정상 동작)
+                if (process.env.NODE_ENV !== 'development') {
+                    Logger.debug('AUTH_CONTEXT', '❌ 인증되지 않음');
+                }
                 setAuthState(getDefaultAuth());
             }
         } catch (error) {

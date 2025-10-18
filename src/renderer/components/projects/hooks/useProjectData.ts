@@ -5,6 +5,7 @@ import { Logger } from '../../../../shared/logger';
 import { calculateWriterStats, type WriterStats as WriterStatsType } from '../editor/WriterStats';
 import { useAutoSave } from './useAutoSave';
 import { ProjectCharacter, ProjectStructure, ProjectNote, Project } from '../../../../shared/types';
+import type { StructureStatus } from '../../../../shared/constants/enums';
 import useStructureStore from '../../../stores/useStructureStore'; // 🔥 스토어 import 추가
 
 // 저장 상태 타입
@@ -119,13 +120,13 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
     },
   ], [projectId, defaultDate]);
 
-  const defaultStructure = useMemo(() => [
+  const defaultStructure = useMemo((): ProjectStructure[] => [
     {
       id: '1',
       projectId: projectId,
       type: 'chapter' as const,
       title: '1챕터: 시작',
-      status: 'planning',
+      status: 'draft' as StructureStatus,
       wordCount: 0,
       sortOrder: 0,
       depth: 0,
@@ -139,7 +140,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       projectId: projectId,
       type: 'synopsis' as const,
       title: '첫 번째 장면',
-      status: 'planning',
+      status: 'draft' as StructureStatus,
       wordCount: 0,
       sortOrder: 1,
       depth: 1,
@@ -153,7 +154,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       projectId: projectId,
       type: 'synopsis' as const,
       title: '두 번째 장면',
-      status: 'planning',
+      status: 'draft' as StructureStatus,
       wordCount: 0,
       sortOrder: 2,
       depth: 1,
@@ -167,7 +168,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       projectId: projectId,
       type: 'chapter' as const,
       title: '2챕터: 전개',
-      status: 'planning',
+      status: 'draft' as StructureStatus,
       wordCount: 0,
       sortOrder: 3,
       depth: 0,
@@ -181,7 +182,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       projectId: projectId,
       type: 'synopsis' as const,
       title: '세 번째 장면',
-      status: 'planning',
+      status: 'draft' as StructureStatus,
       wordCount: 0,
       sortOrder: 4,
       depth: 1,
@@ -195,7 +196,7 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
       projectId: projectId,
       type: 'idea' as const,
       title: '아이디어 메모',
-      status: 'planning',
+      status: 'draft' as StructureStatus,
       wordCount: 0,
       sortOrder: 5,
       depth: 0,
