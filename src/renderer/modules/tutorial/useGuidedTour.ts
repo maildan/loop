@@ -92,14 +92,32 @@ export function useGuidedTour(): Driver | null {
       if (firstStep?.element) {
         let firstElement: Element | null = null;
         let retryCount = 0;
-        const maxRetries = 30;  // 20 → 30 (더 많은 재시도, Projects.tsx와 동기화)
-        const retryDelay = 150; // 100 → 150 (더 긴 대기 시간)
+        const maxRetries = 60;  // 30 → 60 (충분한 재시도 횟수)
+        const retryDelay = 150; // 유지
 
         // 🔥 재시도 로직: element가 로드될 때까지 대기
         // (Dashboard/ProjectCreator 컴포넌트 렌더링 완료 대기)
         while (!firstElement && retryCount < maxRetries) {
           if (typeof firstStep.element === 'string') {
             firstElement = document.querySelector(firstStep.element);
+            
+            // 🔥 DEBUG: 매 시도마다 로그 (첫 시도, 그리고 5번마다)
+            if (retryCount === 0 || retryCount % 5 === 0 || firstElement) {
+              Logger.debug(
+                'useGuidedTour',
+                `🔍 Element search (retry ${retryCount}): selector="${firstStep.element}" found=${!!firstElement}`
+              );
+              
+              // 🔥 더 상세한 디버그: 첫 번째 시도에서 모든 [data-tour] 요소 나열
+              if (retryCount === 0) {
+                const allTourElements = document.querySelectorAll('[data-tour]');
+                const tourElementsList = Array.from(allTourElements).map(el => el.getAttribute('data-tour'));
+                Logger.debug(
+                  'useGuidedTour',
+                  `📊 All [data-tour] elements in DOM (${allTourElements.length}): ${tourElementsList.join(', ')}`
+                );
+              }
+            }
           } else if (typeof firstStep.element === 'function') {
             try {
               const result = firstStep.element();
@@ -124,7 +142,7 @@ export function useGuidedTour(): Driver | null {
           retryCount++;
           if (retryCount < maxRetries) {
             await new Promise(resolve => setTimeout(resolve, retryDelay));
-            Logger.debug('useGuidedTour', `⏳ Retry ${retryCount}/${maxRetries}: Waiting for element...`);
+            // 로그는 생략 (너무 많음)
           }
         }
 
@@ -132,8 +150,35 @@ export function useGuidedTour(): Driver | null {
           Logger.warn(
             'useGuidedTour',
             `⚠️ Tutorial "${currentTutorialId}" element not found after ${maxRetries} retries (${maxRetries * retryDelay}ms total). ` +
-            `Component may not be mounted. Skipping driver initialization.`
+            `Selector: "${firstStep.element}" | Component may not be mounted. Skipping driver initialization.`
           );
+          
+          // 🔥 최종 디버그: 마지막 시도에서 실제 DOM 상태 확인
+          const allTourElements = document.querySelectorAll('[data-tour]');
+          const tourElementsList = Array.from(allTourElements).map(el => el.getAttribute('data-tour'));
+          Logger.warn(
+            'useGuidedTour',
+            `📊 FINAL DOM check - All [data-tour] elements (${allTourElements.length}): ${tourElementsList.join(', ')}`
+          );
+          
+          // 요소를 찾지 못하면 튜토리얼을 강제로 종료 (무한 재시도 방지)
+          await closeTutorial();
+          return;
+        }        if (!firstElement) {
+          Logger.warn(
+            'useGuidedTour',
+            `⚠️ Tutorial "${currentTutorialId}" element not found after ${maxRetries} retries (${maxRetries * retryDelay}ms total). ` +
+            `Selector: "${firstStep.element}" | Component may not be mounted. Skipping driver initialization.`
+          );
+          
+          // 🔥 최종 디버그: 마지막 시도에서 실제 DOM 상태 확인
+          const allTourElements = document.querySelectorAll('[data-tour]');
+          Logger.debug(
+            'useGuidedTour',
+            `📊 Final DOM check - All [data-tour] elements: ${allTourElements.length}`,
+            Array.from(allTourElements).map(el => `${el.getAttribute('data-tour')} (display=${window.getComputedStyle(el).display})`)
+          );
+          
           // 요소를 찾지 못하면 튜토리얼을 강제로 종료 (무한 재시도 방지)
           await closeTutorial();
           return;
@@ -184,33 +229,56 @@ export function useGuidedTour(): Driver | null {
           if (currentStep?.stepId === 'action-create') {
             Logger.info('useGuidedTour', '🎯 action-create detected → starting ProjectCreator tutorial flow');
             const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
-            if (actionCreateBtn) {
-              // 🔥 localStorage 플래그 설정
-              localStorage.setItem('tutorial_open_project_creator', 'true');
-              Logger.info('useGuidedTour', '💾 localStorage flag set');
-              
-              // 🔥 버튼 클릭 → navigate 발동
-              Logger.info('useGuidedTour', '🚀 Clicking action-create button');
-              actionCreateBtn.click();
-              
-              // 🔥 적절한 지연 후:
-              // 1. Dashboard 튜토리얼 완료
-              // 2. 즉시 project-creator 튜토리얼 시작 (Projects 페이지 로드 여부와 무관)
-              setTimeout(async () => {
-                Logger.info('useGuidedTour', '⏸️ Completing dashboard tutorial');
-                await completeTutorial();
-                Logger.info('useGuidedTour', '🎬 Starting project-creator tutorial immediately');
-                
-                // 🔥 Projects.tsx 대기 없이 바로 project-creator 시작
-                // Projects 페이지가 로드되지 않아도 상관없음
-                // useGuidedTour 내의 element 검색 로직이 처리함
-                startTutorial('project-creator');
-              }, 100);
-              
+            
+            // 🔥 디버깅: 버튼 확인
+            if (!actionCreateBtn) {
+              Logger.warn('useGuidedTour', '⚠️ action-create button not found!');
+              await nextStep();
               return;
-            } else {
-              Logger.warn('useGuidedTour', '⚠️ action-create button not found');
             }
+            
+            Logger.info('useGuidedTour', '✅ action-create button found, preparing to click');
+            
+            // 🔥 localStorage 플래그 설정
+            localStorage.setItem('tutorial_open_project_creator', 'true');
+            Logger.info('useGuidedTour', '💾 localStorage flag set');
+            
+            // 🔥 버튼 클릭 → navigate 발동
+            Logger.info('useGuidedTour', '🚀 Clicking action-create button');
+            actionCreateBtn.click();
+            Logger.info('useGuidedTour', '✅ action-create button clicked');
+            
+            // 🔥 적절한 지연 후:
+            // 1. Dashboard 튜토리얼 완료
+            // 2. project-creator 튜토리얼 시작 (Projects 페이지 렌더링 완료 대기)
+            // 🔥 React Router navigate() + Projects.tsx 리렌더링에 충분한 시간 필요
+            setTimeout(async () => {
+              Logger.info('useGuidedTour', '⏸️ [1200ms] Completing dashboard tutorial');
+              
+              // 🔥 현재 DOM 상태 확인 (Projects 페이지 로드 여부)
+              const projectsElements = document.querySelectorAll('[data-tour]');
+              const elementsList = Array.from(projectsElements).map(el => el.getAttribute('data-tour'));
+              Logger.info('useGuidedTour', `📊 [1200ms] Current DOM [data-tour] elements: ${elementsList.join(', ')}`);
+              
+              await completeTutorial();
+              Logger.info('useGuidedTour', '🎬 Starting project-creator tutorial after 1200ms delay');
+              
+              // 🔥 1200ms 지연 = React Router 네비게이션 + 컴포넌트 렌더링 + state 업데이트 완료
+              // 추가 대기 후 startTutorial 직접 호출 (Projects.tsx useEffect에만 의존하지 않음)
+              setTimeout(async () => {
+                Logger.info('useGuidedTour', '⏸️ [1700ms] About to call startTutorial');
+                
+                // 🔥 현재 DOM 상태 최종 확인
+                const finalElements = document.querySelectorAll('[data-tour]');
+                const finalList = Array.from(finalElements).map(el => el.getAttribute('data-tour'));
+                Logger.info('useGuidedTour', `📊 [1700ms] Final DOM [data-tour] elements: ${finalList.join(', ')}`);
+                
+                Logger.info('useGuidedTour', '🎬 Directly calling startTutorial from useGuidedTour');
+                startTutorial('project-creator');
+              }, 500); // 추가 500ms 대기 (총 1700ms)
+            }, 1200);
+            
+            return;
           }
           
           // 🔥 일반 다음 버튼: Context state 업데이트 (driver.moveTo는 useEffect에서 자동 처리)

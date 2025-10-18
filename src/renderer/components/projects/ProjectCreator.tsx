@@ -150,10 +150,12 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
   // 🔥 선택된 Google Docs 문서 정보
   const [selectedGoogleDoc, setSelectedGoogleDoc] = useState<any>(null);
 
-  // 🔥 초기 렌더링 로그
-  if (isOpen) {
-    Logger.debug('PROJECT_CREATOR', `Component rendering with isOpen=true, currentTutorialId=${currentTutorialId}, isActive=${isActive}`);
-  }
+  // 🔥 컴포넌트 렌더링 로그 - 매번 호출되어야 함
+  Logger.debug('PROJECT_CREATOR', `🎨 ProjectCreator rendered`, { 
+    isOpen,
+    currentTutorialId,
+    isActive
+  });
 
   // 🔥 ProjectCreator 모달이 열릴 때 튜토리얼 자동 시작 제거
   // 이제는 Projects.tsx에서 모달 마운트 후 튜토리얼을 시작하므로
@@ -252,8 +254,6 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       };
     }
   }, [selectedPlatform]);
-
-  if (!isOpen) return null;
 
   // 🔥 Google Docs 연동 처리 - End User 토큰 기반 (보안 강화)
   // googleOAuthService를 통해 사용자 토큰만 사용 (.env 토큰 미사용)
@@ -698,7 +698,12 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
 
   return (
     <>
-      <div className={PROJECT_CREATOR_STYLES.overlay} onClick={onClose}>
+      {isOpen && Logger.debug('PROJECT_CREATOR', '🎨 ProjectCreator isOpen=true, rendering overlay')}
+      <div 
+        className={PROJECT_CREATOR_STYLES.overlay} 
+        onClick={onClose}
+        style={{ display: isOpen ? 'flex' : 'none' }}
+      >
         <div className={PROJECT_CREATOR_STYLES.modal} onClick={e => e.stopPropagation()} data-tour="project-creator-container">
           {/* 헤더 */}
           <div className={PROJECT_CREATOR_STYLES.header}>

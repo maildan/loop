@@ -300,10 +300,12 @@ export const getDashboardTutorial = (): Tutorial => ({
     Logger.info('getDashboardTutorial', '⏭️ Dashboard tutorial skipped');
   },
 
-  // 메타 정보: ProjectCreator 튜토리얼로 반환 시 사용
-  // nextTutorialId는 제거 (Projects.tsx에서 로드 후 수동으로 시작)
+  // 메타 정보: ProjectCreator 튜토리얼로부터 복귀 시만 사용
+  // 📌 주의: Dashboard는 순환 참조하지 않음 (returnTutorialId 제거)
+  // Dashboard가 완료되면 그냥 종료됨
   meta: {
-    returnTutorialId: 'dashboard-intro',
-    returnStepId: 'action-import',
+    // returnTutorialId와 returnStepId 제거
+    // Dashboard는 끝이므로 어디로도 복귀하지 않음
+    // ProjectCreator에서만 Dashboard로 복귀 설정
   },
 });

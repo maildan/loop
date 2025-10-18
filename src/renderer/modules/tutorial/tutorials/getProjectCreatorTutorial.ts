@@ -41,7 +41,7 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
         description:
           '프로젝트를 만드는 방법은 3가지입니다!\n\n' +
           '각 방법에 대해 자세히 알아보겠습니다.\n' +
-          '(자동으로 다음 단계로 진행됩니다...)',
+          '(다음 버튼으로 진행해주세요)',
         side: 'bottom',
         align: 'center',
         showButtons: ['close', 'next'],
@@ -142,7 +142,7 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
         description:
           '이제 프로젝트의 상세 정보를 설정해봅시다!\n\n' +
           '제목, 장르, 목표 등을 입력할 수 있습니다.\n' +
-          '(자동으로 다음 단계로 진행됩니다...)',
+          '(다음 버튼으로 진행해주세요)',
         side: 'bottom',
         align: 'center',
         showButtons: ['close', 'next'],
@@ -272,14 +272,15 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
    * onPopoverRender 시 setTimeout으로 자동 진행
    * + smooth scroll 애니메이션
    * 
-   * ✅ returnStepId: 'action-import' → Dashboard Step 5 (index 4)
-   * 이를 통해 ProjectCreator 완료 후 Dashboard의 'action-import'로 복귀
-   * (action-create로 복귀하면 무한루프)
+   * ✅ autoProgress: false → 사용자가 '다음' 버튼을 클릭해서 진행 (자동 진행 X)
+   * ✅ returnStepId: 'dashboard-complete' → Dashboard 최종 단계 (index 9)
+   * 이를 통해 ProjectCreator 완료 후 Dashboard의 'dashboard-complete'로 복귀
+   * (최종 단계는 '다음' 버튼이 없으므로 무한루프 방지)
    */
   meta: {
-    autoProgress: true,
-    autoProgressDelay: 5500, // 5.5초마다 자동으로 다음 단계 (충분한 이해 시간)
+    autoProgress: false, // 자동 진행 비활성화 → 사용자가 각 단계를 천천히 읽을 수 있음
+    autoProgressDelay: 5500, // 참고용 유지 (사용 안함)
     returnTutorialId: 'dashboard-intro', // 이 튜토리얼 완료 후 대시보드로 복귀
-    returnStepId: 'action-import', // ✅ 복귀할 스텝: action-import (step 5, index 4)
+    returnStepId: 'dashboard-complete', // ✅ 복귀할 스텝: dashboard-complete (최종 step, index 9)
   },
 });
