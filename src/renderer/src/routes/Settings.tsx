@@ -7,7 +7,6 @@ import { useSettings } from '../../app/settings/hooks/useSettings';
 import { SettingsNavigation } from '../../app/settings/components/SettingsNavigation';
 import { AppSettingsSection } from '../../app/settings/components/sections/AppSettingsSection';
 import ProfileSettingsSection from '../../app/settings/components/sections/ProfileSettingsSection';
-import { KeyboardSettingsSection } from '../../app/settings/components/sections/KeyboardSettingsSection';
 import { UISettingsSection } from '../../app/settings/components/sections/UISettingsSection';
 import { NotificationSettingsSection } from '../../app/settings/components/sections/NotificationSettingsSection';
 import { PerformanceSettingsSection } from '../../app/settings/components/sections/PerformanceSettingsSection';
@@ -79,12 +78,6 @@ export default function Settings(): React.ReactElement {
           />
         )}
 
-        {activeSection === 'keyboard' && (
-          <KeyboardSettingsSection
-            settings={settings.keyboard}
-            updateSetting={updateSetting}
-          />
-        )}
 
         {activeSection === 'performance' && (
           <PerformanceSettingsSection

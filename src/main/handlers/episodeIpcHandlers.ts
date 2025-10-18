@@ -10,6 +10,7 @@ import { Logger } from '../../shared/logger';
 import { EpisodeService } from '../services/EpisodeService';
 import { prismaService } from '../services/PrismaService';
 import { calculateWordCount } from '../../shared/utils/text';
+import { globalRateLimiter } from '../services/RateLimiterService';
 import type {
   CreateEpisodeInput,
   UpdateEpisodeInput,
@@ -31,6 +32,18 @@ export function setupEpisodeIpcHandlers(): void {
   // 회차 생성
   ipcMain.handle('episode:create', async (event: IpcMainEvent, input: CreateEpisodeInput) => {
     try {
+      // 🔒 V4 단계 0: 속도 제한 (Rate Limiting) 검증
+      const limitResult = globalRateLimiter.checkLimit('episode:create');
+      if (!limitResult.allowed) {
+        Logger.warn('EPISODE_IPC', '⚠️ V4 Rate limit exceeded for episode:create', {
+          retryAfterMs: limitResult.retryAfter,
+        });
+        return {
+          success: false,
+          error: `회차 생성 요청이 너무 많습니다. ${Math.ceil(limitResult.retryAfter / 1000)}초 후 다시 시도해주세요.`,
+        };
+      }
+
       Logger.debug('EPISODE_IPC', 'Creating episode', { input });
       const episode = await episodeService.createEpisode(input);
       return { success: true, data: episode };

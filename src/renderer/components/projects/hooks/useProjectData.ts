@@ -289,8 +289,12 @@ export function useProjectData(projectId: string): UseProjectDataReturn {
 
       // result는 위에서 설정된 값
       if (result && result.success && result.data) {
+        // 🔥 title과 titleRef 모두 동기화
         setTitle(result.data.title);
+        titleRef.current = result.data.title;
+        
         setContent(result.data.content || '');
+        contentRef.current = result.data.content || '';
 
         // 🔥 chapters 데이터 로드 및 ref 동기화
         const chaptersData = result.data.chapters || '{}';

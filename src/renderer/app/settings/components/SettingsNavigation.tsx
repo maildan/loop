@@ -14,7 +14,6 @@ const SECTIONS: SettingSectionMeta[] = [
   { id: 'account', label: '사용자 프로필', icon: User },
   { id: 'notifications', label: '알림', icon: Bell },
   { id: 'ui', label: 'UI/UX', icon: Palette },
-  { id: 'keyboard', label: '키보드', icon: Keyboard },
   { id: 'performance', label: '성능', icon: Cpu },
 ];
 

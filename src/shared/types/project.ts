@@ -3,14 +3,16 @@
  * Based on Prisma schema models
  */
 
+import type { KoreanWebNovelGenre, ProjectStatus, StructureStatus } from '../constants/enums';
+
 export interface Project {
   id: string;
   title: string;
   description?: string;
   content?: string;
   chapters?: string; // JSON string
-  genre: string;
-  status: string;
+  genre: KoreanWebNovelGenre;
+  status: ProjectStatus;
   progress: number;
   wordCount: number;
   author: string;
@@ -65,7 +67,7 @@ export interface ProjectStructure {
   title: string;
   description?: string;
   content?: string;
-  status: string;
+  status: StructureStatus;
   wordCount: number;
   sortOrder: number;
   parentId?: string;

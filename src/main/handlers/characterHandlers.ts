@@ -7,6 +7,7 @@ import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { IpcResponse, ProjectCharacter } from '../../shared/types';
 import { prismaService } from '../services/PrismaService';
+import { globalRateLimiter, channelLimiters } from '../services/RateLimiterService';
 
 /**
  * 🔥 프로젝트 캐릭터 IPC 핸들러
@@ -88,6 +89,20 @@ export function registerCharacterHandlers(): void {
   // 캐릭터 생성/업데이트
   ipcMain.handle('projects:upsert-character', async (_event: IpcMainInvokeEvent, character: Partial<ProjectCharacter>): Promise<IpcResponse<ProjectCharacter>> => {
     try {
+      // 🔒 V4 단계 0: 속도 제한 (Rate Limiting) 검증
+      const rateLimitKey = 'projects:upsert-character';
+      const limitResult = globalRateLimiter.checkLimit(rateLimitKey);
+      if (!limitResult.allowed) {
+        Logger.warn('CHARACTER_IPC', '⚠️ V4 Rate limit exceeded for upsert-character', {
+          retryAfterMs: limitResult.retryAfter,
+        });
+        return {
+          success: false,
+          error: `캐릭터 업데이트 요청이 너무 많습니다. ${Math.ceil(limitResult.retryAfter / 1000)}초 후 다시 시도해주세요.`,
+          timestamp: new Date(),
+        };
+      }
+
       const prisma = await prismaService.getClient();
 
       const upsertedCharacter = await prisma.projectCharacter.upsert({

@@ -101,6 +101,7 @@
     "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.3.1",
     "tippy.js": "^6.3.7",
+    "vitest": "^3.2.4",
     "zod": "^4.1.9",
     "zustand": "^5.0.8"
   },

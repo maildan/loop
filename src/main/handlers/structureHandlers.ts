@@ -8,6 +8,7 @@ import type { Prisma, PrismaClient, ProjectStructure as PrismaStructureModel } f
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { IpcResponse, ProjectStructure } from '../../shared/types';
+import type { StructureStatus } from '../../shared/constants/enums';
 import { calculateWordCount } from '../../shared/utils/text';
 import { prismaService } from '../services/PrismaService';
 import { recordDailyWritingActivity } from '../utils/writingActivity';
@@ -42,7 +43,7 @@ export function registerStructureHandlers(): void {
         title: string;
         description: string | null;
         content: string | null;
-        status: string;
+        status: StructureStatus;
         wordCount: number;
         sortOrder: number;
         parentId: string | null;
@@ -235,7 +236,7 @@ function mapToProjectStructure(model: PrismaStructureModel): ProjectStructure {
     title: model.title,
     description: toOptionalString(model.description),
     content: toOptionalString(model.content),
-    status: model.status ?? 'planned',
+    status: (model.status as StructureStatus) || 'draft',
     wordCount: model.wordCount ?? 0,
     sortOrder: model.sortOrder ?? 0,
     parentId: toOptionalString(model.parentId),

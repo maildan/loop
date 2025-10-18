@@ -6,7 +6,10 @@
 import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { IpcResponse, Project } from '../../shared/types';
+import type { KoreanWebNovelGenre, ProjectStatus } from '../../shared/constants/enums';
 import { prismaService } from '../services/PrismaService';
+import { ProjectCreateSchema, ProjectUpdateSchema, detectSuspiciousInput } from '../../shared/validation/projectValidation';
+import { globalRateLimiter, channelLimiters } from '../services/RateLimiterService';
 
 /**
  * 🔥 프로젝트 CRUD IPC 핸들러 - 성능 최적화
@@ -44,8 +47,8 @@ export function registerProjectCrudHandlers(): void {
         wordCount: number;
         lastModified: Date;
         createdAt: Date;
-        genre: string;
-        status: string;
+        genre: KoreanWebNovelGenre;
+        status: ProjectStatus;
         author: string;
       }) => ({
         id: project.id,
@@ -57,8 +60,8 @@ export function registerProjectCrudHandlers(): void {
         lastModified: project.lastModified,
         createdAt: project.createdAt,
         updatedAt: project.lastModified, // 🔥 updatedAt 필드 추가
-        genre: project.genre || '기타',
-        status: (project.status as 'active' | 'completed' | 'paused') || 'active',
+        genre: project.genre || 'unknown',
+        status: project.status || 'active',
         author: project.author || '사용자',
       }));
 
@@ -113,7 +116,7 @@ export function registerProjectCrudHandlers(): void {
             chapters: '{}', // 🔥 빈 chapters 추가
             progress: 0,
             wordCount: 0,
-            genre: '기타',
+            genre: 'unknown',
             status: 'active',
             author: '사용자',
             createdAt: now,
@@ -147,8 +150,8 @@ export function registerProjectCrudHandlers(): void {
         lastModified: project.lastModified,
         createdAt: project.createdAt,
         updatedAt: project.lastModified, // 🔥 lastModified를 updatedAt으로 사용
-        genre: project.genre || '기타',
-        status: (project.status as 'active' | 'completed' | 'paused') || 'active',
+        genre: project.genre || 'unknown',
+        status: project.status || 'active',
         author: project.author || '사용자',
       };
 
@@ -175,13 +178,48 @@ export function registerProjectCrudHandlers(): void {
         genre: project.genre,
       });
 
-      // 🔥 유효성 검증
-      if (!project.title || project.title.trim().length === 0) {
-        throw new Error('프로젝트 제목은 필수입니다.');
+      // 🔒 V4 단계 0: 속도 제한 (Rate Limiting) 검증
+      const rateLimitKey = 'projects:create';
+      const limiter = channelLimiters[rateLimitKey] || globalRateLimiter;
+      const limitResult = limiter.checkLimit(rateLimitKey);
+      if (!limitResult.allowed) {
+        Logger.warn('PROJECT_CRUD_IPC', '⚠️ V4 Rate limit exceeded for projects:create', {
+          retryAfterMs: limitResult.retryAfter,
+          requestCount: limitResult.requestCount,
+        });
+        return {
+          success: false,
+          error: `프로젝트 생성 요청이 너무 많습니다. ${Math.ceil(limitResult.retryAfter / 1000)}초 후 다시 시도해주세요.`,
+          timestamp: new Date(),
+        };
+      }
+      Logger.debug('PROJECT_CRUD_IPC', '✅ V4 Rate limit check passed', {
+        remaining: limitResult.remaining,
+      });
+
+      // 🔒 V3 단계 1: Zod 검증을 통한 입력값 검증
+      let validatedProject: any;
+      try {
+        validatedProject = await ProjectCreateSchema.parseAsync(project);
+        Logger.debug('PROJECT_CRUD_IPC', '✅ V3 Zod validation passed', { title: validatedProject.title });
+      } catch (zodError: any) {
+        const errorMessage = zodError.issues?.[0]?.message || '입력값 검증 실패';
+        Logger.error('PROJECT_CRUD_IPC', '❌ V3 Zod validation failed', zodError);
+        
+        // 🔒 의심스러운 입력 패턴 감지
+        if (detectSuspiciousInput(JSON.stringify(project))) {
+          Logger.warn('PROJECT_CRUD_IPC', '⚠️ Suspicious input pattern detected', {
+            title: (project as any).title,
+            genre: (project as any).genre
+          });
+        }
+        
+        throw new Error(`입력값 검증 실패: ${errorMessage}`);
       }
 
-      if (project.title.length > 100) {
-        throw new Error('프로젝트 제목은 100자를 초과할 수 없습니다.');
+      // 🔒 V3 단계 2: 비즈니스 로직 검증
+      if (!validatedProject.title || validatedProject.title.trim().length === 0) {
+        throw new Error('프로젝트 제목은 필수입니다.');
       }
 
       // 🔥 Prisma를 통한 실제 DB 생성
@@ -192,14 +230,14 @@ export function registerProjectCrudHandlers(): void {
 
         const createdProject = await prisma.project.create({
           data: {
-            title: project.title.trim(),
-            description: project.description?.trim() || '새로운 프로젝트입니다.',
-            content: project.content || '',
+            title: validatedProject.title.trim(),
+            description: validatedProject.description?.trim() || '새로운 프로젝트입니다.',
+            content: validatedProject.content || '',
             progress: 0,
-            wordCount: project.content ? project.content.split(/\s+/).filter(w => w.length > 0).length : 0,
-            genre: project.genre || '기타',
-            status: project.status || 'active',
-            author: project.author || '사용자',
+            wordCount: validatedProject.content ? validatedProject.content.split(/\s+/).filter((w: string) => w.length > 0).length : 0,
+            genre: validatedProject.genre || 'unknown',
+            status: validatedProject.status || 'active',
+            author: validatedProject.author || '사용자',
             createdAt: now,
             lastModified: now,
           }
@@ -212,8 +250,8 @@ export function registerProjectCrudHandlers(): void {
           content: createdProject.content || '',
           progress: createdProject.progress || 0,
           wordCount: createdProject.wordCount || 0,
-          genre: createdProject.genre || '기타',
-          status: (createdProject.status as 'active' | 'completed' | 'paused') || 'active',
+          genre: createdProject.genre || 'unknown',
+          status: createdProject.status || 'active',
           author: createdProject.author || '사용자',
           createdAt: createdProject.createdAt,
           lastModified: createdProject.lastModified,
@@ -249,6 +287,45 @@ export function registerProjectCrudHandlers(): void {
     try {
       Logger.debug('PROJECT_CRUD_IPC', '🚀 즉시 프로젝트 업데이트 시작', { id, contentLength: updates.content?.length });
 
+      // 🔒 V4 단계 0: 속도 제한 (Rate Limiting) 검증
+      const rateLimitKey = 'projects:update';
+      const limiter = channelLimiters[rateLimitKey] || globalRateLimiter;
+      const limitResult = limiter.checkLimit(rateLimitKey);
+      if (!limitResult.allowed) {
+        Logger.warn('PROJECT_CRUD_IPC', '⚠️ V4 Rate limit exceeded for projects:update', {
+          retryAfterMs: limitResult.retryAfter,
+          requestCount: limitResult.requestCount,
+        });
+        return {
+          success: false,
+          error: `프로젝트 업데이트 요청이 너무 많습니다. ${Math.ceil(limitResult.retryAfter / 1000)}초 후 다시 시도해주세요.`,
+          timestamp: new Date(),
+        };
+      }
+      Logger.debug('PROJECT_CRUD_IPC', '✅ V4 Rate limit check passed', {
+        remaining: limitResult.remaining,
+      });
+
+      // 🔒 V3 단계 1: Zod 검증을 통한 입력값 검증 (update는 partial)
+      let validatedUpdates: any;
+      try {
+        validatedUpdates = await ProjectUpdateSchema.parseAsync(updates);
+        Logger.debug('PROJECT_CRUD_IPC', '✅ V3 Zod update validation passed', { hasTitle: !!validatedUpdates.title });
+      } catch (zodError: any) {
+        const errorMessage = zodError.issues?.[0]?.message || '입력값 검증 실패';
+        Logger.error('PROJECT_CRUD_IPC', '❌ V3 Zod update validation failed', zodError);
+        
+        // 🔒 의심스러운 입력 패턴 감지
+        if (detectSuspiciousInput(JSON.stringify(updates))) {
+          Logger.warn('PROJECT_CRUD_IPC', '⚠️ Suspicious update pattern detected', {
+            hasGenre: 'genre' in updates,
+            hasStatus: 'status' in updates
+          });
+        }
+        
+        throw new Error(`입력값 검증 실패: ${errorMessage}`);
+      }
+
       const prisma = await prismaService.getClient();
 
       const updateData: Partial<{
@@ -266,17 +343,17 @@ export function registerProjectCrudHandlers(): void {
         lastModified: new Date(),
       };
 
-      if (updates.title) updateData.title = updates.title.trim();
-      if (updates.description !== undefined) updateData.description = updates.description;
-      if (updates.content !== undefined) {
-        updateData.content = updates.content;
-        updateData.wordCount = updates.content.split(/\s+/).filter(w => w.length > 0).length;
+      if (validatedUpdates.title) updateData.title = validatedUpdates.title.trim();
+      if (validatedUpdates.description !== undefined) updateData.description = validatedUpdates.description;
+      if (validatedUpdates.content !== undefined) {
+        updateData.content = validatedUpdates.content;
+        updateData.wordCount = validatedUpdates.content.split(/\s+/).filter((w: string) => w.length > 0).length;
       }
-      if (updates.chapters !== undefined) updateData.chapters = updates.chapters; // 🔥 chapters 업데이트 로직 추가
-      if (updates.progress !== undefined) updateData.progress = updates.progress;
-      if (updates.genre) updateData.genre = updates.genre;
-      if (updates.status) updateData.status = updates.status;
-      if (updates.author) updateData.author = updates.author;
+      if (validatedUpdates.chapters !== undefined) updateData.chapters = validatedUpdates.chapters; // 🔥 chapters 업데이트 로직 추가
+      if (validatedUpdates.progress !== undefined) updateData.progress = validatedUpdates.progress;
+      if (validatedUpdates.genre) updateData.genre = validatedUpdates.genre;
+      if (validatedUpdates.status) updateData.status = validatedUpdates.status;
+      if (validatedUpdates.author) updateData.author = validatedUpdates.author;
 
       // 🔥 디버깅 로그: 저장할 데이터 확인
       Logger.debug('PROJECT_CRUD_IPC', 'Backend about to save updateData', {
@@ -299,8 +376,8 @@ export function registerProjectCrudHandlers(): void {
         chapters: (updatedProject as any).chapters || undefined, // 🔥 chapters 필드 추가 (타입 캐스팅)
         progress: updatedProject.progress || 0,
         wordCount: updatedProject.wordCount || 0,
-        genre: updatedProject.genre || '기타',
-        status: (updatedProject.status as 'active' | 'completed' | 'paused') || 'active',
+        genre: updatedProject.genre || 'unknown',
+        status: updatedProject.status || 'active',
         author: updatedProject.author || '사용자',
         createdAt: updatedProject.createdAt,
         lastModified: updatedProject.lastModified,
@@ -425,8 +502,8 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
           content: createdProject.content || '',
           progress: createdProject.progress || 0,
           wordCount: createdProject.wordCount || 0,
-          genre: createdProject.genre || '기타',
-          status: (createdProject.status as 'active' | 'completed' | 'paused') || 'active',
+          genre: createdProject.genre || 'unknown',
+          status: createdProject.status || 'active',
           author: createdProject.author || '사용자',
           createdAt: createdProject.createdAt,
           lastModified: createdProject.lastModified,
@@ -530,8 +607,8 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
           content: createdProject.content || '',
           progress: createdProject.progress || 0,
           wordCount: createdProject.wordCount || 0,
-          genre: createdProject.genre || '기타',
-          status: (createdProject.status as 'active' | 'completed' | 'paused') || 'active',
+          genre: createdProject.genre || 'unknown',
+          status: createdProject.status || 'active',
           author: createdProject.author || '사용자',
           createdAt: createdProject.createdAt,
           lastModified: createdProject.lastModified,

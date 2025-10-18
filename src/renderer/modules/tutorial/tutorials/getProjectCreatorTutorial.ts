@@ -76,7 +76,7 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
         showProgress: true,
         progressText: '{{current}} / 9',
       },
-      disableActiveInteraction: false,
+      disableActiveInteraction: true, // 🔥 클릭 방지 (5.5초 자동 진행 중 의도치 않은 선택 방지)
     },
 
     // ============================================================
@@ -102,7 +102,7 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
         showProgress: true,
         progressText: '{{current}} / 9',
       },
-      disableActiveInteraction: false,
+      disableActiveInteraction: true, // 🔥 클릭 방지 (Google Docs OAuth 자동 시작 방지)
     },
 
     // ============================================================

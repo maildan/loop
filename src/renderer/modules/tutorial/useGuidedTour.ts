@@ -52,6 +52,16 @@ export function useGuidedTour(): Driver | null {
   const isInitializingRef = useRef(false);
   const autoProgressTimeoutRef = useRef<NodeJS.Timeout | null>(null); // 🔥 중복 타이머 방지
   const renderCountRef = useRef(0); // 🔥 onPopoverRender 호출 횟수 추적 (디버깅)
+  const currentStepIndexRef = useRef(0); // 🔥 최신 currentStepIndex를 ref로 추적 (closure 문제 해결)
+
+  /**
+   * 🔥 currentStepIndex를 ref로 항상 최신 상태 유지
+   * onPopoverRender 콜백에서 stale closure 문제 방지
+   */
+  useEffect(() => {
+    currentStepIndexRef.current = currentStepIndex;
+    Logger.debug('useGuidedTour', `📌 currentStepIndexRef updated: ${currentStepIndex}`);
+  }, [currentStepIndex]);
 
   /**
    * Driver.js 초기화 및 실행
@@ -111,10 +121,11 @@ export function useGuidedTour(): Driver | null {
 
         // 네비게이션 핸들러
         onNextClick: async () => {
-          Logger.debug('useGuidedTour', `→ Next button clicked (step ${currentStepIndex})`);
+          const stepIdx = currentStepIndexRef.current;
+          Logger.debug('useGuidedTour', `→ Next button clicked (step ${stepIdx})`);
           
           // 🔥 Step 3-3 (action-create)에서 "다음" 클릭 시 자동으로 action-create 버튼 클릭
-          const currentStep = tutorial.steps[currentStepIndex];
+          const currentStep = tutorial.steps[stepIdx];
           if (currentStep?.stepId === 'action-create') {
             Logger.info('useGuidedTour', '🚀 Auto-clicking action-create button');
             const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
@@ -128,12 +139,13 @@ export function useGuidedTour(): Driver | null {
             }
           }
           
+          // 🔥 State 변경만 함 (driver.moveTo는 useEffect에서 자동 처리)
           await nextStep();
           
           // 🔥 nextStep 후 상태 업데이트 확인 (비동기 처리)
           setTimeout(async () => {
             // 현재 튜토리얼이 마지막 스텝인지 확인
-            const isLastStep = currentStepIndex + 1 >= tutorial.steps.length;
+            const isLastStep = currentStepIndexRef.current + 1 >= tutorial.steps.length;
             
             if (isLastStep && tutorial.meta?.nextTutorialId) {
               Logger.info(
@@ -148,7 +160,9 @@ export function useGuidedTour(): Driver | null {
         },
 
         onPrevClick: async () => {
-          Logger.debug('useGuidedTour', `← Previous button clicked (step ${currentStepIndex})`);
+          const stepIdx = currentStepIndexRef.current;
+          Logger.debug('useGuidedTour', `← Previous button clicked (step ${stepIdx})`);
+          // 🔥 State 변경만 함 (driver.moveTo는 useEffect에서 자동 처리)
           await previousStep();
         },
 
@@ -161,10 +175,11 @@ export function useGuidedTour(): Driver | null {
         onPopoverRender: (popover) => {
           renderCountRef.current++;
           const renderCount = renderCountRef.current;
+          const currentStepIdx = currentStepIndexRef.current; // 🔥 ref에서 최신 값 가져오기
           
           Logger.debug(
             'useGuidedTour',
-            `📍 onPopoverRender called (count: ${renderCount}, step: ${currentStepIndex})`
+            `📍 onPopoverRender called (count: ${renderCount}, step: ${currentStepIdx})`
           );
 
           // 🔥 이전 타이머 정리 (중복 방지) - 더 엄격한 확인
@@ -176,7 +191,7 @@ export function useGuidedTour(): Driver | null {
 
           // 🔥 Scroll to element if needed
           try {
-            const currentStep = tutorial.steps[currentStepIndex];
+            const currentStep = tutorial.steps[currentStepIdx]; // 🔥 ref 값 사용
             if (currentStep?.element && typeof currentStep.element === 'string') {
               const element = document.querySelector(currentStep.element) as HTMLElement;
               if (element) {
@@ -208,10 +223,10 @@ export function useGuidedTour(): Driver | null {
           }
 
           // 🔥 자동 진행 타이머 (마지막 step이 아닐 때만)
-          if (isAutoProgress && currentStepIndex < tutorial.steps.length - 1) {
+          if (isAutoProgress && currentStepIdx < tutorial.steps.length - 1) { // 🔥 ref 값 사용
             Logger.info(
               'useGuidedTour',
-              `⏱️ Auto-progress scheduled for step ${currentStepIndex} after ${autoProgressDelay}ms (render #${renderCount})`
+              `⏱️ Auto-progress scheduled for step ${currentStepIdx} after ${autoProgressDelay}ms (render #${renderCount})`
             );
             
             autoProgressTimeoutRef.current = setTimeout(() => {
@@ -222,14 +237,14 @@ export function useGuidedTour(): Driver | null {
               }
               
               autoProgressTimeoutRef.current = null;
-              Logger.info('useGuidedTour', `→ Auto-progress executing for step ${currentStepIndex}`);
+              Logger.info('useGuidedTour', `→ Auto-progress executing for step ${currentStepIndexRef.current}`);
               nextStep().catch(err =>
                 Logger.error('useGuidedTour', 'Error in auto-progress', err)
               );
             }, autoProgressDelay);
           } else if (!isAutoProgress) {
             Logger.debug('useGuidedTour', '⏸️ Auto-progress disabled for this step');
-          } else if (currentStepIndex >= tutorial.steps.length - 1) {
+          } else if (currentStepIdx >= tutorial.steps.length - 1) { // 🔥 ref 값 사용
             Logger.info('useGuidedTour', '✅ Last step reached, no auto-progress scheduled');
           }
         },
@@ -242,9 +257,10 @@ export function useGuidedTour(): Driver | null {
 
         // 하이라이트 시작
         onHighlighted: (element, step) => {
+          // 🔥 currentStepIndex는 stale closure이므로 currentStepIndexRef 사용
           Logger.debug(
             'useGuidedTour',
-            `🎯 Highlighted step ${currentStepIndex}`,
+            `🎯 Highlighted step ${currentStepIndexRef.current}`,
             { element: element?.id || element?.className }
           );
           // Driver.js가 자동으로 positioning을 처리하므로 수동 개입 제거 ✅
@@ -252,19 +268,25 @@ export function useGuidedTour(): Driver | null {
 
         // 하이라이트 해제
         onDeselected: () => {
-          Logger.debug('useGuidedTour', `⭕ Deselected step ${currentStepIndex}`);
+          // 🔥 currentStepIndex는 stale closure이므로 currentStepIndexRef 사용
+          Logger.debug('useGuidedTour', `⭕ Deselected step ${currentStepIndexRef.current}`);
         },
       });
 
-      // 튜토리얼 시작 (저장된 진행도부터)
-      driverRef.current.drive(currentStepIndex);
-      Logger.info('useGuidedTour', `✅ Driver.js started at step ${currentStepIndex}`);
+      // 🔥 튜토리얼 시작 (저장된 진행도부터 시작)
+      // currentStepIndexRef를 사용하여 최신 상태 반영
+      const startStep = currentStepIndexRef.current;
+      driverRef.current.drive(startStep);
+      Logger.info('useGuidedTour', `✅ Driver.js started at step ${startStep}`);
     } catch (error) {
       Logger.error('useGuidedTour', '❌ Failed to initialize Driver.js', error);
     } finally {
       isInitializingRef.current = false;
     }
-  }, [currentTutorialId, currentStepIndex, nextStep, previousStep, closeTutorial]);
+  }, [currentTutorialId, nextStep, previousStep, closeTutorial]);
+  // 🔥 currentStepIndex는 ref로 추적하므로 의존성 제외
+  // 이렇게 하면 step 변경 시 useCallback 재생성 안 됨 (driver 재초기화 방지)
+  // 하지만 onPopoverRender는 currentStepIndexRef.current로 항상 최신 값 사용!
 
   /**
    * 🔥 개선: TutorialRefreshController 통합
@@ -307,7 +329,9 @@ export function useGuidedTour(): Driver | null {
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [isActive, currentTutorialId, initializeDriver]);
+  }, [isActive, currentTutorialId]);
+  // 🔥 initializeDriver 제거: 이미 currentTutorialId 변경으로 재초기화됨
+  // initializeDriver 포함 시 → 재생성 → useEffect 재실행 → driver 재초기화 (무한루프 위험)
 
   /**
    * 🔧 Scroll 이벤트 감시 - popover position 업데이트
@@ -334,24 +358,32 @@ export function useGuidedTour(): Driver | null {
   }, [isActive]);
 
   /**
-   * 🔧 Step index 변경 시 popover 재계산
-   * 새로운 element를 highlight할 때 위치 재계산 필요
+   * 🔧 Step index 변경 시 driver를 해당 step으로 이동
+   * 사용자가 이전/다음 버튼 클릭 시 Driver.js의 internal state도 동기화
    */
   useEffect(() => {
     if (!driverRef.current || !isActive) return;
 
-    // 50ms 후 refresh (step 전환 애니메이션 완료 대기)
-    const timerId = setTimeout(() => {
-      if (driverRef.current?.refresh) {
-        driverRef.current.refresh();
-        Logger.debug('useGuidedTour', `🔄 Popover refreshed for step ${currentStepIndex}`);
-        // Driver.js가 자동으로 처리하므로 수동 sync 제거 ✅
-      }
-    }, 50);
+    // 🔥 driver.moveTo(currentStepIndex)로 동기화
+    // 이렇게 하면 TutorialContext의 상태 변경이 Driver.js에 반영됨
+    try {
+      driverRef.current.moveTo(currentStepIndex);
+      Logger.info(
+        'useGuidedTour',
+        `🎯 Driver moved to step ${currentStepIndex}`
+      );
+    } catch (error) {
+      Logger.error('useGuidedTour', `Error moving driver to step ${currentStepIndex}:`, error);
+    }
 
-    return () => {
-      clearTimeout(timerId);
-    };
+    // 🔥 주의: moveTo() 호출 후 refresh() 제거
+    // moveTo()가 이미 새 step의 popover를 렌더링하므로
+    // refresh() 호출하면 onPopoverRender가 2번 실행됨 (중복 문제)
+    // Step 전환 후 element 위치가 변경되었다면 scroll 핸들러에서 처리
+    
+    // 나중에 필요하면 조건부로만 refresh 호출:
+    // const needsRefresh = /* element position changed */ 
+    // if (needsRefresh) driverRef.current?.refresh();
   }, [currentStepIndex, isActive]);
 
   /**

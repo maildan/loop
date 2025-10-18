@@ -4,6 +4,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import type { KoreanWebNovelGenre } from '../../../shared/constants/enums';
+import { SELECTABLE_GENRES, GENRE_LABELS } from '../../../shared/constants/enums';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Textarea } from '../ui/Textarea';
@@ -97,17 +99,12 @@ const PLATFORM_OPTIONS: readonly PlatformOption[] = [
   },
 ] as const;
 
-// 🔥 장르 옵션
-const GENRE_OPTIONS = [
-  { id: 'novel', name: '소설', icon: BookOpen },
-  { id: 'essay', name: '에세이', icon: Coffee },
-  { id: 'blog', name: '블로그', icon: Newspaper },
-  { id: 'tech', name: '기술', icon: Code },
-  { id: 'diary', name: '일기', icon: FileText },
-  { id: 'poem', name: '시', icon: Lightbulb },
-  { id: 'script', name: '대본', icon: FileText },
-  { id: 'other', name: '기타', icon: Plus },
-] as const;
+// 🔥 장르 옵션 - 선택 가능한 장르 목록에서 생성
+const GENRE_OPTIONS = SELECTABLE_GENRES.map((genreId) => ({
+  id: genreId,
+  name: GENRE_LABELS[genreId] || genreId,
+  icon: BookOpen, // 모든 장르에 동일한 아이콘 사용
+}));
 
 export interface ProjectCreatorProps {
   readonly isOpen: boolean;
@@ -133,7 +130,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
   const [selectedPlatform, setSelectedPlatform] = useState<string>('loop');
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  const [selectedGenre, setSelectedGenre] = useState<string>('novel');
+  const [selectedGenre, setSelectedGenre] = useState<KoreanWebNovelGenre>('unknown');
   const [targetWords, setTargetWords] = useState<number>(10000); // 🔥 목표 단어 수
   const [deadline, setDeadline] = useState<string>(''); // 🔥 완료 목표 날짜
   const [isCreating, setIsCreating] = useState<boolean>(false);
@@ -610,7 +607,7 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
       // 성공 시 폼 리셋
       setTitle('');
       setDescription('');
-      setSelectedGenre('novel');
+      setSelectedGenre('unknown');
       setSelectedPlatform('loop');
       setTargetWords(10000);
       setDeadline('');
@@ -640,28 +637,24 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
   };
 
   const handleGenreSelect = (genreId: string): void => {
-    setSelectedGenre(genreId);
+    setSelectedGenre(genreId as KoreanWebNovelGenre);
     Logger.debug('PROJECT_CREATOR', `Genre selected: ${genreId}`);
   };
 
-  const getDefaultContent = (genre: string): string => {
-    const templates: Record<string, string> = {
-      novel: `제1장: 새로운 시작\n\n여기서부터 당신의 이야기가 시작됩니다.\n\n✍️ 작성 팁:\n- 등장인물을 구체적으로 묘사해보세요\n- 독자가 몰입할 수 있는 장면을 그려보세요\n- 하루에 500단어씩 꾸준히 작성해보세요`,
-      essay: `# 제목을 여기에 입력하세요\n\n오늘의 생각을 자유롭게 써보세요.\n\n일상의 작은 순간들이 때로는 가장 의미 있는 글이 됩니다.`,
-      blog: `# 블로그 포스트 제목\n\n## 소개\n\n독자들과 공유하고 싶은 이야기를 써보세요.\n\n## 본문\n\n경험, 배움, 생각을 자유롭게 표현해보세요.`,
-      tech: `# 기술 문서 제목\n\n## 개요\n\n## 문제 정의\n\n## 해결 방법\n\n## 결론\n\n코드와 설명을 함께 작성해보세요.`,
-      diary: `${new Date().toLocaleDateString('ko-KR')} 일기\n\n오늘 있었던 일들을 기록해보세요.\n\n소중한 순간들을 글로 남겨보세요.`,
-      other: `새로운 프로젝트가 시작되었습니다.\n\n자유롭게 내용을 작성해보세요.`,
+  const getDefaultContent = (genre: KoreanWebNovelGenre): string => {
+    const templates: Record<KoreanWebNovelGenre, string> = {
+      'romance-fantasy': `제1장: 새로운 세계\n\n로맨스와 판타지가 어우러진 새로운 이야기.\n\n✍️ 작성 팁:\n- 주인공의 감정을 생생하게 표현해보세요\n- 판타지 세계관을 독자가 느낄 수 있게 묘사하세요`,
+      'romance': `제1장: 운명의 만남\n\n두 사람의 로맨스 스토리를 시작해보세요.\n\n✍️ 작성 팁:\n- 캐릭터 간의 감정 변화를 디테일하게 표현하세요\n- 독자가 감정이입할 수 있는 장면을 그려보세요`,
+      'bl': `제1장: 숨겨진 감정\n\nBL 장르의 감정 표현을 자유롭게 담아보세요.\n\n✍️ 작성 팁:\n- 캐릭터들의 감정 변화를 생생하게 표현하세요\n- 신뢰와 감정의 성장을 보여주세요`,
+      'modern-fantasy': `제1장: 이상한 일이 일어나다\n\n현대를 배경으로 한 판타지 스토리.\n\n✍️ 작성 팁:\n- 현대와 판타지 요소를 자연스럽게 섞어보세요\n- 세계관의 규칙을 명확히 설정하세요`,
+      'hunter': `제1장: 각성\n\n헌터 장르의 액션 어드벤처를 시작해보세요.\n\n✍️ 작성 팁:\n- 전투 장면을 박진감 있게 표현하세요\n- 주인공의 성장 과정을 보여주세요`,
+      'fantasy': `제1장: 새로운 세계로의 여정\n\n판타지 세계의 모험을 시작해보세요.\n\n✍️ 작성 팁:\n- 세계관을 상세하게 설정하세요\n- 독자가 세계에 몰입할 수 있게 묘사하세요`,
+      'martial-arts': `제1장: 무림의 입장\n\n무협지의 액션과 인간관계를 담아보세요.\n\n✍️ 작성 팁:\n- 무술 체계를 명확하게 설정하세요\n- 인물의 성격과 무술 스타일의 조화를 보여주세요`,
+      'historical': `제1장: 역사 속 발자국\n\n역사 배경의 스토리를 창작해보세요.\n\n✍️ 작성 팁:\n- 시대 배경을 정확하게 반영하세요\n- 역사적 사건과 개인의 이야기를 어우러지게 표현하세요`,
+      'unknown': `새로운 프로젝트가 시작되었습니다.\n\n자유롭게 내용을 작성해보세요.`,
     };
 
-    // genre가 undefined일 경우 대비하여 기본값 제공
-    const defaultTemplate = `새로운 프로젝트가 시작되었습니다.\n\n자유롭게 내용을 작성해보세요.`;
-
-    if (!genre) {
-      return defaultTemplate;
-    }
-
-    return templates[genre] ?? templates.other ?? defaultTemplate;
+    return templates[genre] || templates['unknown'];
   };
 
   return (
@@ -679,7 +672,15 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                   Logger.info('ProjectCreator', '🎬 X button: completeTutorial() → Dashboard');
                   completeTutorial().catch(err => {
                     Logger.error('ProjectCreator', 'Error completing tutorial', err);
+                  }).finally(() => {
+                    // 🔥 completeTutorial 완료 후 모달 닫기 + Dashboard로 네비게이션
+                    Logger.info('ProjectCreator', '🚪 X button: Closing modal + navigate to /dashboard');
                     onClose();
+                    // 🔥 모달 닫기와 동시에 Dashboard로 이동
+                    setTimeout(() => {
+                      navigate('/dashboard');
+                      Logger.info('ProjectCreator', '✅ Navigated to /dashboard');
+                    }, 0);
                   });
                 } else {
                   // 비튜토리얼 상태: 그냥 모달 닫기
