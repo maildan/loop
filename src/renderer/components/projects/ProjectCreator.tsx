@@ -149,13 +149,14 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
   // 🔥 선택된 Google Docs 문서 정보
   const [selectedGoogleDoc, setSelectedGoogleDoc] = useState<any>(null);
 
-  // 🔥 ProjectCreator 모달이 열릴 때 튜토리얼 자동 시작
+  // 🔥 ProjectCreator 모달이 열릴 때 튜토리얼 상태 확인 (시작은 Projects.tsx에서 처리)
   useEffect(() => {
     if (isOpen && currentTutorialId === 'project-creator') {
-      Logger.info('PROJECT_CREATOR', '🚀 Starting project-creator tutorial');
-      startTutorial('project-creator');
+      Logger.info('PROJECT_CREATOR', '✅ ProjectCreator modal opened - tutorial should be started by Projects.tsx');
+      // 🔥 NOTE: startTutorial은 Projects.tsx에서 호출됨
+      // 중복 호출을 방지하기 위해 여기서는 호출하지 않음
     }
-  }, [isOpen, currentTutorialId, startTutorial]);
+  }, [isOpen, currentTutorialId]);
 
   // 🔥 OAuth 성공 이벤트 리스너 설정 (강화된 다중 채널 지원)
   useEffect(() => {
@@ -669,11 +670,13 @@ export function ProjectCreator({ isOpen, onClose, onCreate }: ProjectCreatorProp
                 // 🔥 **중요**: 튜토리얼 상태일 때만 completeTutorial() 호출
                 // 조건: currentTutorialId === 'project-creator' AND isActive === true
                 if (currentTutorialId === 'project-creator' && isActive) {
-                  Logger.info('ProjectCreator', '🎬 X button: completeTutorial() → Dashboard');
-                  completeTutorial().catch(err => {
-                    Logger.error('ProjectCreator', 'Error completing tutorial', err);
+                  Logger.info('ProjectCreator', '🎬 X button: ProjectCreator 튜토리얼 종료');
+                  
+                  // 🔥 Dashboard 튜토리얼 action-import부터 시작 (무한루프 방지)
+                  startTutorial('dashboard-intro', 'action-import').catch(err => {
+                    Logger.error('ProjectCreator', 'Error starting dashboard tutorial', err);
                   }).finally(() => {
-                    // 🔥 completeTutorial 완료 후 모달 닫기 + Dashboard로 네비게이션
+                    // 🔥 모달 닫기와 동시에 Dashboard로 이동
                     Logger.info('ProjectCreator', '🚪 X button: Closing modal + navigate to /dashboard');
                     onClose();
                     // 🔥 모달 닫기와 동시에 Dashboard로 이동

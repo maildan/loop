@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import type { Driver } from 'driver.js';
@@ -12,6 +13,7 @@ import { getTutorial } from './TutorialContext';
 import { Logger } from '../../../shared/logger';
 import { useTutorialRefreshController } from '../../hooks/useTutorialRefreshController';
 import { waitForCSSVariables } from '../../utils/tutorial-refresh';
+import { waitForElement } from '../../../shared/utils/waitForElement';
 
 /**
  * 스타일 상수 (다크모드 지원)
@@ -46,7 +48,9 @@ const DRIVER_STYLES = {
  * ```
  */
 export function useGuidedTour(): Driver | null {
-  const { startTutorial, nextStep, previousStep, closeTutorial } = useTutorial();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const { startTutorial, nextStep, previousStep, closeTutorial, completeTutorial } = useTutorial();
   const { currentTutorialId, currentStepIndex, isActive } = useTutorialState();
   const driverRef = useRef<Driver | null>(null);
   const isInitializingRef = useRef(false);
@@ -85,6 +89,21 @@ export function useGuidedTour(): Driver | null {
       }
 
       Logger.info('useGuidedTour', `🎬 Initializing Driver.js for ${currentTutorialId}`);
+
+      // 🔥 개선: 첫 번째 step의 element가 DOM에 로드될 때까지 대기
+      // ProjectCreator 모달 같이 async로 로드되는 요소들을 위함
+      if (tutorial.steps.length > 0) {
+        const firstStepElement = tutorial.steps[0]?.element;
+        if (firstStepElement && typeof firstStepElement === 'string') {
+          try {
+            await waitForElement(firstStepElement, { timeout: 3000 }); // 3초 대기
+            Logger.debug('useGuidedTour', `✅ First step element found: ${firstStepElement}`);
+          } catch (error) {
+            Logger.warn('useGuidedTour', `⚠️ First step element not found after 3s: ${firstStepElement}`, error);
+            // 계속 진행 (element가 로드 중일 수 있음)
+          }
+        }
+      }
 
       // 기존 인스턴스 정리
       if (driverRef.current) {
@@ -126,18 +145,40 @@ export function useGuidedTour(): Driver | null {
           
           Logger.debug('useGuidedTour', `→ Next button clicked (step ${stepIdx})`);
           
-          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭 후 프로젝트 생성 튜토리얼 전환
+          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭
+          // Projects 페이지에서 자동으로 project-creator 튜토리얼이 시작됨
           if (currentStep?.stepId === 'action-create') {
-            Logger.info('useGuidedTour', '🎯 Detected action-create step → auto-triggering modal');
+            Logger.info('useGuidedTour', '🎯 action-create step detected - clicking button and delegating to Projects page');
+            
+            // 🔥 Flag: action-create 이동 중임을 표시
+            // 이를 통해 useEffect가 재초기화되지 않도록 함
+            const isTransitioningToCreator = true;
+            
             const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
             if (actionCreateBtn) {
+              // 🔥 순서 중요:
+              // 1. 먼저 button click
               actionCreateBtn.click();
-              Logger.debug('useGuidedTour', '⏳ Waiting for modal to open before starting project-creator tutorial');
+              Logger.info('useGuidedTour', '✅ Button clicked - navigating to Projects page');
               
-              // 모달 오픈 애니메이션 완료 대기
-              setTimeout(() => {
-                startTutorial('project-creator');
-              }, 500);
+              // 2. Driver 파괴
+              if (driverRef.current) {
+                try {
+                  driverRef.current.destroy();
+                  driverRef.current = null;
+                  Logger.info('useGuidedTour', '🧹 Driver instance destroyed for action-create transition');
+                } catch (error) {
+                  Logger.warn('useGuidedTour', 'Error destroying Driver instance', error);
+                }
+              }
+              
+              // 3. 🔥 CRITICAL: Dashboard 튜토리얼 종료
+              // 이렇게 해야 Projects 페이지에서 project-creator 튜토리얼이 시작됨
+              // 그리고 Dashboard useGuidedTour가 다시 driver를 생성하지 않음
+              Logger.info('useGuidedTour', '🏁 Dashboard tutorial ending - Projects page will start project-creator');
+              await completeTutorial();
+              
+              // 4. 더 이상 대기하지 않음
               return;
             } else {
               Logger.warn('useGuidedTour', '⚠️ action-create button not found');
@@ -147,27 +188,10 @@ export function useGuidedTour(): Driver | null {
           // 🔥 일반 다음 버튼: Context state 업데이트 (driver.moveTo는 useEffect에서 자동 처리)
           await nextStep();
           
-          // 🔥 개선: driver.js API를 사용해 마지막 스텝 여부 확인 (더 정확함)
-          // nextStep() 직후 driver가 이미 새로운 step으로 이동했으므로
-          // driver.isLastStep()를 사용하면 비동기 지연 없이 즉시 확인 가능
-          if (!driverRef.current) return;
-          
-          try {
-            // 마지막 스텝에 도달했는지 확인
-            const isNowLastStep = driverRef.current.isLastStep?.();
-            
-            if (isNowLastStep && tutorial.meta?.nextTutorialId) {
-              Logger.info(
-                'useGuidedTour',
-                `🔄 Last step completed → Transitioning to next tutorial: ${tutorial.meta.nextTutorialId}`
-              );
-              
-              // 다음 튜토리얼로 자동 전환 (지연 없음)
-              await startTutorial(tutorial.meta.nextTutorialId);
-            }
-          } catch (error) {
-            Logger.error('useGuidedTour', 'Error checking last step status', error);
-          }
+          // 🔥 주의: nextStep() 호출 후 currentStepIndexRef는 아직 업데이트 안됨!
+          // useEffect가 실행되어야 ref가 업데이트되므로
+          // 여기서는 마지막 스텝 체크를 하지 않음
+          // 대신 onPopoverRender에서 UI 렌더링될 때 체크 (그때는 확실하게 업데이트됨)
         },
 
         onPrevClick: async () => {
@@ -184,6 +208,20 @@ export function useGuidedTour(): Driver | null {
 
         onCloseClick: async () => {
           Logger.info('useGuidedTour', '✖️ Tutorial closed');
+          
+          // 🔥 ProjectCreator 튜토리얼 종료 → Dashboard 복귀
+          // action-import (action-import stepId)부터 시작해서 무한루프 방지
+          if (currentTutorialId === 'project-creator') {
+            Logger.info(
+              'useGuidedTour',
+              '🔄 ProjectCreator closed → Returning to Dashboard at action-import'
+            );
+            
+            // Dashboard 튜토리얼을 action-import 스텝부터 시작
+            await startTutorial('dashboard-intro', 'action-import');
+            return;
+          }
+          
           closeTutorial();
         },
 
@@ -263,6 +301,14 @@ export function useGuidedTour(): Driver | null {
             Logger.debug('useGuidedTour', '⏸️ Auto-progress disabled for this step');
           } else if (currentStepIdx >= tutorial.steps.length - 1) { // 🔥 ref 값 사용
             Logger.info('useGuidedTour', '✅ Last step reached, no auto-progress scheduled');
+            
+            // 🔥 마지막 스텝에서 튜토리얼 완료 로직 처리
+            // (이 시점에서 currentStepIndexRef가 확실히 업데이트됨)
+            setTimeout(async () => {
+              // 버튼 클릭 대기 (auto-close는 하지 않음, 사용자가 클릭하도록)
+              // 하지만 '다음' 버튼이 있으면 클릭해서 completeTutorial 유발
+              Logger.debug('useGuidedTour', '🔔 Last step popover rendered - waiting for user action');
+            }, 0);
           }
         },
 
@@ -290,9 +336,10 @@ export function useGuidedTour(): Driver | null {
         },
       });
 
-      // 🔥 튜토리얼 시작 (저장된 진행도부터 시작)
-      // currentStepIndexRef를 사용하여 최신 상태 반영
-      const startStep = currentStepIndexRef.current;
+      // 🔥 튜토리얼 시작 (현재 step부터 시작)
+      // ⚠️ CRITICAL: currentStepIndexRef가 아닌 현재 스냅샷의 currentStepIndex 사용!
+      // currentStepIndexRef.current는 useEffect timing 때문에 stale할 수 있음
+      const startStep = currentStepIndex; // ← ref 대신 prop 직접 사용
       driverRef.current.drive(startStep);
       Logger.info('useGuidedTour', `✅ Driver.js started at step ${startStep}`);
     } catch (error) {
@@ -300,10 +347,9 @@ export function useGuidedTour(): Driver | null {
     } finally {
       isInitializingRef.current = false;
     }
-  }, [currentTutorialId, nextStep, previousStep, closeTutorial]);
-  // 🔥 currentStepIndex는 ref로 추적하므로 의존성 제외
-  // 이렇게 하면 step 변경 시 useCallback 재생성 안 됨 (driver 재초기화 방지)
-  // 하지만 onPopoverRender는 currentStepIndexRef.current로 항상 최신 값 사용!
+  }, [currentTutorialId, currentStepIndex, nextStep, previousStep, closeTutorial, startTutorial]);
+  // 🔥 currentStepIndex를 의존성에 추가: state 변경 시 재초기화 필요!
+  // 🔥 startTutorial 추가: onCloseClick에서 사용하므로 필수!
 
   /**
    * 🔥 개선: TutorialRefreshController 통합
@@ -335,10 +381,27 @@ export function useGuidedTour(): Driver | null {
       return;
     }
 
-    // 🚀 개선: requestAnimationFrame으로 DOM 렌더링 완료 대기
+    // � 라우팅 아키텍처: 튜토리얼의 필요 경로 확인 및 자동 네비게이션
+    const tutorial = getTutorial(currentTutorialId);
+    if (tutorial?.requiredPath && tutorial.requiredPath !== pathname) {
+      Logger.info(
+        'useGuidedTour',
+        `🌍 Navigating to required path: ${tutorial.requiredPath} (current: ${pathname})`
+      );
+      navigate(tutorial.requiredPath);
+      // 네비게이션 후 경로가 업데이트될 때까지 대기 (pathname이 변경되면 useEffect 재실행)
+      return;
+    }
+
+    //  개선: requestAnimationFrame으로 DOM 렌더링 완료 대기
     const frameId = requestAnimationFrame(() => {
       // 한 번 더 기다려서 CSS도 적용되도록 함
       setTimeout(() => {
+        // 🔥 재확인: currentStepIndex가 0인지 검증 (startTutorial 호출 확인)
+        Logger.debug(
+          'useGuidedTour',
+          `🔍 Before initializeDriver: tutorial=${currentTutorialId}, step=${currentStepIndexRef.current}`
+        );
         initializeDriver();
       }, 10);
     });
@@ -346,9 +409,9 @@ export function useGuidedTour(): Driver | null {
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [isActive, currentTutorialId]);
-  // 🔥 initializeDriver 제거: 이미 currentTutorialId 변경으로 재초기화됨
-  // initializeDriver 포함 시 → 재생성 → useEffect 재실행 → driver 재초기화 (무한루프 위험)
+  }, [isActive, currentTutorialId, pathname, navigate]);
+  // 🔥 pathname 추가: 경로 변경 감지하여 라우팅 아키텍처 지원
+  // 🔥 navigate 추가: pathname 의존성으로 인한 ESLint 경고 방지
 
   /**
    * 🔧 Scroll 이벤트 감시 - popover position 업데이트

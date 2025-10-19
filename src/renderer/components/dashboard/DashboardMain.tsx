@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Target,
   Clock,
@@ -101,11 +101,24 @@ function formatTime(seconds: number): string {
 }
 
 export function DashboardMain(): React.ReactElement {
-  const navigate = useNavigate(); // 🔥 Navigation 훅 추가
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   
-  // 🔥 튜토리얼 시스템 초기화
+  // 🔥 useGuidedTour는 호출하되, startTutorial은 NOT 호출
+  // App.tsx에서 URL 파라미터로 전체 튜토리얼 흐름을 관리함
   useGuidedTour();
-  // 모니터링 기능 제거됨 - 기획 변경으로 불필요
+  
+  // 🔥 URL 파라미터 감지 (App.tsx에서 &tutorial=dashboard-intro로 설정됨)
+  // 하지만 여기서는 호출하지 않음 - App.tsx/TutorialProvider가 처리함
+  const tutorialParam = searchParams.get('tutorial');
+  React.useEffect(() => {
+    if (tutorialParam) {
+      Logger.info('DashboardMain', `� Tutorial parameter detected: ${tutorialParam}`);
+      // 🔥 URL에서 파라미터 제거 (뒤로가기 시 재시작 방지)
+      navigate('/dashboard', { replace: true });
+      // startTutorial은 호출하지 않음 - App.tsx가 처리함
+    }
+  }, [tutorialParam, navigate]);
 
   // 모니터링 데이터 상태 제거됨 - 모니터링 기능 불필요
 

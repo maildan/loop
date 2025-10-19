@@ -79,6 +79,13 @@ export interface Tutorial {
   readonly onSkip?: () => void | Promise<void>;
 
   /**
+   * 🔥 이 튜토리얼이 필요한 페이지 경로 (라우팅 아키텍처)
+   * @example '/dashboard' (대시보드 튜토리얼), '/projects/create' (프로젝트 생성)
+   * @description 튜토리얼 시작 시 현재 경로가 다르면 자동으로 네비게이션
+   */
+  readonly requiredPath?: string;
+
+  /**
    * 선택적: 튜토리얼 메타 정보 (자동 진행 등)
    */
   readonly meta?: {
@@ -157,8 +164,9 @@ export interface TutorialContextValue extends TutorialState {
   /**
    * 튜토리얼 시작
    * @param tutorialId 시작할 튜토리얼 ID
+   * @param startStepId 시작할 스텝 ID (optional, 기본값은 첫 번째 스텝)
    */
-  startTutorial: (tutorialId: string) => Promise<void>;
+  startTutorial: (tutorialId: string, startStepId?: string) => Promise<void>;
 
   /**
    * 다음 단계로 이동

@@ -28,6 +28,10 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
   id: 'project-creator',
   name: '프로젝트 생성 가이드',
   description: '프로젝트를 만드는 방법과 상세 정보를 설정합니다',
+  
+  // 🔥 ProjectCreator는 modal이므로 requiredPath 없음!
+  // Projects 페이지에서 modal로 열리므로 navigation 불필요
+  // requiredPath: undefined,
 
   steps: [
     // ============================================================
@@ -203,7 +207,7 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
     },
 
     // ============================================================
-    // Step 8: 목표 설정89
+    // Step 8: 목표 설정
     // ============================================================
     {
       stepId: 'create-details-goal',
@@ -279,7 +283,8 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
   meta: {
     autoProgress: true,
     autoProgressDelay: 5500, // 5.5초마다 자동으로 다음 단계 (충분한 이해 시간)
-    returnTutorialId: 'dashboard-intro', // 이 튜토리얼 완료 후 대시보드로 복귀
-    returnStepId: 'action-import', // ✅ 복귀할 스텝: action-import (step 5, index 4)
+    // 🔥 returnTutorialId 제거! 무한 루프 방지
+    // ProjectCreator는 modal이므로, 완료 후 대시보드로 돌아갈 필요 없음
+    // 사용자는 Projects 페이지에 계속 있게 됨
   },
 });

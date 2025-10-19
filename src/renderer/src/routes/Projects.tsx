@@ -9,6 +9,7 @@ import { ConfirmDeleteDialog } from '../../components/projects/components/Confir
 import { type ProjectData } from '../../components/projects/ProjectCard';
 import { Logger } from '../../../shared/logger';
 import { useGuidedTour } from '../../modules/tutorial/useGuidedTour';
+import { useTutorial } from '../../modules/tutorial/useTutorial';
 import type { KoreanWebNovelGenre, ProjectStatus } from '../../../shared/constants/enums';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
@@ -32,6 +33,7 @@ function ProjectsPageContent(): React.ReactElement {
   
   // 🔥 튜토리얼 시스템 (Projects 페이지에서도 필요!)
   useGuidedTour();
+  const { startTutorial, isActive } = useTutorial();
   
   const [projects, setProjects] = useState<readonly ProjectData[]>(DEFAULT_PROJECTS);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,18 +43,49 @@ function ProjectsPageContent(): React.ReactElement {
   const [deletingProject, setDeletingProject] = useState<ProjectData | null>(null);
 
   // 🔥 URL 쿼리 파라미터에서 create=true 감지 시 자동으로 생성 다이얼로그 열기
+  // 이 effect는 mount 시에만 1회 실행됨 (initial load)
   useEffect(() => {
     const shouldCreate = searchParams.get('create') === 'true';
     if (shouldCreate) {
-      Logger.info('PROJECTS_PAGE', '🚀 Auto-opening project creator from URL parameter');
-      setShowCreator(true);
-
-      // URL에서 쿼리 파라미터 제거 (깔끔한 URL 유지)
+      Logger.info('PROJECTS_PAGE', `🚀 Auto-opening project creator from URL parameter (isActive=${isActive})`);
+      
+      // ✅ 먼저 URL에서 쿼리 파라미터 제거 (깔끔한 URL 유지)
+      // 이를 먼저 하는 이유: searchParams dependency 때문에 useEffect 재실행 방지
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete('create');
       window.history.replaceState({}, '', newUrl.pathname);
+      
+      // ✅ 그 다음에 modal 열기
+      setShowCreator(true);
     }
-  }, [searchParams]);
+  }, []); // 🔥 CRITICAL: 초기 로드 시에만 실행 (dependency 없음)
+
+  // 🔥 showCreator가 true가 되면, 튜토리얼이 활성화되어 있는 경우 project-creator 튜토리얼 시작
+  // ⚠️ CRITICAL: Dashboard completeTutorial() 호출 후 Projects 페이지 도달 시
+  // isActive는 이미 false가 되어 있으므로, isActive 조건을 제거해야 함
+  useEffect(() => {
+    if (showCreator) {
+      Logger.info('PROJECTS_PAGE', `🎯 ProjectCreator modal opened - isActive=${isActive}`);
+      
+      // 🔥 requestAnimationFrame + setTimeout을 사용하여 ProjectCreator DOM이 완전히 준비될 때까지 대기
+      const frameId = requestAnimationFrame(() => {
+        const timerId = setTimeout(() => {
+          Logger.info('PROJECTS_PAGE', '🚀 Starting project-creator tutorial with step 0');
+          // 🔥 명시적으로 step 0부터 시작하도록 함
+          startTutorial('project-creator');
+        }, 300); // ProjectCreator 렌더링 + 스타일 적용 대기
+        
+        return () => {
+          clearTimeout(timerId);
+          cancelAnimationFrame(frameId);
+        };
+      });
+      
+      return () => cancelAnimationFrame(frameId);
+    }
+  }, [showCreator, startTutorial]);
+  // 🔥 의존성: [showCreator, startTutorial]
+  // - isActive 제거: Dashboard completeTutorial() 호출 후에도 tutorial 시작되도록
 
   // 🔥 기가차드 규칙: 이펙트로 데이터 로딩
   useEffect(() => {

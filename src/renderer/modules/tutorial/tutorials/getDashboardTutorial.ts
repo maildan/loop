@@ -21,6 +21,9 @@ export const getDashboardTutorial = (): Tutorial => ({
   id: 'dashboard-intro',
   name: '대시보드 시작 가이드',
   description: '대시보드의 주요 기능을 소개합니다',
+  
+  // 🔥 라우팅 아키텍처: 이 튜토리얼은 /dashboard 페이지에서만 시작
+  requiredPath: '/dashboard',
 
   steps: [
     // ============================================================
@@ -300,11 +303,11 @@ export const getDashboardTutorial = (): Tutorial => ({
     Logger.info('getDashboardTutorial', '⏭️ Dashboard tutorial skipped');
   },
 
-  // 메타 정보: Step 3-3 (action-create)에서 ProjectCreator 튜토리얼로 전환
+  // 메타 정보: 📝 CRITICAL - Dashboard는 return 정보가 없어야 함!
+  // (ProjectCreator 튜토리얼만 Dashboard로 돌아감)
   meta: {
     nextTutorialId: 'project-creator',
     nextStepId: 'create-method-intro',
-    returnTutorialId: 'dashboard-intro',
-    returnStepId: 'action-import',
+    // 🔥 returnTutorialId/returnStepId 제거: Dashboard 자체는 복귀 대상이 아님!
   },
 });
