@@ -146,6 +146,21 @@ export function TutorialProvider({ children, navigate }: TutorialProviderProps):
 
     try {
       Logger.info('TUTORIAL_CONTEXT', `🚀 Starting tutorial: ${tutorialId}`);
+
+      // 🔥 project-creator 튜토리얼은 URL에 ?create=true가 필요
+  if (tutorial.id === 'project-creator' && navigateRef.current && typeof window !== 'undefined') {
+        const targetPath = '/projects?create=true';
+        try {
+          const currentPath = `${window.location.pathname}${window.location.search}`;
+          if (currentPath !== targetPath) {
+            navigateRef.current(targetPath);
+          } else if (!window.location.search.includes('create=true')) {
+            navigateRef.current(targetPath);
+          }
+        } catch (navigationError) {
+          Logger.warn('TUTORIAL_CONTEXT', '⚠️ Failed to ensure ?create=true parameter before starting project-creator tutorial', navigationError);
+        }
+      }
       
       // 🔥 stepId 지정된 경우 그 스텝부터 시작, 아니면 0부터 시작
       let validStepIndex = 0;
@@ -243,6 +258,13 @@ export function TutorialProvider({ children, navigate }: TutorialProviderProps):
               'TUTORIAL_CONTEXT',
               `🔄 Transitioning from ${prev.currentTutorialId} to next tutorial: ${tutorial.meta.nextTutorialId} at step ${validNextStep}`
             );
+
+            // 🔥 project-creator로 이동할 때 특별 처리: ?create=true 파라미터 붙여서 이동
+            if (tutorial.meta.nextTutorialId === 'project-creator' && navigateRef.current) {
+              // project-creator는 modal이므로 requiredPath가 없음. Projects 페이지로 이동하면서 parameter 전달
+              const targetPath = nextTutorial.requiredPath || '/projects';
+              navigateRef.current(`${targetPath}?create=true`);
+            }
 
             return {
               ...prev,

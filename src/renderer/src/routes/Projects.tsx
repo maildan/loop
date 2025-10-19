@@ -61,12 +61,14 @@ function ProjectsPageContent(): React.ReactElement {
     }
   }, [isCreateFlow]);
 
-  // 🔥 showCreator가 true가 되면, project-creator 튜토리얼 시작 (isCreateFlow=true일 때만)
+  // 🔥 showCreator가 true가 되면, 수동으로 연 경우 튜토리얼 종료
+  // ?create=true인 경우에는 자동으로 열린 것이므로 아무것도 안 함
+  // 🔥 중요: 튜토리얼이 활성화되어 있으면 이 effect를 무시 (isActive=true일 때)
   useEffect(() => {
-    console.log(`[DEBUG] showCreator=${showCreator}, isCreateFlow=${isCreateFlow}`);
+    console.log(`[DEBUG] showCreator=${showCreator}, isCreateFlow=${isCreateFlow}, isActive=${isActive}`);
     
-    if (showCreator && !isCreateFlow) {
-      // 🔥 수동으로 모달을 연 경우 (isCreateFlow=false)
+    if (showCreator && !isCreateFlow && !isActive) {
+      // 🔥 수동으로 모달을 연 경우 (isCreateFlow=false, 튜토리얼 비활성)
       console.log(`[DEBUG] >>> MANUAL OPEN - STOPPING TUTORIAL <<<`);
       
       // 진행 중인 튜토리얼 시작 타이머 취소
@@ -81,7 +83,16 @@ function ProjectsPageContent(): React.ReactElement {
       Logger.info('PROJECTS_PAGE', '⏹️ Explicitly closing any active tutorial - manual modal open');
       closeTutorial();
     }
-  }, [showCreator, isCreateFlow, closeTutorial]);
+  }, [showCreator, isCreateFlow, isActive, closeTutorial]);
+
+  // 🔥 Projects 튜토리얼이 시작되면 ProjectCreator 모달 자동 열기
+  // (Dashboard 튜토리얼에서 전환된 경우)
+  useEffect(() => {
+    if (isActive && !showCreator && !isCreateFlow) {
+      Logger.info('PROJECTS_PAGE', '🚀 Projects tutorial started - auto-opening ProjectCreator modal');
+      setShowCreator(true);
+    }
+  }, [isActive]);
 
   // 🔥 기가차드 규칙: 이펙트로 데이터 로딩
   useEffect(() => {

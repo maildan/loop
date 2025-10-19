@@ -30,6 +30,7 @@ import { ProgressBar } from '../ui/ProgressBar';
 import { Button } from '../ui/Button';
 import { Logger } from '../../../shared/logger';
 import type { ElectronAPI } from '../../../shared/types';
+import { useGuidedTour } from '../../modules/tutorial/useGuidedTour';
 
 // 🔥 Window 타입 확장
 declare global {
@@ -108,12 +109,12 @@ const TAB_CONFIG = [
   {
     id: 'compare',
     label: '종합 비교',
-    icon: '�',
+    icon: '🏆',
     description: '전체 프로젝트 성과 랭킹과 비교'
   }
 ] as const;
 
-// �🔥 타입 정의
+// 🔥 타입 정의
 type TabType = 'global' | 'project' | 'compare';
 
 interface WritingInsight {
@@ -139,6 +140,9 @@ interface ProjectRanking {
 // 🔥 분리된 Analytics 페이지 클라이언트 컴포넌트
 export function AnalyticsPageClient(): React.ReactElement {
   const navigate = useNavigate(); // 🔥 라우터 추가
+
+  // 🔥 분석 페이지에서도 튜토리얼 드라이버 활성화
+  useGuidedTour();
 
   // 🎯 상태 관리
   const [activeTab, setActiveTab] = useState<TabType>('global');

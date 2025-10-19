@@ -199,19 +199,18 @@ export function useGuidedTour(): Driver | null {
           Logger.debug('useGuidedTour', `→ Next button clicked (step ${stepIdx}, tutorial=${currentTutorialId})`);
           Logger.debug('useGuidedTour', `📊 currentStep.stepId=${currentStep?.stepId}, tutorial.id=${tutorial.id}, total steps=${tutorial.steps.length}`);
           
-          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭
-          // Projects 페이지에서 자동으로 project-creator 튜토리얼이 시작됨
+          // 🔥 특수 처리: 'action-create' 스텝에서 project-creator 튜토리얼로 직접 전환
           if (currentStep?.stepId === 'action-create') {
-            console.warn(`⏸️⏸️⏸️ [NEXT_BUTTON] action-create step detected`);
-            Logger.info('useGuidedTour', '🎯 action-create step detected - clicking button and delegating to Projects page');
+            console.warn(`⏸️⏸️⏸️ [NEXT_BUTTON] action-create step detected - transitioning to project-creator tutorial`);
+            Logger.info('useGuidedTour', '🎯 action-create step detected - starting project-creator tutorial');
             
             const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
             if (actionCreateBtn) {
               // 🔥 순서 중요:
-              // 1. 먼저 button click
+              // 1. 먼저 button click (Projects 페이지로 네비게이션)
               actionCreateBtn.click();
-              console.warn(`✅ [NEXT_BUTTON] action-create button clicked`);
-              Logger.info('useGuidedTour', '✅ Button clicked - navigating to Projects page');
+              console.warn(`✅ [NEXT_BUTTON] action-create button clicked - navigating to /projects`);
+              Logger.info('useGuidedTour', '✅ Button clicked - navigating to /projects');
               
               // 2. Driver 파괴 (즉시 Overlay 제거)
               if (driverRef.current) {
@@ -224,9 +223,12 @@ export function useGuidedTour(): Driver | null {
                 }
               }
 
-              // 3. 🔥 Dashboard 튜토리얼은 일시 중지 (완료 처리 X)
-              Logger.info('useGuidedTour', '⏸️ Dashboard tutorial paused - Project Creator flow will resume later');
-              closeTutorial();
+              // 3. 🔥 project-creator 튜토리얼로 즉시 전환
+              // Projects 페이지로의 네비게이션이 완료될 때까지 약간의 딜레이 필요 (200ms)
+              setTimeout(async () => {
+                Logger.info('useGuidedTour', '🚀 Starting project-creator tutorial after navigation');
+                await startTutorial('project-creator', 'create-method-intro');
+              }, 200);
 
               // 4. 더 이상 대기하지 않음
               return;
@@ -492,25 +494,10 @@ export function useGuidedTour(): Driver | null {
    * 2. CSS 변수 로드 대기 추가
    * 3. 초기화 이전에 첫 step element 존재 확인
    */
-  useEffect(() => {
-    // 🔥 NEW: Projects 페이지에서 ?create=true 감지 시 자동으로 project-creator 튜토리얼 시작
-    // 🔥 중요: 이 effect는 정확히 한 번만 실행되어야 함!
-    if (pathname === '/projects' && !autoStartExecutedRef.current) {
-      const params = new URLSearchParams(search);
-      const isCreateFlow = params.get('create') === 'true';
-      
-      if (isCreateFlow && !currentTutorialId) {
-        console.warn(`🚀 [useGuidedTour] AUTO-START: project-creator tutorial (detected create=true on /projects page)`);
-        Logger.info('useGuidedTour', `🚀 Auto-starting project-creator tutorial from Dashboard flow (create=true)`);
-        autoStartExecutedRef.current = true; // 🔥 플래그 설정: 다시 실행 안 함
-        startTutorial('project-creator', 'create-method-intro');
-      } else if (!isCreateFlow) {
-        // 🔥 ?create=true가 없으면 플래그만 설정 (auto-start 실행 안 함)
-        autoStartExecutedRef.current = true;
-      }
-    }
-  }, [pathname, search, currentTutorialId, startTutorial]);
-  // 🔥 이 effect는 오직 자동 시작만 담당 (initializeDriver는 별도 effect에서)
+  // 🔥 REMOVED: Auto-start project-creator tutorial on ?create=true
+  // Reason: Users should not see tutorial when they manually trigger project creation
+  // The project-creator tutorial should only start when explicitly requested
+  // (e.g., from Dashboard tutorial's "직접 해보기" button with proper flow)
 
   /**
    * 🔥 NEW: pathname이 변하면 autoStartExecutedRef 리셋
@@ -569,7 +556,7 @@ export function useGuidedTour(): Driver | null {
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [isActive, currentTutorialId, pathname, navigate]);
+  }, [isActive, currentTutorialId, pathname, navigate, search, initializeDriver]);
   // 🔥 search, startTutorial 제거: 이 effect는 오직 currentTutorialId 변경에만 반응
   // 🔥 자동 시작은 위의 별도 effect에서 처리
 

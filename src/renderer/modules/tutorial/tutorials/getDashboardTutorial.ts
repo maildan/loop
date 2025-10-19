@@ -143,6 +143,7 @@ export const getDashboardTutorial = (): Tutorial => ({
       disableActiveInteraction: false,
     },
 
+
     // ============================================================
     // Step 3-4: QuickStart - 프로젝트 가져오기
     // ============================================================
@@ -222,7 +223,7 @@ export const getDashboardTutorial = (): Tutorial => ({
       stepId: 'active-projects',
       element: '[data-tour="active-projects-section"]',
       popover: {
-        title: '� 활성 프로젝트',
+      title: '🔥 활성 프로젝트',
         description:
           '현재 진행 중인 프로젝트들이 여기 표시됩니다.\n\n' +
           '프로젝트를 클릭하면 에디터로 이동합니다.\n\n' +
@@ -279,9 +280,10 @@ export const getDashboardTutorial = (): Tutorial => ({
     Logger.info('getDashboardTutorial', '⏭️ Dashboard tutorial skipped');
   },
 
-  // 메타 정보: Dashboard 완료 후 Projects 튜토리얼로 이동
+  // 메타 정보: Dashboard는 명시적 사용자의 액션으로 다음 튜토리얼을 시작하도록 함
+  // 자동 전환을 비활성화하여 중복 시작을 방지합니다.
   meta: {
-    nextTutorialId: 'projects-intro',
-    nextStepId: 'projects-welcome',
+    nextTutorialId: undefined,
+    nextStepId: undefined,
   },
 });

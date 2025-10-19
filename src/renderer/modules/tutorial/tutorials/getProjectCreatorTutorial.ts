@@ -271,12 +271,12 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
   },
 
   /**
-   * 🔥 자동 진행 플래그 (수동 클릭 유지)
-   * ProjectCreator 완료 후 Dashboard 튜토리얼로 복귀하도록 return 설정
+   * 🔥 자동 진행 플래그
+   * ProjectCreator 완료 후 Projects 튜토리얼로 이어지도록 설정
    */
   meta: {
-    autoProgress: false, // 🔥 수동 모드: 사용자가 버튼 클릭해서 진행
-    returnTutorialId: 'dashboard-intro', // � Dashboard 튜토리얼로 복귀
-    returnStepId: 'action-import', // 🔙 QuickStart의 다음 스텝부터 이어서 진행
+    autoProgress: false,
+    nextTutorialId: 'projects-intro',
+    nextStepId: 'projects-welcome',
   },
 });
