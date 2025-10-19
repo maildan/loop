@@ -150,6 +150,7 @@ export class HandlersManager {
           'app:get-name',
         ]),
         this.setupHandler('gemini', () => setupGeminiIpcHandlers(), [
+          'gemini:get-status',
           'gemini:get-project-context',
           'gemini:get-chat-history',
           'gemini:send-message',
