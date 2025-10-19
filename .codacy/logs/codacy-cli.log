@@ -20900,3 +20900,13 @@
 2025-10-18T11:23:56+09:00 [INFO] (codacy-cli-v2/cmd/install.go:72) All components are already installed
 2025-10-18T11:23:56+09:00 [INFO] (codacy-cli-v2/cli-v2.go:27) Starting Codacy CLI version=1.0.0-main.359.sha.fd2d067 (fd2d067) built at 2025-10-17T08:46:35Z
 2025-10-18T11:23:56+09:00 [INFO] (codacy-cli-v2/cmd/root.go:34) Executing CLI command command=analyze full_command=[/Users/user/Library/Caches/Codacy/codacy-cli-v2/1.0.0-main.359.sha.fd2d067/codacy-cli-v2 analyze /Users/user/loop/loop/docs/TUTORIAL_SYSTEM_FIX_PHASE5.md --format sarif] args=[/Users/user/loop/loop/docs/TUTORIAL_SYSTEM_FIX_PHASE5.md]
+2025-10-19T16:33:26+09:00 [INFO] (codacy-cli-v2/cli-v2.go:27) Starting Codacy CLI version=1.0.0-main.359.sha.fd2d067 (fd2d067) built at 2025-10-17T08:46:35Z
+2025-10-19T16:33:26+09:00 [INFO] (codacy-cli-v2/cmd/root.go:34) Executing CLI command command=update full_command=[/Users/user/Library/Caches/Codacy/codacy-cli-v2/1.0.0-main.359.sha.fd2d067/codacy-cli-v2 update] args=[]
+2025-10-19T16:33:26+09:00 [INFO] (codacy-cli-v2/cli-v2.go:27) Starting Codacy CLI version=1.0.0-main.359.sha.fd2d067 (fd2d067) built at 2025-10-17T08:46:35Z
+2025-10-19T16:33:26+09:00 [INFO] (codacy-cli-v2/cmd/root.go:34) Executing CLI command command=reset full_command=[/Users/user/Library/Caches/Codacy/codacy-cli-v2/1.0.0-main.359.sha.fd2d067/codacy-cli-v2 config reset] args=[]
+2025-10-19T16:33:30+09:00 [INFO] (codacy-cli-v2/cli-v2.go:27) Starting Codacy CLI version=1.0.0-main.359.sha.fd2d067 (fd2d067) built at 2025-10-17T08:46:35Z
+2025-10-19T16:33:30+09:00 [INFO] (codacy-cli-v2/cmd/root.go:34) Executing CLI command args=[] command=install full_command=[/Users/user/Library/Caches/Codacy/codacy-cli-v2/1.0.0-main.359.sha.fd2d067/codacy-cli-v2 install]
+2025-10-19T16:33:30+09:00 [INFO] (codacy-cli-v2/cmd/install.go:72) All components are already installed
+2025-10-19T16:33:31+09:00 [INFO] (codacy-cli-v2/cli-v2.go:27) Starting Codacy CLI version=1.0.0-main.359.sha.fd2d067 (fd2d067) built at 2025-10-17T08:46:35Z
+2025-10-19T16:33:31+09:00 [INFO] (codacy-cli-v2/cmd/root.go:34) Executing CLI command command=analyze full_command=[/Users/user/Library/Caches/Codacy/codacy-cli-v2/1.0.0-main.359.sha.fd2d067/codacy-cli-v2 analyze /Users/user/loop/loop/package.json --format sarif] args=[/Users/user/loop/loop/package.json]
+2025-10-19T16:33:31+09:00 [INFO] (codacy-cli-v2/cmd/analyze.go:341) Config file found for tool tool=trivy toolConfigPath=.codacy/tools-configs/trivy.yaml
