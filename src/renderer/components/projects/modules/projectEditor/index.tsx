@@ -883,7 +883,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 title: safeTitle,
                                 description: '',
                                 type: 'chapter',
-                                status: 'planning',
+                                status: 'draft',
                                 wordCount: 0,
                                 sortOrder: 0,
                                 depth: 0,

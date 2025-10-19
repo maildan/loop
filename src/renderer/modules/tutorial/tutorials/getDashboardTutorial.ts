@@ -21,6 +21,9 @@ export const getDashboardTutorial = (): Tutorial => ({
   id: 'dashboard-intro',
   name: '대시보드 시작 가이드',
   description: '대시보드의 주요 기능을 소개합니다',
+  
+  // 🔥 라우팅 아키텍처: 이 튜토리얼은 /dashboard 페이지에서만 시작
+  requiredPath: '/dashboard',
 
   steps: [
     // ============================================================
@@ -256,37 +259,13 @@ export const getDashboardTutorial = (): Tutorial => ({
       },
       disableActiveInteraction: false,
     },
-
-    // ============================================================
-    // Step 6: 완료 (메인 그리드 설명 추가)
-    // ============================================================
-    {
-      stepId: 'dashboard-complete',
-      element: '[data-tour="dashboard-container"]',
-      popover: {
-        title: '🎉 튜토리얼 완료!',
-        description:
-          'Loop의 핵심 기능을 모두 배웠습니다!\n\n' +
-          '✅ 창작 통계 대시보드로 활동 추적\n' +
-          '✅ 새 프로젝트 빠르게 생성\n' +
-          '✅ 기존 파일 Loop에 가져오기\n' +
-          '✅ 활성 프로젝트 및 최근 파일 관리\n\n' +
-          '이제 당신의 창작 여정을 시작해봅시다!\n' +
-          '행운의 창작을 기원합니다. ✨',
-        side: 'top',
-        align: 'center',
-        showButtons: ['previous', 'close'],
-        prevBtnText: '← 이전',
-        doneBtnText: '완료',
-        showProgress: true,
-      },
-      disableActiveInteraction: true,
-    },
   ] as const,
 
   // 튜토리얼 시작 콜백
   onStart: async () => {
     Logger.info('getDashboardTutorial', '🚀 Dashboard tutorial started');
+    // 🔥 주의: Dashboard 튜토리얼은 항상 step 0부터 시작
+    // (이전 session 상태가 지속되는 것을 방지)
   },
 
   // 튜토리얼 완료 콜백
@@ -300,12 +279,9 @@ export const getDashboardTutorial = (): Tutorial => ({
     Logger.info('getDashboardTutorial', '⏭️ Dashboard tutorial skipped');
   },
 
-  // 메타 정보: ProjectCreator 튜토리얼로부터 복귀 시만 사용
-  // 📌 주의: Dashboard는 순환 참조하지 않음 (returnTutorialId 제거)
-  // Dashboard가 완료되면 그냥 종료됨
+  // 메타 정보: Dashboard 완료 후 Projects 튜토리얼로 이동
   meta: {
-    // returnTutorialId와 returnStepId 제거
-    // Dashboard는 끝이므로 어디로도 복귀하지 않음
-    // ProjectCreator에서만 Dashboard로 복귀 설정
+    nextTutorialId: 'projects-intro',
+    nextStepId: 'projects-welcome',
   },
 });

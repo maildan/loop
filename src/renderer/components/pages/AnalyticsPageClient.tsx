@@ -330,7 +330,7 @@ export function AnalyticsPageClient(): React.ReactElement {
 
   // 🎯 탭별 렌더링 함수
   const renderGlobalView = () => (
-    <div className="space-y-8">
+    <div className="space-y-8" data-tour="analytics-global-view">
       {/* 💡 액션 가능한 인사이트 */}
       <div>
         <h2 className="text-xl font-bold text-[color:hsl(var(--foreground))] mb-4">
@@ -442,7 +442,7 @@ export function AnalyticsPageClient(): React.ReactElement {
   );
 
   const renderProjectView = () => (
-    <div className="space-y-8">
+    <div className="space-y-8" data-tour="analytics-project-view">
       {/* 🎯 프로젝트 목록 */}
       <Card className="p-6">
         <h2 className="text-xl font-bold text-[color:hsl(var(--foreground))] mb-6">
@@ -533,7 +533,7 @@ export function AnalyticsPageClient(): React.ReactElement {
   );
 
   const renderCompareView = () => (
-    <div className="space-y-8">
+    <div className="space-y-8" data-tour="analytics-compare-view">
       {/* 🏆 프로젝트 성과 랭킹 */}
       <Card className="p-6">
         <h2 className="text-xl font-bold text-[color:hsl(var(--foreground))] mb-6">
@@ -666,7 +666,7 @@ export function AnalyticsPageClient(): React.ReactElement {
       </div>
 
       {/* 🎯 상단 탭 시스템 */}
-      <div className={ANALYTICS_STYLES.tabContainer}>
+      <div className={ANALYTICS_STYLES.tabContainer} data-tour="analytics-tabs-container">
         <div className={ANALYTICS_STYLES.tabList}>
           {TAB_CONFIG.map(tab => (
             <button
@@ -676,6 +676,7 @@ export function AnalyticsPageClient(): React.ReactElement {
                 : ANALYTICS_STYLES.tabInactive
                 }`}
               onClick={() => setActiveTab(tab.id as TabType)}
+              data-tour={`analytics-tab-${tab.id}`}
             >
               <span className={ANALYTICS_STYLES.tabIcon}>{tab.icon}</span>
               <div className="text-left">

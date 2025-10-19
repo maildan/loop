@@ -176,13 +176,13 @@ export function ProjectGrid({
   }
 
   return (
-    <div className={PROJECT_GRID_STYLES.container} role="main" aria-label="프로젝트 목록">
+    <div className={PROJECT_GRID_STYLES.container} role="main" aria-label="프로젝트 목록" data-tour="projects-container">
       {/* 헤더 */}
       <div className={PROJECT_GRID_STYLES.header}>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-6">
             <h2 className={PROJECT_GRID_STYLES.title}>프로젝트</h2>
-            <div className={PROJECT_GRID_STYLES.statsBar} role="tablist" aria-label="프로젝트 통계">
+            <div className={PROJECT_GRID_STYLES.statsBar} role="tablist" aria-label="프로젝트 통계" data-tour="projects-status">
               <button
                 type="button"
                 onClick={() => { handleStatusFilter('all'); setSortField('updatedAt'); setSortOrder('desc'); }}
@@ -212,7 +212,7 @@ export function ProjectGrid({
 
           {/* 프로젝트 액션 버튼들 */}
           {showCreateButton && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2" data-tour="quick-start-card">
               {/* 가져오기 버튼들 */}
               <Button
                 variant="outline"

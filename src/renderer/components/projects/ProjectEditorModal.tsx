@@ -18,6 +18,7 @@ import {
   Target
 } from 'lucide-react';
 import type { Project } from '../../../shared/types';
+import type { KoreanWebNovelGenre } from '../../../shared/constants/enums';
 
 // 스타일 – ProjectCreator와 동일한 룩앤필 유지
 const EDITOR_STYLES = {
@@ -83,7 +84,7 @@ export function ProjectEditorModal({ isOpen, project, onClose, onUpdated }: Proj
       const updates: Partial<Project> = {
         title: title.trim(),
         description: description.trim(),
-        genre,
+        genre: genre as KoreanWebNovelGenre,
         lastModified: new Date(),
       };
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, Suspense, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ProjectGrid } from '../../components/projects/ProjectGrid';
 import { ProjectCreator, type ProjectCreationData } from '../../components/projects/ProjectCreator';
 import { ProjectEditorModal } from '../../components/projects/ProjectEditorModal';
@@ -9,7 +9,7 @@ import { ConfirmDeleteDialog } from '../../components/projects/components/Confir
 import { type ProjectData } from '../../components/projects/ProjectCard';
 import { Logger } from '../../../shared/logger';
 import { useGuidedTour } from '../../modules/tutorial/useGuidedTour';
-import { useTutorial, useTutorialState } from '../../modules/tutorial/useTutorial';
+import { useTutorial } from '../../modules/tutorial/useTutorial';
 import type { KoreanWebNovelGenre, ProjectStatus } from '../../../shared/constants/enums';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
@@ -30,90 +30,58 @@ const DEFAULT_PROJECTS: readonly ProjectData[] = [] as const;
 function ProjectsPageContent(): React.ReactElement {
   const navigate = useNavigate(); // 🔥 Navigation 훅 추가
   const [searchParams] = useSearchParams(); // 🔥 URL 쿼리 파라미터 감지
+  const location = useLocation();
   
   // 🔥 매우 명확한 초기 로그 (여러 번 출력되는지 확인)
   Logger.info('PROJECTS_PAGE', '✅ ✅ ✅ Projects.tsx RENDERED ✅ ✅ ✅');
   
   // 🔥 튜토리얼 시스템 (Projects 페이지에서도 필요!)
   useGuidedTour();
-  const { startTutorial } = useTutorial();
-  const { currentTutorialId } = useTutorialState();
-  
-  // 🔥 Debug: URL 파라미터 확인
-  const urlCreate = searchParams.get('create');
-  Logger.debug('PROJECTS_PAGE', `🔍 URL params: create=${urlCreate}, currentTutorialId=${currentTutorialId}`);
+  const { startTutorial, isActive, closeTutorial } = useTutorial();
   
   const [projects, setProjects] = useState<readonly ProjectData[]>(DEFAULT_PROJECTS);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreator, setShowCreator] = useState<boolean>(false);
+  // 🔥 중요: isCreateFlow는 매번 searchParams에서 계산 (state 유지 방지)
+  const isCreateFlow = searchParams.get('create') === 'true';
   const [editingProject, setEditingProject] = useState<ProjectData | null>(null);
   const [deletingProject, setDeletingProject] = useState<ProjectData | null>(null);
+  
+  // 🔥 진행 중인 튜토리얼 시작 타이머 추적 (수동 열기 시 취소하기 위함)
+  const tutorialStartTimerRef = useRef<number | null>(null);
 
-  // 🔥 DEBUG: create=true URL param 감지 시 showCreator 강제 설정
-  // 그리고 showCreator가 변경되면 ProjectCreator 렌더링 후 튜토리얼 시작
+  // 🔥 URL 쿼리 파라미터에서 create=true 감지 시 자동으로 생성 다이얼로그 열기
+  // ⚠️ 중요: isCreateFlow는 이제 const로 계산되므로, 이 effect를 간단히 수정
+  // URL ?create=true 감지 시 모달 자동 열기
   useEffect(() => {
-    const createParam = searchParams.get('create');
-    const shouldCreate = createParam === 'true';
-    
-    Logger.info('PROJECTS_PAGE', `� searchParams useEffect: create=${createParam}, showCreator=${showCreator}, shouldCreate=${shouldCreate}`);
-    
-    // Step 1: create=true면 showCreator=true 설정
-    if (shouldCreate && !showCreator) {
-      Logger.warn('PROJECTS_PAGE', '⚠️ Setting showCreator=true because create=true URL param');
+    if (isCreateFlow && !showCreator) {
+      Logger.info('PROJECTS_PAGE', `🚀 Auto-opening project creator from URL parameter (create=true)`);
       setShowCreator(true);
-      return; // 다음 렌더링 사이클에서 showCreator가 true로 업데이트됨
     }
-  }, [searchParams]);
+  }, [isCreateFlow]);
 
-  // 🔥 showCreator가 true로 변경되면 projectCreator 렌더링 후 튜토리얼 시작
+  // 🔥 showCreator가 true가 되면, project-creator 튜토리얼 시작 (isCreateFlow=true일 때만)
   useEffect(() => {
-    if (!showCreator) {
-      Logger.debug('PROJECTS_PAGE', '📍 showCreator=false, skipping');
-      return;
+    console.log(`[DEBUG] showCreator=${showCreator}, isCreateFlow=${isCreateFlow}`);
+    
+    if (showCreator && !isCreateFlow) {
+      // 🔥 수동으로 모달을 연 경우 (isCreateFlow=false)
+      console.log(`[DEBUG] >>> MANUAL OPEN - STOPPING TUTORIAL <<<`);
+      
+      // 진행 중인 튜토리얼 시작 타이머 취소
+      if (tutorialStartTimerRef.current) {
+        clearTimeout(tutorialStartTimerRef.current);
+        tutorialStartTimerRef.current = null;
+        Logger.info('PROJECTS_PAGE', '⏹️ Cancelled pending tutorial timer');
+      }
+      
+      // 🔥 명시적으로 현재 튜토리얼을 즉시 종료
+      // 중요: useGuidedTour가 복구하지 못하도록 Context를 명확히 초기화해야 함
+      Logger.info('PROJECTS_PAGE', '⏹️ Explicitly closing any active tutorial - manual modal open');
+      closeTutorial();
     }
-    
-    Logger.debug('PROJECTS_PAGE', '✅ showCreator=TRUE');
-    
-    // 🔥 모든 현재 DOM 요소 확인
-    const allTourElements = document.querySelectorAll('[data-tour]');
-    const tourElementsList = Array.from(allTourElements).map(el => el.getAttribute('data-tour'));
-    Logger.warn('PROJECTS_PAGE', `� Current DOM [data-tour] elements (${allTourElements.length}): ${tourElementsList.join(', ')}`);
-    
-    // 🔥 requestAnimationFrame: React render 완료 대기
-    const frameId = requestAnimationFrame(() => {
-      Logger.warn('PROJECTS_PAGE', '📍 [RAF] React render + DOM update 완료');
-      
-      const elementsAfterRAF = document.querySelectorAll('[data-tour]');
-      const listAfterRAF = Array.from(elementsAfterRAF).map(el => el.getAttribute('data-tour'));
-      Logger.warn('PROJECTS_PAGE', `� [RAF] DOM elements after RAF (${elementsAfterRAF.length}): ${listAfterRAF.join(', ')}`);
-      
-      // 🔥 추가 시간 여유 (DOM layout/paint)
-      setTimeout(() => {
-        Logger.warn('PROJECTS_PAGE', '📍 [100ms] DOM element search 시작');
-        
-        const elementsAfter100ms = document.querySelectorAll('[data-tour]');
-        const listAfter100ms = Array.from(elementsAfter100ms).map(el => el.getAttribute('data-tour'));
-        Logger.warn('PROJECTS_PAGE', `� [100ms] DOM elements after 100ms (${elementsAfter100ms.length}): ${listAfter100ms.join(', ')}`);
-        
-        // 🔥 projectCreator element 특별히 확인
-        const projectCreatorElem = document.querySelector('[data-tour="project-creator-container"]');
-        Logger.warn('PROJECTS_PAGE', `� [100ms] project-creator-container exists: ${!!projectCreatorElem}`);
-        
-        // 🔥 중복 호출 방지: 이미 project-creator tutorial이 시작 중이면 스킵
-        if (currentTutorialId !== 'project-creator') {
-          Logger.warn('PROJECTS_PAGE', '🎬 [100ms] Calling startTutorial("project-creator")');
-          startTutorial('project-creator');
-        } else {
-          Logger.debug('PROJECTS_PAGE', '📍 project-creator already active');
-        }
-      }, 100);
-    });
-    
-    return () => {
-      cancelAnimationFrame(frameId);
-    };
-  }, [showCreator, startTutorial, currentTutorialId]);
+  }, [showCreator, isCreateFlow, closeTutorial]);
 
   // 🔥 기가차드 규칙: 이펙트로 데이터 로딩
   useEffect(() => {
@@ -206,7 +174,16 @@ function ProjectsPageContent(): React.ReactElement {
         const newProject = result.data;
         setProjects(prev => [newProject as ProjectData, ...prev]);
         setShowCreator(false);
+        // 🔥 isCreateFlow는 const이므로 리셋 불필요 (URL 정리로 자동 처리)
         Logger.info('PROJECTS_PAGE', '✅ Project created successfully', { id: newProject.id });
+        
+        // 🔥 URL 정리 (create 파라미터 제거)
+        const params = new URLSearchParams(location.search);
+        if (params.has('create')) {
+          params.delete('create');
+          const paramsString = params.toString();
+          navigate(`${location.pathname}${paramsString ? `?${paramsString}` : ''}`, { replace: true });
+        }
         
         // 🔥 생성된 프로젝트로 자동 리다이렉트
         navigate(`/projects/${newProject.id}`);
@@ -438,12 +415,23 @@ function ProjectsPageContent(): React.ReactElement {
   }
 
   return (
-    <div className={PROJECTS_PAGE_STYLES.container}>
+    <div className={PROJECTS_PAGE_STYLES.container} data-tour="projects-container">
       {/* 🔥 프로젝트 생성 다이얼로그 - 항상 렌더링 (isOpen으로만 제어) */}
       {/* 조건부 렌더링 제거 → element 검색 시 항상 찾을 수 있음 */}
       <ProjectCreator
         isOpen={showCreator}
-        onClose={() => setShowCreator(false)}
+        onClose={() => {
+          setShowCreator(false);
+          // 🔥 isCreateFlow는 const이므로 리셋 불필요 (URL 정리로 자동 처리)
+          
+          // 🔥 URL 정리 (튜토리얼 이후 또는 취소 시)
+          const params = new URLSearchParams(location.search);
+          if (params.has('create')) {
+            params.delete('create');
+            const paramsString = params.toString();
+            navigate(`${location.pathname}${paramsString ? `?${paramsString}` : ''}`, { replace: true });
+          }
+        }}
         onCreate={handleCreateProject}
       />
 
@@ -475,12 +463,20 @@ function ProjectsPageContent(): React.ReactElement {
       {/* 🔥 프로젝트 그리드 */}
       <ProjectGrid
         projects={projects}
-        onCreateProject={() => setShowCreator(true)}
+        onCreateProject={() => {
+          // 🔥 수동으로 "새 프로젝트" 버튼 클릭 시 튜토리얼 비활성화
+          // ⚠️ CRITICAL: 즉시 TutorialContext 상태를 비활성화 해야 함
+          // 그렇지 않으면 useGuidedTour 훅이 project-creator를 복구하기 전에
+          // 이미 setShowCreator(true)로 인한 리렌더링이 시작됨
+          closeTutorial();
+          setShowCreator(true);
+        }}
         onImportFromFile={handleImportFromFile}
         onImportFromGoogleDocs={handleImportFromGoogleDocs}
         onEditProject={(project: ProjectData) => setEditingProject(project)}
         onDeleteProject={handleDeleteProject}
         onViewProject={handleSelectProject}
+        data-tour="projects-grid"
       />
     </div>
   );

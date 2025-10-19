@@ -1,6 +1,6 @@
 // React Router App: Main app component with routing structure
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 // import { Inter } from 'next/font/google'; // Removed Next.js font import
 import { themeManager } from '../utils/themeManager';
 import { Logger } from '../../shared/logger';
@@ -14,7 +14,9 @@ import AI from './routes/AI';
 import OAuthCallback from './routes/OAuthCallback';
 import NotFound from './routes/NotFound';
 import { UpdateNotification } from '../components/common/UpdateNotification';
-import { TutorialProvider } from '../modules/tutorial';
+import { TutorialProvider, useTutorial } from '../modules/tutorial';
+// 🔥 튜토리얼 초기화: App 로드 시 모든 튜토리얼 등록
+import '../modules/tutorial/tutorials';
 import '../styles/index.css';
 
 // 🔥 기가차드 규칙: 프리컴파일된 스타일 상수
@@ -80,48 +82,81 @@ function TrayActionHandler(): null {
   return null;
 }
 
+/**
+ * 🔥 TutorialProvider의 내용물을 감싸는 컴포넌트
+ * BrowserRouter 하위에서 useNavigate를 호출할 수 있는 유일한 방법
+ * 
+ * 계층 구조:
+ * BrowserRouter
+ *   └─ AppContent (← useNavigate 호출 가능)
+ *        └─ TutorialProvider (← navigate props로 받음)
+ */
+function AppContentInner(): React.ReactElement {
+  const [searchParams] = useSearchParams();
+  const { startTutorial } = useTutorial();
+
+  // 🔥 App 시작 시 Dashboard 튜토리얼 자동 시작
+  useEffect(() => {
+    const tutorialParam = searchParams.get('tutorial');
+    if (tutorialParam) {
+      Logger.info('APP', `🚀 Starting tutorial from URL parameter: ${tutorialParam}`);
+      startTutorial(tutorialParam);
+      
+      // URL 파라미터 제거 (뒤로가기 시 재시작 방지)
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete('tutorial');
+      window.history.replaceState({}, '', newUrl.pathname);
+    }
+  }, [searchParams, startTutorial]);
+
+  return (
+    <>
+      <TrayActionHandler />
+      <ClientLayout initialAuth={null}>
+        <Routes>
+          {/* Main routes */}
+          <Route path="/" element={<Home />} />
+          {/* 🔥 Dashboard 라우트: 튜토리얼 지원을 위해 "/" 대신 별도 라우트로 처리 */}
+          <Route path="/dashboard" element={<Home />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/ai" element={<AI />} />
+          
+          {/* OAuth callback */}
+          <Route path="/oauth/callback" element={<OAuthCallback />} />
+          
+          {/* 404 fallback */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ClientLayout>
+      {/* 🔥 Auto-updater 알림 (전역 표시) */}
+      <UpdateNotification />
+    </>
+  );
+}
+
+function AppContent(): React.ReactElement {
+  const navigate = useNavigate();
+
+  return (
+    <TutorialProvider navigate={navigate}>
+      <AppContentInner />
+    </TutorialProvider>
+  );
+}
+
 export default function App(): React.ReactElement {
   // 🎨 테마 매니저 초기화
   useEffect(() => {
     // setupSystemThemeListener는 ThemeProvider에서 처리됨
   }, []);
 
-  // read auth snapshot synchronously
-  let initialAuth: any = null;
-  try {
-    // In Electron environment, we'll handle auth differently
-    const snapPath = '.auth_snapshot.json';
-    // This will be handled by IPC in electron context
-  } catch (e) {
-    // ignore
-  }
-
   return (
     <div className={LAYOUT_STYLES.container}>
       <BrowserRouter>
-        <TutorialProvider>
-          <TrayActionHandler />
-          <ClientLayout initialAuth={initialAuth}>
-            <Routes>
-              {/* Main routes */}
-              <Route path="/" element={<Home />} />
-              <Route path="/dashboard" element={<Navigate to="/" replace />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/:id" element={<ProjectDetail />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/ai" element={<AI />} />
-              
-              {/* OAuth callback */}
-              <Route path="/oauth/callback" element={<OAuthCallback />} />
-              
-              {/* 404 fallback */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </ClientLayout>
-          {/* 🔥 Auto-updater 알림 (전역 표시) */}
-          <UpdateNotification />
-        </TutorialProvider>
+        <AppContent />
       </BrowserRouter>
     </div>
   );

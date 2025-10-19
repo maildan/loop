@@ -28,6 +28,10 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
   id: 'project-creator',
   name: '프로젝트 생성 가이드',
   description: '프로젝트를 만드는 방법과 상세 정보를 설정합니다',
+  
+  // 🔥 ProjectCreator는 modal이므로 requiredPath 없음!
+  // Projects 페이지에서 modal로 열리므로 navigation 불필요
+  // requiredPath: undefined,
 
   steps: [
     // ============================================================
@@ -203,7 +207,7 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
     },
 
     // ============================================================
-    // Step 8: 목표 설정89
+    // Step 8: 목표 설정
     // ============================================================
     {
       stepId: 'create-details-goal',
@@ -267,20 +271,12 @@ export const getProjectCreatorTutorial = (): Tutorial => ({
   },
 
   /**
-   * 🔥 자동 진행 플래그 (5.5초 이상 간격)
-   * useGuidedTour에서 이 플래그를 감지하여
-   * onPopoverRender 시 setTimeout으로 자동 진행
-   * + smooth scroll 애니메이션
-   * 
-   * ✅ autoProgress: false → 사용자가 '다음' 버튼을 클릭해서 진행 (자동 진행 X)
-   * ✅ returnStepId: 'dashboard-complete' → Dashboard 최종 단계 (index 9)
-   * 이를 통해 ProjectCreator 완료 후 Dashboard의 'dashboard-complete'로 복귀
-   * (최종 단계는 '다음' 버튼이 없으므로 무한루프 방지)
+   * 🔥 자동 진행 플래그 (수동 클릭 유지)
+   * ProjectCreator 완료 후 Dashboard 튜토리얼로 복귀하도록 return 설정
    */
   meta: {
-    autoProgress: false, // 자동 진행 비활성화 → 사용자가 각 단계를 천천히 읽을 수 있음
-    autoProgressDelay: 5500, // 참고용 유지 (사용 안함)
-    returnTutorialId: 'dashboard-intro', // 이 튜토리얼 완료 후 대시보드로 복귀
-    returnStepId: 'dashboard-complete', // ✅ 복귀할 스텝: dashboard-complete (최종 step, index 9)
+    autoProgress: false, // 🔥 수동 모드: 사용자가 버튼 클릭해서 진행
+    returnTutorialId: 'dashboard-intro', // � Dashboard 튜토리얼로 복귀
+    returnStepId: 'action-import', // 🔙 QuickStart의 다음 스텝부터 이어서 진행
   },
 });

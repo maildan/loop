@@ -4,6 +4,7 @@
  */
 
 import { useEffect, useRef, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { driver } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import type { Driver } from 'driver.js';
@@ -12,6 +13,7 @@ import { getTutorial } from './TutorialContext';
 import { Logger } from '../../../shared/logger';
 import { useTutorialRefreshController } from '../../hooks/useTutorialRefreshController';
 import { waitForCSSVariables } from '../../utils/tutorial-refresh';
+import { waitForElement } from '../../../shared/utils/waitForElement';
 
 /**
  * 스타일 상수 (다크모드 지원)
@@ -46,13 +48,16 @@ const DRIVER_STYLES = {
  * ```
  */
 export function useGuidedTour(): Driver | null {
-  const { startTutorial, nextStep, previousStep, closeTutorial, completeTutorial } = useTutorial();
+  const navigate = useNavigate();
+  const { pathname, search } = useLocation();
+  const { startTutorial, nextStep, previousStep, closeTutorial } = useTutorial();
   const { currentTutorialId, currentStepIndex, isActive } = useTutorialState();
   const driverRef = useRef<Driver | null>(null);
   const isInitializingRef = useRef(false);
   const autoProgressTimeoutRef = useRef<NodeJS.Timeout | null>(null); // 🔥 중복 타이머 방지
   const renderCountRef = useRef(0); // 🔥 onPopoverRender 호출 횟수 추적 (디버깅)
   const currentStepIndexRef = useRef(0); // 🔥 최신 currentStepIndex를 ref로 추적 (closure 문제 해결)
+  const autoStartExecutedRef = useRef(false); // 🔥 NEW: auto-start 한 번만 실행
 
   /**
    * 🔥 currentStepIndex를 ref로 항상 최신 상태 유지
@@ -71,6 +76,25 @@ export function useGuidedTour(): Driver | null {
       return;
     }
 
+    // 🔥 NEW: project-creator 튜토리얼은 ?create=true 파라미터가 있을 때만 시작 허용
+    // (수동 열기 시 auto-recovery 방지)
+    if (currentTutorialId === 'project-creator') {
+      const params = new URLSearchParams(search);
+      const isCreateFlow = params.get('create') === 'true';
+      
+      if (!isCreateFlow) {
+        console.warn(
+          `🛡️🛡️🛡️ [useGuidedTour] BLOCKED project-creator tutorial auto-recovery (manual open detected, create=${params.get('create')})`
+        );
+        Logger.warn(
+          'useGuidedTour',
+          `🛡️ BLOCKED: project-creator tutorial attempted to start without ?create=true parameter`
+        );
+        closeTutorial();
+        return;
+      }
+    }
+
     try {
       isInitializingRef.current = true;
       
@@ -86,102 +110,50 @@ export function useGuidedTour(): Driver | null {
 
       Logger.info('useGuidedTour', `🎬 Initializing Driver.js for ${currentTutorialId}`);
 
-      // 🔥 안전성 검증: 첫 번째 step의 element가 존재하는지 확인
-      // 이 검사가 없으면 element를 못 찾을 때 무한 재시도 루프 발생 (무한루프 버그)
-      const firstStep = tutorial.steps[0];
-      if (firstStep?.element) {
-        let firstElement: Element | null = null;
-        let retryCount = 0;
-        const maxRetries = 60;  // 30 → 60 (충분한 재시도 횟수)
-        const retryDelay = 150; // 유지
-
-        // 🔥 재시도 로직: element가 로드될 때까지 대기
-        // (Dashboard/ProjectCreator 컴포넌트 렌더링 완료 대기)
-        while (!firstElement && retryCount < maxRetries) {
-          if (typeof firstStep.element === 'string') {
-            firstElement = document.querySelector(firstStep.element);
-            
-            // 🔥 DEBUG: 매 시도마다 로그 (첫 시도, 그리고 5번마다)
-            if (retryCount === 0 || retryCount % 5 === 0 || firstElement) {
-              Logger.debug(
-                'useGuidedTour',
-                `🔍 Element search (retry ${retryCount}): selector="${firstStep.element}" found=${!!firstElement}`
-              );
-              
-              // 🔥 더 상세한 디버그: 첫 번째 시도에서 모든 [data-tour] 요소 나열
-              if (retryCount === 0) {
-                const allTourElements = document.querySelectorAll('[data-tour]');
-                const tourElementsList = Array.from(allTourElements).map(el => el.getAttribute('data-tour'));
-                Logger.debug(
-                  'useGuidedTour',
-                  `📊 All [data-tour] elements in DOM (${allTourElements.length}): ${tourElementsList.join(', ')}`
-                );
-              }
-            }
-          } else if (typeof firstStep.element === 'function') {
-            try {
-              const result = firstStep.element();
-              firstElement = result as Element | null;
-            } catch (e) {
-              Logger.debug('useGuidedTour', `Debug: Retry ${retryCount + 1} - element function call failed`);
-            }
+      // 🔥 개선: 첫 번째 step의 element가 DOM에 로드될 때까지 대기
+      // ProjectCreator 모달 같이 async로 로드되는 요소들을 위함
+      if (tutorial.steps.length > 0) {
+        const firstStepElement = tutorial.steps[0]?.element;
+        const currentStepElement = tutorial.steps[currentStepIndex]?.element;
+        const currentStep = tutorial.steps[currentStepIndex];
+        
+        console.warn(`🔍 [useGuidedTour] initializeDriver check:
+          - currentTutorialId: ${currentTutorialId}
+          - currentStepIndex: ${currentStepIndex}
+          - firstStepElement: ${firstStepElement}
+          - currentStepElement: ${currentStepElement}
+          - currentStep.stepId: ${currentStep?.stepId}
+        `);
+        
+        // Step 0이 아닌 경우 현재 step의 element도 대기
+        const elementToWait = currentStepIndex > 0 ? currentStepElement : firstStepElement;
+        
+        if (elementToWait && typeof elementToWait === 'string') {
+          try {
+            // 🔥 Step 1+ 의 경우 더 긴 타임아웃 (7초로 증가)
+            const timeout = currentStepIndex > 0 ? 7000 : 3000;
+            await waitForElement(elementToWait, { timeout });
+            Logger.debug('useGuidedTour', `✅ Step element found: ${elementToWait} (step ${currentStepIndex})`);
+            console.warn(`✅ [useGuidedTour] Element found: ${elementToWait}`);
+          } catch (error) {
+            // 🔥 CRITICAL: Element not found → 튜토리얼 중단!
+            Logger.warn('useGuidedTour', `❌ CRITICAL: Step element not found after timeout: ${elementToWait} (step ${currentStepIndex})`, error);
+            console.warn(`❌ [useGuidedTour] Element NOT found - ABORTING TUTORIAL: ${elementToWait}`);
+            closeTutorial();
+            return; // 🔥 튜토리얼 중단!
           }
-
-          // element 찾으면 루프 탈출
-          if (firstElement) {
-            if (retryCount > 0) {
-              Logger.info(
-                'useGuidedTour',
-                `✅ Element found after ${retryCount} retries (${retryCount * retryDelay}ms)`
-              );
-            }
-            break;
-          }
-
-          // element 못 찾으면 재시도
-          retryCount++;
-          if (retryCount < maxRetries) {
-            await new Promise(resolve => setTimeout(resolve, retryDelay));
-            // 로그는 생략 (너무 많음)
-          }
+        } else {
+          // 🔥 element 문자열이 없음 → 튜토리얼 중단!
+          Logger.warn('useGuidedTour', `❌ CRITICAL: elementToWait is not a valid string: ${elementToWait}`);
+          console.warn(`❌ [useGuidedTour] No valid element - ABORTING TUTORIAL`);
+          closeTutorial();
+          return; // 🔥 튜토리얼 중단!
         }
-
-        if (!firstElement) {
-          Logger.warn(
-            'useGuidedTour',
-            `⚠️ Tutorial "${currentTutorialId}" element not found after ${maxRetries} retries (${maxRetries * retryDelay}ms total). ` +
-            `Selector: "${firstStep.element}" | Component may not be mounted. Skipping driver initialization.`
-          );
-          
-          // 🔥 최종 디버그: 마지막 시도에서 실제 DOM 상태 확인
-          const allTourElements = document.querySelectorAll('[data-tour]');
-          const tourElementsList = Array.from(allTourElements).map(el => el.getAttribute('data-tour'));
-          Logger.warn(
-            'useGuidedTour',
-            `📊 FINAL DOM check - All [data-tour] elements (${allTourElements.length}): ${tourElementsList.join(', ')}`
-          );
-          
-          // 요소를 찾지 못하면 튜토리얼을 강제로 종료 (무한 재시도 방지)
-          await closeTutorial();
-          return;
-        }        if (!firstElement) {
-          Logger.warn(
-            'useGuidedTour',
-            `⚠️ Tutorial "${currentTutorialId}" element not found after ${maxRetries} retries (${maxRetries * retryDelay}ms total). ` +
-            `Selector: "${firstStep.element}" | Component may not be mounted. Skipping driver initialization.`
-          );
-          
-          // 🔥 최종 디버그: 마지막 시도에서 실제 DOM 상태 확인
-          const allTourElements = document.querySelectorAll('[data-tour]');
-          Logger.debug(
-            'useGuidedTour',
-            `📊 Final DOM check - All [data-tour] elements: ${allTourElements.length}`,
-            Array.from(allTourElements).map(el => `${el.getAttribute('data-tour')} (display=${window.getComputedStyle(el).display})`)
-          );
-          
-          // 요소를 찾지 못하면 튜토리얼을 강제로 종료 (무한 재시도 방지)
-          await closeTutorial();
-          return;
+        
+        // 🔥 디버깅: 현재 step index와 element 확인
+        if (currentStepIndex !== 0) {
+          console.warn(`⚠️ [useGuidedTour] WARNING: Starting at step ${currentStepIndex} (not 0). Tutorial: ${currentTutorialId}, StepId: ${currentStep?.stepId}`);
+          Logger.warn('useGuidedTour', `⚠️ CRITICAL: currentStepIndex=${currentStepIndex} (expected 0 for new tutorial). Element: ${currentStepElement}`);
         }
       }
 
@@ -223,101 +195,58 @@ export function useGuidedTour(): Driver | null {
           const stepIdx = currentStepIndexRef.current;
           const currentStep = tutorial.steps[stepIdx];
           
-          Logger.debug('useGuidedTour', `→ Next button clicked (step ${stepIdx})`);
+          console.warn(`🔘🔘🔘 [NEXT_BUTTON_CLICKED] tutorial=${currentTutorialId}, step=${stepIdx}, stepId=${currentStep?.stepId}`);
+          Logger.debug('useGuidedTour', `→ Next button clicked (step ${stepIdx}, tutorial=${currentTutorialId})`);
+          Logger.debug('useGuidedTour', `📊 currentStep.stepId=${currentStep?.stepId}, tutorial.id=${tutorial.id}, total steps=${tutorial.steps.length}`);
           
-          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭 후 Projects 페이지로 이동
+          // 🔥 특수 처리: 'action-create' 스텝에서 버튼 자동 클릭
+          // Projects 페이지에서 자동으로 project-creator 튜토리얼이 시작됨
           if (currentStep?.stepId === 'action-create') {
-            Logger.info('useGuidedTour', '🎯 action-create detected → starting ProjectCreator tutorial flow');
+            console.warn(`⏸️⏸️⏸️ [NEXT_BUTTON] action-create step detected`);
+            Logger.info('useGuidedTour', '🎯 action-create step detected - clicking button and delegating to Projects page');
+            
             const actionCreateBtn = document.querySelector('[data-tour="action-create"]') as HTMLElement;
-            
-            // 🔥 디버깅: 버튼 확인
-            if (!actionCreateBtn) {
-              Logger.warn('useGuidedTour', '⚠️ action-create button not found!');
-              await nextStep();
+            if (actionCreateBtn) {
+              // 🔥 순서 중요:
+              // 1. 먼저 button click
+              actionCreateBtn.click();
+              console.warn(`✅ [NEXT_BUTTON] action-create button clicked`);
+              Logger.info('useGuidedTour', '✅ Button clicked - navigating to Projects page');
+              
+              // 2. Driver 파괴 (즉시 Overlay 제거)
+              if (driverRef.current) {
+                try {
+                  driverRef.current.destroy();
+                  driverRef.current = null;
+                  Logger.info('useGuidedTour', '🧹 Driver instance destroyed for action-create transition');
+                } catch (error) {
+                  Logger.warn('useGuidedTour', 'Error destroying Driver instance', error);
+                }
+              }
+
+              // 3. 🔥 Dashboard 튜토리얼은 일시 중지 (완료 처리 X)
+              Logger.info('useGuidedTour', '⏸️ Dashboard tutorial paused - Project Creator flow will resume later');
+              closeTutorial();
+
+              // 4. 더 이상 대기하지 않음
               return;
+            } else {
+              console.warn(`⚠️ [NEXT_BUTTON] action-create button NOT found`);
+              Logger.warn('useGuidedTour', '⚠️ action-create button not found');
             }
-            
-            Logger.info('useGuidedTour', '✅ action-create button found, preparing to click');
-            
-            // 🔥 localStorage 플래그 설정
-            localStorage.setItem('tutorial_open_project_creator', 'true');
-            Logger.info('useGuidedTour', '💾 localStorage flag set');
-            
-            // 🔥 버튼 클릭 → navigate 발동
-            Logger.info('useGuidedTour', '🚀 Clicking action-create button');
-            actionCreateBtn.click();
-            Logger.info('useGuidedTour', '✅ action-create button clicked');
-            
-            // 🔥 적절한 지연 후:
-            // 1. Dashboard 튜토리얼 완료
-            // 2. project-creator 튜토리얼 시작 (Projects 페이지 렌더링 완료 대기)
-            // 🔥 React Router navigate() + Projects.tsx 리렌더링에 충분한 시간 필요
-            setTimeout(async () => {
-              Logger.info('useGuidedTour', '⏸️ [1200ms] Completing dashboard tutorial');
-              
-              // 🔥 현재 DOM 상태 확인 (Projects 페이지 로드 여부)
-              const projectsElements = document.querySelectorAll('[data-tour]');
-              const elementsList = Array.from(projectsElements).map(el => el.getAttribute('data-tour'));
-              Logger.info('useGuidedTour', `📊 [1200ms] Current DOM [data-tour] elements: ${elementsList.join(', ')}`);
-              
-              await completeTutorial();
-              Logger.info('useGuidedTour', '🎬 Starting project-creator tutorial after 1200ms delay');
-              
-              // 🔥 1200ms 지연 = React Router 네비게이션 + 컴포넌트 렌더링 + state 업데이트 완료
-              // 추가 대기 후 startTutorial 직접 호출 (Projects.tsx useEffect에만 의존하지 않음)
-              setTimeout(async () => {
-                Logger.info('useGuidedTour', '⏸️ [1700ms] About to call startTutorial');
-                
-                // 🔥 현재 DOM 상태 최종 확인
-                const finalElements = document.querySelectorAll('[data-tour]');
-                const finalList = Array.from(finalElements).map(el => el.getAttribute('data-tour'));
-                Logger.info('useGuidedTour', `📊 [1700ms] Final DOM [data-tour] elements: ${finalList.join(', ')}`);
-                
-                Logger.info('useGuidedTour', '🎬 Directly calling startTutorial from useGuidedTour');
-                startTutorial('project-creator');
-              }, 500); // 추가 500ms 대기 (총 1700ms)
-            }, 1200);
-            
-            return;
           }
           
           // 🔥 일반 다음 버튼: Context state 업데이트 (driver.moveTo는 useEffect에서 자동 처리)
+          console.warn(`📌📌📌 [NEXT_BUTTON] Calling nextStep() - tutorial=${currentTutorialId}, step=${stepIdx}`);
+          Logger.info('useGuidedTour', `📌 Calling nextStep() for tutorial=${currentTutorialId}, step=${stepIdx}`);
           await nextStep();
+          console.warn(`✅✅✅ [NEXT_BUTTON] nextStep() completed`);
+          Logger.info('useGuidedTour', `📌 nextStep() returned for tutorial=${currentTutorialId}`);
           
-          // 🔥 개선: driver.js API를 사용해 마지막 스텝 여부 확인 (더 정확함)
-          // nextStep() 직후 driver가 이미 새로운 step으로 이동했으므로
-          // driver.isLastStep()를 사용하면 비동기 지연 없이 즉시 확인 가능
-          if (!driverRef.current) return;
-          
-          try {
-            // 마지막 스텝에 도달했는지 확인
-            const isNowLastStep = driverRef.current.isLastStep?.();
-            
-            // ✅ 해결책: 마지막 스텝이고 다음 튜토리얼이 있으면 그곳으로 전환
-            if (isNowLastStep && tutorial.meta?.nextTutorialId) {
-              Logger.info(
-                'useGuidedTour',
-                `🔄 Last step completed → Transitioning to next tutorial: ${tutorial.meta.nextTutorialId}`
-              );
-              
-              // 다음 튜토리얼로 자동 전환 (지연 없음)
-              await startTutorial(tutorial.meta.nextTutorialId);
-            }
-            // ✅ 핵심 수정: 마지막 스텝이고 다음 튜토리얼이 없으면 튜토리얼 완료 처리
-            else if (isNowLastStep) {
-              Logger.info(
-                'useGuidedTour',
-                `🎉 Tutorial completed (last step) → completeTutorial()`
-              );
-              
-              // TutorialContext의 completeTutorial() 호출
-              // 이를 통해 returnTutorialId가 있으면 그곳으로 복귀
-              // 없으면 isActive = false로 설정
-              await completeTutorial();
-            }
-          } catch (error) {
-            Logger.error('useGuidedTour', 'Error checking last step status', error);
-          }
+          // 🔥 주의: nextStep() 호출 후 currentStepIndexRef는 아직 업데이트 안됨!
+          // useEffect가 실행되어야 ref가 업데이트되므로
+          // 여기서는 마지막 스텝 체크를 하지 않음
+          // 대신 onPopoverRender에서 UI 렌더링될 때 체크 (그때는 확실하게 업데이트됨)
         },
 
         onPrevClick: async () => {
@@ -333,7 +262,10 @@ export function useGuidedTour(): Driver | null {
         },
 
         onCloseClick: async () => {
-          Logger.info('useGuidedTour', '✖️ Tutorial closed');
+          Logger.info('useGuidedTour', '✖️ X button clicked - Tutorial close initiated');
+          Logger.debug('useGuidedTour', `📊 onCloseClick: tutorialId=${currentTutorialId}, stepIdx=${currentStepIndexRef.current}`);
+          // 🔥 X 버튼 클릭 후 실제 closeTutorial/다음튜토리얼은 onDeselected에서 처리됨
+          // 여기서는 단순히 driver.destroy() 트리거만 하면 됨
           closeTutorial();
         },
 
@@ -413,6 +345,14 @@ export function useGuidedTour(): Driver | null {
             Logger.debug('useGuidedTour', '⏸️ Auto-progress disabled for this step');
           } else if (currentStepIdx >= tutorial.steps.length - 1) { // 🔥 ref 값 사용
             Logger.info('useGuidedTour', '✅ Last step reached, no auto-progress scheduled');
+            
+            // 🔥 마지막 스텝에서 튜토리얼 완료 로직 처리
+            // (이 시점에서 currentStepIndexRef가 확실히 업데이트됨)
+            setTimeout(async () => {
+              // 버튼 클릭 대기 (auto-close는 하지 않음, 사용자가 클릭하도록)
+              // 하지만 '다음' 버튼이 있으면 클릭해서 completeTutorial 유발
+              Logger.debug('useGuidedTour', '🔔 Last step popover rendered - waiting for user action');
+            }, 0);
           }
         },
 
@@ -433,16 +373,78 @@ export function useGuidedTour(): Driver | null {
           // Driver.js가 자동으로 positioning을 처리하므로 수동 개입 제거 ✅
         },
 
-        // 하이라이트 해제
-        onDeselected: () => {
+        // 하이라이트 해제 (X 버튼 또는 driver.destroy() 호출 시)
+        onDeselected: async () => {
           // 🔥 currentStepIndex는 stale closure이므로 currentStepIndexRef 사용
           Logger.debug('useGuidedTour', `⭕ Deselected step ${currentStepIndexRef.current}`);
+          console.warn(`🔴🔴🔴 [useGuidedTour] onDeselected FIRED! currentTutorialId=${currentTutorialId}, step=${currentStepIndexRef.current}, total steps=${tutorial.steps.length}`);
+          
+          // 🔥 CRITICAL 진단: element가 실제로 존재하는지 확인
+          if (tutorial.steps[currentStepIndexRef.current]) {
+            const currentStep = tutorial.steps[currentStepIndexRef.current];
+            if (currentStep?.element && typeof currentStep.element === 'string') {
+              const element = document.querySelector(currentStep.element);
+              if (!element) {
+                Logger.warn(
+                  'useGuidedTour',
+                  `🔴 CRITICAL: onDeselected fired because element not found: ${currentStep.element} (stepId=${currentStep.stepId}, tutorial=${currentTutorialId})`
+                );
+                console.warn(`🔴 [useGuidedTour] Element NOT found: ${currentStep.element}`);
+              } else {
+                console.warn(`✅ [useGuidedTour] Element EXISTS: ${currentStep.element}`);
+              }
+            }
+          }
+          
+          // 🔥 CRITICAL: onDeselected는 X 버튼 클릭 또는 driver.destroy()에서 호출됨
+          // 여기서 다음 튜토리얼 시작 로직 처리
+          if (currentTutorialId) {
+            const currentTutorial = getTutorial(currentTutorialId);
+            if (currentTutorial) {
+              const isLastStep = currentStepIndexRef.current >= currentTutorial.steps.length - 1;
+              console.warn(`📊 [useGuidedTour] onDeselected: tutorial=${currentTutorialId}, isLastStep=${isLastStep}, hasNext=${!!currentTutorial.meta?.nextTutorialId}`);
+              Logger.debug(
+                'useGuidedTour',
+                `📊 onDeselected check: tutorialId=${currentTutorialId}, isLastStep=${isLastStep}, nextTutorialId=${currentTutorial.meta?.nextTutorialId ?? 'NONE'}`
+              );
+              
+              // 🔥 ProjectCreator 특수 처리 제거!
+              // ProjectCreator는 modal이므로, 닫혀도 Projects 페이지에 남아있음
+              // onDeselected에서 Dashboard로 갈 필요 없음
+              // 대신 onCloseClick에서 처리됨
+              
+              // 마지막 스텝에서 닫혔으면 다음 튜토리얼 시작
+              if (isLastStep && currentTutorial.meta?.nextTutorialId) {
+                Logger.info(
+                  'useGuidedTour',
+                  `🔄 Last step onDeselected → Starting next tutorial: ${currentTutorial.meta.nextTutorialId}`
+                );
+                const nextStepId = currentTutorial.meta.nextStepId;
+                await startTutorial(currentTutorial.meta.nextTutorialId, nextStepId);
+                return;
+              }
+
+              if (isLastStep && currentTutorial.meta?.returnTutorialId) {
+                Logger.info(
+                  'useGuidedTour',
+                  `🔄 Last step onDeselected → Returning to tutorial: ${currentTutorial.meta.returnTutorialId}`
+                );
+                const returnStepId = currentTutorial.meta.returnStepId;
+                await startTutorial(currentTutorial.meta.returnTutorialId, returnStepId);
+                return;
+              }
+            }
+          }
+          
+          console.warn(`⏸️ [useGuidedTour] onDeselected: No action taken (not last step or no next tutorial)`);
+          Logger.debug('useGuidedTour', '📊 onDeselected: No next tutorial, closing normally');
         },
       });
 
-      // 🔥 튜토리얼 시작 (저장된 진행도부터 시작)
-      // currentStepIndexRef를 사용하여 최신 상태 반영
-      const startStep = currentStepIndexRef.current;
+      // 🔥 튜토리얼 시작 (현재 step부터 시작)
+      // ⚠️ CRITICAL: currentStepIndexRef가 아닌 현재 스냅샷의 currentStepIndex 사용!
+      // currentStepIndexRef.current는 useEffect timing 때문에 stale할 수 있음
+      const startStep = currentStepIndex; // ← ref 대신 prop 직접 사용
       driverRef.current.drive(startStep);
       Logger.info('useGuidedTour', `✅ Driver.js started at step ${startStep}`);
     } catch (error) {
@@ -450,10 +452,9 @@ export function useGuidedTour(): Driver | null {
     } finally {
       isInitializingRef.current = false;
     }
-  }, [currentTutorialId, nextStep, previousStep, closeTutorial]);
-  // 🔥 currentStepIndex는 ref로 추적하므로 의존성 제외
-  // 이렇게 하면 step 변경 시 useCallback 재생성 안 됨 (driver 재초기화 방지)
-  // 하지만 onPopoverRender는 currentStepIndexRef.current로 항상 최신 값 사용!
+  }, [currentTutorialId, currentStepIndex, nextStep, previousStep, closeTutorial, startTutorial, search]);
+  // 🔥 currentStepIndex를 의존성에 추가: state 변경 시 재초기화 필요!
+  // 🔥 startTutorial 추가: onCloseClick에서 사용하므로 필수!
 
   /**
    * 🔥 개선: TutorialRefreshController 통합
@@ -465,12 +466,66 @@ export function useGuidedTour(): Driver | null {
   });
 
   /**
+   * 🔥 CRITICAL: currentTutorialId 변경 시 이전 Driver 정리
+   * Projects로 navigate될 때 Dashboard Driver가 여전히 onDeselected를 호출하지 않도록
+   */
+  useEffect(() => {
+    console.warn(`🔥 [useGuidedTour] currentTutorialId changed: ${currentTutorialId}`);
+    
+    // 이전 driver 정리
+    if (driverRef.current && isActive && currentTutorialId) {
+      try {
+        console.warn(`🔥 [useGuidedTour] Destroying previous driver before initializing new tutorial`);
+        driverRef.current.destroy();
+        driverRef.current = null;
+      } catch (error) {
+        Logger.warn('useGuidedTour', 'Error destroying previous driver', error);
+      }
+    }
+  }, [currentTutorialId]);
+
+  /**
    * 튜토리얼 활성화/비활성화 감지 및 Driver.js 제어
    * 
    * 🔧 개선사항:
    * 1. requestAnimationFrame으로 DOM 렌더링 완료 대기
    * 2. CSS 변수 로드 대기 추가
    * 3. 초기화 이전에 첫 step element 존재 확인
+   */
+  useEffect(() => {
+    // 🔥 NEW: Projects 페이지에서 ?create=true 감지 시 자동으로 project-creator 튜토리얼 시작
+    // 🔥 중요: 이 effect는 정확히 한 번만 실행되어야 함!
+    if (pathname === '/projects' && !autoStartExecutedRef.current) {
+      const params = new URLSearchParams(search);
+      const isCreateFlow = params.get('create') === 'true';
+      
+      if (isCreateFlow && !currentTutorialId) {
+        console.warn(`🚀 [useGuidedTour] AUTO-START: project-creator tutorial (detected create=true on /projects page)`);
+        Logger.info('useGuidedTour', `🚀 Auto-starting project-creator tutorial from Dashboard flow (create=true)`);
+        autoStartExecutedRef.current = true; // 🔥 플래그 설정: 다시 실행 안 함
+        startTutorial('project-creator', 'create-method-intro');
+      } else if (!isCreateFlow) {
+        // 🔥 ?create=true가 없으면 플래그만 설정 (auto-start 실행 안 함)
+        autoStartExecutedRef.current = true;
+      }
+    }
+  }, [pathname, search, currentTutorialId, startTutorial]);
+  // 🔥 이 effect는 오직 자동 시작만 담당 (initializeDriver는 별도 effect에서)
+
+  /**
+   * 🔥 NEW: pathname이 변하면 autoStartExecutedRef 리셋
+   * 다른 페이지로 이동했다가 다시 Projects로 오면 auto-start 가능하도록
+   */
+  useEffect(() => {
+    if (pathname !== '/projects') {
+      autoStartExecutedRef.current = false;
+      console.warn(`🔄 [useGuidedTour] Resetting autoStartExecutedRef (pathname changed to ${pathname})`);
+    }
+  }, [pathname]);
+
+  /**
+   * 🔥 Driver.js 초기화 및 시작 (독립적인 effect)
+   * currentTutorialId 변경 시에만 실행
    */
   useEffect(() => {
     if (!isActive || !currentTutorialId) {
@@ -486,10 +541,27 @@ export function useGuidedTour(): Driver | null {
       return;
     }
 
-    // 🚀 개선: requestAnimationFrame으로 DOM 렌더링 완료 대기
+    // � 라우팅 아키텍처: 튜토리얼의 필요 경로 확인 및 자동 네비게이션
+    const tutorial = getTutorial(currentTutorialId);
+    if (tutorial?.requiredPath && tutorial.requiredPath !== pathname) {
+      Logger.info(
+        'useGuidedTour',
+        `🌍 Navigating to required path: ${tutorial.requiredPath} (current: ${pathname})`
+      );
+      navigate(tutorial.requiredPath);
+      // 네비게이션 후 경로가 업데이트될 때까지 대기 (pathname이 변경되면 useEffect 재실행)
+      return;
+    }
+
+    //  개선: requestAnimationFrame으로 DOM 렌더링 완료 대기
     const frameId = requestAnimationFrame(() => {
       // 한 번 더 기다려서 CSS도 적용되도록 함
       setTimeout(() => {
+        // 🔥 재확인: currentStepIndex가 0인지 검증 (startTutorial 호출 확인)
+        Logger.debug(
+          'useGuidedTour',
+          `🔍 Before initializeDriver: tutorial=${currentTutorialId}, step=${currentStepIndexRef.current}`
+        );
         initializeDriver();
       }, 50); // 10 → 50ms (더 긴 대기 시간)
     });
@@ -497,9 +569,9 @@ export function useGuidedTour(): Driver | null {
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [isActive, currentTutorialId]);
-  // 🔥 initializeDriver 제거: 이미 currentTutorialId 변경으로 재초기화됨
-  // initializeDriver 포함 시 → 재생성 → useEffect 재실행 → driver 재초기화 (무한루프 위험)
+  }, [isActive, currentTutorialId, pathname, navigate]);
+  // 🔥 search, startTutorial 제거: 이 effect는 오직 currentTutorialId 변경에만 반응
+  // 🔥 자동 시작은 위의 별도 effect에서 처리
 
   /**
    * 🔧 Scroll 이벤트 감시 - popover position 업데이트

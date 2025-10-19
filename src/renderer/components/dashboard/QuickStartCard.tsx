@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Plus, FileText, Download, BookOpen, type LucideIcon } from 'lucide-react';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
@@ -48,6 +49,7 @@ export function QuickStartCard({
   onViewDocs,
   showActions = true
 }: QuickStartCardProps): React.ReactElement {
+  const navigate = useNavigate();
   // 🔥 튜토리얼 시스템
   const { startTutorial } = useTutorial();
 
@@ -56,9 +58,16 @@ export function QuickStartCard({
     callback?.();
   };
 
+  const handleCreateProject = async (): Promise<void> => {
+    Logger.info('QUICK_START', '🚀 "새 프로젝트" button clicked - navigating to /projects?create=true');
+    onCreateProject?.();
+  };
+
   const handleViewDocs = async (): Promise<void> => {
-    // 튜토리얼 시작
-    await startTutorial('dashboard-intro');
+    // 🔥 라우팅 아키텍처: Dashboard로 이동하면서 튜토리얼 자동 시작
+    Logger.info('QUICK_START', '📖 Navigating to dashboard with tutorial');
+    navigate('/dashboard?tutorial=dashboard-intro');
+    
     // onViewDocs 콜백도 호출 (있으면)
     onViewDocs?.();
   };
@@ -69,7 +78,7 @@ export function QuickStartCard({
       label: '새 프로젝트',
       icon: Plus,
       variant: 'primary',
-      onClick: () => handleAction('create', onCreateProject),
+      onClick: () => handleAction('create', handleCreateProject),
       ariaLabel: '새 프로젝트 만들기'
     },
     {

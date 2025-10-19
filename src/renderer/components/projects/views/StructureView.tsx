@@ -267,7 +267,7 @@ const StructureView = memo(function StructureView({
       title: itemTitle,
       description: '',
       type: type as any, // 🔥 임시 타입 캐스팅
-      status: 'planning',
+      status: 'draft',
       wordCount: 0,
       sortOrder: structures.length,
       depth: 0,

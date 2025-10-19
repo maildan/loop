@@ -61,7 +61,7 @@ export const SynopsisView: React.FC<SynopsisViewProps> = ({
                         title: '새 프로젝트',
                         description: '시놉시스를 통해 생성된 프로젝트',
                         content: content || '',
-                        genre: '기타',
+                        genre: 'unknown',
                         status: 'active',
                         progress: 0,
                         wordCount: 0,
