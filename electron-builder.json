@@ -196,11 +196,5 @@
     "runAfterFinish": true,
     "deleteAppDataOnUninstall": false
   },
-  "publish": {
-    "provider": "github",
-    "owner": "maildan",
-    "repo": "loop",
-    "releaseType": "release"
-  },
   "asar": true
 }
