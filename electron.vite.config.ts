@@ -7,11 +7,10 @@ import { parse } from 'dotenv'
 // 🔥 GIGA-CHAD 보안 강화: NEXT_PUBLIC_* 환경변수 제거
 // API 키는 main process에서만 관리, renderer는 IPC를 통해서만 접근
 const PUBLIC_RENDERER_ENV_KEYS = [
-  // NEXT_PUBLIC_GEMINI_* 제거 - 보안 위험
-  // 'NEXT_PUBLIC_GEMINI_API_KEY', // ❌ REMOVED: 보안 취약점
-  // 'NEXT_PUBLIC_GEMINI_MODEL', // ❌ REMOVED
-  // 'NEXT_PUBLIC_GEMINI_MAX_TOKENS', // ❌ REMOVED
-  // 'NEXT_PUBLIC_GEMINI_TEMPERATURE' // ❌ REMOVED
+  'GEMINI_API_KEY',
+  'GEMINI_MODEL',
+  'GEMINI_MAX_TOKENS',
+  'GEMINI_TEMPERATURE' // warning!! 추후 개선예정
 ] as const
 
 type PublicRendererEnvKey = (typeof PUBLIC_RENDERER_ENV_KEYS)[number]
@@ -54,15 +53,24 @@ export default defineConfig(({ mode }) => {
   const readEnv = (key: string, fallback = ''): string => {
     // 🔥 NODE_ENV는 process.env를 우선으로 (cross-env 지원)
     if (key === 'NODE_ENV' && process.env.NODE_ENV) {
+      console.log(`[vite-config] NODE_ENV from cross-env: ${process.env.NODE_ENV}`);
       return process.env.NODE_ENV
     }
     const value = env[key] ?? process.env[key]
+    if (key === 'NODE_ENV') {
+      const result = typeof value === 'string' && value.length > 0 ? value : fallback
+      console.log(`[vite-config] NODE_ENV fallback to: ${result}`)
+      return result
+    }
     return typeof value === 'string' && value.length > 0 ? value : fallback
   }
 
   const rendererEnvDefinition: Record<string, string> = {}
   for (const [key, fallback] of Object.entries(RENDERER_ENV_DEFAULTS)) {
-    rendererEnvDefinition[key] = JSON.stringify(readEnv(key, fallback))
+    // 🔥 GIGA-CHAD: NODE_ENV는 cross-env가 설정한 process.env를 우선 사용
+    // readEnv에서 이미 process.env.NODE_ENV 체크하므로 여기서는 RENDERER_ENV_DEFAULTS 폴백 사용 가능
+    const value = readEnv(key, fallback) || fallback
+    rendererEnvDefinition[key] = JSON.stringify(value)
   }
 
   // 🔥 GIGA-CHAD: PUBLIC_RENDERER_ENV_KEYS가 비어있으므로 Gemini API 키 체크 제거

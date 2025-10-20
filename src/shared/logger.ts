@@ -25,8 +25,10 @@ class LoggerService {
   constructor() {
     // 🔥 환경변수 기반 로그 레벨 설정 (렌더러 호환)
     const safeEnv = (typeof process !== 'undefined' && process.env ? process.env : {}) as Record<string, string | undefined>;
-    const envLogLevel = safeEnv.LOG_LEVEL?.toLowerCase();
-    const debugMode = safeEnv.DEBUG === 'true' || safeEnv.NODE_ENV === 'development';
+    const envNodeEnv = (safeEnv.NODE_ENV || '').trim() || undefined;
+    const envDebug = (safeEnv.DEBUG || '').trim() || undefined;
+    const envLogLevel = (safeEnv.LOG_LEVEL || '').trim()?.toLowerCase();
+    const debugMode = envDebug === 'true' || envNodeEnv === 'development';
     
     if (debugMode || envLogLevel === 'debug') {
       this.logLevel = LogLevel.DEBUG;
@@ -41,7 +43,7 @@ class LoggerService {
       this.logLevel = LogLevel.DEBUG;
     }
     
-    console.log(`🔥 [LOGGER] Logger initialized - Level: ${LogLevel[this.logLevel]}, ENV: ${safeEnv.NODE_ENV}, DEBUG: ${safeEnv.DEBUG}`);
+    console.log(`🔥 [LOGGER] Logger initialized - Level: ${LogLevel[this.logLevel]}, NODE_ENV: ${envNodeEnv || 'undefined'}, DEBUG: ${envDebug || 'undefined'}`);
   }
 
   setLogLevel(level: LogLevel): void {
