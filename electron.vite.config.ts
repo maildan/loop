@@ -6,12 +6,9 @@ import { parse } from 'dotenv'
 
 // 🔥 GIGA-CHAD 보안 강화: NEXT_PUBLIC_* 환경변수 제거
 // API 키는 main process에서만 관리, renderer는 IPC를 통해서만 접근
-const PUBLIC_RENDERER_ENV_KEYS = [
-  'GEMINI_API_KEY',
-  'GEMINI_MODEL',
-  'GEMINI_MAX_TOKENS',
-  'GEMINI_TEMPERATURE' // warning!! 추후 개선예정
-] as const
+// ⚠️ CRITICAL: GEMINI_API_KEY는 절대 렌더러에 노출하면 안 됨!
+// 렌더러는 IPC를 통해 main process의 Gemini 기능을 호출만 함
+const PUBLIC_RENDERER_ENV_KEYS = [] as const
 
 type PublicRendererEnvKey = (typeof PUBLIC_RENDERER_ENV_KEYS)[number]
 
@@ -72,6 +69,10 @@ export default defineConfig(({ mode }) => {
     const value = readEnv(key, fallback) || fallback
     rendererEnvDefinition[key] = JSON.stringify(value)
   }
+
+  // 🔥 GIGA-CHAD 보안: 렌더러에는 PUBLIC 환경변수만 주입
+  // 민감한 API 키는 main process에서만 접근 가능
+  // PUBLIC_RENDERER_ENV_KEYS는 빈 배열 유지 (현재 모든 PUBLIC 값은 RENDERER_ENV_DEFAULTS에 있음)
 
   // 🔥 GIGA-CHAD: PUBLIC_RENDERER_ENV_KEYS가 비어있으므로 Gemini API 키 체크 제거
   // Gemini API 키는 main process에서만 관리, renderer는 IPC를 통해서만 접근
@@ -137,25 +138,28 @@ export default defineConfig(({ mode }) => {
         'process.env.REACT_DEVELOPER_TOOLS': JSON.stringify(readEnv('REACT_DEVELOPER_TOOLS', 'true')),
         'process.env.REDUX_DEVTOOLS': JSON.stringify(readEnv('REDUX_DEVTOOLS', 'true')),
         
-        // 🔥 Google OAuth 설정 (CRITICAL for production)
+        // 🔥 GIGA-CHAD 보안: Main process에만 민감한 API 키 주입
+        // 렌더러에는 절대 주입 안 함 (console에서 접근 불가)
+        
+        // Google OAuth 설정 (Main only)
         'process.env.GOOGLE_CLIENT_ID': JSON.stringify(readEnv('GOOGLE_CLIENT_ID', '')),
         'process.env.GOOGLE_CLIENT_SECRET': JSON.stringify(readEnv('GOOGLE_CLIENT_SECRET', '')),
         'process.env.GOOGLE_API_KEY': JSON.stringify(readEnv('GOOGLE_API_KEY', '')),
         'process.env.GOOGLE_REDIRECT_URI': JSON.stringify(readEnv('GOOGLE_REDIRECT_URI', 'http://localhost:35821/oauth/callback')),
         
-        // 🔥 암호화 키
+        // 암호화 키 (Main only)
         'process.env.ENCRYPT_SNAPSHOT_KEY': JSON.stringify(readEnv('ENCRYPT_SNAPSHOT_KEY', '')),
         
-        // 🔥 Gemini AI 설정 (CRITICAL for AI features)
+        // 🔥 Gemini AI 설정 (Main only - 렌더러는 IPC로만 접근)
         'process.env.GEMINI_API_KEY': JSON.stringify(readEnv('GEMINI_API_KEY', '')),
         'process.env.GEMINI_MODEL': JSON.stringify(readEnv('GEMINI_MODEL', 'gemini-2.5-flash')),
         'process.env.GEMINI_MAX_TOKENS': JSON.stringify(readEnv('GEMINI_MAX_TOKENS', '8192')),
         'process.env.GEMINI_TEMPERATURE': JSON.stringify(readEnv('GEMINI_TEMPERATURE', '0.9')),
         
-        // 🔥 GitHub 토큰 (for electron-builder publishing)
+        // 🔥 GitHub 토큰 (Main only - 비밀)
         'process.env.GH_TOKEN': JSON.stringify(readEnv('GH_TOKEN', '')),
         
-        // 🔥 Firebase 설정
+        // 🔥 Firebase 설정 (Main only - 비밀)
         'process.env.FIREBASE_API_KEY': JSON.stringify(readEnv('FIREBASE_API_KEY', '')),
         'process.env.FIRE_AUTH_DOMAIN': JSON.stringify(readEnv('FIRE_AUTH_DOMAIN', '')),
         'process.env.FIRE_PROJECT_ID': JSON.stringify(readEnv('FIRE_PROJECT_ID', '')),
