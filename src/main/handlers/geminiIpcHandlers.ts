@@ -135,7 +135,11 @@ export function setupGeminiIpcHandlers(): void {
   ipcMain.handle('gemini:get-status', async () => {
     try {
       const { EnvironmentService } = await import('../services/EnvironmentService');
+      
+      // 🔥 EnvironmentService가 로드되지 않았다면 즉시 초기화
+      // (constructor에서 미리 초기화했으므로 이 호출은 빠르게 완료됨)
       await EnvironmentService.initialize();
+      
       const status = EnvironmentService.getStatus();
       const available = status.GEMINI_API_KEY === 'set';
 

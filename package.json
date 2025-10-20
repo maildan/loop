@@ -1,7 +1,7 @@
 {
   "name": "loop",
   "productName": "Loop",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "Loop",
   "author": "Loop",
   "private": true,
@@ -22,6 +22,7 @@
     "build:win": "pnpm build:prod && electron-builder --win --arch x64,arm64 --config.productName=Loop",
     "build:mac": "pnpm build:prod && electron-builder --mac --arch x64,arm64 --config.productName=Loop",
     "start": "pnpm build &&cross-env NODE_ENV=production electron .",
+    "check:build-secrets": "node scripts/check-build-secrets.js",
     "start:prod": "cross-env NODE_ENV=production electron .",
     "test": "jest",
     "test:unit": "jest --testPathPattern=unit",

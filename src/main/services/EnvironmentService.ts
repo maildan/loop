@@ -92,10 +92,12 @@ class EnvironmentServiceClass {
    */
   private async loadFromProcessEnv(): Promise<void> {
     // 🔥 DEBUG: process.env 값 확인
-    Logger.debug(COMPONENT, 'Loading environment variables from process.env', {
-      GEMINI_API_KEY: process.env.GEMINI_API_KEY ? `***${process.env.GEMINI_API_KEY.slice(-8)}` : 'undefined',
-      GEMINI_MODEL: process.env.GEMINI_MODEL,
+    Logger.debug(COMPONENT, '📥 Loading environment variables from process.env', {
       NODE_ENV: process.env.NODE_ENV,
+      GEMINI_API_KEY_exists: !!process.env.GEMINI_API_KEY,
+      GEMINI_API_KEY_length: process.env.GEMINI_API_KEY?.length || 0,
+      GEMINI_API_KEY_prefix: process.env.GEMINI_API_KEY ? `***${process.env.GEMINI_API_KEY.slice(-8)}` : '(empty)',
+      GEMINI_MODEL: process.env.GEMINI_MODEL || '(not set)',
     });
 
     // 🔥 주의: process.env.GEMINI_API_KEY가 undefined인 경우 ''를 할당하면 안 됨!
@@ -109,10 +111,10 @@ class EnvironmentServiceClass {
       GH_TOKEN: process.env.GH_TOKEN || undefined,
     };
 
-    Logger.debug(COMPONENT, 'After loadFromProcessEnv (before .env fallback)', {
-      GEMINI_API_KEY_exists: !!this.config.GEMINI_API_KEY,
+    Logger.debug(COMPONENT, '✅ After loadFromProcessEnv (before .env fallback)', {
+      GEMINI_API_KEY_loaded: !!this.config.GEMINI_API_KEY,
       GEMINI_API_KEY_length: this.config.GEMINI_API_KEY ? this.config.GEMINI_API_KEY.length : 0,
-      keysLoaded: Object.keys(this.config).filter(k => this.config[k as keyof EnvironmentConfig])
+      keysLoaded: Object.keys(this.config).filter(k => this.config[k as keyof EnvironmentConfig]).length
     });
 
     // 🔥 Packaged 상태에서 .env 파일이 process.env에 로드되지 않았다면, 명시적으로 찾아서 로드

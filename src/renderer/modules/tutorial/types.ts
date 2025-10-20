@@ -35,15 +35,6 @@ export interface TutorialStepConfig extends Omit<DriveStep, 'popover'> {
    * 선택적: 이 단계에서 사용자 상호작용 방지
    */
   readonly disableActiveInteraction?: boolean;
-
-  /**
-   * 🔥 추가: 다음 버튼 클릭 시 특정 튜토리얼로 즉시 전환
-   */
-  readonly onNextClickTransition?: {
-    readonly tutorialId: string;
-    readonly stepId?: string;
-    readonly params?: Record<string, string>;
-  };
 }
 
 /**

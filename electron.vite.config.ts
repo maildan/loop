@@ -70,6 +70,12 @@ export default defineConfig(({ mode }) => {
     rendererEnvDefinition[key] = JSON.stringify(value)
   }
 
+  // Build a JS object literal (as code string) that represents process.env for the renderer.
+  // rendererEnvDefinition values are already JSON.stringified, so we can interpolate them directly.
+  const rendererProcessEnvCode = `{ ${Object.entries(rendererEnvDefinition)
+    .map(([k, v]) => `${JSON.stringify(k)}: ${v}`)
+    .join(', ')} }`
+
   // 🔥 GIGA-CHAD 보안: 렌더러에는 PUBLIC 환경변수만 주입
   // 민감한 API 키는 main process에서만 접근 가능
   // PUBLIC_RENDERER_ENV_KEYS는 빈 배열 유지 (현재 모든 PUBLIC 값은 RENDERER_ENV_DEFAULTS에 있음)
@@ -211,13 +217,15 @@ export default defineConfig(({ mode }) => {
       },
 
       define: {
-        // 🔥 GIGA-CHAD: 개별 키로 명시적 주입 (Vite runtime 호환성)
-        'process.env.NODE_ENV': rendererEnvDefinition['NODE_ENV'],
-        'process.env.DEBUG': rendererEnvDefinition['DEBUG'],
-        'process.env.LOG_LEVEL': rendererEnvDefinition['LOG_LEVEL'],
-        'process.env.VERBOSE_LOGGING': rendererEnvDefinition['VERBOSE_LOGGING']
-        // 🔥 GIGA-CHAD: __LOOP_RENDERER_PUBLIC_ENV__ 제거 (NEXT_PUBLIC_* 없음)
-        // renderer는 IPC를 통해서만 API 키 접근
+        // Expose full process.env object in renderer (so runtime reads of process.env work)
+        'process.env': rendererProcessEnvCode,
+        // Also keep individual keys mapped for direct replacements
+        ...Object.fromEntries(
+          Object.entries(rendererEnvDefinition).map(([key, value]) => [
+            `process.env.${key}`,
+            value
+          ])
+        )
       },
       server: {
         port: parseInt(readEnv('RENDERER_PORT', '4000')),

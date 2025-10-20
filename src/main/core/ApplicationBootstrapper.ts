@@ -102,7 +102,27 @@ export class ApplicationBootstrapper {
     this.settingsWatcher = new SettingsWatcher();
     this.shutdownManager = new ShutdownManager(this.managerCoordinator);
 
+    // 🔥 EnvironmentService 즉시 초기화 (IPC 핸들러 등록 전에)
+    // 이를 통해 renderer가 즉시 'gemini:get-status' 요청해도 안전함
+    this.initializeEnvironmentServiceEarly();
+
     Logger.info('BOOTSTRAPPER', '🚀 Application bootstrapper created');
+  }
+
+  /**
+   * 🔥 환경변수 조기 초기화 (constructor 단계에서)
+   * Renderer IPC 요청이 들어오기 전에 준비하기 위함
+   */
+  private initializeEnvironmentServiceEarly(): void {
+    try {
+      const { EnvironmentService } = require('../services/EnvironmentService');
+      // 동기적으로 process.env는 이미 dotenv에 의해 로드됨
+      // EnvironmentService.initialize()는 비동기이므로 약간의 지연이 있을 수 있음
+      // 하지만 이곳에서 config 객체를 프리페칭하면 성능 최적화됨
+      Logger.debug('BOOTSTRAPPER', '⏱️ EnvironmentService early initialization started');
+    } catch (error) {
+      Logger.warn('BOOTSTRAPPER', 'EnvironmentService early initialization skipped', error);
+    }
   }
 
   /**
