@@ -7,6 +7,7 @@ import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { Logger } from '../../shared/logger';
 import { IpcResponse, ProjectCharacter } from '../../shared/types';
 import { prismaService } from '../services/PrismaService';
+import { databaseMutex } from '../services/DatabaseMutexService';  // 🔒 동시성 제어
 import { globalRateLimiter, channelLimiters } from '../services/RateLimiterService';
 
 /**
@@ -103,45 +104,47 @@ export function registerCharacterHandlers(): void {
         };
       }
 
-      const prisma = await prismaService.getClient();
+      const upsertedCharacter = await databaseMutex.acquireWriteLock(async () => {
+        const prisma = await prismaService.getClient();
 
-      const upsertedCharacter = await prisma.projectCharacter.upsert({
-        where: { id: character.id || '' },
-        update: {
-          name: character.name,
-          role: character.role,
-          description: character.description,
-          notes: character.notes,
-          appearance: character.appearance,
-          personality: character.personality,
-          background: character.background,
-          goals: character.goals,
-          conflicts: character.conflicts,
-          avatar: character.avatar,
-          color: character.color,
-          sortOrder: character.sortOrder,
-          isActive: character.isActive,
-          updatedAt: new Date(),
-        },
-        create: {
-          id: character.id || '',
-          projectId: character.projectId || '',
-          name: character.name || '',
-          role: character.role || '',
-          description: character.description,
-          notes: character.notes,
-          appearance: character.appearance,
-          personality: character.personality,
-          background: character.background,
-          goals: character.goals,
-          conflicts: character.conflicts,
-          avatar: character.avatar,
-          color: character.color,
-          sortOrder: character.sortOrder || 0,
-          isActive: character.isActive ?? true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
+        return await prisma.projectCharacter.upsert({
+          where: { id: character.id || '' },
+          update: {
+            name: character.name,
+            role: character.role,
+            description: character.description,
+            notes: character.notes,
+            appearance: character.appearance,
+            personality: character.personality,
+            background: character.background,
+            goals: character.goals,
+            conflicts: character.conflicts,
+            avatar: character.avatar,
+            color: character.color,
+            sortOrder: character.sortOrder,
+            isActive: character.isActive,
+            updatedAt: new Date(),
+          },
+          create: {
+            id: character.id || '',
+            projectId: character.projectId || '',
+            name: character.name || '',
+            role: character.role || '',
+            description: character.description,
+            notes: character.notes,
+            appearance: character.appearance,
+            personality: character.personality,
+            background: character.background,
+            goals: character.goals,
+            conflicts: character.conflicts,
+            avatar: character.avatar,
+            color: character.color,
+            sortOrder: character.sortOrder || 0,
+            isActive: character.isActive ?? true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          },
+        });
       });
 
       // Prisma 결과를 ProjectCharacter 타입으로 변환
@@ -185,17 +188,21 @@ export function registerCharacterHandlers(): void {
   // 캐릭터 삭제
   ipcMain.handle('projects:delete-character', async (_event: IpcMainInvokeEvent, characterId: string): Promise<IpcResponse<boolean>> => {
     try {
-      const prisma = await prismaService.getClient();
+      const result = await databaseMutex.acquireWriteLock(async () => {
+        const prisma = await prismaService.getClient();
 
-      await prisma.projectCharacter.delete({
-        where: { id: characterId }
+        await prisma.projectCharacter.delete({
+          where: { id: characterId }
+        });
+
+        return true;
       });
 
       Logger.info('CHARACTER_IPC', '✅ Character deleted successfully', { characterId });
 
       return {
         success: true,
-        data: true,
+        data: result,
         timestamp: new Date(),
       };
     } catch (error) {
@@ -213,59 +220,66 @@ export function registerCharacterHandlers(): void {
     try {
       Logger.debug('CHARACTER_IPC', 'Updating project characters', { projectId, count: characters.length });
 
-      const prisma = await prismaService.getClient();
+      const convertedCharacters = await databaseMutex.acquireWriteLock(async () => {
+        const prisma = await prismaService.getClient();
 
-      // 🔥 기존 캐릭터들 삭제 후 새로 생성 (간단한 방법)
-      await prisma.projectCharacter.deleteMany({
-        where: { projectId }
+        // � 트랜잭션: 삭제 + 생성을 원자성으로 보장
+        return await prisma.$transaction(async (tx: any) => {
+          // Step 1: 기존 캐릭터들 삭제
+          await tx.projectCharacter.deleteMany({
+            where: { projectId }
+          });
+
+          // Step 2: 새 캐릭터들 생성 (순차 처리로 안정성 보장)
+          const createdCharacters = [];
+          for (const character of characters) {
+            const created = await tx.projectCharacter.create({
+              data: {
+                id: character.id,
+                projectId: character.projectId,
+                name: character.name || '',
+                role: character.role || '',
+                description: character.description,
+                notes: character.notes || '',
+                appearance: character.appearance,
+                personality: character.personality,
+                background: character.background,
+                goals: character.goals,
+                conflicts: character.conflicts,
+                avatar: character.avatar,
+                color: character.color,
+                sortOrder: character.sortOrder || 0,
+                isActive: character.isActive ?? true,
+                createdAt: character.createdAt || new Date(),
+                updatedAt: new Date(),
+              }
+            });
+            createdCharacters.push(created);
+          }
+
+          return createdCharacters.map(char => ({
+            id: char.id,
+            projectId: char.projectId,
+            name: char.name,
+            role: char.role || '',
+            description: char.description || undefined,
+            notes: char.notes || undefined,
+            appearance: char.appearance || undefined,
+            personality: char.personality || undefined,
+            background: char.background || undefined,
+            goals: char.goals || undefined,
+            conflicts: char.conflicts || undefined,
+            avatar: char.avatar || undefined,
+            color: char.color || undefined,
+            sortOrder: char.sortOrder || 0,
+            isActive: typeof char.isActive === 'boolean' ? char.isActive : true,
+            createdAt: char.createdAt,
+            updatedAt: char.updatedAt,
+          }));
+          // ✅ 트랜잭션 커밋: 삭제 + 생성 모두 완료
+          // ❌ 에러 발생 시: 모두 롤백 (기존 캐릭터 복구)
+        });
       });
-
-      // 🔥 새 캐릭터들 생성
-      const createdCharacters = await Promise.all(
-        characters.map(character =>
-          prisma.projectCharacter.create({
-            data: {
-              id: character.id,
-              projectId: character.projectId,
-              name: character.name || '',
-              role: character.role || '',
-              description: character.description,
-              notes: character.notes || '',
-              appearance: character.appearance,
-              personality: character.personality,
-              background: character.background,
-              goals: character.goals,
-              conflicts: character.conflicts,
-              avatar: character.avatar,
-              color: character.color,
-              sortOrder: character.sortOrder || 0,
-              isActive: character.isActive ?? true,
-              createdAt: character.createdAt || new Date(),
-              updatedAt: new Date(),
-            }
-          })
-        )
-      );
-
-      const convertedCharacters: ProjectCharacter[] = createdCharacters.map(char => ({
-        id: char.id,
-        projectId: char.projectId,
-        name: char.name,
-        role: char.role || '',
-        description: char.description || undefined,
-        notes: char.notes || undefined,
-        appearance: char.appearance || undefined,
-        personality: char.personality || undefined,
-        background: char.background || undefined,
-        goals: char.goals || undefined,
-        conflicts: char.conflicts || undefined,
-        avatar: char.avatar || undefined,
-        color: char.color || undefined,
-        sortOrder: char.sortOrder || 0,
-        isActive: typeof char.isActive === 'boolean' ? char.isActive : true,
-        createdAt: char.createdAt,
-        updatedAt: char.updatedAt,
-      }));
 
       Logger.info('CHARACTER_IPC', `✅ Characters updated successfully`, { count: convertedCharacters.length });
 

@@ -145,16 +145,20 @@ class EnvironmentServiceClass {
   }
 
   /**
-   * �📁 process.env에서 로드 (Dev)
+   * 📁 process.env에서 로드 (Dev)
    * 🔥 Packaged 상태에서는 .env 파일을 명시적으로 재로드
+   * 🔒 SECURITY: API 키를 로깅할 때 마스킹
    */
   private async loadFromProcessEnv(): Promise<void> {
-    // 🔥 DEBUG: process.env 값 확인
+    // 🔥 DEBUG: process.env 값 확인 (API 키 마스킹)
     Logger.debug(COMPONENT, '📥 Loading environment variables from process.env', {
       NODE_ENV: process.env.NODE_ENV,
       GEMINI_API_KEY_exists: !!process.env.GEMINI_API_KEY,
       GEMINI_API_KEY_length: process.env.GEMINI_API_KEY?.length || 0,
-      GEMINI_API_KEY_prefix: process.env.GEMINI_API_KEY ? `***${process.env.GEMINI_API_KEY.slice(-8)}` : '(empty)',
+      // 🔒 SECURITY: 로그에 실제 API 키 출력 금지 - 마지막 8글자만 표시
+      GEMINI_API_KEY_prefix: process.env.GEMINI_API_KEY 
+        ? `***${process.env.GEMINI_API_KEY.slice(-8)}` 
+        : '(empty)',
       GEMINI_MODEL: process.env.GEMINI_MODEL || '(not set)',
     });
 

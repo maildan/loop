@@ -11,6 +11,7 @@ import { IpcResponse, ProjectStructure } from '../../shared/types';
 import type { StructureStatus } from '../../shared/constants/enums';
 import { calculateWordCount } from '../../shared/utils/text';
 import { prismaService } from '../services/PrismaService';
+import { databaseMutex } from '../services/DatabaseMutexService';  // 🔒 동시성 제어
 import { recordDailyWritingActivity } from '../utils/writingActivity';
 
 /**
@@ -110,17 +111,21 @@ export function registerStructureHandlers(): void {
     try {
       Logger.debug('STRUCTURE_IPC', 'Deleting structure item', { structureId });
 
-      const prisma = await prismaService.getClient();
+      const result = await databaseMutex.acquireWriteLock(async () => {
+        const prisma = await prismaService.getClient();
 
-      await prisma.projectStructure.delete({
-        where: { id: structureId }
+        await prisma.projectStructure.delete({
+          where: { id: structureId }
+        });
+
+        return true;
       });
 
       Logger.info('STRUCTURE_IPC', '✅ Structure item deleted successfully', { structureId });
 
       return {
         success: true,
-        data: true,
+        data: result,
         timestamp: new Date(),
       };
     } catch (error) {

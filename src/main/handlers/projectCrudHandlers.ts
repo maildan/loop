@@ -10,6 +10,7 @@ import type { KoreanWebNovelGenre, ProjectStatus } from '../../shared/constants/
 import { prismaService } from '../services/PrismaService';
 import { ProjectCreateSchema, ProjectUpdateSchema, detectSuspiciousInput } from '../../shared/validation/projectValidation';
 import { globalRateLimiter, channelLimiters } from '../services/RateLimiterService';
+import { databaseMutex } from '../services/DatabaseMutexService';  // 🔒 동시성 제어
 
 /**
  * 🔥 프로젝트 CRUD IPC 핸들러 - 성능 최적화
@@ -33,24 +34,53 @@ export function registerProjectCrudHandlers(): void {
 
       const prisma = await prismaService.getClient();
 
+      // 🔥 N+1 쿼리 최적화: include로 관련 데이터 한 번에 로드
       const projects = await prisma.project.findMany({
+        include: {
+          episodes: {
+            select: { 
+              id: true, 
+              title: true, 
+              wordCount: true, 
+              episodeNumber: true,
+              status: true,
+              createdAt: true,
+              updatedAt: true
+            }
+          },
+          characters: {
+            select: { 
+              id: true, 
+              name: true, 
+              role: true, 
+              description: true 
+            }
+          },
+          structure: {
+            select: { 
+              id: true, 
+              type: true, 
+              content: true,
+              title: true,
+              status: true
+            }
+          },
+          notes: {
+            select: { 
+              id: true, 
+              title: true, 
+              type: true, 
+              content: true 
+            }
+          },
+          writerStats: true,
+          publications: true
+        },
         orderBy: { lastModified: 'desc' }
       });
 
       // Prisma 결과를 Project 타입으로 변환
-      const convertedProjects: Project[] = projects.map((project: {
-        id: string;
-        title: string;
-        description: string | null;
-        content: string | null;
-        progress: number;
-        wordCount: number;
-        lastModified: Date;
-        createdAt: Date;
-        genre: KoreanWebNovelGenre;
-        status: ProjectStatus;
-        author: string;
-      }) => ({
+      const convertedProjects: Project[] = projects.map((project: any) => ({
         id: project.id,
         title: project.title,
         description: project.description || '',
@@ -63,6 +93,10 @@ export function registerProjectCrudHandlers(): void {
         genre: project.genre || 'unknown',
         status: project.status || 'active',
         author: project.author || '사용자',
+        // 🔥 include된 관련 데이터 포함 (상세 정보 필요)
+        characters: project.characters || [],
+        structure: project.structures || [],
+        notes: project.notes || [],
       }));
 
       Logger.info('PROJECT_CRUD_IPC', `✅ 조회된 프로젝트 수: ${convertedProjects.length}`);
@@ -93,8 +127,49 @@ export function registerProjectCrudHandlers(): void {
       // 🔥 디버깅: 요청된 ID 상세 로그
       Logger.info('PROJECT_CRUD_IPC', `🔍 실제 요청된 프로젝트 ID: "${id}" (길이: ${id.length})`);
 
+      // 🔥 N+1 쿼리 최적화: include로 관련 데이터 한 번에 로드
       const project = await prisma.project.findUnique({
-        where: { id }
+        where: { id },
+        include: {
+          episodes: {
+            select: { 
+              id: true, 
+              title: true, 
+              wordCount: true, 
+              episodeNumber: true,
+              status: true,
+              createdAt: true,
+              updatedAt: true
+            }
+          },
+          characters: {
+            select: { 
+              id: true, 
+              name: true, 
+              role: true, 
+              description: true 
+            }
+          },
+          structure: {
+            select: { 
+              id: true, 
+              type: true, 
+              content: true,
+              title: true,
+              status: true
+            }
+          },
+          notes: {
+            select: { 
+              id: true, 
+              title: true, 
+              type: true, 
+              content: true 
+            }
+          },
+          writerStats: true,
+          publications: true
+        }
       });
 
       // 🔥 디버깅: 조회 결과 로그
@@ -153,6 +228,10 @@ export function registerProjectCrudHandlers(): void {
         genre: project.genre || 'unknown',
         status: project.status || 'active',
         author: project.author || '사용자',
+        // 🔥 include된 관련 데이터 포함 (상세 정보)
+        characters: project.characters || [],
+        structure: project.structures || [],
+        notes: project.notes || [],
       };
 
       return {
@@ -226,21 +305,50 @@ export function registerProjectCrudHandlers(): void {
       const prisma = await prismaService.getClient();
 
       try {
-        const now = new Date();
+        // 🔒 동시성 제어: SQLite 동시 쓰기 제한으로 인한 SQLITE_BUSY 에러 방지
+        // 💎 트랜잭션: 프로젝트 + 기본 캐릭터를 원자성 보장
+        const createdProject = await databaseMutex.acquireWriteLock(async () => {
+          const now = new Date();
 
-        const createdProject = await prisma.project.create({
-          data: {
-            title: validatedProject.title.trim(),
-            description: validatedProject.description?.trim() || '새로운 프로젝트입니다.',
-            content: validatedProject.content || '',
-            progress: 0,
-            wordCount: validatedProject.content ? validatedProject.content.split(/\s+/).filter((w: string) => w.length > 0).length : 0,
-            genre: validatedProject.genre || 'unknown',
-            status: validatedProject.status || 'active',
-            author: validatedProject.author || '사용자',
-            createdAt: now,
-            lastModified: now,
-          }
+          return await prisma.$transaction(async (tx: any) => {
+            // Step 1: 프로젝트 생성
+            const project = await tx.project.create({
+              data: {
+                title: validatedProject.title.trim(),
+                description: validatedProject.description?.trim() || '새로운 프로젝트입니다.',
+                content: validatedProject.content || '',
+                progress: 0,
+                wordCount: validatedProject.content ? validatedProject.content.split(/\s+/).filter((w: string) => w.length > 0).length : 0,
+                genre: validatedProject.genre || 'unknown',
+                status: validatedProject.status || 'active',
+                author: validatedProject.author || '사용자',
+                createdAt: now,
+                lastModified: now,
+              }
+            });
+
+            // Step 2: 기본 캐릭터 생성 (주인공)
+            try {
+              await tx.projectCharacter.create({
+                data: {
+                  id: `char_${project.id}_main`,
+                  projectId: project.id,
+                  name: '주인공',
+                  role: 'protagonist',
+                  description: '프로젝트의 주요 캐릭터입니다.',
+                  isActive: true,
+                  createdAt: now,
+                  updatedAt: now,
+                }
+              });
+            } catch (charError) {
+              Logger.warn('PROJECT_CRUD_IPC', 'Failed to create default character, continuing without it', { projectId: project.id });
+            }
+
+            return project;
+            // ✅ 트랜잭션 커밋: 프로젝트 + 캐릭터 모두 저장
+            // ❌ 에러 발생 시: 전체 롤백
+          });
         });
 
         const newProject: Project = {
@@ -362,10 +470,12 @@ export function registerProjectCrudHandlers(): void {
         chaptersPreview: updateData.chapters?.substring(0, 100)
       });
 
-      // 🔥 즉시 저장 - 트랜잭션으로 성능 개선
-      const updatedProject = await prisma.project.update({
-        where: { id },
-        data: updateData
+      // 🔥 즉시 저장 - 동시성 제어로 SQLITE_BUSY 방지
+      const updatedProject = await databaseMutex.acquireWriteLock(async () => {
+        return await prisma.project.update({
+          where: { id },
+          data: updateData
+        });
       });
 
       const convertedProject: Project = {
@@ -412,23 +522,27 @@ export function registerProjectCrudHandlers(): void {
     try {
       Logger.debug('PROJECT_CRUD_IPC', 'Deleting project from DB', { id });
 
-      const prisma = await prismaService.getClient();
+      const result = await databaseMutex.acquireWriteLock(async () => {
+        const prisma = await prismaService.getClient();
 
-      try {
-        await prisma.project.delete({
-          where: { id }
-        });
+        try {
+          await prisma.project.delete({
+            where: { id }
+          });
 
-        Logger.info('PROJECT_CRUD_IPC', '✅ Project deleted successfully', { id });
+          Logger.info('PROJECT_CRUD_IPC', '✅ Project deleted successfully', { id });
 
-        return {
-          success: true,
-          data: true,
-          timestamp: new Date(),
-        };
-      } finally {
-        await prisma.$disconnect();
-      }
+          return true;
+        } finally {
+          await prisma.$disconnect();
+        }
+      });
+
+      return {
+        success: true,
+        data: result,
+        timestamp: new Date(),
+      };
     } catch (error) {
       Logger.error('PROJECT_CRUD_IPC', 'Failed to delete project', error);
       return {
@@ -475,40 +589,45 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
       }
 
       // 실제 DB에 저장
-      const prisma = await prismaService.getClient();
-
       try {
-        const now = new Date();
+        const sampleProject = await databaseMutex.acquireWriteLock(async () => {
+          const prisma = await prismaService.getClient();
+          try {
+            const now = new Date();
 
-        const createdProject = await prisma.project.create({
-          data: {
-            title: selectedSample.title,
-            description: selectedSample.description,
-            content: selectedSample.content,
-            progress: selectedSample.progress,
-            wordCount: selectedSample.wordCount,
-            genre: selectedSample.genre,
-            status: 'active',
-            author: selectedSample.author,
-            createdAt: now,
-            lastModified: now,
+            const createdProject = await prisma.project.create({
+              data: {
+                title: selectedSample.title,
+                description: selectedSample.description,
+                content: selectedSample.content,
+                progress: selectedSample.progress,
+                wordCount: selectedSample.wordCount,
+                genre: selectedSample.genre,
+                status: 'active',
+                author: selectedSample.author,
+                createdAt: now,
+                lastModified: now,
+              }
+            });
+
+            return {
+              id: createdProject.id,
+              title: createdProject.title,
+              description: createdProject.description || '',
+              content: createdProject.content || '',
+              progress: createdProject.progress || 0,
+              wordCount: createdProject.wordCount || 0,
+              genre: createdProject.genre || 'unknown',
+              status: createdProject.status || 'active',
+              author: createdProject.author || '사용자',
+              createdAt: createdProject.createdAt,
+              lastModified: createdProject.lastModified,
+              updatedAt: createdProject.lastModified, // 🔥 lastModified를 updatedAt으로 사용
+            } as Project;
+          } finally {
+            await prisma.$disconnect();
           }
         });
-
-        const sampleProject: Project = {
-          id: createdProject.id,
-          title: createdProject.title,
-          description: createdProject.description || '',
-          content: createdProject.content || '',
-          progress: createdProject.progress || 0,
-          wordCount: createdProject.wordCount || 0,
-          genre: createdProject.genre || 'unknown',
-          status: createdProject.status || 'active',
-          author: createdProject.author || '사용자',
-          createdAt: createdProject.createdAt,
-          lastModified: createdProject.lastModified,
-          updatedAt: createdProject.lastModified, // 🔥 lastModified를 updatedAt으로 사용
-        };
 
         Logger.info('PROJECT_CRUD_IPC', `샘플 프로젝트 생성됨: ${sampleProject.title}`, {
           genre: sampleProject.genre,
@@ -520,8 +639,13 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
           data: sampleProject,
           timestamp: new Date(),
         };
-      } finally {
-        await prisma.$disconnect();
+      } catch (error) {
+        Logger.error('PROJECT_CRUD_IPC', 'Failed to create sample project', error);
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+          timestamp: new Date(),
+        };
       }
     } catch (error) {
       Logger.error('PROJECT_CRUD_IPC', 'Failed to create sample project', error);
@@ -580,40 +704,45 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
       }
 
       // 실제 DB에 저장
-      const prisma = await prismaService.getClient();
-
       try {
-        const now = new Date();
+        const importedProject = await databaseMutex.acquireWriteLock(async () => {
+          const prisma = await prismaService.getClient();
+          try {
+            const now = new Date();
 
-        const createdProject = await prisma.project.create({
-          data: {
-            title: fileName,
-            description: `가져온 파일: ${path.basename(filePath)} (${wordCount}단어)`,
-            content: fileContent,
-            progress: 100, // 이미 작성된 파일이므로
-            wordCount,
-            genre: estimatedGenre,
-            status: 'completed',
-            author: '가져온 파일',
-            createdAt: now,
-            lastModified: now,
+            const createdProject = await prisma.project.create({
+              data: {
+                title: fileName,
+                description: `가져온 파일: ${path.basename(filePath)} (${wordCount}단어)`,
+                content: fileContent,
+                progress: 100, // 이미 작성된 파일이므로
+                wordCount,
+                genre: estimatedGenre,
+                status: 'completed',
+                author: '가져온 파일',
+                createdAt: now,
+                lastModified: now,
+              }
+            });
+
+            return {
+              id: createdProject.id,
+              title: createdProject.title,
+              description: createdProject.description || '',
+              content: createdProject.content || '',
+              progress: createdProject.progress || 0,
+              wordCount: createdProject.wordCount || 0,
+              genre: createdProject.genre || 'unknown',
+              status: createdProject.status || 'active',
+              author: createdProject.author || '사용자',
+              createdAt: createdProject.createdAt,
+              lastModified: createdProject.lastModified,
+              updatedAt: createdProject.lastModified, // 🔥 lastModified를 updatedAt으로 사용
+            } as Project;
+          } finally {
+            await prisma.$disconnect();
           }
         });
-
-        const importedProject: Project = {
-          id: createdProject.id,
-          title: createdProject.title,
-          description: createdProject.description || '',
-          content: createdProject.content || '',
-          progress: createdProject.progress || 0,
-          wordCount: createdProject.wordCount || 0,
-          genre: createdProject.genre || 'unknown',
-          status: createdProject.status || 'active',
-          author: createdProject.author || '사용자',
-          createdAt: createdProject.createdAt,
-          lastModified: createdProject.lastModified,
-          updatedAt: createdProject.lastModified, // 🔥 lastModified를 updatedAt으로 사용
-        };
 
         Logger.info('PROJECT_CRUD_IPC', `파일 가져오기 완료: ${fileName}`, {
           filePath,
@@ -626,8 +755,13 @@ Loop과 함께 작가의 꿈을 실현해보세요! 🚀`,
           data: importedProject,
           timestamp: new Date(),
         };
-      } finally {
-        await prisma.$disconnect();
+      } catch (error) {
+        Logger.error('PROJECT_CRUD_IPC', 'Failed to import project', error);
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Unknown error',
+          timestamp: new Date(),
+        };
       }
     } catch (error) {
       Logger.error('PROJECT_CRUD_IPC', 'Failed to import project file', error);

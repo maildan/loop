@@ -127,6 +127,8 @@ export class ApplicationBootstrapper {
 
   /**
    * 🔥 메인 부트스트래핑 프로세스
+   * 
+   * Race Condition 해결: IPC 핸들러 등록 → Window 생성 순서 보장
    */
   public async bootstrap(): Promise<void> {
     try {
@@ -150,10 +152,15 @@ export class ApplicationBootstrapper {
       // 4. 권한 체크 (1회만, UnifiedPermissionManager 활용)
       await this.checkPermissions();
 
-      // 5. 매니저들 초기화 (CPU 부하 분산)
+      // 5️⃣ CRITICAL: IPC 핸들러 먼저 등록 (Race Condition 방지)
+      // Window가 생성되고 Renderer가 IPC 호출하기 전에 모든 핸들러가 준비되어야 함
       await this.initializeManagers();
+      Logger.info('BOOTSTRAPPER', '✅ All IPC handlers registered before window creation');
 
-      // 6. 설정 감시 시작
+      // 6️⃣ 이제 안전하게 Window 생성 (핸들러 준비됨)
+      await this.handleAppReady();
+
+      // 7. 설정 감시 시작
       this.startWatchers();
 
       Logger.info('BOOTSTRAPPER', '✅ Bootstrap process completed successfully');
@@ -385,6 +392,9 @@ export class ApplicationBootstrapper {
 
   /**
    * 🔥 Electron 이벤트 설정 (EventController 활용)
+   * 
+   * 주의: app.on('ready') 는 bootstrap 프로세스가 완료되면 자동으로 호출됨
+   * IPC 핸들러 등록이 먼저 완료되므로 onReady는 최소한의 작업만 수행
    */
   private setupElectronEvents(): void {
     this.eventController.setupAppEvents({
@@ -395,8 +405,9 @@ export class ApplicationBootstrapper {
         // 🔥 2. 커스텀 프로토콜 등록 (loop-avatar://, loop://, loop-font://)
         await this.setupCustomProtocols();
         
-        // 🔥 3. 윈도우 생성 및 URL 로딩
-        await this.handleAppReady();
+        // 🔥 3. Window는 이미 생성됨 (handleAppReady에서 완료)
+        // onReady에서는 추가 세팅만 처리
+        Logger.info('BOOTSTRAPPER', '✅ onReady event processed (handlers already registered)');
       },
       onShutdown: () => this.shutdownManager.shutdown(),
       onActivate: () => this.handleAppActivate(),
@@ -465,19 +476,23 @@ export class ApplicationBootstrapper {
 
   /**
    * 🔥 앱 Ready 이벤트 핸들러
+   * 
+   * Race Condition 수정: bootstrap() 메서드에서 명시적으로 호출
+   * IPC 핸들러가 등록된 후에만 Window 생성 및 URL 로딩
    */
   private async handleAppReady(): Promise<void> {
     try {
+      Logger.info('BOOTSTRAPPER', '🪟 Creating main window (IPC handlers ready)...');
+      
       // 기존 windowManager 활용 (중복 방지)
       const mainWindow = windowManager.createMainWindow('main');
       // 글로벌 참조 설정 (이벤트 포워딩 등 기존 코드 호환)
       (globalThis as unknown as { mainWindow?: typeof mainWindow }).mainWindow = mainWindow;
-      // unifiedHandler 제거됨 - 모니터링 기능 불필요
 
       // 🔥 URL 로딩 추가 (빈 화면 문제 해결)
       await windowManager.loadUrl('main');
 
-      Logger.info('BOOTSTRAPPER', '🪟 Main window created and URL loaded');
+      Logger.info('BOOTSTRAPPER', '✅ Main window created and URL loaded (race condition fixed)');
     } catch (error) {
       Logger.error('BOOTSTRAPPER', 'Failed to create main window', error);
       throw error;
