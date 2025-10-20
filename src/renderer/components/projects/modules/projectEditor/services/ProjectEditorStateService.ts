@@ -29,6 +29,7 @@ export interface ProjectEditorState {
     activeTabId: string;
     nextTabOrder: number;
     tabHistory: string[];  // 🔥 Chrome-style: MRU (Most Recently Used) 탭 히스토리
+    primaryChapterId: string;  // 🔥 프로젝트의 주요 chapter (모든 탭 닫으면 복구)
 }
 
 export interface ProjectEditorStateActions {
@@ -112,20 +113,13 @@ export class ProjectEditorStateService {
             showChapterDeleteDialog: false,
             chapterToDelete: null,
 
-            // Tab 상태
-            tabs: [
-                {
-                    id: 'main',
-                    title: '메인',
-                    type: 'main',
-                    isActive: true,
-                    order: 0,
-                    content: ''
-                }
-            ],
-            activeTabId: 'main',
-            nextTabOrder: 1,
+            // Tab 상태 - 🔥 main 탭 제거: chapter 기반 작업 흐름으로 변경
+            // 프로젝트 생성 시 첫 chapter를 자동 생성하므로 초기에는 탭 비워둠
+            tabs: [],
+            activeTabId: '',
+            nextTabOrder: 0,
             tabHistory: [],  // 🔥 초기에는 히스토리 없음
+            primaryChapterId: '',  // 🔥 프로젝트의 주요 chapter (모든 탭 닫으면 복구)
         };
     }
 

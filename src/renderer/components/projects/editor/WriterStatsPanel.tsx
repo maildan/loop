@@ -43,11 +43,12 @@ interface WriterStatsPanelProps {
 interface DisplayMessage {
   role: 'user' | 'ai';
   content: string;
+  isStreaming?: boolean;
 }
 
 const STATS_STYLES = {
   rightSidebar:
-    'flex-1 flex flex-col bg-[color:hsl(var(--card))] border-l border-[color:hsl(var(--border))] transition-all duration-300 ease-in-out text-[color:hsl(var(--foreground))] overflow-hidden min-w-0',
+    'flex-1 flex flex-col h-full bg-[color:hsl(var(--card))] border-l border-[color:hsl(var(--border))] transition-all duration-300 ease-in-out text-[color:hsl(var(--foreground))] overflow-hidden min-w-0',
   rightSidebarCollapsed: 'w-0 overflow-hidden transition-all duration-300 ease-in-out',
   rightSidebarHeader:
     'flex items-center justify-between p-4 border-b border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))] flex-shrink-0',
@@ -62,11 +63,11 @@ const STATS_STYLES = {
   statValue: 'text-lg font-bold text-[color:hsl(var(--foreground))]',
   statSubtext: 'text-xs text-[color:hsl(var(--muted-foreground))]',
 
-  // 🔥 탭 스타일 추가 - 아이콘 포함
-  tabs: 'flex border-b border-[color:hsl(var(--border))]',
+  // 🔥 탭 스타일 추가 - 아이콘 포함 (고정, 스크롤 안됨)
+  tabs: 'flex border-b border-[color:hsl(var(--border))] flex-shrink-0 bg-[color:hsl(var(--card))]',
   tab: 'flex items-center gap-2 px-4 py-2 text-sm text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] cursor-pointer transition-colors',
   tabActive: 'flex items-center gap-2 px-4 py-2 text-sm font-medium text-[color:var(--accent-primary)] border-b-2 border-[color:var(--accent-primary)] cursor-pointer',
-  tabContent: 'flex-1 overflow-hidden bg-[color:hsl(var(--card))] flex flex-col min-h-0',
+  tabContent: 'flex-1 overflow-y-auto bg-[color:hsl(var(--card))] flex flex-col min-h-0',
 
   // 🔥 AI 채팅 스타일 - UI 잘림 문제 해결 (스크롤바 문제 수정)
   chatContainer: 'flex flex-col h-full overflow-hidden bg-[color:hsl(var(--card))]',
@@ -74,9 +75,9 @@ const STATS_STYLES = {
   chatMessage: 'p-2 rounded-lg text-sm break-words whitespace-pre-wrap max-w-[90%]',
   userMessage: 'bg-[color:var(--accent-light,#dbeafe)] ml-8 mr-2 text-[color:var(--accent-primary)]',
   aiMessage: 'bg-[color:hsl(var(--muted))] ml-2 mr-8 text-[color:hsl(var(--foreground))] overflow-auto',
-  chatInputContainer: 'flex-shrink-0 flex p-2 border-t border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
+  chatInputContainer: 'flex-shrink-0 flex flex-col gap-1 p-2 border-t border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
   chatInput:
-    'flex-1 rounded-l-md px-3 py-2 border border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))] text-[color:hsl(var(--foreground))] focus:outline-none focus:ring-1 focus:ring-[color:var(--accent-primary)]',
+    'flex-1 rounded-md px-3 py-2 border border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))] text-[color:hsl(var(--foreground))] focus:outline-none focus:ring-1 focus:ring-[color:var(--accent-primary)] font-mono text-sm',
   chatSendButton:
     'flex items-center justify-center px-3 py-2 bg-[color:var(--accent-primary)] hover:bg-[color:var(--accent-hover,#1d4ed8)] text-[color:var(--text-inverse,#ffffff)] rounded-r-md transition-colors disabled:bg-[color:var(--accent-primary)]/60 disabled:cursor-not-allowed',
   loadingDots: 'flex space-x-1 items-center justify-center py-2',
@@ -134,7 +135,8 @@ export function WriterStatsPanel({
   // 🔥 Display messages 변환 (Gemini 메시지 → UI 형식)
   const displayMessages = geminiMessages.map((msg: GeminiChatMessage) => ({
     role: msg.role === 'user' ? 'user' : 'ai' as const,
-    content: msg.content
+    content: msg.content,
+    isStreaming: msg.isStreaming
   })) as DisplayMessage[];
 
   // 🔥 메시지 자동 스크롤
@@ -156,8 +158,11 @@ export function WriterStatsPanel({
       return;
     }
     
-    await sendGeminiMessage(userInput.trim());
+    // 즉시 입력창 비우기 (중복 방지)
+    const messageToSend = userInput.trim();
     setUserInput('');
+    
+    await sendGeminiMessage(messageToSend);
   }, [userInput, isGeminiLoading, sendGeminiMessage, geminiStatus?.available]);
 
   // 🔥 실시간 통계 계산
@@ -371,6 +376,7 @@ export function WriterStatsPanel({
 
   return (
     <div className={showRightSidebar ? STATS_STYLES.rightSidebar : STATS_STYLES.rightSidebarCollapsed}>
+      {/* 🔥 고정 헤더 */}
       <div className={STATS_STYLES.rightSidebarHeader}>
         <h2 className={STATS_STYLES.rightSidebarTitle}>
           {activeTab === 'stats' ? '작가 통계' : activeTab === 'ai' ? 'AI 창작 파트너' : '글쓰기 분석'}
@@ -380,7 +386,7 @@ export function WriterStatsPanel({
         </button>
       </div>
 
-      {/* 🔥 탭 네비게이션 - 3개 탭 */}
+      {/* 🔥 고정 탭 네비게이션 - 스크롤 안 됨 */}
       <div className={STATS_STYLES.tabs}>
         <div
           className={activeTab === 'stats' ? STATS_STYLES.tabActive : STATS_STYLES.tab}
@@ -405,9 +411,10 @@ export function WriterStatsPanel({
         </div>
       </div>
 
+      {/* 🔥 스크롤 가능한 탭 컨텐츠 영역 */}
       {/* 통계 탭 */}
       {activeTab === 'stats' && (
-        <div className="p-3 overflow-y-auto">
+        <div className={`${STATS_STYLES.tabContent} p-3`}>
           {/* 🔥 Goal Progress (전문 작가 도구 스타일) */}
           <div className={STATS_STYLES.statCard}>
             <div className="flex justify-between items-center mb-2">
@@ -688,7 +695,7 @@ export function WriterStatsPanel({
 
       {/* AI 챗봇 탭 */}
       {activeTab === 'ai' && (
-        <div className={`${STATS_STYLES.chatContainer} h-full`}>
+        <div className={`${STATS_STYLES.tabContent} bg-[color:hsl(var(--card))]`}>
           {/* 🔥 Gemini 상태 경고 */}
           {!geminiStatusChecked ? (
             <div className="flex-1 flex items-center justify-center">
@@ -738,10 +745,18 @@ export function WriterStatsPanel({
                           }`}
                       >
                         {message.role === 'ai' && message.content && (
-                          <div className="prose prose-sm dark:prose-invert max-w-none">
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                              {message.content}
-                            </ReactMarkdown>
+                          <div className="space-y-1">
+                            <div className="prose prose-sm dark:prose-invert max-w-none">
+                              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {message.content}
+                              </ReactMarkdown>
+                            </div>
+                            {message.isStreaming && (
+                              <div className="text-xs text-[color:hsl(var(--muted-foreground))] italic flex items-center gap-1">
+                                <span className="inline-block w-1.5 h-1.5 rounded-full bg-[color:var(--accent-primary)] animate-pulse"></span>
+                                응답 중...
+                              </div>
+                            )}
                           </div>
                         )}
                         {message.role === 'user' && message.content}
@@ -762,14 +777,20 @@ export function WriterStatsPanel({
               </div>
 
               <div className={STATS_STYLES.chatInputContainer}>
-                <input
-                  type="text"
+                <textarea
                   value={userInput}
                   onChange={(e) => setUserInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleChatSubmit()}
-                  placeholder="메시지 보내기..."
-                  className={STATS_STYLES.chatInput}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      handleChatSubmit();
+                    }
+                    // Shift+Enter은 자동으로 줄바꿈 (기본 동작)
+                  }}
+                  placeholder="메시지 보내기... (Shift+Enter 줄바꿈)"
+                  className={`${STATS_STYLES.chatInput} resize-none`}
                   disabled={isGeminiLoading}
+                  rows={3}
                 />
                 <button
                   className="flex items-center justify-center px-2 py-2 text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] transition-colors"
@@ -794,7 +815,7 @@ export function WriterStatsPanel({
 
       {/* 🔥 글쓰기 분석 탭 - 작가를 위한 실질적인 데이터 */}
       {activeTab === 'analysis' && (
-        <div className="p-4 overflow-y-auto space-y-4">
+        <div className={`${STATS_STYLES.tabContent} p-4 space-y-4`}>
           {/* 프로젝트 기본 정보 */}
           <div className={STATS_STYLES.statCard}>
             <div className="flex items-center gap-2 mb-3">
@@ -957,6 +978,8 @@ export function WriterStatsPanel({
                 const analysisPrompt = `다음 텍스트를 분석하고 개선점을 제안해주세요:\n\n${currentText.substring(0, 2000)}${currentText.length > 2000 ? '...' : ''}`;
                 
                 setActiveTab('ai');
+                // 채팅 입력창도 함께 리셋 (중복 방지)
+                setUserInput('');
                 await sendGeminiMessage(analysisPrompt);
               }}
               disabled={isGeminiLoading || !currentText.trim()}

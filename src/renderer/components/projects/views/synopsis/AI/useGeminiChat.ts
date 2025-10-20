@@ -439,6 +439,10 @@ export function useGeminiChat({ projectId, onError }: UseGeminiChatOptions) {
         }
       };
 
+      // 🔥 중요: 이전 리스너 제거 (중복 방지)
+      window.electronAPI.removeListener('gemini:stream-chunk', handleStreamChunk);
+      window.electronAPI.removeListener('gemini:stream-error', handleStreamError);
+
       // Listener 등록
       window.electronAPI.on('gemini:stream-chunk', handleStreamChunk);
       window.electronAPI.on('gemini:stream-error', handleStreamError);
