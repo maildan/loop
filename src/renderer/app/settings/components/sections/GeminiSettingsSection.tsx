@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AlertCircle, Check, Eye, EyeOff } from 'lucide-react';
+import { AlertCircle, Check, Eye, EyeOff, HelpCircle, ExternalLink } from 'lucide-react';
 import { Logger } from '../../../../../shared/logger';
 
 const COMPONENT = 'GEMINI_SETTINGS';
@@ -75,6 +75,17 @@ export function GeminiSettingsSection() {
       setSuccessMessage(`❌ 오류: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleOpenGuide = async () => {
+    try {
+      const result = await window.electronAPI.shell.openExternal('http://bit.ly/4hkefvJ');
+      if (!result.success) {
+        Logger.error(COMPONENT, 'Failed to open external link', result.error);
+      }
+    } catch (error) {
+      Logger.error(COMPONENT, 'Failed to open guide', error);
     }
   };
 
@@ -198,6 +209,35 @@ export function GeminiSettingsSection() {
           현재 키: {maskedKey}
         </div>
       )}
+
+      {/* 🆘 QnA 섹션 */}
+      <div className="border-t border-gray-200 dark:border-slate-700 pt-6 mt-6">
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+            <h4 className="font-semibold text-gray-900 dark:text-white">
+              자주 묻는 질문 (FAQ)
+            </h4>
+          </div>
+          
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Gemini API 키 설정 및 사용에 관한 궁금한 점이 있으신가요?
+          </p>
+
+          <button
+            onClick={handleOpenGuide}
+            className="w-full flex items-center justify-between px-4 py-3 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-700 rounded-lg hover:shadow-md transition group"
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-base">📚</span>
+              <span className="font-medium text-gray-900 dark:text-white">
+                Gemini API 설정 가이드 보기
+              </span>
+            </span>
+            <ExternalLink className="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition" />
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
