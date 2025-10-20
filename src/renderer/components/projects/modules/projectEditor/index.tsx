@@ -608,7 +608,18 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 });
                             }
                         }}
-                        onTabClose={actions.removeTab}
+                        onTabClose={(tabId: string) => {
+                            // 🔥 CRITICAL: removeTab 호출 후 즉시 localStorage 저장
+                            actions.removeTab(tabId);
+                            // setTimeout으로 state 업데이트 완료 후 저장
+                            setTimeout(() => {
+                                projectEditorStateService.saveCacheToStorage(projectId, state.tabMetadataCache);
+                                Logger.debug(PROJECT_EDITOR, 'Cache saved immediately after removeTab', {
+                                    projectId,
+                                    cacheSize: Object.keys(state.tabMetadataCache).length
+                                });
+                            }, 0);
+                        }}
                         onNewTab={() => {
                             const newTab = {
                                 id: `tab-${Date.now()}`,

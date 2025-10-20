@@ -375,11 +375,14 @@ export class ProjectEditorStateService {
                         removedTabId: tabId, 
                         newActiveTabId,
                         historyLength: newHistory.length,
-                        cacheSize: Object.keys(newMetadataCache).length
+                        cacheSize: Object.keys(newMetadataCache).length,
+                        removedTabMetadata: JSON.stringify(newMetadataCache[tabId])
                     });
 
-                    // 🔥 주의: localStorage 저장은 index.tsx의 useEffect에서 처리 (projectId 필요)
-
+                    // 🔥 CRITICAL: removeTab 후 즉시 localStorage에 저장
+                    // (useEffect에서만 저장하면 비동기 문제로 손실 가능)
+                    // projectId가 필요한데, 여기선 접근 불가 → 호출자가 처리해야 함
+                    
                     return {
                         ...prev,
                         tabs: newTabs,
