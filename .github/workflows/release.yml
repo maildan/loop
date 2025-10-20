@@ -133,14 +133,13 @@ jobs:
       - name: Package Windows application
         run: pnpm dist:win --publish never
         env:
-          # ⚠️ GH_TOKEN 제거 (electron-builder 자동 업로드 비활성화)
+          # ⚠️ GH_TOKEN은 job 레벨에서 이미 정의됨 (L17)
           # electron-builder가 자동으로 GitHub Release에 업로드하지 않도록 함
           # softprops/action-gh-release에서만 업로드 수행
 
           # 🔥 Windows 코드 서명 (electron-builder v26+ 표준 방식)
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # ← 여기를 추가
 
           # 🔥 기본 환경 설정
           NODE_ENV: production
@@ -346,16 +345,13 @@ jobs:
       - name: Package Windows ARM64 application
         run: pnpm dist:win --publish never
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # ← 여기를 추가
+          # ⚠️ GH_TOKEN은 job 레벨에서 이미 정의됨 (L17)
           # electron-builder가 자동으로 GitHub Release에 업로드하지 않도록 함
           # softprops/action-gh-release에서만 업로드 수행
 
           # 🔥 Windows 코드 서명 (electron-builder v26+ 표준 방식)
           CSC_LINK: ${{ secrets.WIN_CSC_LINK }}
           CSC_KEY_PASSWORD: ${{ secrets.WIN_CSC_KEY_PASSWORD }}
-
-          # 🔥 GitHub 토큰 (electron-builder가 필요함)
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
           # 🔥 기본 환경 설정
           NODE_ENV: production
