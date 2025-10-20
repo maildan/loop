@@ -139,6 +139,16 @@ export function setupGeminiIpcHandlers(): void {
       const status = EnvironmentService.getStatus();
       const available = status.GEMINI_API_KEY === 'set';
 
+      // 🔥 DEBUG: 실제 값 확인
+      const geminiKeyValue = EnvironmentService.get('GEMINI_API_KEY');
+      Logger.debug('GEMINI_IPC', 'get-status result', {
+        available,
+        GEMINI_API_KEY_status: status.GEMINI_API_KEY,
+        GEMINI_API_KEY_length: geminiKeyValue ? geminiKeyValue.length : 0,
+        GEMINI_API_KEY_prefix: geminiKeyValue ? `***${geminiKeyValue.slice(-8)}` : 'undefined',
+        GEMINI_MODEL: status.GEMINI_MODEL,
+      });
+
       return {
         success: true,
         data: {

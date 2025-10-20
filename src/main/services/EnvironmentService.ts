@@ -16,11 +16,12 @@ import { parse } from 'dotenv';
 const COMPONENT = 'ENV_SERVICE';
 
 export interface EnvironmentConfig {
-  GEMINI_API_KEY: string;
+  GEMINI_API_KEY?: string;
   GEMINI_MODEL?: string;
   GOOGLE_CLIENT_ID?: string;
   GOOGLE_CLIENT_SECRET?: string;
   GOOGLE_REDIRECT_URI?: string;
+  GH_TOKEN?: string;
 }
 
 class EnvironmentServiceClass {
@@ -37,7 +38,12 @@ class EnvironmentServiceClass {
     }
 
     const isDev = process.env.NODE_ENV === 'development';
-    Logger.info(COMPONENT, 'Initializing environment', { isDev });
+    Logger.info(COMPONENT, 'Initializing environment', { 
+      isDev, 
+      NODE_ENV: process.env.NODE_ENV,
+      envKeysCount: Object.keys(process.env).length,
+      hasGeminiInEnv: !!process.env.GEMINI_API_KEY,
+    });
 
     if (isDev) {
       // Dev: .env 파일이 이미 로드됨 (main/index.ts의 dotenv/config)
@@ -85,34 +91,61 @@ class EnvironmentServiceClass {
    * 🔥 Packaged 상태에서는 .env 파일을 명시적으로 재로드
    */
   private async loadFromProcessEnv(): Promise<void> {
+    // 🔥 DEBUG: process.env 값 확인
+    Logger.debug(COMPONENT, 'Loading environment variables from process.env', {
+      GEMINI_API_KEY: process.env.GEMINI_API_KEY ? `***${process.env.GEMINI_API_KEY.slice(-8)}` : 'undefined',
+      GEMINI_MODEL: process.env.GEMINI_MODEL,
+      NODE_ENV: process.env.NODE_ENV,
+    });
+
+    // 🔥 주의: process.env.GEMINI_API_KEY가 undefined인 경우 ''를 할당하면 안 됨!
+    // 빈 string은 나중에 falsy 체크에서 문제를 일으킬 수 있음
     this.config = {
-      GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
+      GEMINI_API_KEY: process.env.GEMINI_API_KEY || undefined,
       GEMINI_MODEL: process.env.GEMINI_MODEL,
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
       GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
       GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI,
+      GH_TOKEN: process.env.GH_TOKEN || undefined,
     };
 
-    Logger.debug(COMPONENT, 'Loaded from process.env', {
+    Logger.debug(COMPONENT, 'After loadFromProcessEnv (before .env fallback)', {
+      GEMINI_API_KEY_exists: !!this.config.GEMINI_API_KEY,
+      GEMINI_API_KEY_length: this.config.GEMINI_API_KEY ? this.config.GEMINI_API_KEY.length : 0,
       keysLoaded: Object.keys(this.config).filter(k => this.config[k as keyof EnvironmentConfig])
     });
 
     // 🔥 Packaged 상태에서 .env 파일이 process.env에 로드되지 않았다면, 명시적으로 찾아서 로드
     if (!this.config.GEMINI_API_KEY) {
+      Logger.debug(COMPONENT, 'GEMINI_API_KEY not in process.env, searching for .env file');
       const envPath = this.findEnvFile();
       if (envPath) {
         try {
           const parsed = parse(readFileSync(envPath));
-          this.config.GEMINI_API_KEY = parsed.GEMINI_API_KEY || '';
+          Logger.debug(COMPONENT, '.env file parsed', {
+            path: envPath,
+            hasGeminiKey: !!parsed.GEMINI_API_KEY,
+            geminiKeyPreview: parsed.GEMINI_API_KEY ? `***${parsed.GEMINI_API_KEY.slice(-8)}` : 'undefined',
+          });
+          
+          // 🔥 .env 파일에서 로드된 값을 사용 (undefined 아닌 실제 값)
+          this.config.GEMINI_API_KEY = parsed.GEMINI_API_KEY || undefined;
           this.config.GEMINI_MODEL = parsed.GEMINI_MODEL || this.config.GEMINI_MODEL;
           this.config.GOOGLE_CLIENT_ID = parsed.GOOGLE_CLIENT_ID || this.config.GOOGLE_CLIENT_ID;
           this.config.GOOGLE_CLIENT_SECRET = parsed.GOOGLE_CLIENT_SECRET || this.config.GOOGLE_CLIENT_SECRET;
           this.config.GOOGLE_REDIRECT_URI = parsed.GOOGLE_REDIRECT_URI || this.config.GOOGLE_REDIRECT_URI;
+          this.config.GH_TOKEN = parsed.GH_TOKEN || this.config.GH_TOKEN;
 
-          Logger.info(COMPONENT, '🔥 .env 파일을 명시적으로 로드 (Packaged 상태)', { envPath });
+          Logger.info(COMPONENT, '🔥 .env 파일을 명시적으로 로드 (Packaged 상태)', { 
+            envPath,
+            geminiKeyLoaded: !!this.config.GEMINI_API_KEY,
+            geminiKeyLength: this.config.GEMINI_API_KEY ? this.config.GEMINI_API_KEY.length : 0,
+          });
         } catch (error) {
           Logger.warn(COMPONENT, '.env 파일 로드 실패', { envPath, error });
         }
+      } else {
+        Logger.warn(COMPONENT, '.env 파일을 찾을 수 없음. 확인된 경로들을 참고하세요.');
       }
     }
   }
@@ -230,11 +263,12 @@ class EnvironmentServiceClass {
    */
   public getStatus(): Record<keyof EnvironmentConfig, 'set' | 'missing'> {
     return {
-      GEMINI_API_KEY: this.config.GEMINI_API_KEY ? 'set' : 'missing',
-      GEMINI_MODEL: this.config.GEMINI_MODEL ? 'set' : 'missing',
-      GOOGLE_CLIENT_ID: this.config.GOOGLE_CLIENT_ID ? 'set' : 'missing',
-      GOOGLE_CLIENT_SECRET: this.config.GOOGLE_CLIENT_SECRET ? 'set' : 'missing',
-      GOOGLE_REDIRECT_URI: this.config.GOOGLE_REDIRECT_URI ? 'set' : 'missing',
+      GEMINI_API_KEY: this.config.GEMINI_API_KEY && this.config.GEMINI_API_KEY.length > 0 ? 'set' : 'missing',
+      GEMINI_MODEL: this.config.GEMINI_MODEL && this.config.GEMINI_MODEL.length > 0 ? 'set' : 'missing',
+      GOOGLE_CLIENT_ID: this.config.GOOGLE_CLIENT_ID && this.config.GOOGLE_CLIENT_ID.length > 0 ? 'set' : 'missing',
+      GOOGLE_CLIENT_SECRET: this.config.GOOGLE_CLIENT_SECRET && this.config.GOOGLE_CLIENT_SECRET.length > 0 ? 'set' : 'missing',
+      GOOGLE_REDIRECT_URI: this.config.GOOGLE_REDIRECT_URI && this.config.GOOGLE_REDIRECT_URI.length > 0 ? 'set' : 'missing',
+      GH_TOKEN: this.config.GH_TOKEN && this.config.GH_TOKEN.length > 0 ? 'set' : 'missing',
     };
   }
 

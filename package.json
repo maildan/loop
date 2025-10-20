@@ -1,7 +1,7 @@
 {
   "name": "loop",
   "productName": "Loop",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "description": "Loop",
   "author": "Loop",
   "private": true,
@@ -9,9 +9,9 @@
   "main": "out/main/index.js",
   "homepage": "./",
   "scripts": {
-    "dev": "electron-vite dev",
+    "dev": "cross-env NODE_ENV=development electron-vite dev",
     "prebuild": "pnpm db:generate && node scripts/prepare-fonts.js",
-    "build": "electron-vite build",
+    "build": "cross-env NODE_ENV=production electron-vite build",
     "build:prod": "cross-env NODE_ENV=production electron-vite build",
     "preview": "electron-vite preview",
     "dev:db": "prisma studio --schema=./prisma/schema.prisma",

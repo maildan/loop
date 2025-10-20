@@ -144,6 +144,9 @@ export default defineConfig(({ mode }) => {
         'process.env.GEMINI_MAX_TOKENS': JSON.stringify(readEnv('GEMINI_MAX_TOKENS', '8192')),
         'process.env.GEMINI_TEMPERATURE': JSON.stringify(readEnv('GEMINI_TEMPERATURE', '0.9')),
         
+        // 🔥 GitHub 토큰 (for electron-builder publishing)
+        'process.env.GH_TOKEN': JSON.stringify(readEnv('GH_TOKEN', '')),
+        
         // 🔥 Firebase 설정
         'process.env.FIREBASE_API_KEY': JSON.stringify(readEnv('FIREBASE_API_KEY', '')),
         'process.env.FIRE_AUTH_DOMAIN': JSON.stringify(readEnv('FIRE_AUTH_DOMAIN', '')),

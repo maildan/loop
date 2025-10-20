@@ -3,7 +3,13 @@
 // 🔥 환경변수 우선 로드
 import 'dotenv/config';
 
-
+// 🔥 DEBUG: dotenv 로드 직후 환경변수 확인
+if (process.env.GEMINI_API_KEY) {
+  console.log('✅ [DOTENV] GEMINI_API_KEY loaded:', `***${process.env.GEMINI_API_KEY.slice(-8)}`);
+} else {
+  console.log('❌ [DOTENV] GEMINI_API_KEY is missing after dotenv/config import');
+}
+console.log('ℹ️  [DOTENV] NODE_ENV:', process.env.NODE_ENV);
 
 import "./core/security"
 import { app, protocol } from 'electron';
