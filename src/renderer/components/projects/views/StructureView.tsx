@@ -475,7 +475,8 @@ const StructureView = memo(function StructureView({
           ) : (
             /* 🔥 폴더형 구조 목록 */
             <div className="space-y-4">
-              {/* 🔥 메인 스토리 섹션 - 항상 표시 */}
+              {/* 🔥 Phase 0: main 폴더 제거 - Empty State Pattern으로 전환 */}
+              {/* 
               <div>
                 {renderFolderHeader('main', '메인 스토리', BookOpen, 1)}
                 {!collapsedFolders.has('main') && (
@@ -533,6 +534,7 @@ const StructureView = memo(function StructureView({
                   </div>
                 )}
               </div>
+              */}
 
               {/* 🔥 챕터 폴더 */}
               {groupedStructures.chapters.length > 0 && (

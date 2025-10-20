@@ -24,6 +24,7 @@ import { NotesView } from '../../views/notes';
 import { SynopsisView } from '../../views/synopsis';
 import { GeminiSynopsisAgent } from '../../views/synopsis/AI/GeminiSynopsisAgent';
 import { IdeaView } from '../../views/idea';
+import { EmptyEditorState } from './components/EmptyEditorState';
 import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
 import { ProjectStructure } from '../../../../../shared/types';
 import { useStructureStore } from '../../../../stores/useStructureStore';
@@ -36,6 +37,7 @@ const PROJECT_EDITOR = Symbol.for('PROJECT_EDITOR');
 import { useProjectData } from '../../hooks/useProjectData';
 import { useUIState } from '../../hooks/useUIState';
 import { useProjectEditorState } from './hooks/useProjectEditorState';
+import { projectEditorStateService } from './services/ProjectEditorStateService';
 import { useSettings } from '../../../../app/settings/hooks/useSettings';
 import ProjectEditorLayout from './components/ProjectEditorLayout';
 
@@ -63,15 +65,69 @@ export const ProjectEditor = memo(function ProjectEditor({
     const loadStructuresFromDB = useStructureStore((s) => s.loadStructuresFromDB); // 🔥 새로 추가
     const { settings, updateSetting } = useSettings();
 
-    // 🔥 프로젝트 변경 시 DB에서 구조 데이터 로드
+    // 🔥 캐시 로드 및 상태 초기화 (projectId 변경 시)
     useEffect(() => {
         if (projectId) {
-            Logger.debug(PROJECT_EDITOR, 'Loading structures from DB for project', { projectId });
-            loadStructuresFromDB(projectId).catch(error => {
-                Logger.error(PROJECT_EDITOR, 'Failed to load structures from DB', { projectId, error });
-            });
+            Logger.debug(PROJECT_EDITOR, 'Loading project - loading cache from storage', { projectId });
+            
+            // localStorage에서 캐시 복구
+            const cachedMetadata = projectEditorStateService.loadCacheFromStorage(projectId);
+            if (Object.keys(cachedMetadata).length > 0) {
+                Logger.debug(PROJECT_EDITOR, 'Cache loaded from storage', {
+                    projectId,
+                    cacheSize: Object.keys(cachedMetadata).length,
+                    cache: cachedMetadata
+                });
+                
+                // 상태에 캐시 업데이트 - state 변경을 통해 리렌더링 트리거
+                // 주의: 직접 setState가 필요한데, actions에 메서드가 없음
+                // 임시 방법: state.tabMetadataCache가 비어있으면 캐시 설정
+                if (Object.keys(state.tabMetadataCache).length === 0) {
+                    // 캐시 상태 복구를 위해 액션 필요 - 아래서 처리
+                }
+            }
         }
-    }, [projectId, loadStructuresFromDB]);
+    }, [projectId]);
+
+    // 🔥 캐시 변경 시 localStorage에 자동 저장
+    useEffect(() => {
+        if (projectId && Object.keys(state.tabMetadataCache).length > 0) {
+            projectEditorStateService.saveCacheToStorage(projectId, state.tabMetadataCache);
+        }
+    }, [projectId, state.tabMetadataCache]);
+
+    // 🔥 Phase 0: 프로젝트 진입 시 최근 장 자동 오픈
+    useEffect(() => {
+        if (projectId && state.tabs.length === 0) {
+            // tabHistory에서 가장 최근의 chapter 찾기
+            const recentChapterId = state.tabHistory.find(tabId => 
+                tabId.startsWith('chapter-')
+            );
+
+            if (recentChapterId) {
+                // 최근 장이 있으면 자동으로 탭 추가
+                const structureId = recentChapterId.replace('chapter-', '');
+                const structures = useStructureStore.getState().structures[projectId] || [];
+                const chapter = structures.find(s => s.id === structureId);
+
+                if (chapter) {
+                    actions.addTab({
+                        id: recentChapterId,
+                        title: chapter.title,
+                        type: 'chapter',
+                        chapterId: chapter.id,  // 🔥 CRITICAL: chapterId 반드시 저장
+                        isActive: true,
+                        content: chapter.content || ''
+                    });
+                    actions.setCurrentView('write');
+                    Logger.info(PROJECT_EDITOR, 'Auto-opened recent chapter', { 
+                        chapterId: chapter.id, 
+                        title: chapter.title 
+                    });
+                }
+            }
+        }
+    }, [projectId, state.tabs.length, state.tabHistory, actions]);
 
     // 🔥 NewChapterModal 상태 디버깅
     useEffect(() => {
@@ -212,21 +268,7 @@ export const ProjectEditor = memo(function ProjectEditor({
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [isZenMode, toggleSidebar, enableZenMode, disableZenMode]);
 
-    // 🔥 프로젝트 데이터 로드 시 메인 탭 content 초기화
-    useEffect(() => {
-        if (projectData?.content && state.tabs.length > 0) {
-            const mainTab = state.tabs.find(tab => tab.id === 'main');
-            if (mainTab && mainTab.content === '') {
-                // 메인 탭의 content가 비어있으면 프로젝트 content로 초기화
-                actions.updateTab('main', {
-                    content: projectData.content
-                });
-                Logger.info('PROJECT_EDITOR', 'Main tab content initialized from project data', {
-                    contentLength: projectData.content.length
-                });
-            }
-        }
-    }, [projectData?.content, state.tabs, actions]);
+    // 🔥 Phase 0: main 탭 제거됨 - 더 이상 필요 없음
 
     // 🔥 Settings sidebar collapsed와 local state 동기화
     useEffect(() => {
@@ -317,12 +359,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                                                 isDirty: true
                                             });
 
-                                            // 🔥 탭 타입에 따라 다른 저장 로직
-                                            if (activeTab.type === 'main') {
-                                                // 메인 탭: 프로젝트 메인 content에 저장
-                                                Logger.debug(PROJECT_EDITOR, 'Saving to MAIN project content');
-                                                projectData.setContent(content);
-                                            } else if (activeTab.type === 'chapter') {
+                                            // 🔥 모든 탭은 chapter 타입이므로 chapter 저장 로직만 필요
+                                            if (activeTab.type === 'chapter') {
                                                 // 챕터 탭: 해당 챕터 구조체에 저장
                                                 Logger.debug(PROJECT_EDITOR, 'Saving to CHAPTER', { title: activeTab.title });
 
@@ -336,6 +374,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                                                     content: content
                                                 }).then(() => {
                                                     Logger.info(PROJECT_EDITOR, 'Chapter saved successfully', { structureId });
+                                                    // 🔥 저장 완료 후 isDirty 플래그 리셋
+                                                    actions.updateTab(activeTab.id, { isDirty: false });
                                                 }).catch((error) => {
                                                     Logger.error(PROJECT_EDITOR, 'Failed to save chapter', { error });
                                                 });
@@ -371,6 +411,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 title,
                                 type: 'chapter' as const,
                                 isActive: true,
+                                chapterId: chapterId,  // 🔥 CRITICAL: chapterId 반드시 저장
                                 content: chapter?.content || ''  // 🔥 기존 content 사용
                             };
                             actions.addTab(newTab);
@@ -398,6 +439,10 @@ export const ProjectEditor = memo(function ProjectEditor({
                             setCurrentEditor({ projectId, editorType: 'synopsis', itemId: synopsisId, itemTitle: syn?.title });
                             actions.setCurrentView('synopsis');
                             Logger.info('PROJECT_EDITOR', 'Synopsis view opened', { synopsisId });
+                        }}
+                        onNavigateToNotesView={() => {
+                            actions.setCurrentView('notes');
+                            Logger.info('PROJECT_EDITOR', 'Notes view opened from structure');
                         }}
                     />
                 );
@@ -570,6 +615,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 title: `새 탭 ${state.tabs.length}`,
                                 type: 'chapter' as const,
                                 isActive: true,
+                                chapterId: `chapter_${Date.now()}`,  // 🔥 CRITICAL: chapterId 반드시 추가
                                 content: ''
                             };
                             actions.addTab(newTab);
@@ -626,7 +672,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                                     
                                     switch (view) {
                                         case 'write':
-                                            targetTabId = 'main';
+                                            // 🔥 Phase 0: 'main' 탭 제거 - write 뷰는 이미 열려있는 탭에서 처리
+                                            // 탭이 없으면 EmptyEditorState 표시
                                             break;
                                         case 'synopsis':
                                             targetTabId = 'synopsis';
@@ -726,7 +773,8 @@ export const ProjectEditor = memo(function ProjectEditor({
                                 
                                 switch (view) {
                                     case 'write':
-                                        targetTabId = 'main';
+                                        // 🔥 Phase 0: 'main' 탭 제거 - write 뷰는 이미 열려있는 탭에서 처리
+                                        // 탭이 없으면 EmptyEditorState 표시
                                         break;
                                     case 'synopsis':
                                         targetTabId = 'synopsis';
@@ -813,43 +861,209 @@ export const ProjectEditor = memo(function ProjectEditor({
 
                 {/* 🔥 메인 에디터 + 우측바를 flex row로 구성하여 스크롤바 제거 */}
                 <div className="flex flex-row flex-1 min-w-0 h-full overflow-hidden">
-                    {/* 각 뷰의 메인 컨텐츠 */}
-                    <div className="flex-1 min-w-0 overflow-hidden">
-                        {renderCurrentView()}
-                    </div>
-
-                    {/* 오른쪽 사이드바 (AI 패널) - fixed width, shrink 안 함 */}
-                    {state.showRightSidebar && (
-                        <div className="w-80 flex-shrink-0 overflow-hidden h-full border-l border-[color:hsl(var(--border))]">
-                            {normalizedCurrentView === 'synopsis' ? (
-                                <GeminiSynopsisAgent
-                                    projectId={projectId}
-                                    onClose={actions.toggleRightSidebar}
-                                />
-                            ) : (
-                                <WriterStatsPanel
-                                    showRightSidebar={state.showRightSidebar}
-                                    toggleRightSidebar={actions.toggleRightSidebar}
-                                    writerStats={projectData?.writerStats || {
-                                        wordCount: 0,
-                                        charCount: 0,
-                                        paragraphCount: 0,
-                                        readingTime: 0,
-                                        wordGoal: 1000,
-                                        progress: 0,
-                                        sessionTime: 0,
-                                        wpm: 0,
-                                        headingCount: 0,
-                                        listItemCount: 0
-                                    }}
-                                    setWordGoal={(goal) => {
-                                        projectData?.setWordGoal(goal);
-                                    }}
-                                    currentText={activeTab?.content || ''}
-                                    projectId={projectId}
-                                />
-                            )}
+                    {/* 🔥 Empty State: 모든 탭이 닫혀있는 경우 */}
+                    {state.tabs.length === 0 ? (
+                        <div className="flex-1 min-w-0 overflow-hidden">
+                            {(() => {
+                                // 🔥 1단계: 현재 state의 캐시 사용
+                                let cachedTabIds = Object.keys(state.tabMetadataCache);
+                                
+                                // 🔥 2단계: 캐시가 비어있으면 localStorage에서 직접 로드
+                                if (cachedTabIds.length === 0) {
+                                    const storageCached = projectEditorStateService.loadCacheFromStorage(projectId);
+                                    cachedTabIds = Object.keys(storageCached);
+                                    const firstKey = Object.keys(storageCached)[0];
+                                    Logger.info('PROJECT_EDITOR_DETAIL', '🔍 localStorage 로드 시작', {
+                                        projectId,
+                                        storageCachedKeys: Object.keys(storageCached),
+                                        storageCachedSize: Object.keys(storageCached).length,
+                                        sample: firstKey ? storageCached[firstKey] : 'none'
+                                    });
+                                    Logger.debug(PROJECT_EDITOR, 'Loaded cache from localStorage', {
+                                        projectId,
+                                        loaded: cachedTabIds.length > 0,
+                                        cache: storageCached
+                                    });
+                                    
+                                    // 캐시를 상태에 설정하려면 별도 액션이 필요
+                                    // 임시: 직접 캐시 사용
+                                    if (cachedTabIds.length > 0) {
+                                        const mostRecentTabId = cachedTabIds.reduce((latest, current) => {
+                                            const latestMeta = storageCached[latest];
+                                            const currentMeta = storageCached[current];
+                                            if (!latestMeta || !currentMeta) return latest;
+                                            return currentMeta.lastAccessedAt > latestMeta.lastAccessedAt ? current : latest;
+                                        });
+                                        
+                                        const lastChapterMetadata = storageCached[mostRecentTabId];
+                                        
+                                        Logger.info('EMPTY_STATE_RENDER_STORAGE', 'Storage cache loaded', {
+                                            mostRecentTabId,
+                                            fullMetadata: JSON.stringify(lastChapterMetadata),
+                                            keys: Object.keys(lastChapterMetadata || {}),
+                                            chapterId_exists: !!lastChapterMetadata?.chapterId,
+                                            chapterId_value: lastChapterMetadata?.chapterId,
+                                            full_storageCached: JSON.stringify(storageCached)
+                                        });
+                                        
+                                        return (
+                                            <EmptyEditorState
+                                                onCreateChapter={() => actions.openNewChapterModal()}
+                                                onGoToLastChapter={() => {
+                                                    Logger.info(PROJECT_EDITOR, 'Opening last chapter from storage', {
+                                                        tabId: mostRecentTabId,
+                                                        metadata: lastChapterMetadata,
+                                                        chapterId_debug: lastChapterMetadata?.chapterId
+                                                    });
+                                                    
+                                                    Logger.debug(PROJECT_EDITOR, 'Checking chapterId', {
+                                                        hasChapterId: !!lastChapterMetadata?.chapterId,
+                                                        chapterId: lastChapterMetadata?.chapterId,
+                                                        metadata: lastChapterMetadata,
+                                                        metadataKeys: Object.keys(lastChapterMetadata || {})
+                                                    });
+                                                    
+                                                    if (lastChapterMetadata?.chapterId) {
+                                                        // chapterId로 탭 재생성
+                                                        const structures = useStructureStore.getState().structures[projectId] || [];
+                                                        Logger.debug(PROJECT_EDITOR, 'Loaded structures', {
+                                                            projectId,
+                                                            structureCount: structures.length,
+                                                            searchingFor: lastChapterMetadata.chapterId
+                                                        });
+                                                        
+                                                        const chapter = structures.find(s => s.id === lastChapterMetadata.chapterId);
+                                                        Logger.debug(PROJECT_EDITOR, 'Chapter search result', {
+                                                            found: !!chapter,
+                                                            chapterId: chapter?.id,
+                                                            title: chapter?.title
+                                                        });
+                                                        
+                                                        if (chapter?.id) {
+                                                            Logger.debug(PROJECT_EDITOR, 'Adding tab from structures', {
+                                                                tabId: `chapter-${chapter.id}`,
+                                                                title: chapter.title
+                                                            });
+                                                            actions.addTab({
+                                                                id: `chapter-${chapter.id}`,
+                                                                title: chapter.title || lastChapterMetadata.title,
+                                                                type: 'chapter',
+                                                                chapterId: chapter.id,
+                                                                isActive: true
+                                                            });
+                                                            actions.setCurrentView('write');
+                                                        } else {
+                                                            // 구조 데이터가 없으면 탭만 추가
+                                                            Logger.warn('PROJECT_EDITOR', 'Chapter not found in structures, using cached data');
+                                                            Logger.debug('PROJECT_EDITOR', 'Adding tab from cache', {
+                                                                tabId: mostRecentTabId,
+                                                                title: lastChapterMetadata.title,
+                                                                chapterId: lastChapterMetadata.chapterId
+                                                            });
+                                                            actions.addTab({
+                                                                id: mostRecentTabId,
+                                                                title: lastChapterMetadata.title,
+                                                                type: 'chapter',
+                                                                chapterId: lastChapterMetadata.chapterId,
+                                                                isActive: true
+                                                            });
+                                                            actions.setCurrentView('write');
+                                                        }
+                                                    } else {
+                                                        Logger.warn('PROJECT_EDITOR', 'No chapterId in metadata');
+                                                    }
+                                                }}
+                                                hasLastChapter={!!lastChapterMetadata}
+                                                lastChapterTitle={lastChapterMetadata?.title || ''}
+                                            />
+                                        );
+                                    }
+                                }
+                                
+                                // 3단계: state 캐시 사용
+                                const cachedMostRecentId = cachedTabIds.length > 0
+                                    ? cachedTabIds.reduce((latest, current) => {
+                                        const latestMeta = state.tabMetadataCache[latest];
+                                        const currentMeta = state.tabMetadataCache[current];
+                                        if (!latestMeta || !currentMeta) return latest;
+                                        return currentMeta.lastAccessedAt > latestMeta.lastAccessedAt ? current : latest;
+                                    })
+                                    : null;
+                                
+                                const lastChapterMetadata = cachedMostRecentId ? state.tabMetadataCache[cachedMostRecentId] : null;
+                                
+                                return (
+                                    <EmptyEditorState
+                                        onCreateChapter={() => actions.openNewChapterModal()}
+                                        onGoToLastChapter={() => {
+                                            Logger.info(PROJECT_EDITOR, 'Opening last chapter from state cache', {
+                                                tabId: cachedMostRecentId,
+                                                metadata: lastChapterMetadata
+                                            });
+                                            
+                                            if (cachedMostRecentId && lastChapterMetadata?.chapterId) {
+                                                const structures = useStructureStore.getState().structures[projectId] || [];
+                                                const chapter = structures.find(s => s.id === lastChapterMetadata.chapterId);
+                                                
+                                                if (chapter?.id) {
+                                                    actions.addTab({
+                                                        id: `chapter-${chapter.id}`,
+                                                        title: chapter.title || lastChapterMetadata.title,
+                                                        type: 'chapter',
+                                                        chapterId: chapter.id,
+                                                        isActive: true
+                                                    });
+                                                    actions.setCurrentView('write');
+                                                }
+                                            }
+                                        }}
+                                        hasLastChapter={!!lastChapterMetadata}
+                                        lastChapterTitle={lastChapterMetadata?.title || ''}
+                                    />
+                                );
+                            })()}
                         </div>
+                    ) : (
+                        <>
+                            {/* 각 뷰의 메인 컨텐츠 */}
+                            <div className="flex-1 min-w-0 overflow-hidden">
+                                {renderCurrentView()}
+                            </div>
+
+                            {/* 오른쪽 사이드바 (AI 패널) - fixed width, shrink 안 함 */}
+                            {state.showRightSidebar && (
+                                <div className="w-80 flex-shrink-0 overflow-hidden h-full border-l border-[color:hsl(var(--border))]">
+                                    {normalizedCurrentView === 'synopsis' ? (
+                                        <GeminiSynopsisAgent
+                                            projectId={projectId}
+                                            onClose={actions.toggleRightSidebar}
+                                        />
+                                    ) : (
+                                        <WriterStatsPanel
+                                            showRightSidebar={state.showRightSidebar}
+                                            toggleRightSidebar={actions.toggleRightSidebar}
+                                            writerStats={projectData?.writerStats || {
+                                                wordCount: 0,
+                                                charCount: 0,
+                                                paragraphCount: 0,
+                                                readingTime: 0,
+                                                wordGoal: 1000,
+                                                progress: 0,
+                                                sessionTime: 0,
+                                                wpm: 0,
+                                                headingCount: 0,
+                                                listItemCount: 0
+                                            }}
+                                            setWordGoal={(goal) => {
+                                                projectData?.setWordGoal(goal);
+                                            }}
+                                            currentText={activeTab?.content || ''}
+                                            projectId={projectId}
+                                        />
+                                    )}
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </ProjectEditorLayout.Main>
@@ -913,6 +1127,7 @@ export const ProjectEditor = memo(function ProjectEditor({
                                     title: newItem.title,
                                     type: 'chapter' as const,
                                     isActive: true,
+                                    chapterId: newItem.id,  // 🔥 CRITICAL: chapterId 반드시 저장
                                     content: ''
                                 };
                                 actions.addTab(newTab);

@@ -161,7 +161,7 @@ export const EditorTabBar = memo(function EditorTabBar({
         if (!contextMenu.tabId) return;
 
         tabs.forEach(tab => {
-            if (tab.id !== contextMenu.tabId && tab.id !== 'main') {
+            if (tab.id !== contextMenu.tabId) {
                 onTabClose(tab.id);
             }
         });
@@ -177,9 +177,7 @@ export const EditorTabBar = memo(function EditorTabBar({
         if (currentIndex === -1) return;
 
         tabs.slice(currentIndex + 1).forEach(tab => {
-            if (tab.id !== 'main') {
-                onTabClose(tab.id);
-            }
+            onTabClose(tab.id);
         });
 
         closeContextMenu();
@@ -195,8 +193,7 @@ export const EditorTabBar = memo(function EditorTabBar({
 
     // 🔥 탭 타입에 따른 아이콘 반환 - Universal Tab System
     const getTabIcon = useCallback((type: EditorTab['type']) => {
-        const iconMap: Record<EditorTab['type'], string> = {
-            main: '📝',
+        const iconMap: Partial<Record<EditorTab['type'], string>> = {
             chapter: '📖',
             synopsis: '📊',
             characters: '👥',
@@ -204,7 +201,7 @@ export const EditorTabBar = memo(function EditorTabBar({
             ideas: '💡',
             notes: '📔'
         };
-        return iconMap[type] || '📄';
+        return iconMap[type] || '📖';
     }, []);
 
     // 🔥 전역 클릭 시 컨텍스트 메뉴 닫기
@@ -222,7 +219,7 @@ export const EditorTabBar = memo(function EditorTabBar({
                 {stableTabs.map((tab, index) => {
                     const isActive = tab.id === activeTabId;
                     const isDragOver = dragOverTabId === tab.id;
-                    const canClose = tab.id !== 'main'; // 메인 탭은 닫을 수 없음
+                    const canClose = true; // 🔥 모든 탭을 닫을 수 있음 (Empty State Pattern)
 
                     return (
                         <div
@@ -319,23 +316,22 @@ export const EditorTabBar = memo(function EditorTabBar({
                         오른쪽 탭 모두 닫기
                     </div>
 
-                    {contextMenu.tabId !== 'main' && (
-                        <>
-                            <div className={TAB_STYLES.contextMenuSeparator} />
-                            <div
-                                className={TAB_STYLES.contextMenuItem}
-                                onClick={() => {
-                                    if (contextMenu.tabId) {
-                                        onTabClose(contextMenu.tabId);
-                                    }
-                                    closeContextMenu();
-                                }}
-                            >
+                    {/* 🔥 모든 탭을 닫을 수 있음 (Empty State Pattern) */}
+                    <>
+                        <div className={TAB_STYLES.contextMenuSeparator} />
+                        <div
+                            className={TAB_STYLES.contextMenuItem}
+                            onClick={() => {
+                                if (contextMenu.tabId) {
+                                    onTabClose(contextMenu.tabId);
+                                }
+                                closeContextMenu();
+                            }}
+                        >
                                 이 탭 닫기
                             </div>
                         </>
-                    )}
-                </div>
+                    </div>
             )}
         </div>
     );
