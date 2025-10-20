@@ -183,7 +183,7 @@ export const ProjectSidebar = memo(function ProjectSidebar({
 
             {/* 🔥 일반 확장된 사이드바 */}
             {shouldShowExpanded && (
-                <div className={`${SIDEBAR_STYLES.container} ${SIDEBAR_STYLES.expanded}`}>
+                <div className={`${SIDEBAR_STYLES.container} ${SIDEBAR_STYLES.expanded} flex-shrink-0`}>
                     <SidebarContent
                         currentView={currentView}
                         onViewChange={onViewChange}
@@ -449,26 +449,26 @@ const SidebarContent = memo(function SidebarContent({
                         </div>
                     </div>
                 )}
-            </div>
 
-            {/* 🔥 통계 섹션 */}
-            <div className={SIDEBAR_STYLES.statsSection}>
-                <h3 className={SIDEBAR_STYLES.sectionHeader}>프로젝트 통계</h3>
-                <div className={SIDEBAR_STYLES.statItem}>
-                    <span className={SIDEBAR_STYLES.statLabel}>단어 수</span>
-                    <span className={SIDEBAR_STYLES.statValue}>{stats.wordCount?.toLocaleString() || 0}</span>
-                </div>
-                <div className={SIDEBAR_STYLES.statItem}>
-                    <span className={SIDEBAR_STYLES.statLabel}>문자 수</span>
-                    <span className={SIDEBAR_STYLES.statValue}>{stats.charCount?.toLocaleString() || 0}</span>
-                </div>
-                <div className={SIDEBAR_STYLES.statItem}>
-                    <span className={SIDEBAR_STYLES.statLabel}>예상 읽기 시간</span>
-                    <span className={SIDEBAR_STYLES.statValue}>{stats.readingTime || 0}분</span>
-                </div>
-                <div className={SIDEBAR_STYLES.statItem}>
-                    <span className={SIDEBAR_STYLES.statLabel}>진행률</span>
-                    <span className={SIDEBAR_STYLES.statValue}>{stats.progress || 0}%</span>
+                {/* 🔥 통계 섹션 - scrollArea 내부로 이동 (빈 공간 채우기) */}
+                <div className="mt-auto border-t border-[color:var(--editor-border)] p-3 space-y-2">
+                    <h3 className={SIDEBAR_STYLES.sectionHeader}>프로젝트 통계</h3>
+                    <div className={SIDEBAR_STYLES.statItem}>
+                        <span className={SIDEBAR_STYLES.statLabel}>단어 수</span>
+                        <span className={SIDEBAR_STYLES.statValue}>{stats.wordCount?.toLocaleString() || 0}</span>
+                    </div>
+                    <div className={SIDEBAR_STYLES.statItem}>
+                        <span className={SIDEBAR_STYLES.statLabel}>문자 수</span>
+                        <span className={SIDEBAR_STYLES.statValue}>{stats.charCount?.toLocaleString() || 0}</span>
+                    </div>
+                    <div className={SIDEBAR_STYLES.statItem}>
+                        <span className={SIDEBAR_STYLES.statLabel}>예상 읽기 시간</span>
+                        <span className={SIDEBAR_STYLES.statValue}>{stats.readingTime || 0}분</span>
+                    </div>
+                    <div className={SIDEBAR_STYLES.statItem}>
+                        <span className={SIDEBAR_STYLES.statLabel}>진행률</span>
+                        <span className={SIDEBAR_STYLES.statValue}>{stats.progress || 0}%</span>
+                    </div>
                 </div>
             </div>
         </>

@@ -297,9 +297,9 @@ export const ProjectEditor = memo(function ProjectEditor({
             case 'write':
                 return (
                     <EditorProvider>
-                        <div className="flex flex-col h-full">
+                        <div className="flex flex-col h-full w-full">
                             {/* 에디터 - 전체 화면 활용 */}
-                            <div className="flex-1 min-h-0">
+                            <div className="flex-1 min-h-0 w-full overflow-hidden">
                                 <MarkdownEditor
                                     content={activeTab?.content || ''}
                                     onChange={(content) => {
@@ -709,142 +709,149 @@ export const ProjectEditor = memo(function ProjectEditor({
                     </div>
                 )}
 
-                {/* 🔥 일반 ProjectSidebar (사이드바 펼쳐져 있을 때) */}
+                {/* 🔥 일반 ProjectSidebar (사이드바 펼쳐져 있을 때) - absolute로 flow에서 제외 */}
                 {!isSidebarCollapsed && (
-                    <ProjectSidebar
-                        projectId={projectId}
-                        currentView={state.currentView}
-                        onViewChange={(view) => {
-                            // 🔥 Chrome 스타일: 탭이 없으면 생성, 있으면 활성화
-                            actions.setCurrentView(view);
-                            
-                            // 뷰에 맞는 탭 ID와 정보 정의
-                            let targetTabId: string | undefined;
-                            let tabTitle: string | undefined;
-                            let tabType: EditorTab['type'] | undefined;
-                            
-                            switch (view) {
-                                case 'write':
-                                    targetTabId = 'main';
-                                    break;
-                                case 'synopsis':
-                                    targetTabId = 'synopsis';
-                                    tabTitle = '시놉시스';
-                                    tabType = 'synopsis';
-                                    break;
-                                case 'characters':
-                                    targetTabId = 'characters';
-                                    tabTitle = '인물';
-                                    tabType = 'characters';
-                                    break;
-                                case 'structure':
-                                    targetTabId = 'structure';
-                                    tabTitle = '구조';
-                                    tabType = 'structure';
-                                    break;
-                                case 'notes':
-                                    targetTabId = 'notes';
-                                    tabTitle = '노트';
-                                    tabType = 'notes';
-                                    break;
-                                case 'idea':
-                                    targetTabId = 'ideas';
-                                    tabTitle = '아이디어';
-                                    tabType = 'ideas';
-                                    break;
-                            }
-                            
-                            if (!targetTabId) return;
-                            
-                            // 탭이 이미 존재하면 활성화
-                            const existingTab = state.tabs.find(t => t.id === targetTabId);
-                            if (existingTab) {
-                                actions.setActiveTab(targetTabId);
-                                Logger.info('PROJECT_SIDEBAR', 'Existing tab activated', { 
-                                    view, 
-                                    targetTabId 
-                                });
-                            } 
-                            // 탭이 없으면 새로 생성
-                            else if (tabTitle && tabType) {
-                                actions.addTab({
-                                    id: targetTabId,
-                                    title: tabTitle,
-                                    type: tabType,
-                                    isActive: true,
-                                    content: ''
-                                });
-                                Logger.info('PROJECT_SIDEBAR', 'New tab created', { 
-                                    view, 
-                                    targetTabId,
-                                    tabTitle 
-                                });
-                            }
-                        }}
-                        structure={projectData?.structure || []}
-                        characters={memoizedCharacters}
-                        collapsed={false}
-                        stats={{
-                            wordCount: projectData?.writerStats?.wordCount || 0,
-                            charCount: projectData?.writerStats?.charCount || 0,
-                            paragraphCount: projectData?.writerStats?.paragraphCount || 0,
-                            readingTime: projectData?.writerStats?.readingTime || 0,
-                            wordGoal: projectData?.writerStats?.wordGoal || 1000,
-                            progress: projectData?.writerStats?.progress || 0,
-                            sessionTime: projectData?.writerStats?.sessionTime || 0,
-                            wpm: projectData?.writerStats?.wpm || 0
-                        }}
-                        onAddStructure={() => {
-                            actions.openNewChapterModal();
-                            Logger.info('PROJECT_EDITOR', 'Add structure clicked');
-                        }}
-                        onAddCharacter={() => {
-                            actions.openNewCharacterModal();
-                            Logger.info('PROJECT_EDITOR', 'Add character clicked');
-                        }}
-                        onAddNote={() => {
-                            actions.openNewNoteModal();
-                            Logger.info('PROJECT_EDITOR', 'Add note clicked');
-                        }}
-                    />
+                    <div className="absolute left-0 top-0 w-80 h-full z-[140] bg-[color:hsl(var(--card))] border-r border-[color:hsl(var(--border))] overflow-hidden shadow-sm">
+                        <ProjectSidebar
+                            projectId={projectId}
+                            currentView={state.currentView}
+                            onViewChange={(view) => {
+                                // 🔥 Chrome 스타일: 탭이 없으면 생성, 있으면 활성화
+                                actions.setCurrentView(view);
+                                
+                                // 뷰에 맞는 탭 ID와 정보 정의
+                                let targetTabId: string | undefined;
+                                let tabTitle: string | undefined;
+                                let tabType: EditorTab['type'] | undefined;
+                                
+                                switch (view) {
+                                    case 'write':
+                                        targetTabId = 'main';
+                                        break;
+                                    case 'synopsis':
+                                        targetTabId = 'synopsis';
+                                        tabTitle = '시놉시스';
+                                        tabType = 'synopsis';
+                                        break;
+                                    case 'characters':
+                                        targetTabId = 'characters';
+                                        tabTitle = '인물';
+                                        tabType = 'characters';
+                                        break;
+                                    case 'structure':
+                                        targetTabId = 'structure';
+                                        tabTitle = '구조';
+                                        tabType = 'structure';
+                                        break;
+                                    case 'notes':
+                                        targetTabId = 'notes';
+                                        tabTitle = '노트';
+                                        tabType = 'notes';
+                                        break;
+                                    case 'idea':
+                                        targetTabId = 'ideas';
+                                        tabTitle = '아이디어';
+                                        tabType = 'ideas';
+                                        break;
+                                }
+                                
+                                if (!targetTabId) return;
+                                
+                                // 탭이 이미 존재하면 활성화
+                                const existingTab = state.tabs.find(t => t.id === targetTabId);
+                                if (existingTab) {
+                                    actions.setActiveTab(targetTabId);
+                                    Logger.info('PROJECT_SIDEBAR', 'Existing tab activated', { 
+                                        view, 
+                                        targetTabId 
+                                    });
+                                } 
+                                // 탭이 없으면 새로 생성
+                                else if (tabTitle && tabType) {
+                                    actions.addTab({
+                                        id: targetTabId,
+                                        title: tabTitle,
+                                        type: tabType,
+                                        isActive: true,
+                                        content: ''
+                                    });
+                                    Logger.info('PROJECT_SIDEBAR', 'New tab created', { 
+                                        view, 
+                                        targetTabId,
+                                        tabTitle 
+                                    });
+                                }
+                            }}
+                            structure={projectData?.structure || []}
+                            characters={memoizedCharacters}
+                            collapsed={false}
+                            stats={{
+                                wordCount: projectData?.writerStats?.wordCount || 0,
+                                charCount: projectData?.writerStats?.charCount || 0,
+                                paragraphCount: projectData?.writerStats?.paragraphCount || 0,
+                                readingTime: projectData?.writerStats?.readingTime || 0,
+                                wordGoal: projectData?.writerStats?.wordGoal || 1000,
+                                progress: projectData?.writerStats?.progress || 0,
+                                sessionTime: projectData?.writerStats?.sessionTime || 0,
+                                wpm: projectData?.writerStats?.wpm || 0
+                            }}
+                            onAddStructure={() => {
+                                actions.openNewChapterModal();
+                                Logger.info('PROJECT_EDITOR', 'Add structure clicked');
+                            }}
+                            onAddCharacter={() => {
+                                actions.openNewCharacterModal();
+                                Logger.info('PROJECT_EDITOR', 'Add character clicked');
+                            }}
+                            onAddNote={() => {
+                                actions.openNewNoteModal();
+                                Logger.info('PROJECT_EDITOR', 'Add note clicked');
+                            }}
+                        />
+                    </div>
                 )}
 
-                {/* 각 뷰의 메인 컨텐츠 */}
-                <div className="flex-1 h-full">
-                    {renderCurrentView()}
+                {/* 🔥 메인 에디터 + 우측바를 flex row로 구성하여 스크롤바 제거 */}
+                <div className="flex flex-row flex-1 min-w-0 h-full overflow-hidden">
+                    {/* 각 뷰의 메인 컨텐츠 */}
+                    <div className="flex-1 min-w-0 overflow-hidden">
+                        {renderCurrentView()}
+                    </div>
+
+                    {/* 오른쪽 사이드바 (AI 패널) - fixed width, shrink 안 함 */}
+                    {state.showRightSidebar && (
+                        <div className="w-80 flex-shrink-0 overflow-hidden h-full border-l border-[color:hsl(var(--border))]">
+                            {normalizedCurrentView === 'synopsis' ? (
+                                <GeminiSynopsisAgent
+                                    projectId={projectId}
+                                    onClose={actions.toggleRightSidebar}
+                                />
+                            ) : (
+                                <WriterStatsPanel
+                                    showRightSidebar={state.showRightSidebar}
+                                    toggleRightSidebar={actions.toggleRightSidebar}
+                                    writerStats={projectData?.writerStats || {
+                                        wordCount: 0,
+                                        charCount: 0,
+                                        paragraphCount: 0,
+                                        readingTime: 0,
+                                        wordGoal: 1000,
+                                        progress: 0,
+                                        sessionTime: 0,
+                                        wpm: 0,
+                                        headingCount: 0,
+                                        listItemCount: 0
+                                    }}
+                                    setWordGoal={(goal) => {
+                                        projectData?.setWordGoal(goal);
+                                    }}
+                                    currentText={activeTab?.content || ''}
+                                    projectId={projectId}
+                                />
+                            )}
+                        </div>
+                    )}
                 </div>
-
-                {/* 오른쪽 사이드바 (AI 패널) */}
-                {state.showRightSidebar && (
-                    normalizedCurrentView === 'synopsis' ? (
-                        <GeminiSynopsisAgent
-                            projectId={projectId}
-                            onClose={actions.toggleRightSidebar}
-                        />
-                    ) : (
-                        <WriterStatsPanel
-                            showRightSidebar={state.showRightSidebar}
-                            toggleRightSidebar={actions.toggleRightSidebar}
-                            writerStats={projectData?.writerStats || {
-                                wordCount: 0,
-                                charCount: 0,
-                                paragraphCount: 0,
-                                readingTime: 0,
-                                wordGoal: 1000,
-                                progress: 0,
-                                sessionTime: 0,
-                                wpm: 0,
-                                headingCount: 0,
-                                listItemCount: 0
-                            }}
-                            setWordGoal={(goal) => {
-                                projectData?.setWordGoal(goal);
-                            }}
-                            currentText={activeTab?.content || ''}
-                            projectId={projectId}
-                        />
-                    )
-                )}
             </ProjectEditorLayout.Main>
 
             {/* 모달들 */}

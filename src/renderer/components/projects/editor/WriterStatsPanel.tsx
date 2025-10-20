@@ -47,10 +47,10 @@ interface DisplayMessage {
 
 const STATS_STYLES = {
   rightSidebar:
-    'w-80 bg-[color:hsl(var(--card))] border-l border-[color:hsl(var(--border))] flex flex-col transition-all duration-300 ease-in-out text-[color:hsl(var(--foreground))]',
+    'flex-1 flex flex-col bg-[color:hsl(var(--card))] border-l border-[color:hsl(var(--border))] transition-all duration-300 ease-in-out text-[color:hsl(var(--foreground))] overflow-hidden min-w-0',
   rightSidebarCollapsed: 'w-0 overflow-hidden transition-all duration-300 ease-in-out',
   rightSidebarHeader:
-    'flex items-center justify-between p-4 border-b border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))]',
+    'flex items-center justify-between p-4 border-b border-[color:hsl(var(--border))] bg-[color:hsl(var(--card))] flex-shrink-0',
   rightSidebarTitle: 'text-lg font-semibold text-[color:hsl(var(--foreground))]',
   iconButton:
     'flex items-center justify-center w-9 h-9 rounded-lg transition-colors text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] hover:bg-[color:hsl(var(--muted))]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/30 focus-visible:ring-offset-0',

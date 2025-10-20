@@ -2,26 +2,48 @@
 
 /* TipTap 에디터 컨테이너 */
 .markdown-editor,
-div[class*="w-full h-full flex flex-col relative"] {
-  @apply h-full w-full relative;
-  /* 🔥 FIXED: 터치패드 스크롤 최적화 */
-  overflow-x: hidden !important;
-  overflow-y: auto;
-  min-height: calc(100vh - var(--editor-viewport-offset, 11rem));
-  padding-bottom: 4rem;
+div[class*="w-full h-full flex flex-col relative"],
+/* TipTap EditorContent 자동 생성 div */
+.ProseMirror + [class*=""],
+.tiptap-editor-container {
+  @apply h-full w-full relative flex flex-col;
+  
+  /* 🔥 CRITICAL: overflow hidden - 에디터 외부는 스크롤 불가 */
+  overflow: hidden !important;
   
   /* macOS 터치패드 최적화 */
-  -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
   overscroll-behavior: contain;
 }
 
+/* 🔥 EditorContent 래퍼 (TipTap에서 자동 생성되는 div) */
+.ec {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* 🔥 더 강력한 EditorContent 선택자 */
+[class*="EditorContent"],
+div > .ProseMirror {
+  display: flex;
+  flex-direction: column;
+}
+
 /* 🔥 ProseMirror 에디터 기본 스타일 */
 .ProseMirror {
-  @apply outline-none min-h-full p-8 leading-7 text-base;
+  @apply outline-none px-8 py-4 leading-7 text-base;
 
-  /* 🔥 부모 min-height 상속 */
-  min-height: inherit;
+  /* 🔥 CRITICAL: overflow-y: auto - 에디터 내부에서만 스크롤 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  /* 🔥 높이는 부모에서 관리 */
+  height: 100%;
+  
+  /* 🔥 FIXED: box-sizing으로 패딩 포함 */
+  box-sizing: border-box;
   
   /* 🔥 폰트 시스템 연동 - 기본 폰트 설정 */
   font-family: var(--editor-font-family, var(--app-font-family));
@@ -29,11 +51,9 @@ div[class*="w-full h-full flex flex-col relative"] {
   color: var(--editor-text);
   background: var(--editor-bg);
   
-  /* 🔥 스크롤 최적화 - 에디터 자체는 스크롤하지 않음 */
-  overflow: visible;
-  
   /* 터치패드 제스처 최적화 */
   touch-action: pan-y pinch-zoom;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 🎯 포커스 상태 - 미니멀하게 */
@@ -68,6 +88,11 @@ div[class*="w-full h-full flex flex-col relative"] {
 /* 🔥 기본 마진 리셋 - 간격 축소 */
 .ProseMirror > * + * {
   @apply mt-1;
+}
+
+/* 🔥 모든 자식 요소도 overflow 제한 */
+.ProseMirror * {
+  max-height: 100vh;
 }
 
 .ProseMirror li p {

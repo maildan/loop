@@ -33,13 +33,13 @@ interface MarkdownEditorProps {
 }
 
 const EDITOR_STYLES = {
-    container: 'w-full h-full flex flex-col relative',
+    container: 'w-full h-full flex flex-col relative overflow-hidden', // 🔥 h-full, overflow-hidden 추가
     loading: 'flex items-center justify-center h-full',
     dragOverlay: 'absolute inset-0 border-2 border-dashed border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 rounded-lg flex items-center justify-center z-10 pointer-events-none',
 } as const;
 
 const StableEditorContent = React.memo<{ editor: Editor }>(({ editor }) => (
-    <EditorContent editor={editor} />
+    <EditorContent editor={editor} className="flex-1 min-h-0 w-full overflow-hidden" />
 ));
 
 StableEditorContent.displayName = 'StableEditorContent';

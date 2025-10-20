@@ -20,11 +20,11 @@ export const WRITER_EDITOR_STYLES = {
     headerRight: 'flex items-center gap-2',
 
     // 메인 레이아웃
-    main: 'relative flex flex-1 overflow-hidden',
+    main: 'relative flex flex-row flex-1 overflow-hidden min-w-0 min-h-0', // 🔥 min-h-0 추가: 부모 h 계산 정확화
 
     // 🔥 에디터 영역 수정 (한줄 문제, 스크롤 제한 해결)
-    editorContainer: 'flex-1 flex flex-col h-full bg-[color:hsl(var(--background))] transition-colors duration-200',
-    editorContent: 'flex-1 min-h-0 overflow-hidden', // 🔥 min-h-0 추가로 flex 영역 제대로 잡힘
+    editorContainer: 'flex-1 flex flex-col h-full bg-[color:hsl(var(--background))] transition-colors duration-200 min-w-0', // 🔥 min-w-0 추가
+    editorContent: 'flex-1 min-h-0 min-w-0 overflow-hidden', // 🔥 min-w-0 추가로 flex 영역 제대로 잡힘
 
     // UI 컨트롤
     iconButton: 'flex items-center justify-center w-9 h-9 rounded-lg transition-colors text-[color:hsl(var(--muted-foreground))] hover:text-[color:hsl(var(--foreground))] hover:bg-[color:hsl(var(--muted))]/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-primary)]/25 focus-visible:ring-offset-0',

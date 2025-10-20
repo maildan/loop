@@ -201,12 +201,12 @@ export const GeminiSynopsisAgent: React.FC<GeminiSynopsisAgentProps> = ({
   if (!mounted) return null;
 
   return (
-    <div className={`h-full w-[400px] ${colorScheme.header} border-l grid grid-rows-[auto_auto_1fr_auto]`}>
+    <div className={`h-full flex-1 flex flex-col ${colorScheme.header} border-l grid grid-rows-[auto_auto_1fr_auto] min-w-0`}>
       {/* 헤더 */}
       <div className={`flex items-center justify-between px-4 py-3 border-b ${colorScheme.border} ${colorScheme.header}`}>
         <div className="flex items-center gap-2">
           <Sparkles className={`h-5 w-5 ${colorScheme.contextText}`} />
-          <h2 className={`text-lg font-semibold ${colorScheme.headerText}`}>AI 어시스턴트</h2>
+          <h2 className={`text-lg font-semibold ${colorScheme.headerText}`}>Loop AI</h2>
         </div>
         <div className="flex items-center gap-2">
           <button
