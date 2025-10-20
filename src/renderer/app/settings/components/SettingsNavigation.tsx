@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useCallback } from 'react';
-import { Settings, User, Bell, Palette, Keyboard, Cpu } from 'lucide-react';
+import { Settings, User, Bell, Palette, Keyboard, Cpu, Sparkles } from 'lucide-react';
 import { SETTINGS_PAGE_STYLES } from '../constants/styles';
 import type { SettingSection, SettingSectionMeta } from '../types';
 
@@ -15,6 +15,7 @@ const SECTIONS: SettingSectionMeta[] = [
   { id: 'notifications', label: '알림', icon: Bell },
   { id: 'ui', label: 'UI/UX', icon: Palette },
   { id: 'performance', label: '성능', icon: Cpu },
+  { id: 'gemini', label: 'Gemini AI', icon: Sparkles },
 ];
 
 /**

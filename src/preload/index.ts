@@ -147,6 +147,12 @@ const electronAPI: ElectronAPI = {
     getAnalysisHistory: (projectId: string, analysisType?: string) => ipcRenderer.invoke('ai:get-analysis-history', projectId, analysisType),
   },
 
+  env: {
+    setGeminiKey: (apiKey: string) => ipcRenderer.invoke('env:set-gemini-key', apiKey),
+    getGeminiKey: () => ipcRenderer.invoke('env:get-gemini-key'),
+    getGeminiStatus: () => ipcRenderer.invoke('gemini:get-status'),
+  },
+
   notifications: {
     show: (title: string, message: string) => ipcRenderer.invoke('notifications:show', title, message),
     showTypingGoal: (progress: number) => ipcRenderer.invoke('notifications:show-typing-goal', progress),

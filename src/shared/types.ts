@@ -346,6 +346,13 @@ export interface ElectronAPI {
     quitAndInstall: () => Promise<IpcResponse<boolean>>;
   };
 
+  // 🌍 환경 변수 & 설정 API
+  env: {
+    setGeminiKey: (apiKey: string) => Promise<IpcResponse<{ success: boolean; message: string }>>;
+    getGeminiKey: () => Promise<IpcResponse<{ key?: string; message: string }>>;
+    getGeminiStatus: () => Promise<IpcResponse<{ available: boolean; status: 'set' | 'missing'; message: string }>>;
+  };
+
   // 🤖 Gemini AI Assistant API (시놉시스 뷰 전용)
   'gemini:get-status': () => Promise<IpcResponse<GeminiEnvironmentStatus>>;
   'gemini:get-project-context': (projectId: string) => Promise<IpcResponse<{

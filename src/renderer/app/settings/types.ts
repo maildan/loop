@@ -7,7 +7,7 @@ import type { Theme } from '../../../shared/types/theme';
 /**
  * 🔥 설정 섹션 타입 (main/settings와 완전 호환)
  */
-export type SettingSection = 'app' | 'account' | 'notifications' | 'ui' | 'keyboard' | 'performance';
+export type SettingSection = 'app' | 'account' | 'notifications' | 'ui' | 'keyboard' | 'performance' | 'gemini';
 
 /**
  * 🔥 설정 데이터 인터페이스 (main/settings/ElectronStoreSettingsManager와 동일)

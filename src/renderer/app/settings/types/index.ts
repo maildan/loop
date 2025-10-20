@@ -7,7 +7,7 @@ import type { Theme } from '../../../../shared/types/theme';
 /**
  * 🎯 Settings 섹션 타입 (main/settings와 완벽 호환)
  */
-export type SettingSection = 'app' | 'keyboard' | 'ui' | 'performance';
+export type SettingSection = 'app' | 'keyboard' | 'ui' | 'performance' | 'gemini';
 
 /**
  * 🔥 Settings 데이터 스키마 (SimpleSettingsSchema와 100% 호환)
@@ -66,6 +66,15 @@ export type PerformanceSettings = SettingsData['performance'];
  * 🔥 Settings 섹션 정의
  */
 export interface SettingSectionDefinition {
+  readonly id: SettingSection;
+  readonly label: string;
+  readonly icon: React.ComponentType<{ className?: string }>;
+}
+
+/**
+ * 🔥 Settings 섹션 메타데이터 (네비게이션용)
+ */
+export interface SettingSectionMeta {
   readonly id: SettingSection;
   readonly label: string;
   readonly icon: React.ComponentType<{ className?: string }>;

@@ -155,6 +155,50 @@ export class HandlersManager {
           'gemini:get-chat-history',
           'gemini:send-message',
         ]),
+        // 🌍 환경 변수 & 설정 핸들러
+        this.setupHandler('environment', async () => {
+          const { EnvironmentService } = await import('../services/EnvironmentService');
+          const { ipcMain } = require('electron');
+          
+          // Gemini API 키 저장
+          ipcMain.handle('env:set-gemini-key', async (event: any, apiKey: string) => {
+            const success = await EnvironmentService.set('GEMINI_API_KEY', apiKey);
+            Logger.info('HANDLERS_INDEX', 'Gemini API key saved', { success });
+            return { success, message: 'API key saved successfully' };
+          });
+
+          // Gemini API 키 조회
+          ipcMain.handle('env:get-gemini-key', async () => {
+            const key = EnvironmentService.get('GEMINI_API_KEY');
+            return { 
+              success: true,
+              timestamp: new Date(),
+              data: {
+                key: key || undefined,
+                message: key ? 'Gemini API key retrieved' : 'Gemini API key not set'
+              }
+            };
+          });
+
+          // Gemini 상태 조회
+          ipcMain.handle('gemini:get-status', async () => {
+            await EnvironmentService.initialize();
+            const status = EnvironmentService.getStatus();
+            const available = status.GEMINI_API_KEY === 'set';
+            return {
+              success: true,
+              data: {
+                available,
+                status: status.GEMINI_API_KEY,
+                message: available ? 'Gemini API key is configured' : 'Gemini API key is not configured'
+              }
+            };
+          });
+        }, [
+          'env:set-gemini-key',
+          'env:get-gemini-key',
+          'gemini:get-status',
+        ]),
         this.setupHandler('synopsis-stats', async () => {
           const { registerSynopsisStatsHandlers } = await import('./synopsis-stats');
           registerSynopsisStatsHandlers();

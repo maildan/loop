@@ -1,7 +1,65 @@
 // 🔥 기가차드 Loop Main - 978줄을 50줄로 축소한 깔끔한 진입점
 
-// 🔥 환경변수 우선 로드
+// 🔥 1단계: 환경변수 우선 로드 (DevMode)
 import 'dotenv/config';
+
+// 🔥 2단계: Packaged 상태에서 Runtime .env 재로드
+// 빌드타임 define은 고정되므로, runtime에 명시적으로 .env를 다시 로드해야 함
+const { parse } = require('dotenv');
+const { existsSync, readFileSync } = require('fs');
+const { join: pathJoin, resolve: pathResolve } = require('path');
+
+function reloadEnvForPackaged(): void {
+  // 현재 NODE_ENV 확인 (dev라면 스킵)
+  const isDev = process.env.NODE_ENV === 'development';
+  
+  // .env 파일 찾기
+  const candidates = [
+    pathJoin(process.cwd(), '.env'),
+    pathJoin(process.cwd(), '..', '.env'),
+    pathJoin(__dirname, '..', '.env'),
+    pathJoin(__dirname, '..', '..', '.env'),
+  ];
+
+  for (const candidate of candidates) {
+    try {
+      if (existsSync(candidate)) {
+        const content = readFileSync(candidate, 'utf-8');
+        const parsed = parse(content);
+        
+        // 🔥 buildtime define이 빈 값이면, runtime에서 .env로부터 로드
+        if (!process.env.GEMINI_API_KEY && parsed.GEMINI_API_KEY) {
+          Reflect.set(process.env as Record<string, unknown>, 'GEMINI_API_KEY', parsed.GEMINI_API_KEY);
+          console.log('✅ [RUNTIME] GEMINI_API_KEY reloaded from', candidate);
+        }
+        if (!process.env.GEMINI_MODEL && parsed.GEMINI_MODEL) {
+          Reflect.set(process.env as Record<string, unknown>, 'GEMINI_MODEL', parsed.GEMINI_MODEL);
+        }
+        if (!process.env.GOOGLE_CLIENT_ID && parsed.GOOGLE_CLIENT_ID) {
+          Reflect.set(process.env as Record<string, unknown>, 'GOOGLE_CLIENT_ID', parsed.GOOGLE_CLIENT_ID);
+        }
+        if (!process.env.GOOGLE_CLIENT_SECRET && parsed.GOOGLE_CLIENT_SECRET) {
+          Reflect.set(process.env as Record<string, unknown>, 'GOOGLE_CLIENT_SECRET', parsed.GOOGLE_CLIENT_SECRET);
+        }
+        if (!process.env.GOOGLE_REDIRECT_URI && parsed.GOOGLE_REDIRECT_URI) {
+          Reflect.set(process.env as Record<string, unknown>, 'GOOGLE_REDIRECT_URI', parsed.GOOGLE_REDIRECT_URI);
+        }
+        break; // 첫 번째 발견된 .env만 사용
+      }
+    } catch (err) {
+      // continue to next candidate
+    }
+  }
+}
+
+// Packaged 상태에서만 실행 (asar 체크)
+const isPackaged = process.mainModule?.filename?.includes('asar') || 
+                   __filename.includes('asar') ||
+                   (process.env.NODE_ENV !== 'development');
+
+if (isPackaged && process.env.NODE_ENV !== 'development') {
+  reloadEnvForPackaged();
+}
 
 // 🔥 DEBUG: dotenv 로드 직후 환경변수 확인
 if (process.env.GEMINI_API_KEY) {

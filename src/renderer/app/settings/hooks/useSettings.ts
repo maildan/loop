@@ -300,17 +300,59 @@ export function useSettings(): UseSettingsReturn {
 
       Logger.info('USE_SETTINGS', 'Saving all settings...');
 
-      // 🔥 명시적으로 모든 카테고리 저장 (누락 방지)
-  const categories = ['app', 'keyboard', 'ui', 'performance', 'account', 'notifications'] as const;
+      // 🔥 개별 필드로 저장 (화이트리스트 기반)
+      const appFields: (keyof typeof settings.app)[] = ['theme', 'language', 'autoSave', 'startMinimized', 'minimizeToTray', 'fontSize', 'fontFamily'];
+      const uiFields: (keyof typeof settings.ui)[] = ['windowWidth', 'windowHeight', 'sidebarCollapsed', 'appSidebarCollapsed', 'showLineNumbers', 'showWordCount', 'zenMode', 'focusMode', 'hideToolbars', 'minimalistMode', 'compactMode', 'showShortcutHelp'];
+      const performanceFields: (keyof typeof settings.performance)[] = ['enableGPUAcceleration', 'maxCPUUsage', 'maxMemoryUsage', 'enableHardwareAcceleration'];
+      const notificationFields: (keyof typeof settings.notifications)[] = ['enableNotifications', 'enableSounds', 'notifyGoalAchieved', 'notifyDailyGoal', 'notifyErrors'];
+      const keyboardFields: (keyof typeof settings.keyboard)[] = ['enabled', 'language', 'trackAllApps', 'sessionTimeout'];
+      const accountFields: (keyof typeof settings.account)[] = ['displayName', 'avatar', 'enableSync', 'syncProvider', 'syncInterval', 'enableTwoFactor', 'sessionTimeout'];
 
-      for (const category of categories) {
-        const categoryData = settings[category];
-        if (categoryData) {
-          Logger.debug('USE_SETTINGS', `Saving category: ${category}`, categoryData);
-          const result = await window.electronAPI.settings.set(category, categoryData);
-          if (!result.success) {
-            throw new Error(`Failed to save ${category} settings: ${result.error}`);
-          }
+      // App 필드 저장
+      for (const field of appFields) {
+        const result = await window.electronAPI.settings.set(`app.${field}`, settings.app[field]);
+        if (!result.success) {
+          Logger.warn('USE_SETTINGS', `Failed to save app.${field}`, { error: result.error });
+        }
+      }
+
+      // UI 필드 저장
+      for (const field of uiFields) {
+        const result = await window.electronAPI.settings.set(`ui.${field}`, settings.ui[field]);
+        if (!result.success) {
+          Logger.warn('USE_SETTINGS', `Failed to save ui.${field}`, { error: result.error });
+        }
+      }
+
+      // Performance 필드 저장
+      for (const field of performanceFields) {
+        const result = await window.electronAPI.settings.set(`performance.${field}`, settings.performance[field]);
+        if (!result.success) {
+          Logger.warn('USE_SETTINGS', `Failed to save performance.${field}`, { error: result.error });
+        }
+      }
+
+      // Notifications 필드 저장
+      for (const field of notificationFields) {
+        const result = await window.electronAPI.settings.set(`notifications.${field}`, settings.notifications[field]);
+        if (!result.success) {
+          Logger.warn('USE_SETTINGS', `Failed to save notifications.${field}`, { error: result.error });
+        }
+      }
+
+      // Keyboard 필드 저장
+      for (const field of keyboardFields) {
+        const result = await window.electronAPI.settings.set(`keyboard.${field}`, settings.keyboard[field]);
+        if (!result.success) {
+          Logger.warn('USE_SETTINGS', `Failed to save keyboard.${field}`, { error: result.error });
+        }
+      }
+
+      // Account 필드 저장
+      for (const field of accountFields) {
+        const result = await window.electronAPI.settings.set(`account.${field}`, settings.account[field]);
+        if (!result.success) {
+          Logger.warn('USE_SETTINGS', `Failed to save account.${field}`, { error: result.error });
         }
       }
 

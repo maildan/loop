@@ -10,6 +10,7 @@ import ProfileSettingsSection from '../../app/settings/components/sections/Profi
 import { UISettingsSection } from '../../app/settings/components/sections/UISettingsSection';
 import { NotificationSettingsSection } from '../../app/settings/components/sections/NotificationSettingsSection';
 import { PerformanceSettingsSection } from '../../app/settings/components/sections/PerformanceSettingsSection';
+import { GeminiSettingsSection } from '../../app/settings/components/sections/GeminiSettingsSection';
 import { SettingsActions } from '../../app/settings/components/SettingsActions';
 import { useTheme } from '../../providers/ThemeProvider';
 import type { SettingSection } from '../../app/settings/types';
@@ -84,6 +85,10 @@ export default function Settings(): React.ReactElement {
             settings={settings.performance}
             updateSetting={updateSetting}
           />
+        )}
+
+        {activeSection === 'gemini' && (
+          <GeminiSettingsSection />
         )}
 
       </div>
