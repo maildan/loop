@@ -211,7 +211,11 @@ export default defineConfig(({ mode }) => {
       },
 
       define: {
-        'process.env': rendererEnvDefinition
+        // 🔥 GIGA-CHAD: 개별 키로 명시적 주입 (Vite runtime 호환성)
+        'process.env.NODE_ENV': rendererEnvDefinition['NODE_ENV'],
+        'process.env.DEBUG': rendererEnvDefinition['DEBUG'],
+        'process.env.LOG_LEVEL': rendererEnvDefinition['LOG_LEVEL'],
+        'process.env.VERBOSE_LOGGING': rendererEnvDefinition['VERBOSE_LOGGING']
         // 🔥 GIGA-CHAD: __LOOP_RENDERER_PUBLIC_ENV__ 제거 (NEXT_PUBLIC_* 없음)
         // renderer는 IPC를 통해서만 API 키 접근
       },
