@@ -44,8 +44,8 @@ export class WindowManager {
       const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
       const settings: WindowSettings = {
-        width: Math.min(1200, Math.floor(width * 0.8)),
-        height: Math.min(800, Math.floor(height * 0.8)),
+        width: Math.min(1440, Math.floor(width * 0.8)),
+        height: Math.min(900, Math.floor(height * 0.8)),
         minWidth: 800,
         minHeight: 600,
         show: false, // 🔥 성능 최적화: 준비될 때까지 숨김

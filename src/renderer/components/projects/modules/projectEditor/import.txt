@@ -1,0 +1,49 @@
+// 🔥 Modularized ProjectEditor - 모듈화된 새로운 프로젝트 에디터
+// 기존 1284줄 → 약 200줄로 축소, 단일 책임 원칙 준수
+
+'use client';
+
+import React, { memo, useEffect, useCallback, useRef, useState } from 'react';
+import type { Editor } from '@tiptap/react';
+import { MarkdownEditor } from '../../editor/MarkdownEditor';
+import { EditorProvider } from '../../editor/EditorProvider';
+import { ShortcutHelp } from '../../editor/ShortcutHelp';
+import { WriterSidebar } from '../../components/WriterSidebar';
+import { ProjectSidebar } from '../../components/ProjectSidebar';
+import { WriterStatsPanel } from '../../editor/WriterStatsPanel';
+import { ProjectHeader } from '../../components/ProjectHeader';
+import { EditorTabBar } from '../../components/EditorTabBar';
+import { NewChapterModal } from '../../components/NewChapterModal';
+import { ConfirmDeleteDialog } from '../../components/ConfirmDeleteDialog';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { ShareDialog } from '../../components/ShareDialog';
+import { WriteView } from '../../views/write';
+import { StructureView } from '../../views/StructureView';
+import { CharactersView } from '../../views/CharactersView';
+import { NotesView } from '../../views/notes';
+import { SynopsisView } from '../../views/synopsis';
+import { GeminiSynopsisAgent } from '../../views/synopsis/AI/GeminiSynopsisAgent';
+import { IdeaView } from '../../views/idea';
+import { EmptyEditorState } from './components/EmptyEditorState';
+import { RendererLogger as Logger } from '../../../../../shared/logger-renderer';
+import { ProjectStructure } from '../../../../../shared/types';
+import { useStructureStore } from '../../../../stores/useStructureStore';
+import { EditorTab } from '../../../../../shared/editor';
+
+// 🔥 Symbol 기반 컴포넌트 이름
+const PROJECT_EDITOR = Symbol.for('PROJECT_EDITOR');
+
+// 🔥 모듈화된 hooks 및 services
+import { useProjectData } from '../../hooks/useProjectData';
+import { useUIState } from '../../hooks/useUIState';
+import { useProjectEditorState } from './hooks/useProjectEditorState';
+import { projectEditorStateService } from './services/ProjectEditorStateService';
+import { useSettings } from '../../../../app/settings/hooks/useSettings';
+import ProjectEditorLayout from './components/ProjectEditorLayout';
+
+export interface ProjectEditorProps {
+    projectId: string;
+}
+
+type ProjectEditorView = 'write' | 'synopsis' | 'characters' | 'structure' | 'notes' | 'idea';
+const PROJECT_EDITOR_VIEWS: readonly ProjectEditorView[] = ['write', 'synopsis', 'characters', 'structure', 'notes', 'idea'] as const;
